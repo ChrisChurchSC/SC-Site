@@ -2,6 +2,9 @@ import { useState } from 'react'
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
 
+const KIT_API_URL = 'https://api.kit.com/v4/subscribers'
+const KIT_API_KEY = 'kit_2df81d6b7f67f9b4512769af18bd29be'
+
 const traits = [
   {
     n: '01',
@@ -62,11 +65,21 @@ export default function AboutUs() {
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!email) return
+    try {
+      await fetch(KIT_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Kit-Api-Key': KIT_API_KEY,
+        },
+        body: JSON.stringify({ email_address: email }),
+      })
+    } catch (_) {}
     setDone(true)
-    setTimeout(() => setDone(false), 4000)
+    setEmail('')
   }
 
   return (

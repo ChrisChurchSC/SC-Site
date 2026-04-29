@@ -556,3 +556,30 @@ a.nav-cs-item {
   color: rgba(255, 255, 255, 0.35);
   padding-bottom: 2px;
 }
+
+/* ── Work drawer mobile ── */
+@media (max-width: 768px) {
+  .work-drawer {
+    width: 100vw;
+    border-right: none;
+    padding: 20px 24px 48px;
+  }
+
+  .work-overlay-item {
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+  }
+
+  .work-overlay-name {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+
+  .work-overlay-type,
+  .work-overlay-year {
+    display: none;
+  }
+
+  .work-overlay-bg {
+    display: none;
+  }
+}
