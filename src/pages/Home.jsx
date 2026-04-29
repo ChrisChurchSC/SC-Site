@@ -71,7 +71,7 @@ export default function Home() {
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
-          <p className={styles.cornerText}>Making things people want<br />and need since 2023</p>
+          <p className={styles.cornerText}>The makers of high quality<br />brands and content</p>
         </div>
         <button
           className={styles.menuCard}
