@@ -37,13 +37,15 @@ const openRoles = [
   {
     title: 'Design Intern',
     type: 'Internship',
-    location: 'Philadelphia, PA',
+    location: 'Remote',
+    level: 'Entry Level',
     description: "Work across brand, digital, and content. You'll be hands-on from day one, concepting, designing, and refining real client work. Strong eye, curious mind, and a point of view on what makes things good.",
   },
   {
     title: 'Motion Intern',
     type: 'Internship',
-    location: 'Philadelphia, PA',
+    location: 'Remote',
+    level: 'Entry Level',
     description: "Help bring campaigns and content to life through motion. You'll work on social content, brand films, and everything in between. Comfortable in After Effects, interested in the full creative process.",
   },
 ]
@@ -117,12 +119,13 @@ export default function AboutUs() {
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>Open Roles</p>
         <div className={styles.rolesGrid}>
-          {openRoles.map(({ title, type, location, description }) => (
+          {openRoles.map(({ title, type, location, level, description }) => (
             <div key={title} className={styles.roleCard}>
               <div className={styles.roleHeader}>
                 <p className={styles.roleTitle}>{title}</p>
                 <div className={styles.roleMeta}>
                   <span className={styles.roleTag}>{type}</span>
+                  <span className={styles.roleTag}>{level}</span>
                   <span className={styles.roleLocation}>{location}</span>
                 </div>
               </div>
