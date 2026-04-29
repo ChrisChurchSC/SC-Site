@@ -22,14 +22,21 @@ export default function Home() {
   const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
 
   // Helper: render media for a block
+  const isImageUrl = (url) => /\.(png|jpe?g|gif|webp|avif)$/i.test(url)
   const blockMedia = (label, style = {}) => {
     const b = grid[label]
     if (!b) return null
-    if (b.mediaType === 'video' && b.videoUrl) return (
-      <video src={assetUrl(b.videoUrl)} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
-    )
+    if (b.mediaType === 'video' && b.videoUrl) {
+      const url = assetUrl(b.videoUrl)
+      if (isImageUrl(url)) return (
+        <img src={url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+      )
+      return (
+        <video src={url} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+      )
+    }
     if (b.mediaType === 'image' && b.imageUrl) return (
-      <img src={assetUrl(b.imageUrl)} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+      <img src={b.imageUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
     )
     return null
   }
