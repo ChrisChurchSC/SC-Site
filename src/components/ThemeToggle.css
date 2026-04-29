@@ -1,0 +1,50 @@
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 300;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.theme-track {
+  display: block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.theme-track--light {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.theme-thumb {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.4, 1), background 0.25s ease;
+}
+
+.theme-thumb--light {
+  transform: translate(16px, -50%);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+body.reel-open .theme-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}

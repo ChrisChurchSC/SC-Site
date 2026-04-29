@@ -1,0 +1,9 @@
+node_modules
+dist
+.vite
+.DS_Store
+
+# Large media — host on CDN, not git
+public/**/*.mp4
+public/**/*.mov
+public/reel-preview.gif

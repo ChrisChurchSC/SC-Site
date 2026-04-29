@@ -1,0 +1,513 @@
+.main {
+  padding: 0 305px 80px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@keyframes cascadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.main section:nth-of-type(1) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.45s both; }
+.main section:nth-of-type(2) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.55s both; }
+.main section:nth-of-type(3) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.65s both; }
+.main section:nth-of-type(4) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both; }
+.main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
+.main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
+.main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
+
+/* ── Back button ── */
+.backBtn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 50;
+  transition: color 0.15s, background 0.15s;
+}
+
+.backBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1e1e1e;
+}
+
+/* ── Header ── */
+.header {
+  padding: 72px 40px 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.headerLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  max-width: 800px;
+}
+
+.sub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  max-width: 640px;
+}
+
+/* ── Shared section row ── */
+.textSection {
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Photo grid ── */
+.photoSection {
+  padding: 24px 40px 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 5px;
+  align-items: start;
+}
+
+.photoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photoBlock:nth-child(1) .photoPlaceholder {
+  aspect-ratio: 4 / 5;
+}
+
+.photoBlock:nth-child(2) .photoPlaceholder {
+  aspect-ratio: 1 / 1;
+}
+
+.photoBlock:nth-child(3) {
+  display: none;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  background: #161616;
+  border-radius: 4px;
+}
+
+.photoCaption {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0;
+}
+
+/* ── Statement text ── */
+.statement {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* ── Realities ── */
+.realitiesGrid {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.realityRow {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.realityLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.realityValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Traits grid (2x2) ── */
+.traitsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.traitCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.traitN {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.traitHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.traitBody {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+}
+
+/* ── Open roles ── */
+.rolesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.roleCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.roleHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roleTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.roleMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roleTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  padding: 3px 8px;
+}
+
+.roleLocation {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.roleDescription {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+  flex: 1;
+}
+
+.roleApply {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  align-self: flex-start;
+  transition: color 0.15s;
+}
+
+.roleApply:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── CTA section ── */
+.ctaSection {
+  padding: 48px 40px;
+}
+
+.ctaCard {
+  background-color: #1a1a1a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: 6px;
+  padding: 64px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.035;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.ctaHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.5vw, 36px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaSub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaForm {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaInput {
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.ctaInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.ctaInput:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ctaSubmit {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.ctaSubmit:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaConfirm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.ctaLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+  transition: color 0.15s;
+  margin-top: 8px;
+}
+
+.ctaLink:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .main {
+    padding: 0 0 80px 0;
+  }
+
+  .backBtn {
+    top: 12px;
+    left: 12px;
+  }
+
+  .header {
+    padding: 72px 24px 40px;
+  }
+
+  .textSection {
+    padding: 36px 24px;
+  }
+
+  .photoSection {
+    padding: 16px 24px 36px;
+  }
+
+  .photoBlock:nth-child(1) .photoPlaceholder {
+    aspect-ratio: 1 / 1;
+  }
+
+  .photoBlock:nth-child(2) .photoPlaceholder {
+    aspect-ratio: 1 / 1;
+  }
+
+  .realityLabel {
+    width: 100px;
+  }
+
+  .traitsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .rolesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaSection {
+    padding: 36px 24px;
+  }
+
+  .ctaCard {
+    padding: 40px 24px;
+  }
+
+  .ctaForm {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .ctaSubmit {
+    width: 100%;
+  }
+}

@@ -1,0 +1,331 @@
+@font-face {
+  font-family: 'Signifier';
+  src: url('/fonts/Signifier/WOFF2/signifier-light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Signifier';
+  src: url('/fonts/Signifier/Signifier-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --text: #fff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-faint: rgba(255, 255, 255, 0.28);
+  --pink: #df4ed6;
+  --teal: #4ecfb3;
+  --blue: #5a76e5;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Roboto Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0a0a0a;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Global back button (outside theme-layer so position:fixed works in light mode) ── */
+.back-btn-global {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 50;
+  transition: color 0.15s, background 0.15s;
+}
+
+.back-btn-global:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1e1e1e;
+}
+
+[data-theme="light"] .back-btn-global {
+  color: rgba(0, 0, 0, 0.45);
+  background: #e8e8e8;
+}
+
+[data-theme="light"] .back-btn-global:hover {
+  color: rgba(0, 0, 0, 0.85);
+  background: #dcdcdc;
+}
+
+/* ── Light mode ── */
+[data-theme="light"],
+[data-theme="light"] body {
+  background: #f5f5f5;
+}
+
+[data-theme="light"] .nav-side {
+  background: #f5f5f5;
+  border-left-color: rgba(0, 0, 0, 0.07);
+}
+
+[data-theme="light"] .nav-card,
+[data-theme="light"] .work-drawer,
+[data-theme="light"] .nav-mobile-menu {
+  background: #ebebeb;
+}
+
+[data-theme="light"] .nav-cs-item {
+  background: transparent;
+}
+
+[data-theme="light"] .nav-cs-see-all {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="light"] .nav-cs-see-all:hover {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="light"] .work-drawer {
+  background: #f5f5f5;
+  border-right-color: rgba(0, 0, 0, 0.07);
+}
+
+[data-theme="light"] .work-overlay-label {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .work-overlay-close-card {
+  background: #e8e8e8;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .work-overlay-close-card:hover {
+  background: #dcdcdc;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="light"] .work-overlay-item {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .work-overlay-name {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="light"] .work-overlay-item:hover .work-overlay-name {
+  color: rgba(0, 0, 0, 1);
+}
+
+[data-theme="light"] .work-overlay-num,
+[data-theme="light"] .work-overlay-type,
+[data-theme="light"] .work-overlay-year {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .work-backdrop--open {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] .nav-card-title,
+[data-theme="light"] .nav-cs-name,
+[data-theme="light"] .nav-mobile-link {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .nav-card-sub,
+[data-theme="light"] .nav-cs-type,
+[data-theme="light"] .nav-cs-year,
+[data-theme="light"] .nav-cs-num,
+[data-theme="light"] .nav-social-link {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .nav-cs-item {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .nav-grad-1 { background: #c0c0c0; }
+[data-theme="light"] .nav-grad-2 { background: #d5d5d5; }
+[data-theme="light"] .nav-grad-3 { background: #e8e8e8; }
+
+[data-theme="light"] .nav-card:hover {
+  background: #e0e0e0;
+}
+
+[data-theme="light"] .nav-cs-item:hover {
+  opacity: 0.5;
+}
+
+[data-theme="light"] .nav-social-link:hover {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .nav-mobile-link:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="light"] .nav-mobile-social-link {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .nav-mobile-social-link:hover {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="light"] .copy-bubble {
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="light"] .theme-layer {
+  filter: invert(1);
+}
+
+[data-theme="light"] img,
+[data-theme="light"] video,
+[data-theme="light"] [style*="background-image"] {
+  filter: invert(1);
+}
+
+/* ── Kit form overrides ── */
+.formkit-form {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  max-width: 440px !important;
+}
+
+.formkit-fields {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.formkit-field {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.formkit-input {
+  width: 100% !important;
+  background: #0a0a0a !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 4px !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.04em !important;
+  padding: 11px 14px !important;
+  outline: none !important;
+  transition: border-color 0.15s !important;
+}
+
+.formkit-input::placeholder {
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.formkit-input:focus {
+  background: #111 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.formkit-submit {
+  width: auto !important;
+  flex-shrink: 0 !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 4px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  padding: 11px 20px !important;
+  cursor: pointer !important;
+  transition: background 0.15s, color 0.15s !important;
+  display: block !important;
+}
+
+.formkit-submit:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.formkit-alert {
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 0.04em !important;
+  border-radius: 4px !important;
+  padding: 10px 14px !important;
+  margin-top: 8px !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.formkit-alert-error {
+  background: rgba(255, 80, 80, 0.06) !important;
+  border: 1px solid rgba(255, 80, 80, 0.15) !important;
+  color: rgba(255, 120, 120, 0.7) !important;
+}
+
+.formkit-alert-success {
+  background: rgba(78, 207, 179, 0.06) !important;
+  border: 1px solid rgba(78, 207, 179, 0.15) !important;
+  color: rgba(78, 207, 179, 0.7) !important;
+}
+
+.formkit-powered-by-convertkit-container,
+.formkit-guarantee {
+  display: none !important;
+}
+

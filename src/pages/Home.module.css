@@ -1,0 +1,441 @@
+.main {
+  padding: 12px 312px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* ── Load animation ── */
+@keyframes blockIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Shared block ── */
+.block {
+  background: #161616;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-radius: 4px;
+  animation: blockIn 0.5s ease both;
+  transition: background 0.2s ease, transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.block:hover {
+  background: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+.blockLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.wwCard {
+  view-transition-name: cs-world-within;
+}
+
+.block:nth-child(1) { animation-delay: 0.05s; }
+.block:nth-child(2) { animation-delay: 0.12s; }
+.block:nth-child(3) { animation-delay: 0.19s; }
+.block:nth-child(4) { animation-delay: 0.26s; }
+
+/* ── Aspect ratios ── */
+.r169 { aspect-ratio: 16 / 9; }
+.r916 { aspect-ratio: 9 / 16; }
+.r45  { aspect-ratio: 4 / 5; }
+.r11  { aspect-ratio: 1 / 1; }
+
+/* ── Tagline ── */
+.tagline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3.5vw, 48px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 40px 8px 32px;
+  max-width: 700px;
+  text-align: center;
+  align-self: center;
+}
+
+/* ── 12-col row grid ── */
+.row12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+  align-items: start;
+}
+
+/* ── Labels & type ── */
+.label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.cornerNote {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 14px 16px;
+  animation: blockIn 0.5s ease both;
+}
+
+.cornerWordmark {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+/* ── Mobile menu card ── */
+.menuCard {
+  display: none;
+}
+
+.menuLine {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1px;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.4, 1), opacity 0.2s ease;
+}
+
+.menuLine:first-child.menuLineOpen { transform: translateY(3.25px) rotate(45deg); }
+.menuLine:last-child.menuLineOpen  { transform: translateY(-3.25px) rotate(-45deg); }
+
+
+.cornerText {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.blockTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 1vw, 16px);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.1;
+}
+
+.csTag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+/* ── Reel overlay ── */
+.reelOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.96);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.reelVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.reelClose {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 201;
+  transition: color 0.15s, background 0.15s;
+}
+
+.reelClose:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.reelControls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 24px 24px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+}
+
+.reelCtrlBtn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.reelCtrlBtn:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.reelScrub {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  border-radius: 1px;
+  outline: none;
+  cursor: pointer;
+}
+
+.reelScrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.reelScrub::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: none;
+}
+
+/* ── Play button ── */
+.playBtn {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  padding: 0;
+}
+
+.playBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Empty block crosshair ── */
+.blockEmpty::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-50%);
+}
+
+.blockEmpty::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(-50%);
+}
+
+/* ── Ticker ── */
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 7px 0;
+}
+
+.tickerInner {
+  display: inline-block;
+  animation: tickerScroll 40s linear infinite;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Meta row ── */
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 2px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+
+/* ── Vertical rule ── */
+.vertRule {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 20px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.vertRule::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.vertRuleText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.18);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .main {
+    padding: 12px 12px 60px 12px;
+  }
+
+  .row12 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Reset all inline grid-column spans to auto-flow 2 cols */
+  .row12 > * {
+    grid-column: auto !important;
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  /* Intro card: takes left column, natural height */
+  .cornerNote {
+    grid-column: auto !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* Wordmark scales to card width on mobile */
+  .cornerWordmark {
+    width: 100%;
+    max-width: 160px;
+  }
+
+  /* Tagline hidden on mobile — no room in compact card */
+  .cornerText {
+    display: none;
+  }
+
+  /* Intro row: logo takes remaining space, menu card width = its own height */
+  .introRow {
+    grid-template-columns: 1fr auto !important;
+  }
+
+  /* Hamburger card: square sized by stretched height (= logo card height) */
+  .menuCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    aspect-ratio: 1 / 1 !important;
+    align-self: stretch;
+    animation: blockIn 0.5s ease both;
+    position: relative;
+    z-index: 100;
+  }
+
+  /* Reel hero: full width 16:9 */
+  .heroBlock {
+    grid-column: 1 / -1 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .blockTitle {
+    font-size: 13px;
+  }
+}

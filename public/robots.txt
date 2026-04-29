@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://super-conscious.studio/sitemap.xml

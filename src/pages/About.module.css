@@ -1,0 +1,443 @@
+.main {
+  padding: 0 305px 80px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@keyframes cascadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.main section:nth-of-type(1) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.45s both; }
+.main section:nth-of-type(2) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.55s both; }
+.main section:nth-of-type(3) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.65s both; }
+.main section:nth-of-type(4) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both; }
+.main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
+
+/* ── Back button ── */
+.backBtn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 50;
+  transition: color 0.15s, background 0.15s;
+}
+
+.backBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1e1e1e;
+}
+
+/* ── Header ── */
+.header {
+  padding: 72px 40px 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.headerLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  max-width: 800px;
+}
+
+.sub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  max-width: 640px;
+}
+
+/* ── Shared section row ── */
+.textSection {
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Approach statement ── */
+.approachStatement {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* ── Principles grid (2x2) ── */
+.principlesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+/* ── Embedded ── */
+.embeddedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.embeddedPoint {
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.embeddedN {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.embeddedHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.embeddedBody {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+}
+
+/* ── Services ── */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.serviceCol {
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.serviceTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 0 10px;
+}
+
+.serviceName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 20px;
+}
+
+.serviceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.serviceItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+  padding-left: 12px;
+  position: relative;
+}
+
+.serviceItem::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Pricing ── */
+.pricingSection {
+  padding: 48px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pricingCard {
+  position: relative;
+  background-color: #1a1a1a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: 6px;
+  padding: 64px 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.pricingCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.035;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.pricingLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.5vw, 36px);
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.pricingSub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.pricingForm {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
+
+.pricingInput {
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pricingInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.pricingInput:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pricingSubmit {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.pricingSubmit:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pricingConfirm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  padding: 12px 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 300;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastIn 0.3s cubic-bezier(0.25, 1, 0.4, 1) both;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Clients ── */
+.clientsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.clientName {
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.15s;
+}
+
+.clientName:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .main {
+    padding: 0 0 80px 0;
+  }
+
+  .backBtn {
+    top: 12px;
+    left: 12px;
+  }
+
+  .header {
+    padding: 72px 24px 40px;
+  }
+
+  .textSection {
+    padding: 36px 24px;
+  }
+
+  .embeddedGrid,
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .principlesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricingSection {
+    padding: 36px 24px;
+  }
+
+  .pricingCard {
+    padding: 40px 24px;
+  }
+
+  .pricingForm {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .pricingSubmit {
+    width: 100%;
+  }
+
+  .clientsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
