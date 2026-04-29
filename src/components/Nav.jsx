@@ -6,7 +6,7 @@ import { projects as caseStudies } from '../data/projects'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
 
-const CONTACT_EMAIL = 'chris@super-conscious.studio'
+const CONTACT_EMAIL = 'contact@super-conscious.studio'
 
 const actionCards = [
   { label: 'Capabilities', sub: 'Brand, content, and product.',  to: '/about', action: null },

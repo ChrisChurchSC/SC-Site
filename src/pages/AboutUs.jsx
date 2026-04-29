@@ -130,7 +130,7 @@ export default function AboutUs() {
                 </div>
               </div>
               <p className={styles.roleDescription}>{description}</p>
-              <a href="mailto:chris@super-conscious.studio" className={styles.roleApply}>Apply</a>
+              <a href="mailto:contact@super-conscious.studio" className={styles.roleApply}>Apply</a>
             </div>
           ))}
         </div>
