@@ -1,8 +1,10 @@
 import { useParams, NavLink } from 'react-router-dom'
-import { caseStudies } from '../data/caseStudies'
-import { projects } from '../data/projects'
+import { caseStudies as staticCaseStudies } from '../data/caseStudies'
+import { projects as staticProjects } from '../data/projects'
 import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
+import { useSanity } from '../hooks/useSanity'
+import { CASE_STUDY_QUERY, PROJECTS_QUERY } from '../lib/queries'
 
 function MediaItem({ src, alt = '' }) {
   if (!src) return null
@@ -71,8 +73,24 @@ function buildPlaceholder(project) {
 
 export default function CaseStudy() {
   const { slug } = useParams()
+  const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug })
+  const { data: sanityProjects } = useSanity(PROJECTS_QUERY)
+
+  const projects = sanityProjects?.length ? sanityProjects : staticProjects
   const project = projects.find(p => p.slug === slug)
-  const cs = caseStudies[slug] ?? (project ? buildPlaceholder(project) : null)
+
+  // Normalize Sanity sections to match existing renderer expectations
+  const normalizeSections = (sections) => sections?.map(s => {
+    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, ratio: s.ratio }
+    if (s._type === 'textSection') return { type: 'text', heading: s.heading, body: s.body }
+    if (s._type === 'imageGridSection') return { type: 'image-grid', images: s.images }
+    return s
+  }) ?? []
+
+  const cs = sanityCs
+    ? { ...sanityCs, sections: normalizeSections(sanityCs.sections), credits: [{ role: 'Creative Direction', name: 'Super Conscious' }, { role: 'Client', name: sanityCs.name }] }
+    : (staticCaseStudies[slug] ?? (project ? buildPlaceholder(project) : null))
+
   const moreProjects = projects.filter(p => p.slug !== slug).slice(0, 3)
 
   useMeta({

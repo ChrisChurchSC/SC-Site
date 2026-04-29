@@ -4,13 +4,40 @@ import styles from './Home.module.css'
 import LogoWordmark from '../components/LogoWordmark'
 import Loader from '../components/Loader'
 import { useNav } from '../context/NavContext'
+import { useSanity } from '../hooks/useSanity'
+import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
 
 let didLoad = false
 
 export default function Home() {
-  const gi = (n) => ({ backgroundImage: `url(/grid/img-${n}.png)`, backgroundSize: 'cover', backgroundPosition: 'center' })
-
   const { menuOpen, setMenuOpen } = useNav()
+  const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
+
+  // Build a lookup map: label -> block data
+  const grid = {}
+  gridData?.blocks?.forEach(b => { grid[b.label] = b })
+
+  // Helper: render media for a block
+  const blockMedia = (label, style = {}) => {
+    const b = grid[label]
+    if (!b) return null
+    if (b.mediaType === 'video' && b.videoUrl) return (
+      <video src={b.videoUrl} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+    )
+    if (b.mediaType === 'image' && b.imageUrl) return (
+      <img src={b.imageUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+    )
+    return null
+  }
+
+  // Helper: wrap block in NavLink if it has a project
+  const blockLink = (label, className, style, children) => {
+    const b = grid[label]
+    if (b?.projectSlug) return (
+      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{children}</NavLink>
+    )
+    return <div className={className} style={style}>{children}</div>
+  }
   const [loading, setLoading] = useState(!didLoad)
   const [reelOpen, setReelOpen] = useState(false)
   const [playing, setPlaying] = useState(true)
@@ -94,145 +121,163 @@ export default function Home() {
             </svg>
           </button>
         </div>
-        <NavLink to="/work/world-within" className={`${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`} style={{ gridColumn: '10 / span 3' }}>
+        {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '10 / span 3' }, <>
           <span className={styles.label}>002</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>World Within</p>
-        </NavLink>
+          <p className={styles.blockTitle}>{grid['002']?.projectName || 'World Within'}</p>
+        </>)}
       </section>
 
-      {/* Row 2 — 3 blocks, shifted right, gap at left + right */}
+      {/* Row 2 */}
       <section className={styles.row12}>
-        <NavLink to="/work/oxyle" className={`${styles.block} ${styles.r45} ${styles.blockLink}`} style={{ gridColumn: '2 / span 3' }}>
-          <video src="/grid/oxyle-hero.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        {blockLink('003', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '2 / span 3' }, <>
+          {blockMedia('003')}
           <span className={styles.label}>003</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>Oxyle</p>
-        </NavLink>
-        <NavLink to="/work/deep-dive-films" className={`${styles.block} ${styles.r45} ${styles.blockLink}`} style={{ gridColumn: '5 / span 3' }}>
+          <p className={styles.blockTitle}>{grid['003']?.projectName || 'Oxyle'}</p>
+        </>)}
+        {blockLink('004', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '5 / span 3' }, <>
+          {blockMedia('004')}
           <span className={styles.label}>004</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>Deep Dive Films</p>
-        </NavLink>
-        <NavLink to="/work/mindmatter" className={`${styles.block} ${styles.r45} ${styles.blockLink}`} style={{ gridColumn: '9 / span 3' }}>
+          <p className={styles.blockTitle}>{grid['004']?.projectName || 'Deep Dive Films'}</p>
+        </>)}
+        {blockLink('005', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
+          {blockMedia('005')}
           <span className={styles.label}>005</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>Mindmatter</p>
-        </NavLink>
+          <p className={styles.blockTitle}>{grid['005']?.projectName || 'Mindmatter'}</p>
+        </>)}
       </section>
 
-      {/* Row 3 — 4 across, full width */}
+      {/* Row 3 */}
       <section className={styles.row12}>
-        <NavLink to="/work/concis-labs" className={`${styles.block} ${styles.r45} ${styles.blockLink}`} style={{ gridColumn: 'span 3' }}>
+        {blockLink('006', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('006')}
           <span className={styles.label}>006</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>Concis Labs</p>
-        </NavLink>
-        <NavLink to="/work/big-buoy" className={`${styles.block} ${styles.r45} ${styles.blockLink}`} style={{ gridColumn: 'span 3' }}>
+          <p className={styles.blockTitle}>{grid['006']?.projectName || 'Concis Labs'}</p>
+        </>)}
+        {blockLink('007', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('007')}
           <span className={styles.label}>007</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>Big Buoy</p>
-        </NavLink>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 3', ...gi(29) }}>
+          <p className={styles.blockTitle}>{grid['007']?.projectName || 'Big Buoy'}</p>
+        </>)}
+        {blockLink('008', `${styles.block} ${styles.r45}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('008')}
           <span className={styles.label}>008</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 3' }}>
+        </>)}
+        {blockLink('009', `${styles.block} ${styles.r45}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('009')}
           <span className={styles.label}>009</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 4 — two 16:9, gap in middle */}
+      {/* Row 4 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 5' }}>
+        {blockLink('010', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 5' }, <>
+          {blockMedia('010')}
           <span className={styles.label}>010</span>
-        </div>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '7 / span 5' }}>
+        </>)}
+        {blockLink('011', `${styles.block} ${styles.r169}`, { gridColumn: '7 / span 5' }, <>
+          {blockMedia('011')}
           <span className={styles.label}>011</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 5 — 9:16 trio, side by side */}
+      {/* Row 5 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '1 / span 3' }}>
-          <video src="/grid/smashburger.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        {blockLink('012', `${styles.block} ${styles.r916}`, { gridColumn: '1 / span 3' }, <>
+          {blockMedia('012')}
           <span className={styles.label}>012</span>
-        </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '4 / span 3' }}>
-          <video src="/grid/0421.mov" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </>)}
+        {blockLink('013', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+          {blockMedia('013')}
           <span className={styles.label}>013</span>
-        </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '7 / span 3' }}>
-          <video src="/grid/nimruz-logo.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </>)}
+        {blockLink('014', `${styles.block} ${styles.r916}`, { gridColumn: '7 / span 3' }, <>
+          {blockMedia('014')}
           <span className={styles.label}>014</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 6 — 9:16 + 4:5 mix, side by side */}
+      {/* Row 6 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '1 / span 3' }}>
+        {blockLink('015', `${styles.block} ${styles.r45}`, { gridColumn: '1 / span 3' }, <>
+          {blockMedia('015')}
           <span className={styles.label}>015</span>
-        </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '4 / span 3' }}>
+        </>)}
+        {blockLink('016', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+          {blockMedia('016')}
           <span className={styles.label}>016</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 3' }}>
+        </>)}
+        {blockLink('017', `${styles.block} ${styles.r45}`, { gridColumn: '7 / span 3' }, <>
+          {blockMedia('017')}
           <span className={styles.label}>017</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 7 — 3 blocks, left gap */}
+      {/* Row 7 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '3 / span 3' }}>
+        {blockLink('018', `${styles.block} ${styles.r45}`, { gridColumn: '3 / span 3' }, <>
+          {blockMedia('018')}
           <span className={styles.label}>018</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '6 / span 3' }}>
-          <video src="/grid/big-crispy.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </>)}
+        {blockLink('019', `${styles.block} ${styles.r45}`, { gridColumn: '6 / span 3' }, <>
+          {blockMedia('019')}
           <span className={styles.label}>019</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '9 / span 3' }}>
-          <video src="/grid/empy-01.mov" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </>)}
+        {blockLink('020', `${styles.block} ${styles.r45}`, { gridColumn: '9 / span 3' }, <>
+          {blockMedia('020')}
           <span className={styles.label}>020</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 8 — wide 16:9 + tall 9:16 */}
+      {/* Row 8 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
-          <video src="/grid/ww-sizzle.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        {blockLink('021', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 7' }, <>
+          {blockMedia('021')}
           <span className={styles.label}>021</span>
-        </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '9 / span 3' }}>
+        </>)}
+        {blockLink('022', `${styles.block} ${styles.r916}`, { gridColumn: '9 / span 3' }, <>
+          {blockMedia('022')}
           <span className={styles.label}>022</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 9 — 4 square blocks */}
+      {/* Row 9 */}
       <section className={styles.row12}>
         {['023','024','025','026'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 3' }}>
+          blockLink(n, `${styles.block} ${styles.r11}`, { gridColumn: 'span 3' }, <>
+            {blockMedia(n)}
             <span className={styles.label}>{n}</span>
-          </div>
+          </>)
         ))}
       </section>
 
-      {/* Row 10 — 9:16 pair + 4:5 */}
+      {/* Row 10 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '1 / span 3' }}>
+        {blockLink('027', `${styles.block} ${styles.r916}`, { gridColumn: '1 / span 3' }, <>
+          {blockMedia('027')}
           <span className={styles.label}>027</span>
-        </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: '4 / span 3', ...gi(28) }}>
+        </>)}
+        {blockLink('028', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+          {blockMedia('028')}
           <span className={styles.label}>028</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '8 / span 4' }}>
+        </>)}
+        {blockLink('029', `${styles.block} ${styles.r45}`, { gridColumn: '8 / span 4' }, <>
+          {blockMedia('029')}
           <span className={styles.label}>029</span>
-        </div>
+        </>)}
       </section>
 
-      {/* Row 11 — full-width 16:9 */}
+      {/* Row 11 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 12' }}>
+        {blockLink('030', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 12' }, <>
+          {blockMedia('030')}
           <span className={styles.label}>030</span>
-        </div>
+        </>)}
       </section>
 
       {reelOpen && (

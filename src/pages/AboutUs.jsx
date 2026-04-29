@@ -1,5 +1,7 @@
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
+import { useSanity } from '../hooks/useSanity'
+import { OPEN_ROLES_QUERY } from '../lib/queries'
 
 const traits = [
   {
@@ -56,6 +58,9 @@ const photos = [
 ]
 
 export default function AboutUs() {
+  const { data: sanityRoles } = useSanity(OPEN_ROLES_QUERY)
+  const roles = sanityRoles?.length ? sanityRoles : openRoles
+
   useMeta({
     title: 'Careers — Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
@@ -119,7 +124,7 @@ export default function AboutUs() {
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>Open Roles</p>
         <div className={styles.rolesGrid}>
-          {openRoles.map(({ title, type, location, level, description }) => (
+          {roles.map(({ title, type, location, level, description }) => (
             <div key={title} className={styles.roleCard}>
               <div className={styles.roleHeader}>
                 <p className={styles.roleTitle}>{title}</p>

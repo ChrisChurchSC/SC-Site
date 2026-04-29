@@ -2,7 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useContact } from '../context/ContactContext'
 import { useNav } from '../context/NavContext'
-import { projects as caseStudies } from '../data/projects'
+import { projects as staticProjects } from '../data/projects'
+import { useSanity } from '../hooks/useSanity'
+import { PROJECTS_QUERY } from '../lib/queries'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
 
@@ -20,6 +22,8 @@ export default function Nav() {
   const location = useLocation()
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
+  const { data: sanityProjects } = useSanity(PROJECTS_QUERY)
+  const caseStudies = sanityProjects?.length ? sanityProjects : staticProjects
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
   const intervalRef = useRef(null)
