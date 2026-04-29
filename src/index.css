@@ -247,6 +247,7 @@ img, video {
 .formkit-fields {
   display: flex !important;
   flex-direction: row !important;
+  align-items: stretch !important;
   gap: 8px !important;
   width: 100% !important;
 }
@@ -254,6 +255,11 @@ img, video {
 .formkit-field {
   flex: 1 !important;
   min-width: 0 !important;
+  display: flex !important;
+}
+
+.formkit-field .formkit-input {
+  flex: 1 !important;
 }
 
 .formkit-input {
@@ -294,6 +300,7 @@ img, video {
   cursor: pointer !important;
   transition: background 0.15s, color 0.15s !important;
   display: block !important;
+  align-self: stretch !important;
 }
 
 .formkit-submit:hover {
@@ -313,15 +320,11 @@ img, video {
 }
 
 .formkit-alert-error {
-  background: rgba(255, 80, 80, 0.06) !important;
-  border: 1px solid rgba(255, 80, 80, 0.15) !important;
-  color: rgba(255, 120, 120, 0.7) !important;
+  display: none !important;
 }
 
 .formkit-alert-success {
-  background: rgba(78, 207, 179, 0.06) !important;
-  border: 1px solid rgba(78, 207, 179, 0.15) !important;
-  color: rgba(78, 207, 179, 0.7) !important;
+  display: none !important;
 }
 
 .formkit-powered-by-convertkit-container,
@@ -329,3 +332,26 @@ img, video {
   display: none !important;
 }
 
+
+.kit-toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  border-radius: 4px;
+  z-index: 9999;
+  animation: toastIn 0.25s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

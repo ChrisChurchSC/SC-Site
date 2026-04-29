@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import styles from './About.module.css'
 import { useMeta } from '../hooks/useMeta'
-
-const KIT_API_URL = 'https://api.kit.com/v4/subscribers'
-const KIT_API_KEY = 'kit_2df81d6b7f67f9b4512769af18bd29be'
+import KitForm from '../components/KitForm'
 
 const services = [
   {
@@ -46,26 +43,6 @@ export default function About() {
     title: 'Capabilities — Super Conscious',
     description: 'Creative strategy and production partner for founders and marketing teams. Brand, content, and product — embedded month to month, no long contracts.',
   })
-  const [email, setEmail] = useState('')
-  const [done, setDone] = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!email) return
-    try {
-      await fetch(KIT_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Kit-Api-Key': KIT_API_KEY,
-        },
-        body: JSON.stringify({ email_address: email }),
-      })
-    } catch (_) {}
-    setDone(true)
-    setEmail('')
-    setTimeout(() => setDone(false), 4000)
-  }
 
   return (
     <main className={styles.main}>
@@ -122,20 +99,7 @@ export default function About() {
         <div className={styles.pricingCard}>
           <p className={styles.pricingLabel}>Get Pricing</p>
           <p className={styles.pricingSub}>Drop your email and we'll send over rates and availability.</p>
-          {done ? (
-            <p className={styles.pricingConfirm}>We'll be in touch.</p>
-          ) : (
-            <form className={styles.pricingForm} onSubmit={handleSubmit}>
-              <input
-                className={styles.pricingInput}
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-              <button className={styles.pricingSubmit} type="submit">Send</button>
-            </form>
-          )}
+          <KitForm />
         </div>
       </section>
 
