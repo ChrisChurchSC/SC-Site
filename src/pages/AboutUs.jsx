@@ -1,9 +1,5 @@
-import { useState } from 'react'
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
-
-const KIT_API_URL = 'https://api.kit.com/v4/subscribers'
-const KIT_API_KEY = 'kit_2df81d6b7f67f9b4512769af18bd29be'
 
 const traits = [
   {
@@ -62,26 +58,6 @@ export default function AboutUs() {
     title: 'Careers — Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
   })
-  const [email, setEmail] = useState('')
-  const [done, setDone] = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!email) return
-    try {
-      await fetch(KIT_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Kit-Api-Key': KIT_API_KEY,
-        },
-        body: JSON.stringify({ email_address: email }),
-      })
-    } catch (_) {}
-    setDone(true)
-    setEmail('')
-  }
-
   return (
     <main className={styles.main}>
 
@@ -157,27 +133,6 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className={styles.ctaSection}>
-        <div className={styles.ctaCard}>
-          <p className={styles.ctaHeading}>Think you'd fit?</p>
-          <p className={styles.ctaSub}>Don't see something that fits? Join our list and we'll let you know when we're hiring.</p>
-          {done ? (
-            <p className={styles.ctaConfirm}>We'll be in touch.</p>
-          ) : (
-            <form className={styles.ctaForm} onSubmit={handleSubmit}>
-              <input
-                className={styles.ctaInput}
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-              <button className={styles.ctaSubmit} type="submit">Send</button>
-            </form>
-          )}
-        </div>
-      </section>
 
     </main>
   )
