@@ -8,7 +8,7 @@ dist
 # Large media — host on CDN, not git
 public/**/*.mp4
 public/**/*.mov
-public/reel-preview.gif
+# public/reel-preview.gif — committed, small enough
 
 # Allow compressed grid videos
 !public/grid/*-compressed.mp4

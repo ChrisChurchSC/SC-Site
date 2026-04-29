@@ -17,15 +17,19 @@ export default function Home() {
   const grid = {}
   gridData?.blocks?.forEach(b => { grid[b.label] = b })
 
+  // Prefix local paths with Vite base URL (needed for GitHub Pages /SC-Site/ subpath)
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
+
   // Helper: render media for a block
   const blockMedia = (label, style = {}) => {
     const b = grid[label]
     if (!b) return null
     if (b.mediaType === 'video' && b.videoUrl) return (
-      <video src={b.videoUrl} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+      <video src={assetUrl(b.videoUrl)} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
     )
     if (b.mediaType === 'image' && b.imageUrl) return (
-      <img src={b.imageUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+      <img src={assetUrl(b.imageUrl)} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
     )
     return null
   }
@@ -112,7 +116,7 @@ export default function Home() {
 
       {/* Row 1 — Hero */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer', backgroundImage: 'url(/reel-preview.gif)', backgroundSize: 'cover', backgroundPosition: 'center' }} onClick={() => setReelOpen(true)}>
+        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer', backgroundImage: `url(${assetUrl('/reel-preview.gif')})`, backgroundSize: 'cover', backgroundPosition: 'center' }} onClick={() => setReelOpen(true)}>
           <span className={styles.label}>Brand · Content · Web</span>
           <span className={styles.csTag}>Reel</span>
           <button className={styles.playBtn}>
