@@ -24,7 +24,7 @@ function BackButton() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter basename="/SC-Site">
+      <BrowserRouter basename={import.meta.env.PROD ? '/SC-Site' : ''}>
         <NavProvider>
         <ContactProvider>
           <TransitionBar />
