@@ -19,7 +19,7 @@ const BLOCK_MAP = {
   '006': { slug: 'concis-labs' },
   '007': { slug: 'girlfight' },
   '008': { slug: 'arbitrum' },
-  '009': { slug: 'mindmatter' },
+  '009': {},
   '010': { slug: 'opentext' },
   '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '012': { slug: 'aris' },
