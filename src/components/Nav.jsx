@@ -97,7 +97,7 @@ export default function Nav() {
               <button className="nav-card nav-card--full" onClick={copyEmail}>
                 <div className="nav-card-text">
                   <p className="nav-card-title">Contact</p>
-                  <p className="nav-card-sub">Copy email.</p>
+                  <p className="nav-card-sub">Get in touch.</p>
                 </div>
               </button>
             </div>
