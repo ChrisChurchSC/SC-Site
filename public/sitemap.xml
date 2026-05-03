@@ -21,6 +21,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://super-conscious.studio/thoughts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url><loc>https://super-conscious.studio/thoughts/on-building-brands-that-last</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/thoughts/the-case-for-slower-creative</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/thoughts/what-content-strategy-actually-is</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
   <url><loc>https://super-conscious.studio/work/joon</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/concis-labs</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>

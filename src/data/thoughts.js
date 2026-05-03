@@ -4,6 +4,7 @@ export const thoughts = [
     title: 'On building brands that last',
     date: 'May 2025',
     slug: 'on-building-brands-that-last',
+    isoDate: '2025-05-01',
     body: [
       'Most brands are built to launch, not to last. The brief says "bold and differentiated," the timeline is eight weeks, and by the time the work ships everyone has moved on to the next thing. The result is a lot of very polished systems that fall apart the moment the founding designer leaves or the company hits year three.',
       'What makes a brand durable isn\'t the logo. It\'s the depth of the decisions underneath it — the reasoning that explains why the type is set this way, why the palette works at these specific ratios, why the voice has these particular edges and not others. Documented reasoning is load-bearing. Aesthetic choices without it are decoration.',
@@ -19,6 +20,7 @@ export const thoughts = [
     title: 'The case for slower creative',
     date: 'Apr 2025',
     slug: 'the-case-for-slower-creative',
+    isoDate: '2025-04-01',
     body: [
       'The speed of content production has become a source of pride in the industry. Brands brag about how fast they can move. Agencies sell responsiveness as a feature. The implicit message is that speed equals relevance — that if you\'re not posting, you don\'t exist.',
       'We think this is mostly wrong. Not for every type of content, and not as a universal rule, but as a default operating principle for creative work, speed is overrated and under-examined.',
@@ -34,6 +36,7 @@ export const thoughts = [
     title: 'What content strategy actually is',
     date: 'Mar 2025',
     slug: 'what-content-strategy-actually-is',
+    isoDate: '2025-03-01',
     body: [
       'Content strategy has a definition problem. Ask ten people in the industry what it means and you\'ll get ten answers, ranging from "editorial calendar" to "brand voice document" to "SEO keyword mapping" to something vaguer about storytelling. Most of these answers describe a deliverable, not a discipline.',
       'Our working definition: content strategy is the practice of deciding what a brand should say, to whom, in what form, and why — and then building the infrastructure to do it consistently over time. The last part is where most strategies fail.',
