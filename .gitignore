@@ -12,3 +12,7 @@ public/**/*.mov
 
 # Allow compressed grid videos
 !public/grid/*-compressed.mp4
+
+# Grid placeholder images — serve from CDN or Sanity, not git
+public/grid/*.png
+public/grid/*.jpg
