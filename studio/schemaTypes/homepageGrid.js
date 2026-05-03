@@ -32,6 +32,7 @@ export const homepageGrid = defineType({
               type: 'reference',
               to: [{ type: 'project' }],
             }),
+            defineField({ name: 'externalUrl', title: 'External URL', type: 'url', description: 'If set, overrides project link' }),
           ],
           preview: {
             select: { title: 'label', subtitle: 'mediaType' },

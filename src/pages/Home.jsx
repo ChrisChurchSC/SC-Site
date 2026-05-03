@@ -6,8 +6,49 @@ import Loader from '../components/Loader'
 import { useNav } from '../context/NavContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { projects as staticProjects } from '../data/projects'
 
 let didLoad = false
+
+// Static fallback for every grid block: slug drives the NavLink, img drives the media
+const BLOCK_MAP = {
+  '002': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
+  '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
+  '004': { slug: 'deep-dive-films',   img: '/grid/img-1.png' },
+  '005': { slug: 'mindmatter',        img: '/grid/img-2.png' },
+  '006': { slug: 'concis-labs',       img: '/grid/img-3.png' },
+  '007': { slug: 'big-buoy',          img: '/grid/img-4.png' },
+  '008': { slug: 'arbitrum',          img: '/grid/img-5.png' },
+  '009': { slug: 'offchain',          img: '/grid/img-6.png' },
+  '010': { slug: 'opentext',          img: '/grid/img-7.png' },
+  '011': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
+  '012': { slug: 'aris',              img: '/grid/img-8.png' },
+  '013': { slug: 'girlfight',         img: '/grid/img-9.png' },
+  '014': { slug: 'photon',            img: '/grid/img-10.png' },
+  '015': { slug: 'starchase',         img: '/grid/img-11.png' },
+  '016': { slug: 'transcend',         img: '/grid/img-12.png' },
+  '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
+  '018': { slug: 'helen-maroulis',    img: '/grid/img-13.png' },
+  '019': { slug: 'fieldston',         img: '/grid/img-14.png' },
+  '020': { slug: 'gigs',              img: '/grid/img-15.png' },
+  '021': { slug: 'heard',             img: '/grid/img-16.png' },
+  '022': { slug: 'industry-standard', img: '/grid/img-17.png' },
+  '023': { slug: 'yellow-dog',        img: '/grid/img-18.png' },
+  '024': { slug: 'wonderwerk',        img: '/grid/img-19.png' },
+  '025': { slug: 'coldwater-club',    img: '/grid/img-20.png' },
+  '026': { slug: 'path-projects',     img: '/grid/img-21.png' },
+  '027': { slug: 'novi',              img: '/grid/img-22.png' },
+  '028': { slug: 'hylands',           img: '/grid/img-23.png' },
+  '029': { slug: 'perm-agriculture',  img: '/grid/img-24.png' },
+  '030': { slug: 'smallhold',         img: '/grid/img-25.png' },
+  '031': { slug: 'entropy',           img: '/grid/empy-01-compressed.mp4' },
+  '032': { slug: 'banzen',            img: '/grid/img-26.png' },
+  '033': { slug: 'print-parlor',      img: '/grid/img-27.png' },
+  '034': { slug: 'infura',            img: '/grid/img-28.png' },
+  '035': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
+  '036': { slug: 'kindling',          img: '/grid/img-29.png' },
+  '037': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
+}
 
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
@@ -21,34 +62,62 @@ export default function Home() {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
   const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
 
-  // Helper: render media for a block
   const isImageUrl = (url) => /\.(png|jpe?g|gif|webp|avif)$/i.test(url)
+
+  // Render media — Sanity data first, static fallback second
   const blockMedia = (label, style = {}) => {
     const b = grid[label]
-    if (!b) return null
-    if (b.mediaType === 'video' && b.videoUrl) {
+    const mediaStyle = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }
+    if (b?.mediaType === 'video' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
-      if (isImageUrl(url)) return (
-        <img src={url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
-      )
-      return (
-        <video src={url} autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
-      )
+      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} />
+      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} />
     }
-    if (b.mediaType === 'image' && b.imageUrl) return (
-      <img src={b.imageUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }} />
+    if (b?.mediaType === 'image' && b?.imageUrl) return (
+      <img src={b.imageUrl} alt="" style={mediaStyle} />
     )
+    const fallback = BLOCK_MAP[label]
+    if (fallback?.img) {
+      const url = assetUrl(fallback.img)
+      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} />
+      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} />
+    }
     return null
   }
 
-  // Helper: wrap block in NavLink if it has a project
+  // Wrap block in NavLink/anchor — Sanity data first, static fallback second
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
+    if (b?.externalUrl) {
+      const isInternal = b.externalUrl.startsWith('/')
+      if (isInternal) return <NavLink to={b.externalUrl} className={className} style={style}>{children}</NavLink>
+      return (
+        <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={className} style={style}>
+          <span className={styles.extIcon}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 2h8v8M10 2 4 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          {children}
+        </a>
+      )
+    }
     if (b?.projectSlug) return (
       <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{children}</NavLink>
     )
+    const fallback = BLOCK_MAP[label]
+    if (fallback?.slug) return (
+      <NavLink to={`/work/${fallback.slug}`} className={className} style={style}>{children}</NavLink>
+    )
     return <div className={className} style={style}>{children}</div>
   }
+
+  // Resolve project name for a block (Sanity → static projects list)
+  const blockName = (label) => {
+    const slug = grid[label]?.projectSlug ?? BLOCK_MAP[label]?.slug
+    return slug ? (staticProjects.find(p => p.slug === slug)?.name ?? grid[label]?.projectName) : null
+  }
+
   const [loading, setLoading] = useState(!didLoad)
   const [reelOpen, setReelOpen] = useState(false)
   const [playing, setPlaying] = useState(true)
@@ -133,9 +202,10 @@ export default function Home() {
           </button>
         </div>
         {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '10 / span 3' }, <>
+          {blockMedia('002')}
           <span className={styles.label}>002</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['002']?.projectName || 'World Within'}</p>
+          <p className={styles.blockTitle}>{blockName('002') || 'World Within'}</p>
         </>)}
       </section>
 
@@ -145,19 +215,19 @@ export default function Home() {
           {blockMedia('003')}
           <span className={styles.label}>003</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['003']?.projectName || 'Oxyle'}</p>
+          <p className={styles.blockTitle}>{blockName('003') || 'Oxyle'}</p>
         </>)}
         {blockLink('004', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '5 / span 3' }, <>
           {blockMedia('004')}
           <span className={styles.label}>004</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['004']?.projectName || 'Deep Dive Films'}</p>
+          <p className={styles.blockTitle}>{blockName('004') || 'Deep Dive Films'}</p>
         </>)}
         {blockLink('005', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
           {blockMedia('005')}
           <span className={styles.label}>005</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['005']?.projectName || 'Mindmatter'}</p>
+          <p className={styles.blockTitle}>{blockName('005') || 'Mindmatter'}</p>
         </>)}
       </section>
 
@@ -167,31 +237,35 @@ export default function Home() {
           {blockMedia('006')}
           <span className={styles.label}>006</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['006']?.projectName || 'Concis Labs'}</p>
+          <p className={styles.blockTitle}>{blockName('006') || 'Concis Labs'}</p>
         </>)}
         {blockLink('007', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('007')}
           <span className={styles.label}>007</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{grid['007']?.projectName || 'Big Buoy'}</p>
+          <p className={styles.blockTitle}>{blockName('007') || 'Big Buoy'}</p>
         </>)}
-        {blockLink('008', `${styles.block} ${styles.r45}`, { gridColumn: 'span 3' }, <>
+        {blockLink('008', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('008')}
           <span className={styles.label}>008</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('008')}</p>
         </>)}
-        {blockLink('009', `${styles.block} ${styles.r45}`, { gridColumn: 'span 3' }, <>
+        {blockLink('009', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('009')}
           <span className={styles.label}>009</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('009')}</p>
         </>)}
       </section>
 
       {/* Row 4 */}
       <section className={styles.row12}>
-        {blockLink('010', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 5' }, <>
+        {blockLink('010', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
           {blockMedia('010')}
           <span className={styles.label}>010</span>
         </>)}
-        {blockLink('011', `${styles.block} ${styles.r169}`, { gridColumn: '7 / span 5' }, <>
+        {blockLink('011', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '7 / span 6' }, <>
           {blockMedia('011')}
           <span className={styles.label}>011</span>
         </>)}
@@ -199,15 +273,15 @@ export default function Home() {
 
       {/* Row 5 */}
       <section className={styles.row12}>
-        {blockLink('012', `${styles.block} ${styles.r916}`, { gridColumn: '1 / span 3' }, <>
+        {blockLink('012', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('012')}
           <span className={styles.label}>012</span>
         </>)}
-        {blockLink('013', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+        {blockLink('013', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
           {blockMedia('013')}
           <span className={styles.label}>013</span>
         </>)}
-        {blockLink('014', `${styles.block} ${styles.r916}`, { gridColumn: '7 / span 3' }, <>
+        {blockLink('014', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
           {blockMedia('014')}
           <span className={styles.label}>014</span>
         </>)}
@@ -215,15 +289,15 @@ export default function Home() {
 
       {/* Row 6 */}
       <section className={styles.row12}>
-        {blockLink('015', `${styles.block} ${styles.r45}`, { gridColumn: '1 / span 3' }, <>
+        {blockLink('015', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('015')}
           <span className={styles.label}>015</span>
         </>)}
-        {blockLink('016', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+        {blockLink('016', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
           {blockMedia('016')}
           <span className={styles.label}>016</span>
         </>)}
-        {blockLink('017', `${styles.block} ${styles.r45}`, { gridColumn: '7 / span 3' }, <>
+        {blockLink('017', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
           {blockMedia('017')}
           <span className={styles.label}>017</span>
         </>)}
@@ -231,15 +305,15 @@ export default function Home() {
 
       {/* Row 7 */}
       <section className={styles.row12}>
-        {blockLink('018', `${styles.block} ${styles.r45}`, { gridColumn: '3 / span 3' }, <>
+        {blockLink('018', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '3 / span 3' }, <>
           {blockMedia('018')}
           <span className={styles.label}>018</span>
         </>)}
-        {blockLink('019', `${styles.block} ${styles.r45}`, { gridColumn: '6 / span 3' }, <>
+        {blockLink('019', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
           {blockMedia('019')}
           <span className={styles.label}>019</span>
         </>)}
-        {blockLink('020', `${styles.block} ${styles.r45}`, { gridColumn: '9 / span 3' }, <>
+        {blockLink('020', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
           {blockMedia('020')}
           <span className={styles.label}>020</span>
         </>)}
@@ -247,11 +321,11 @@ export default function Home() {
 
       {/* Row 8 */}
       <section className={styles.row12}>
-        {blockLink('021', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 7' }, <>
+        {blockLink('021', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 7' }, <>
           {blockMedia('021')}
           <span className={styles.label}>021</span>
         </>)}
-        {blockLink('022', `${styles.block} ${styles.r916}`, { gridColumn: '9 / span 3' }, <>
+        {blockLink('022', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
           {blockMedia('022')}
           <span className={styles.label}>022</span>
         </>)}
@@ -260,7 +334,7 @@ export default function Home() {
       {/* Row 9 */}
       <section className={styles.row12}>
         {['023','024','025','026'].map(n => (
-          blockLink(n, `${styles.block} ${styles.r11}`, { gridColumn: 'span 3' }, <>
+          blockLink(n, `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
             {blockMedia(n)}
             <span className={styles.label}>{n}</span>
           </>)
@@ -269,15 +343,15 @@ export default function Home() {
 
       {/* Row 10 */}
       <section className={styles.row12}>
-        {blockLink('027', `${styles.block} ${styles.r916}`, { gridColumn: '1 / span 3' }, <>
+        {blockLink('027', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('027')}
           <span className={styles.label}>027</span>
         </>)}
-        {blockLink('028', `${styles.block} ${styles.r916}`, { gridColumn: '4 / span 3' }, <>
+        {blockLink('028', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
           {blockMedia('028')}
           <span className={styles.label}>028</span>
         </>)}
-        {blockLink('029', `${styles.block} ${styles.r45}`, { gridColumn: '8 / span 4' }, <>
+        {blockLink('029', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '8 / span 4' }, <>
           {blockMedia('029')}
           <span className={styles.label}>029</span>
         </>)}
@@ -285,9 +359,45 @@ export default function Home() {
 
       {/* Row 11 */}
       <section className={styles.row12}>
-        {blockLink('030', `${styles.block} ${styles.r169}`, { gridColumn: '1 / span 12' }, <>
+        {blockLink('030', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 12' }, <>
           {blockMedia('030')}
           <span className={styles.label}>030</span>
+        </>)}
+      </section>
+
+      {/* Row 12 */}
+      <section className={styles.row12}>
+        {blockLink('031', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('031')}
+          <span className={styles.label}>031</span>
+        </>)}
+        {blockLink('032', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('032')}
+          <span className={styles.label}>032</span>
+        </>)}
+        {blockLink('033', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('033')}
+          <span className={styles.label}>033</span>
+        </>)}
+        {blockLink('034', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('034')}
+          <span className={styles.label}>034</span>
+        </>)}
+      </section>
+
+      {/* Row 13 */}
+      <section className={styles.row12}>
+        {blockLink('035', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 4' }, <>
+          {blockMedia('035')}
+          <span className={styles.label}>035</span>
+        </>)}
+        {blockLink('036', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '5 / span 4' }, <>
+          {blockMedia('036')}
+          <span className={styles.label}>036</span>
+        </>)}
+        {blockLink('037', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
+          {blockMedia('037')}
+          <span className={styles.label}>037</span>
         </>)}
       </section>
 

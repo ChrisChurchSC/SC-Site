@@ -4,7 +4,7 @@ export const client = createClient({
   projectId: 'ppq16wpu',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  useCdn: true,
+  useCdn: false,
 })
 
 export function imageUrl(source) {

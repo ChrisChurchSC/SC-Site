@@ -54,6 +54,7 @@ export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepag
     "imageUrl": image.asset->url,
     videoUrl,
     "projectSlug": project->slug.current,
-    "projectName": project->name
+    "projectName": project->name,
+    externalUrl
   }
 }`
