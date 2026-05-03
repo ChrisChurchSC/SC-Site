@@ -557,27 +557,16 @@ a.nav-cs-item {
   padding-bottom: 2px;
 }
 
-/* ── Nav contact button ── */
-.nav-contact-btn {
-  width: 100%;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 10px 12px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s, color 0.15s;
-  margin-top: 4px;
+/* ── Two-up card pair ── */
+.nav-card-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
 }
 
-.nav-contact-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.75);
+.nav-card--full {
+  width: 100%;
+  height: 100%;
 }
 
 /* ── Work drawer mobile ── */

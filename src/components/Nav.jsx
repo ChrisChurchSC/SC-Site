@@ -71,33 +71,37 @@ export default function Nav() {
 
         {/* Action cards */}
         <div className="nav-action-cards">
-          {actionCards.map(({ label, sub, to, action }) => {
-            if (to) return (
-              <NavLink key={label} to={to} className="nav-card">
-                <div className="nav-card-text">
-                  <p className="nav-card-title">{label}</p>
-                  <p className="nav-card-sub">{sub}</p>
-                </div>
-              </NavLink>
-            )
-            return (
-              <div key={label} style={{ position: 'relative' }}>
-                {copied && <span className="copy-bubble">Copied!</span>}
-                <button className="nav-card" onClick={copyEmail}>
-                  <div className="nav-card-text">
-                    <p className="nav-card-title">{label}</p>
-                    <p className="nav-card-sub">{sub}</p>
-                  </div>
-                </button>
-              </div>
-            )
-          })}
-        </div>
+          <NavLink to="/about" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Capabilities</p>
+              <p className="nav-card-sub">Brand, content, and product.</p>
+            </div>
+          </NavLink>
 
-        {/* Contact */}
-        <div style={{ position: 'relative' }}>
-          {copied && <span className="copy-bubble">Copied!</span>}
-          <button className="nav-contact-btn" onClick={copyEmail}>Contact</button>
+          <div className="nav-card-pair">
+            <NavLink to="/about-us" className="nav-card">
+              <div className="nav-card-text">
+                <p className="nav-card-title">Careers</p>
+                <p className="nav-card-sub">Join the team.</p>
+              </div>
+            </NavLink>
+            <div style={{ position: 'relative' }}>
+              {copied && <span className="copy-bubble">Copied!</span>}
+              <button className="nav-card nav-card--full" onClick={copyEmail}>
+                <div className="nav-card-text">
+                  <p className="nav-card-title">Contact</p>
+                  <p className="nav-card-sub">Copy email.</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <NavLink to="/thoughts" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Thoughts</p>
+              <p className="nav-card-sub">Ideas, notes, and process.</p>
+            </div>
+          </NavLink>
         </div>
 
         {/* Case study list */}
