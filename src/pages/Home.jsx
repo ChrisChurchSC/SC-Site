@@ -12,7 +12,7 @@ let didLoad = false
 
 // Static fallback for every grid block: slug drives the NavLink, img drives the media
 const BLOCK_MAP = {
-  '002': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
+  '002': { slug: 'girlfight' },
   '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
   '004': { slug: 'deep-dive-films' },
   '005': { slug: 'mindmatter' },
@@ -23,7 +23,7 @@ const BLOCK_MAP = {
   '010': { slug: 'opentext' },
   '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '012': { slug: 'aris' },
-  '013': { slug: 'girlfight' },
+  '013': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
   '014': { slug: 'photon' },
   '015': { slug: 'starchase' },
   '016': { slug: 'transcend' },
@@ -37,7 +37,7 @@ const BLOCK_MAP = {
   '024': { slug: 'wonderwerk' },
   '025': { slug: 'coldwater-club' },
   '026': { slug: 'path-projects' },
-  '027': { slug: 'novi' },
+  '027': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
   '028': { slug: 'hylands' },
   '029': { slug: 'perm-agriculture' },
   '030': { slug: 'smallhold' },

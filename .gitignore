@@ -16,3 +16,6 @@ public/**/*.mov
 # Grid placeholder images — serve from CDN or Sanity, not git
 public/grid/*.png
 public/grid/*.jpg
+
+# Allow named compressed grid images
+!public/grid/*-compressed.jpg
