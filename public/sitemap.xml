@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url>
-    <loc>https://super-conscious.studio/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://super-conscious.studio/work</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://super-conscious.studio/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://super-conscious.studio/about-us</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://super-conscious.studio/thoughts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://super-conscious.studio/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://super-conscious.studio/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://super-conscious.studio/about-us</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/thoughts</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://super-conscious.studio/thoughts/on-building-brands-that-last</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
   <url><loc>https://super-conscious.studio/thoughts/the-case-for-slower-creative</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
   <url><loc>https://super-conscious.studio/thoughts/what-content-strategy-actually-is</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
@@ -37,28 +16,35 @@
   <url><loc>https://super-conscious.studio/work/oxyle</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/mindmatter</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/deep-dive-films</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/vessel</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/halfday</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/pollen</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/marketing-dept</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/dune-studio</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/overland</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/forma</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/gather</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/meridian</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/aris</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/nimruz</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/smashburger</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/photon</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/helen-maroulis</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/fieldston</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/gigs</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/heard</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/industry-standard</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/starchase</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/yellow-dog</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/soft-science</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/world-within</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/arbitrum</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/north-quarter</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/atlas</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/wonderwerk</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/offchain</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/opentext</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/girlfight</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/coldwater-club</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/path-projects</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/novi</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/hylands</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/perm-agriculture</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/smallhold</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/entropy</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/banzen</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/print-parlor</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/infura</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://super-conscious.studio/work/tbt</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://super-conscious.studio/work/kindling</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/open-field</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/liminal</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/hollow</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/terrain</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/clearwater</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/still-life</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/prospect</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://super-conscious.studio/work/founders-table</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
 
 </urlset>

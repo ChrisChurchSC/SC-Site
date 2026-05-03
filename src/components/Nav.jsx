@@ -106,12 +106,11 @@ export default function Nav() {
 
         {/* Case study list */}
         <ul className="nav-cs-list">
-          {caseStudies.slice(0, 20).map(({ n, name, type, year, slug }) => {
+          {caseStudies.slice(0, 20).map(({ n, name, type, slug }) => {
             const inner = <>
               <span className="nav-cs-num">{n}</span>
               <span className="nav-cs-name">{name}</span>
               <span className="nav-cs-type">{type}</span>
-              <span className="nav-cs-year">{year}</span>
             </>
             return slug ? (
               <NavLink key={n} to={`/work/${slug}`} className="nav-cs-item">
@@ -175,7 +174,6 @@ export default function Nav() {
               <span className="work-overlay-num">{cs.n}</span>
               <span className="work-overlay-name">{cs.name}</span>
               <span className="work-overlay-type">{cs.type}</span>
-              <span className="work-overlay-year">{cs.year}</span>
             </>
             return cs.slug ? (
               <NavLink
