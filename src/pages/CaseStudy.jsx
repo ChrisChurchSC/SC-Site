@@ -26,14 +26,14 @@ const servicesByType = {
 }
 
 function buildPlaceholder(project) {
+  const services = project.work ?? servicesByType[project.type] ?? ['Brand Identity', 'Web Design', 'Content', 'Motion']
   return {
     n: project.n,
     name: project.name,
     type: project.type,
-    year: project.year,
     tagline: 'A complete creative system built to move at the speed of the market.',
     summary: 'A full creative engagement spanning brand identity, visual language, and launch communications. We partnered closely with the founding team to develop a system that could carry the weight of their ambition — from investor decks to product surfaces to public-facing campaigns. The work was built to scale.',
-    services: servicesByType[project.type] ?? ['Brand Identity', 'Web Design', 'Content', 'Motion'],
+    services,
     outcomes: [
       { category: 'Brand', outcome: 'Delivered a cohesive visual identity system across every touchpoint from day one.' },
       { category: 'Launch', outcome: 'Shipped on schedule and within scope, ready for a full public rollout.' },
