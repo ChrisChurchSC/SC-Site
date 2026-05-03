@@ -12,12 +12,12 @@ let didLoad = false
 
 // Static fallback for every grid block: slug drives the NavLink, img drives the media
 const BLOCK_MAP = {
-  '002': { slug: 'girlfight' },
+  '002': { slug: 'big-buoy' },
   '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
   '004': { slug: 'deep-dive-films' },
   '005': { slug: 'offchain' },
   '006': { slug: 'concis-labs' },
-  '007': { slug: 'big-buoy' },
+  '007': { slug: 'girlfight' },
   '008': { slug: 'arbitrum' },
   '009': { slug: 'mindmatter' },
   '010': { slug: 'opentext' },
