@@ -78,6 +78,13 @@ export default function Nav() {
             </div>
           </NavLink>
 
+          <NavLink to="/thoughts" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Thoughts</p>
+              <p className="nav-card-sub">Ideas, notes, and process.</p>
+            </div>
+          </NavLink>
+
           <div className="nav-card-pair">
             <NavLink to="/about-us" className="nav-card">
               <div className="nav-card-text">
@@ -95,13 +102,6 @@ export default function Nav() {
               </button>
             </div>
           </div>
-
-          <NavLink to="/thoughts" className="nav-card">
-            <div className="nav-card-text">
-              <p className="nav-card-title">Thoughts</p>
-              <p className="nav-card-sub">Ideas, notes, and process.</p>
-            </div>
-          </NavLink>
         </div>
 
         {/* Case study list */}
