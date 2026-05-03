@@ -403,6 +403,53 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* Row 14 */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 5' }}>
+          <span className={styles.label}>038</span>
+        </div>
+        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '6 / span 7' }}>
+          <span className={styles.label}>039</span>
+        </div>
+      </section>
+
+      {/* Row 15 */}
+      <section className={styles.row12}>
+        {['040','041','042','043'].map(n => (
+          <div key={n} className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 3' }}>
+            <span className={styles.label}>{n}</span>
+          </div>
+        ))}
+      </section>
+
+      {/* Row 16 */}
+      <section className={styles.row12}>
+        {['044','045','046'].map(n => (
+          <div key={n} className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
+            <span className={styles.label}>{n}</span>
+          </div>
+        ))}
+      </section>
+
+      {/* Row 17 */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
+          <span className={styles.label}>047</span>
+        </div>
+        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
+          <span className={styles.label}>048</span>
+        </div>
+      </section>
+
+      {/* Row 18 */}
+      <section className={styles.row12}>
+        {['049','050','051'].map(n => (
+          <div key={n} className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
+            <span className={styles.label}>{n}</span>
+          </div>
+        ))}
+      </section>
+
       {reelOpen && (
         <div className={styles.reelOverlay} onClick={closeReel}>
           <button className={styles.reelClose} onClick={closeReel}>Close</button>
