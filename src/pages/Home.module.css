@@ -132,10 +132,15 @@
 }
 
 .blockTitle {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: clamp(12px, 1vw, 16px);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.1;
 }
 
@@ -143,6 +148,7 @@
   position: absolute;
   top: 12px;
   right: 12px;
+  z-index: 2;
   font-family: 'Roboto Mono', monospace;
   font-size: 7px;
   letter-spacing: 0.1em;
@@ -151,6 +157,19 @@
   background: rgba(255, 255, 255, 0.07);
   border-radius: 2px;
   padding: 3px 6px;
+}
+
+.block::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 0 0 4px 4px;
 }
 
 .extIcon {
