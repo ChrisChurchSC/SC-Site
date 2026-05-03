@@ -70,11 +70,11 @@ export default function Home() {
     const mediaStyle = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }
     if (b?.mediaType === 'video' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
-      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} />
-      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} />
+      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
+      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} onError={e => e.target.style.display = 'none'} />
     }
     if (b?.mediaType === 'image' && b?.imageUrl) return (
-      <img src={b.imageUrl} alt="" style={mediaStyle} />
+      <img src={b.imageUrl} alt="" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
     )
     const fallback = BLOCK_MAP[label]
     if (fallback?.img) {
