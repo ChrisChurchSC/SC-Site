@@ -15,18 +15,18 @@ const BLOCK_MAP = {
   '002': { slug: 'girlfight' },
   '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
   '004': { slug: 'deep-dive-films' },
-  '005': { slug: 'mindmatter' },
+  '005': { slug: 'offchain' },
   '006': { slug: 'concis-labs' },
   '007': { slug: 'big-buoy' },
   '008': { slug: 'arbitrum' },
-  '009': { slug: 'offchain' },
+  '009': { slug: 'mindmatter' },
   '010': { slug: 'opentext' },
   '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '012': { slug: 'aris' },
   '013': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
-  '014': { slug: 'photon' },
+  '014': { slug: 'transcend' },
   '015': { slug: 'starchase' },
-  '016': { slug: 'transcend' },
+  '016': { slug: 'photon' },
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
   '018': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
   '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
@@ -227,7 +227,7 @@ export default function Home() {
           {blockMedia('005')}
           <span className={styles.label}>005</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('005') || 'Mindmatter'}</p>
+          <p className={styles.blockTitle}>{blockName('005')}</p>
         </>)}
       </section>
 
