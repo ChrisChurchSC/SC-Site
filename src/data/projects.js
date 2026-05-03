@@ -34,7 +34,7 @@ export const projects = [
   { n: '013', name: 'Transcend',        type: 'Brand',                    slug: 'transcend' },
   { n: '014', name: 'Mindmatter',       type: 'Brand',                    slug: 'mindmatter' },
 
-  { n: '015', name: 'Deep Dive Films',  type: 'Brand + Content',          slug: 'deep-dive-films',
+  { n: '015', name: 'Deep Dive',         type: 'Brand + Content',          slug: 'deep-dive-films',
     work: ['Brand', 'Content'] },
 
   { n: '016', name: 'Nimruz',           type: 'Brand + Content',          slug: 'nimruz',
