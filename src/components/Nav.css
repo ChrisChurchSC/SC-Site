@@ -557,55 +557,27 @@ a.nav-cs-item {
   padding-bottom: 2px;
 }
 
-/* ── Floating contact button ── */
-.contact-float {
-  position: fixed;
-  bottom: 20px;
-  right: 324px;
-  z-index: 300;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.contact-float-btn {
+/* ── Nav contact button ── */
+.nav-contact-btn {
+  width: 100%;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 7px 14px;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 10px 12px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-  white-space: nowrap;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  margin-top: 4px;
 }
 
-.contact-float-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.contact-float-bubble {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.8);
-  font-family: 'Roboto Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
-  pointer-events: none;
-  animation: bubbleIn 0.15s cubic-bezier(0.25, 1, 0.4, 1) both;
+.nav-contact-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* ── Work drawer mobile ── */
@@ -632,9 +604,5 @@ a.nav-cs-item {
 
   .work-overlay-bg {
     display: none;
-  }
-
-  .contact-float {
-    right: 20px;
   }
 }

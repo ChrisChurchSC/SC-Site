@@ -11,9 +11,9 @@ import './Nav.css'
 const CONTACT_EMAIL = 'contact@super-conscious.studio'
 
 const actionCards = [
-  { label: 'Capabilities', sub: 'Brand, content, and product.',  to: '/about', action: null },
-  { label: 'Careers',      sub: 'Join the team.', to: '/about-us', action: null },
-  { label: 'Thoughts',     sub: "Ideas, notes, and process.", to: null,     action: 'copy' },
+  { label: 'Capabilities', sub: 'Brand, content, and product.',  to: '/about',    action: null },
+  { label: 'Careers',      sub: 'Join the team.',                to: '/about-us', action: null },
+  { label: 'Thoughts',     sub: 'Ideas, notes, and process.',    to: '/thoughts', action: null },
 ]
 
 export default function Nav() {
@@ -25,13 +25,6 @@ export default function Nav() {
   const { data: sanityProjects } = useSanity(PROJECTS_QUERY)
   const caseStudies = sanityProjects?.length ? sanityProjects : staticProjects
   const [copied, setCopied] = useState(false)
-  const [copiedFloat, setCopiedFloat] = useState(false)
-
-  const copyEmailFloat = () => {
-    navigator.clipboard.writeText(CONTACT_EMAIL)
-    setCopiedFloat(true)
-    setTimeout(() => setCopiedFloat(false), 2000)
-  }
   const [bgImage, setBgImage] = useState(null)
   const intervalRef = useRef(null)
   const frameRef = useRef(0)
@@ -101,6 +94,12 @@ export default function Nav() {
           })}
         </div>
 
+        {/* Contact */}
+        <div style={{ position: 'relative' }}>
+          {copied && <span className="copy-bubble">Copied!</span>}
+          <button className="nav-contact-btn" onClick={copyEmail}>Contact</button>
+        </div>
+
         {/* Case study list */}
         <ul className="nav-cs-list">
           {caseStudies.slice(0, 20).map(({ n, name, type, year, slug }) => {
@@ -159,12 +158,6 @@ export default function Nav() {
 
       {/* Backdrop */}
       <div className={`work-backdrop${workOpen ? ' work-backdrop--open' : ''}`} onClick={() => setWorkOpen(false)} />
-
-      {/* Floating contact button */}
-      <div className="contact-float">
-        {copiedFloat && <span className="contact-float-bubble">Copied!</span>}
-        <button className="contact-float-btn" onClick={copyEmailFloat}>Contact</button>
-      </div>
 
       {/* Drawer */}
       <div className={`work-drawer${workOpen ? ' work-drawer--open' : ''}`}>

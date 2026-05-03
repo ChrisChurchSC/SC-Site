@@ -11,6 +11,7 @@ import Work from './pages/Work'
 import About from './pages/About'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
+import Thoughts from './pages/Thoughts'
 
 function BackButton() {
   const location = useLocation()
@@ -39,6 +40,7 @@ export default function App() {
               <Route path="/work/:slug" element={<CaseStudy />} />
               <Route path="/about" element={<About />} />
               <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/thoughts" element={<Thoughts />} />
             </Routes>
           </div>
         </ContactProvider>
