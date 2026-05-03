@@ -12,7 +12,7 @@ let didLoad = false
 
 // Static fallback for every grid block: slug drives the NavLink, img drives the media
 const BLOCK_MAP = {
-  '002': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
+  '002': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
   '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
   '004': { slug: 'deep-dive-films' },
   '005': { slug: 'mindmatter' },
@@ -21,7 +21,7 @@ const BLOCK_MAP = {
   '008': { slug: 'arbitrum' },
   '009': { slug: 'offchain' },
   '010': { slug: 'opentext' },
-  '011': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
+  '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '012': { slug: 'aris' },
   '013': { slug: 'girlfight' },
   '014': { slug: 'photon' },
@@ -205,7 +205,7 @@ export default function Home() {
           {blockMedia('002')}
           <span className={styles.label}>002</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('002') || 'World Within'}</p>
+          <p className={styles.blockTitle}>{blockName('002')}</p>
         </>)}
       </section>
 
