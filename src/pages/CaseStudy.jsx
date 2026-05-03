@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
 import { projects as staticProjects } from '../data/projects'
@@ -77,6 +78,24 @@ export default function CaseStudy() {
   const projects = staticProjects
   const project = projects.find(p => p.slug === slug)
 
+  const [unlocked, setUnlocked] = useState(() =>
+    !project?.password || sessionStorage.getItem(`cs_unlocked_${slug}`) === '1'
+  )
+  const [pw, setPw] = useState('')
+  const [error, setError] = useState(false)
+
+  const handleUnlock = (e) => {
+    e.preventDefault()
+    if (pw === project.password) {
+      sessionStorage.setItem(`cs_unlocked_${slug}`, '1')
+      setUnlocked(true)
+    } else {
+      setError(true)
+      setPw('')
+      setTimeout(() => setError(false), 600)
+    }
+  }
+
   // Normalize Sanity sections to match existing renderer expectations
   const normalizeSections = (sections) => sections?.map(s => {
     if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, ratio: s.ratio }
@@ -97,6 +116,30 @@ export default function CaseStudy() {
   })
 
   if (!cs) return <main className={styles.main}><p className={styles.notFound}>Case study not found.</p></main>
+
+  if (!unlocked) return (
+    <main className={styles.main}>
+      <div className={styles.gate}>
+        <div className={styles.gateInner}>
+          <p className={styles.gateNum}>{project.n}</p>
+          <h1 className={styles.gateName}>{project.name}</h1>
+          <p className={styles.gateSubtext}>This case study is private.</p>
+          <form className={styles.gateForm} onSubmit={handleUnlock}>
+            <input
+              className={`${styles.gateInput}${error ? ` ${styles.gateInputError}` : ''}`}
+              type="password"
+              placeholder="Password"
+              value={pw}
+              onChange={e => setPw(e.target.value)}
+              autoFocus
+            />
+            <span className={styles.gateError}>{error ? 'Incorrect password.' : ''}</span>
+            <button type="submit" className={styles.gateSubmit}>Enter →</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  )
 
   return (
     <main className={styles.main}>

@@ -1,5 +1,5 @@
 export const projects = [
-  { n: '001', name: 'Arbitrum',         type: 'Brand + Content',          slug: 'arbitrum',
+  { n: '001', name: 'Arbitrum',         type: 'Brand + Content',          slug: 'arbitrum',  password: 'arbitrum',
     work: ['Rebrand', 'Interview Series', 'Product Videos', 'Marketing Dept Videos', 'Openhouse'] },
 
   { n: '002', name: 'Offchain',         type: 'Brand',                    slug: 'offchain' },
