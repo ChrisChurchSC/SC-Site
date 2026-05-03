@@ -28,8 +28,8 @@ const BLOCK_MAP = {
   '015': { slug: 'starchase' },
   '016': { slug: 'transcend' },
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
-  '018': { slug: 'helen-maroulis' },
-  '019': { slug: 'fieldston' },
+  '018': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
+  '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
   '020': { slug: 'gigs' },
   '021': { slug: 'heard' },
   '022': { slug: 'industry-standard' },
@@ -45,9 +45,9 @@ const BLOCK_MAP = {
   '032': { slug: 'banzen' },
   '033': { slug: 'print-parlor' },
   '034': { slug: 'infura' },
-  '035': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
+  '035': { slug: 'helen-maroulis' },
   '036': { slug: 'kindling' },
-  '037': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
+  '037': { slug: 'fieldston' },
 }
 
 export default function Home() {
