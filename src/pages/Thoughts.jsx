@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom'
 import styles from './Thoughts.module.css'
 import { thoughts } from '../data/thoughts'
 
@@ -10,12 +11,12 @@ export default function Thoughts() {
       </header>
 
       <section className={styles.index}>
-        {thoughts.map(({ n, title, date }) => (
-          <div key={n} className={styles.row}>
+        {thoughts.map(({ n, title, date, slug }) => (
+          <NavLink key={n} to={`/thoughts/${slug}`} className={styles.row}>
             <span className={styles.num}>{n}</span>
             <span className={styles.title}>{title}</span>
             <span className={styles.date}>{date}</span>
-          </div>
+          </NavLink>
         ))}
       </section>
     </main>

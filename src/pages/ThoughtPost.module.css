@@ -1,0 +1,96 @@
+.main {
+  padding: 0 305px 120px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.header {
+  padding: 72px 40px 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.num {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.date {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.title {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.body {
+  padding: 56px 40px;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.para {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.notFound {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.2);
+  padding: 72px 40px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 0 0 120px;
+  }
+
+  .header {
+    padding: 72px 24px 40px;
+  }
+
+  .body {
+    padding: 40px 24px;
+  }
+}
