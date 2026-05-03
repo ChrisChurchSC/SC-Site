@@ -85,7 +85,7 @@ export default function Home() {
     return null
   }
 
-  // Wrap block in NavLink/anchor — Sanity data first, static fallback second
+  // Wrap block in NavLink/anchor — BLOCK_MAP wins; Sanity externalUrl still overrides
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
     if (b?.externalUrl) {
@@ -102,20 +102,20 @@ export default function Home() {
         </a>
       )
     }
-    if (b?.projectSlug) return (
-      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{children}</NavLink>
-    )
     const fallback = BLOCK_MAP[label]
     if (fallback?.slug) return (
       <NavLink to={`/work/${fallback.slug}`} className={className} style={style}>{children}</NavLink>
     )
+    if (b?.projectSlug) return (
+      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{children}</NavLink>
+    )
     return <div className={className} style={style}>{children}</div>
   }
 
-  // Resolve project name for a block (Sanity → static projects list)
+  // Resolve project name — BLOCK_MAP slug drives the lookup
   const blockName = (label) => {
-    const slug = grid[label]?.projectSlug ?? BLOCK_MAP[label]?.slug
-    return slug ? (staticProjects.find(p => p.slug === slug)?.name ?? grid[label]?.projectName) : null
+    const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
+    return slug ? staticProjects.find(p => p.slug === slug)?.name : null
   }
 
   const [loading, setLoading] = useState(!didLoad)

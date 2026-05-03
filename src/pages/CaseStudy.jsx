@@ -74,9 +74,7 @@ function buildPlaceholder(project) {
 export default function CaseStudy() {
   const { slug } = useParams()
   const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug })
-  const { data: sanityProjects } = useSanity(PROJECTS_QUERY)
-
-  const projects = sanityProjects?.length ? sanityProjects : staticProjects
+  const projects = staticProjects
   const project = projects.find(p => p.slug === slug)
 
   // Normalize Sanity sections to match existing renderer expectations

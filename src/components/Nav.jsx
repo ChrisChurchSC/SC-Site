@@ -22,8 +22,7 @@ export default function Nav() {
   const location = useLocation()
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
-  const { data: sanityProjects } = useSanity(PROJECTS_QUERY)
-  const caseStudies = sanityProjects?.length ? sanityProjects : staticProjects
+  const caseStudies = staticProjects
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
   const intervalRef = useRef(null)
