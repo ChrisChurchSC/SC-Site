@@ -73,10 +73,13 @@ function buildPlaceholder(project) {
 }
 
 export default function CaseStudy() {
-  const { slug } = useParams()
-  const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug })
+  const { slug, clientSlug, workSlug } = useParams()
+  // When accessed via /work/:clientSlug/:workSlug, resolve the Sanity slug as "clientSlug-workSlug"
+  const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
+  const clientSlugResolved = clientSlug ?? slug
+  const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug: sanitySlug })
   const projects = staticProjects
-  const project = projects.find(p => p.slug === slug)
+  const project = projects.find(p => p.slug === clientSlugResolved)
 
   const [unlocked, setUnlocked] = useState(() =>
     !project?.password || sessionStorage.getItem(`cs_unlocked_${slug}`) === '1'
