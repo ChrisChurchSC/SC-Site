@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ContactProvider } from './context/ContactContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -15,6 +16,12 @@ import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import { projects as staticProjects } from './data/projects'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
 
 function BackButton() {
   const location = useLocation()
@@ -46,6 +53,7 @@ export default function App() {
       <BrowserRouter basename={import.meta.env.PROD ? '/SC-Site' : ''}>
         <NavProvider>
         <ContactProvider>
+          <ScrollToTop />
           <TransitionBar />
           <Cursor />
           <Nav />
