@@ -476,19 +476,19 @@ export default function Home() {
 
       {/* Row 13 */}
       <section className={styles.row12}>
-        {blockLink('035', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 4' }, <>
+        {blockLink('035', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
           {blockMedia('035')}
           <span className={styles.label}>035</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('035')}</p>
         </>)}
-        {blockLink('036', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '5 / span 4' }, <>
+        {blockLink('036', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
           {blockMedia('036')}
           <span className={styles.label}>036</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('036')}</p>
         </>)}
-        {blockLink('037', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
+        {blockLink('037', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
           {blockMedia('037')}
           <span className={styles.label}>037</span>
           <span className={styles.csTag}>Case Study</span>
