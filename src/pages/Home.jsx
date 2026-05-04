@@ -259,6 +259,16 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* Placeholder A */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
+          <span className={styles.label}>038</span>
+        </div>
+        <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: '8 / span 5' }}>
+          <span className={styles.label}>039</span>
+        </div>
+      </section>
+
       {/* Row 4 */}
       <section className={styles.row12}>
         {blockLink('010', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
@@ -295,6 +305,15 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('014')}</p>
         </>)}
+      </section>
+
+      {/* Placeholder B */}
+      <section className={styles.row12}>
+        {['040','041','042'].map(n => (
+          <div key={n} className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 4' }}>
+            <span className={styles.label}>{n}</span>
+          </div>
+        ))}
       </section>
 
       {/* Row 6 */}
@@ -341,6 +360,13 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* Placeholder C */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 12' }}>
+          <span className={styles.label}>043</span>
+        </div>
+      </section>
+
       {/* Row 8 */}
       <section className={styles.row12}>
         {blockLink('021', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 7' }, <>
@@ -366,6 +392,15 @@ export default function Home() {
             <span className={styles.csTag}>Case Study</span>
             <p className={styles.blockTitle}>{blockName(n)}</p>
           </>)
+        ))}
+      </section>
+
+      {/* Placeholder D */}
+      <section className={styles.row12}>
+        {['044','045','046'].map(n => (
+          <div key={n} className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
+            <span className={styles.label}>{n}</span>
+          </div>
         ))}
       </section>
 
@@ -399,6 +434,16 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('030')}</p>
         </>)}
+      </section>
+
+      {/* Placeholder E */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
+          <span className={styles.label}>047</span>
+        </div>
+        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
+          <span className={styles.label}>048</span>
+        </div>
       </section>
 
       {/* Row 12 */}
@@ -451,45 +496,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Row 14 */}
-      <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 5' }}>
-          <span className={styles.label}>038</span>
-        </div>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '6 / span 7' }}>
-          <span className={styles.label}>039</span>
-        </div>
-      </section>
-
-      {/* Row 15 */}
-      <section className={styles.row12}>
-        {['040','041','042','043'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 3' }}>
-            <span className={styles.label}>{n}</span>
-          </div>
-        ))}
-      </section>
-
-      {/* Row 16 */}
-      <section className={styles.row12}>
-        {['044','045','046'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
-            <span className={styles.label}>{n}</span>
-          </div>
-        ))}
-      </section>
-
-      {/* Row 17 */}
-      <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
-          <span className={styles.label}>047</span>
-        </div>
-        <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
-          <span className={styles.label}>048</span>
-        </div>
-      </section>
-
-      {/* Row 18 */}
+      {/* Placeholder F */}
       <section className={styles.row12}>
         {['049','050','051'].map(n => (
           <div key={n} className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
