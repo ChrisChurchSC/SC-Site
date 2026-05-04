@@ -41,6 +41,7 @@ export default function ClientOverview() {
           <span className={styles.metaYear}>{project.year}</span>
         </div>
         <h1 className={styles.title}>{project.name}</h1>
+        {project.descriptor && <p className={styles.descriptor}>{project.descriptor}</p>}
         {tagline && <p className={styles.tagline}>{tagline}</p>}
       </header>
 
@@ -63,6 +64,7 @@ export default function ClientOverview() {
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>
               <span className={styles.cardArrow}>→</span>
+              <div className={styles.cardOverlay} />
             </NavLink>
           ))}
         </div>

@@ -1,10 +1,12 @@
 export const projects = [
   { n: '001', name: 'Arbitrum',         type: 'Brand + Content',          slug: 'arbitrum',  password: 'arbitrum',
+    descriptor: 'The leading Ethereum Layer 2 blockchain network.',
     work: ['Rebrand', 'Interview Series', 'Product Videos', 'Marketing Dept Videos', 'Openhouse'] },
 
   { n: '002', name: 'Offchain',         type: 'Brand',                    slug: 'offchain' },
 
   { n: '003', name: 'OpenText',         type: 'Brand + Campaign',         slug: 'opentext',
+    descriptor: 'An enterprise information management and cloud software company.',
     work: ['Brand', 'Animated Ads', 'Live Action Campaign'] },
 
   { n: '004', name: 'Smashburger',      type: 'Brand + Content',          slug: 'smashburger',
@@ -14,6 +16,7 @@ export const projects = [
     work: ['Brand', 'Content'] },
 
   { n: '006', name: 'World Within',     type: 'Brand + Content',          slug: 'world-within',
+    descriptor: 'A consciousness and human growth media platform.',
     work: ['Brand', 'Brand II', 'Social', 'Content', 'How to Change the World'] },
 
   { n: '007', name: 'Girlfight',        type: 'Brand + Content',          slug: 'girlfight',
@@ -26,14 +29,17 @@ export const projects = [
     work: ['Brand', 'Content'] },
 
   { n: '011', name: 'Concis Labs',      type: 'Brand + Content',          slug: 'concis-labs',
+    descriptor: 'A Medicaid meeting intelligence platform.',
     work: ['Brand', 'Content'] },
 
   { n: '012', name: 'Big Buoy',         type: 'Brand + Content + Product',slug: 'big-buoy',
+    descriptor: 'A live marine forecast app for surfers and boaters.',
     work: ['Brand', 'Content', 'Product'] },
 
   { n: '013', name: 'Transcend',        type: 'Brand',                    slug: 'transcend' },
 
   { n: '015', name: 'Deep Dive',         type: 'Brand + Content',          slug: 'deep-dive-films',
+    descriptor: 'A Brooklyn-based edutainment production studio.',
     work: ['Brand', 'Content'] },
 
   { n: '016', name: 'Nimruz',           type: 'Brand + Content',          slug: 'nimruz',
@@ -43,6 +49,7 @@ export const projects = [
   { n: '018', name: 'Fieldston',        type: 'Brand',                    slug: 'fieldston' },
 
   { n: '019', name: 'Gigs',             type: 'Brand + Content + Product',slug: 'gigs',
+    descriptor: 'A telecom-as-a-service platform for building mobile products.',
     work: ['Brand', 'Content', 'Product'] },
 
   { n: '020', name: 'Heard',            type: 'Brand',                    slug: 'heard' },
@@ -60,6 +67,7 @@ export const projects = [
   { n: '029', name: 'Perm Agriculture', type: 'Content',                  slug: 'perm-agriculture' },
 
   { n: '030', name: 'Smallhold',        type: 'Brand + Content',          slug: 'smallhold',
+    descriptor: 'A specialty mushroom grower and national distributor.',
     work: ['Brand', 'Content'] },
 
   { n: '031', name: 'Entropy',          type: 'Brand',                    slug: 'entropy' },

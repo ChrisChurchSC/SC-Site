@@ -53,7 +53,15 @@
   font-size: clamp(40px, 5.5vw, 80px);
   line-height: 1.0;
   color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 16px;
+  margin: 0 0 14px;
+}
+
+.descriptor {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 14px;
 }
 
 .tagline {
@@ -120,12 +128,9 @@
 .card {
   background: #161616;
   border-radius: 4px;
-  padding: 20px 18px 18px;
+  padding: 14px 16px;
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
   aspect-ratio: 4 / 5;
   position: relative;
   transition: background 0.2s ease, transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
@@ -143,30 +148,50 @@
 }
 
 .cardNum {
+  position: absolute;
+  top: 14px;
+  left: 16px;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.22);
-  display: block;
-  margin-bottom: auto;
 }
 
 .cardName {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 40px;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(16px, 1.6vw, 24px);
+  font-size: clamp(14px, 1.4vw, 20px);
   line-height: 1.15;
   color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 10px;
+  margin: 0;
+  z-index: 2;
 }
 
 .cardArrow {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.2);
   transition: color 0.2s, transform 0.2s;
-  display: block;
-  align-self: flex-end;
+  z-index: 2;
+}
+
+.cardOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 0 0 4px 4px;
 }
 
 /* ── Mobile ── */
