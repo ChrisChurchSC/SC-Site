@@ -65,6 +65,7 @@ export const project = defineType({
     // Case study fields
     defineField({ name: 'tagline', title: 'Tagline', type: 'string' }),
     defineField({ name: 'summary', title: 'Summary', type: 'text', rows: 5 }),
+    defineField({ name: 'relationship', title: 'Client Relationship', type: 'text', rows: 8, description: 'Longer write-up about the working relationship — shown on the client overview page.' }),
     defineField({
       name: 'services',
       title: 'Services',

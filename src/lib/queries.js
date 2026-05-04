@@ -48,7 +48,8 @@ export const OPEN_ROLES_QUERY = `*[_type == "openRole" && active == true] | orde
 
 export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   tagline,
-  summary
+  summary,
+  relationship
 }`
 
 export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepage-grid"][0] {

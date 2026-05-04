@@ -28,8 +28,8 @@ export default function ClientOverview() {
     n: String(i + 1).padStart(2, '0'),
   }))
 
-  const summary = sanity?.summary ?? null
   const tagline = sanity?.tagline ?? null
+  const relationshipCopy = sanity?.relationship ?? sanity?.summary ?? null
 
   return (
     <main className={styles.main}>
@@ -45,10 +45,10 @@ export default function ClientOverview() {
         {tagline && <p className={styles.tagline}>{tagline}</p>}
       </header>
 
-      {summary && (
+      {relationshipCopy && (
         <div className={styles.relationship}>
           <span className={styles.relationshipLabel}>Our Work Together</span>
-          <p className={styles.relationshipBody}>{summary}</p>
+          <p className={styles.relationshipBody}>{relationshipCopy}</p>
         </div>
       )}
 
