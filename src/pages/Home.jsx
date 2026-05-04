@@ -385,14 +385,30 @@ export default function Home() {
 
       {/* Row 9 */}
       <section className={styles.row12}>
-        {['023','024','025','026'].map(n => (
-          blockLink(n, `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-            {blockMedia(n)}
-            <span className={styles.label}>{n}</span>
-            <span className={styles.csTag}>Case Study</span>
-            <p className={styles.blockTitle}>{blockName(n)}</p>
-          </>)
-        ))}
+        {blockLink('023', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('023')}
+          <span className={styles.label}>023</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('023')}</p>
+        </>)}
+        {blockLink('024', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('024')}
+          <span className={styles.label}>024</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('024')}</p>
+        </>)}
+        {blockLink('025', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('025')}
+          <span className={styles.label}>025</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('025')}</p>
+        </>)}
+        {blockLink('026', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('026')}
+          <span className={styles.label}>026</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('026')}</p>
+        </>)}
       </section>
 
       {/* Placeholder D */}
