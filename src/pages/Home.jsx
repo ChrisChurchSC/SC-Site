@@ -88,9 +88,12 @@ export default function Home() {
   // Wrap block in NavLink/anchor — BLOCK_MAP wins; Sanity externalUrl still overrides
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
+    const count = workCount(label)
+    const badge = count > 1 ? <span key="wb" className={styles.workBadge}>{count}</span> : null
+    const inner = badge ? <>{children}{badge}</> : children
     if (b?.externalUrl) {
       const isInternal = b.externalUrl.startsWith('/')
-      if (isInternal) return <NavLink to={b.externalUrl} className={className} style={style}>{children}</NavLink>
+      if (isInternal) return <NavLink to={b.externalUrl} className={className} style={style}>{inner}</NavLink>
       return (
         <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={className} style={style}>
           <span className={styles.extIcon}>
@@ -98,24 +101,30 @@ export default function Home() {
               <path d="M2 2h8v8M10 2 4 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          {children}
+          {inner}
         </a>
       )
     }
     const fallback = BLOCK_MAP[label]
     if (fallback?.slug) return (
-      <NavLink to={`/work/${fallback.slug}`} className={className} style={style}>{children}</NavLink>
+      <NavLink to={`/work/${fallback.slug}`} className={className} style={style}>{inner}</NavLink>
     )
     if (b?.projectSlug) return (
-      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{children}</NavLink>
+      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{inner}</NavLink>
     )
-    return <div className={className} style={style}>{children}</div>
+    return <div className={className} style={style}>{inner}</div>
   }
 
   // Resolve project name — BLOCK_MAP slug drives the lookup
   const blockName = (label) => {
     const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
     return slug ? staticProjects.find(p => p.slug === slug)?.name : null
+  }
+
+  // Count distinct work items for a project
+  const workCount = (label) => {
+    const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
+    return slug ? (staticProjects.find(p => p.slug === slug)?.work?.length ?? 0) : 0
   }
 
   const [loading, setLoading] = useState(!didLoad)
