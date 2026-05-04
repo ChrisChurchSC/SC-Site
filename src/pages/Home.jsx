@@ -30,7 +30,7 @@ const BLOCK_MAP = {
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
   '018': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
   '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
-  '020': { slug: 'gigs' },
+  '020': { slug: 'gigs',              img: '/grid/0421-compressed.mp4' },
   '021': { slug: 'heard' },
   '022': { slug: 'industry-standard' },
   '023': { slug: 'yellow-dog' },
