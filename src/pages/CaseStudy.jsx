@@ -108,8 +108,9 @@ export default function CaseStudy() {
   const sanityStripped = sanityCs
     ? Object.fromEntries(Object.entries(sanityCs).filter(([, v]) => v !== null && v !== undefined))
     : null
+  const normalizedSections = normalizeSections(sanityCs?.sections)
   const cs = sanityCs
-    ? { ...placeholder, ...sanityStripped, sections: normalizeSections(sanityCs.sections), credits: [{ role: 'Creative Direction', name: 'Super Conscious' }, { role: 'Client', name: sanityCs.name }] }
+    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []), credits: [{ role: 'Creative Direction', name: 'Super Conscious' }, { role: 'Client', name: sanityCs.name }] }
     : (staticCaseStudies[slug] ?? placeholder)
 
   const moreProjects = projects.filter(p => p.slug !== slug).slice(0, 3)
