@@ -182,6 +182,15 @@
   z-index: 2;
 }
 
+.cardThumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
 .cardOverlay {
   position: absolute;
   bottom: 0;

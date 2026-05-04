@@ -22,11 +22,19 @@ export default function ClientOverview() {
     <main className={styles.main}><p className={styles.notFound}>Client not found.</p></main>
   )
 
-  const workItems = (project.work ?? []).map((name, i) => ({
-    name,
-    slug: slugify(name),
-    n: String(i + 1).padStart(2, '0'),
-  }))
+  const subProjects = {}
+  sanity?.subProjects?.forEach(sp => { subProjects[sp.slug] = sp })
+
+  const workItems = (project.work ?? []).map((name, i) => {
+    const workSlug = slugify(name)
+    const fullSlug = `${slug}-${workSlug}`
+    return {
+      name,
+      slug: workSlug,
+      n: String(i + 1).padStart(2, '0'),
+      thumbnail: subProjects[fullSlug]?.thumbnail ?? null,
+    }
+  })
 
   const tagline = sanity?.tagline ?? null
   const relationshipCopy = sanity?.relationship ?? sanity?.summary ?? project?.relationship ?? null
@@ -61,6 +69,9 @@ export default function ClientOverview() {
               to={`/work/${slug}/${item.slug}`}
               className={styles.card}
             >
+              {item.thumbnail && (
+                <img src={item.thumbnail} alt="" className={styles.cardThumb} />
+              )}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>
               <span className={styles.cardArrow}>→</span>

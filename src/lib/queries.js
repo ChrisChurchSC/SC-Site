@@ -49,7 +49,11 @@ export const OPEN_ROLES_QUERY = `*[_type == "openRole" && active == true] | orde
 export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   tagline,
   summary,
-  relationship
+  relationship,
+  "subProjects": *[_type == "project" && string::startsWith(slug.current, $slug + "-")] {
+    "slug": slug.current,
+    "thumbnail": coalesce(thumbnailImages[0].asset->url, sections[_type == "imageFullSection"][0].image.asset->url)
+  }
 }`
 
 export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepage-grid"][0] {
