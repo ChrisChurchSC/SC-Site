@@ -31,7 +31,7 @@ const BLOCK_MAP = {
   '018': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
   '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
   '020': { slug: 'gigs',              img: '/grid/0421-compressed.mp4' },
-  '021': { slug: 'heard' },
+  '021': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '022': { slug: 'industry-standard' },
   '023': { slug: 'yellow-dog' },
   '024': { slug: 'wonderwerk' },
