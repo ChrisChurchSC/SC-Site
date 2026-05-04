@@ -23,14 +23,14 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][
     _type,
     _key,
     // imageFullSection
-    "src": image.asset->url,
+    "src": coalesce(videoFile.asset->url, image.asset->url),
     ratio,
     // textSection
     heading,
     body,
     // imageGridSection
     images[] {
-      "src": image.asset->url,
+      "src": coalesce(videoFile.asset->url, image.asset->url),
       cols,
       ratio
     }
