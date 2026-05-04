@@ -29,7 +29,7 @@ export default function ClientOverview() {
   }))
 
   const tagline = sanity?.tagline ?? null
-  const relationshipCopy = sanity?.relationship ?? sanity?.summary ?? null
+  const relationshipCopy = sanity?.relationship ?? sanity?.summary ?? project?.relationship ?? null
 
   return (
     <main className={styles.main}>
