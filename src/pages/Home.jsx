@@ -24,7 +24,7 @@ const BLOCK_MAP = {
   '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '012': { slug: 'aris' },
   '013': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
-  '014': { slug: 'transcend' },
+  '014': { slug: 'transcend',           img: '/grid/transcend-compressed.mp4' },
   '015': { slug: 'starchase' },
   '016': { slug: 'photon' },
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
