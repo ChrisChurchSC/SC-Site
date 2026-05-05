@@ -28,7 +28,7 @@ const BLOCK_MAP = {
   '015': { slug: 'starchase' },
   '016': { slug: 'photon' },
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
-  '018': { slug: 'tbt',               img: '/grid/0421-compressed.mp4' },
+  '018': { slug: 'helen-maroulis' },
   '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
   '020': { slug: 'gigs',              img: '/grid/0421-compressed.mp4' },
   '021': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
@@ -38,14 +38,14 @@ const BLOCK_MAP = {
   '025': { slug: 'coldwater-club' },
   '026': { slug: 'path-projects' },
   '027': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
-  '028': { slug: 'hylands' },
+  '028': { slug: 'hylands',           img: '/grid/hylands-compressed.mp4' },
   '029': { slug: 'perm-agriculture' },
   '030': { slug: 'smallhold' },
   '031': { slug: 'entropy',           img: '/grid/empy-01-compressed.mp4' },
   '032': { slug: 'banzen' },
   '033': { slug: 'print-parlor' },
   '034': { slug: 'infura' },
-  '035': { slug: 'helen-maroulis' },
+  '035': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
   '036': { slug: 'kindling' },
   '037': { slug: 'fieldston' },
 }
@@ -378,7 +378,7 @@ export default function Home() {
 
       {/* Row 8 */}
       <section className={styles.row12}>
-        {blockLink('021', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 7' }, <>
+        {blockLink('021', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 7' }, <>
           {blockMedia('021')}
           <span className={styles.label}>021</span>
           <span className={styles.csTag}>Case Study</span>
