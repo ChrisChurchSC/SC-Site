@@ -378,7 +378,7 @@ export default function Home() {
 
       {/* Row 8 */}
       <section className={styles.row12}>
-        {blockLink('021', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 2' }, <>
+        {blockLink('021', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 1' }, <>
           {blockMedia('021')}
           <span className={styles.label}>021</span>
           <span className={styles.csTag}>Case Study</span>
