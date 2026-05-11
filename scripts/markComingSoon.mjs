@@ -58,6 +58,7 @@ const COMING_SOON = [
   'smallhold-content',
   'entropy',
   'infura',
+  'zbiotics',
 ]
 
 const existing = await client.fetch(`*[_type == "project"]{_id, "slug": slug.current}`)

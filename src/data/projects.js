@@ -46,6 +46,7 @@ export const projects = [
     work: ['Brand', 'Content', 'Product'] },
 
   { n: '013', name: 'Transcend',        type: 'Brand',                    slug: 'transcend' },
+  { n: '014', name: 'Zbiotics',         type: 'Content',                  slug: 'zbiotics' },
 
   { n: '015', name: 'Deep Dive',         type: 'Brand + Content',          slug: 'deep-dive-films',
     descriptor: 'A Brooklyn-based edutainment production studio.',
