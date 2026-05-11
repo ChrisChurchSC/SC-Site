@@ -437,6 +437,21 @@
     width: 100%;
   }
 
+  .pricingCard :global(.formkit-fields[data-stacked="false"]) {
+    flex-direction: column !important;
+    gap: 8px;
+  }
+
+  .pricingCard :global(.formkit-field),
+  .pricingCard :global(.formkit-submit) {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .pricingCard :global(.formkit-input) {
+    width: 100% !important;
+  }
+
   .clientsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
