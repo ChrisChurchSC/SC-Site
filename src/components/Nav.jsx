@@ -115,7 +115,10 @@ export default function Nav() {
             const inner = <>
               <span className="nav-cs-num">{n}</span>
               <span className="nav-cs-name">{name}</span>
-              <span className="nav-cs-type">{isComingSoon ? 'Coming Soon' : type}</span>
+              <span className="nav-cs-type">
+                {type}
+                {isComingSoon && <span className="nav-cs-tag">Soon</span>}
+              </span>
             </>
             const className = `nav-cs-item${isComingSoon ? ' nav-cs-item--coming-soon' : ''}`
             return slug && !isComingSoon ? (
@@ -180,7 +183,10 @@ export default function Nav() {
             const inner = <>
               <span className="work-overlay-num">{cs.n}</span>
               <span className="work-overlay-name">{cs.name}</span>
-              <span className="work-overlay-type">{isComingSoon ? 'Coming Soon' : cs.type}</span>
+              <span className="work-overlay-type">
+                {cs.type}
+                {isComingSoon && <span className="work-overlay-tag">Soon</span>}
+              </span>
             </>
             const className = `work-overlay-item${isComingSoon ? ' work-overlay-item--coming-soon' : ''}`
             return cs.slug && !isComingSoon ? (

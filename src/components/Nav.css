@@ -83,12 +83,22 @@
 
 .nav-cs-item:hover { opacity: 0.6; }
 
-.nav-cs-item--coming-soon { cursor: default; opacity: 0.5; }
-.nav-cs-item--coming-soon:hover { opacity: 0.5; }
-.nav-cs-item--coming-soon .nav-cs-type {
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.1em;
+.nav-cs-item--coming-soon { cursor: default; opacity: 0.55; }
+.nav-cs-item--coming-soon:hover { opacity: 0.55; }
+
+.nav-cs-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  vertical-align: middle;
 }
 
 a.nav-cs-item {
@@ -415,17 +425,26 @@ a.nav-cs-item {
 
 .work-overlay-item--coming-soon {
   cursor: default;
-  opacity: 0.4;
+  opacity: 0.55;
 }
 
 .work-overlay-item--coming-soon:hover .work-overlay-name {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.work-overlay-item--coming-soon .work-overlay-type {
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.08em;
+.work-overlay-tag {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  vertical-align: middle;
 }
 
 .work-overlay-type {
