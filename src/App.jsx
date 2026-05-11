@@ -29,7 +29,7 @@ function BackButton() {
   if (location.pathname === '/') return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
-    if (parts.length > 2) {
+    if (parts.length > 1) {
       navigate('/' + parts.slice(0, -1).join('/'))
     } else {
       navigate('/')
