@@ -25,6 +25,7 @@ export default function Nav() {
   const caseStudies = staticProjects
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
+  const [hoveredN, setHoveredN] = useState(null)
   const intervalRef = useRef(null)
   const frameRef = useRef(0)
 
@@ -35,6 +36,7 @@ export default function Nav() {
   }
 
   const startCycling = (cs) => {
+    setHoveredN(cs.n)
     if (!cs.images?.length) return
     clearInterval(intervalRef.current)
     frameRef.current = 0
@@ -48,6 +50,7 @@ export default function Nav() {
   const stopCycling = () => {
     clearInterval(intervalRef.current)
     setBgImage(null)
+    setHoveredN(null)
   }
 
   useEffect(() => () => clearInterval(intervalRef.current), [])
@@ -164,7 +167,7 @@ export default function Nav() {
       {/* Drawer */}
       <div className={`work-drawer${workOpen ? ' work-drawer--open' : ''}`}>
         <div className="work-drawer-header">
-          <span className="work-overlay-label">Selected Work — 001 / {String(caseStudies.length).padStart(3, '0')}</span>
+          <span className="work-overlay-label">Selected Work — {hoveredN || caseStudies[0]?.n || '001'} / {String(caseStudies.length).padStart(3, '0')}</span>
           <button className="work-overlay-close-card" onClick={() => setWorkOpen(false)}>Close</button>
         </div>
         <div className="work-overlay-list">
