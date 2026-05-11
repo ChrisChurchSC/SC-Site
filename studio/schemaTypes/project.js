@@ -54,6 +54,7 @@ export const project = defineType({
     defineField({ name: 'year', title: 'Year', type: 'string' }),
     defineField({ name: 'order', title: 'Order', type: 'number', description: 'Sort order (lower = first)' }),
     defineField({ name: 'published', title: 'Published', type: 'boolean', initialValue: true }),
+    defineField({ name: 'comingSoon', title: 'Coming Soon', type: 'boolean', description: 'Show in lists with a badge; disable link until ready.', initialValue: false }),
     defineField({
       name: 'thumbnailImages',
       title: 'Thumbnail Images',

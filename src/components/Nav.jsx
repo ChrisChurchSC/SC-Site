@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useContact } from '../context/ContactContext'
 import { useNav } from '../context/NavContext'
+import { useComingSoon } from '../context/ComingSoonContext'
 import { projects as staticProjects } from '../data/projects'
 import { useSanity } from '../hooks/useSanity'
 import { PROJECTS_QUERY } from '../lib/queries'
@@ -23,6 +24,7 @@ export default function Nav() {
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
   const caseStudies = staticProjects
+  const comingSoon = useComingSoon()
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
   const [hoveredN, setHoveredN] = useState(null)
@@ -109,17 +111,19 @@ export default function Nav() {
         {/* Case study list */}
         <ul className="nav-cs-list">
           {caseStudies.slice(0, 20).map(({ n, name, type, slug }) => {
+            const isComingSoon = slug && comingSoon.has(slug)
             const inner = <>
               <span className="nav-cs-num">{n}</span>
               <span className="nav-cs-name">{name}</span>
-              <span className="nav-cs-type">{type}</span>
+              <span className="nav-cs-type">{isComingSoon ? 'Coming Soon' : type}</span>
             </>
-            return slug ? (
-              <NavLink key={n} to={`/work/${slug}`} className="nav-cs-item">
+            const className = `nav-cs-item${isComingSoon ? ' nav-cs-item--coming-soon' : ''}`
+            return slug && !isComingSoon ? (
+              <NavLink key={n} to={`/work/${slug}`} className={className}>
                 {inner}
               </NavLink>
             ) : (
-              <li key={n} className="nav-cs-item">
+              <li key={n} className={className}>
                 {inner}
               </li>
             )
@@ -172,16 +176,18 @@ export default function Nav() {
         </div>
         <div className="work-overlay-list">
           {caseStudies.map((cs) => {
+            const isComingSoon = cs.slug && comingSoon.has(cs.slug)
             const inner = <>
               <span className="work-overlay-num">{cs.n}</span>
               <span className="work-overlay-name">{cs.name}</span>
-              <span className="work-overlay-type">{cs.type}</span>
+              <span className="work-overlay-type">{isComingSoon ? 'Coming Soon' : cs.type}</span>
             </>
-            return cs.slug ? (
+            const className = `work-overlay-item${isComingSoon ? ' work-overlay-item--coming-soon' : ''}`
+            return cs.slug && !isComingSoon ? (
               <NavLink
                 key={cs.n}
                 to={`/work/${cs.slug}`}
-                className="work-overlay-item"
+                className={className}
                 onMouseEnter={() => startCycling(cs)}
                 onMouseLeave={stopCycling}
                 onClick={() => setWorkOpen(false)}
@@ -191,7 +197,7 @@ export default function Nav() {
             ) : (
               <div
                 key={cs.n}
-                className="work-overlay-item"
+                className={className}
                 onMouseEnter={() => startCycling(cs)}
                 onMouseLeave={stopCycling}
               >

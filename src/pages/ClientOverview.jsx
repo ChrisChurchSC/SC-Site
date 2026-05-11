@@ -33,6 +33,7 @@ export default function ClientOverview() {
       slug: workSlug,
       n: String(i + 1).padStart(2, '0'),
       thumbnail: subProjects[fullSlug]?.thumbnail ?? null,
+      comingSoon: subProjects[fullSlug]?.comingSoon ?? false,
     }
   })
 
@@ -63,21 +64,25 @@ export default function ClientOverview() {
       <div className={styles.section}>
         <span className={styles.sectionLabel}>{workItems.length} Projects</span>
         <div className={styles.grid}>
-          {workItems.map((item) => (
-            <NavLink
-              key={item.slug}
-              to={`/work/${slug}/${item.slug}`}
-              className={styles.card}
-            >
+          {workItems.map((item) => {
+            const cardClass = `${styles.card}${item.comingSoon ? ' ' + styles.cardComingSoon : ''}`
+            const inner = <>
               {item.thumbnail && (
                 <img src={item.thumbnail} alt="" className={styles.cardThumb} />
               )}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>
-              <span className={styles.cardArrow}>→</span>
+              {item.comingSoon
+                ? <span className={styles.cardComingSoonBadge}>Coming Soon</span>
+                : <span className={styles.cardArrow}>→</span>}
               <div className={styles.cardOverlay} />
-            </NavLink>
-          ))}
+            </>
+            return item.comingSoon ? (
+              <div key={item.slug} className={cardClass}>{inner}</div>
+            ) : (
+              <NavLink key={item.slug} to={`/work/${slug}/${item.slug}`} className={cardClass}>{inner}</NavLink>
+            )
+          })}
         </div>
       </div>
 

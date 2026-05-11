@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } fro
 import { ContactProvider } from './context/ContactContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
+import { ComingSoonProvider } from './context/ComingSoonContext'
 import Nav from './components/Nav'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
@@ -53,6 +54,7 @@ export default function App() {
       <BrowserRouter basename={import.meta.env.PROD ? '/SC-Site' : ''}>
         <NavProvider>
         <ContactProvider>
+        <ComingSoonProvider>
           <ScrollToTop />
           <TransitionBar />
           <Cursor />
@@ -71,6 +73,7 @@ export default function App() {
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
             </Routes>
           </div>
+        </ComingSoonProvider>
         </ContactProvider>
         </NavProvider>
       </BrowserRouter>

@@ -5,8 +5,11 @@ export const PROJECTS_QUERY = `*[_type == "project" && published == true] | orde
   "slug": slug.current,
   type,
   year,
+  comingSoon,
   "images": thumbnailImages[].asset->url
 }`
+
+export const COMING_SOON_QUERY = `*[_type == "project" && comingSoon == true].slug.current`
 
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   _id,
@@ -52,6 +55,7 @@ export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $s
   relationship,
   "subProjects": *[_type == "project" && string::startsWith(slug.current, $slug + "-")] {
     "slug": slug.current,
+    comingSoon,
     "thumbnail": coalesce(thumbnailImages[0].asset->url, sections[_type == "imageFullSection"][0].image.asset->url)
   }
 }`

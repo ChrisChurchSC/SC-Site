@@ -4,6 +4,7 @@ import styles from './Home.module.css'
 import LogoWordmark from '../components/LogoWordmark'
 import Loader from '../components/Loader'
 import { useNav } from '../context/NavContext'
+import { useComingSoon } from '../context/ComingSoonContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { projects as staticProjects } from '../data/projects'
@@ -53,6 +54,7 @@ const BLOCK_MAP = {
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
+  const comingSoon = useComingSoon()
 
   // Build a lookup map: label -> block data
   const grid = {}
@@ -90,12 +92,16 @@ export default function Home() {
     const b = grid[label]
     const count = workCount(label)
     const badge = count > 1 ? <span key="wb" className={styles.workBadge}>{count}</span> : null
-    const inner = badge ? <>{children}{badge}</> : children
+    const slug = BLOCK_MAP[label]?.slug ?? b?.projectSlug
+    const isComingSoon = slug && comingSoon.has(slug) && !b?.externalUrl
+    const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
+    const inner = <>{children}{badge}{csBadge}</>
+    const finalClass = `${className}${isComingSoon ? ' ' + styles.blockComingSoon : ''}`
     if (b?.externalUrl) {
       const isInternal = b.externalUrl.startsWith('/')
-      if (isInternal) return <NavLink to={b.externalUrl} className={className} style={style}>{inner}</NavLink>
+      if (isInternal) return <NavLink to={b.externalUrl} className={finalClass} style={style}>{inner}</NavLink>
       return (
-        <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={className} style={style}>
+        <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={finalClass} style={style}>
           <span className={styles.extIcon}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 2h8v8M10 2 4 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -105,14 +111,11 @@ export default function Home() {
         </a>
       )
     }
-    const fallback = BLOCK_MAP[label]
-    if (fallback?.slug) return (
-      <NavLink to={`/work/${fallback.slug}`} className={className} style={style}>{inner}</NavLink>
+    if (isComingSoon) return <div className={finalClass} style={style}>{inner}</div>
+    if (slug) return (
+      <NavLink to={`/work/${slug}`} className={finalClass} style={style}>{inner}</NavLink>
     )
-    if (b?.projectSlug) return (
-      <NavLink to={`/work/${b.projectSlug}`} className={className} style={style}>{inner}</NavLink>
-    )
-    return <div className={className} style={style}>{inner}</div>
+    return <div className={finalClass} style={style}>{inner}</div>
   }
 
   // Resolve project name — BLOCK_MAP slug drives the lookup

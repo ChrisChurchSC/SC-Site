@@ -83,6 +83,14 @@
 
 .nav-cs-item:hover { opacity: 0.6; }
 
+.nav-cs-item--coming-soon { cursor: default; opacity: 0.5; }
+.nav-cs-item--coming-soon:hover { opacity: 0.5; }
+.nav-cs-item--coming-soon .nav-cs-type {
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 a.nav-cs-item {
   text-decoration: none;
   color: inherit;
@@ -403,6 +411,21 @@ a.nav-cs-item {
 
 .work-overlay-item:hover .work-overlay-name {
   color: rgba(255, 255, 255, 1);
+}
+
+.work-overlay-item--coming-soon {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.work-overlay-item--coming-soon:hover .work-overlay-name {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.work-overlay-item--coming-soon .work-overlay-type {
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .work-overlay-type {
