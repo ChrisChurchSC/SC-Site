@@ -56,6 +56,9 @@ export const OPEN_ROLES_QUERY = `*[_type == "openRole" && active == true] | orde
 }`
 
 export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $slug][0] {
+  name,
+  type,
+  descriptor,
   tagline,
   summary,
   relationship,
