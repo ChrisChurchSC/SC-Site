@@ -6,6 +6,23 @@ const FORM_INNER = `<div data-style="clean"><ul class="formkit-alert formkit-ale
 
 let ckScriptLoaded = false
 
+// Patch fetch once so we can detect Kit subscribe responses globally.
+const kitSubscribeListeners = new Set()
+if (typeof window !== 'undefined' && !window.__kitFetchPatched) {
+  window.__kitFetchPatched = true
+  const origFetch = window.fetch
+  window.fetch = async function (input, init) {
+    const res = await origFetch.apply(this, arguments)
+    const url = typeof input === 'string' ? input : input?.url
+    if (url && /\/forms\/\d+\/subscriptions/.test(url) && res.ok) {
+      const m = url.match(/\/forms\/(\d+)\/subscriptions/)
+      const formId = m?.[1]
+      kitSubscribeListeners.forEach(cb => cb(formId))
+    }
+    return res
+  }
+}
+
 export default function KitForm({ uid = 'f036f942c2', formId = '9383718' }) {
   const formRef = useRef(null)
   const [toast, setToast] = useState(false)
@@ -28,27 +45,10 @@ export default function KitForm({ uid = 'f036f942c2', formId = '9383718' }) {
       setTimeout(() => setToast(false), 4000)
     }
 
-    // Kit event
-    el.addEventListener('formkit:subscribe', showToast)
-    document.addEventListener('formkit:subscribe', showToast)
-
-    // Watch for Kit's success alert appearing
-    const observer = new MutationObserver(() => {
-      const success = el.querySelector('.formkit-alert-success')
-      if (success && success.textContent.trim()) {
-        success.style.display = 'none'
-        showToast()
-        observer.disconnect()
-      }
-    })
-    observer.observe(el, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] })
-
-    return () => {
-      el.removeEventListener('formkit:subscribe', showToast)
-      document.removeEventListener('formkit:subscribe', showToast)
-      observer.disconnect()
-    }
-  }, [])
+    const onKitSubscribe = (id) => { if (id === formId) showToast() }
+    kitSubscribeListeners.add(onKitSubscribe)
+    return () => kitSubscribeListeners.delete(onKitSubscribe)
+  }, [formId])
 
   return (
     <div style={{ position: 'relative' }}>
