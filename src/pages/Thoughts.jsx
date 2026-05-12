@@ -3,6 +3,9 @@ import styles from './Thoughts.module.css'
 import { thoughts } from '../data/thoughts'
 import { useMeta } from '../hooks/useMeta'
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
+
 export default function Thoughts() {
   useMeta({
     title: 'Thoughts | Super Conscious',
@@ -16,9 +19,12 @@ export default function Thoughts() {
       </header>
 
       <section className={styles.index}>
-        {thoughts.map(({ n, title, date, slug }) => (
+        {thoughts.map(({ n, title, date, slug, hero }) => (
           <NavLink key={n} to={`/thoughts/${slug}`} className={styles.row}>
             <span className={styles.num}>{n}</span>
+            <span className={styles.thumb}>
+              {hero && <img src={assetUrl(hero)} alt="" />}
+            </span>
             <span className={styles.title}>{title}</span>
             <span className={styles.date}>{date}</span>
           </NavLink>
