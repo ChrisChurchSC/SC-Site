@@ -44,6 +44,18 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
   }
 }`
 
+export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
+  headerLabel,
+  headline,
+  intro,
+  embeddedPoints[] { heading, body },
+  services[] { tag, name, deliverables },
+  pricingLabel,
+  pricingSub,
+  clientsLabel,
+  clients
+}`
+
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   _id,
   "n": string(order),
