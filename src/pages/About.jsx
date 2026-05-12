@@ -40,8 +40,8 @@ const clients = [
 
 export default function About() {
   useMeta({
-    title: 'Capabilities — Super Conscious',
-    description: 'Creative strategy and production partner for founders and marketing teams. Brand, content, and product — embedded month to month, no long contracts.',
+    title: 'Capabilities | Super Conscious',
+    description: 'Creative strategy and production partner for founders and marketing teams. Brand, content, and product, embedded month to month, no long contracts.',
   })
 
   return (

@@ -33,7 +33,7 @@ function buildPlaceholder(project) {
     name: project.name,
     type: project.type,
     tagline: 'A complete creative system built to move at the speed of the market.',
-    summary: 'A full creative engagement spanning brand identity, visual language, and launch communications. We partnered closely with the founding team to develop a system that could carry the weight of their ambition — from investor decks to product surfaces to public-facing campaigns. The work was built to scale.',
+    summary: 'A full creative engagement spanning brand identity, visual language, and launch communications. We partnered closely with the founding team to develop a system that could carry the weight of their ambition, from investor decks to product surfaces to public-facing campaigns. The work was built to scale.',
     services,
     outcomes: [
       { category: 'Brand', outcome: 'Delivered a cohesive visual identity system across every touchpoint from day one.' },
@@ -42,7 +42,7 @@ function buildPlaceholder(project) {
     ],
     sections: [
       { type: 'image-full', src: null },
-      { type: 'text', heading: 'The Challenge', body: 'The team came to us with a clear vision but no visual language to carry it. They needed a brand that could hold up across investor materials, product surfaces, and public-facing campaigns — all at once, from day one.' },
+      { type: 'text', heading: 'The Challenge', body: 'The team came to us with a clear vision but no visual language to carry it. They needed a brand that could hold up across investor materials, product surfaces, and public-facing campaigns, all at once, from day one.' },
       { type: 'image-grid', images: [
         { src: null, cols: 7, ratio: '16/9', tag: 'Reel' },
         { src: null, cols: 5, ratio: '4/5' },
@@ -52,7 +52,7 @@ function buildPlaceholder(project) {
         { src: null, cols: 4, ratio: '4/5' },
         { src: null, cols: 4, ratio: '4/5' },
       ]},
-      { type: 'text', heading: 'The Approach', body: 'We built the system from the inside out — starting with core identity, then extending into motion, typography, and a modular content framework that the team could run independently. Every decision was made to serve longevity over trend.' },
+      { type: 'text', heading: 'The Approach', body: 'We built the system from the inside out, starting with core identity, then extending into motion, typography, and a modular content framework that the team could run independently. Every decision was made to serve longevity over trend.' },
       { type: 'image-full', src: null },
       { type: 'image-grid', images: [
         { src: null, cols: 6, ratio: '16/9' },
@@ -119,7 +119,7 @@ export default function CaseStudy() {
   const moreProjects = projects.filter(p => p.slug !== slug).slice(0, 3)
 
   useMeta({
-    title: cs ? `${cs.name} — Super Conscious` : 'Work — Super Conscious',
+    title: cs ? `${cs.name} | Super Conscious` : 'Work | Super Conscious',
     description: cs?.tagline ?? cs?.summary?.slice(0, 155) ?? 'Case study from Super Conscious.',
   })
 

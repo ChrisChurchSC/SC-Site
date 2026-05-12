@@ -53,7 +53,7 @@ const openRoles = [
 ]
 
 const photos = [
-  { caption: 'Philadelphia, PA — 2024' },
+  { caption: 'Philadelphia, PA, 2024' },
   { caption: 'The team, offsite 2024'  },
 ]
 
@@ -62,7 +62,7 @@ export default function AboutUs() {
   const roles = sanityRoles?.length ? sanityRoles : openRoles
 
   useMeta({
-    title: 'Careers — Super Conscious',
+    title: 'Careers | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
   })
   return (

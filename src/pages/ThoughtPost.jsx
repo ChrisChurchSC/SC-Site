@@ -8,7 +8,7 @@ export default function ThoughtPost() {
   const post = thoughts.find(t => t.slug === slug)
 
   useMeta(post ? {
-    title: `${post.title} — Super Conscious`,
+    title: `${post.title} | Super Conscious`,
     description: post.body[0].slice(0, 155),
     schema: {
       '@context': 'https://schema.org',

@@ -174,7 +174,7 @@ export default function Nav() {
       {/* Drawer */}
       <div className={`work-drawer${workOpen ? ' work-drawer--open' : ''}`}>
         <div className="work-drawer-header">
-          <span className="work-overlay-label">Selected Work — {hoveredN || caseStudies[0]?.n || '001'} / {String(caseStudies.length).padStart(3, '0')}</span>
+          <span className="work-overlay-label">Selected Work · {hoveredN || caseStudies[0]?.n || '001'} / {String(caseStudies.length).padStart(3, '0')}</span>
           <button className="work-overlay-close-card" onClick={() => setWorkOpen(false)}>Close</button>
         </div>
         <div className="work-overlay-list">

@@ -7,7 +7,7 @@ export const caseStudies = {
     type: 'Campaign',
     year: '2022',
     tagline: 'A full brand and campaign system for a mission-driven organization raising capital through culture.',
-    summary: 'World Within is a mission-driven organization working at the intersection of capital, culture, and community. They came to us without a brand, without a web presence, and with a launch window of under 90 days. We built their full identity system from scratch — naming architecture, visual language, motion principles, and a content framework that could scale across paid media, live events, and organic social. The campaign launched in Q4 2022 and exceeded every benchmark they set.',
+    summary: 'World Within is a mission-driven organization working at the intersection of capital, culture, and community. They came to us without a brand, without a web presence, and with a launch window of under 90 days. We built their full identity system from scratch: naming architecture, visual language, motion principles, and a content framework that could scale across paid media, live events, and organic social. The campaign launched in Q4 2022 and exceeded every benchmark they set.',
     services: ['Brand Identity', 'Website', 'Social', 'Animation', 'Marketing'],
     outcomes: [
       { category: 'Fundraising', outcome: 'Raised $2.4M in their first public campaign launch.' },
@@ -43,7 +43,7 @@ export const caseStudies = {
       {
         type: 'text',
         heading: 'The Approach',
-        body: 'We developed a unified brand system — identity, motion language, and a content framework — that could flex across every touchpoint from paid social to live events. Every decision was made to serve the mission first.',
+        body: 'We developed a unified brand system (identity, motion language, and a content framework) that could flex across every touchpoint from paid social to live events. Every decision was made to serve the mission first.',
       },
       {
         type: 'image-full',

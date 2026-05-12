@@ -14,8 +14,8 @@ export default function ClientOverview() {
   const { data: sanity } = useSanity(CLIENT_OVERVIEW_QUERY, { slug })
 
   useMeta({
-    title: project ? `${project.name} — Super Conscious` : 'Work — Super Conscious',
-    description: sanity?.tagline ?? `${project?.name} — ${project?.type}`,
+    title: project ? `${project.name} | Super Conscious` : 'Work | Super Conscious',
+    description: sanity?.tagline ?? `${project?.name}, ${project?.type}`,
   })
 
   if (!project) return (
