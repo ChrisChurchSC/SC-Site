@@ -17,6 +17,33 @@ export const SITE_CONFIG_QUERY = `*[_type == "siteConfig" && _id == "site-config
   homeHeroTagline
 }`
 
+export const THOUGHTS_INDEX_QUERY = `*[_type == "thought"] | order(order asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  publishedAt,
+  order,
+  "heroUrl": hero.asset->url
+}`
+
+export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  publishedAt,
+  order,
+  "heroUrl": hero.asset->url,
+  body[] {
+    _type,
+    _key,
+    text,
+    "imageUrl": image.asset->url,
+    alt
+  }
+}`
+
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   _id,
   "n": string(order),
