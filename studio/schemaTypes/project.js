@@ -55,6 +55,7 @@ export const project = defineType({
     defineField({ name: 'order', title: 'Order', type: 'number', description: 'Sort order (lower = first)' }),
     defineField({ name: 'published', title: 'Published', type: 'boolean', initialValue: true }),
     defineField({ name: 'comingSoon', title: 'Coming Soon', type: 'boolean', description: 'Show in lists with a badge; disable link until ready.', initialValue: false }),
+    defineField({ name: 'password', title: 'Password', type: 'string', description: 'If set, the case study is gated behind this password.' }),
     defineField({
       name: 'thumbnailImages',
       title: 'Thumbnail Images',

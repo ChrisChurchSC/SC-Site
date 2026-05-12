@@ -3,9 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useContact } from '../context/ContactContext'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
-import { projects as staticProjects } from '../data/projects'
-import { useSanity } from '../hooks/useSanity'
-import { PROJECTS_QUERY } from '../lib/queries'
+import { useProjects } from '../context/ProjectsContext'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
 
@@ -23,7 +21,8 @@ export default function Nav() {
   const location = useLocation()
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
-  const caseStudies = staticProjects
+  const projects = useProjects()
+  const caseStudies = projects.all
   const comingSoon = useComingSoon()
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)

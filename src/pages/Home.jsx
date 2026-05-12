@@ -7,7 +7,7 @@ import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
-import { projects as staticProjects } from '../data/projects'
+import { useProjects } from '../context/ProjectsContext'
 
 let didLoad = false
 
@@ -56,6 +56,7 @@ export default function Home() {
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   const comingSoon = useComingSoon()
+  const projects = useProjects()
 
   // Build a lookup map: label -> block data
   const grid = {}
@@ -122,13 +123,13 @@ export default function Home() {
   // Resolve project name — BLOCK_MAP slug drives the lookup
   const blockName = (label) => {
     const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
-    return slug ? staticProjects.find(p => p.slug === slug)?.name : null
+    return slug ? projects.bySlug(slug)?.name : null
   }
 
   // Count distinct work items for a project
   const workCount = (label) => {
     const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
-    return slug ? (staticProjects.find(p => p.slug === slug)?.work?.length ?? 0) : 0
+    return slug ? (projects.bySlug(slug)?.subCount ?? 0) : 0
   }
 
   const [loading, setLoading] = useState(!didLoad)

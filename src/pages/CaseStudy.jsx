@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
-import { projects as staticProjects } from '../data/projects'
+import { useProjects } from '../context/ProjectsContext'
 import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
-import { CASE_STUDY_QUERY, PROJECTS_QUERY } from '../lib/queries'
+import { CASE_STUDY_QUERY } from '../lib/queries'
 
 function MediaItem({ src, alt = '' }) {
   if (!src) return null
@@ -78,8 +78,8 @@ export default function CaseStudy() {
   const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
   const clientSlugResolved = clientSlug ?? slug
   const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug: sanitySlug })
-  const projects = staticProjects
-  const project = projects.find(p => p.slug === clientSlugResolved)
+  const projects = useProjects()
+  const project = projects.bySlug(clientSlugResolved)
 
   const [unlocked, setUnlocked] = useState(() =>
     !project?.password || sessionStorage.getItem(`cs_unlocked_${slug}`) === '1'

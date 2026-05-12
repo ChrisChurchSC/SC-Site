@@ -4,6 +4,7 @@ import { ContactProvider } from './context/ContactContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
+import { ProjectsProvider, useProjects } from './context/ProjectsContext'
 import Nav from './components/Nav'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
@@ -16,8 +17,6 @@ import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
-import { projects as staticProjects } from './data/projects'
-
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -43,8 +42,8 @@ function BackButton() {
 
 function WorkRouter() {
   const { slug } = useParams()
-  const project = staticProjects.find(p => p.slug === slug)
-  if (project?.work?.length > 1) return <ClientOverview />
+  const projects = useProjects()
+  if (projects.isMulti(slug)) return <ClientOverview />
   return <CaseStudy />
 }
 
@@ -55,6 +54,7 @@ export default function App() {
         <NavProvider>
         <ContactProvider>
         <ComingSoonProvider>
+        <ProjectsProvider>
           <ScrollToTop />
           <TransitionBar />
           <Cursor />
@@ -73,6 +73,7 @@ export default function App() {
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
             </Routes>
           </div>
+        </ProjectsProvider>
         </ComingSoonProvider>
         </ContactProvider>
         </NavProvider>

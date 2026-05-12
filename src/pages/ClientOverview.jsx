@@ -1,16 +1,14 @@
 import { NavLink, useParams } from 'react-router-dom'
-import { projects as staticProjects } from '../data/projects'
+import { useProjects } from '../context/ProjectsContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CLIENT_OVERVIEW_QUERY } from '../lib/queries'
 import styles from './ClientOverview.module.css'
 
-export const slugify = (str) =>
-  str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-
 export default function ClientOverview() {
   const { slug } = useParams()
-  const project = staticProjects.find(p => p.slug === slug)
+  const projects = useProjects()
+  const project = projects.bySlug(slug)
   const { data: sanity } = useSanity(CLIENT_OVERVIEW_QUERY, { slug })
 
   useMeta({
@@ -22,18 +20,20 @@ export default function ClientOverview() {
     <main className={styles.main}><p className={styles.notFound}>Client not found.</p></main>
   )
 
-  const subProjects = {}
-  sanity?.subProjects?.forEach(sp => { subProjects[sp.slug] = sp })
+  // Sanity sub-projects (with thumbnail and comingSoon) keyed by full slug
+  const sanitySubs = {}
+  sanity?.subProjects?.forEach(sp => { sanitySubs[sp.slug] = sp })
 
-  const workItems = (project.work ?? []).map((name, i) => {
-    const workSlug = slugify(name)
-    const fullSlug = `${slug}-${workSlug}`
+  // Use ProjectsContext sub-projects as the source of truth for the list +
+  // names (Sanity-backed when available, static fallback when not).
+  const workItems = (project.subProjects ?? []).map((sp, i) => {
+    const sanitySub = sanitySubs[sp.slug]
     return {
-      name,
-      slug: workSlug,
+      name: sp.name,
+      slug: sp.slug.replace(`${slug}-`, ''),
       n: String(i + 1).padStart(2, '0'),
-      thumbnail: subProjects[fullSlug]?.thumbnail ?? null,
-      comingSoon: subProjects[fullSlug]?.comingSoon ?? false,
+      thumbnail: sanitySub?.thumbnail ?? null,
+      comingSoon: sanitySub?.comingSoon ?? false,
     }
   })
 

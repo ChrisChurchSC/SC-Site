@@ -1,11 +1,18 @@
-export const PROJECTS_QUERY = `*[_type == "project" && published == true] | order(order asc) {
+export const PROJECTS_QUERY = `*[_type == "project" && published == true && coalesce(order, 0) < 100] | order(order asc) {
   _id,
   "n": string(order),
   name,
   "slug": slug.current,
   type,
   year,
+  descriptor,
+  password,
   comingSoon,
+  "subCount": count(*[_type == "project" && string::startsWith(slug.current, ^.slug.current + "-")]),
+  "subProjects": *[_type == "project" && string::startsWith(slug.current, ^.slug.current + "-")] | order(order asc) {
+    "slug": slug.current,
+    name
+  },
   "images": thumbnailImages[].asset->url
 }`
 
