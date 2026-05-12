@@ -91,4 +91,5 @@ export const projects = [
   { n: '034', name: 'Infura',           type: 'Brand',                    slug: 'infura' },
   { n: '035', name: 'TBT',              type: 'Brand',                    slug: 'tbt' },
   { n: '036', name: 'Kindling',         type: 'Content',                  slug: 'kindling' },
+  { n: '037', name: 'Yura',             type: 'Brand + Product',          slug: 'yura' },
 ]
