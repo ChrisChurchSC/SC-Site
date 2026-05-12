@@ -6,7 +6,7 @@ import Loader from '../components/Loader'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { useSanity } from '../hooks/useSanity'
-import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 import { projects as staticProjects } from '../data/projects'
 
 let didLoad = false
@@ -54,6 +54,7 @@ const BLOCK_MAP = {
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
+  const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   const comingSoon = useComingSoon()
 
   // Build a lookup map: label -> block data
@@ -190,7 +191,7 @@ export default function Home() {
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
-          <p className={styles.cornerText}>The makers of high quality<br />brands and content</p>
+          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers of high quality brands and content'}</p>
         </div>
         <button
           className={styles.menuCard}
@@ -205,7 +206,7 @@ export default function Home() {
       {/* Row 1 — Hero */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer', backgroundImage: `url(${assetUrl('/reel-preview.gif')})`, backgroundSize: 'cover', backgroundPosition: 'center' }} onClick={() => setReelOpen(true)}>
-          <span className={styles.label}>Brand · Content · Web</span>
+          <span className={styles.label}>{siteConfig?.homeHeroTagline ?? 'Brand · Content · Web'}</span>
           <span className={styles.csTag}>Reel</span>
           <button className={styles.playBtn}>
             <svg width="7" height="8" viewBox="0 0 10 12" fill="none">
@@ -538,7 +539,7 @@ export default function Home() {
           <button className={styles.reelClose} onClick={closeReel}>Close</button>
           <video
             ref={videoRef}
-            src="https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4"
+            src={siteConfig?.reelVideoUrl ?? 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'}
             autoPlay
             playsInline
             className={styles.reelVideo}

@@ -11,6 +11,12 @@ export const PROJECTS_QUERY = `*[_type == "project" && published == true] | orde
 
 export const COMING_SOON_QUERY = `*[_type == "project" && comingSoon == true].slug.current`
 
+export const SITE_CONFIG_QUERY = `*[_type == "siteConfig" && _id == "site-config"][0] {
+  reelVideoUrl,
+  homeHeroTitle,
+  homeHeroTagline
+}`
+
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   _id,
   "n": string(order),
