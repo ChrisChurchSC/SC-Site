@@ -538,7 +538,7 @@ export default function Home() {
           <button className={styles.reelClose} onClick={closeReel}>Close</button>
           <video
             ref={videoRef}
-            src="/reel.mp4"
+            src="https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4"
             autoPlay
             playsInline
             className={styles.reelVideo}
