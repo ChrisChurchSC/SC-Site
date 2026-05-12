@@ -18,15 +18,18 @@ export default function Thoughts() {
         <h1 className={styles.headline}>Ideas, notes, and process.</h1>
       </header>
 
-      <section className={styles.index}>
-        {thoughts.map(({ n, title, date, slug, hero }) => (
-          <NavLink key={n} to={`/thoughts/${slug}`} className={styles.row}>
-            <span className={styles.num}>{n}</span>
-            <span className={styles.thumb}>
+      <section className={styles.grid}>
+        {thoughts.map(({ n, title, date, slug, hero, excerpt }) => (
+          <NavLink key={n} to={`/thoughts/${slug}`} className={styles.card}>
+            <div className={styles.cardThumb}>
               {hero && <img src={assetUrl(hero)} alt="" />}
-            </span>
-            <span className={styles.title}>{title}</span>
-            <span className={styles.date}>{date}</span>
+            </div>
+            <div className={styles.cardMeta}>
+              <span className={styles.cardNum}>{n}</span>
+              <span className={styles.cardDate}>{date}</span>
+            </div>
+            <h2 className={styles.cardTitle}>{title}</h2>
+            {excerpt && <p className={styles.cardExcerpt}>{excerpt}</p>}
           </NavLink>
         ))}
       </section>
