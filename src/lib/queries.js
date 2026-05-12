@@ -56,6 +56,21 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   clients
 }`
 
+export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0] {
+  headerLabel,
+  headline,
+  intro,
+  photos[] { caption },
+  whatItsLikeLabel,
+  whatItsLikeBody,
+  realitiesLabel,
+  realities[] { label, value },
+  traitsLabel,
+  traits[] { heading, body },
+  openRolesLabel,
+  applyEmail
+}`
+
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
   _id,
   "n": string(order),
