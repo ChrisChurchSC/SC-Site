@@ -6,8 +6,8 @@ import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
 const FALLBACK = {
   headerLabel: '[ Capabilities ]',
-  headline: 'Creative Strategy & Production Partner',
-  intro: 'We help founders and marketing teams decide what to make, why it matters, and bring it to life.',
+  headline: 'Making damn good-tasting\nbrands, content, and digital products\nsince 2016.',
+  intro: 'A creative production & strategy studio for founders and marketing teams who care how a brand looks, sounds, and reads. (Hire us for our taste, not our cooking.)',
   embeddedPoints: [
     { heading: 'No long contracts.', body: 'Month to month, rate card that works for both sides. No surprises.' },
     { heading: 'Plugged into your team.', body: 'Your Slack, your meetings, your tools. Multiple team members, one shared goal.' },
