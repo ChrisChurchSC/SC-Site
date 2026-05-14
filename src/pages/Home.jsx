@@ -192,7 +192,7 @@ export default function Home() {
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
-          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers of high quality brands and content'}</p>
+          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nartisan brands, content, and digital products'}</p>
         </div>
         <button
           className={styles.menuCard}
