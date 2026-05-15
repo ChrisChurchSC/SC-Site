@@ -30,12 +30,12 @@ const BLOCK_MAP = {
   '016': { slug: 'photon' },
   '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
   '018': { slug: 'helen-maroulis' },
-  '019': { slug: 'nimruz',            img: '/grid/nimruz-logo-compressed.mp4' },
+  '019': { slug: 'wonderwerk' },
   '020': { slug: 'gigs',              img: '/grid/0421-compressed.mp4' },
   '021': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '022': { slug: 'industry-standard' },
   '023': { slug: 'yellow-dog' },
-  '024': { slug: 'wonderwerk' },
+  '024': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
   '025': { slug: 'coldwater-club' },
   '026': { slug: 'path-projects' },
   '027': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
@@ -276,6 +276,7 @@ export default function Home() {
       {/* Placeholder A */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
+          <img src="https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>038</span>
         </div>
         <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: '8 / span 5' }}>
