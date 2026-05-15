@@ -192,7 +192,7 @@ export default function Home() {
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
-          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nartisan brands, content, and digital products'}</p>
+          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nhigh quality brands, content, and digital products'}</p>
         </div>
         <button
           className={styles.menuCard}
@@ -231,13 +231,13 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('003') || 'Oxyle'}</p>
         </>)}
-        {blockLink('004', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '5 / span 3' }, <>
+        {blockLink('004', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '5 / span 5' }, <>
           {blockMedia('004')}
           <span className={styles.label}>004</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('004') || 'Deep Dive Films'}</p>
         </>)}
-        {blockLink('005', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
+        {blockLink('005', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '10 / span 3' }, <>
           {blockMedia('005')}
           <span className={styles.label}>005</span>
           <span className={styles.csTag}>Case Study</span>
