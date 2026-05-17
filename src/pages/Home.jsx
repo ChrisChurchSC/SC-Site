@@ -21,6 +21,7 @@ const BLOCK_MAP = {
   '007': { slug: 'girlfight' },
   '008': { slug: 'arbitrum' },
   '009': { slug: 'gigs', img: '/grid/0421-compressed.mp4' },
+  '011': { slug: 'dimly-lit-chophouse' },
   '012': { slug: 'opentext' },
   '013': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
   '014': { slug: 'smashburger', img: '/grid/smashburger-compressed.mp4' },
@@ -32,6 +33,7 @@ const BLOCK_MAP = {
   '020': { slug: 'helen-maroulis' },
   '021': { slug: 'wonderwerk' },
   '022': { slug: 'drip' },
+  '023': { slug: 'sublime' },
   '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '025': { slug: 'industry-standard' },
   '026': { slug: 'yellow-dog' },
@@ -49,6 +51,7 @@ const BLOCK_MAP = {
   '040': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
   '041': { slug: 'kindling' },
   '042': { slug: 'fieldston' },
+  '049': { slug: 'pubkey' },
 }
 
 export default function Home() {
@@ -279,9 +282,12 @@ export default function Home() {
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>010</span>
         </div>
-        <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: '8 / span 5' }}>
+        {blockLink('011', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: '8 / span 5' }, <>
+          {blockMedia('011')}
           <span className={styles.label}>011</span>
-        </div>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('011')}</p>
+        </>)}
       </section>
 
       {/* Row 4 */}
@@ -377,9 +383,12 @@ export default function Home() {
 
       {/* Placeholder C */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 12' }}>
+        {blockLink('023', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 12' }, <>
+          {blockMedia('023')}
           <span className={styles.label}>023</span>
-        </div>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('023')}</p>
+        </>)}
       </section>
 
       {/* Row 8 */}
@@ -529,7 +538,13 @@ export default function Home() {
 
       {/* Placeholder F */}
       <section className={styles.row12}>
-        {['049','050','051'].map(n => (
+        {blockLink('049', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('049')}
+          <span className={styles.label}>049</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('049')}</p>
+        </>)}
+        {['050','051'].map(n => (
           <div key={n} className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
             <span className={styles.label}>{n}</span>
           </div>
