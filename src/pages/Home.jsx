@@ -48,9 +48,10 @@ const BLOCK_MAP = {
   '037': { slug: 'banzen' },
   '038': { slug: 'print-parlor' },
   '039': { slug: 'infura' },
-  '040': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
-  '041': { slug: 'kindling' },
-  '042': { slug: 'fieldston' },
+  '040': { slug: 'golden-ventures' },
+  '043': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
+  '044': { slug: 'kindling' },
+  '045': { slug: 'fieldston' },
   '049': { slug: 'pubkey' },
 }
 
@@ -330,7 +331,13 @@ export default function Home() {
 
       {/* Placeholder B */}
       <section className={styles.row12}>
-        {['040','041','042'].map(n => (
+        {blockLink('040', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('040')}
+          <span className={styles.label}>040</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('040')}</p>
+        </>)}
+        {['041','042'].map(n => (
           <div key={n} className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 4' }}>
             <span className={styles.label}>{n}</span>
           </div>
@@ -516,23 +523,23 @@ export default function Home() {
 
       {/* Row 13 */}
       <section className={styles.row12}>
-        {blockLink('040', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
-          {blockMedia('040')}
-          <span className={styles.label}>040</span>
+        {blockLink('043', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
+          {blockMedia('043')}
+          <span className={styles.label}>043</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('040')}</p>
+          <p className={styles.blockTitle}>{blockName('043')}</p>
         </>)}
-        {blockLink('041', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
-          {blockMedia('041')}
-          <span className={styles.label}>041</span>
+        {blockLink('044', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
+          {blockMedia('044')}
+          <span className={styles.label}>044</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('041')}</p>
+          <p className={styles.blockTitle}>{blockName('044')}</p>
         </>)}
-        {blockLink('042', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
-          {blockMedia('042')}
-          <span className={styles.label}>042</span>
+        {blockLink('045', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
+          {blockMedia('045')}
+          <span className={styles.label}>045</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('042')}</p>
+          <p className={styles.blockTitle}>{blockName('045')}</p>
         </>)}
       </section>
 
