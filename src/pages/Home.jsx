@@ -20,35 +20,35 @@ const BLOCK_MAP = {
   '006': { slug: 'concis-labs' },
   '007': { slug: 'girlfight' },
   '008': { slug: 'arbitrum' },
-  '009': {},
-  '010': { slug: 'opentext' },
-  '011': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
-  '012': { slug: 'aris' },
-  '013': { slug: 'smashburger',       img: '/grid/smashburger-compressed.mp4' },
-  '014': { slug: 'transcend',           img: '/grid/transcend-compressed.mp4' },
-  '015': { slug: 'starchase' },
-  '016': { slug: 'photon' },
-  '017': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
-  '018': { slug: 'helen-maroulis' },
-  '019': { slug: 'wonderwerk' },
-  '020': { slug: 'gigs',              img: '/grid/0421-compressed.mp4' },
-  '021': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
-  '022': { slug: 'industry-standard' },
-  '023': { slug: 'yellow-dog' },
-  '024': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
-  '025': { slug: 'coldwater-club' },
-  '026': { slug: 'path-projects' },
-  '027': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
-  '028': { slug: 'hylands',           img: '/grid/hylands-compressed.mp4' },
-  '029': { slug: 'perm-agriculture' },
-  '030': { slug: 'smallhold' },
-  '031': { slug: 'entropy',           img: '/grid/empy-01-compressed.mp4' },
-  '032': { slug: 'banzen' },
-  '033': { slug: 'print-parlor' },
-  '034': { slug: 'infura' },
-  '035': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
-  '036': { slug: 'kindling' },
-  '037': { slug: 'fieldston' },
+  '009': { slug: 'gigs', img: '/grid/0421-compressed.mp4' },
+  '012': { slug: 'opentext' },
+  '013': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
+  '014': { slug: 'smashburger', img: '/grid/smashburger-compressed.mp4' },
+  '015': { slug: 'aris' },
+  '016': { slug: 'transcend',           img: '/grid/transcend-compressed.mp4' },
+  '017': { slug: 'starchase' },
+  '018': { slug: 'photon' },
+  '019': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
+  '020': { slug: 'helen-maroulis' },
+  '021': { slug: 'wonderwerk' },
+  '022': {},
+  '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
+  '025': { slug: 'industry-standard' },
+  '026': { slug: 'yellow-dog' },
+  '027': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
+  '028': { slug: 'coldwater-club' },
+  '029': { slug: 'path-projects' },
+  '030': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
+  '031': { slug: 'hylands',           img: '/grid/hylands-compressed.mp4' },
+  '032': { slug: 'perm-agriculture' },
+  '033': { slug: 'smallhold' },
+  '036': { slug: 'entropy',           img: '/grid/empy-01-compressed.mp4' },
+  '037': { slug: 'banzen' },
+  '038': { slug: 'print-parlor' },
+  '039': { slug: 'infura' },
+  '040': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
+  '041': { slug: 'kindling' },
+  '042': { slug: 'fieldston' },
 }
 
 export default function Home() {
@@ -277,48 +277,48 @@ export default function Home() {
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>038</span>
+          <span className={styles.label}>010</span>
         </div>
         <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: '8 / span 5' }}>
-          <span className={styles.label}>039</span>
+          <span className={styles.label}>011</span>
         </div>
       </section>
 
       {/* Row 4 */}
       <section className={styles.row12}>
-        {blockLink('010', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
-          {blockMedia('010')}
-          <span className={styles.label}>010</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('010')}</p>
-        </>)}
-        {blockLink('011', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '7 / span 6' }, <>
-          {blockMedia('011')}
-          <span className={styles.label}>011</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('011')}</p>
-        </>)}
-      </section>
-
-      {/* Row 5 */}
-      <section className={styles.row12}>
-        {blockLink('012', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
+        {blockLink('012', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
           {blockMedia('012')}
           <span className={styles.label}>012</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('012')}</p>
         </>)}
-        {blockLink('013', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
+        {blockLink('013', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '7 / span 6' }, <>
           {blockMedia('013')}
           <span className={styles.label}>013</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('013')}</p>
         </>)}
-        {blockLink('014', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
+      </section>
+
+      {/* Row 5 */}
+      <section className={styles.row12}>
+        {blockLink('014', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('014')}
           <span className={styles.label}>014</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('014')}</p>
+        </>)}
+        {blockLink('015', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
+          {blockMedia('015')}
+          <span className={styles.label}>015</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('015')}</p>
+        </>)}
+        {blockLink('016', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
+          {blockMedia('016')}
+          <span className={styles.label}>016</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('016')}</p>
         </>)}
       </section>
 
@@ -333,64 +333,41 @@ export default function Home() {
 
       {/* Row 6 */}
       <section className={styles.row12}>
-        {blockLink('015', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
-          {blockMedia('015')}
-          <span className={styles.label}>015</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('015')}</p>
-        </>)}
-        {blockLink('016', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
-          {blockMedia('016')}
-          <span className={styles.label}>016</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('016')}</p>
-        </>)}
-        {blockLink('017', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
+        {blockLink('017', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('017')}
           <span className={styles.label}>017</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('017')}</p>
         </>)}
-      </section>
-
-      {/* Row 7 */}
-      <section className={styles.row12}>
-        {blockLink('018', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '3 / span 3' }, <>
+        {blockLink('018', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
           {blockMedia('018')}
           <span className={styles.label}>018</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('018')}</p>
         </>)}
-        {blockLink('019', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
+        {blockLink('019', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
           {blockMedia('019')}
           <span className={styles.label}>019</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('019')}</p>
         </>)}
-        {blockLink('020', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
+      </section>
+
+      {/* Row 7 */}
+      <section className={styles.row12}>
+        {blockLink('020', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '3 / span 3' }, <>
           {blockMedia('020')}
           <span className={styles.label}>020</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('020')}</p>
         </>)}
-      </section>
-
-      {/* Placeholder C */}
-      <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 12' }}>
-          <span className={styles.label}>043</span>
-        </div>
-      </section>
-
-      {/* Row 8 */}
-      <section className={styles.row12}>
-        {blockLink('021', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
+        {blockLink('021', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
           {blockMedia('021')}
           <span className={styles.label}>021</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('021')}</p>
         </>)}
-        {blockLink('022', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
+        {blockLink('022', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
           {blockMedia('022')}
           <span className={styles.label}>022</span>
           <span className={styles.csTag}>Case Study</span>
@@ -398,31 +375,54 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Row 9 */}
+      {/* Placeholder C */}
       <section className={styles.row12}>
-        {blockLink('023', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('023')}
+        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 12' }}>
           <span className={styles.label}>023</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('023')}</p>
-        </>)}
-        {blockLink('024', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+        </div>
+      </section>
+
+      {/* Row 8 */}
+      <section className={styles.row12}>
+        {blockLink('024', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('024')}
           <span className={styles.label}>024</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('024')}</p>
         </>)}
-        {blockLink('025', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+        {blockLink('025', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '9 / span 3' }, <>
           {blockMedia('025')}
           <span className={styles.label}>025</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('025')}</p>
         </>)}
-        {blockLink('026', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+      </section>
+
+      {/* Row 9 */}
+      <section className={styles.row12}>
+        {blockLink('026', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('026')}
           <span className={styles.label}>026</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('026')}</p>
+        </>)}
+        {blockLink('027', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('027')}
+          <span className={styles.label}>027</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('027')}</p>
+        </>)}
+        {blockLink('028', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('028')}
+          <span className={styles.label}>028</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('028')}</p>
+        </>)}
+        {blockLink('029', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('029')}
+          <span className={styles.label}>029</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('029')}</p>
         </>)}
       </section>
 
@@ -437,93 +437,93 @@ export default function Home() {
 
       {/* Row 10 */}
       <section className={styles.row12}>
-        {blockLink('027', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
-          {blockMedia('027')}
-          <span className={styles.label}>027</span>
+        {blockLink('030', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
+          {blockMedia('030')}
+          <span className={styles.label}>030</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('027')}</p>
+          <p className={styles.blockTitle}>{blockName('030')}</p>
         </>)}
-        {blockLink('028', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
-          {blockMedia('028')}
-          <span className={styles.label}>028</span>
+        {blockLink('031', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
+          {blockMedia('031')}
+          <span className={styles.label}>031</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('028')}</p>
+          <p className={styles.blockTitle}>{blockName('031')}</p>
         </>)}
-        {blockLink('029', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '8 / span 4' }, <>
-          {blockMedia('029')}
-          <span className={styles.label}>029</span>
+        {blockLink('032', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '8 / span 4' }, <>
+          {blockMedia('032')}
+          <span className={styles.label}>032</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('029')}</p>
+          <p className={styles.blockTitle}>{blockName('032')}</p>
         </>)}
       </section>
 
       {/* Row 11 */}
       <section className={styles.row12}>
-        {blockLink('030', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 12' }, <>
-          {blockMedia('030')}
-          <span className={styles.label}>030</span>
+        {blockLink('033', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 12' }, <>
+          {blockMedia('033')}
+          <span className={styles.label}>033</span>
           <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('030')}</p>
+          <p className={styles.blockTitle}>{blockName('033')}</p>
         </>)}
       </section>
 
       {/* Placeholder E */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
-          <span className={styles.label}>047</span>
+          <span className={styles.label}>034</span>
         </div>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
-          <span className={styles.label}>048</span>
+          <span className={styles.label}>035</span>
         </div>
       </section>
 
       {/* Row 12 */}
       <section className={styles.row12}>
-        {blockLink('031', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('031')}
-          <span className={styles.label}>031</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('031')}</p>
-        </>)}
-        {blockLink('032', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('032')}
-          <span className={styles.label}>032</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('032')}</p>
-        </>)}
-        {blockLink('033', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('033')}
-          <span className={styles.label}>033</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('033')}</p>
-        </>)}
-        {blockLink('034', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('034')}
-          <span className={styles.label}>034</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('034')}</p>
-        </>)}
-      </section>
-
-      {/* Row 13 */}
-      <section className={styles.row12}>
-        {blockLink('035', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
-          {blockMedia('035')}
-          <span className={styles.label}>035</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('035')}</p>
-        </>)}
-        {blockLink('036', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
+        {blockLink('036', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('036')}
           <span className={styles.label}>036</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('036')}</p>
         </>)}
-        {blockLink('037', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
+        {blockLink('037', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('037')}
           <span className={styles.label}>037</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('037')}</p>
+        </>)}
+        {blockLink('038', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('038')}
+          <span className={styles.label}>038</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('038')}</p>
+        </>)}
+        {blockLink('039', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('039')}
+          <span className={styles.label}>039</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('039')}</p>
+        </>)}
+      </section>
+
+      {/* Row 13 */}
+      <section className={styles.row12}>
+        {blockLink('040', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '1 / span 5' }, <>
+          {blockMedia('040')}
+          <span className={styles.label}>040</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('040')}</p>
+        </>)}
+        {blockLink('041', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
+          {blockMedia('041')}
+          <span className={styles.label}>041</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('041')}</p>
+        </>)}
+        {blockLink('042', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '9 / span 4' }, <>
+          {blockMedia('042')}
+          <span className={styles.label}>042</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('042')}</p>
         </>)}
       </section>
 
