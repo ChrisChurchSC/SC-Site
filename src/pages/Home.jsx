@@ -31,7 +31,7 @@ const BLOCK_MAP = {
   '019': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
   '020': { slug: 'helen-maroulis' },
   '021': { slug: 'wonderwerk' },
-  '022': {},
+  '022': { slug: 'drip' },
   '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '025': { slug: 'industry-standard' },
   '026': { slug: 'yellow-dog' },
