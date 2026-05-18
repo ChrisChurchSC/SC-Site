@@ -49,9 +49,12 @@ const BLOCK_MAP = {
   '038': { slug: 'print-parlor' },
   '039': { slug: 'infura' },
   '040': { slug: 'golden-ventures' },
+  '041': { slug: 'zbiotics' },
+  '042': { slug: 'yura' },
   '043': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
   '044': { slug: 'kindling' },
   '045': { slug: 'fieldston' },
+  '050': { slug: 'concis-labs' },
   '049': { slug: 'pubkey' },
 }
 
@@ -337,11 +340,18 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('040')}</p>
         </>)}
-        {['041','042'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r45}`} style={{ gridColumn: 'span 4' }}>
-            <span className={styles.label}>{n}</span>
-          </div>
-        ))}
+        {blockLink('041', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('041')}
+          <span className={styles.label}>041</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('041')}</p>
+        </>)}
+        {blockLink('042', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('042')}
+          <span className={styles.label}>042</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('042')}</p>
+        </>)}
       </section>
 
       {/* Row 6 */}
@@ -486,9 +496,11 @@ export default function Home() {
       {/* Placeholder E */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
+          <img src="https://cdn.sanity.io/images/ppq16wpu/production/3b72e768eff83d9af86bcad7873197610df48634-900x1125.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>034</span>
         </div>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
+          <img src="https://cdn.sanity.io/images/ppq16wpu/production/6e924b2b6714c40f8b3370e33887742277bd4dff-900x1125.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>035</span>
         </div>
       </section>
@@ -551,11 +563,16 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('049')}</p>
         </>)}
-        {['050','051'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
-            <span className={styles.label}>{n}</span>
-          </div>
-        ))}
+        {blockLink('050', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('050')}
+          <span className={styles.label}>050</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('050')}</p>
+        </>)}
+        <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
+          <img src="https://cdn.sanity.io/images/ppq16wpu/production/39c03a66175bc56d734102dd2554154dad957272-900x900.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <span className={styles.label}>051</span>
+        </div>
       </section>
 
       {reelOpen && (
