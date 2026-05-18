@@ -54,7 +54,7 @@ const BLOCK_MAP = {
   '043': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
   '044': { slug: 'kindling' },
   '045': { slug: 'fieldston' },
-  '046': { slug: 'arbitrum-marketing-dept' },
+  '046': { slug: 'arbitrum-marketing-dept-videos' },
   '048': { slug: 'pubkey' },
 }
 
