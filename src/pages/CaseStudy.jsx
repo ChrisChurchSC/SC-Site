@@ -116,7 +116,7 @@ export default function CaseStudy() {
     ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []), credits: [{ role: 'Creative Direction', name: 'Super Conscious' }, { role: 'Client', name: sanityCs.name }] }
     : (staticCaseStudies[slug] ?? placeholder)
 
-  const moreProjects = projects.filter(p => p.slug !== slug).slice(0, 3)
+  const moreProjects = projects.all.filter(p => p.slug !== slug).slice(0, 3)
 
   useMeta({
     title: cs ? `${cs.name} | Super Conscious` : 'Work | Super Conscious',
