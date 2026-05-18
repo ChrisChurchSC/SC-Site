@@ -463,7 +463,7 @@ export default function Home() {
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/a4ba923c1409b9cf94ef626df91212ac4174e569-2400x2400.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>048</span>
         </div>
-        {blockLink('046', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+        {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('046')}
           <span className={styles.label}>046</span>
           <span className={styles.csTag}>Case Study</span>
