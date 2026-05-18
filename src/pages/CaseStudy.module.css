@@ -288,6 +288,8 @@
 }
 
 .moreCard {
+  position: relative;
+  overflow: hidden;
   background: #161616;
   border-radius: 4px;
   aspect-ratio: 4 / 5;
@@ -306,14 +308,35 @@
   transform: translateY(-2px);
 }
 
+.moreCardThumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.moreCardScrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 80%, rgba(0,0,0,0.75) 100%);
+}
+
 .moreCardNum {
+  position: relative;
+  z-index: 2;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .moreCardName {
+  position: relative;
+  z-index: 2;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: clamp(14px, 1.4vw, 20px);

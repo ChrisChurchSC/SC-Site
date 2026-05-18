@@ -5,7 +5,7 @@ import { useProjects } from '../context/ProjectsContext'
 import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
-import { CASE_STUDY_QUERY } from '../lib/queries'
+import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
 
 function MediaItem({ src, alt = '' }) {
   if (!src) return null
@@ -78,8 +78,15 @@ export default function CaseStudy() {
   const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
   const clientSlugResolved = clientSlug ?? slug
   const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug: sanitySlug })
+  const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
   const projects = useProjects()
   const project = projects.bySlug(clientSlugResolved)
+
+  // Map project slug → { imageUrl, videoUrl, mediaType } from the homepage grid
+  const gridBySlug = {}
+  gridData?.blocks?.forEach(b => {
+    if (b.projectSlug) gridBySlug[b.projectSlug] = b
+  })
 
   const [unlocked, setUnlocked] = useState(() =>
     !project?.password || sessionStorage.getItem(`cs_unlocked_${slug}`) === '1'
@@ -226,19 +233,27 @@ export default function CaseStudy() {
       <div className={styles.moreWork}>
         <span className={styles.moreWorkLabel}>More Work</span>
         <div className={styles.moreWorkGrid}>
-          {moreProjects.map(p => (
-            p.slug ? (
-              <NavLink key={p.n} to={`/work/${p.slug}`} className={styles.moreCard}>
+          {moreProjects.map(p => {
+            const g = gridBySlug[p.slug]
+            const thumb = g?.mediaType === 'video' && g?.videoUrl
+              ? <video src={g.videoUrl} autoPlay muted loop playsInline className={styles.moreCardThumb} />
+              : g?.imageUrl
+                ? <img src={g.imageUrl} alt="" className={styles.moreCardThumb} />
+                : null
+            const inner = (
+              <>
+                {thumb}
+                {thumb && <div className={styles.moreCardScrim} />}
                 <span className={styles.moreCardNum}>{p.n}</span>
                 <span className={styles.moreCardName}>{p.name}</span>
-              </NavLink>
-            ) : (
-              <div key={p.n} className={styles.moreCard}>
-                <span className={styles.moreCardNum}>{p.n}</span>
-                <span className={styles.moreCardName}>{p.name}</span>
-              </div>
+              </>
             )
-          ))}
+            return p.slug ? (
+              <NavLink key={p.n} to={`/work/${p.slug}`} className={styles.moreCard}>{inner}</NavLink>
+            ) : (
+              <div key={p.n} className={styles.moreCard}>{inner}</div>
+            )
+          })}
         </div>
       </div>
 
