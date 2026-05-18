@@ -121,7 +121,7 @@ export default function Home() {
       )
     }
     if (isComingSoon) return (
-      <div className={finalClass} style={style} onClick={() => setToast(blockName(label) ? `${blockName(label)} — coming soon` : 'Case study coming soon')}>
+      <div className={finalClass} style={style} onClick={() => setToast({ msg: blockName(label) ? `${blockName(label)} — coming soon` : 'Case study coming soon', ts: Date.now() })}>
         {inner}
       </div>
     )
@@ -636,7 +636,7 @@ export default function Home() {
         </div>
       )}
 
-      {toast && <div className={styles.toast} role="status" aria-live="polite">{toast}</div>}
+      {toast && <div key={toast.ts} className={styles.toast} role="status" aria-live="polite">{toast.msg}</div>}
 
     </main>
 
