@@ -36,7 +36,7 @@ const BLOCK_MAP = {
   '023': { slug: 'sublime' },
   '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '025': { slug: 'industry-standard' },
-  '026': { slug: 'yellow-dog' },
+  '026': { slug: 'opentext-animated-ads' },
   '027': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
   '028': { slug: 'coldwater-club' },
   '029': { slug: 'path-projects' },
