@@ -221,13 +221,17 @@
 
 .extIcon {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  bottom: 10px;
+  right: 10px;
   z-index: 2;
-  color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 2px;
-  padding: 4px 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+  padding: 5px 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,8 +239,8 @@
 }
 
 .block:hover .extIcon {
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #fff;
 }
 
 /* ── Reel overlay ── */
