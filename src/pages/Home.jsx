@@ -454,11 +454,17 @@ export default function Home() {
 
       {/* Placeholder D */}
       <section className={styles.row12}>
-        {['044','045','046'].map(n => (
-          <div key={n} className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
-            <span className={styles.label}>{n}</span>
-          </div>
-        ))}
+        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
+          <video src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <span className={styles.label}>044</span>
+        </div>
+        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
+          <img src="https://cdn.sanity.io/images/ppq16wpu/production/a4ba923c1409b9cf94ef626df91212ac4174e569-2400x2400.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <span className={styles.label}>045</span>
+        </div>
+        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
+          <span className={styles.label}>046</span>
+        </div>
       </section>
 
       {/* Row 10 */}
