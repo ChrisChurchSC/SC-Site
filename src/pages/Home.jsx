@@ -101,7 +101,7 @@ export default function Home() {
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
     const count = workCount(label)
-    const badge = count > 1 ? <span key="wb" className={styles.workBadge}>{count}</span> : null
+    const badge = count > 1 ? <span key="wb" className={styles.workBadge}>+{count} PROJECTS</span> : null
     const slug = BLOCK_MAP[label]?.slug ?? b?.projectSlug
     const isComingSoon = slug && comingSoon.has(slug) && !b?.externalUrl
     const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
