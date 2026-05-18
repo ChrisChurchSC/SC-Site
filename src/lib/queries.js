@@ -67,7 +67,7 @@ export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-p
   headerLabel,
   headline,
   intro,
-  photos[] { caption },
+  photos[] { caption, "imageUrl": image.asset->url, "videoUrl": videoFile.asset->url },
   whatItsLikeLabel,
   whatItsLikeBody,
   realitiesLabel,

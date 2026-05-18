@@ -129,11 +129,13 @@
   gap: 8px;
 }
 
-.photoBlock:nth-child(1) .photoPlaceholder {
+.photoBlock:nth-child(1) .photoPlaceholder,
+.photoBlock:nth-child(1) .photoMedia {
   aspect-ratio: 4 / 5;
 }
 
-.photoBlock:nth-child(2) .photoPlaceholder {
+.photoBlock:nth-child(2) .photoPlaceholder,
+.photoBlock:nth-child(2) .photoMedia {
   aspect-ratio: 1 / 1;
 }
 
@@ -145,6 +147,14 @@
   width: 100%;
   background: #161616;
   border-radius: 4px;
+}
+
+.photoMedia {
+  width: 100%;
+  object-fit: cover;
+  background: #161616;
+  border-radius: 4px;
+  display: block;
 }
 
 .photoCaption {

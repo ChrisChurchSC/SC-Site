@@ -61,9 +61,15 @@ export default function AboutUs() {
 
       <section className={styles.photoSection}>
         <div className={styles.photoGrid}>
-          {cfg.photos?.map(({ caption }) => (
+          {cfg.photos?.map(({ caption, imageUrl, videoUrl }) => (
             <div key={caption} className={styles.photoBlock}>
-              <div className={styles.photoPlaceholder} />
+              {videoUrl ? (
+                <video src={videoUrl} autoPlay muted loop playsInline className={styles.photoMedia} />
+              ) : imageUrl ? (
+                <img src={imageUrl} alt={caption} className={styles.photoMedia} />
+              ) : (
+                <div className={styles.photoPlaceholder} />
+              )}
               <p className={styles.photoCaption}>{caption}</p>
             </div>
           ))}
