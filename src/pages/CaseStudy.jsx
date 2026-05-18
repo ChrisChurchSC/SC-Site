@@ -188,7 +188,7 @@ export default function CaseStudy() {
         {cs.sections.map((section, i) => {
 
           if (section.type === 'image-full') return (
-            <div key={i} className={styles.mediaFull} style={{ aspectRatio: '16/9' }}>
+            <div key={i} className={styles.mediaFull} style={{ aspectRatio: section.ratio ?? '16/9' }}>
               <MediaItem src={section.src} />
             </div>
           )
@@ -208,7 +208,7 @@ export default function CaseStudy() {
                   <div
                     key={j}
                     className={styles.mediaGridItem}
-                    style={{ gridColumn: `span ${item.cols}`, aspectRatio: single ? '16/9' : (item.ratio ?? '16/9') }}
+                    style={{ gridColumn: `span ${item.cols}`, aspectRatio: item.ratio ?? '16/9' }}
                   >
                     <MediaItem src={item.src} />
                     {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
