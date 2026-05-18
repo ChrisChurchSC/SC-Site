@@ -55,8 +55,8 @@ const BLOCK_MAP = {
   '044': { slug: 'kindling' },
   '045': { slug: 'fieldston' },
   '046': { slug: 'arbitrum-marketing-dept' },
-  '050': { slug: 'concis-labs' },
-  '049': { slug: 'pubkey' },
+  '048': { slug: 'pubkey' },
+  '049': { slug: 'concis-labs' },
 }
 
 export default function Home() {
@@ -459,10 +459,6 @@ export default function Home() {
           <video src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>047</span>
         </div>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
-          <img src="https://cdn.sanity.io/images/ppq16wpu/production/a4ba923c1409b9cf94ef626df91212ac4174e569-2400x2400.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>048</span>
-        </div>
         {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('046')}
           <span className={styles.label}>046</span>
@@ -567,21 +563,21 @@ export default function Home() {
 
       {/* Row 14 */}
       <section className={styles.row12}>
+        {blockLink('048', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('048')}
+          <span className={styles.label}>048</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('048')}</p>
+        </>)}
         {blockLink('049', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('049')}
           <span className={styles.label}>049</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('049')}</p>
         </>)}
-        {blockLink('050', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
-          {blockMedia('050')}
-          <span className={styles.label}>050</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('050')}</p>
-        </>)}
         <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/39c03a66175bc56d734102dd2554154dad957272-900x900.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>051</span>
+          <span className={styles.label}>050</span>
         </div>
       </section>
 
