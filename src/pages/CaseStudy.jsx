@@ -6,6 +6,7 @@ import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { BLOCK_MAP } from '../lib/blockMap'
 
 function MediaItem({ src, alt = '' }) {
   if (!src) return null
@@ -82,10 +83,22 @@ export default function CaseStudy() {
   const projects = useProjects()
   const project = projects.bySlug(clientSlugResolved)
 
-  // Map project slug → { imageUrl, videoUrl, mediaType } from the homepage grid
+  // Map project slug → grid block. Prefer BLOCK_MAP[label].slug (covers blocks
+  // without a Sanity project ref) and fall back to projectSlug from Sanity.
+  // For blocks whose media is on a static path (BLOCK_MAP.img), expose that as videoUrl/imageUrl too.
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  const isImg = (u) => /\.(png|jpe?g|gif|webp|avif)$/i.test(u || '')
   const gridBySlug = {}
   gridData?.blocks?.forEach(b => {
-    if (b.projectSlug) gridBySlug[b.projectSlug] = b
+    const slug = BLOCK_MAP[b.label]?.slug ?? b.projectSlug
+    if (!slug) return
+    const fallbackImg = BLOCK_MAP[b.label]?.img
+    const fallbackUrl = fallbackImg ? (fallbackImg.startsWith('/') ? `${base}${fallbackImg}` : fallbackImg) : null
+    gridBySlug[slug] = {
+      mediaType: b.mediaType ?? (fallbackImg && !isImg(fallbackImg) ? 'video' : (fallbackImg ? 'image' : null)),
+      videoUrl: b.videoUrl ?? (fallbackImg && !isImg(fallbackImg) ? fallbackUrl : null),
+      imageUrl: b.imageUrl ?? (fallbackImg && isImg(fallbackImg) ? fallbackUrl : null),
+    }
   })
 
   const [unlocked, setUnlocked] = useState(() =>

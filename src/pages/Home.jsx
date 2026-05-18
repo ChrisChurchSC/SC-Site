@@ -8,55 +8,9 @@ import { useComingSoon } from '../context/ComingSoonContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 import { useProjects } from '../context/ProjectsContext'
+import { BLOCK_MAP } from '../lib/blockMap'
 
 let didLoad = false
-
-// Static fallback for every grid block: slug drives the NavLink, img drives the media
-const BLOCK_MAP = {
-  '002': { slug: 'big-buoy' },
-  '003': { slug: 'oxyle',             img: '/grid/oxyle-hero-compressed.mp4' },
-  '004': { slug: 'deep-dive-films' },
-  '005': { slug: 'offchain' },
-  '006': { slug: 'local-hoops' },
-  '007': { slug: 'girlfight' },
-  '008': { slug: 'arbitrum' },
-  '009': { slug: 'gigs', img: '/grid/0421-compressed.mp4' },
-  '011': { slug: 'dimly-lit-chophouse' },
-  '012': { slug: 'sublime' },
-  '013': { slug: 'world-within',      img: '/grid/ww-sizzle-compressed.mp4' },
-  '014': { slug: 'smashburger', img: '/grid/smashburger-compressed.mp4' },
-  '015': { slug: 'aris' },
-  '016': { slug: 'transcend',           img: '/grid/transcend-compressed.mp4' },
-  '017': { slug: 'starchase' },
-  '018': { slug: 'photon' },
-  '019': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
-  '020': { slug: 'helen-maroulis' },
-  '021': { slug: 'wonderwerk' },
-  '022': { slug: 'drip' },
-  '023': { slug: 'opentext' },
-  '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
-  '025': { slug: 'industry-standard' },
-  '026': { slug: 'opentext-animated-ads' },
-  '027': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
-  '028': { slug: 'coldwater-club' },
-  '029': { slug: 'path-projects' },
-  '030': { slug: 'novi',              img: '/grid/novi-compressed.jpg' },
-  '031': { slug: 'hylands',           img: '/grid/hylands-compressed.mp4' },
-  '032': { slug: 'perm-agriculture' },
-  '033': { slug: 'smallhold' },
-  '036': { slug: 'entropy',           img: '/grid/empy-01-compressed.mp4' },
-  '037': { slug: 'banzen' },
-  '038': { slug: 'print-parlor' },
-  '039': { slug: 'infura' },
-  '040': { slug: 'golden-ventures' },
-  '041': { slug: 'zbiotics' },
-  '042': { slug: 'yura' },
-  '043': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
-  '044': { slug: 'kindling' },
-  '045': { slug: 'fieldston' },
-  '046': { slug: 'arbitrum-marketing-dept-videos' },
-  '048': { slug: 'pubkey' },
-}
 
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
