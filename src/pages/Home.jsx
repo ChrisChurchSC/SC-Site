@@ -281,7 +281,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder A */}
+      {/* Row 3 */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -333,7 +333,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder B */}
+      {/* Row 5b */}
       <section className={styles.row12}>
         {blockLink('040', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('040')}
@@ -399,7 +399,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder C */}
+      {/* Row 7b */}
       <section className={styles.row12}>
         {blockLink('023', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '1 / span 12' }, <>
           {blockMedia('023')}
@@ -453,17 +453,17 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder D */}
+      {/* Row 9b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
           <video src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>044</span>
+          <span className={styles.label}>047</span>
         </div>
         <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/a4ba923c1409b9cf94ef626df91212ac4174e569-2400x2400.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>045</span>
+          <span className={styles.label}>048</span>
         </div>
-        {blockLink('046', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+        {blockLink('046', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('046')}
           <span className={styles.label}>046</span>
           <span className={styles.csTag}>Case Study</span>
@@ -503,7 +503,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder E */}
+      {/* Row 11b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
           <img src="https://cdn.sanity.io/images/ppq16wpu/production/3b72e768eff83d9af86bcad7873197610df48634-900x1125.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -551,7 +551,7 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('043')}</p>
         </>)}
-        {blockLink('044', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
+        {blockLink('044', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '6 / span 3' }, <>
           {blockMedia('044')}
           <span className={styles.label}>044</span>
           <span className={styles.csTag}>Case Study</span>
@@ -565,7 +565,7 @@ export default function Home() {
         </>)}
       </section>
 
-      {/* Placeholder F */}
+      {/* Row 14 */}
       <section className={styles.row12}>
         {blockLink('049', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('049')}
