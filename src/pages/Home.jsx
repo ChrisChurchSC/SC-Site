@@ -458,7 +458,7 @@ export default function Home() {
           <video src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>047</span>
         </div>
-        {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+        {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 8' }, <>
           {blockMedia('046')}
           <span className={styles.label}>046</span>
           <span className={styles.csTag}>Case Study</span>
