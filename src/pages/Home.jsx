@@ -120,7 +120,11 @@ export default function Home() {
         </a>
       )
     }
-    if (isComingSoon) return <div className={finalClass} style={style}>{inner}</div>
+    if (isComingSoon) return (
+      <div className={finalClass} style={style} onClick={() => setToast(blockName(label) ? `${blockName(label)} — coming soon` : 'Case study coming soon')}>
+        {inner}
+      </div>
+    )
     if (slug) return (
       <NavLink to={`/work/${slug}`} className={finalClass} style={style}>{inner}</NavLink>
     )
@@ -144,7 +148,14 @@ export default function Home() {
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [toast, setToast] = useState(null)
   const videoRef = useRef(null)
+
+  useEffect(() => {
+    if (!toast) return
+    const t = setTimeout(() => setToast(null), 3500)
+    return () => clearTimeout(t)
+  }, [toast])
 
   const closeReel = () => {
     if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 }
@@ -624,6 +635,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {toast && <div className={styles.toast} role="status" aria-live="polite">{toast}</div>}
 
     </main>
 
