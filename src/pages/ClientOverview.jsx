@@ -33,6 +33,7 @@ export default function ClientOverview() {
       slug: sp.slug.replace(`${slug}-`, ''),
       n: String(i + 1).padStart(2, '0'),
       thumbnail: sanitySub?.thumbnail ?? null,
+      thumbnailVideo: sanitySub?.thumbnailVideo ?? null,
       comingSoon: sanitySub?.comingSoon ?? false,
     }
   })
@@ -67,9 +68,11 @@ export default function ClientOverview() {
           {workItems.map((item) => {
             const cardClass = `${styles.card}${item.comingSoon ? ' ' + styles.cardComingSoon : ''}`
             const inner = <>
-              {item.thumbnail && (
+              {item.thumbnailVideo ? (
+                <video src={item.thumbnailVideo} autoPlay muted loop playsInline className={styles.cardThumb} />
+              ) : item.thumbnail ? (
                 <img src={item.thumbnail} alt="" className={styles.cardThumb} />
-              )}
+              ) : null}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>
               {item.comingSoon

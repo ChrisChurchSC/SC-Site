@@ -130,7 +130,8 @@ export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $s
       thumbnailImages[0].asset->url,
       sections[_type == "imageFullSection" && defined(image.asset)][0].image.asset->url,
       sections[_type == "imageGridSection"][0].images[defined(image.asset)][0].image.asset->url
-    )
+    ),
+    "thumbnailVideo": thumbnailVideoFile.asset->url
   }
 }`
 
