@@ -1,4 +1,4 @@
-export const PROJECTS_QUERY = `*[_type == "project" && published == true && coalesce(order, 0) < 100] | order(order asc) {
+export const PROJECTS_QUERY = `*[_type == "project" && published == true] | order(order asc) {
   _id,
   "n": string(order),
   name,

@@ -22,7 +22,7 @@ export default function Nav() {
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
-  const caseStudies = projects.all
+  const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100)
   const comingSoon = useComingSoon()
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
