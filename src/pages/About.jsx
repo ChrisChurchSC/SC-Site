@@ -91,15 +91,6 @@ export default function About() {
         </div>
       </section>
 
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{cfg.clientsLabel || 'Selected Clients'}</p>
-        <div className={styles.clientsGrid}>
-          {cfg.clients?.map(c => (
-            <span key={c} className={styles.clientName}>{c}</span>
-          ))}
-        </div>
-      </section>
-
     </main>
   )
 }
