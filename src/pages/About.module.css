@@ -266,10 +266,11 @@
 }
 
 .roleName {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
