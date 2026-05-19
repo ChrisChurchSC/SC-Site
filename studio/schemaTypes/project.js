@@ -2,13 +2,16 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 
 const imageFullSection = defineArrayMember({
   name: 'imageFullSection',
-  title: 'Full-Width Image',
+  title: 'Full-Width Image / Video',
   type: 'object',
   fields: [
-    defineField({ name: 'image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'image', title: 'Desktop Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'videoFile', title: 'Desktop Video (overrides image)', type: 'file', options: { accept: 'video/*' } }),
+    defineField({ name: 'mobileImage', title: 'Mobile Image (optional)', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'mobileVideoFile', title: 'Mobile Video (overrides mobile image)', type: 'file', options: { accept: 'video/*' } }),
     defineField({ name: 'ratio', type: 'string', options: { list: ['16/9', '4/3', '1/1', '9/16', '4/5'] }, initialValue: '16/9' }),
   ],
-  preview: { select: { media: 'image' }, prepare: () => ({ title: 'Full-Width Image' }) },
+  preview: { select: { media: 'image' }, prepare: () => ({ title: 'Full-Width Image / Video' }) },
 })
 
 const textSection = defineArrayMember({
@@ -62,6 +65,13 @@ export const project = defineType({
       type: 'array',
       of: [{ type: 'image' }],
       description: 'Cycle on hover in the work drawer',
+    }),
+    defineField({
+      name: 'thumbnailVideoFile',
+      title: 'Thumbnail Video',
+      type: 'file',
+      options: { accept: 'video/*' },
+      description: 'Autoplay video shown on client overview sub-project cards (overrides Thumbnail Images).',
     }),
 
     // Case study fields

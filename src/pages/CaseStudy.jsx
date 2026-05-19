@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
 import { useProjects } from '../context/ProjectsContext'
@@ -8,13 +8,29 @@ import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { BLOCK_MAP } from '../lib/blockMap'
 
-function MediaItem({ src, alt = '' }) {
-  if (!src) return null
-  const isVideo = src?.endsWith('.mp4') || src?.endsWith('.mov')
-  if (isVideo) return (
-    <video src={src} autoPlay muted loop playsInline onError={(e) => e.target.style.display = 'none'} />
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia(`(max-width: ${breakpoint}px)`).matches
   )
-  return <img src={src} alt={alt} onError={(e) => e.target.style.display = 'none'} />
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const onChange = e => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [breakpoint])
+  return isMobile
+}
+
+function MediaItem({ src, mobileSrc, alt = '' }) {
+  const isMobile = useIsMobile()
+  const chosen = isMobile && mobileSrc ? mobileSrc : src
+  if (!chosen) return null
+  const isVideo = chosen?.endsWith('.mp4') || chosen?.endsWith('.mov')
+  if (isVideo) return (
+    <video src={chosen} autoPlay muted loop playsInline onError={(e) => e.target.style.display = 'none'} />
+  )
+  return <img src={chosen} alt={alt} onError={(e) => e.target.style.display = 'none'} />
 }
 
 const servicesByType = {
@@ -121,7 +137,7 @@ export default function CaseStudy() {
 
   // Normalize Sanity sections to match existing renderer expectations
   const normalizeSections = (sections) => sections?.map(s => {
-    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, ratio: s.ratio }
+    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, mobileSrc: s.mobileSrc, ratio: s.ratio }
     if (s._type === 'textSection') return { type: 'text', heading: s.heading, body: s.body }
     if (s._type === 'imageGridSection') return { type: 'image-grid', images: s.images }
     return s
@@ -209,7 +225,7 @@ export default function CaseStudy() {
 
           if (section.type === 'image-full') return (
             <div key={i} className={styles.mediaFull} style={{ aspectRatio: section.ratio ?? '16/9' }}>
-              <MediaItem src={section.src} />
+              <MediaItem src={section.src} mobileSrc={section.mobileSrc} />
             </div>
           )
 
