@@ -419,6 +419,16 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* Google */}
+      <section className={styles.row12}>
+        {blockLink('049', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '3 / span 8' }, <>
+          {blockMedia('049')}
+          <span className={styles.label}>049</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('049')}</p>
+        </>)}
+      </section>
+
       {/* Row 9b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
@@ -534,12 +544,6 @@ export default function Home() {
           <span className={styles.label}>048</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('048')}</p>
-        </>)}
-        {blockLink('049', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
-          {blockMedia('049')}
-          <span className={styles.label}>049</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('049')}</p>
         </>)}
       </section>
 
