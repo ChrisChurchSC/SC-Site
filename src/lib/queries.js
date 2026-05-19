@@ -102,6 +102,7 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][
     // imageGridSection
     images[] {
       "src": coalesce(videoFile.asset->url, image.asset->url),
+      "mobileSrc": coalesce(mobileVideoFile.asset->url, mobileImage.asset->url),
       cols,
       ratio
     }

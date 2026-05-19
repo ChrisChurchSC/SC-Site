@@ -246,7 +246,7 @@ export default function CaseStudy() {
                     className={styles.mediaGridItem}
                     style={{ gridColumn: `span ${item.cols}`, aspectRatio: item.ratio ?? '16/9' }}
                   >
-                    <MediaItem src={item.src} />
+                    <MediaItem src={item.src} mobileSrc={item.mobileSrc} />
                     {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
                   </div>
                 ))}
