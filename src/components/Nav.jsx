@@ -63,7 +63,6 @@ export default function Nav() {
         {/* Head logo */}
         <NavLink to="/" className="nav-side-head">
           <img src={logoSrc} alt="Super Conscious" width={28} height={33} />
-          <span className="nav-side-tagline">A creative production &amp; engineering studio.</span>
         </NavLink>
 
         {/* Gradient strips */}
