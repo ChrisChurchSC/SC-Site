@@ -79,9 +79,16 @@ export default function About() {
           <p className={styles.sectionLabel}>{cfg.rolesLabel || 'Roles'}</p>
           {cfg.rolesIntro && <p className={styles.rolesIntro}>{cfg.rolesIntro}</p>}
           <div className={styles.rolesGrid}>
-            {cfg.roles.map(r => (
-              <div key={r} className={styles.roleCard}>{r}</div>
-            ))}
+            {cfg.roles.map(r => {
+              const name = typeof r === 'string' ? r : r.name
+              const description = typeof r === 'string' ? null : r.description
+              return (
+                <div key={name} className={styles.roleCard}>
+                  <p className={styles.roleName}>{name}</p>
+                  {description && <p className={styles.roleDesc}>{description}</p>}
+                </div>
+              )
+            })}
           </div>
         </section>
       )}

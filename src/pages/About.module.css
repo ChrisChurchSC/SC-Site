@@ -258,11 +258,28 @@
 .roleCard {
   background: #161616;
   border-radius: 4px;
-  padding: 16px 18px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 96px;
+}
+
+.roleName {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.roleDesc {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
 }
 
 @media (max-width: 900px) {
