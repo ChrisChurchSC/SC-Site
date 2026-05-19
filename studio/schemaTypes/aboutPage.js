@@ -33,6 +33,7 @@ export const aboutPage = defineType({
     defineField({ name: 'headline', title: 'Headline', type: 'string' }),
     defineField({ name: 'intro', title: 'Intro', type: 'text', rows: 3 }),
     defineField({ name: 'embeddedPoints', title: 'Embedded Partnership Points', type: 'array', of: [embeddedPoint] }),
+    defineField({ name: 'servicesIntro', title: 'What We Do — Intro', type: 'text', rows: 2 }),
     defineField({ name: 'services', title: 'What We Do', type: 'array', of: [serviceItem] }),
     defineField({ name: 'rolesLabel', title: 'Roles — Label', type: 'string', initialValue: 'Roles' }),
     defineField({ name: 'rolesIntro', title: 'Roles — Intro', type: 'text', rows: 2 }),

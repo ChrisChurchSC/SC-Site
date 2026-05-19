@@ -129,8 +129,12 @@
 /* ── Embedded ── */
 .embeddedGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 5px;
+}
+
+@media (max-width: 900px) {
+  .embeddedGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .embeddedPoint {
@@ -223,6 +227,16 @@
   position: absolute;
   left: 0;
   color: rgba(255, 255, 255, 0.15);
+}
+
+.servicesIntro {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 24px;
+  max-width: 640px;
 }
 
 /* ── Roles / Disciplines ── */

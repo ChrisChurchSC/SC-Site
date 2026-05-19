@@ -56,6 +56,7 @@ export default function About() {
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>What We Do</p>
+        {cfg.servicesIntro && <p className={styles.servicesIntro}>{cfg.servicesIntro}</p>}
         <div className={styles.servicesGrid}>
           {cfg.services?.map(({ tag, name, deliverables }) => (
             <div key={name} className={styles.serviceCol}>

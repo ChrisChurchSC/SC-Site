@@ -56,6 +56,7 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   headline,
   intro,
   embeddedPoints[] { heading, body },
+  servicesIntro,
   services[] { tag, name, deliverables },
   rolesLabel,
   rolesIntro,
