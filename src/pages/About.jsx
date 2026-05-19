@@ -37,7 +37,7 @@ export default function About() {
 
       <section className={styles.header}>
         <p className={styles.headerLabel}>{cfg.headerLabel}</p>
-        <h1 className={styles.headline}>{cfg.headline}</h1>
+        {cfg.headline && <h1 className={styles.headline}>{cfg.headline}</h1>}
         <p className={styles.sub}>{cfg.intro}</p>
       </section>
 

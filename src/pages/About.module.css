@@ -84,11 +84,11 @@
 .sub {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(14px, 1.4vw, 18px);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: clamp(20px, 2.4vw, 32px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
-  max-width: 640px;
+  max-width: 800px;
 }
 
 /* ── Shared section row ── */
