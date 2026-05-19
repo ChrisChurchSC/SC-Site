@@ -10,7 +10,7 @@ import './Nav.css'
 const CONTACT_EMAIL = 'contact@super-conscious.studio'
 
 const actionCards = [
-  { label: 'Capabilities', sub: 'A creative production & engineering studio.',  to: '/about',    action: null },
+  { label: 'Capabilities', sub: 'Brand, content, and product.',  to: '/about',    action: null },
   { label: 'Careers',      sub: 'Join the team.',                to: '/about-us', action: null },
   { label: 'Thoughts',     sub: 'Ideas, notes, and process.',    to: '/thoughts', action: null },
 ]
@@ -63,6 +63,7 @@ export default function Nav() {
         {/* Head logo */}
         <NavLink to="/" className="nav-side-head">
           <img src={logoSrc} alt="Super Conscious" width={28} height={33} />
+          <span className="nav-side-tagline">A creative production &amp; engineering studio.</span>
         </NavLink>
 
         {/* Gradient strips */}
@@ -77,7 +78,7 @@ export default function Nav() {
           <NavLink to="/about" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Capabilities</p>
-              <p className="nav-card-sub">A creative production & engineering studio.</p>
+              <p className="nav-card-sub">Brand, content, and product.</p>
             </div>
           </NavLink>
 
