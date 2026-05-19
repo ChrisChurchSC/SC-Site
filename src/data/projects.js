@@ -4,6 +4,10 @@ export const projects = [
     relationship: 'Arbitrum came to us at a pivotal moment: a technically dominant product that needed a brand identity to match its ambition. We rebuilt the visual language from the ground up, then stayed on as their embedded creative team, producing everything from executive interview series and product explainers to campaign content and internal comms. The relationship has grown with the company, and years in, we are still their primary creative partner across every channel.',
     work: ['Rebrand', 'Interview Series', 'Product Videos', 'Marketing Dept Videos', 'Openhouse'] },
 
+  { n: '002', name: 'Google',           type: 'Content',                  slug: 'google',
+    relationship: "Google is one of our longest-running creative partnerships. Over years and across teams, we have produced documentary series, brand films, short-form content, and editorial interviews for Google's biggest properties: Maps, Ads, Small Business, Research, and Think with Google. The work has lived on Google's owned channels, in advertising campaigns, and inside the publishing they push to the broader marketing world. Across every piece, the consistent thread has been bringing Google's stories down to the level of the people behind them.",
+    work: ['Hot Takes', "Champion's Place", 'Language AI at Google', 'Mapping the Globe', 'Small Business Profiles', 'Modern Marketers'] },
+
   { n: '002', name: 'Offchain',         type: 'Brand',                    slug: 'offchain' },
 
   { n: '003', name: 'OpenText',         type: 'Brand + Campaign',         slug: 'opentext',
