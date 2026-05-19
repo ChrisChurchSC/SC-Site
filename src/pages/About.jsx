@@ -38,7 +38,9 @@ export default function About() {
       <section className={styles.header}>
         <p className={styles.headerLabel}>{cfg.headerLabel}</p>
         {cfg.headline && <h1 className={styles.headline}>{cfg.headline}</h1>}
-        <p className={styles.sub}>{cfg.intro}</p>
+        {cfg.intro?.split(/\n\n+/).map((para, i) => (
+          <p key={i} className={styles.sub}>{para}</p>
+        ))}
       </section>
 
       <section className={styles.textSection}>
