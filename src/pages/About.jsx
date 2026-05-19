@@ -71,33 +71,15 @@ export default function About() {
         </div>
       </section>
 
-      {cfg.packages?.length > 0 && (
+      {cfg.roles?.length > 0 && (
         <section className={styles.textSection}>
-          <p className={styles.sectionLabel}>{cfg.packagesLabel || 'Packages'}</p>
-          {cfg.packagesIntro && <p className={styles.packagesIntro}>{cfg.packagesIntro}</p>}
-          {['Build', 'Grow'].map(track => {
-            const items = cfg.packages.filter(p => p.track === track)
-            if (!items.length) return null
-            return (
-              <div key={track} className={styles.packagesTrack}>
-                <p className={styles.packagesTrackLabel}>{track}</p>
-                <div className={styles.packagesGrid}>
-                  {items.map(p => (
-                    <div key={p.name} className={styles.packageCard}>
-                      <p className={styles.packageName}>{p.name}</p>
-                      {p.goal && <p className={styles.packageGoal}>{p.goal}</p>}
-                      {p.metric && (
-                        <p className={styles.packageMetric}>
-                          <span className={styles.packageMetricLabel}>Tracked together — </span>{p.metric}
-                        </p>
-                      )}
-                      {p.price ? <p className={styles.packagePrice}>From ${Number(p.price).toLocaleString()}</p> : null}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
+          <p className={styles.sectionLabel}>{cfg.rolesLabel || 'Roles'}</p>
+          {cfg.rolesIntro && <p className={styles.rolesIntro}>{cfg.rolesIntro}</p>}
+          <div className={styles.rolesGrid}>
+            {cfg.roles.map(r => (
+              <div key={r} className={styles.roleCard}>{r}</div>
+            ))}
+          </div>
         </section>
       )}
 
