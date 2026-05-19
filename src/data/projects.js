@@ -15,8 +15,8 @@ export const projects = [
     relationship: 'Smashburger needed content that felt as alive as the brand. We worked closely with their marketing team to develop a visual content system and then produced across it, creating work built for social, in-store, and digital that captured the energy of the product and the people who love it.',
     work: ['Brand', 'Content'] },
 
-  { n: '005', name: 'Aris',             type: 'Brand + Content',          slug: 'aris',
-    relationship: 'With Aris, we built the brand and the content engine simultaneously. The founding team had a clear product vision and trusted us to translate it into something that could live in the world. We defined the identity, the visual language, and the content toolkit so the team could move fast from day one.',
+  { n: '005', name: "Ari's",            type: 'Brand + Content',          slug: 'aris',
+    relationship: "With Ari's, we built the brand and the content engine simultaneously. The founding team had a clear product vision and trusted us to translate it into something that could live in the world. We defined the identity, the visual language, and the content toolkit so the team could move fast from day one.",
     work: ['Brand', 'Content'] },
 
   { n: '006', name: 'World Within',     type: 'Brand + Content',          slug: 'world-within',

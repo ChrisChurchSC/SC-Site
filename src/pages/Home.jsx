@@ -535,10 +535,12 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('048')}</p>
         </>)}
-        <div className={`${styles.block} ${styles.r11}`} style={{ gridColumn: 'span 4' }}>
-          <img src="https://cdn.sanity.io/images/ppq16wpu/production/39c03a66175bc56d734102dd2554154dad957272-900x900.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        {blockLink('049', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('049')}
           <span className={styles.label}>049</span>
-        </div>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('049')}</p>
+        </>)}
       </section>
 
       {reelOpen && (

@@ -44,4 +44,5 @@ export const BLOCK_MAP = {
   '045': { slug: 'fieldston' },
   '046': { slug: 'arbitrum-marketing-dept-videos' },
   '048': { slug: 'pubkey' },
+  '049': { slug: 'google' },
 }
