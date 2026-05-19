@@ -27,10 +27,12 @@ function MediaItem({ src, mobileSrc, alt = '' }) {
   const chosen = isMobile && mobileSrc ? mobileSrc : src
   if (!chosen) return null
   const isVideo = chosen?.endsWith('.mp4') || chosen?.endsWith('.mov')
+  const onLoad = (e) => { e.target.style.display = '' }
+  const onError = (e) => { e.target.style.display = 'none' }
   if (isVideo) return (
-    <video src={chosen} autoPlay muted loop playsInline onError={(e) => e.target.style.display = 'none'} />
+    <video key={chosen} src={chosen} autoPlay muted loop playsInline onLoadedData={onLoad} onError={onError} />
   )
-  return <img src={chosen} alt={alt} onError={(e) => e.target.style.display = 'none'} />
+  return <img key={chosen} src={chosen} alt={alt} onLoad={onLoad} onError={onError} />
 }
 
 const servicesByType = {
