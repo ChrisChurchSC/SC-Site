@@ -129,12 +129,12 @@
 /* ── Embedded ── */
 .embeddedGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 5px;
 }
 
 @media (max-width: 900px) {
-  .embeddedGrid { grid-template-columns: repeat(2, 1fr); }
+  .embeddedGrid { grid-template-columns: 1fr; }
 }
 
 .embeddedPoint {
