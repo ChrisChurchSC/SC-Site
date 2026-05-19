@@ -27,7 +27,7 @@ const FALLBACK = {
 export default function About() {
   useMeta({
     title: 'Capabilities | Super Conscious',
-    description: 'Creative strategy and production partner for founders and marketing teams. Brand, content, and product, embedded month to month, no long contracts.',
+    description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
   })
   const { data } = useSanity(ABOUT_PAGE_QUERY)
   const cfg = data ?? FALLBACK
