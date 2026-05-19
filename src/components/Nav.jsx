@@ -10,7 +10,7 @@ import './Nav.css'
 const CONTACT_EMAIL = 'contact@super-conscious.studio'
 
 const actionCards = [
-  { label: 'Capabilities', sub: 'Brand, content, and product.',  to: '/about',    action: null },
+  { label: 'Capabilities', sub: 'Design, motion, engineering.',  to: '/about',    action: null },
   { label: 'Careers',      sub: 'Join the team.',                to: '/about-us', action: null },
   { label: 'Thoughts',     sub: 'Ideas, notes, and process.',    to: '/thoughts', action: null },
 ]
@@ -78,7 +78,7 @@ export default function Nav() {
           <NavLink to="/about" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Capabilities</p>
-              <p className="nav-card-sub">Brand, content, and product.</p>
+              <p className="nav-card-sub">Design, motion, engineering.</p>
             </div>
           </NavLink>
 
