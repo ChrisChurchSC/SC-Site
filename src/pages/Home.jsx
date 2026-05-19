@@ -535,7 +535,7 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('048')}</p>
         </>)}
-        {blockLink('049', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+        {blockLink('049', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('049')}
           <span className={styles.label}>049</span>
           <span className={styles.csTag}>Case Study</span>
