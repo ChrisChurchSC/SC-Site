@@ -429,6 +429,28 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* New work row: YouTube / Spot & Tango / SurvivorNet */}
+      <section className={styles.row12}>
+        {blockLink('050', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+          {blockMedia('050')}
+          <span className={styles.label}>050</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('050')}</p>
+        </>)}
+        {blockLink('051', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 5' }, <>
+          {blockMedia('051')}
+          <span className={styles.label}>051</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('051')}</p>
+        </>)}
+        {blockLink('052', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
+          {blockMedia('052')}
+          <span className={styles.label}>052</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('052')}</p>
+        </>)}
+      </section>
+
       {/* Row 9b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>

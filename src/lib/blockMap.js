@@ -45,4 +45,7 @@ export const BLOCK_MAP = {
   '046': { slug: 'arbitrum-marketing-dept-videos' },
   '048': { slug: 'pubkey' },
   '049': { slug: 'google' },
+  '050': { slug: 'youtube' },
+  '051': { slug: 'spot-and-tango' },
+  '052': { slug: 'survivornet' },
 }
