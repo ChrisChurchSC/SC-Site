@@ -164,7 +164,10 @@ export default function Home() {
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
-          <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nhigh quality brands, content, and digital products'}</p>
+          <div className={styles.cornerTextStack}>
+            <p className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nhigh quality brands, content, and digital products'}</p>
+            {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
+          </div>
         </div>
         <button
           className={styles.menuCard}
@@ -179,8 +182,7 @@ export default function Home() {
       {/* Row 1 — Hero */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer', backgroundImage: `url(${assetUrl('/reel-preview.gif')})`, backgroundSize: 'cover', backgroundPosition: 'center' }} onClick={() => setReelOpen(true)}>
-          <span className={styles.label}>{siteConfig?.homeHeroTagline ?? 'Brand · Content · Web'}</span>
-          <span className={styles.csTag}>Reel</span>
+          <span className={styles.label}>Reel</span>
           <button className={styles.playBtn}>
             <svg width="7" height="8" viewBox="0 0 10 12" fill="none">
               <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>

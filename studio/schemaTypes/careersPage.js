@@ -24,12 +24,16 @@ const traitCard = defineArrayMember({
 
 const photoCaption = defineArrayMember({
   name: 'photoCaption',
-  title: 'Photo Caption',
+  title: 'Photo',
   type: 'object',
   fields: [
     defineField({ name: 'caption', title: 'Caption', type: 'string' }),
+    defineField({ name: 'image', title: 'Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'videoFile', title: 'Video (optional, overrides image)', type: 'file', options: { accept: 'video/*' } }),
   ],
-  preview: { select: { title: 'caption' } },
+  preview: {
+    select: { title: 'caption', media: 'image' },
+  },
 })
 
 export const careersPage = defineType({
@@ -41,7 +45,7 @@ export const careersPage = defineType({
     defineField({ name: 'headerLabel', title: 'Header Label', type: 'string' }),
     defineField({ name: 'headline', title: 'Headline', type: 'string' }),
     defineField({ name: 'intro', title: 'Intro', type: 'text', rows: 3 }),
-    defineField({ name: 'photos', title: 'Photo Captions', type: 'array', of: [photoCaption] }),
+    defineField({ name: 'photos', title: 'Photos', type: 'array', of: [photoCaption] }),
     defineField({ name: 'whatItsLikeLabel', title: 'What Its Like — Label', type: 'string', initialValue: "What It's Like" }),
     defineField({ name: 'whatItsLikeBody', title: 'What Its Like — Body', type: 'text', rows: 5 }),
     defineField({ name: 'realitiesLabel', title: 'Realities — Label', type: 'string', initialValue: 'The Realities' }),

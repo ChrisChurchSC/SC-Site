@@ -121,6 +121,13 @@
 .menuLine:last-child.menuLineOpen  { transform: translateY(-3.25px) rotate(-45deg); }
 
 
+.cornerTextStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
 .cornerText {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
@@ -128,7 +135,18 @@
   text-transform: uppercase;
   text-align: right;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre-line;
+}
+
+.cornerSub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
   white-space: pre-line;
 }
 
