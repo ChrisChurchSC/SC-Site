@@ -79,7 +79,9 @@ export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-p
   traitsLabel,
   traits[] { heading, body },
   openRolesLabel,
-  applyEmail
+  applyEmail,
+  signupLabel,
+  signupSub
 }`
 
 export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {

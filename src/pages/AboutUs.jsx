@@ -1,5 +1,6 @@
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
+import KitForm from '../components/KitForm'
 import { useSanity } from '../hooks/useSanity'
 import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
 
@@ -123,6 +124,14 @@ export default function AboutUs() {
               <a href={`mailto:${cfg.applyEmail || 'contact@super-conscious.studio'}`} className={styles.roleApply}>Apply</a>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className={styles.ctaSection}>
+        <div className={styles.ctaCard} style={{ alignItems: 'center', textAlign: 'center' }}>
+          <p className={styles.ctaHeading}>{cfg.signupLabel || 'Stay in touch'}</p>
+          <p className={styles.ctaSub}>{cfg.signupSub || "Drop your email and we'll let you know when new roles open up."}</p>
+          <KitForm />
         </div>
       </section>
 
