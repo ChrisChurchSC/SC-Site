@@ -534,11 +534,11 @@ export default function Home() {
       {/* Row 11b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '2 / span 4' }}>
-          <img src="https://cdn.sanity.io/images/ppq16wpu/production/3b72e768eff83d9af86bcad7873197610df48634-900x1125.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={sanityImg("https://cdn.sanity.io/images/ppq16wpu/production/3b72e768eff83d9af86bcad7873197610df48634-900x1125.png", { w: 900 })} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>034</span>
         </div>
         <div className={`${styles.block} ${styles.r45}`} style={{ gridColumn: '7 / span 4' }}>
-          <img src="https://cdn.sanity.io/images/ppq16wpu/production/6e924b2b6714c40f8b3370e33887742277bd4dff-900x1125.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={sanityImg("https://cdn.sanity.io/images/ppq16wpu/production/6e924b2b6714c40f8b3370e33887742277bd4dff-900x1125.png", { w: 900 })} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>035</span>
         </div>
       </section>
