@@ -99,9 +99,9 @@ export default function Home() {
       if (isInternal) return <NavLink to={b.externalUrl} className={finalClass} style={style}>{inner}</NavLink>
       return (
         <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={finalClass} style={style}>
-          <span className={styles.extIcon}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 2h8v8M10 2 4 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+          <span className={styles.extIcon} aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9 9 3M4 3h5v5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square"/>
             </svg>
           </span>
           {inner}
