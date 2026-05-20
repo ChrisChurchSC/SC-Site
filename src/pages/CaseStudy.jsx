@@ -7,6 +7,7 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { BLOCK_MAP } from '../lib/blockMap'
+import { sanityImg } from '../lib/sanityImg'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -32,7 +33,8 @@ function MediaItem({ src, mobileSrc, alt = '' }) {
   if (isVideo) return (
     <video key={chosen} src={chosen} autoPlay muted loop playsInline onLoadedData={onLoad} onError={onError} />
   )
-  return <img key={chosen} src={chosen} alt={alt} onLoad={onLoad} onError={onError} />
+  const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
+  return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
 }
 
 const servicesByType = {
@@ -286,7 +288,7 @@ export default function CaseStudy() {
             const thumb = g?.mediaType === 'video' && g?.videoUrl
               ? <video src={g.videoUrl} autoPlay muted loop playsInline className={styles.moreCardThumb} />
               : g?.imageUrl
-                ? <img src={g.imageUrl} alt={`${p.name} case study thumbnail`} className={styles.moreCardThumb} />
+                ? <img src={sanityImg(g.imageUrl, { w: 800 })} alt={`${p.name} case study thumbnail`} loading="lazy" className={styles.moreCardThumb} />
                 : null
             const inner = (
               <>

@@ -3,6 +3,7 @@ import { useProjects } from '../context/ProjectsContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CLIENT_OVERVIEW_QUERY } from '../lib/queries'
+import { sanityImg } from '../lib/sanityImg'
 import styles from './ClientOverview.module.css'
 
 export default function ClientOverview() {
@@ -72,7 +73,7 @@ export default function ClientOverview() {
               {item.thumbnailVideo ? (
                 <video src={item.thumbnailVideo} autoPlay muted loop playsInline className={styles.cardThumb} />
               ) : item.thumbnail ? (
-                <img src={item.thumbnail} alt={`${item.name} thumbnail`} className={styles.cardThumb} />
+                <img src={sanityImg(item.thumbnail, { w: 900 })} alt={`${item.name} thumbnail`} loading="lazy" className={styles.cardThumb} />
               ) : null}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>

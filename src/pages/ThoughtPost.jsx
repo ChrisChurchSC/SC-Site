@@ -4,6 +4,7 @@ import styles from './ThoughtPost.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { THOUGHT_QUERY } from '../lib/queries'
+import { sanityImg } from '../lib/sanityImg'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
@@ -92,7 +93,7 @@ export default function ThoughtPost() {
 
       {post.heroUrl && (
         <figure className={styles.hero}>
-          <img src={post.heroUrl} alt="" />
+          <img src={sanityImg(post.heroUrl, { w: 1800 })} alt="" />
         </figure>
       )}
 
@@ -102,7 +103,7 @@ export default function ThoughtPost() {
           if (item._type === 'headingBlock') return <h2 key={i} className={styles.h2}>{item.text}</h2>
           if (item._type === 'imageBlock') return (
             <figure key={i} className={styles.figure}>
-              <img src={item.imageUrl} alt={item.alt ?? ''} />
+              <img src={sanityImg(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} loading="lazy" />
             </figure>
           )
           return null

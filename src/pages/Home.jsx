@@ -10,6 +10,7 @@ import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 import { useProjects } from '../context/ProjectsContext'
 import { BLOCK_MAP } from '../lib/blockMap'
+import { sanityImg } from '../lib/sanityImg'
 
 let didLoad = false
 
@@ -67,16 +68,16 @@ export default function Home() {
     const mediaStyle = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }
     if (b?.mediaType === 'video' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
-      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
+      if (isImageUrl(url)) return <img src={sanityImg(url, { w: 900 })} alt="" loading="lazy" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
       return <video src={url} autoPlay muted loop playsInline style={mediaStyle} onError={e => e.target.style.display = 'none'} />
     }
     if (b?.mediaType === 'image' && b?.imageUrl) return (
-      <img src={b.imageUrl} alt="" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
+      <img src={sanityImg(b.imageUrl, { w: 900 })} alt="" loading="lazy" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
     )
     const fallback = BLOCK_MAP[label]
     if (fallback?.img) {
       const url = assetUrl(fallback.img)
-      if (isImageUrl(url)) return <img src={url} alt="" style={mediaStyle} />
+      if (isImageUrl(url)) return <img src={sanityImg(url, { w: 900 })} alt="" loading="lazy" style={mediaStyle} />
       return <video src={url} autoPlay muted loop playsInline style={mediaStyle} />
     }
     return null
@@ -282,7 +283,7 @@ export default function Home() {
       {/* Row 3 */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
-          <img src="https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={sanityImg("https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png", { w: 1400 })} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>010</span>
         </div>
         {blockLink('011', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: '8 / span 5' }, <>

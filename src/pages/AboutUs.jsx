@@ -3,6 +3,7 @@ import { useMeta } from '../hooks/useMeta'
 import KitForm from '../components/KitForm'
 import { useSanity } from '../hooks/useSanity'
 import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
+import { sanityImg } from '../lib/sanityImg'
 
 const FALLBACK = {
   headerLabel: '[ Working Here ]',
@@ -68,7 +69,7 @@ export default function AboutUs() {
               {videoUrl ? (
                 <video src={videoUrl} autoPlay muted loop playsInline className={styles.photoMedia} />
               ) : imageUrl ? (
-                <img src={imageUrl} alt={caption} className={styles.photoMedia} />
+                <img src={sanityImg(imageUrl, { w: 1200 })} alt={caption} loading="lazy" className={styles.photoMedia} />
               ) : (
                 <div className={styles.photoPlaceholder} />
               )}
