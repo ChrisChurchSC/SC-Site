@@ -5,7 +5,7 @@ export const projects = [
     work: ['Rebrand', 'Interview Series', 'Product Videos', 'Marketing Dept Videos', 'Openhouse'] },
 
   { n: '002', name: 'Google',           type: 'Content',                  slug: 'google',
-    relationship: "This body of Google work was produced by Deep Dive, our production partner. It spans years and teams: documentary series for Google Maps and Google for Small Business, short-form content for Google Ads, brand films for Google Research, and an interview series for Think with Google. The constant across every piece is telling Google's stories through people, not products, and making technical and platform stories feel human. We feature it here as an example of the documentary and branded content work Super Conscious and Deep Dive take on together.",
+    relationship: "This body of Google work was produced by Deep Dive, our edutainment production partner. It spans years and teams: documentary series for Google Maps and Google for Small Business, short-form content for Google Ads, brand films for Google Research, and an interview series for Think with Google. The constant across every piece is telling Google's stories through people, not products, and making technical and platform stories feel human. We feature it here as an example of the documentary and branded content work Super Conscious and Deep Dive take on together.",
     work: ['Hot Takes', "Champion's Place", 'Language AI at Google', 'Mapping the Globe', 'Small Business Profiles', 'Modern Marketers'] },
 
   { n: '002', name: 'Offchain',         type: 'Brand',                    slug: 'offchain' },
