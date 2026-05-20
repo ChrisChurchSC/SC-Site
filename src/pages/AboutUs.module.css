@@ -257,6 +257,16 @@
   gap: 5px;
 }
 
+.rolesEmpty {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  max-width: 560px;
+}
+
 .roleCard {
   background: #161616;
   border-radius: 4px;

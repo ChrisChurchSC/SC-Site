@@ -35,12 +35,9 @@ const FALLBACK = {
   applyEmail: 'contact@super-conscious.studio',
 }
 
-const fallbackOpenRoles = [
-  { title: 'Design Intern', type: 'Internship', location: 'Remote', level: 'Entry Level',
-    description: "Work across brand, digital, and content. You'll be hands-on from day one, concepting, designing, and refining real client work. Strong eye, curious mind, and a point of view on what makes things good." },
-  { title: 'Motion Intern', type: 'Internship', location: 'Remote', level: 'Entry Level',
-    description: "Help bring campaigns and content to life through motion. You'll work on social content, brand films, and everything in between. Comfortable in After Effects, interested in the full creative process." },
-]
+// No roles are listed unless we are actively hiring. Live openings come
+// from Sanity (openRole docs); the empty state below covers the rest.
+const fallbackOpenRoles = []
 
 export default function AboutUs() {
   const { data: sanityRoles } = useSanity(OPEN_ROLES_QUERY)
@@ -111,22 +108,26 @@ export default function AboutUs() {
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{cfg.openRolesLabel}</p>
-        <div className={styles.rolesGrid}>
-          {roles.map(({ title, type, location, level, description }) => (
-            <div key={title} className={styles.roleCard}>
-              <div className={styles.roleHeader}>
-                <p className={styles.roleTitle}>{title}</p>
-                <div className={styles.roleMeta}>
-                  <span className={styles.roleTag}>{type}</span>
-                  <span className={styles.roleTag}>{level}</span>
-                  <span className={styles.roleLocation}>{location}</span>
+        {roles.length > 0 ? (
+          <div className={styles.rolesGrid}>
+            {roles.map(({ title, type, location, level, description }) => (
+              <div key={title} className={styles.roleCard}>
+                <div className={styles.roleHeader}>
+                  <p className={styles.roleTitle}>{title}</p>
+                  <div className={styles.roleMeta}>
+                    <span className={styles.roleTag}>{type}</span>
+                    <span className={styles.roleTag}>{level}</span>
+                    <span className={styles.roleLocation}>{location}</span>
+                  </div>
                 </div>
+                <p className={styles.roleDescription}>{description}</p>
+                <a href={`mailto:${cfg.applyEmail || 'contact@super-conscious.studio'}`} className={styles.roleApply}>Apply</a>
               </div>
-              <p className={styles.roleDescription}>{description}</p>
-              <a href={`mailto:${cfg.applyEmail || 'contact@super-conscious.studio'}`} className={styles.roleApply}>Apply</a>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className={styles.rolesEmpty}>No open roles right now. We're always glad to meet talented people, so say hello below.</p>
+        )}
       </section>
 
       <section className={styles.ctaSection}>
