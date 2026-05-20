@@ -152,7 +152,9 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>About</NavLink>
+          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
+          <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
+          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <button className="nav-mobile-link" onClick={() => { setMenuOpen(false); setWorkOpen(true) }}>Work</button>
           <button className="nav-mobile-link" onClick={() => { setMenuOpen(false); openContact() }}>Contact</button>
           <div className="nav-mobile-socials">

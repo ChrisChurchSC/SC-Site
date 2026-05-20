@@ -57,11 +57,13 @@
 }
 
 .descriptor {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.4);
   margin: 0 0 14px;
+  max-width: 600px;
 }
 
 .tagline {
