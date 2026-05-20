@@ -9,6 +9,7 @@ import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { BLOCK_MAP } from '../lib/blockMap'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
+import ClickToPlayVideo from '../components/ClickToPlayVideo'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -32,7 +33,7 @@ function MediaItem({ src, mobileSrc, alt = '' }) {
   const onLoad = (e) => { e.target.style.display = '' }
   const onError = (e) => { e.target.style.display = 'none' }
   if (isVideo) return (
-    <LazyVideo key={chosen} src={chosen} onError={onError} />
+    <ClickToPlayVideo key={chosen} src={chosen} onError={onError} />
   )
   const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
   return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
