@@ -161,8 +161,8 @@
 
 .cardComingSoonBadge {
   position: absolute;
-  bottom: 14px;
-  right: 16px;
+  top: 10px;
+  left: 12px;
   font-family: 'Roboto Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.12em;
