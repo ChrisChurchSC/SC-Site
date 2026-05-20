@@ -86,7 +86,7 @@ export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-p
   signupSub
 }`
 
-export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][0] {
+export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug && published == true][0] {
   _id,
   "n": string(order),
   name,
@@ -131,14 +131,14 @@ export const OPEN_ROLES_QUERY = `*[_type == "openRole" && active == true] | orde
   description
 }`
 
-export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $slug][0] {
+export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $slug && published == true][0] {
   name,
   type,
   descriptor,
   tagline,
   summary,
   relationship,
-  "subProjects": *[_type == "project" && string::startsWith(slug.current, $slug + "-")] {
+  "subProjects": *[_type == "project" && string::startsWith(slug.current, $slug + "-") && published == true] {
     "slug": slug.current,
     comingSoon,
     "thumbnail": coalesce(
