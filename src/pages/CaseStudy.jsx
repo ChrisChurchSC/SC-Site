@@ -124,17 +124,26 @@ export default function CaseStudy() {
     }
   })
 
-  const [unlocked, setUnlocked] = useState(() =>
-    !project?.password || sessionStorage.getItem(`cs_unlocked_${slug}`) === '1'
-  )
+  // Gate each page by its own password. Sub-projects use their own Sanity
+  // doc rather than inheriting the parent client's password.
+  const gateProject = workSlug ? projects.bySlug(sanitySlug) : project
+  const gateResolved = !!gateProject
+  const gatePassword = gateProject?.password
+
+  const [manualUnlock, setManualUnlock] = useState(false)
   const [pw, setPw] = useState('')
   const [error, setError] = useState(false)
 
+  // Derived (not one-time state) so it re-evaluates once the project loads.
+  const sessionUnlocked = typeof sessionStorage !== 'undefined'
+    && sessionStorage.getItem(`cs_unlocked_${sanitySlug}`) === '1'
+  const unlocked = manualUnlock || sessionUnlocked || (gateResolved && !gatePassword)
+
   const handleUnlock = (e) => {
     e.preventDefault()
-    if (pw === project.password) {
-      sessionStorage.setItem(`cs_unlocked_${slug}`, '1')
-      setUnlocked(true)
+    if (pw === gatePassword) {
+      sessionStorage.setItem(`cs_unlocked_${sanitySlug}`, '1')
+      setManualUnlock(true)
     } else {
       setError(true)
       setPw('')
@@ -192,6 +201,10 @@ export default function CaseStudy() {
   })
 
   if (!cs) return <main className={styles.main}><p className={styles.notFound}>Case study not found.</p></main>
+
+  // Wait for the sub-project doc to resolve before deciding the gate, so a
+  // private page never flashes its content and a public one never flashes the gate.
+  if (workSlug && !gateResolved) return <main className={styles.main} />
 
   if (!unlocked) return (
     <main className={styles.main}>
