@@ -15,6 +15,8 @@ import LazyVideo from '../components/LazyVideo'
 
 let didLoad = false
 
+const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
+
 const HOME_SCHEMA = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -215,12 +217,22 @@ export default function Home() {
 
       {/* Row 1 — Hero */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer', backgroundImage: `url(${assetUrl('/reel-preview.gif')})`, backgroundSize: 'cover', backgroundPosition: 'center' }} onClick={() => setReelOpen(true)}>
-          <span className={styles.label}>Reel</span>
-          <button className={styles.playBtn}>
-            <svg width="7" height="8" viewBox="0 0 10 12" fill="none">
+        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
+          <video
+            className={styles.heroReel}
+            src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
+            poster={assetUrl('/reel-preview.gif')}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <span className={styles.label}>Showreel</span>
+          <button className={styles.playBtn} aria-label="Play showreel with sound">
+            <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
               <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
             </svg>
+            <span>Watch with sound</span>
           </button>
         </div>
         {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '10 / span 3' }, <>

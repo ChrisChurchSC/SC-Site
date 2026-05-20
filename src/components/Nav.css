@@ -113,13 +113,13 @@ a.nav-cs-item {
   font-family: 'Roboto Mono', monospace;
   font-size: 8px;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .nav-cs-name {
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.92);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -128,7 +128,7 @@ a.nav-cs-item {
 .nav-cs-type {
   font-family: 'Roboto Mono', monospace;
   font-size: 8px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   white-space: nowrap;
 }
 
@@ -213,7 +213,7 @@ a.nav-cs-item {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1;
 }
 
@@ -221,7 +221,7 @@ a.nav-cs-item {
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.4;
 }
 

@@ -23,20 +23,15 @@ export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
   const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100)
-
-  // Side-nav list ordering tweaks (does not affect /work or the homepage):
-  // hide YouTube, and move Google down into the mid-list.
-  const navCaseStudies = (() => {
-    const list = caseStudies.filter(cs => cs.slug !== 'youtube')
-    const gi = list.findIndex(cs => cs.slug === 'google')
-    if (gi > -1) {
-      const [google] = list.splice(gi, 1)
-      list.splice(Math.min(8, list.length), 0, google)
-    }
-    return list
-  })()
-
   const comingSoon = useComingSoon()
+
+  // Side-nav list (does not affect /work or the homepage): hide YouTube,
+  // drop Coming Soon entries, and sort the rest alphabetically.
+  const navCaseStudies = caseStudies
+    .filter(cs => cs.slug !== 'youtube')
+    .filter(cs => !(cs.slug && comingSoon.has(cs.slug)))
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
   const [hoveredN, setHoveredN] = useState(null)
