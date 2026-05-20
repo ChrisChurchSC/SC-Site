@@ -8,6 +8,7 @@ import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { BLOCK_MAP } from '../lib/blockMap'
 import { sanityImg } from '../lib/sanityImg'
+import LazyVideo from '../components/LazyVideo'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -31,7 +32,7 @@ function MediaItem({ src, mobileSrc, alt = '' }) {
   const onLoad = (e) => { e.target.style.display = '' }
   const onError = (e) => { e.target.style.display = 'none' }
   if (isVideo) return (
-    <video key={chosen} src={chosen} autoPlay muted loop playsInline onLoadedData={onLoad} onError={onError} />
+    <LazyVideo key={chosen} src={chosen} onError={onError} />
   )
   const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
   return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
@@ -286,7 +287,7 @@ export default function CaseStudy() {
           {moreProjects.map(p => {
             const g = gridBySlug[p.slug]
             const thumb = g?.mediaType === 'video' && g?.videoUrl
-              ? <video src={g.videoUrl} autoPlay muted loop playsInline className={styles.moreCardThumb} />
+              ? <LazyVideo src={g.videoUrl} className={styles.moreCardThumb} />
               : g?.imageUrl
                 ? <img src={sanityImg(g.imageUrl, { w: 800 })} alt={`${p.name} case study thumbnail`} loading="lazy" className={styles.moreCardThumb} />
                 : null

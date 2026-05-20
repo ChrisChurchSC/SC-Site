@@ -4,6 +4,7 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CLIENT_OVERVIEW_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
+import LazyVideo from '../components/LazyVideo'
 import styles from './ClientOverview.module.css'
 
 export default function ClientOverview() {
@@ -71,7 +72,7 @@ export default function ClientOverview() {
             const cardClass = `${styles.card}${item.comingSoon ? ' ' + styles.cardComingSoon : ''}`
             const inner = <>
               {item.thumbnailVideo ? (
-                <video src={item.thumbnailVideo} autoPlay muted loop playsInline className={styles.cardThumb} />
+                <LazyVideo src={item.thumbnailVideo} className={styles.cardThumb} />
               ) : item.thumbnail ? (
                 <img src={sanityImg(item.thumbnail, { w: 900 })} alt={`${item.name} thumbnail`} loading="lazy" className={styles.cardThumb} />
               ) : null}

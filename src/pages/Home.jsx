@@ -11,6 +11,7 @@ import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 import { useProjects } from '../context/ProjectsContext'
 import { BLOCK_MAP } from '../lib/blockMap'
 import { sanityImg } from '../lib/sanityImg'
+import LazyVideo from '../components/LazyVideo'
 
 let didLoad = false
 
@@ -69,7 +70,7 @@ export default function Home() {
     if (b?.mediaType === 'video' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
       if (isImageUrl(url)) return <img src={sanityImg(url, { w: 900 })} alt="" loading="lazy" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
-      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} onError={e => e.target.style.display = 'none'} />
+      return <LazyVideo src={url} style={mediaStyle} onError={e => e.target.style.display = 'none'} />
     }
     if (b?.mediaType === 'image' && b?.imageUrl) return (
       <img src={sanityImg(b.imageUrl, { w: 900 })} alt="" loading="lazy" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
@@ -78,7 +79,7 @@ export default function Home() {
     if (fallback?.img) {
       const url = assetUrl(fallback.img)
       if (isImageUrl(url)) return <img src={sanityImg(url, { w: 900 })} alt="" loading="lazy" style={mediaStyle} />
-      return <video src={url} autoPlay muted loop playsInline style={mediaStyle} />
+      return <LazyVideo src={url} style={mediaStyle} />
     }
     return null
   }
@@ -487,7 +488,7 @@ export default function Home() {
       {/* Row 9b */}
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
-          <video src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          <LazyVideo src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className={styles.label}>047</span>
         </div>
         {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 8' }, <>
