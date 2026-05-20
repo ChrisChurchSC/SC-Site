@@ -1,42 +1,66 @@
 # Super Conscious
 
-> Creative strategy and production studio for founders and marketing teams. Philadelphia, PA.
+> Super Conscious is a creative production and engineering studio building brands, content, and digital products for founders and marketing teams. Based in Philadelphia, PA.
 
-Super Conscious is a small, embedded creative studio. We help companies decide what to make, why it matters, and bring it to life. Our work spans brand identity, campaign strategy, content production, and product design.
+Super Conscious is a small studio of designers, animators, and engineers. We embed with founders and marketing teams to make brand systems, content programs, and digital products. We work month to month with no long contracts, and we treat every project like it carries the weight of the company.
 
-## What We Do
+## About
 
-- **Brand** — identity systems, visual language, positioning, and messaging
-- **Content** — strategy, production (video, social, design), and delivery
-- **Product** — UX/UI, product design, web design and development
-- **Strategy** — creative strategy, marketing planning, channel strategy
+- [Capabilities](https://super-conscious.studio/about): What we do, how we work, and the disciplines we cover.
+- [Careers](https://super-conscious.studio/about-us): How we work, who fits here, and how to join the freelance roster.
+- [Thoughts](https://super-conscious.studio/thoughts): Ideas, notes, and process from the studio.
 
-## How We Work
+## Disciplines
 
-Month-to-month engagements. No long contracts. We embed directly into client teams — Slack, meetings, shared tools. Multiple team members, one shared goal. The output of an in-house creative team without the cost of building one.
+Creative direction, writing, design, illustration, film and photo, 3D and motion, animation, editing, production, engineering. All in-house.
 
-## Clients
+## Services
 
-Joon, Concis Labs, Big Buoy, Transcend, Oxyle, Mindmatter, Deep Dive Films, Vessel, Halfday, Overland, Pollen, World Within, Arbitrum, and others.
+**Build** (the foundation): Brand infrastructure / content, product design, web and interactive, decks, print and OOH, copywriting, concept creation.
 
-## Contact
+**Grow** (the fuel): Growth infrastructure / content, social, long-form video, lead magnets, email and newsletter, lifecycle and retention, ad creative.
 
-chris@super-conscious.studio
+## Case Studies
+
+- [Arbitrum](https://super-conscious.studio/work/arbitrum): Brand + Content
+- [Google](https://super-conscious.studio/work/google): An ongoing creative partnership across Google's biggest properties.
+- [OpenText](https://super-conscious.studio/work/opentext): Brand + Campaign
+- [YouTube Connect](https://super-conscious.studio/work/youtube): Connecting the YouTube ecosystem to the people behind it.
+- [World Within](https://super-conscious.studio/work/world-within): Bringing a World Within to life.
+- [Girlfight](https://super-conscious.studio/work/girlfight): Brand + Content
+- [Photon](https://super-conscious.studio/work/photon): Rewriting the prescription network around people, not paperwork.
+- [Big Buoy](https://super-conscious.studio/work/big-buoy): Brand + Content + Product
+- [Transcend](https://super-conscious.studio/work/transcend): Crafting a breakthrough neuroscience brand to market.
+- [Gigs](https://super-conscious.studio/work/gigs): Building a trusted brand in the gig economy.
+- [Heard](https://super-conscious.studio/work/heard): Elevating user research with AI-powered insights.
+- [Industry Standard](https://super-conscious.studio/work/industry-standard): Rebuilding a denim essential from the ground up.
+- [Wonderwerk](https://super-conscious.studio/work/wonderwerk): A rebrand built to carry the company forward.
+- [Path Projects](https://super-conscious.studio/work/path-projects): Building a motion system for a fast-moving running brand.
+- [Smallhold](https://super-conscious.studio/work/smallhold): Growing the nation’s most recognizable mushroom brand.
+- [Banzen](https://super-conscious.studio/work/banzen): A dispensary brand rooted in Coldwater, Michigan.
+- [Print Parlor](https://super-conscious.studio/work/print-parlor): Creating a merch platform where quality comes first.
+- [TBT](https://super-conscious.studio/work/tbt): Bringing scientific rigor to the future of dermatology.
+- [Yura](https://super-conscious.studio/work/yura): Redefining the healthcare benefits experience.
+- [Arbitrum — Rebrand](https://super-conscious.studio/work/arbitrum-rebrand): A brand identity built to match the ambition of the network.
+- [Arbitrum — Marketing Dept Videos](https://super-conscious.studio/work/arbitrum-marketing-dept-videos): Turning crypto conversation into community participation.
+- [Openhouse](https://super-conscious.studio/work/arbitrum-openhouse): Creating a launchpad for every Arbitrum builder.
+- [Hot Takes](https://super-conscious.studio/work/google-ads): Quick takes on the platforms shaping modern marketing.
+- [Champion's Place](https://super-conscious.studio/work/google-champions-place): A community built around a place worth showing up for.
+- [Language AI at Google](https://super-conscious.studio/work/google-language-ai): The human side of building AI for every language.
+- [From a Whisper to a Roar](https://super-conscious.studio/work/survivornet): One survivor's mission, told in full.
+- [Mapping the Globe](https://super-conscious.studio/work/google-maps): The people behind the map of the world.
+- [New York Dogs](https://super-conscious.studio/work/spot-and-tango): Real New York. Real dogs. Real owners.
+- [Small Business Profiles](https://super-conscious.studio/work/google-small-business): Small businesses, told the way they deserve to be told.
+- [Modern Marketers](https://super-conscious.studio/work/google-think-with-google): Conversations with the people shaping how brands grow.
 
 ## Thoughts
 
-Essays and notes on brand, creative practice, and content strategy from the Super Conscious team.
+- [Build slow, grow fast](https://super-conscious.studio/thoughts/build-slow-grow-fast): The balance between building brand and driving performance.
+- [Rethinking the workweek](https://super-conscious.studio/thoughts/rethinking-the-workweek): Why we dropped the five-day norm for more meaningful work.
+- [The case for toolkits](https://super-conscious.studio/thoughts/the-case-for-toolkits): Our take on building toolkits that keep brands cohesive, flexible, and alive.
 
-- On building brands that last: https://super-conscious.studio/thoughts/on-building-brands-that-last
-- The case for slower creative: https://super-conscious.studio/thoughts/the-case-for-slower-creative
-- What content strategy actually is: https://super-conscious.studio/thoughts/what-content-strategy-actually-is
+## Contact
 
-## Links
-
-- Website: https://super-conscious.studio
-- Work: https://super-conscious.studio/work
-- Capabilities: https://super-conscious.studio/about
-- Careers: https://super-conscious.studio/about-us
-- Thoughts: https://super-conscious.studio/thoughts
+- Email: contact@super-conscious.studio
 - Instagram: https://www.instagram.com/_super_conscious/
 - LinkedIn: https://www.linkedin.com/company/super-conscious/

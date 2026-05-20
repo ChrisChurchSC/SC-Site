@@ -244,7 +244,7 @@ export default function CaseStudy() {
 
           if (section.type === 'image-full') return (
             <div key={i} className={styles.mediaFull} style={{ aspectRatio: section.ratio ?? '16/9' }}>
-              <MediaItem src={section.src} mobileSrc={section.mobileSrc} />
+              <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} />
             </div>
           )
 
@@ -265,7 +265,7 @@ export default function CaseStudy() {
                     className={styles.mediaGridItem}
                     style={{ gridColumn: `span ${item.cols}`, aspectRatio: item.ratio ?? '16/9' }}
                   >
-                    <MediaItem src={item.src} mobileSrc={item.mobileSrc} />
+                    <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} />
                     {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
                   </div>
                 ))}
@@ -286,7 +286,7 @@ export default function CaseStudy() {
             const thumb = g?.mediaType === 'video' && g?.videoUrl
               ? <video src={g.videoUrl} autoPlay muted loop playsInline className={styles.moreCardThumb} />
               : g?.imageUrl
-                ? <img src={g.imageUrl} alt="" className={styles.moreCardThumb} />
+                ? <img src={g.imageUrl} alt={`${p.name} case study thumbnail`} className={styles.moreCardThumb} />
                 : null
             const inner = (
               <>

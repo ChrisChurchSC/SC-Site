@@ -25,13 +25,23 @@ const FALLBACK = {
 }
 
 export default function About() {
+  const { data } = useSanity(ABOUT_PAGE_QUERY)
+  const cfg = data ?? FALLBACK
+  const faqSchema = cfg.faqs?.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: cfg.faqs.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  } : null
   useMeta({
     title: 'Capabilities | Super Conscious',
     description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
     path: '/about',
+    schema: faqSchema,
   })
-  const { data } = useSanity(ABOUT_PAGE_QUERY)
-  const cfg = data ?? FALLBACK
 
   return (
     <main className={styles.main}>
@@ -91,6 +101,20 @@ export default function About() {
               )
             })}
           </div>
+        </section>
+      )}
+
+      {cfg.faqs?.length > 0 && (
+        <section className={styles.textSection}>
+          <p className={styles.sectionLabel}>{cfg.faqLabel || 'FAQ'}</p>
+          <dl className={styles.faqList}>
+            {cfg.faqs.map(({ question, answer }) => (
+              <div key={question} className={styles.faqItem}>
+                <dt className={styles.faqQ}>{question}</dt>
+                <dd className={styles.faqA}>{answer}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
       )}
 

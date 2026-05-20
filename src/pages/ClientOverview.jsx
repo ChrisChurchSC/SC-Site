@@ -72,7 +72,7 @@ export default function ClientOverview() {
               {item.thumbnailVideo ? (
                 <video src={item.thumbnailVideo} autoPlay muted loop playsInline className={styles.cardThumb} />
               ) : item.thumbnail ? (
-                <img src={item.thumbnail} alt="" className={styles.cardThumb} />
+                <img src={item.thumbnail} alt={`${item.name} thumbnail`} className={styles.cardThumb} />
               ) : null}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>

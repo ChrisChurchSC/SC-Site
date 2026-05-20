@@ -61,6 +61,8 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   rolesLabel,
   rolesIntro,
   roles,
+  faqLabel,
+  faqs[] { question, answer },
   pricingLabel,
   pricingSub,
   clientsLabel,
