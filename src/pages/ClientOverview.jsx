@@ -42,7 +42,6 @@ export default function ClientOverview() {
   })
 
   const tagline = sanity?.tagline ?? null
-  const relationshipCopy = sanity?.relationship ?? sanity?.summary ?? project?.relationship ?? null
 
   return (
     <main className={styles.main}>
@@ -57,13 +56,6 @@ export default function ClientOverview() {
         {(sanity?.descriptor ?? project.descriptor) && <p className={styles.descriptor}>{sanity?.descriptor ?? project.descriptor}</p>}
         {tagline && <p className={styles.tagline}>{tagline}</p>}
       </header>
-
-      {relationshipCopy && (
-        <div className={styles.relationship}>
-          <span className={styles.relationshipLabel}>Our Work Together</span>
-          <p className={styles.relationshipBody}>{relationshipCopy}</p>
-        </div>
-      )}
 
       <div className={styles.section}>
         <span className={styles.sectionLabel}>{workItems.length} Projects</span>
