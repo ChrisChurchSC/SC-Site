@@ -95,6 +95,7 @@ function buildPlaceholder(project) {
 }
 
 export default function CaseStudy() {
+  const isMobile = useIsMobile()
   const { slug, clientSlug, workSlug } = useParams()
   // When accessed via /work/:clientSlug/:workSlug, resolve the Sanity slug as "clientSlug-workSlug"
   const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
@@ -142,7 +143,7 @@ export default function CaseStudy() {
 
   // Normalize Sanity sections to match existing renderer expectations
   const normalizeSections = (sections) => sections?.map(s => {
-    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, mobileSrc: s.mobileSrc, ratio: s.ratio }
+    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, mobileSrc: s.mobileSrc, ratio: s.ratio, mobileRatio: s.mobileRatio }
     if (s._type === 'textSection') return { type: 'text', heading: s.heading, body: s.body }
     if (s._type === 'imageGridSection') return { type: 'image-grid', images: s.images }
     return s
@@ -245,11 +246,15 @@ export default function CaseStudy() {
       <div className={styles.sections}>
         {cs.sections.map((section, i) => {
 
-          if (section.type === 'image-full') return (
-            <div key={i} className={styles.mediaFull} style={{ aspectRatio: section.ratio ?? '16/9' }}>
-              <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} />
-            </div>
-          )
+          if (section.type === 'image-full') {
+            const useMobile = isMobile && section.mobileSrc
+            const ar = useMobile ? (section.mobileRatio ?? '4/5') : (section.ratio ?? '16/9')
+            return (
+              <div key={i} className={styles.mediaFull} style={{ aspectRatio: ar }}>
+                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} />
+              </div>
+            )
+          }
 
           if (section.type === 'text') return (
             <div key={i} className={styles.textSection}>
@@ -262,16 +267,20 @@ export default function CaseStudy() {
             const single = section.images.length === 1
             return (
               <div key={i} className={styles.mediaGrid}>
-                {section.images.map((item, j) => (
-                  <div
-                    key={j}
-                    className={styles.mediaGridItem}
-                    style={{ gridColumn: `span ${item.cols}`, aspectRatio: item.ratio ?? '16/9' }}
-                  >
-                    <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} />
-                    {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
-                  </div>
-                ))}
+                {section.images.map((item, j) => {
+                  const useMobile = isMobile && item.mobileSrc
+                  const ar = useMobile ? (item.mobileRatio ?? '4/5') : (item.ratio ?? '16/9')
+                  return (
+                    <div
+                      key={j}
+                      className={styles.mediaGridItem}
+                      style={{ gridColumn: `span ${item.cols}`, aspectRatio: ar }}
+                    >
+                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} />
+                      {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
+                    </div>
+                  )
+                })}
               </div>
             )
           }
