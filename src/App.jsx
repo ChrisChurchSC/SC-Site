@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { ContactProvider } from './context/ContactContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
@@ -17,6 +16,7 @@ import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
+import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -53,7 +53,6 @@ export default function App() {
     <ThemeProvider>
       <BrowserRouter basename={import.meta.env.PROD ? '/SC-Site' : ''}>
         <NavProvider>
-        <ContactProvider>
         <ComingSoonProvider>
         <ProjectsProvider>
           <ScrollToTop />
@@ -72,12 +71,12 @@ export default function App() {
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/thoughts" element={<Thoughts />} />
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </ProjectsProvider>
         </ComingSoonProvider>
-        </ContactProvider>
         </NavProvider>
       </BrowserRouter>
     </ThemeProvider>

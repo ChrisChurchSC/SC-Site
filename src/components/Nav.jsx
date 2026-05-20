@@ -1,22 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { useContact } from '../context/ContactContext'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { useProjects } from '../context/ProjectsContext'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
 
-const CONTACT_EMAIL = 'contact@super-conscious.studio'
-
-const actionCards = [
-  { label: 'Capabilities', sub: 'Design, motion, engineering.',  to: '/about',    action: null },
-  { label: 'Careers',      sub: 'Join the team.',                to: '/about-us', action: null },
-  { label: 'Thoughts',     sub: 'Ideas, notes, and process.',    to: '/thoughts', action: null },
-]
-
 export default function Nav() {
-  const { openContact } = useContact()
   const { menuOpen, setMenuOpen } = useNav()
   const location = useLocation()
   const isHome = location.pathname === '/'
@@ -32,17 +22,10 @@ export default function Nav() {
     .filter(cs => !(cs.slug && comingSoon.has(cs.slug)))
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
-  const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
   const [hoveredN, setHoveredN] = useState(null)
   const intervalRef = useRef(null)
   const frameRef = useRef(0)
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(CONTACT_EMAIL)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const startCycling = (cs) => {
     setHoveredN(cs.n)
@@ -103,15 +86,12 @@ export default function Nav() {
                 <p className="nav-card-sub">Join the team.</p>
               </div>
             </NavLink>
-            <div style={{ position: 'relative' }}>
-              {copied && <span className="copy-bubble">Copied!</span>}
-              <button className="nav-card nav-card--full" onClick={copyEmail}>
-                <div className="nav-card-text">
-                  <p className="nav-card-title">Contact</p>
-                  <p className="nav-card-sub">Get in touch.</p>
-                </div>
-              </button>
-            </div>
+            <NavLink to="/contact" className="nav-card">
+              <div className="nav-card-text">
+                <p className="nav-card-title">Contact</p>
+                <p className="nav-card-sub">Get in touch.</p>
+              </div>
+            </NavLink>
           </div>
         </div>
 
@@ -165,7 +145,7 @@ export default function Nav() {
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
           <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <button className="nav-mobile-link" onClick={() => { setMenuOpen(false); setWorkOpen(true) }}>Work</button>
-          <button className="nav-mobile-link" onClick={() => { setMenuOpen(false); openContact() }}>Contact</button>
+          <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>
             <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">LinkedIn</a>

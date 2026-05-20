@@ -207,11 +207,6 @@ img, video {
   color: rgba(0, 0, 0, 0.85);
 }
 
-[data-theme="light"] .copy-bubble {
-  background: rgba(0, 0, 0, 0.08);
-  color: rgba(0, 0, 0, 0.7);
-}
-
 [data-theme="light"] .theme-layer {
   filter: invert(1);
 }
