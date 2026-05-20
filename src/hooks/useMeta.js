@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 const DEFAULT_TITLE = 'Super Conscious | Creative Studio'
 const DEFAULT_DESC = 'Super Conscious is a creative strategy and production studio building brands, content, and digital products for founders and marketing teams. Philadelphia, PA.'
+const DEFAULT_OG_DESC = 'The makers and purveyors of high quality brands, content, and digital products'
 const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.gif'
 const SITE_BASE = 'https://super-conscious.studio'
 
@@ -17,7 +18,7 @@ export function useMeta({ title, description, image, path, schema } = {}) {
 
     const ogImage = image || DEFAULT_IMAGE
     const ogTitle = title || DEFAULT_TITLE
-    const ogDesc  = description || DEFAULT_DESC
+    const ogDesc  = description || DEFAULT_OG_DESC
     const ogUrl   = path ? `${SITE_BASE}${path}` : SITE_BASE
 
     setMeta('meta[property="og:title"]',        'content', ogTitle)
@@ -44,11 +45,11 @@ export function useMeta({ title, description, image, path, schema } = {}) {
       document.title = DEFAULT_TITLE
       setMeta('meta[name="description"]', 'content', DEFAULT_DESC)
       setMeta('meta[property="og:title"]',        'content', DEFAULT_TITLE)
-      setMeta('meta[property="og:description"]',  'content', DEFAULT_DESC)
+      setMeta('meta[property="og:description"]',  'content', DEFAULT_OG_DESC)
       setMeta('meta[property="og:image"]',        'content', DEFAULT_IMAGE)
       setMeta('meta[property="og:url"]',          'content', SITE_BASE)
       setMeta('meta[name="twitter:title"]',       'content', DEFAULT_TITLE)
-      setMeta('meta[name="twitter:description"]', 'content', DEFAULT_DESC)
+      setMeta('meta[name="twitter:description"]', 'content', DEFAULT_OG_DESC)
       setMeta('meta[name="twitter:image"]',       'content', DEFAULT_IMAGE)
       const canonical = document.querySelector('link[rel="canonical"]')
       if (canonical) canonical.setAttribute('href', SITE_BASE + '/')
