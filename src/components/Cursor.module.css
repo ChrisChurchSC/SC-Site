@@ -24,30 +24,12 @@
     opacity 0.2s;
 }
 
-/* Center dot — shown only over clickable elements, inside the ring */
-.cursor::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #fff;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.2s cubic-bezier(0.25, 1, 0.4, 1);
-}
-
-/* Over a clickable element: a bright, obvious ring + center dot */
+/* Over a clickable element: a bright, obvious ring */
 .cursor.large {
   width: 30px;
   height: 30px;
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.95);
-}
-
-.cursor.large::after {
-  transform: translate(-50%, -50%) scale(1);
 }
 
 .cursor.hidden {
@@ -56,10 +38,6 @@
 
 :global([data-theme="light"]) .cursor {
   background: rgba(0, 0, 0, 0.8);
-}
-
-:global([data-theme="light"]) .cursor::after {
-  background: #000;
 }
 
 :global([data-theme="light"]) .cursor.large {
