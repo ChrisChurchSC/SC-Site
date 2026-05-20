@@ -107,14 +107,17 @@ export default function About() {
       {cfg.faqs?.length > 0 && (
         <section className={styles.textSection}>
           <p className={styles.sectionLabel}>{cfg.faqLabel || 'FAQ'}</p>
-          <dl className={styles.faqList}>
+          <div className={styles.faqList}>
             {cfg.faqs.map(({ question, answer }) => (
-              <div key={question} className={styles.faqItem}>
-                <dt className={styles.faqQ}>{question}</dt>
-                <dd className={styles.faqA}>{answer}</dd>
-              </div>
+              <details key={question} className={styles.faqItem}>
+                <summary className={styles.faqQ}>
+                  <span>{question}</span>
+                  <span className={styles.faqToggle} aria-hidden="true" />
+                </summary>
+                <p className={styles.faqA}>{answer}</p>
+              </details>
             ))}
-          </dl>
+          </div>
         </section>
       )}
 
