@@ -229,7 +229,7 @@ export default function Home() {
           />
           <span className={styles.label}>Showreel</span>
           <button className={styles.playBtn} aria-label="Play showreel with sound">
-            <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
+            <svg width="8" height="9" viewBox="0 0 10 12" fill="none">
               <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
             </svg>
             <span>Watch with sound</span>
