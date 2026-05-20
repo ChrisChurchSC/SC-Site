@@ -202,9 +202,10 @@ export default function CaseStudy() {
 
   if (!cs) return <main className={styles.main}><p className={styles.notFound}>Case study not found.</p></main>
 
-  // Wait for the sub-project doc to resolve before deciding the gate, so a
-  // private page never flashes its content and a public one never flashes the gate.
-  if (workSlug && !gateResolved) return <main className={styles.main} />
+  // Wait for the gate project to resolve before deciding the gate, so a
+  // private page never flashes its content and a public one never flashes
+  // the gate (and the gate never renders against an undefined project).
+  if (!gateResolved) return <main className={styles.main} />
 
   if (!unlocked) return (
     <main className={styles.main}>
