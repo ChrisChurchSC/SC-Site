@@ -17,6 +17,7 @@ import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
+import NotFound from './pages/NotFound'
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -71,6 +72,7 @@ export default function App() {
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/thoughts" element={<Thoughts />} />
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </ProjectsProvider>
