@@ -1,0 +1,42 @@
+.ptr {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 9000;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(255, 87, 168, 0.35);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+  color: #ff57a8;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.ptr-glyph {
+  display: block;
+}
+
+/* armed to release */
+.ptr--ready {
+  border-color: #ff57a8;
+  box-shadow: 0 6px 22px rgba(255, 87, 168, 0.35);
+}
+
+/* spinning while the reload fires */
+.ptr--refreshing .ptr-glyph {
+  animation: ptr-spin 0.7s linear infinite;
+}
+
+@keyframes ptr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* desktop / non-touch — never show */
+@media (hover: hover) and (pointer: fine) {
+  .ptr { display: none; }
+}

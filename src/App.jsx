@@ -7,6 +7,7 @@ import { ComingSoonProvider } from './context/ComingSoonContext'
 import { ProjectsProvider, useProjects } from './context/ProjectsContext'
 import Nav from './components/Nav'
 import Cursor from './components/Cursor'
+import PullToRefresh from './components/PullToRefresh'
 import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
@@ -57,6 +58,7 @@ export default function App() {
         <ComingSoonProvider>
         <ProjectsProvider>
           <ScrollToTop />
+          <PullToRefresh />
           <TransitionBar />
           <Cursor />
           <Nav />

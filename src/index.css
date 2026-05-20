@@ -22,6 +22,8 @@ html {
   font-family: 'Roboto Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Disable native pull-to-refresh — custom PullToRefresh handles it */
+  overscroll-behavior-y: contain;
 }
 
 body {
