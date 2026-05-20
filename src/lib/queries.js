@@ -98,6 +98,8 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug][
   services,
   outcomes,
   partner,
+  client,
+  partnerNote,
   sections[] {
     _type,
     _key,

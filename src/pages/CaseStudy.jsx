@@ -156,11 +156,15 @@ export default function CaseStudy() {
     : null
   const normalizedSections = normalizeSections(sanityCs?.sections)
   const cs = sanityCs
-    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []), credits: [
-        { role: 'Creative Direction', name: 'Super Conscious' },
-        ...(sanityCs.partner ? [{ role: 'Production Partner', name: sanityCs.partner }] : []),
-        { role: 'Client', name: sanityCs.name },
-      ] }
+    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []), credits: sanityCs.partner
+        ? [
+            { role: 'Produced by', name: sanityCs.partner },
+            { role: 'Client', name: sanityCs.client ?? sanityCs.name },
+          ]
+        : [
+            { role: 'Creative Direction', name: 'Super Conscious' },
+            { role: 'Client', name: sanityCs.name },
+          ] }
     : (staticCaseStudies[slug] ?? placeholder)
 
   const moreProjects = projects.all.filter(p => p.slug !== slug).slice(0, 3)
@@ -235,6 +239,7 @@ export default function CaseStudy() {
       {/* Overview */}
       <div className={styles.overview}>
         <p className={styles.overviewDesc}>{cs.summary}</p>
+        {cs.partnerNote && <p className={styles.partnerNote}>{cs.partnerNote}</p>}
         {cs.outcomes?.length > 0 && (
           <div className={styles.outcomeCards}>
             {cs.outcomes.map(({ category, outcome }) => (
