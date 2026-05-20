@@ -19,9 +19,9 @@ export const BLOCK_MAP = {
   '018': { slug: 'photon' },
   '019': { slug: 'soft-science',      img: '/grid/soft-science-compressed.mp4' },
   '020': { slug: 'helen-maroulis' },
-  '021': { slug: 'wonderwerk' },
   '022': { slug: 'drip' },
-  // 023 / 026 (OpenText) intentionally omitted — hidden pending client approval
+  '023': { slug: 'wonderwerk' },
+  // 026 (OpenText) intentionally omitted — hidden pending client approval
   '024': { slug: 'heard',               img: '/grid/heard-compressed.mp4' },
   '025': { slug: 'industry-standard' },
   '027': { slug: 'nimruz', img: '/grid/nimruz-logo-compressed.mp4' },
