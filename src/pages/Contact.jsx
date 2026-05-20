@@ -2,8 +2,8 @@ import { useState } from 'react'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
 
-// Formspree form ID. Create a form at https://formspree.io and paste its ID here.
-const FORMSPREE_ID = 'REPLACE_WITH_FORM_ID'
+// Formspree form ID (https://formspree.io).
+const FORMSPREE_ID = 'xzdobjza'
 const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`
 
 export default function Contact() {
