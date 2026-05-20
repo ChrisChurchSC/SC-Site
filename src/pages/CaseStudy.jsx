@@ -156,9 +156,26 @@ export default function CaseStudy() {
 
   const moreProjects = projects.all.filter(p => p.slug !== slug).slice(0, 3)
 
+  const heroImage = (cs?.sections ?? [])
+    .flatMap(s => s._type === 'imageGridSection' ? (s.images ?? []) : [s])
+    .map(s => s.src)
+    .find(src => src && src.includes('/images/'))
+  const csSchema = cs ? {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: cs.name,
+    description: cs.tagline ?? cs.summary,
+    url: `https://super-conscious.studio/work/${slug}`,
+    image: heroImage,
+    creator: { '@type': 'Organization', name: 'Super Conscious', url: 'https://super-conscious.studio' },
+    author: { '@type': 'Organization', name: 'Super Conscious' },
+  } : null
   useMeta({
     title: cs ? `${cs.name} | Super Conscious` : 'Work | Super Conscious',
     description: cs?.tagline ?? cs?.summary?.slice(0, 155) ?? 'Case study from Super Conscious.',
+    image: heroImage,
+    path: `/work/${slug}`,
+    schema: csSchema,
   })
 
   if (!cs) return <main className={styles.main}><p className={styles.notFound}>Case study not found.</p></main>

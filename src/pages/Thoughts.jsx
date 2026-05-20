@@ -29,6 +29,7 @@ export default function Thoughts() {
   useMeta({
     title: 'Thoughts | Super Conscious',
     description: 'Ideas, notes, and process from the Super Conscious studio. Brand strategy, creative practice, and content thinking.',
+    path: '/thoughts',
   })
   const { data: sanityThoughts } = useSanity(THOUGHTS_INDEX_QUERY)
   const items = (sanityThoughts && sanityThoughts.length ? sanityThoughts : fromStatic)

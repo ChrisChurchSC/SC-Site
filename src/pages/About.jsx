@@ -28,6 +28,7 @@ export default function About() {
   useMeta({
     title: 'Capabilities | Super Conscious',
     description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
+    path: '/about',
   })
   const { data } = useSanity(ABOUT_PAGE_QUERY)
   const cfg = data ?? FALLBACK

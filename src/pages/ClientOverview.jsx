@@ -14,6 +14,7 @@ export default function ClientOverview() {
   useMeta({
     title: project ? `${project.name} | Super Conscious` : 'Work | Super Conscious',
     description: sanity?.tagline ?? `${project?.name}, ${project?.type}`,
+    path: `/work/${slug}`,
   })
 
   if (!project) return (

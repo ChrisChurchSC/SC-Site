@@ -50,6 +50,7 @@ export default function ThoughtPost() {
   useMeta(post ? {
     title: `${post.title} | Super Conscious`,
     description: (post.excerpt || firstParagraph(post)).slice(0, 155),
+    path: `/thoughts/${slug}`,
     schema: {
       '@context': 'https://schema.org',
       '@type': 'Article',

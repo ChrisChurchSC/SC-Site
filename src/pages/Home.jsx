@@ -5,6 +5,7 @@ import LogoWordmark from '../components/LogoWordmark'
 import Loader from '../components/Loader'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
+import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 import { useProjects } from '../context/ProjectsContext'
@@ -12,12 +13,43 @@ import { BLOCK_MAP } from '../lib/blockMap'
 
 let didLoad = false
 
+const HOME_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://super-conscious.studio/#organization',
+      name: 'Super Conscious',
+      url: 'https://super-conscious.studio',
+      logo: 'https://super-conscious.studio/favicon-dark.png',
+      sameAs: [
+        'https://www.instagram.com/_super_conscious/',
+        'https://www.linkedin.com/company/super-conscious/',
+      ],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Philadelphia',
+        addressRegion: 'PA',
+        addressCountry: 'US',
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://super-conscious.studio/#website',
+      url: 'https://super-conscious.studio',
+      name: 'Super Conscious',
+      publisher: { '@id': 'https://super-conscious.studio/#organization' },
+    },
+  ],
+}
+
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   const comingSoon = useComingSoon()
   const projects = useProjects()
+  useMeta({ path: '/', schema: HOME_SCHEMA })
 
   // Build a lookup map: label -> block data
   const grid = {}
