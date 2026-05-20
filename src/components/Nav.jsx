@@ -23,6 +23,19 @@ export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
   const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100)
+
+  // Side-nav list ordering tweaks (does not affect /work or the homepage):
+  // hide YouTube, and move Google down into the mid-list.
+  const navCaseStudies = (() => {
+    const list = caseStudies.filter(cs => cs.slug !== 'youtube')
+    const gi = list.findIndex(cs => cs.slug === 'google')
+    if (gi > -1) {
+      const [google] = list.splice(gi, 1)
+      list.splice(Math.min(8, list.length), 0, google)
+    }
+    return list
+  })()
+
   const comingSoon = useComingSoon()
   const [copied, setCopied] = useState(false)
   const [bgImage, setBgImage] = useState(null)
@@ -109,10 +122,11 @@ export default function Nav() {
 
         {/* Case study list */}
         <ul className="nav-cs-list">
-          {caseStudies.slice(0, 20).map(({ n, name, type, slug }) => {
+          {navCaseStudies.slice(0, 20).map(({ name, type, slug }, idx) => {
+            const num = String(idx + 1).padStart(3, '0')
             const isComingSoon = slug && comingSoon.has(slug)
             const inner = <>
-              <span className="nav-cs-num">{n}</span>
+              <span className="nav-cs-num">{num}</span>
               <span className="nav-cs-name">{name}</span>
               <span className="nav-cs-type">
                 {type}
@@ -121,11 +135,11 @@ export default function Nav() {
             </>
             const className = `nav-cs-item${isComingSoon ? ' nav-cs-item--coming-soon' : ''}`
             return slug && !isComingSoon ? (
-              <NavLink key={n} to={`/work/${slug}`} className={className}>
+              <NavLink key={slug} to={`/work/${slug}`} className={className}>
                 {inner}
               </NavLink>
             ) : (
-              <li key={n} className={className}>
+              <li key={slug || num} className={className}>
                 {inner}
               </li>
             )
