@@ -1,16 +1,6 @@
-@font-face {
-  font-family: 'Signifier';
-  src: url('/fonts/Signifier/WOFF2/signifier-light.woff2') format('woff2');
-  font-weight: 300;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Signifier';
-  src: url('/fonts/Signifier/Signifier-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-display: swap;
-}
+/* Signifier @font-face is injected at runtime in main.jsx using
+   import.meta.env.BASE_URL so the same code works under /SC-Site/
+   and a future root deploy on the custom domain. */
 
 *, *::before, *::after {
   box-sizing: border-box;
