@@ -7,7 +7,8 @@ const FORMSPREE_ID = 'xzdobjza'
 const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`
 
 export default function Contact() {
-  const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const [status, setStatus] = useState('idle') // idle | sending | error
+  const [toast, setToast] = useState(false)
 
   useMeta({
     title: 'Contact | Super Conscious',
@@ -27,8 +28,10 @@ export default function Contact() {
         headers: { Accept: 'application/json' },
       })
       if (res.ok) {
-        setStatus('sent')
         form.reset()
+        setStatus('idle')
+        setToast(true)
+        setTimeout(() => setToast(false), 4500)
       } else {
         setStatus('error')
       }
@@ -48,42 +51,41 @@ export default function Contact() {
       </section>
 
       <section className={styles.formSection}>
-        {status === 'sent' ? (
-          <div className={styles.sent}>
-            <p className={styles.sentHeading}>Message sent.</p>
-            <p className={styles.sentBody}>Thanks for reaching out. We'll be in touch shortly.</p>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.row}>
+            <label className={styles.field}>
+              <span className={styles.label}>Name</span>
+              <input className={styles.input} type="text" name="name" required autoComplete="name" />
+            </label>
+            <label className={styles.field}>
+              <span className={styles.label}>Email</span>
+              <input className={styles.input} type="email" name="email" required autoComplete="email" />
+            </label>
           </div>
-        ) : (
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.row}>
-              <label className={styles.field}>
-                <span className={styles.label}>Name</span>
-                <input className={styles.input} type="text" name="name" required autoComplete="name" />
-              </label>
-              <label className={styles.field}>
-                <span className={styles.label}>Email</span>
-                <input className={styles.input} type="email" name="email" required autoComplete="email" />
-              </label>
-            </div>
-            <label className={styles.field}>
-              <span className={styles.label}>Company <span className={styles.optional}>(optional)</span></span>
-              <input className={styles.input} type="text" name="company" autoComplete="organization" />
-            </label>
-            <label className={styles.field}>
-              <span className={styles.label}>Project</span>
-              <textarea className={styles.textarea} name="message" rows={6} required />
-            </label>
+          <label className={styles.field}>
+            <span className={styles.label}>Company <span className={styles.optional}>(optional)</span></span>
+            <input className={styles.input} type="text" name="company" autoComplete="organization" />
+          </label>
+          <label className={styles.field}>
+            <span className={styles.label}>Project</span>
+            <textarea className={styles.textarea} name="message" rows={6} required />
+          </label>
 
-            {status === 'error' && (
-              <p className={styles.error}>Something went wrong. Email us directly at contact@super-conscious.studio.</p>
-            )}
+          {status === 'error' && (
+            <p className={styles.error}>Something went wrong. Email us directly at contact@super-conscious.studio.</p>
+          )}
 
-            <button className={styles.submit} type="submit" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending…' : 'Send message'}
-            </button>
-          </form>
-        )}
+          <button className={styles.submit} type="submit" disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send message'}
+          </button>
+        </form>
       </section>
+
+      {toast && (
+        <div className={styles.toast} role="status">
+          Message sent. We'll be in touch shortly.
+        </div>
+      )}
     </main>
   )
 }
