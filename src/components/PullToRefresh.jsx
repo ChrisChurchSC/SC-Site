@@ -25,6 +25,8 @@ export default function PullToRefresh() {
       if (window.scrollY > 0) { tracking.current = false; setPull(0); setStatus('idle'); return }
       const raw = e.touches[0].clientY - startY.current
       if (raw <= 0) { setPull(0); setStatus('idle'); return }
+      // Block the browser's native pull-to-refresh while we drive our own
+      if (e.cancelable) e.preventDefault()
       const damped = Math.min(MAX_PULL, raw * RESISTANCE)
       setPull(damped)
       setStatus(damped >= THRESHOLD ? 'ready' : 'pulling')
@@ -44,7 +46,7 @@ export default function PullToRefresh() {
     }
 
     window.addEventListener('touchstart', onStart, { passive: true })
-    window.addEventListener('touchmove', onMove, { passive: true })
+    window.addEventListener('touchmove', onMove, { passive: false })
     window.addEventListener('touchend', onEnd, { passive: true })
     window.addEventListener('touchcancel', onEnd, { passive: true })
     return () => {
