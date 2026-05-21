@@ -567,6 +567,11 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  /* An odd-count last card would sit alone at 50% — let it span full width */
+  .moreCard:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
   /* Credits: stack label above rows */
   .credits {
     padding: 36px 24px;
