@@ -69,6 +69,17 @@ export default function Home() {
   const blockMedia = (label, style = {}) => {
     const b = grid[label]
     const mediaStyle = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }
+    // Block 023: tile the video as a 3x3 grid inside the block
+    if (label === '023' && b?.videoUrl) {
+      const url = assetUrl(b.videoUrl)
+      return (
+        <div style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(3, 1fr)' }}>
+          {Array.from({ length: 9 }).map((_, i) => (
+            <LazyVideo key={i} src={url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => e.target.style.display = 'none'} />
+          ))}
+        </div>
+      )
+    }
     if (b?.mediaType === 'video' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
       if (isImageUrl(url)) return <img src={sanityImg(url, { w: 900 })} alt="" loading="lazy" style={mediaStyle} onError={e => e.target.style.display = 'none'} />
