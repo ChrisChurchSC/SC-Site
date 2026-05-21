@@ -108,7 +108,7 @@
   font-weight: 300;
   font-size: clamp(24px, 3vw, 48px);
   line-height: 1.05;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   max-width: 800px;
   animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both;
 }
