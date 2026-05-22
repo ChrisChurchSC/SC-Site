@@ -273,25 +273,19 @@ export default function Home() {
 
       {/* Row 3 */}
       <section className={styles.row12}>
-        {blockLink('006', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+        {blockLink('006', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('006')}
           <span className={styles.label}>006</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('006') || 'Concis Labs'}</p>
         </>)}
-        {blockLink('007', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+        {blockLink('007', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('007')}
           <span className={styles.label}>007</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('007') || 'Big Buoy'}</p>
         </>)}
-        {blockLink('008', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('008')}
-          <span className={styles.label}>008</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('008')}</p>
-        </>)}
-        {blockLink('009', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
+        {blockLink('009', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 4' }, <>
           {blockMedia('009')}
           <span className={styles.label}>009</span>
           <span className={styles.csTag}>Case Study</span>
@@ -488,20 +482,6 @@ export default function Home() {
           <span className={styles.label}>052</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('052')}</p>
-        </>)}
-      </section>
-
-      {/* Row 9b */}
-      <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r916}`} style={{ gridColumn: 'span 4' }}>
-          <LazyVideo src="https://cdn.sanity.io/files/ppq16wpu/production/ebefe364a979525232d38c45f383881d12bba783.mp4" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>047</span>
-        </div>
-        {blockLink('046', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: 'span 8' }, <>
-          {blockMedia('046')}
-          <span className={styles.label}>046</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('046')}</p>
         </>)}
       </section>
 

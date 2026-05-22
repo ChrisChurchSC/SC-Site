@@ -7,7 +7,7 @@ export const BLOCK_MAP = {
   '005': { slug: 'offchain' },
   '006': { slug: 'local-hoops' },
   '007': { slug: 'girlfight' },
-  '008': { slug: 'arbitrum' },
+  // 008 (Arbitrum) intentionally omitted — hidden pending client approval
   '009': { slug: 'gigs', img: '/grid/0421-compressed.mp4' },
   '011': { slug: 'dimly-lit-chophouse' },
   '012': { slug: 'sublime' },
@@ -41,7 +41,7 @@ export const BLOCK_MAP = {
   '043': { slug: 'tbt',             img: '/grid/0421-compressed.mp4' },
   '044': { slug: 'kindling' },
   '045': { slug: 'fieldston' },
-  '046': { slug: 'arbitrum-marketing-dept-videos' },
+  // 046 (Arbitrum — Marketing Dept Videos) intentionally omitted — hidden pending client approval
   '048': { slug: 'pubkey' },
   '049': { slug: 'google' },
   '050': { slug: 'youtube' },
