@@ -36,6 +36,26 @@
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+/* Clearer hover affordance on clickable cards */
+.blockLink:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.blockLink img,
+.blockLink video {
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.blockLink:hover img,
+.blockLink:hover video {
+  transform: scale(1.06);
 }
 
 .wwCard {
