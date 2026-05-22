@@ -12,6 +12,7 @@ import { useProjects } from '../context/ProjectsContext'
 import { BLOCK_MAP } from '../lib/blockMap'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
+import { useToast, Toast } from '../components/Toast'
 
 let didLoad = false
 
@@ -122,7 +123,7 @@ export default function Home() {
       )
     }
     if (isComingSoon) return (
-      <div className={finalClass} style={style} onClick={() => setToast({ msg: blockName(label) ? `${blockName(label)} — coming soon` : 'Case study coming soon', ts: Date.now() })}>
+      <div className={finalClass} style={style} onClick={() => showToast(blockName(label) ? `${blockName(label)} — coming soon` : 'Case study coming soon')}>
         {inner}
       </div>
     )
@@ -149,14 +150,8 @@ export default function Home() {
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [toast, setToast] = useState(null)
+  const { toast, showToast } = useToast()
   const videoRef = useRef(null)
-
-  useEffect(() => {
-    if (!toast) return
-    const t = setTimeout(() => setToast(null), 3500)
-    return () => clearTimeout(t)
-  }, [toast])
 
   const closeReel = () => {
     if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 }
@@ -687,7 +682,7 @@ export default function Home() {
         </div>
       )}
 
-      {toast && <div key={toast.ts} className={styles.toast} role="status" aria-live="polite">{toast.msg}</div>}
+      <Toast toast={toast} />
 
     </main>
 

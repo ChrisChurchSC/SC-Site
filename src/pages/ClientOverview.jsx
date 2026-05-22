@@ -5,6 +5,7 @@ import { useSanity } from '../hooks/useSanity'
 import { CLIENT_OVERVIEW_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
+import { useToast, Toast } from '../components/Toast'
 import styles from './ClientOverview.module.css'
 
 export default function ClientOverview() {
@@ -12,6 +13,7 @@ export default function ClientOverview() {
   const projects = useProjects()
   const project = projects.bySlug(slug)
   const { data: sanity } = useSanity(CLIENT_OVERVIEW_QUERY, { slug })
+  const { toast, showToast } = useToast()
 
   useMeta({
     title: project ? `${project.name} | Super Conscious` : 'Work | Super Conscious',
@@ -76,13 +78,19 @@ export default function ClientOverview() {
               <div className={styles.cardOverlay} />
             </>
             return item.comingSoon ? (
-              <div key={item.slug} className={cardClass}>{inner}</div>
+              <div
+                key={item.slug}
+                className={cardClass}
+                onClick={() => showToast(`${item.name} — coming soon`)}
+              >{inner}</div>
             ) : (
               <NavLink key={item.slug} to={`/work/${slug}/${item.slug}`} className={cardClass}>{inner}</NavLink>
             )
           })}
         </div>
       </div>
+
+      <Toast toast={toast} />
 
     </main>
   )
