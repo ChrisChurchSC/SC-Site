@@ -176,7 +176,12 @@ export default function CaseStudy() {
           ] }
     : (staticCaseStudies[slug] ?? placeholder)
 
-  const moreProjects = projects.all.filter(p => p.slug !== slug).slice(0, 3)
+  // "More Work" recommends only live case studies — exclude the current
+  // project (client or sub-project slug) and anything still coming soon.
+  const excludeSlugs = new Set([slug, clientSlugResolved, sanitySlug].filter(Boolean))
+  const moreProjects = projects.all
+    .filter(p => !excludeSlugs.has(p.slug) && !p.comingSoon)
+    .slice(0, 3)
 
   const heroImage = (cs?.sections ?? [])
     .flatMap(s => s._type === 'imageGridSection' ? (s.images ?? []) : [s])
@@ -206,6 +211,20 @@ export default function CaseStudy() {
   // private page never flashes its content and a public one never flashes
   // the gate (and the gate never renders against an undefined project).
   if (!gateResolved) return <main className={styles.main} />
+
+  // A coming-soon project has no live case study — show a notice rather than
+  // rendering placeholder content as if the page were finished.
+  if (gateProject.comingSoon) return (
+    <main className={styles.main}>
+      <div className={styles.gate}>
+        <div className={styles.gateInner}>
+          <p className={styles.gateNum}>{gateProject.n}</p>
+          <h1 className={styles.gateName}>{gateProject.name}</h1>
+          <p className={styles.gateSubtext}>This case study is coming soon.</p>
+        </div>
+      </div>
+    </main>
+  )
 
   if (!unlocked) return (
     <main className={styles.main}>

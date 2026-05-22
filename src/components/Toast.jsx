@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './Toast.module.css'
 
 /**
@@ -21,10 +22,14 @@ export function useToast(duration = 3500) {
 }
 
 export function Toast({ toast }) {
-  if (!toast) return null
-  return (
+  if (!toast || typeof document === 'undefined') return null
+  // Portal to <body> so an ancestor's transform (e.g. the page slideUp
+  // animation) can't make `position: fixed` anchor to the page instead
+  // of the viewport.
+  return createPortal(
     <div key={toast.ts} className={styles.toast} role="status" aria-live="polite">
       {toast.msg}
-    </div>
+    </div>,
+    document.body,
   )
 }
