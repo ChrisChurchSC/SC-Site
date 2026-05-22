@@ -532,8 +532,13 @@
     aspect-ratio: 4 / 5 !important;
   }
 
-  /* A row with a single card spans the full width */
-  .row12 > *:only-child {
+  /* An odd-count last card would sit alone at 50% — span it full width */
+  .row12 > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* A card stranded after the full-width hero also spans full width */
+  .row12 > .heroBlock + *:last-child {
     grid-column: 1 / -1 !important;
   }
 
