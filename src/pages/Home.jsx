@@ -522,6 +522,16 @@ export default function Home() {
         </>)}
       </section>
 
+      {/* Row 9c — Deep Dive Films */}
+      <section className={styles.row12}>
+        {blockLink('053', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '3 / span 8' }, <>
+          {blockMedia('053')}
+          <span className={styles.label}>053</span>
+          <span className={styles.csTag}>Visit Site</span>
+          <p className={styles.blockTitle}>Deep Dive Films</p>
+        </>)}
+      </section>
+
       {/* Row 10 */}
       <section className={styles.row12}>
         {blockLink('030', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '1 / span 3' }, <>
@@ -623,16 +633,6 @@ export default function Home() {
           <span className={styles.label}>048</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('048')}</p>
-        </>)}
-      </section>
-
-      {/* Row 15 */}
-      <section className={styles.row12}>
-        {blockLink('053', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '3 / span 8' }, <>
-          {blockMedia('053')}
-          <span className={styles.label}>053</span>
-          <span className={styles.csTag}>Visit Site</span>
-          <p className={styles.blockTitle}>Deep Dive Films</p>
         </>)}
       </section>
 
