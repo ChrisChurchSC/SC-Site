@@ -11,10 +11,15 @@
   display: block;
 }
 
-.soundBtn {
+.controls {
   position: absolute;
   bottom: 12px;
   right: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.ctrlBtn {
   width: 30px;
   height: 30px;
   display: flex;
@@ -29,7 +34,7 @@
   transition: background 0.15s, border-color 0.15s;
 }
 
-.soundBtn:hover {
+.ctrlBtn:hover {
   background: rgba(0, 0, 0, 0.85);
   border-color: #fff;
 }
