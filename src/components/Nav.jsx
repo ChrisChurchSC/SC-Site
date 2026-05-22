@@ -3,6 +3,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { useProjects } from '../context/ProjectsContext'
+import { useSanity } from '../hooks/useSanity'
+import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { BLOCK_MAP } from '../lib/blockMap'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
 
@@ -12,14 +15,25 @@ export default function Nav() {
   const isHome = location.pathname === '/'
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
+  const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
   const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100)
   const comingSoon = useComingSoon()
 
+  // Map project slug -> externalUrl for any homepage grid tile that links
+  // out, so the side nav links to the same destination as the grid tile
+  // (e.g. Big Buoy, Pubkey) instead of an empty /work/<slug> placeholder.
+  const externalBySlug = {}
+  gridData?.blocks?.forEach(b => {
+    if (!b.externalUrl) return
+    const slug = BLOCK_MAP[b.label]?.slug ?? b.projectSlug
+    if (slug) externalBySlug[slug] = b.externalUrl
+  })
+
   // Side-nav list (does not affect /work or the homepage): hide YouTube,
-  // drop Coming Soon entries, and sort the rest alphabetically.
+  // drop Coming Soon entries (unless they link out), sort alphabetically.
   const navCaseStudies = caseStudies
     .filter(cs => cs.slug !== 'youtube')
-    .filter(cs => !(cs.slug && comingSoon.has(cs.slug)))
+    .filter(cs => externalBySlug[cs.slug] || !(cs.slug && comingSoon.has(cs.slug)))
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
   const [bgImage, setBgImage] = useState(null)
@@ -99,7 +113,10 @@ export default function Nav() {
         <ul className="nav-cs-list">
           {navCaseStudies.slice(0, 20).map(({ name, type, slug }, idx) => {
             const num = String(idx + 1).padStart(3, '0')
-            const isComingSoon = slug && comingSoon.has(slug)
+            const ext = slug ? externalBySlug[slug] : null
+            // An externalUrl tile links out regardless of coming-soon state,
+            // matching the homepage grid.
+            const isComingSoon = slug && comingSoon.has(slug) && !ext
             const inner = <>
               <span className="nav-cs-num">{num}</span>
               <span className="nav-cs-name">{name}</span>
@@ -109,8 +126,13 @@ export default function Nav() {
               </span>
             </>
             const className = `nav-cs-item${isComingSoon ? ' nav-cs-item--coming-soon' : ''}`
+            if (ext && !ext.startsWith('/')) return (
+              <a key={slug} href={ext} target="_blank" rel="noopener noreferrer" className={className}>
+                {inner}
+              </a>
+            )
             return slug && !isComingSoon ? (
-              <NavLink key={slug} to={`/work/${slug}`} className={className}>
+              <NavLink key={slug} to={ext || `/work/${slug}`} className={className}>
                 {inner}
               </NavLink>
             ) : (
@@ -169,7 +191,8 @@ export default function Nav() {
         </div>
         <div className="work-overlay-list">
           {caseStudies.map((cs) => {
-            const isComingSoon = cs.slug && comingSoon.has(cs.slug)
+            const ext = cs.slug ? externalBySlug[cs.slug] : null
+            const isComingSoon = cs.slug && comingSoon.has(cs.slug) && !ext
             const inner = <>
               <span className="work-overlay-num">{cs.n}</span>
               <span className="work-overlay-name">{cs.name}</span>
@@ -179,24 +202,32 @@ export default function Nav() {
               </span>
             </>
             const className = `work-overlay-item${isComingSoon ? ' work-overlay-item--coming-soon' : ''}`
+            const hover = { onMouseEnter: () => startCycling(cs), onMouseLeave: stopCycling }
+            if (ext && !ext.startsWith('/')) return (
+              <a
+                key={cs.n}
+                href={ext}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={className}
+                {...hover}
+                onClick={() => setWorkOpen(false)}
+              >
+                {inner}
+              </a>
+            )
             return cs.slug && !isComingSoon ? (
               <NavLink
                 key={cs.n}
-                to={`/work/${cs.slug}`}
+                to={ext || `/work/${cs.slug}`}
                 className={className}
-                onMouseEnter={() => startCycling(cs)}
-                onMouseLeave={stopCycling}
+                {...hover}
                 onClick={() => setWorkOpen(false)}
               >
                 {inner}
               </NavLink>
             ) : (
-              <div
-                key={cs.n}
-                className={className}
-                onMouseEnter={() => startCycling(cs)}
-                onMouseLeave={stopCycling}
-              >
+              <div key={cs.n} className={className} {...hover}>
                 {inner}
               </div>
             )
