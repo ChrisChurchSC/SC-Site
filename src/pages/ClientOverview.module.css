@@ -76,6 +76,15 @@
   max-width: 600px;
 }
 
+.kicker {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 12px;
+}
+
 /* ── Working relationship ── */
 .relationship {
   padding: 48px 40px;

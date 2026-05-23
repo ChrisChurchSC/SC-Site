@@ -54,9 +54,9 @@ export default function ClientOverview() {
           <span className={styles.metaType}>{project.type}</span>
           <span className={styles.metaYear}>{project.year}</span>
         </div>
+        {tagline && <p className={styles.kicker}>{tagline}</p>}
         <h1 className={styles.title}>{project.name}</h1>
         {(sanity?.descriptor ?? project.descriptor) && <p className={styles.descriptor}>{sanity?.descriptor ?? project.descriptor}</p>}
-        {tagline && <p className={styles.tagline}>{tagline}</p>}
       </header>
 
       <div className={styles.section}>
