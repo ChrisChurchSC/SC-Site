@@ -140,12 +140,5 @@ export const caseStudies = {
         ],
       },
     ],
-    credits: [
-      { role: 'Creative Direction', name: 'Super Conscious' },
-      { role: 'Brand Identity', name: 'Super Conscious' },
-      { role: 'Web Design', name: 'Super Conscious' },
-      { role: 'Motion', name: 'Super Conscious' },
-      { role: 'Client', name: 'World Within' },
-    ],
   },
 }

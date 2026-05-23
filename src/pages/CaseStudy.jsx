@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useParams, NavLink } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
 import { useProjects } from '../context/ProjectsContext'
 import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
-import { CASE_STUDY_QUERY, HOMEPAGE_GRID_QUERY } from '../lib/queries'
-import { BLOCK_MAP } from '../lib/blockMap'
+import { CASE_STUDY_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
-import LazyVideo from '../components/LazyVideo'
 import CaseStudyVideo from '../components/CaseStudyVideo'
 
 function useIsMobile(breakpoint = 768) {
@@ -87,11 +85,6 @@ function buildPlaceholder(project) {
       ]},
       { type: 'image-full', src: null },
     ],
-    credits: [
-      { role: 'Creative Direction', name: 'Super Conscious' },
-      { role: 'Brand Identity', name: 'Super Conscious' },
-      { role: 'Client', name: project.name },
-    ],
   }
 }
 
@@ -102,27 +95,8 @@ export default function CaseStudy() {
   const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
   const clientSlugResolved = clientSlug ?? slug
   const { data: sanityCs } = useSanity(CASE_STUDY_QUERY, { slug: sanitySlug })
-  const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
   const projects = useProjects()
   const project = projects.bySlug(clientSlugResolved)
-
-  // Map project slug → grid block. Prefer BLOCK_MAP[label].slug (covers blocks
-  // without a Sanity project ref) and fall back to projectSlug from Sanity.
-  // For blocks whose media is on a static path (BLOCK_MAP.img), expose that as videoUrl/imageUrl too.
-  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
-  const isImg = (u) => /\.(png|jpe?g|gif|webp|avif)$/i.test(u || '')
-  const gridBySlug = {}
-  gridData?.blocks?.forEach(b => {
-    const slug = BLOCK_MAP[b.label]?.slug ?? b.projectSlug
-    if (!slug) return
-    const fallbackImg = BLOCK_MAP[b.label]?.img
-    const fallbackUrl = fallbackImg ? (fallbackImg.startsWith('/') ? `${base}${fallbackImg}` : fallbackImg) : null
-    gridBySlug[slug] = {
-      mediaType: b.mediaType ?? (fallbackImg && !isImg(fallbackImg) ? 'video' : (fallbackImg ? 'image' : null)),
-      videoUrl: b.videoUrl ?? (fallbackImg && !isImg(fallbackImg) ? fallbackUrl : null),
-      imageUrl: b.imageUrl ?? (fallbackImg && isImg(fallbackImg) ? fallbackUrl : null),
-    }
-  })
 
   // Gate each page by its own password. Sub-projects use their own Sanity
   // doc rather than inheriting the parent client's password.
@@ -165,23 +139,8 @@ export default function CaseStudy() {
     : null
   const normalizedSections = normalizeSections(sanityCs?.sections)
   const cs = sanityCs
-    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []), credits: sanityCs.partner
-        ? [
-            { role: 'Produced by', name: sanityCs.partner },
-            { role: 'Client', name: sanityCs.client ?? sanityCs.name },
-          ]
-        : [
-            { role: 'Creative Direction', name: 'Super Conscious' },
-            { role: 'Client', name: sanityCs.name },
-          ] }
+    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []) }
     : (staticCaseStudies[slug] ?? placeholder)
-
-  // "More Work" recommends only live case studies — exclude the current
-  // project (client or sub-project slug) and anything still coming soon.
-  const excludeSlugs = new Set([slug, clientSlugResolved, sanitySlug].filter(Boolean))
-  const moreProjects = projects.all
-    .filter(p => !excludeSlugs.has(p.slug) && !p.comingSoon)
-    .slice(0, 3)
 
   const heroImage = (cs?.sections ?? [])
     .flatMap(s => s._type === 'imageGridSection' ? (s.images ?? []) : [s])
@@ -331,47 +290,6 @@ export default function CaseStudy() {
           return null
         })}
       </div>
-
-      {/* More Work */}
-      <div className={styles.moreWork}>
-        <span className={styles.moreWorkLabel}>More Work</span>
-        <div className={styles.moreWorkGrid}>
-          {moreProjects.map(p => {
-            const g = gridBySlug[p.slug]
-            const thumb = g?.mediaType === 'video' && g?.videoUrl
-              ? <LazyVideo src={g.videoUrl} className={styles.moreCardThumb} />
-              : g?.imageUrl
-                ? <img src={sanityImg(g.imageUrl, { w: 800 })} alt={`${p.name} case study thumbnail`} loading="lazy" className={styles.moreCardThumb} />
-                : null
-            const inner = (
-              <>
-                {thumb}
-                {thumb && <div className={styles.moreCardScrim} />}
-                <span className={styles.moreCardNum}>{p.n}</span>
-                <span className={styles.moreCardName}>{p.name}</span>
-              </>
-            )
-            return p.slug ? (
-              <NavLink key={p.n} to={`/work/${p.slug}`} className={styles.moreCard}>{inner}</NavLink>
-            ) : (
-              <div key={p.n} className={styles.moreCard}>{inner}</div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Credits */}
-      <footer className={styles.credits}>
-        <span className={styles.creditsLabel}>Credits</span>
-        <div className={styles.creditsList}>
-          {cs.credits.map(({ role, name }) => (
-            <div key={role} className={styles.creditRow}>
-              <span className={styles.creditRole}>{role}</span>
-              <span className={styles.creditName}>{name}</span>
-            </div>
-          ))}
-        </div>
-      </footer>
 
     </main>
   )
