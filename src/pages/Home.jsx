@@ -104,15 +104,16 @@ export default function Home() {
     const count = workCount(label)
     const badge = count > 1 ? <span key="wb" className={styles.workBadge}>+{count} PROJECTS</span> : null
     const slug = BLOCK_MAP[label]?.slug ?? b?.projectSlug
-    const isComingSoon = slug && comingSoon.has(slug) && !b?.externalUrl
+    const externalUrl = b?.externalUrl ?? BLOCK_MAP[label]?.externalUrl
+    const isComingSoon = slug && comingSoon.has(slug) && !externalUrl
     const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
     const inner = <>{children}{badge}{csBadge}</>
     const finalClass = `${className}${isComingSoon ? ' ' + styles.blockComingSoon : ''}`
-    if (b?.externalUrl) {
-      const isInternal = b.externalUrl.startsWith('/')
-      if (isInternal) return <NavLink to={b.externalUrl} className={finalClass} style={style}>{inner}</NavLink>
+    if (externalUrl) {
+      const isInternal = externalUrl.startsWith('/')
+      if (isInternal) return <NavLink to={externalUrl} className={finalClass} style={style}>{inner}</NavLink>
       return (
-        <a href={b.externalUrl} target="_blank" rel="noopener noreferrer" className={finalClass} style={style}>
+        <a href={externalUrl} target="_blank" rel="noopener noreferrer" className={finalClass} style={style}>
           <span className={styles.extIcon} aria-hidden="true">
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 9 9 3M4 3h5v5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square"/>

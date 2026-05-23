@@ -23,11 +23,22 @@ export default function Nav() {
   // out, so the side nav links to the same destination as the grid tile
   // (e.g. Big Buoy, Pubkey) instead of an empty /work/<slug> placeholder.
   const externalBySlug = {}
+  Object.values(BLOCK_MAP).forEach(entry => {
+    if (entry?.externalUrl && entry?.slug) externalBySlug[entry.slug] = entry.externalUrl
+  })
   gridData?.blocks?.forEach(b => {
     if (!b.externalUrl) return
     const slug = BLOCK_MAP[b.label]?.slug ?? b.projectSlug
     if (slug) externalBySlug[slug] = b.externalUrl
   })
+
+  const extIcon = (
+    <span className="nav-cs-ext" aria-hidden="true">
+      <svg width="9" height="9" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 9 9 3M4 3h5v5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square"/>
+      </svg>
+    </span>
+  )
 
   // Side-nav list (does not affect /work or the homepage): hide YouTube,
   // drop Coming Soon entries (unless they link out), sort alphabetically.
@@ -119,7 +130,7 @@ export default function Nav() {
             const isComingSoon = slug && comingSoon.has(slug) && !ext
             const inner = <>
               <span className="nav-cs-num">{num}</span>
-              <span className="nav-cs-name">{name}</span>
+              <span className="nav-cs-name">{name}{ext && !ext.startsWith('/') && extIcon}</span>
               <span className="nav-cs-type">
                 {type}
                 {isComingSoon && <span className="nav-cs-tag">Soon</span>}
@@ -195,7 +206,7 @@ export default function Nav() {
             const isComingSoon = cs.slug && comingSoon.has(cs.slug) && !ext
             const inner = <>
               <span className="work-overlay-num">{cs.n}</span>
-              <span className="work-overlay-name">{cs.name}</span>
+              <span className="work-overlay-name">{cs.name}{ext && !ext.startsWith('/') && extIcon}</span>
               <span className="work-overlay-type">
                 {cs.type}
                 {isComingSoon && <span className="work-overlay-tag">Soon</span>}
