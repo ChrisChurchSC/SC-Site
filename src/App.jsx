@@ -51,7 +51,7 @@ function WorkRouter() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter basename={import.meta.env.PROD ? '/SC-Site' : ''}>
+      <BrowserRouter>
         <NavProvider>
         <ComingSoonProvider>
         <ProjectsProvider>
