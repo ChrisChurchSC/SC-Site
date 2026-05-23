@@ -113,6 +113,16 @@
   animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both;
 }
 
+.kicker {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 12px;
+  animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.6s both;
+}
+
 .services {
   display: flex;
   flex-wrap: wrap;
