@@ -128,11 +128,12 @@ export default function Nav() {
             // An externalUrl tile links out regardless of coming-soon state,
             // matching the homepage grid.
             const isComingSoon = slug && comingSoon.has(slug) && !ext
+            const isExternal = ext && !ext.startsWith('/')
             const inner = <>
               <span className="nav-cs-num">{num}</span>
-              <span className="nav-cs-name">{name}{ext && !ext.startsWith('/') && extIcon}</span>
+              <span className="nav-cs-name">{name}{isExternal && extIcon}</span>
               <span className="nav-cs-type">
-                {type}
+                {!isExternal && type}
                 {isComingSoon && <span className="nav-cs-tag">Soon</span>}
               </span>
             </>
@@ -204,11 +205,12 @@ export default function Nav() {
           {caseStudies.map((cs) => {
             const ext = cs.slug ? externalBySlug[cs.slug] : null
             const isComingSoon = cs.slug && comingSoon.has(cs.slug) && !ext
+            const isExternal = ext && !ext.startsWith('/')
             const inner = <>
               <span className="work-overlay-num">{cs.n}</span>
-              <span className="work-overlay-name">{cs.name}{ext && !ext.startsWith('/') && extIcon}</span>
+              <span className="work-overlay-name">{cs.name}{isExternal && extIcon}</span>
               <span className="work-overlay-type">
-                {cs.type}
+                {!isExternal && cs.type}
                 {isComingSoon && <span className="work-overlay-tag">Soon</span>}
               </span>
             </>

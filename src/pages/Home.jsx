@@ -101,10 +101,10 @@ export default function Home() {
   // Wrap block in NavLink/anchor — BLOCK_MAP wins; Sanity externalUrl still overrides
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
-    const count = workCount(label)
-    const badge = count > 1 ? <span key="wb" className={styles.workBadge}>+{count} PROJECTS</span> : null
     const slug = BLOCK_MAP[label]?.slug ?? b?.projectSlug
     const externalUrl = b?.externalUrl ?? BLOCK_MAP[label]?.externalUrl
+    const count = workCount(label)
+    const badge = !externalUrl && count > 1 ? <span key="wb" className={styles.workBadge}>+{count} PROJECTS</span> : null
     const isComingSoon = slug && comingSoon.has(slug) && !externalUrl
     const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
     const inner = <>{children}{badge}{csBadge}</>
