@@ -183,6 +183,8 @@
   line-height: 1.1;
 }
 
+.blockExternal .csTag { display: none; }
+
 .csTag {
   position: absolute;
   top: 12px;

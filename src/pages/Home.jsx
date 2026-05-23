@@ -108,7 +108,7 @@ export default function Home() {
     const isComingSoon = slug && comingSoon.has(slug) && !externalUrl
     const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
     const inner = <>{children}{badge}{csBadge}</>
-    const finalClass = `${className}${isComingSoon ? ' ' + styles.blockComingSoon : ''}`
+    const finalClass = `${className}${isComingSoon ? ' ' + styles.blockComingSoon : ''}${externalUrl ? ' ' + styles.blockExternal : ''}`
     if (externalUrl) {
       const isInternal = externalUrl.startsWith('/')
       if (isInternal) return <NavLink to={externalUrl} className={finalClass} style={style}>{inner}</NavLink>
