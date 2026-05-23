@@ -75,7 +75,8 @@ export const projects = [
   { n: '023', name: 'Soft Science',     type: 'Brand',                    slug: 'soft-science' },
 
   { n: '024', name: 'Wonderwerk',       type: 'Brand + Content',          slug: 'wonderwerk',
-    relationship: 'Wonderwerk came to us for a rebrand and stayed for the content. We rebuilt the visual identity to better reflect where the company was headed, then developed a content program to match. The work is clean, considered, and built to carry the brand forward.',
+    descriptor: "A natural wine brand from California's House of Fermentation.",
+    relationship: 'Wonderwerk makes the dreamwork. Issamu and Andrew came to us with a House of Fermentation: natural California wines made for friends, music, and whatever comes next. We rebuilt the identity to match that energy, easy-drinking and anti-pretentious without losing the seriousness of the craft, then built a content program around the bottles, the trade, and the social channels that keep the party moving.',
     work: ['Rebrand', 'Content'] },
 
   { n: '025', name: 'Coldwater Club',   type: 'Brand',                    slug: 'coldwater-club' },
