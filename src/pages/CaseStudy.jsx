@@ -219,8 +219,8 @@ export default function CaseStudy() {
           <span className={styles.metaType}>{cs.type}</span>
           <span className={styles.metaYear}>{cs.year}</span>
         </div>
-        {cs.tagline && <p className={styles.kicker}>{cs.tagline}</p>}
         <h1 className={styles.title}>{cs.name}</h1>
+        {cs.tagline && <p className={styles.tagline}>{cs.tagline}</p>}
         <div className={styles.services}>
           {cs.services.map(s => (
             <span key={s} className={styles.serviceTag}>{s}</span>
