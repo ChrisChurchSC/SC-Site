@@ -11,10 +11,18 @@ function setMeta(selector, attr, value) {
   if (el && value != null) el.setAttribute(attr, value)
 }
 
-export function useMeta({ title, description, image, path, schema } = {}) {
+export function useMeta({ title, description, image, path, schema, noindex } = {}) {
   useEffect(() => {
     if (title) document.title = title
     setMeta('meta[name="description"]', 'content', description)
+
+    let robotsEl = null
+    if (noindex) {
+      robotsEl = document.createElement('meta')
+      robotsEl.name = 'robots'
+      robotsEl.content = 'noindex, nofollow'
+      document.head.appendChild(robotsEl)
+    }
 
     const ogImage = image || DEFAULT_IMAGE
     const ogTitle = title || DEFAULT_TITLE
@@ -54,6 +62,7 @@ export function useMeta({ title, description, image, path, schema } = {}) {
       const canonical = document.querySelector('link[rel="canonical"]')
       if (canonical) canonical.setAttribute('href', SITE_BASE + '/')
       if (scriptEl) scriptEl.remove()
+      if (robotsEl) robotsEl.remove()
     }
-  }, [title, description, image, path, schema])
+  }, [title, description, image, path, schema, noindex])
 }

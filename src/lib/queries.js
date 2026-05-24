@@ -150,6 +150,28 @@ export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $s
   }
 }`
 
+export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current == $slug][0] {
+  _id,
+  password,
+  clientName,
+  headline,
+  intro,
+  ctaText,
+  ctaHref,
+  "caseStudies": caseStudies[]-> {
+    "slug": slug.current,
+    name,
+    type,
+    tagline,
+    "thumbnail": coalesce(
+      thumbnailImages[0].asset->url,
+      sections[_type == "imageFullSection" && defined(image.asset)][0].image.asset->url,
+      sections[_type == "imageGridSection"][0].images[defined(image.asset)][0].image.asset->url
+    ),
+    "thumbnailVideo": thumbnailVideoFile.asset->url
+  }
+}`
+
 export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepage-grid"][0] {
   blocks[] {
     _key,

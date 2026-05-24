@@ -14,6 +14,7 @@ import About from './pages/About'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
+import ClientLanding from './pages/ClientLanding'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
@@ -72,6 +73,7 @@ export default function App() {
               <Route path="/thoughts" element={<Thoughts />} />
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/clients/:slug" element={<ClientLanding />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
