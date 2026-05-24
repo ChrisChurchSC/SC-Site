@@ -7,6 +7,7 @@ import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { buildPackages, buildCapabilities } from '../data/buildPackages'
 import styles from './ClientLanding.module.css'
+import homeStyles from './Home.module.css'
 
 const formatPrice = (n) => `$${n.toLocaleString('en-US')}`
 
@@ -96,17 +97,20 @@ export default function ClientLanding() {
           <h2 className={styles.sectionHeading}>Selected work</h2>
           <div className={styles.workGrid}>
             {data.caseStudies.map((cs, i) => (
-              <NavLink key={cs.slug} to={`/work/${cs.slug}`} className={styles.workBlock}>
+              <NavLink
+                key={cs.slug}
+                to={`/work/${cs.slug}`}
+                className={`${homeStyles.block} ${homeStyles.r45} ${homeStyles.blockLink}`}
+              >
                 {cs.thumbnailVideo ? (
-                  <LazyVideo src={cs.thumbnailVideo} className={styles.workMedia} />
+                  <LazyVideo src={cs.thumbnailVideo} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : cs.thumbnail ? (
-                  <img src={sanityImg(cs.thumbnail, { w: 1200 })} alt="" loading="lazy" className={styles.workMedia} />
+                  <img src={sanityImg(cs.thumbnail, { w: 1200 })} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : null}
-                <span className={styles.workLabel}>{cs.n || String(i + 1).padStart(3, '0')}</span>
-                <span className={styles.workCsTag}>Case Study</span>
-                {cs.subCount > 1 && <span className={styles.workBadge}>+{cs.subCount} PROJECTS</span>}
-                <p className={styles.workTitle}>{cs.name}</p>
-                <div className={styles.workOverlay} />
+                <span className={homeStyles.label}>{cs.n || String(i + 1).padStart(3, '0')}</span>
+                <span className={homeStyles.csTag}>Case Study</span>
+                {cs.subCount > 1 && <span className={homeStyles.workBadge}>+{cs.subCount} PROJECTS</span>}
+                <p className={homeStyles.blockTitle}>{cs.name}</p>
               </NavLink>
             ))}
           </div>
