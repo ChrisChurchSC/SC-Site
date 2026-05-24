@@ -361,13 +361,38 @@
 .packageCard {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   padding: 24px 22px 22px;
   background: #131313;
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: inherit;
-  min-height: 240px;
+}
+
+.packageDeliverables {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.packageDeliverables li {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.78);
+  position: relative;
+  padding-left: 14px;
+}
+
+.packageDeliverables li::before {
+  content: '·';
+  position: absolute;
+  left: 2px;
+  top: -2px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .packageName {

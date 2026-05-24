@@ -146,6 +146,14 @@ export default function ClientLanding() {
                   <p className={styles.packageName}>{pkg.name}</p>
                   <p className={styles.packageGoal}>{pkg.goal}</p>
                 </div>
+                {pkg.deliverables?.length > 0 && (
+                  <div>
+                    <p className={styles.packageOutcomeLabel}>Deliverables</p>
+                    <ul className={styles.packageDeliverables}>
+                      {pkg.deliverables.map(d => <li key={d}>{d}</li>)}
+                    </ul>
+                  </div>
+                )}
                 <div>
                   <p className={styles.packageOutcomeLabel}>Outcome</p>
                   <p className={styles.packageOutcome}>{pkg.outcome}</p>

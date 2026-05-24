@@ -8,6 +8,7 @@ export const buildPackages = [
     name: 'Test a First Project',
     goal: 'A focused, low-risk first project — proof that working together works.',
     outcome: 'Proof that the partnership works, scoped tight and shipped fast.',
+    deliverables: ['Brand strategy', 'Brand sprint'],
     price: 14350,
   },
   {
@@ -15,6 +16,7 @@ export const buildPackages = [
     name: 'Win Enterprise Deals',
     goal: 'A sales toolkit your team can confidently take into high-stakes rooms.',
     outcome: 'A higher enterprise win rate and larger average deal sizes.',
+    deliverables: ['Deck strategy & narrative', 'Sales deck — full', 'Case study film', 'One-pager / checklist'],
     price: 25895,
   },
   {
@@ -22,6 +24,7 @@ export const buildPackages = [
     name: 'Modernize Your Brand',
     goal: 'Bring an established brand back in line with what the company has become.',
     outcome: 'An identity that reflects the company you are now, not the one you started as.',
+    deliverables: ['Brand strategy', 'Brand refresh', 'Deck template system'],
     price: 27210,
   },
   {
@@ -29,6 +32,7 @@ export const buildPackages = [
     name: 'Close Your Funding Round',
     goal: 'An investor-ready story and materials that hold up under scrutiny.',
     outcome: 'Better meeting-to-term-sheet conversion through the raise.',
+    deliverables: ['Deck strategy & narrative', 'Investor / pitch deck', 'Brand refresh'],
     price: 28970,
   },
   {
@@ -36,6 +40,7 @@ export const buildPackages = [
     name: 'Ship Your Product',
     goal: 'A designed, built product in front of real users — discovery through working build.',
     outcome: 'A live product earning early user activation, faster than building it alone.',
+    deliverables: ['Product discovery', 'UX wireframes', 'UI design — feature', 'Design-to-build (Claude Code)'],
     price: 36660,
   },
   {
@@ -43,6 +48,7 @@ export const buildPackages = [
     name: 'Establish Market Credibility',
     goal: 'A brand that makes you credible to bigger clients, partners, and investors.',
     outcome: 'A brand that earns the next tier of clients, partners, and investors.',
+    deliverables: ['Brand strategy', 'Brand system', 'Deck template system'],
     price: 41680,
   },
 ]
