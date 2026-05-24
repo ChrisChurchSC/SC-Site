@@ -6,6 +6,7 @@ import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { buildPackages, buildServices, buildRates, buildBlendedRate, buildDisciplines } from '../data/buildPackages'
+import { growPackages, growServices, growDisciplines } from '../data/growPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
@@ -74,6 +75,12 @@ export default function ClientLanding() {
       </div>
     </main>
   )
+
+  const track = data.track === 'grow' ? 'grow' : 'build'
+  const trackLabel = track === 'grow' ? 'Grow' : 'Build'
+  const packages = track === 'grow' ? growPackages : buildPackages
+  const services = track === 'grow' ? growServices : buildServices
+  const disciplines = track === 'grow' ? growDisciplines : buildDisciplines
 
   return (
     <main className={styles.main}>
@@ -152,7 +159,7 @@ export default function ClientLanding() {
 
         {pricingView === 'packages' ? (
           <div className={styles.packageGrid}>
-            {buildPackages.map(pkg => (
+            {packages.map(pkg => (
               <div key={pkg.slug} className={styles.packageCard}>
                 <div>
                   <p className={styles.packageName}>{pkg.name}</p>
@@ -176,7 +183,7 @@ export default function ClientLanding() {
           </div>
         ) : pricingView === 'services' ? (
           <div className={styles.serviceCategories}>
-            {buildServices.map(cat => (
+            {services.map(cat => (
               <div key={cat.category} className={styles.serviceCategory}>
                 <p className={styles.serviceCategoryHeading}>{cat.category}</p>
                 <ul className={styles.serviceList}>
@@ -210,11 +217,11 @@ export default function ClientLanding() {
         )}
       </section>
 
-      {/* Disciplines — the crafts tied to Build */}
+      {/* Disciplines — the crafts tied to this track */}
       <section className={styles.section}>
-        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || 'Disciplines tied to Build.'}</h2>
+        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || `Disciplines tied to ${trackLabel}.`}</h2>
         <div className={styles.disciplineGrid}>
-          {buildDisciplines.map(d => (
+          {disciplines.map(d => (
             <div key={d.name} className={styles.disciplineCol}>
               <p className={styles.disciplineTag}>{d.tag}</p>
               <p className={styles.disciplineName}>{d.name}</p>

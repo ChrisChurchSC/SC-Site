@@ -152,6 +152,7 @@ export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $s
 
 export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current == $slug][0] {
   _id,
+  track,
   password,
   clientName,
   headline,

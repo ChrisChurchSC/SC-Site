@@ -6,6 +6,20 @@ export const clientLanding = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'track',
+      title: 'Track',
+      type: 'string',
+      description: "Drives which package set, disciplines, and rate card display. Defaults to Build.",
+      options: {
+        list: [
+          { title: 'Build (foundation)', value: 'build' },
+          { title: 'Grow (fuel)', value: 'grow' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'build',
+    }),
+    defineField({
       name: 'name',
       title: 'Internal name',
       type: 'string',
