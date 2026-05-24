@@ -1,8 +1,10 @@
 .main {
-  padding: 80px 305px 120px 40px;
+  padding: 80px 40px 120px;
   background: #0a0a0a;
   min-height: 100vh;
   color: rgba(255, 255, 255, 0.85);
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .notFound {
@@ -233,6 +235,67 @@
   opacity: 0.7;
   z-index: 2;
   transition: transform 0.25s, opacity 0.25s;
+}
+
+/* ── Why / Approach sections ── */
+.why, .approach {
+  max-width: 760px;
+  margin: 0 0 80px;
+}
+
+.sectionHeading {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 18px;
+  font-weight: 400;
+}
+
+.whyBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.approachList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.approachList li {
+  position: relative;
+  padding-left: 20px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.approachList li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.signoff {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 24px;
 }
 
 /* ── CTA ── */

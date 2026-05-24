@@ -156,6 +156,11 @@ export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current 
   clientName,
   headline,
   intro,
+  whyHeading,
+  whyBody,
+  approachHeading,
+  approachBullets,
+  signoff,
   ctaText,
   ctaHref,
   "caseStudies": caseStudies[]-> {

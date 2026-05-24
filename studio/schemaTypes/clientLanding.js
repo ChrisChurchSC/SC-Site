@@ -47,11 +47,43 @@ export const clientLanding = defineType({
       rows: 4,
     }),
     defineField({
+      name: 'whyHeading',
+      title: 'Why-we-sent-this heading',
+      type: 'string',
+      description: 'Optional. Sits above the framing paragraph, e.g. "Why we put this together."',
+    }),
+    defineField({
+      name: 'whyBody',
+      title: 'Why-we-sent-this body',
+      type: 'text',
+      rows: 4,
+      description: 'Optional. 1-paragraph relevance framing connecting your work to their situation.',
+    }),
+    defineField({
       name: 'caseStudies',
       title: 'Featured case studies',
       type: 'array',
       description: 'Drag to reorder. Each links to the existing /work/<slug> page.',
       of: [{ type: 'reference', to: [{ type: 'project' }] }],
+    }),
+    defineField({
+      name: 'approachHeading',
+      title: 'How-we-would-work heading',
+      type: 'string',
+      description: 'Optional. e.g. "How we\'d work together."',
+    }),
+    defineField({
+      name: 'approachBullets',
+      title: 'How-we-would-work bullets',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Optional. 2–4 short lines on engagement model, team, timeline.',
+    }),
+    defineField({
+      name: 'signoff',
+      title: 'Signoff line',
+      type: 'string',
+      description: 'Optional. Personal closer above the CTA, e.g. "Talk soon, Chris."',
     }),
     defineField({
       name: 'ctaText',

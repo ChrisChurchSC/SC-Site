@@ -78,6 +78,13 @@ export default function ClientLanding() {
         {data.intro && <p className={styles.intro}>{data.intro}</p>}
       </header>
 
+      {(data.whyHeading || data.whyBody) && (
+        <section className={styles.why}>
+          {data.whyHeading && <h2 className={styles.sectionHeading}>{data.whyHeading}</h2>}
+          {data.whyBody && <p className={styles.whyBody}>{data.whyBody}</p>}
+        </section>
+      )}
+
       {data.caseStudies?.length > 0 && (
         <section className={styles.grid}>
           {data.caseStudies.map((cs, i) => (
@@ -97,12 +104,26 @@ export default function ClientLanding() {
         </section>
       )}
 
-      {data.ctaHref && data.ctaText && (
+      {(data.approachHeading || data.approachBullets?.length > 0) && (
+        <section className={styles.approach}>
+          {data.approachHeading && <h2 className={styles.sectionHeading}>{data.approachHeading}</h2>}
+          {data.approachBullets?.length > 0 && (
+            <ul className={styles.approachList}>
+              {data.approachBullets.map((b, i) => <li key={i}>{b}</li>)}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {(data.signoff || (data.ctaHref && data.ctaText)) && (
         <footer className={styles.cta}>
-          {data.ctaHref.startsWith('/') ? (
-            <NavLink to={data.ctaHref} className={styles.ctaBtn}>{data.ctaText} →</NavLink>
-          ) : (
-            <a href={data.ctaHref} className={styles.ctaBtn} target={data.ctaHref.startsWith('mailto:') ? undefined : '_blank'} rel="noopener noreferrer">{data.ctaText} →</a>
+          {data.signoff && <p className={styles.signoff}>{data.signoff}</p>}
+          {data.ctaHref && data.ctaText && (
+            data.ctaHref.startsWith('/') ? (
+              <NavLink to={data.ctaHref} className={styles.ctaBtn}>{data.ctaText} →</NavLink>
+            ) : (
+              <a href={data.ctaHref} className={styles.ctaBtn} target={data.ctaHref.startsWith('mailto:') ? undefined : '_blank'} rel="noopener noreferrer">{data.ctaText} →</a>
+            )
           )}
         </footer>
       )}
