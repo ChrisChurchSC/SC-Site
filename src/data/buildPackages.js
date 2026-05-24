@@ -138,6 +138,25 @@ export const buildServices = [
   },
 ]
 
+// Public bill rates per role. Internal cost + margin intentionally omitted.
+export const buildRates = [
+  { role: 'Writer / Strategist', rate: 200 },
+  { role: 'Creative Director', rate: 175 },
+  { role: 'Developer', rate: 175 },
+  { role: 'Executive Producer', rate: 175 },
+  { role: 'Illustration', rate: 175 },
+  { role: '3D Design & Motion', rate: 160 },
+  { role: 'Animator', rate: 150 },
+  { role: 'Editor', rate: 150 },
+  { role: 'Associate Creative Director', rate: 140 },
+  { role: 'Lead Designer', rate: 125 },
+  { role: 'Designer', rate: 95 },
+  { role: 'Account / Project Manager', rate: 95 },
+  { role: 'Jr. Designer', rate: 80 },
+]
+
+export const buildBlendedRate = 146
+
 export const buildCapabilities = [
   {
     heading: 'Brand foundation',

@@ -279,6 +279,62 @@
   white-space: nowrap;
 }
 
+/* Rate card view */
+.rateCard {
+  max-width: 640px;
+}
+
+.rateCard .bodySmall { margin-top: 0; margin-bottom: 28px; }
+
+.rateList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rateRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.rateValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.rateBlended {
+  border-bottom: none;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 4px;
+}
+
+.rateBlended .rateRole {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.rateBlended .rateValue {
+  color: #fff;
+  font-size: 13px;
+}
+
 @media (max-width: 700px) {
   .pricingHeader { flex-direction: column; align-items: flex-start; }
   .serviceRow {

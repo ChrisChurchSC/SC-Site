@@ -5,7 +5,7 @@ import { useMeta } from '../hooks/useMeta'
 import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
-import { buildPackages, buildServices, buildCapabilities } from '../data/buildPackages'
+import { buildPackages, buildServices, buildRates, buildBlendedRate, buildCapabilities } from '../data/buildPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
@@ -18,7 +18,7 @@ export default function ClientLanding() {
   const [pw, setPw] = useState('')
   const [error, setError] = useState(false)
   const [manualUnlock, setManualUnlock] = useState(false)
-  const [pricingView, setPricingView] = useState('packages') // 'packages' | 'services'
+  const [pricingView, setPricingView] = useState('packages') // 'packages' | 'services' | 'rates'
 
   const sessionKey = `client_unlocked_${slug}`
   const sessionUnlocked = typeof sessionStorage !== 'undefined'
@@ -123,22 +123,17 @@ export default function ClientLanding() {
         <div className={styles.pricingHeader}>
           <h2 className={styles.sectionHeading}>{data.packagesHeading || 'Where to start.'}</h2>
           <div className={styles.toggle} role="tablist" aria-label="View pricing as">
-            <button
-              role="tab"
-              aria-selected={pricingView === 'packages'}
-              className={`${styles.toggleBtn}${pricingView === 'packages' ? ' ' + styles.toggleBtnActive : ''}`}
-              onClick={() => setPricingView('packages')}
-            >
-              Packages
-            </button>
-            <button
-              role="tab"
-              aria-selected={pricingView === 'services'}
-              className={`${styles.toggleBtn}${pricingView === 'services' ? ' ' + styles.toggleBtnActive : ''}`}
-              onClick={() => setPricingView('services')}
-            >
-              Services
-            </button>
+            {['packages', 'services', 'rates'].map(view => (
+              <button
+                key={view}
+                role="tab"
+                aria-selected={pricingView === view}
+                className={`${styles.toggleBtn}${pricingView === view ? ' ' + styles.toggleBtnActive : ''}`}
+                onClick={() => setPricingView(view)}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
         {data.packagesIntro && pricingView === 'packages' && <p className={styles.bodySmall}>{data.packagesIntro}</p>}
@@ -159,7 +154,7 @@ export default function ClientLanding() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : pricingView === 'services' ? (
           <div className={styles.serviceCategories}>
             {buildServices.map(cat => (
               <div key={cat.category} className={styles.serviceCategory}>
@@ -175,6 +170,22 @@ export default function ClientLanding() {
                 </ul>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className={styles.rateCard}>
+            <p className={styles.bodySmall}>Transparent rates per role. Every package and service is priced from this card so you can see exactly what you're paying for.</p>
+            <ul className={styles.rateList}>
+              {buildRates.map(r => (
+                <li key={r.role} className={styles.rateRow}>
+                  <span className={styles.rateRole}>{r.role}</span>
+                  <span className={styles.rateValue}>${r.rate} / hr</span>
+                </li>
+              ))}
+              <li className={`${styles.rateRow} ${styles.rateBlended}`}>
+                <span className={styles.rateRole}>Blended average</span>
+                <span className={styles.rateValue}>${buildBlendedRate} / hr</span>
+              </li>
+            </ul>
           </div>
         )}
       </section>
