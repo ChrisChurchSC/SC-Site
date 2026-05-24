@@ -167,14 +167,14 @@ export const buildBlendedRate = 146
 // /about "What We Do" pattern: tag + name + list of capabilities.
 export const buildDisciplines = [
   {
-    tag: 'What we make',
-    name: 'Strategy',
+    tag: 'What it says',
+    name: 'Writing',
     items: [
-      'Brand strategy & positioning',
+      'Positioning & narrative',
       'Naming & verbal identity',
-      'Voice & messaging',
-      'Audience definition',
-      'Information architecture',
+      'Brand voice & messaging',
+      'Copy direction',
+      'Editorial systems',
     ],
   },
   {
@@ -184,8 +184,8 @@ export const buildDisciplines = [
       'Identity & visual systems',
       'Web & product UI',
       'Design systems',
-      'Illustration & iconography',
-      'Motion & 3D',
+      'Information architecture',
+      'Motion & illustration',
     ],
   },
   {
