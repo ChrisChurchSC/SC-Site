@@ -7,6 +7,7 @@ import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { buildPackages, buildServices, buildRates, buildBlendedRate, buildDisciplines } from '../data/buildPackages'
 import { growPackages, growServices, growDisciplines } from '../data/growPackages'
+import { agencyPackages, agencyDisciplines, agencyPartnerModel } from '../data/agencyPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
@@ -76,11 +77,11 @@ export default function ClientLanding() {
     </main>
   )
 
-  const track = data.track === 'grow' ? 'grow' : 'build'
-  const trackLabel = track === 'grow' ? 'Grow' : 'Build'
-  const packages = track === 'grow' ? growPackages : buildPackages
-  const services = track === 'grow' ? growServices : buildServices
-  const disciplines = track === 'grow' ? growDisciplines : buildDisciplines
+  const track = ['build', 'grow', 'agency'].includes(data.track) ? data.track : 'build'
+  const trackLabel = { build: 'Build', grow: 'Grow', agency: 'Agency' }[track]
+  const packages = { build: buildPackages, grow: growPackages, agency: agencyPackages }[track]
+  const services = { build: buildServices, grow: growServices, agency: buildServices }[track] // agency reuses Build services menu
+  const disciplines = { build: buildDisciplines, grow: growDisciplines, agency: agencyDisciplines }[track]
 
   return (
     <main className={styles.main}>
@@ -108,6 +109,16 @@ export default function ClientLanding() {
           {data.foundationBody && data.foundationBody.split(/\n\s*\n/).map((para, i) => (
             <p key={i} className={styles.foundationBody}>{para}</p>
           ))}
+        </section>
+      )}
+
+      {/* Anonymized agency work strip */}
+      {track === 'agency' && data.anonymizedWork?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>{data.anonymizedWorkHeading || 'Work shipped invisibly.'}</h2>
+          <ul className={styles.anonStrip}>
+            {data.anonymizedWork.map((item, i) => <li key={i}>{item}</li>)}
+          </ul>
         </section>
       )}
 
@@ -176,7 +187,11 @@ export default function ClientLanding() {
                 <div>
                   <p className={styles.packageOutcomeLabel}>Outcome</p>
                   <p className={styles.packageOutcome}>{pkg.outcome}</p>
-                  <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
+                  <p className={styles.packagePrice}>
+                    {pkg.price == null
+                      ? pkg.priceLabel
+                      : `${pkg.priceLabel === 'from' ? 'From ' : 'Starting at '}${formatPrice(pkg.price)}${pkg.priceLabel === 'per month' ? ' / month' : ''}`}
+                  </p>
                 </div>
               </div>
             ))}
@@ -232,6 +247,23 @@ export default function ClientLanding() {
           ))}
         </div>
       </section>
+
+      {/* How we partner — agency track only */}
+      {track === 'agency' && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>How we partner.</h2>
+          <div className={styles.partnerGrid}>
+            {agencyPartnerModel.map(col => (
+              <div key={col.heading} className={styles.partnerCol}>
+                <p className={styles.partnerHeading}>{col.heading}</p>
+                <ul className={styles.partnerList}>
+                  {col.items.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Selected thinking */}
       {data.featuredThoughts?.length > 0 && (

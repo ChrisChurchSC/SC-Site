@@ -12,12 +12,26 @@ export const clientLanding = defineType({
       description: "Drives which package set, disciplines, and rate card display. Defaults to Build.",
       options: {
         list: [
-          { title: 'Build (foundation)', value: 'build' },
-          { title: 'Grow (fuel)', value: 'grow' },
+          { title: 'Build (foundation, end clients)', value: 'build' },
+          { title: 'Grow (fuel, end clients)', value: 'grow' },
+          { title: 'Agency (staff aug, white-label)', value: 'agency' },
         ],
         layout: 'radio',
       },
       initialValue: 'build',
+    }),
+    defineField({
+      name: 'anonymizedWorkHeading',
+      title: 'Anonymized work strip — heading',
+      type: 'string',
+      description: 'Agency track only. Optional. e.g. "Work shipped invisibly for other agencies."',
+    }),
+    defineField({
+      name: 'anonymizedWork',
+      title: 'Anonymized work strip — items',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Agency track only. e.g. "Global retail brand · brand campaign". Used when most past agency work is NDA-bound.',
     }),
     defineField({
       name: 'name',

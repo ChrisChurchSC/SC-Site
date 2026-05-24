@@ -472,6 +472,76 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* ── Anonymized work strip (agency only) ── */
+.anonStrip {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 32px;
+  max-width: 900px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 640px) {
+  .anonStrip { grid-template-columns: 1fr; }
+}
+
+.anonStrip li {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ── How we partner (agency only) ── */
+.partnerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1100px;
+}
+
+@media (max-width: 768px) {
+  .partnerGrid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+.partnerCol {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 22px 24px;
+}
+
+.partnerHeading {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 16px;
+}
+
+.partnerList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.partnerList li {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.78);
+}
+
 /* ── Disciplines ── */
 .disciplineGrid {
   display: grid;
