@@ -197,19 +197,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 22px 22px 20px;
+  gap: 24px;
+  padding: 24px 22px 22px;
   background: #131313;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  text-decoration: none;
   color: inherit;
-  min-height: 168px;
-  transition: background 0.18s, border-color 0.18s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.packageCard:hover {
-  background: #181818;
-  border-color: rgba(255, 255, 255, 0.18);
-  transform: translateY(-2px);
+  min-height: 240px;
 }
 
 .packageName {
@@ -217,17 +210,34 @@
   font-weight: 300;
   font-size: 22px;
   color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   line-height: 1.1;
 }
 
 .packageGoal {
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: rgba(255, 255, 255, 0.55);
-  margin: 0 0 18px;
-  flex-grow: 1;
+  margin: 0;
+}
+
+.packageOutcomeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 6px;
+}
+
+.packageOutcome {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 14px;
 }
 
 .packagePrice {
@@ -235,8 +245,10 @@
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ── Capabilities ── */

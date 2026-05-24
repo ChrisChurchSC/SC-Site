@@ -123,11 +123,17 @@ export default function ClientLanding() {
         {data.packagesIntro && <p className={styles.bodySmall}>{data.packagesIntro}</p>}
         <div className={styles.packageGrid}>
           {buildPackages.map(pkg => (
-            <NavLink key={pkg.slug} to={`/contact?package=${pkg.slug}`} className={styles.packageCard}>
-              <p className={styles.packageName}>{pkg.name}</p>
-              <p className={styles.packageGoal}>{pkg.goal}</p>
-              <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
-            </NavLink>
+            <div key={pkg.slug} className={styles.packageCard}>
+              <div>
+                <p className={styles.packageName}>{pkg.name}</p>
+                <p className={styles.packageGoal}>{pkg.goal}</p>
+              </div>
+              <div>
+                <p className={styles.packageOutcomeLabel}>Outcome</p>
+                <p className={styles.packageOutcome}>{pkg.outcome}</p>
+                <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
