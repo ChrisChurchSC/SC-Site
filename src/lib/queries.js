@@ -158,22 +158,38 @@ export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current 
   intro,
   whyHeading,
   whyBody,
+  packagesHeading,
+  packagesIntro,
+  capabilitiesHeading,
+  testimonialQuote,
+  testimonialAttribution,
+  trustLogos,
   approachHeading,
   approachBullets,
   signoff,
+  closingLinkText,
+  closingLinkHref,
   ctaText,
   ctaHref,
   "caseStudies": caseStudies[]-> {
     "slug": slug.current,
+    "n": string(order),
     name,
     type,
     tagline,
+    "subCount": count(*[_type == "project" && string::startsWith(slug.current, ^.slug.current + "-")]),
     "thumbnail": coalesce(
       thumbnailImages[0].asset->url,
       sections[_type == "imageFullSection" && defined(image.asset)][0].image.asset->url,
       sections[_type == "imageGridSection"][0].images[defined(image.asset)][0].image.asset->url
     ),
     "thumbnailVideo": thumbnailVideoFile.asset->url
+  },
+  "featuredThoughts": featuredThoughts[]-> {
+    "slug": slug.current,
+    title,
+    excerpt,
+    publishedAt
   }
 }`
 

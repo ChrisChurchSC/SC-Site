@@ -1,10 +1,12 @@
 .main {
-  padding: 80px 40px 120px;
+  padding: 80px 305px 120px 40px;
   background: #0a0a0a;
   min-height: 100vh;
   color: rgba(255, 255, 255, 0.85);
-  max-width: 1280px;
-  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main { padding: 60px 24px 80px; }
 }
 
 .notFound {
@@ -21,10 +23,7 @@
   min-height: calc(100vh - 80px);
 }
 
-.gateInner {
-  max-width: 420px;
-  text-align: left;
-}
+.gateInner { max-width: 420px; }
 
 .gateLabel {
   font-family: 'Roboto Mono', monospace;
@@ -68,14 +67,8 @@
   transition: border-color 0.15s;
 }
 
-.gateInput:focus {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.gateInputError {
-  animation: shake 0.4s;
-  border-color: rgba(255, 80, 80, 0.6);
-}
+.gateInput:focus { border-color: rgba(255, 255, 255, 0.25); }
+.gateInputError { animation: shake 0.4s; border-color: rgba(255, 80, 80, 0.6); }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -104,14 +97,12 @@
   transition: background 0.15s;
 }
 
-.gateSubmit:hover {
-  background: #fff;
-}
+.gateSubmit:hover { background: #fff; }
 
-/* ── Header ── */
+/* ── Hero ── */
 .header {
   max-width: 760px;
-  margin: 0 0 80px;
+  margin: 0 0 100px;
 }
 
 .eyebrow {
@@ -136,112 +127,13 @@
   font-weight: 300;
   font-size: clamp(16px, 1.4vw, 19px);
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   max-width: 640px;
 }
 
-/* ── Grid ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 80px;
-}
-
-@media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; }
-  .main { padding: 60px 24px 80px; }
-}
-
-.card {
-  position: relative;
-  display: block;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: #161616;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card:hover { transform: translateY(-2px); }
-.card:hover .cardOverlay { opacity: 1; }
-.card:hover .cardArrow { transform: translate(2px, -2px); opacity: 1; }
-
-.cardThumb {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.cardOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 100%);
-  opacity: 0.85;
-  transition: opacity 0.25s;
-  pointer-events: none;
-}
-
-.cardNum {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.7);
-  z-index: 2;
-}
-
-.cardName {
-  position: absolute;
-  bottom: 36px;
-  left: 16px;
-  right: 40px;
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 22px;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0;
-  z-index: 2;
-}
-
-.cardTagline {
-  position: absolute;
-  bottom: 14px;
-  left: 16px;
-  right: 40px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-  z-index: 2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cardArrow {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  opacity: 0.7;
-  z-index: 2;
-  transition: transform 0.25s, opacity 0.25s;
-}
-
-/* ── Why / Approach sections ── */
-.why, .approach {
-  max-width: 760px;
-  margin: 0 0 80px;
-}
+/* ── Generic section ── */
+.section { margin: 0 0 100px; max-width: 1100px; }
 
 .sectionHeading {
   font-family: 'Roboto Mono', monospace;
@@ -249,19 +141,298 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
-  margin: 0 0 18px;
+  margin: 0 0 24px;
   font-weight: 400;
 }
 
-.whyBody {
+.body {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: clamp(16px, 1.4vw, 19px);
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
+  max-width: 760px;
 }
 
+.bodySmall {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: -8px 0 28px;
+  max-width: 640px;
+}
+
+/* ── Work grid (homepage block style) ── */
+.workGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .workGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .workGrid { grid-template-columns: 1fr; }
+}
+
+.workBlock {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #161616;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.workBlock:hover { transform: translateY(-2px); }
+.workBlock:hover .workOverlay { opacity: 1; }
+
+.workMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.workOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.15) 55%, transparent 100%);
+  opacity: 0.9;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+
+.workLabel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.65);
+  z-index: 2;
+}
+
+.workCsTag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  z-index: 2;
+}
+
+.workBadge {
+  position: absolute;
+  top: 32px;
+  right: 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.55);
+  z-index: 2;
+}
+
+.workTitle {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  z-index: 2;
+}
+
+/* ── Where to start (packages) ── */
+.packageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .packageGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .packageGrid { grid-template-columns: 1fr; }
+}
+
+.packageCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 22px 20px;
+  background: #131313;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: inherit;
+  min-height: 168px;
+  transition: background 0.18s, border-color 0.18s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.packageCard:hover {
+  background: #181818;
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+.packageName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+
+.packageGoal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 18px;
+  flex-grow: 1;
+}
+
+.packagePrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* ── Capabilities ── */
+.capGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .capGrid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.capHeading {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 14px;
+}
+
+.capList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.capList li {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.35;
+}
+
+/* ── Thoughts ── */
+.thoughtsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) { .thoughtsGrid { grid-template-columns: 1fr; } }
+
+.thoughtCard {
+  padding: 24px 22px;
+  background: #131313;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.thoughtCard:hover {
+  background: #181818;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.thoughtTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 12px;
+  line-height: 1.15;
+}
+
+.thoughtExcerpt {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 18px;
+}
+
+.thoughtArrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Testimonial ── */
+.testimonial {
+  margin: 0 0 100px;
+  max-width: 800px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.testimonialQuote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 18px;
+}
+
+.testimonialAttr {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ── Approach bullets ── */
 .approachList {
   list-style: none;
   padding: 0;
@@ -269,6 +440,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  max-width: 760px;
 }
 
 .approachList li {
@@ -289,6 +461,32 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+/* ── Trust strip ── */
+.trustStrip {
+  margin: 0 0 80px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  padding: 28px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  align-items: center;
+}
+
+.trustItem {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.02em;
+}
+
+/* ── CTA ── */
+.cta {
+  max-width: 760px;
+  margin-top: 40px;
+}
+
 .signoff {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
@@ -297,9 +495,6 @@
   color: rgba(255, 255, 255, 0.65);
   margin: 0 0 24px;
 }
-
-/* ── CTA ── */
-.cta { max-width: 760px; }
 
 .ctaBtn {
   display: inline-block;
@@ -315,3 +510,21 @@
 }
 
 .ctaBtn:hover { background: #fff; }
+
+.closingLink {
+  display: inline-block;
+  margin-left: 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.closingLink:hover { color: rgba(255, 255, 255, 0.9); }
+
+@media (max-width: 560px) {
+  .closingLink { display: block; margin: 16px 0 0; }
+}

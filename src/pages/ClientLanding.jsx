@@ -5,7 +5,10 @@ import { useMeta } from '../hooks/useMeta'
 import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
+import { buildPackages, buildCapabilities } from '../data/buildPackages'
 import styles from './ClientLanding.module.css'
+
+const formatPrice = (n) => `$${n.toLocaleString('en-US')}`
 
 export default function ClientLanding() {
   const { slug } = useParams()
@@ -72,40 +75,101 @@ export default function ClientLanding() {
 
   return (
     <main className={styles.main}>
+      {/* Hero */}
       <header className={styles.header}>
         <p className={styles.eyebrow}>For {data.clientName}</p>
         {data.headline && <h1 className={styles.headline}>{data.headline}</h1>}
         {data.intro && <p className={styles.intro}>{data.intro}</p>}
       </header>
 
+      {/* Why */}
       {(data.whyHeading || data.whyBody) && (
-        <section className={styles.why}>
+        <section className={styles.section}>
           {data.whyHeading && <h2 className={styles.sectionHeading}>{data.whyHeading}</h2>}
-          {data.whyBody && <p className={styles.whyBody}>{data.whyBody}</p>}
+          {data.whyBody && <p className={styles.body}>{data.whyBody}</p>}
         </section>
       )}
 
+      {/* Selected work — homepage block style */}
       {data.caseStudies?.length > 0 && (
-        <section className={styles.grid}>
-          {data.caseStudies.map((cs, i) => (
-            <NavLink key={cs.slug} to={`/work/${cs.slug}`} className={styles.card}>
-              {cs.thumbnailVideo ? (
-                <LazyVideo src={cs.thumbnailVideo} className={styles.cardThumb} />
-              ) : cs.thumbnail ? (
-                <img src={sanityImg(cs.thumbnail, { w: 900 })} alt="" loading="lazy" className={styles.cardThumb} />
-              ) : null}
-              <span className={styles.cardNum}>{String(i + 1).padStart(2, '0')}</span>
-              <p className={styles.cardName}>{cs.name}</p>
-              {cs.tagline && <p className={styles.cardTagline}>{cs.tagline}</p>}
-              <span className={styles.cardArrow}>→</span>
-              <div className={styles.cardOverlay} />
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>Selected work</h2>
+          <div className={styles.workGrid}>
+            {data.caseStudies.map((cs, i) => (
+              <NavLink key={cs.slug} to={`/work/${cs.slug}`} className={styles.workBlock}>
+                {cs.thumbnailVideo ? (
+                  <LazyVideo src={cs.thumbnailVideo} className={styles.workMedia} />
+                ) : cs.thumbnail ? (
+                  <img src={sanityImg(cs.thumbnail, { w: 1200 })} alt="" loading="lazy" className={styles.workMedia} />
+                ) : null}
+                <span className={styles.workLabel}>{cs.n || String(i + 1).padStart(3, '0')}</span>
+                <span className={styles.workCsTag}>Case Study</span>
+                {cs.subCount > 1 && <span className={styles.workBadge}>+{cs.subCount} PROJECTS</span>}
+                <p className={styles.workTitle}>{cs.name}</p>
+                <div className={styles.workOverlay} />
+              </NavLink>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Where to start — Build packages */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionHeading}>{data.packagesHeading || 'Where to start.'}</h2>
+        {data.packagesIntro && <p className={styles.bodySmall}>{data.packagesIntro}</p>}
+        <div className={styles.packageGrid}>
+          {buildPackages.map(pkg => (
+            <NavLink key={pkg.slug} to={`/contact?package=${pkg.slug}`} className={styles.packageCard}>
+              <p className={styles.packageName}>{pkg.name}</p>
+              <p className={styles.packageGoal}>{pkg.goal}</p>
+              <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
             </NavLink>
           ))}
+        </div>
+      </section>
+
+      {/* Capabilities — what Build means */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || 'What Build means.'}</h2>
+        <div className={styles.capGrid}>
+          {buildCapabilities.map(cap => (
+            <div key={cap.heading}>
+              <p className={styles.capHeading}>{cap.heading}</p>
+              <ul className={styles.capList}>
+                {cap.items.map(item => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Selected thinking */}
+      {data.featuredThoughts?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>Selected thinking</h2>
+          <div className={styles.thoughtsGrid}>
+            {data.featuredThoughts.map(t => (
+              <NavLink key={t.slug} to={`/thoughts/${t.slug}`} className={styles.thoughtCard}>
+                <p className={styles.thoughtTitle}>{t.title}</p>
+                {t.excerpt && <p className={styles.thoughtExcerpt}>{t.excerpt}</p>}
+                <span className={styles.thoughtArrow}>Read →</span>
+              </NavLink>
+            ))}
+          </div>
         </section>
       )}
 
+      {/* Founder testimonial */}
+      {data.testimonialQuote && (
+        <section className={styles.testimonial}>
+          <p className={styles.testimonialQuote}>“{data.testimonialQuote}”</p>
+          {data.testimonialAttribution && <p className={styles.testimonialAttr}>— {data.testimonialAttribution}</p>}
+        </section>
+      )}
+
+      {/* How we'd work together */}
       {(data.approachHeading || data.approachBullets?.length > 0) && (
-        <section className={styles.approach}>
+        <section className={styles.section}>
           {data.approachHeading && <h2 className={styles.sectionHeading}>{data.approachHeading}</h2>}
           {data.approachBullets?.length > 0 && (
             <ul className={styles.approachList}>
@@ -115,6 +179,16 @@ export default function ClientLanding() {
         </section>
       )}
 
+      {/* Trust strip */}
+      {data.trustLogos?.length > 0 && (
+        <section className={styles.trustStrip}>
+          {data.trustLogos.map((logo, i) => (
+            <span key={i} className={styles.trustItem}>{logo}</span>
+          ))}
+        </section>
+      )}
+
+      {/* CTA */}
       {(data.signoff || (data.ctaHref && data.ctaText)) && (
         <footer className={styles.cta}>
           {data.signoff && <p className={styles.signoff}>{data.signoff}</p>}
@@ -123,6 +197,13 @@ export default function ClientLanding() {
               <NavLink to={data.ctaHref} className={styles.ctaBtn}>{data.ctaText} →</NavLink>
             ) : (
               <a href={data.ctaHref} className={styles.ctaBtn} target={data.ctaHref.startsWith('mailto:') ? undefined : '_blank'} rel="noopener noreferrer">{data.ctaText} →</a>
+            )
+          )}
+          {data.closingLinkText && data.closingLinkHref && (
+            data.closingLinkHref.startsWith('/') ? (
+              <NavLink to={data.closingLinkHref} className={styles.closingLink}>{data.closingLinkText} →</NavLink>
+            ) : (
+              <a href={data.closingLinkHref} className={styles.closingLink} target="_blank" rel="noopener noreferrer">{data.closingLinkText} →</a>
             )
           )}
         </footer>

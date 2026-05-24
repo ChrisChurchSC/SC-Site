@@ -42,12 +42,6 @@ function BackButton() {
   )
 }
 
-function ChromeForRoute() {
-  const { pathname } = useLocation()
-  if (pathname.startsWith('/clients/')) return null
-  return <><Nav /><ThemeToggle /></>
-}
-
 function WorkRouter() {
   const { slug } = useParams()
   const projects = useProjects()
@@ -65,7 +59,8 @@ export default function App() {
           <ScrollToTop />
           <TransitionBar />
           <Cursor />
-          <ChromeForRoute />
+          <Nav />
+          <ThemeToggle />
           <BackButton />
           <div className="theme-layer">
             <Routes>
