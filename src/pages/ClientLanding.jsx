@@ -81,7 +81,9 @@ export default function ClientLanding() {
       <header className={styles.header}>
         <p className={styles.eyebrow}>For {data.clientName}</p>
         {data.headline && <h1 className={styles.headline}>{data.headline}</h1>}
-        {data.intro && <p className={styles.intro}>{data.intro}</p>}
+        {data.intro && data.intro.split(/\n\s*\n/).map((para, i) => (
+          <p key={i} className={styles.intro}>{para}</p>
+        ))}
       </header>
 
       {/* Why */}

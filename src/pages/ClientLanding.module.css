@@ -126,11 +126,13 @@
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: clamp(16px, 1.4vw, 19px);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
   max-width: 640px;
 }
+
+.intro:last-child { margin-bottom: 0; }
 
 /* ── Foundation philosophy ── */
 .foundation {
@@ -148,7 +150,6 @@
   line-height: 1.15;
   color: rgba(255, 255, 255, 0.95);
   margin: 0 0 28px;
-  font-style: italic;
 }
 
 .foundationBody {
@@ -569,7 +570,6 @@
 .testimonialQuote {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-style: italic;
   font-size: clamp(22px, 2.4vw, 30px);
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.88);
@@ -708,7 +708,6 @@
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: 18px;
-  font-style: italic;
   color: rgba(255, 255, 255, 0.65);
   margin: 0 0 24px;
 }
