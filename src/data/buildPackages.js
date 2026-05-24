@@ -4,12 +4,12 @@
 // workbook; sync this file when those change.
 export const buildPackages = [
   {
-    slug: 'test-a-first-project',
-    name: 'Test a First Project',
-    goal: 'A focused, low-risk first project — proof that working together works.',
-    outcome: 'Proof that the partnership works, scoped tight and shipped fast.',
-    deliverables: ['Brand strategy', 'Brand sprint'],
-    price: 14350,
+    slug: 'launch-a-new-website',
+    name: 'Launch a New Website',
+    goal: 'A high-craft web presence built to carry your brand from day one.',
+    outcome: 'A site that earns visits, converts them, and stays effortless to update.',
+    deliverables: ['Web strategy & sitemap', 'Marketing site + CMS', 'Website copy'],
+    price: 24045,
   },
   {
     slug: 'win-enterprise-deals',
