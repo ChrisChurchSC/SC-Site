@@ -163,17 +163,40 @@ export const buildRates = [
 
 export const buildBlendedRate = 146
 
-export const buildCapabilities = [
+// Three disciplines that contribute to Build work. Mirrors the
+// /about "What We Do" pattern: tag + name + list of capabilities.
+export const buildDisciplines = [
   {
-    heading: 'Brand foundation',
-    items: ['Identity systems', 'Naming + verbal identity', 'Voice + messaging', 'Visual language', 'Design systems'],
+    tag: 'What we make',
+    name: 'Strategy',
+    items: [
+      'Brand strategy & positioning',
+      'Naming & verbal identity',
+      'Voice & messaging',
+      'Audience definition',
+      'Information architecture',
+    ],
   },
   {
-    heading: 'Digital product',
-    items: ['Websites + microsites', 'Web apps', 'Mobile apps', 'Prototypes', 'Design-to-build (Claude Code)'],
+    tag: 'How it looks and feels',
+    name: 'Design',
+    items: [
+      'Identity & visual systems',
+      'Web & product UI',
+      'Design systems',
+      'Illustration & iconography',
+      'Motion & 3D',
+    ],
   },
   {
-    heading: 'Production',
-    items: ['Illustration', 'Motion + 3D', 'Photography', 'Copywriting', 'Pitch + investor decks'],
+    tag: 'How it gets built',
+    name: 'Engineering',
+    items: [
+      'Marketing sites & web apps',
+      'Product development',
+      'Design-to-build (Claude Code)',
+      'CMS integration',
+      'Performance & accessibility',
+    ],
   },
 ]

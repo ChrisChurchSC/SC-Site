@@ -5,7 +5,7 @@ import { useMeta } from '../hooks/useMeta'
 import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
-import { buildPackages, buildServices, buildRates, buildBlendedRate, buildCapabilities } from '../data/buildPackages'
+import { buildPackages, buildServices, buildRates, buildBlendedRate, buildDisciplines } from '../data/buildPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
@@ -210,15 +210,16 @@ export default function ClientLanding() {
         )}
       </section>
 
-      {/* Capabilities — what Build means */}
+      {/* Disciplines — the crafts tied to Build */}
       <section className={styles.section}>
-        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || 'What Build means.'}</h2>
-        <div className={styles.capGrid}>
-          {buildCapabilities.map(cap => (
-            <div key={cap.heading}>
-              <p className={styles.capHeading}>{cap.heading}</p>
-              <ul className={styles.capList}>
-                {cap.items.map(item => <li key={item}>{item}</li>)}
+        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || 'Disciplines tied to Build.'}</h2>
+        <div className={styles.disciplineGrid}>
+          {buildDisciplines.map(d => (
+            <div key={d.name} className={styles.disciplineCol}>
+              <p className={styles.disciplineTag}>{d.tag}</p>
+              <p className={styles.disciplineName}>{d.name}</p>
+              <ul className={styles.disciplineList}>
+                {d.items.map(item => <li key={item}>{item}</li>)}
               </ul>
             </div>
           ))}
