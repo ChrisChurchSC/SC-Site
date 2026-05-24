@@ -183,6 +183,21 @@ export default function ClientLanding() {
         </section>
       )}
 
+      {/* FAQs */}
+      {data.faqs?.length > 0 && (
+        <section className={styles.section}>
+          {data.faqHeading && <h2 className={styles.sectionHeading}>{data.faqHeading}</h2>}
+          <dl className={styles.faqList}>
+            {data.faqs.map((f, i) => (
+              <div key={i} className={styles.faqItem}>
+                <dt className={styles.faqQ}>{f.question}</dt>
+                <dd className={styles.faqA}>{f.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
       {/* Trust strip */}
       {data.trustLogos?.length > 0 && (
         <section className={styles.trustStrip}>

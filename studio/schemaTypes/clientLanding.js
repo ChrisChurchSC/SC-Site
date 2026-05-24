@@ -116,14 +116,35 @@ export const clientLanding = defineType({
       name: 'approachHeading',
       title: 'How-we-would-work heading',
       type: 'string',
-      description: 'Optional. e.g. "How we\'d work together."',
+      description: 'Optional. e.g. "How we\'d work together." Leave blank to hide.',
     }),
     defineField({
       name: 'approachBullets',
       title: 'How-we-would-work bullets',
       type: 'array',
       of: [{ type: 'string' }],
-      description: 'Optional. 2–4 short lines on engagement model, team, timeline.',
+      description: 'Optional. 2–4 short lines on engagement model, team, timeline. Leave blank to hide.',
+    }),
+    defineField({
+      name: 'faqHeading',
+      title: 'FAQ heading',
+      type: 'string',
+      description: 'Optional. e.g. "Common questions."',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'FAQs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'faq',
+        fields: [
+          { name: 'question', title: 'Question', type: 'string', validation: R => R.required() },
+          { name: 'answer', title: 'Answer', type: 'text', rows: 3, validation: R => R.required() },
+        ],
+        preview: { select: { title: 'question', subtitle: 'answer' } },
+      }],
+      description: 'Optional. 4–8 short Q/A pairs. Shown as a plain list, no accordion.',
     }),
     defineField({
       name: 'signoff',

@@ -166,6 +166,8 @@ export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current 
   trustLogos,
   approachHeading,
   approachBullets,
+  faqHeading,
+  faqs[]{ question, answer },
   signoff,
   closingLinkText,
   closingLinkHref,
