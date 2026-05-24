@@ -47,6 +47,97 @@ export const buildPackages = [
   },
 ]
 
+// Build-side service line items from the Estimator. Grouped by category.
+// Prices are starting points — actual scope is rate-card priced per project.
+export const buildServices = [
+  {
+    category: 'Brand',
+    items: [
+      { name: 'Brand strategy', desc: 'positioning, voice, audience, brief', price: 3810 },
+      { name: 'Brand sprint', desc: '2–3 wks · logo, color, type, basic guidelines', price: 10540 },
+      { name: 'Brand refresh', desc: 'evolve existing identity · 4–6 wks', price: 17580 },
+      { name: 'Brand system', desc: '6–8 wks · full identity + extended guidelines', price: 32050 },
+      { name: 'Brand platform', desc: '10–14 wks · strategy, naming, identity, rollout', price: 54300 },
+    ],
+  },
+  {
+    category: 'Product Design',
+    items: [
+      { name: 'Prototyping', desc: 'interactive clickable prototype for testing', price: 4740 },
+      { name: 'Product discovery', desc: 'research, user flows, feature definition', price: 5125 },
+      { name: 'UX wireframes', desc: 'key flows, low-fidelity, annotated', price: 5675 },
+      { name: 'UI design — feature', desc: 'high-fidelity screens for one feature set', price: 6570 },
+      { name: 'Design-to-build (Claude Code)', desc: 'designed + shipped product · defined scope', price: 19290 },
+      { name: 'Full product UI', desc: 'complete app or product interface · multi-flow', price: 22460 },
+    ],
+  },
+  {
+    category: 'Web & Interactive',
+    items: [
+      { name: 'Web strategy & sitemap', desc: 'goals, sitemap, content plan, wireframes', price: 2905 },
+      { name: 'Business card site', desc: '1 page · minimal presence', price: 3375 },
+      { name: 'Landing page', desc: '1 page · conversion-focused', price: 4930 },
+      { name: 'Web design refresh', desc: 'redesign existing site · same architecture', price: 9705 },
+      { name: 'Microsite', desc: '3–5 pages · campaign-driven · custom interactions', price: 11785 },
+      { name: 'Design system / component library', desc: 'tokens, components, documentation', price: 13520 },
+      { name: 'Marketing site', desc: '5–8 pages · static · responsive', price: 15020 },
+      { name: 'Marketing site + CMS', desc: '5–8 pages · CMS-managed content', price: 18205 },
+      { name: 'Shopify store', desc: 'e-commerce · theme, products, checkout', price: 25100 },
+      { name: 'Big marketing site + CMS', desc: '10+ pages · multiple templates · custom CMS', price: 26850 },
+      { name: 'Interactive experience / WebGL', desc: 'immersive 3D · custom build', price: 27140 },
+    ],
+  },
+  {
+    category: 'Decks',
+    items: [
+      { name: 'Deck refresh', desc: 'restyle existing deck · 15–25 slides', price: 1470 },
+      { name: 'Deck strategy & narrative', desc: 'story arc, key slides, structure', price: 1730 },
+      { name: 'Sales deck — short', desc: '~15 slides · brand-led · existing content', price: 2755 },
+      { name: 'Webinar slide deck', desc: '20–40 slides · designed presentation', price: 3405 },
+      { name: 'Board / leadership deck', desc: '20–30 slides · polished, data-heavy', price: 4880 },
+      { name: 'Deck template system', desc: 'reusable template · 20+ master layouts', price: 5820 },
+      { name: 'Sales deck — full', desc: '25–40 slides · custom layouts · charts + icons', price: 7110 },
+      { name: 'Keynote / event deck', desc: '30–60 slides · stage presentation', price: 8725 },
+      { name: 'Investor / pitch deck', desc: '20–30 slides · narrative + data viz', price: 9660 },
+    ],
+  },
+  {
+    category: 'Print & OOH',
+    items: [
+      { name: 'Campaign strategy & concepts', desc: 'concept development · format planning', price: 2360 },
+      { name: 'Print ads — batch of 3', desc: '3 ads · same campaign · multi-format', price: 2405 },
+      { name: 'OOH — batch of 3 placements', desc: '3 placements · multi-format', price: 2845 },
+      { name: 'Editorial / magazine spread', desc: 'multi-page layout · custom typography', price: 6545 },
+      { name: 'Print ad campaign', desc: '3–5 concepts · multi-format adaptations', price: 7330 },
+      { name: 'Packaging — single SKU', desc: '1 product · structural + graphic', price: 7355 },
+      { name: 'Brand book / printed report', desc: '20–40 pages · designed + production', price: 10200 },
+      { name: 'OOH campaign', desc: '3–5 executions · multiple placements & sizes', price: 10970 },
+      { name: 'Packaging — product line', desc: '3–6 SKUs · system + variations', price: 15460 },
+    ],
+  },
+  {
+    category: 'Copywriting',
+    items: [
+      { name: 'Campaign copy', desc: 'headlines, taglines, body for one campaign', price: 1450 },
+      { name: 'Ad & social copy — batch', desc: '~15 short-form copy units · multi-channel', price: 1590 },
+      { name: 'Scriptwriting', desc: 'script for video or motion piece', price: 1600 },
+      { name: 'Long-form content piece', desc: 'article, blog, or thought-leadership piece', price: 1660 },
+      { name: 'Copy audit & voice guide', desc: 'tone of voice · messaging framework', price: 2735 },
+      { name: 'Website copy', desc: '5–8 pages · brand-led longform', price: 2935 },
+    ],
+  },
+  {
+    category: 'Concept Creation',
+    items: [
+      { name: 'Moodboard & creative territories', desc: 'visual direction options · early-stage', price: 3120 },
+      { name: 'Naming & verbal identity', desc: 'name generation, rationale, screening', price: 4815 },
+      { name: 'Concept sprint', desc: 'big-idea creative concepting · 1–2 wks', price: 7500 },
+      { name: 'Pitch / new business concept', desc: 'speculative creative for a pitch', price: 9440 },
+      { name: 'Campaign concept', desc: 'platform idea, territories, key visuals', price: 11170 },
+    ],
+  },
+]
+
 export const buildCapabilities = [
   {
     heading: 'Brand foundation',

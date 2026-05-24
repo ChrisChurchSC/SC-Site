@@ -179,7 +179,116 @@
   .workGrid { grid-template-columns: 1fr; }
 }
 
-/* ── Where to start (packages) ── */
+/* ── Where to start (packages + services toggle) ── */
+.pricingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.pricingHeader .sectionHeading { margin: 0; }
+
+.toggle {
+  display: inline-flex;
+  background: #131313;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.toggleBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.toggleBtn:hover { color: rgba(255, 255, 255, 0.85); }
+
+.toggleBtnActive {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0a0a;
+}
+
+.toggleBtnActive:hover { color: #0a0a0a; }
+
+/* Services list (à la carte view) */
+.serviceCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.serviceCategoryHeading {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.serviceList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.serviceRow {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr auto;
+  gap: 24px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.serviceRow:last-child { border-bottom: none; }
+
+.serviceName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.serviceDesc {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.servicePrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .pricingHeader { flex-direction: column; align-items: flex-start; }
+  .serviceRow {
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+  }
+  .serviceDesc { grid-column: 1 / -1; }
+}
+
+
 .packageGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

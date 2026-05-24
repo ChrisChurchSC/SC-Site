@@ -5,7 +5,7 @@ import { useMeta } from '../hooks/useMeta'
 import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
-import { buildPackages, buildCapabilities } from '../data/buildPackages'
+import { buildPackages, buildServices, buildCapabilities } from '../data/buildPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
@@ -18,6 +18,7 @@ export default function ClientLanding() {
   const [pw, setPw] = useState('')
   const [error, setError] = useState(false)
   const [manualUnlock, setManualUnlock] = useState(false)
+  const [pricingView, setPricingView] = useState('packages') // 'packages' | 'services'
 
   const sessionKey = `client_unlocked_${slug}`
   const sessionUnlocked = typeof sessionStorage !== 'undefined'
@@ -117,25 +118,65 @@ export default function ClientLanding() {
         </section>
       )}
 
-      {/* Where to start — Build packages */}
+      {/* Where to start — packages / services toggle */}
       <section className={styles.section}>
-        <h2 className={styles.sectionHeading}>{data.packagesHeading || 'Where to start.'}</h2>
-        {data.packagesIntro && <p className={styles.bodySmall}>{data.packagesIntro}</p>}
-        <div className={styles.packageGrid}>
-          {buildPackages.map(pkg => (
-            <div key={pkg.slug} className={styles.packageCard}>
-              <div>
-                <p className={styles.packageName}>{pkg.name}</p>
-                <p className={styles.packageGoal}>{pkg.goal}</p>
-              </div>
-              <div>
-                <p className={styles.packageOutcomeLabel}>Outcome</p>
-                <p className={styles.packageOutcome}>{pkg.outcome}</p>
-                <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
-              </div>
-            </div>
-          ))}
+        <div className={styles.pricingHeader}>
+          <h2 className={styles.sectionHeading}>{data.packagesHeading || 'Where to start.'}</h2>
+          <div className={styles.toggle} role="tablist" aria-label="View pricing as">
+            <button
+              role="tab"
+              aria-selected={pricingView === 'packages'}
+              className={`${styles.toggleBtn}${pricingView === 'packages' ? ' ' + styles.toggleBtnActive : ''}`}
+              onClick={() => setPricingView('packages')}
+            >
+              Packages
+            </button>
+            <button
+              role="tab"
+              aria-selected={pricingView === 'services'}
+              className={`${styles.toggleBtn}${pricingView === 'services' ? ' ' + styles.toggleBtnActive : ''}`}
+              onClick={() => setPricingView('services')}
+            >
+              Services
+            </button>
+          </div>
         </div>
+        {data.packagesIntro && pricingView === 'packages' && <p className={styles.bodySmall}>{data.packagesIntro}</p>}
+
+        {pricingView === 'packages' ? (
+          <div className={styles.packageGrid}>
+            {buildPackages.map(pkg => (
+              <div key={pkg.slug} className={styles.packageCard}>
+                <div>
+                  <p className={styles.packageName}>{pkg.name}</p>
+                  <p className={styles.packageGoal}>{pkg.goal}</p>
+                </div>
+                <div>
+                  <p className={styles.packageOutcomeLabel}>Outcome</p>
+                  <p className={styles.packageOutcome}>{pkg.outcome}</p>
+                  <p className={styles.packagePrice}>Starting at {formatPrice(pkg.price)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.serviceCategories}>
+            {buildServices.map(cat => (
+              <div key={cat.category} className={styles.serviceCategory}>
+                <p className={styles.serviceCategoryHeading}>{cat.category}</p>
+                <ul className={styles.serviceList}>
+                  {cat.items.map(svc => (
+                    <li key={svc.name} className={styles.serviceRow}>
+                      <span className={styles.serviceName}>{svc.name}</span>
+                      <span className={styles.serviceDesc}>{svc.desc}</span>
+                      <span className={styles.servicePrice}>{formatPrice(svc.price)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Capabilities — what Build means */}
