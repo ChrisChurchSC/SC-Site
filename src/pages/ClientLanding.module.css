@@ -132,6 +132,36 @@
   max-width: 640px;
 }
 
+/* ── Foundation philosophy ── */
+.foundation {
+  margin: 0 0 100px;
+  max-width: 760px;
+  padding: 48px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.foundationHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 28px;
+  font-style: italic;
+}
+
+.foundationBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 16px;
+}
+
+.foundationBody:last-child { margin-bottom: 0; }
+
 /* ── Generic section ── */
 .section { margin: 0 0 100px; max-width: 1100px; }
 

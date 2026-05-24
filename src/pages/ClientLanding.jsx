@@ -92,6 +92,16 @@ export default function ClientLanding() {
         </section>
       )}
 
+      {/* Foundation philosophy */}
+      {(data.foundationHeading || data.foundationBody) && (
+        <section className={styles.foundation}>
+          {data.foundationHeading && <h2 className={styles.foundationHeading}>{data.foundationHeading}</h2>}
+          {data.foundationBody && data.foundationBody.split(/\n\s*\n/).map((para, i) => (
+            <p key={i} className={styles.foundationBody}>{para}</p>
+          ))}
+        </section>
+      )}
+
       {/* Selected work — homepage block style */}
       {data.caseStudies?.length > 0 && (
         <section className={styles.section}>

@@ -158,6 +158,8 @@ export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current 
   intro,
   whyHeading,
   whyBody,
+  foundationHeading,
+  foundationBody,
   packagesHeading,
   packagesIntro,
   capabilitiesHeading,

@@ -60,6 +60,19 @@ export const clientLanding = defineType({
       description: 'Optional. 1-paragraph relevance framing connecting your work to their situation.',
     }),
     defineField({
+      name: 'foundationHeading',
+      title: 'Foundation block heading',
+      type: 'string',
+      description: 'Optional. Philosophy block, e.g. "Build means foundation."',
+    }),
+    defineField({
+      name: 'foundationBody',
+      title: 'Foundation block body',
+      type: 'text',
+      rows: 6,
+      description: 'Optional. 1–2 paragraphs articulating the foundation framing. Blank lines separate paragraphs.',
+    }),
+    defineField({
       name: 'caseStudies',
       title: 'Featured case studies',
       type: 'array',
