@@ -187,14 +187,17 @@ export default function ClientLanding() {
       {data.faqs?.length > 0 && (
         <section className={styles.section}>
           {data.faqHeading && <h2 className={styles.sectionHeading}>{data.faqHeading}</h2>}
-          <dl className={styles.faqList}>
+          <div className={styles.faqList}>
             {data.faqs.map((f, i) => (
-              <div key={i} className={styles.faqItem}>
-                <dt className={styles.faqQ}>{f.question}</dt>
-                <dd className={styles.faqA}>{f.answer}</dd>
-              </div>
+              <details key={i} className={styles.faqItem}>
+                <summary className={styles.faqQ}>
+                  <span>{f.question}</span>
+                  <span className={styles.faqIcon} aria-hidden="true">+</span>
+                </summary>
+                <p className={styles.faqA}>{f.answer}</p>
+              </details>
             ))}
-          </dl>
+          </div>
         </section>
       )}
 
