@@ -108,7 +108,7 @@
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.45);
 }
 
 /* ── Photo grid ── */
@@ -197,7 +197,7 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.4);
   width: 140px;
   flex-shrink: 0;
 }
@@ -246,7 +246,7 @@
   font-size: 9px;
   letter-spacing: 0.04em;
   line-height: 1.9;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.52);
   margin: 0;
 }
 
@@ -319,7 +319,7 @@
   font-size: 9px;
   letter-spacing: 0.04em;
   line-height: 1.9;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.52);
   margin: 0;
   flex: 1;
 }
