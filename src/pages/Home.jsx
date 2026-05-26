@@ -224,7 +224,7 @@ export default function Home() {
 
       {/* Row 1 — Hero */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 9', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
+        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 12', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
           <video
             className={styles.heroReel}
             src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
@@ -242,23 +242,23 @@ export default function Home() {
             <span>Watch with sound</span>
           </button>
         </div>
-        {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '10 / span 3' }, <>
+      </section>
+
+      {/* Row 2 */}
+      <section className={styles.row12}>
+        {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '1 / span 3' }, <>
           {blockMedia('002')}
           <span className={styles.label}>002</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('002')}</p>
         </>)}
-      </section>
-
-      {/* Row 2 */}
-      <section className={styles.row12}>
-        {blockLink('003', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '2 / span 3' }, <>
+        {blockLink('003', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
           {blockMedia('003')}
           <span className={styles.label}>003</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('003') || 'Oxyle'}</p>
         </>)}
-        {blockLink('004', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '5 / span 5' }, <>
+        {blockLink('004', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
           {blockMedia('004')}
           <span className={styles.label}>004</span>
           <span className={styles.csTag}>Case Study</span>
@@ -337,12 +337,6 @@ export default function Home() {
           <span className={styles.label}>014</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('014')}</p>
-        </>)}
-        {blockLink('015', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
-          {blockMedia('015')}
-          <span className={styles.label}>015</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('015')}</p>
         </>)}
         {blockLink('016', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
           {blockMedia('016')}
