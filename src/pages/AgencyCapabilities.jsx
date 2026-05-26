@@ -185,19 +185,19 @@ const AGENCY_INTRO_SLIDES = [
         name: 'Digital products',
         tag: 'The product.',
         body: 'Marketing sites & landing pages, CMS-driven websites, product UI, web apps & internal tools, design systems, interactive prototypes, e-commerce builds, design-to-build with engineering.',
-        staticImage: '/digital-products.avif',
+        staticImage: 'https://cdn.sanity.io/files/ppq16wpu/production/38b5230b7dbf6251a8cbceacdb3a4da6fc87d026.avif',
       },
       {
         name: 'Brand systems',
         tag: 'The foundation.',
         body: 'Brand identity & visual systems, messaging & narrative architecture, motion identity, sales decks & pitch materials, scalable creative the in-house team can extend.',
-        staticImage: '/brand-systems.avif',
+        staticImage: 'https://cdn.sanity.io/files/ppq16wpu/production/9a247d8cf4d951f74817a8203600fce57d4efdfe.avif',
       },
       {
         name: 'Content programs',
         tag: 'The engine.',
         body: 'Social content (static, carousel, Reels, Stories), short-form & long-form video, paid ad creative & campaign management, email newsletters & nurture sequences, blog, editorial & thought leadership.',
-        staticImage: '/content-programs.mp4',
+        staticImage: 'https://cdn.sanity.io/files/ppq16wpu/production/0046a65d494bc6acd42d4d2272603403ae2f6c0a.mp4',
         staticIsVideo: true,
       },
     ],
@@ -327,7 +327,7 @@ function CoverSlide() {
     <section className={styles.coverSlide}>
       <video
         className={styles.coverVideo}
-        src="/cover-gradient.mp4"
+        src="https://cdn.sanity.io/files/ppq16wpu/production/6d752bbf01b6f5301b48d62598d4e1ee51a44251.mp4"
         autoPlay
         loop
         muted
@@ -381,7 +381,7 @@ function CoverSlide() {
 function ClosingSlide() {
   return (
     <section className={styles.closingSlide}>
-      <img src="/reel-preview.gif" alt="" className={styles.closingGif} />
+      <img src="https://cdn.sanity.io/files/ppq16wpu/production/f4fbfd1cf112b5d16a11cd8800b9b8d5f02ae496.gif" alt="" className={styles.closingGif} />
     </section>
   )
 }
