@@ -24,6 +24,7 @@ import ContentPackages from './pages/ContentPackages'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
+import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
 import DeckGate from './components/DeckGate'
 function ScrollToTop() {
@@ -98,6 +99,7 @@ export default function App() {
               <Route path="/content-programs" element={<DeckGate><ContentPrograms /></DeckGate>} />
               <Route path="/digital-products" element={<DeckGate><DigitalProducts /></DeckGate>} />
               <Route path="/content-packages" element={<DeckGate><ContentPackages /></DeckGate>} />
+              <Route path="/lp/:slug" element={<LandingPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
