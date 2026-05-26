@@ -181,3 +181,10 @@ export const growDisciplines = [
     ],
   },
 ]
+
+export const growOutcomes = [
+  { headline: 'A predictable pipeline you can plan around', body: 'Channels that compound month over month, not one-off spikes.' },
+  { headline: 'Higher conversion at every stage of the funnel', body: 'Site, content, and offers tuned so more of the traffic you already have turns into pipeline.' },
+  { headline: 'Content that ranks, ships weekly, and earns inbound', body: 'A consistent editorial engine your team owns, not a dependency on the next campaign.' },
+  { headline: 'Clear attribution, not vanity metrics', body: 'Reporting that tells you which channel, asset, and message is moving revenue.' },
+]

@@ -126,3 +126,10 @@ export const agencyPartnerModel = [
     ],
   },
 ]
+
+export const agencyOutcomes = [
+  { headline: 'Capacity without headcount', body: 'A senior team you can scale into a quarter and out of the next, without recruiting overhead.' },
+  { headline: 'Wins on your roster, invisible execution', body: 'We ship under your brand and your client never knows we were there.' },
+  { headline: 'Senior craft on every deliverable', body: 'No juniors learning on your account. The people in the room are the people doing the work.' },
+  { headline: 'One predictable partner instead of five contractors', body: 'Strategy, design, copy, and build under one roof, on one timeline, against one scope.' },
+]

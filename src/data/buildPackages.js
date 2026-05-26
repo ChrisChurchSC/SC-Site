@@ -200,3 +200,10 @@ export const buildDisciplines = [
     ],
   },
 ]
+
+export const buildOutcomes = [
+  { headline: 'A clearer story your team can sell from', body: 'One narrative across web, deck, and brand, so every touchpoint pulls in the same direction.' },
+  { headline: 'A site or deck that earns the next conversation', body: 'Production-grade craft that signals seriousness before a meeting is even taken.' },
+  { headline: 'An identity that matches the company you are now', body: 'Brand systems that fit the work today, not the work three years ago.' },
+  { headline: 'One source of truth, not five disconnected files', body: 'Documented systems your team can extend without rebuilding from scratch.' },
+]

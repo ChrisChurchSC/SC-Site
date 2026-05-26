@@ -81,6 +81,14 @@ export const project = defineType({
     defineField({ name: 'descriptor', title: 'Descriptor', type: 'string', description: 'Short one-line about the client. Shown on the client overview page.' }),
     defineField({ name: 'tagline', title: 'Tagline', type: 'string' }),
     defineField({ name: 'summary', title: 'Summary', type: 'text', rows: 5 }),
+    defineField({
+      name: 'category',
+      title: 'Pillar(s)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { list: ['brand', 'product', 'content'], layout: 'tags' },
+      description: 'Which offering pillar(s) this project demonstrates. Used on the Capabilities deck.',
+    }),
     defineField({ name: 'relationship', title: 'Client Relationship', type: 'text', rows: 8, description: 'Longer write-up about the working relationship — shown on the client overview page.' }),
     defineField({
       name: 'services',

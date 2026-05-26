@@ -69,6 +69,11 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   clients
 }`
 
+export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {
+  "src": coalesce(videoFile.asset->url, image.asset->url),
+  "isVideo": defined(videoFile.asset)
+}`
+
 export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0] {
   headerLabel,
   headline,
@@ -118,6 +123,31 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug &
       cols,
       ratio,
       mobileRatio
+    }
+  }
+}`
+
+// Capabilities page: each top-level client with its key media for the
+// asymmetric mosaic. We pull a flat list of media items per project by
+// projecting each section type into a uniform shape; the page drops
+// projects with too few tiles (catches sub-projects and stubs).
+export const CAPABILITIES_QUERY = `*[_type == "project" && published == true] | order(order asc) {
+  _id,
+  "n": string(order),
+  name,
+  "slug": slug.current,
+  tagline,
+  summary,
+  category,
+  "tiles": sections[]{
+    _type,
+    "src": coalesce(videoFile.asset->url, image.asset->url),
+    ratio,
+    "isVideo": defined(videoFile.asset),
+    "grid": images[]{
+      "src": coalesce(videoFile.asset->url, image.asset->url),
+      "isVideo": defined(videoFile.asset),
+      ratio
     }
   }
 }`

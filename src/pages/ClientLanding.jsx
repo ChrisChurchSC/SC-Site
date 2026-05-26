@@ -5,13 +5,14 @@ import { useMeta } from '../hooks/useMeta'
 import { CLIENT_LANDING_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
-import { buildPackages, buildServices, buildRates, buildBlendedRate, buildDisciplines } from '../data/buildPackages'
-import { growPackages, growServices, growDisciplines } from '../data/growPackages'
-import { agencyPackages, agencyDisciplines, agencyPartnerModel } from '../data/agencyPackages'
+import { buildPackages, buildServices, buildRates, buildBlendedRate, buildDisciplines, buildOutcomes } from '../data/buildPackages'
+import { growPackages, growServices, growDisciplines, growOutcomes } from '../data/growPackages'
+import { agencyPackages, agencyDisciplines, agencyPartnerModel, agencyOutcomes } from '../data/agencyPackages'
 import styles from './ClientLanding.module.css'
 import homeStyles from './Home.module.css'
 
 const formatPrice = (n) => `$${n.toLocaleString('en-US')}`
+const formatStartingAt = (n) => `$${(Math.floor(n / 1000) * 1000).toLocaleString('en-US')}`
 
 export default function ClientLanding() {
   const { slug } = useParams()
@@ -53,13 +54,14 @@ export default function ClientLanding() {
     </main>
   )
 
+  const gateTrack = ['build', 'grow', 'agency'].includes(data.track) ? data.track : 'build'
+  const gateTrackLabel = { build: 'Build', grow: 'Grow', agency: 'Agency' }[gateTrack]
+
   if (!unlocked) return (
     <main className={styles.main}>
       <div className={styles.gate}>
         <div className={styles.gateInner}>
-          <p className={styles.gateLabel}>Private</p>
-          <h1 className={styles.gateName}>{data.clientName}</h1>
-          <p className={styles.gateSubtext}>This page is shared with you privately.</p>
+          <p className={styles.gateLabel}>{gateTrackLabel} landing page</p>
           <form className={styles.gateForm} onSubmit={handleUnlock}>
             <input
               className={`${styles.gateInput}${error ? ` ${styles.gateInputError}` : ''}`}
@@ -77,11 +79,12 @@ export default function ClientLanding() {
     </main>
   )
 
-  const track = ['build', 'grow', 'agency'].includes(data.track) ? data.track : 'build'
-  const trackLabel = { build: 'Build', grow: 'Grow', agency: 'Agency' }[track]
+  const track = gateTrack
+  const trackLabel = gateTrackLabel
   const packages = { build: buildPackages, grow: growPackages, agency: agencyPackages }[track]
   const services = { build: buildServices, grow: growServices, agency: buildServices }[track] // agency reuses Build services menu
   const disciplines = { build: buildDisciplines, grow: growDisciplines, agency: agencyDisciplines }[track]
+  const outcomes = { build: buildOutcomes, grow: growOutcomes, agency: agencyOutcomes }[track]
 
   return (
     <main className={styles.main}>
@@ -112,13 +115,18 @@ export default function ClientLanding() {
         </section>
       )}
 
-      {/* Anonymized agency work strip */}
-      {track === 'agency' && data.anonymizedWork?.length > 0 && (
+      {/* Common outcomes — per track */}
+      {outcomes?.length > 0 && (
         <section className={styles.section}>
-          <h2 className={styles.sectionHeading}>{data.anonymizedWorkHeading || 'Work shipped invisibly.'}</h2>
-          <ul className={styles.anonStrip}>
-            {data.anonymizedWork.map((item, i) => <li key={i}>{item}</li>)}
-          </ul>
+          <h2 className={styles.sectionHeading}>Common outcomes.</h2>
+          <div className={styles.outcomeGrid}>
+            {outcomes.map(o => (
+              <div key={o.headline} className={styles.outcomeCard}>
+                <p className={styles.outcomeHeadline}>{o.headline}</p>
+                <p className={styles.outcomeBody}>{o.body}</p>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
@@ -190,7 +198,7 @@ export default function ClientLanding() {
                   <p className={styles.packagePrice}>
                     {pkg.price == null
                       ? pkg.priceLabel
-                      : `${pkg.priceLabel === 'from' ? 'From ' : 'Starting at '}${formatPrice(pkg.price)}${pkg.priceLabel === 'per month' ? ' / month' : ''}`}
+                      : `${pkg.priceLabel === 'from' ? 'From ' : 'Starting at '}${formatStartingAt(pkg.price)}${pkg.priceLabel === 'per month' ? ' / month' : ''}`}
                   </p>
                 </div>
               </div>
@@ -232,21 +240,23 @@ export default function ClientLanding() {
         )}
       </section>
 
-      {/* Disciplines — the crafts tied to this track */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || `Disciplines tied to ${trackLabel}.`}</h2>
-        <div className={styles.disciplineGrid}>
-          {disciplines.map(d => (
-            <div key={d.name} className={styles.disciplineCol}>
-              <p className={styles.disciplineTag}>{d.tag}</p>
-              <p className={styles.disciplineName}>{d.name}</p>
-              <ul className={styles.disciplineList}>
-                {d.items.map(item => <li key={item}>{item}</li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Disciplines — agency track only */}
+      {track === 'agency' && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>{data.capabilitiesHeading || `Disciplines tied to ${trackLabel}.`}</h2>
+          <div className={styles.disciplineGrid}>
+            {disciplines.map(d => (
+              <div key={d.name} className={styles.disciplineCol}>
+                <p className={styles.disciplineTag}>{d.tag}</p>
+                <p className={styles.disciplineName}>{d.name}</p>
+                <ul className={styles.disciplineList}>
+                  {d.items.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* How we partner — agency track only */}
       {track === 'agency' && (
@@ -266,7 +276,7 @@ export default function ClientLanding() {
       )}
 
       {/* Selected thinking */}
-      {data.featuredThoughts?.length > 0 && (
+      {track !== 'agency' && data.featuredThoughts?.length > 0 && (
         <section className={styles.section}>
           <h2 className={styles.sectionHeading}>Selected thinking</h2>
           <div className={styles.thoughtsGrid}>

@@ -59,9 +59,9 @@
   border-radius: 2px;
 }
 
-.nav-grad-1 { background: #3a3a3a; }
-.nav-grad-2 { background: #252525; }
-.nav-grad-3 { background: #161616; }
+.nav-grad-1 { background: linear-gradient(to right, rgba(255,255,255,0.45), rgba(255,255,255,0.28)); }
+.nav-grad-2 { background: linear-gradient(to right, rgba(255,255,255,0.28), rgba(255,255,255,0.14)); }
+.nav-grad-3 { background: linear-gradient(to right, rgba(255,255,255,0.14), rgba(255,255,255,0.04)); }
 
 /* ── Case study list ── */
 .nav-cs-list {
