@@ -3322,6 +3322,10 @@ function PkgClosingSlide() {
   return (
     <section className={styles.closingSlide}>
       <img src="https://cdn.sanity.io/files/ppq16wpu/production/f4fbfd1cf112b5d16a11cd8800b9b8d5f02ae496.gif" alt="" className={styles.closingGif}/>
+      <div className={styles.closingSocials}>
+        <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>Instagram</a>
+        <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>LinkedIn</a>
+      </div>
     </section>
   )
 }

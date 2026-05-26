@@ -452,6 +452,10 @@ function ClosingSlide() {
         alt=""
         className={styles.closingGif}
       />
+      <div className={styles.closingSocials}>
+        <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>Instagram</a>
+        <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>LinkedIn</a>
+      </div>
     </section>
   )
 }
