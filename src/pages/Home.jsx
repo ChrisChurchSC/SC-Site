@@ -296,10 +296,6 @@ export default function Home() {
 
       {/* Row 3 */}
       <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169}`} style={{ gridColumn: '1 / span 7' }}>
-          <img src={sanityImg("https://cdn.sanity.io/images/ppq16wpu/production/7ea8fad6d92324bb7ed52d4a260da47580a06d8c-2001x1096.png", { w: 1400 })} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <span className={styles.label}>010</span>
-        </div>
         {blockLink('011', `${styles.block} ${styles.r11} ${styles.blockLink}`, { gridColumn: '8 / span 5' }, <>
           {blockMedia('011')}
           <span className={styles.label}>011</span>
