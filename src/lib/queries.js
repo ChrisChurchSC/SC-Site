@@ -69,6 +69,11 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   clients
 }`
 
+export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {
+  "src": coalesce(videoFile.asset->url, image.asset->url),
+  "isVideo": defined(videoFile.asset)
+}`
+
 export const CAREERS_PAGE_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0] {
   headerLabel,
   headline,
@@ -122,6 +127,31 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug &
   }
 }`
 
+// Capabilities page: each top-level client with its key media for the
+// asymmetric mosaic. We pull a flat list of media items per project by
+// projecting each section type into a uniform shape; the page drops
+// projects with too few tiles (catches sub-projects and stubs).
+export const CAPABILITIES_QUERY = `*[_type == "project" && published == true] | order(order asc) {
+  _id,
+  "n": string(order),
+  name,
+  "slug": slug.current,
+  tagline,
+  summary,
+  category,
+  "tiles": sections[]{
+    _type,
+    "src": coalesce(videoFile.asset->url, image.asset->url),
+    ratio,
+    "isVideo": defined(videoFile.asset),
+    "grid": images[]{
+      "src": coalesce(videoFile.asset->url, image.asset->url),
+      "isVideo": defined(videoFile.asset),
+      ratio
+    }
+  }
+}`
+
 export const OPEN_ROLES_QUERY = `*[_type == "openRole" && active == true] | order(_createdAt asc) {
   _id,
   title,
@@ -147,6 +177,56 @@ export const CLIENT_OVERVIEW_QUERY = `*[_type == "project" && slug.current == $s
       sections[_type == "imageGridSection"][0].images[defined(image.asset)][0].image.asset->url
     ),
     "thumbnailVideo": thumbnailVideoFile.asset->url
+  }
+}`
+
+export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current == $slug][0] {
+  _id,
+  track,
+  password,
+  clientName,
+  headline,
+  intro,
+  whyHeading,
+  whyBody,
+  foundationHeading,
+  foundationBody,
+  packagesHeading,
+  packagesIntro,
+  anonymizedWorkHeading,
+  anonymizedWork,
+  capabilitiesHeading,
+  testimonialQuote,
+  testimonialAttribution,
+  trustLogos,
+  approachHeading,
+  approachBullets,
+  faqHeading,
+  faqs[]{ question, answer },
+  signoff,
+  closingLinkText,
+  closingLinkHref,
+  ctaText,
+  ctaHref,
+  "caseStudies": caseStudies[]-> {
+    "slug": slug.current,
+    "n": string(order),
+    name,
+    type,
+    tagline,
+    "subCount": count(*[_type == "project" && string::startsWith(slug.current, ^.slug.current + "-")]),
+    "thumbnail": coalesce(
+      thumbnailImages[0].asset->url,
+      sections[_type == "imageFullSection" && defined(image.asset)][0].image.asset->url,
+      sections[_type == "imageGridSection"][0].images[defined(image.asset)][0].image.asset->url
+    ),
+    "thumbnailVideo": thumbnailVideoFile.asset->url
+  },
+  "featuredThoughts": featuredThoughts[]-> {
+    "slug": slug.current,
+    title,
+    excerpt,
+    publishedAt
   }
 }`
 

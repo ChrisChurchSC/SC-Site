@@ -14,14 +14,31 @@ import About from './pages/About'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
+import LandingHub from './pages/LandingHub'
+import Capabilities from './pages/Capabilities'
+import AgencyCapabilities from './pages/AgencyCapabilities'
+import BrandSystems from './pages/BrandSystems'
+import ContentPrograms from './pages/ContentPrograms'
+import DigitalProducts from './pages/DigitalProducts'
+import ContentPackages from './pages/ContentPackages'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
+import DeckGate from './components/DeckGate'
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return null
+}
+
+function ChromeGate({ children }) {
+  // Hide global chrome (side nav, back button, theme toggle) on full-bleed
+  // presentation routes like /capabilities.
+  const { pathname } = useLocation()
+  const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
+  if (fullBleed) return null
+  return children
 }
 
 function BackButton() {
@@ -58,9 +75,11 @@ export default function App() {
           <ScrollToTop />
           <TransitionBar />
           <Cursor />
-          <Nav />
-          <ThemeToggle />
-          <BackButton />
+          <ChromeGate>
+            <Nav />
+            <ThemeToggle />
+            <BackButton />
+          </ChromeGate>
           <div className="theme-layer">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -72,6 +91,13 @@ export default function App() {
               <Route path="/thoughts" element={<Thoughts />} />
               <Route path="/thoughts/:slug" element={<ThoughtPost />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/landing-pages" element={<LandingHub />} />
+              <Route path="/capabilities" element={<DeckGate><Capabilities /></DeckGate>} />
+              <Route path="/agency-capabilities" element={<DeckGate><AgencyCapabilities /></DeckGate>} />
+              <Route path="/brand-systems" element={<DeckGate><BrandSystems /></DeckGate>} />
+              <Route path="/content-programs" element={<DeckGate><ContentPrograms /></DeckGate>} />
+              <Route path="/digital-products" element={<DeckGate><DigitalProducts /></DeckGate>} />
+              <Route path="/content-packages" element={<DeckGate><ContentPackages /></DeckGate>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

@@ -1,0 +1,3026 @@
+.main {
+  /* Full-bleed presentation: chrome is hidden on /capabilities (see App.jsx). */
+  padding: 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.notFound {
+  padding: 80px 40px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Stage: 16:9 slide fills the viewport, controls overlay at bottom ── */
+.stage {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+  background: #050505;
+}
+
+.slideFrame {
+  aspect-ratio: 16 / 9;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  background: #0e0e0e;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Slide content: 2-col text + mosaic, mosaic fills the slide height ── */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: 1fr;
+  gap: 24px;
+  padding: 20px 28px;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .slide { grid-template-columns: 220px 1fr; gap: 18px; padding: 16px 20px; }
+}
+
+/* ── Left text column ── */
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: hidden;
+}
+
+.ticks {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.ticks span {
+  flex: 1;
+  height: 2px;
+}
+
+.ticks span:nth-child(1) { background: linear-gradient(to right, rgba(255,255,255,0.55), rgba(255,255,255,0.35)); }
+.ticks span:nth-child(2) { background: linear-gradient(to right, rgba(255,255,255,0.35), rgba(255,255,255,0.15)); }
+.ticks span:nth-child(3) { background: linear-gradient(to right, rgba(255,255,255,0.15), rgba(255,255,255,0.04)); }
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.body p {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1vw, 15px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+}
+
+.openLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  margin-top: auto;
+  transition: color 0.15s;
+}
+
+.openLink:hover { color: rgba(255, 255, 255, 0.95); }
+
+/* ── Pillar cards on client slides ── */
+.pillarCards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.pillarCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pillarLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pillarSub {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(10px, 0.85vw, 12px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Mosaic: 4×4 grid that fills the slide exactly (Smallhold pattern) ──
+   Cells are roughly 16:9 in a typical slide so 1×1 reads as wide-accent,
+   1×2 reads as near-square portrait, and 2×2 is the big 16:9 feature. */
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-auto-flow: dense;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+}
+
+.tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #161616;
+}
+
+.tile_wide   { grid-column: span 2; grid-row: span 1; }
+.tile_small  { grid-column: span 1; grid-row: span 1; }
+.tile_tall   { grid-column: span 1; grid-row: span 2; }
+.tile_hero   { grid-column: span 2; grid-row: span 2; }
+.tile_column { grid-column: span 1; grid-row: span 3; }
+
+.tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #161616;
+}
+
+.tileMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Controls (overlay at bottom) ── */
+.controls {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 10px 14px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.stage:hover .controls,
+.controls:focus-within { opacity: 1; pointer-events: auto; }
+
+.navBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.navBtn:hover:not(:disabled) { color: rgba(255, 255, 255, 0.95); border-color: rgba(255, 255, 255, 0.32); }
+.navBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.counter {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 64px;
+  text-align: center;
+}
+
+.counterDim { color: rgba(255, 255, 255, 0.35); }
+
+/* ── Jump menu ── */
+.menuWrap {
+  position: relative;
+}
+
+.menuIconBtn {
+  padding: 9px 13px;
+  line-height: 0;
+}
+
+.menuBtnActive {
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.jumpMenu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 4px;
+  min-width: 520px;
+  z-index: 100;
+}
+
+.jumpCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.jumpCol:last-child {
+  border-right: none;
+}
+
+.jumpSection {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.95vw, 13px);
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+  border: none;
+  padding: 6px 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  margin-bottom: 6px;
+  transition: color 0.12s;
+}
+
+.jumpSection:hover { color: #fff; }
+
+.jumpArea {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.55vw, 9px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  background: transparent;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: color 0.12s, background 0.12s;
+}
+
+.jumpArea:hover {
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.jumpCount {
+  font-size: clamp(6px, 0.48vw, 8px);
+  color: rgba(255, 255, 255, 0.2);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   INTRO SLIDES — shared
+   ────────────────────────────────────────────────────────────────────── */
+
+.introSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 28px;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .introSlide { padding: 16px 20px; }
+}
+
+.pill {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin: 0 0 36px;
+  align-self: flex-start;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 40px;
+  max-width: 1000px;
+}
+
+.subhead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  margin: -28px 0 40px;
+  max-width: 700px;
+}
+
+.slideFooter {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 28px 0 0;
+}
+
+/* ── Closing ── */
+.closingSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.closingGif {
+  max-height: 68%;
+  max-width: 68%;
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+/* ── Cover ── */
+.coverSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 28px 28px 20px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Full-bleed gradient video background. */
+.coverVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}
+
+.coverDivider {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #1e1e1e;
+  z-index: 2;
+}
+
+/* Heavy film-grain noise layer (fine). */
+.coverSlide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.95 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Coarser noise layer for added grit. */
+.coverSlide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.85 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>");
+  opacity: 0.32;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.coverLogo,
+.coverCorner {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 1100px) {
+  .coverSlide { padding: 16px 20px; }
+}
+
+.coverLogo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 1400px;
+  margin: 0 auto 32px;
+  color: #1e1e1e;
+}
+
+.coverMark {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  width: 56px;
+  height: 56px;
+  color: #1e1e1e;
+  z-index: 2;
+}
+
+@media (max-width: 1100px) {
+  .coverMark { left: 20px; bottom: 20px; width: 44px; height: 44px; }
+}
+
+.coverCornerStack {
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 320px;
+  z-index: 2;
+}
+
+.coverCorner {
+  padding: 14px 16px;
+  background: #161616;
+  border-radius: 4px;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: left;
+}
+
+.coverCornerTitle {
+  padding: 14px 16px;
+  background: #161616;
+  border-radius: 4px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: left;
+}
+
+@media (max-width: 1100px) {
+  .coverCornerStack { right: 20px; bottom: 20px; max-width: 260px; }
+  .coverCorner { font-size: 10px; }
+  .coverCornerTitle { font-size: 14px; }
+}
+
+/* ── Who we are: video background + bottom-left text card ── */
+.whoWeAreSlide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.whoWeAreVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.whoWeAreScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.3) 45%,
+    rgba(0, 0, 0, 0.05) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.whoWeAreCard {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  max-width: min(560px, 50%);
+  padding: 28px 30px;
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.whoWeAreHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.98);
+  margin: 0 0 18px;
+}
+
+.whoWeAreBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.whoWeAreBody p {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* ── Prose (legacy) ── */
+.proseHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 3.4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 32px;
+  max-width: 1100px;
+}
+
+.proseBody {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 880px;
+}
+
+.proseBody p {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+/* ── Generic column layouts ── */
+.threeCol {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Wedge / compare cards ── */
+.compareCard {
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.compareName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.compareBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+}
+
+/* ── Offering (Build / Grow) — deck-matched layout ──
+   Big headline top-left, two stacked cards below taking ~55% width. Each
+   card: name in serif, mono subtitle, then a flowing-text body. */
+
+.offeringStack {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .offeringStack { grid-template-columns: 1fr; grid-auto-rows: 1fr; }
+}
+
+.offeringCard {
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.offeringImage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: #1f1f1f;
+}
+
+.offeringCardText {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  margin-top: auto;
+  background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 40%, rgba(0,0,0,0.5) 70%, transparent 100%);
+}
+
+.offeringName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.offeringTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 18px;
+}
+
+.offeringBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+  margin: auto 0 0;
+}
+
+/* ── Doors (Build / Grow) ── */
+.doorCard {
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.doorTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.doorName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(36px, 3.4vw, 48px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.doorList {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.doorList li {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+  padding-left: 18px;
+  position: relative;
+}
+
+.doorList li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Outcomes ── */
+.outcomeCard {
+  background: #161616;
+  border: none;
+  border-radius: 4px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.outcomeTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.outcomeTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.outcomeBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+  flex: 1;
+}
+
+.outcomeSource {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 8px 0 0;
+}
+
+/* ── Disciplines — 5×2 grid of cards, no headline, no numbers ── */
+.disciplinesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 16px;
+}
+
+.disciplineCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.disciplineName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 1.7vw, 26px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.disciplineBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 0.95vw, 14px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ── Numbered list (How we work) ── */
+.numberedLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  flex: 1;
+  min-height: 0;
+}
+
+.numberedLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+}
+
+.numberedMosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-auto-flow: dense;
+  gap: 6px;
+  min-height: 0;
+}
+
+.mosaicTile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #161616;
+}
+
+.numberedCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.numberedCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.numberedNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.numberedTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 1.6vw, 24px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.numberedBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ── Services — Build / Grow columns with grouped service lists ── */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Services — pillar + chip layout ── */
+.servicesPillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+.servicesPillar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 32px 0 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding-right: 32px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.servicesPillar:last-child {
+  border-right: none;
+  padding-right: 0;
+  padding-left: 32px;
+}
+
+.servicesPillar:not(:first-child):not(:last-child) {
+  padding-left: 32px;
+}
+
+.servicesPillarHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.servicesPillarName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+.servicesPillarTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.servicesTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: flex-start;
+  overflow: hidden;
+}
+
+.servicesTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(9px, 0.75vw, 11px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.servicesCol {
+  background: #161616;
+  border-radius: 4px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.servicesColHead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.servicesColName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.98);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+.servicesColTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.servicesGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.servicesGroup {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.servicesGroupHead {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.servicesGroupItems {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* ── Packages — 3-column variant of servicesGrid ── */
+.packagesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+
+.packagesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.packagesRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.packagesRow:last-child { border-bottom: none; }
+
+.packagesText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.packagesName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.packagesGoal {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(12px, 0.95vw, 13px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.packagesPrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(12px, 1vw, 14px);
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ── Pricing — simple: statement + rate card ── */
+.pricingLead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+  margin: -8px 0 36px;
+  max-width: 860px;
+}
+
+.rateCard {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+  align-items: start;
+}
+
+.rateColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 48px;
+  min-height: 0;
+}
+
+.rateCol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.rateRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.rateValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(12px, 1vw, 14px);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.rateBlended {
+  background: #161616;
+  border-radius: 4px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rateBlendedLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.rateBlendedValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+/* ── Brand Systems — capability areas (5-col) ── */
+.bsCapGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.bsCapCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bsCapName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 22px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.bsCapDesc {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.85vw, 13px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 4px;
+}
+
+/* ── Brand Systems — outcome detail slides ── */
+.bsDetailTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 14px;
+  max-width: 900px;
+}
+
+.bsDetailMain {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.bsDetailImage {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #161616;
+  align-self: start;
+  height: 100%;
+  width: auto;
+}
+
+.bsDetailCards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 12px;
+  min-height: 0;
+}
+
+.bsDetailCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.bsDetailLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.bsDetailBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.bsDetailStats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.bsDetailStat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bsDetailStat:last-child {
+  border-bottom: none;
+}
+
+.bsDetailMetric {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.7vw, 10px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.bsDetailResult {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Brand Systems — 4×2 outcomes ── */
+.bsOutcomesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.bsOutcomeCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bsOutcomeTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 19px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.bsOutcomeBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.9vw, 13px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ── Brand Systems — packages (2-col list) ── */
+.bsPackGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.bsPackIncludes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 8px 0 0;
+}
+
+.bsPackNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 16px 0 0;
+}
+
+/* ── Brand Systems — services (5-col) ── */
+.bsSvcGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.bsSvcCol {
+  background: #161616;
+  border-radius: 4px;
+  padding: 20px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bsSvcCol .servicesTags {
+  overflow: visible;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.bsSvcCol .servicesTag {
+  font-size: clamp(7px, 0.62vw, 9px);
+  padding: 3px 8px;
+  letter-spacing: 0.12em;
+}
+
+.bsSvcHead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bsSvcRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.bsSvcName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(10px, 0.85vw, 12px);
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.3;
+}
+
+.bsSvcPrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.7vw, 10px);
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Commitment tiers ── */
+.commitmentTiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.commitmentTier {
+  background: #161616;
+  border-radius: 6px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.commitmentLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.commitmentRate {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.commitmentBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.pricingFooterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pricingNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+/* ── Selected work bridge ── */
+.selectedGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.selectedTile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #161616;
+}
+
+.selectedName {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  right: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+/* ── Content Programs: 4×2 service grid ── */
+.cpSvcGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.cpSvcGrid .bsSvcCol .servicesTags {
+  overflow: visible;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.cpSvcGrid .bsSvcCol .servicesTag {
+  font-size: clamp(6px, 0.58vw, 8.5px);
+  padding: 2px 7px;
+  letter-spacing: 0.1em;
+}
+
+/* ── Content Packages — radial deck ── */
+.pkgRadialSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  min-height: 0;
+}
+
+.pkgInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px 24px 32px;
+  background: #0a0a0a;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pkgNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 20px;
+}
+
+.pkgName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.8vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 14px;
+}
+
+.pkgGoal {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 0.95vw, 14px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 20px;
+  flex: 1;
+}
+
+.pkgPrice {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 18px);
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.pkgRadialArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #060606;
+  padding: 32px;
+  min-height: 0;
+  overflow: visible;
+}
+
+/* ── Radial diagram ── */
+.radialWrap {
+  position: relative;
+  height: 82%;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+}
+
+.radialSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.radialCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.radialCenterLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(5px, 0.45vw, 7px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.4;
+}
+
+.radialNode {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: clamp(30px, 2.8vw, 42px);
+  height: clamp(30px, 2.8vw, 42px);
+}
+
+.radialNodeCircle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.radialNodeCircle svg {
+  width: 46%;
+  height: 46%;
+}
+
+.radialNodeLabel {
+  position: absolute;
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(5.5px, 0.5vw, 7.5px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1.3;
+  width: max-content;
+}
+
+/* ── Package detail slide ── */
+.pkgDetailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.pkgDetailLeft {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pkgDetailLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0 0 6px;
+}
+
+.pkgDetailGoal {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+}
+
+.pkgDetailPrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(16px, 1.5vw, 22px);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 20px;
+}
+
+.pkgSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 0;
+}
+
+.pkgCardArea {
+  background: #060606;
+  padding: 20px 20px 22px;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pkgFlowCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pkgMosaic {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pkgInfoMid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 12px 0;
+  margin: 12px 0 0;
+}
+
+.pkgInfoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pkgInfoCard {
+  background: #161616;
+  border-radius: 3px;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.pkgInfoSectionLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.pkgInfoSectionBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(10px, 0.85vw, 12px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.pkgMediaSpendYes {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(200, 225, 170, 0.7);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pkgMediaSpendYes::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(190, 220, 150, 0.6);
+  flex-shrink: 0;
+}
+
+.pkgMediaSpendNo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pkgMediaSpendNo::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.pkgMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pkgMetricTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.55vw, 9px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 2px;
+  padding: 3px 7px;
+}
+
+.pkgMosaicTile {
+  background: #1c1c1c;
+  overflow: hidden;
+}
+
+.pkgMosaicImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.svcPortraitImg {
+  background: #1c1c1c;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.svcPortraitImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.flowDiagram {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.flowItem {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.flowStep {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.flowStepHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.flowStepIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flowStepIcon svg {
+  width: 44%;
+  height: 44%;
+}
+
+.flowStepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.flowStepLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 1.0vw, 15px);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.flowStepSub {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7.5px, 0.6vw, 9.5px);
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.46);
+}
+
+.flowStepDelivs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-left: 40px;
+}
+
+.flowStepDeliv {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(6.5px, 0.52vw, 8px);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 2px;
+  padding: 2px 6px;
+}
+
+.flowLine {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 6px;
+  padding-left: 27px;
+}
+
+.flowLine::before {
+  content: '';
+  width: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.flowLine::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 5px solid rgba(255, 255, 255, 0.14);
+  margin-left: -3px;
+}
+
+.pkgBottomCard {
+  margin-top: auto;
+  background: #161616;
+  border-radius: 3px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pkgTarget {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  margin: 8px 0 0;
+}
+
+.pkgCadence {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7.5px, 0.6vw, 9.5px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  margin: 0;
+}
+
+.pkgDetailCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+/* ── Content Packages: media spend appendix ── */
+.pkgMediaSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  min-height: 0;
+}
+
+.pkgMediaLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  padding: 40px 48px 44px;
+  background: #0e0e0e;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pkgMediaRatios {
+  margin: 20px 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pkgMediaRatioHeader {
+  display: grid;
+  grid-template-columns: 1fr 110px 1fr;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.pkgMediaRatioHeader span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.54vw, 8.5px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.pkgMediaRatioHeader span:nth-child(2) {
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.pkgMediaRatioRow {
+  display: grid;
+  grid-template-columns: 1fr 110px 1fr;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pkgMediaRatioRow:last-child {
+  border-bottom: none;
+}
+
+.pkgMediaRatioTier {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.92vw, 14px);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 10px 12px;
+}
+
+.pkgMediaRatioValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(10px, 0.82vw, 13px);
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 10px 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  white-space: nowrap;
+}
+
+.pkgMediaRatioNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.56vw, 9px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.pkgMediaNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.1em;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.pkgMediaRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 28px 24px;
+  background: #060606;
+}
+
+.pkgMediaSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pkgMediaPlatforms {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pkgMediaPlatform {
+  background: #161616;
+  border-radius: 4px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.pkgMediaPlatformName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+}
+
+.pkgMediaPlatformUse {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(10px, 0.85vw, 13px);
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pkgMediaPlatformRange {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.pkgMediaPlatformRangeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-end;
+}
+
+.pkgMediaPlatformRangeLine {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.pkgMediaPlatformRangeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7.5px, 0.6vw, 9px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.pkgMediaTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pkgMediaTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.56vw, 9px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(200, 225, 170, 0.7);
+  background: rgba(190, 220, 150, 0.06);
+  border: 1px solid rgba(190, 220, 150, 0.16);
+  border-radius: 2px;
+  padding: 3px 8px;
+}
+
+/* ── Content Packages: intro slide ── */
+.pkgIntroSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  min-height: 0;
+}
+
+.pkgIntroLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 48px 44px;
+  background: #0e0e0e;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pkgIntroEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  margin: 0 0 22px;
+}
+
+.pkgIntroHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 2.8vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 26px;
+}
+
+.pkgIntroBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 520px;
+}
+
+.pkgIntroRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 28px 24px;
+  background: #060606;
+}
+
+.pkgIntroCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pkgIntroCardLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  margin: 0;
+}
+
+.pkgIntroCardBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 1.0vw, 15px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.pkgSectionSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 44px 56px;
+  background: #080808;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pkgVerticalSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #080808;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pkgVerticalLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 44px 48px 44px 56px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pkgVerticalRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 44px 56px 44px 48px;
+}
+
+.pkgVerticalDefCard {
+  padding: 20px 22px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+}
+
+.pkgVerticalDefLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 10px;
+}
+
+.pkgVerticalDefBody {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8.5px, 0.68vw, 10.5px);
+  letter-spacing: 0.07em;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.38);
+  margin: 0;
+}
+
+.pkgSectionInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 560px;
+}
+
+.pkgSectionEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0 0 20px;
+}
+
+.pkgSectionTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(36px, 3.6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 22px;
+}
+
+.pkgSectionBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.48);
+  margin: 0 0 28px;
+}
+
+.pkgSectionCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.65vw, 10px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+.pkgAreaCounts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pkgSubSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 44px 56px;
+  background: #101010;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.pkgSubTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 2.4vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 22px;
+}
+
+/* ── Table of contents slide ─────────────────────────────────────────────── */
+
+.pkgTocSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  background: #080808;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.pkgTocLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 44px 40px 44px 56px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pkgTocHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 3vw, 48px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 16px 0 0;
+}
+
+.pkgTocBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 24px 40px 24px 32px;
+  gap: 12px;
+  overflow: hidden;
+  align-content: start;
+  min-height: 0;
+}
+
+.pkgTocColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: stretch;
+}
+
+.pkgTocSectionBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 2px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pkgTocSectionBtn:hover {
+  background: #222;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.pkgTocSectionName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 1vw, 14px);
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+}
+
+.pkgTocGroupLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.6vw, 9px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0 0 6px 2px;
+}
+
+.pkgTocItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pkgTocItem:hover {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.pkgTocNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(9px, 0.65vw, 10px);
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.pkgTocName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(10px, 0.9vw, 13px);
+  color: rgba(255, 255, 255, 0.75);
+  flex: 1;
+}
+
+.pkgTocCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.5vw, 8px);
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.pkgTocArrow {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.pkgTocItem:hover .pkgTocArrow,
+.pkgTocSectionBtn:hover .pkgTocArrow {
+  color: rgba(255, 255, 255, 0.55);
+  transform: translateX(3px);
+}
+
+/* ── Per-service slides ───────────────────────────────────────────────────── */
+
+.pkgServiceSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 44px 56px;
+  background: #080808;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pkgServiceTop {
+  display: flex;
+  align-items: flex-start;
+}
+
+.pkgServiceAreaTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(8px, 0.6vw, 9px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  padding: 4px 10px;
+}
+
+.pkgServiceMid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 700px;
+}
+
+.pkgServiceName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 3.8vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.pkgServiceDesc {
+  font-size: clamp(13px, 1.15vw, 17px);
+  color: rgba(255, 255, 255, 0.44);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 520px;
+}
+
+.pkgServiceBottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.pkgServiceCounter {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0;
+}
+
+.pkgServicePricing {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+}
+
+.pkgServiceHours {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(10px, 0.85vw, 13px);
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.04em;
+}
+
+.pkgServicePrice {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(18px, 1.8vw, 28px);
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: -0.02em;
+}
+
+/* ── Production Tiers slide ── */
+.pkgTiersSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  min-height: 0;
+}
+
+.pkgTiersLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  padding: 40px 40px 44px 48px;
+  background: #0e0e0e;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pkgTiersRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 44px 28px 36px;
+  background: #060606;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pkgTiersTable {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.pkgTiersHeader {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 68px 120px;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pkgTiersHeader span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(6.5px, 0.5vw, 8px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  padding: 8px 14px;
+}
+
+.pkgTiersRow {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 68px 120px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+}
+
+.pkgTiersRow:last-child {
+  border-bottom: none;
+}
+
+.pkgTiersRow.isBaseline {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.pkgTiersName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(10px, 0.9vw, 13px);
+  color: rgba(255, 255, 255, 0.82);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pkgTiersBaselinePip {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(5.5px, 0.44vw, 7px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+  padding: 1px 4px;
+  flex-shrink: 0;
+}
+
+.pkgTiersDesc {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.56vw, 9px);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 10px 14px;
+  line-height: 1.5;
+}
+
+.pkgTiersShoot {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(6.5px, 0.5vw, 8px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.pkgTiersShoot.hasShoot {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pkgTiersScale {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pkgTiersBar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pkgTiersBarFill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+}
+
+.pkgTiersRow.isBaseline .pkgTiersBarFill {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.pkgTiersMult {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7px, 0.52vw, 8.5px);
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+  width: 28px;
+  text-align: right;
+}
+
+.pkgTiersRow.isBaseline .pkgTiersMult {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pkgTiersNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(7.5px, 0.6vw, 9.5px);
+  letter-spacing: 0.09em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.28);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}

@@ -14,7 +14,7 @@ const FALLBACK = {
     { caption: 'The team, offsite 2024' },
   ],
   whatItsLikeLabel: "What It's Like",
-  whatItsLikeBody: "You'll work directly with clients from day one. You'll have opinions on strategy, execute on creative, and be involved across the full lifecycle of a project. It moves fast and the feedback loop is short. That's the point.",
+  whatItsLikeBody: "You'll work directly with clients from day one. You'll have opinions on strategy, execute on creative, and be involved across the full lifecycle of a project.",
   realitiesLabel: 'The Realities',
   realities: [
     { label: 'Location',   value: 'Philadelphia, PA' },
