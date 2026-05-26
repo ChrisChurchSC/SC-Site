@@ -4,13 +4,11 @@
     <meta charset="UTF-8" />
     <script>
       var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        '/?/' +
-        l.pathname.slice(1).replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // Strip trailing slash and any stuck ?/ loop pattern from path
+      var path = l.pathname.slice(1).replace(/\/$/, '');
+      // If search already starts with '/', we're stuck in an old redirect loop — ignore it
+      var search = (l.search && l.search.charAt(1) !== '/') ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+      l.replace(l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/?/' + path.replace(/&/g, '~and~') + search + l.hash);
     </script>
   </head>
 </html>
