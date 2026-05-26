@@ -70,9 +70,11 @@ export default function Home() {
   const blockMedia = (label, style = {}) => {
     const b = grid[label]
     const mediaStyle = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }
-    // Block 023: tile the video as a 3x3 grid inside the block
+    // Block 023: tile the video as a 3x3 grid inside the block (single video on mobile)
     if (label === '023' && b?.videoUrl) {
       const url = assetUrl(b.videoUrl)
+      const mobile = typeof window !== 'undefined' && window.innerWidth <= 768
+      if (mobile) return <LazyVideo src={url} style={mediaStyle} onError={e => e.target.style.display = 'none'} />
       return (
         <div style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(3, 1fr)' }}>
           {Array.from({ length: 9 }).map((_, i) => (
