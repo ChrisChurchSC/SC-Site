@@ -467,7 +467,7 @@ function CoverSlide() {
     <section className={styles.coverSlide}>
       <video
         className={styles.coverVideo}
-        src="/cover-gradient.mp4"
+        src="https://cdn.sanity.io/files/ppq16wpu/production/6d752bbf01b6f5301b48d62598d4e1ee51a44251.mp4"
         autoPlay
         loop
         muted
@@ -517,7 +517,7 @@ function CoverSlide() {
 function ClosingSlide() {
   return (
     <section className={styles.closingSlide}>
-      <img src="/reel-preview.gif" alt="" className={styles.closingGif} />
+      <img src="https://cdn.sanity.io/files/ppq16wpu/production/f4fbfd1cf112b5d16a11cd8800b9b8d5f02ae496.gif" alt="" className={styles.closingGif} />
     </section>
   )
 }

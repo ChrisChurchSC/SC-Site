@@ -3083,7 +3083,7 @@ function PkgIntroSlide() {
 function PkgCoverSlide() {
   return (
     <section className={styles.coverSlide}>
-      <video className={styles.coverVideo} src="/cover-gradient.mp4" autoPlay loop muted playsInline aria-hidden="true"/>
+      <video className={styles.coverVideo} src="https://cdn.sanity.io/files/ppq16wpu/production/6d752bbf01b6f5301b48d62598d4e1ee51a44251.mp4" autoPlay loop muted playsInline aria-hidden="true"/>
       <svg className={styles.coverLogo} viewBox="0 0 168 24" xmlns="http://www.w3.org/2000/svg" aria-label="Super Conscious" role="img">
         <path d="M132.995 4.23605C133.69 4.23605 134.242 3.72599 134.242 2.99733C134.242 2.26868 133.69 1.73499 132.995 1.73499C132.3 1.73499 131.772 2.26868 131.772 2.99733C131.772 3.72599 132.3 4.23605 132.995 4.23605Z" fill="currentColor"/>
         <path d="M81.4989 1.03586H81.5029V1.03192C83.232 1.03192 84.2954 2.49317 85.0654 4.23209C85.3628 4.90364 85.5144 5.66774 85.5144 5.66774L85.9359 5.58897L85.4317 0.0984497L85.0339 0.12602C85.0615 0.606539 84.902 0.927542 84.3742 0.927542C83.7144 0.927542 82.6333 0.447023 81.2882 0.447023C75.9848 0.447023 70.9453 7.31608 70.9453 13.4624C70.9453 17.151 73.1352 19.1814 75.6697 19.1814C78.2042 19.1814 81.1582 17.017 83.1374 13.9705L82.7672 13.7046C80.8136 16.2707 78.8364 17.3932 77.1211 17.3932C74.8268 17.3932 73.3478 15.7901 73.3478 12.716C73.3478 7.07582 77.3318 1.03782 81.5009 1.03782L81.4989 1.03586Z" fill="currentColor"/>
@@ -3321,7 +3321,7 @@ function SvcSlide({ svc, num, total }) {
 function PkgClosingSlide() {
   return (
     <section className={styles.closingSlide}>
-      <img src="/reel-preview.gif" alt="" className={styles.closingGif}/>
+      <img src="https://cdn.sanity.io/files/ppq16wpu/production/f4fbfd1cf112b5d16a11cd8800b9b8d5f02ae496.gif" alt="" className={styles.closingGif}/>
     </section>
   )
 }
