@@ -332,13 +332,13 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('014')}</p>
         </>)}
-        {blockLink('004', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '4 / span 3' }, <>
+        {blockLink('004', `${styles.block} ${styles.r169} ${styles.blockLink}`, { gridColumn: '4 / span 6' }, <>
           {blockMedia('004')}
           <span className={styles.label}>004</span>
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('004') || 'Deep Dive Films'}</p>
         </>)}
-        {blockLink('016', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
+        {blockLink('016', `${styles.block} ${styles.r916} ${styles.blockLink}`, { gridColumn: '10 / span 3' }, <>
           {blockMedia('016')}
           <span className={styles.label}>016</span>
           <span className={styles.csTag}>Case Study</span>
