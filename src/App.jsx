@@ -14,7 +14,6 @@ import About from './pages/About'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
-import ClientLanding from './pages/ClientLanding'
 import LandingHub from './pages/LandingHub'
 import Capabilities from './pages/Capabilities'
 import AgencyCapabilities from './pages/AgencyCapabilities'
@@ -99,7 +98,6 @@ export default function App() {
               <Route path="/content-programs" element={<DeckGate><ContentPrograms /></DeckGate>} />
               <Route path="/digital-products" element={<DeckGate><DigitalProducts /></DeckGate>} />
               <Route path="/content-packages" element={<DeckGate><ContentPackages /></DeckGate>} />
-              <Route path="/clients/:slug" element={<ClientLanding />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
