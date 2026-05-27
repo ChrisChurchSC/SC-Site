@@ -875,6 +875,9 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: "Defined Coldwater Club's brand foundation and elevated positioning in a crowded hemp beverage category." },
     { key: 'content', achievement: 'Producing ongoing content that builds cultural relevance and fuels community growth.' },
   ],
+  'fieldston': [
+    { key: 'brand', achievement: "Defined Fieldston Power's positioning and narrative, delivering a confident, investor-ready brand for a large-scale battery storage company." },
+  ],
 }
 
 function ClientSlide({ client }) {
