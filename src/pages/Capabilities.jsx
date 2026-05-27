@@ -38,6 +38,23 @@ function pickVariant(uniqueCount) {
   return counts.find(c => c <= uniqueCount) ?? null
 }
 
+// Per-slug layout overrides — use explicit gridColumn/gridRow to force placement.
+// Dense auto-flow fills the remaining slots naturally around explicitly-placed tiles.
+const SLUG_VARIANT_OVERRIDE = {
+  talos: [
+    { shape: 'tall', gridColumn: '1', gridRow: '1 / 3' },
+    { shape: 'tall', gridColumn: '1', gridRow: '3 / 5' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'hero' },
+    { shape: 'tall' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'small' },
+  ],
+}
+
 const MIN_UNIQUE_TILES = 4
 
 function flattenTiles(sections) {
@@ -63,9 +80,11 @@ export default function Capabilities() {
   const clients = (data ?? [])
     .map(p => {
       const flat = flattenTiles(p.tiles)
+      const override = SLUG_VARIANT_OVERRIDE[p.slug]
       const variantCount = pickVariant(flat.length)
-      if (!variantCount || flat.length < MIN_UNIQUE_TILES) return { ...p, tiles: [], variant: null }
-      return { ...p, tiles: flat.slice(0, variantCount), variant: VARIANTS[variantCount] }
+      const variant = override ?? (variantCount ? VARIANTS[variantCount] : null)
+      if (!variant || flat.length < MIN_UNIQUE_TILES) return { ...p, tiles: [], variant: null }
+      return { ...p, tiles: flat.slice(0, variant.length), variant }
     })
     .filter(p => p.tiles.length > 0 && (p.summary || p.tagline))
 
@@ -719,10 +738,10 @@ function SelectedWorkSlide({ slide, thumbnails }) {
 // Client (case study) slide
 // ────────────────────────────────────────────────────────────────────────
 
-function Tile({ tile, className }) {
+function Tile({ tile, className, style }) {
   if (!tile) return null
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       {tile.isVideo
         ? <LazyVideo src={tile.src} className={styles.tileMedia} />
         : <img src={`${tile.src}?w=1600&q=80&auto=format`} alt="" loading="lazy" className={styles.tileMedia} />}
@@ -891,12 +910,16 @@ function ClientSlide({ client }) {
 
       <div className={styles.mosaic}>
         {client.tiles.map((tile, i) => {
-          const shape = client.variant[i].shape
+          const slot = client.variant[i]
+          const gridStyle = slot.gridColumn || slot.gridRow
+            ? { gridColumn: slot.gridColumn, gridRow: slot.gridRow }
+            : undefined
           return (
             <Tile
               key={`${client._id}-${i}`}
               tile={tile}
-              className={`${styles.tile} ${styles[`tile_${shape}`]}`}
+              className={`${styles.tile} ${styles[`tile_${slot.shape}`]}`}
+              style={gridStyle}
             />
           )
         })}
