@@ -69,52 +69,6 @@ const CONTENT_INTRO_SLIDES = [
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
   },
   {
-    id: 'outcomes', layout: 'outcomes',
-    pill: 'Why it matters',
-    cards: [
-      {
-        tag: 'Top of funnel',
-        title: 'Fill the top of funnel consistently.',
-        body: 'A structured content program creates a repeatable system for getting in front of new audiences and moving them toward a conversation. Pipeline stops being lumpy.',
-      },
-      {
-        tag: 'Nurture',
-        title: 'Stay visible between purchase moments.',
-        body: "Most prospects aren't ready to buy right now. Consistent content keeps you top of mind so that when they are, you're the first call they make.",
-      },
-      {
-        tag: 'Owned audience',
-        title: 'Build an audience you own.',
-        body: "Lead magnets, email programs, and editorial content grow a list you own, not one you rent from a platform that can change its algorithm overnight.",
-      },
-      {
-        tag: 'LTV',
-        title: 'Turn content into revenue.',
-        body: "Lifecycle and retention programs keep customers engaged, grow what they spend, and reduce churn. The economics of acquisition only work if customers stay.",
-      },
-      {
-        tag: 'Paid performance',
-        title: 'Make paid work harder.',
-        body: 'Strong creative is the single biggest lever in paid performance. Better ads get lower CPCs, higher CTRs, and better conversion across every platform.',
-      },
-      {
-        tag: 'Organic',
-        title: 'Get found by the right people.',
-        body: 'Editorial and long-form content earns organic search visibility and builds credibility with buyers who research before they talk to sales.',
-      },
-      {
-        tag: 'Launch',
-        title: 'Launch without scrambling.',
-        body: 'A GTM pack means you show up everywhere on launch day with consistent, high-quality materials across every channel. The moment lands the way it should.',
-      },
-      {
-        tag: 'ROI',
-        title: 'Prove ROI on content.',
-        body: 'Structured programs with clear deliverables, defined cadences, and measurable outputs give you something to track. Pipeline attribution you can report on.',
-      },
-    ],
-  },
-  {
     id: 'outcome-topfunnel', layout: 'outcome-detail',
     pill: 'Top of funnel',
     headline: 'Fill the top of funnel consistently.',
@@ -125,45 +79,6 @@ const CONTENT_INTRO_SLIDES = [
       { metric: 'MQLs per month', result: '+30–50% with a consistent content program (HubSpot)' },
       { metric: 'Cost per lead', result: '20–40% lower than paid-only strategy' },
       { metric: 'New audience reach', result: '+50–150% organic over 12 months' },
-    ],
-  },
-  {
-    id: 'outcome-nurture', layout: 'outcome-detail',
-    pill: 'Nurture',
-    headline: 'Stay visible between purchase moments.',
-    when: "When your sales cycle is long, buyers need time to get internal buy-in, or you're in a market where trust is earned over months, not days.",
-    before: "A prospect goes cold after a great first call. You follow up twice, then stop. Six months later they sign with a competitor who kept showing up.",
-    after: "A nurture program that runs in the background, keeping you present and credible until the timing is right. You become the obvious choice.",
-    stats: [
-      { metric: 'Email open rate', result: '30–45% on well-nurtured lists (vs. 20–30% industry avg)' },
-      { metric: 'Nurture-to-opportunity conversion', result: '+10–20%' },
-      { metric: 'Return visit rate', result: '+25–40%' },
-    ],
-  },
-  {
-    id: 'outcome-owned', layout: 'outcome-detail',
-    pill: 'Owned audience',
-    headline: 'Build an audience you own.',
-    when: "When you're spending on paid channels and want to capture that attention in an owned asset that compounds over time instead of resetting every cycle.",
-    before: "All your reach is rented. When the ad budget stops, so does the visibility. You're starting from zero every cycle.",
-    after: "A growing email list and content library that generates attention without paid spend. Every piece of content works harder over time, not less.",
-    stats: [
-      { metric: 'Email list growth', result: '+20–40% per month with active lead magnets' },
-      { metric: 'Lead magnet conversion', result: '15–25% of landing page visitors' },
-      { metric: 'Owned channel traffic', result: 'Grows from under 10% to 30–50% over 12 months' },
-    ],
-  },
-  {
-    id: 'outcome-ltv', layout: 'outcome-detail',
-    pill: 'LTV',
-    headline: 'Turn content into revenue.',
-    when: "When your acquisition cost is high and the economics only work if customers stay and expand. When churn is a bigger problem than awareness.",
-    before: "Customers buy once and disappear. No onboarding experience. No lifecycle communication. No reason to come back or upgrade.",
-    after: "Customers who understand the product, use it more deeply, and feel valued enough to stay. Retention improves. Expansion revenue becomes a real number.",
-    stats: [
-      { metric: 'Customer LTV', result: '+10–25% with lifecycle programs (Bain & Co)' },
-      { metric: 'Churn rate', result: '10–20% reduction with good onboarding content' },
-      { metric: 'Net revenue retention', result: '+10–15 percentage points' },
     ],
   },
   {
@@ -180,19 +95,6 @@ const CONTENT_INTRO_SLIDES = [
     ],
   },
   {
-    id: 'outcome-organic', layout: 'outcome-detail',
-    pill: 'Organic',
-    headline: 'Get found by the right people.',
-    when: "When your target buyers are doing their own research and you're not showing up in the conversations, searches, and platforms where they're looking for answers.",
-    before: "Great product, invisible brand. Competitors with worse solutions rank above you. Buyers who would be perfect customers never find you.",
-    after: "A body of content that earns organic reach over time. Whitepapers, reports, and editorial pieces that position you as the expert. Buyers arrive pre-sold.",
-    stats: [
-      { metric: 'Organic traffic', result: '+50–200% over 12–18 months' },
-      { metric: 'Content-attributed pipeline', result: '20–40% of total pipeline at maturity' },
-      { metric: 'Keyword rankings', result: 'Measurable gains within 3–6 months' },
-    ],
-  },
-  {
     id: 'outcome-launch', layout: 'outcome-detail',
     pill: 'Launch',
     headline: 'Launch without scrambling.',
@@ -203,19 +105,6 @@ const CONTENT_INTRO_SLIDES = [
       { metric: 'Launch-window signups and demos', result: '+50–100% vs. no coordinated campaign' },
       { metric: 'Traffic spike at launch', result: '2–5x baseline' },
       { metric: 'Multi-channel asset delivery', result: 'On time, on brand, across all channels' },
-    ],
-  },
-  {
-    id: 'outcome-roi', layout: 'outcome-detail',
-    pill: 'ROI',
-    headline: 'Prove ROI on content.',
-    when: "When you've invested in content before and struggled to show what it did, or when you need to justify marketing budget to a board or investor who wants pipeline attribution.",
-    before: "Content produced ad hoc. No clear connection between what was made and what it drove. Marketing is a cost centre because no one has made it a revenue centre.",
-    after: "A program with defined outputs, tracked distribution, and clear pipeline metrics. Lead volume, cost per lead, and content-attributed pipeline are visible and reportable.",
-    stats: [
-      { metric: 'Content-attributed pipeline', result: '20–40% of total (Demand Gen Report)' },
-      { metric: 'MQL-to-SQL conversion', result: '+10–20%' },
-      { metric: 'Cost per content-sourced lead', result: '3x lower than paid on average (Content Marketing Institute)' },
     ],
   },
   {
@@ -559,37 +448,34 @@ function CpOutcomesSlide({ slide }) {
   )
 }
 
-function CpOutcomeDetailSlide({ slide, tile }) {
+function CpOutcomeDetailSlide({ slide }) {
   return (
     <section className={styles.introSlide}>
       <Pill>{slide.pill}</Pill>
       <h2 className={styles.bsDetailTitle}>{slide.headline}</h2>
-      <div className={styles.bsDetailMain}>
-        {tile && <Tile tile={tile} className={styles.bsDetailImage} />}
-        <div className={styles.bsDetailCards}>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>When you need it</p>
-            <p className={styles.bsDetailBody}>{slide.when}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>Before</p>
-            <p className={styles.bsDetailBody}>{slide.before}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>After</p>
-            <p className={styles.bsDetailBody}>{slide.after}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>The numbers</p>
-            <ul className={styles.bsDetailStats}>
-              {slide.stats.map(s => (
-                <li key={s.metric} className={styles.bsDetailStat}>
-                  <span className={styles.bsDetailMetric}>{s.metric}</span>
-                  <span className={styles.bsDetailResult}>{s.result}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className={styles.bsDetailRow}>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>When you need it</p>
+          <p className={styles.bsDetailBody}>{slide.when}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>Before</p>
+          <p className={styles.bsDetailBody}>{slide.before}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>After</p>
+          <p className={styles.bsDetailBody}>{slide.after}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>The numbers</p>
+          <ul className={styles.bsDetailStats}>
+            {slide.stats.map(s => (
+              <li key={s.metric} className={styles.bsDetailStat}>
+                <span className={styles.bsDetailMetric}>{s.metric}</span>
+                <span className={styles.bsDetailResult}>{s.result}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

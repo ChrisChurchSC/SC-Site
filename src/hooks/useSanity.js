@@ -15,6 +15,9 @@ export function useSanity(query, params = {}) {
       if (cancelled) return
       setData(result)
       setLoading(false)
+    }).catch(() => {
+      if (cancelled) return
+      setLoading(false)
     })
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
