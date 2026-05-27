@@ -840,6 +840,10 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: 'Established a clearer strategic foundation for Webroot, shaping positioning and narrative for a global cybersecurity leader.' },
     { key: 'content', achievement: 'Helping Webroot earn attention and accelerate growth, turning technical credibility into a more compelling, recognized brand.' },
   ],
+  'carbonite': [
+    { key: 'brand',   achievement: 'Refined the brand foundation for Carbonite, leveraging efficiencies from our Webroot work to strengthen positioning and alignment.' },
+    { key: 'content', achievement: 'Helping Carbonite earn attention and accelerate growth in a competitive data protection market.' },
+  ],
 }
 
 function ClientSlide({ client }) {
