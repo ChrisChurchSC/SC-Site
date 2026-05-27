@@ -3059,7 +3059,10 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a35d4 0%, #d41a1a 100%);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px),
+    linear-gradient(135deg, #1a35d4 0%, #d41a1a 100%);
+  background-size: 28px 28px, 100% 100%;
 }
 
 .flywheelSvg {
