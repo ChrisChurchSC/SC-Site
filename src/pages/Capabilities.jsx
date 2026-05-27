@@ -836,6 +836,10 @@ const STATIC_CATEGORY_MAP = {
   'offchain': [
     { key: 'brand', achievement: "Led the rebrand from Offchain Labs, sharpening the positioning of the engineering company behind Arbitrum." },
   ],
+  'webroot': [
+    { key: 'brand',   achievement: 'Established a clearer strategic foundation for Webroot, shaping positioning and narrative for a global cybersecurity leader.' },
+    { key: 'content', achievement: 'Helping Webroot earn attention and accelerate growth, turning technical credibility into a more compelling, recognized brand.' },
+  ],
 }
 
 function ClientSlide({ client }) {
