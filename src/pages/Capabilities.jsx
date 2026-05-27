@@ -566,36 +566,37 @@ function OfferingSlide({ slide, cardTiles }) {
 }
 
 function PitchFlywheel() {
-  const cx = 150, cy = 152, R = 95, r = 33
+  // 16:9 viewBox — flywheel fills the full slide
+  const cx = 860, cy = 450, R = 295, r = 80
   const arcs = [
-    `M 182.5 62.7 A ${R} ${R} 0 0 1 243.6 168.5`,
-    `M 211.1 224.8 A ${R} ${R} 0 0 1 88.9 224.8`,
-    `M 56.4 168.5 A ${R} ${R} 0 0 1 117.5 62.7`,
+    `M 946 168 A ${R} ${R} 0 0 1 1147 516`,
+    `M 1061 666 A ${R} ${R} 0 0 1 659 666`,
+    `M 573 516 A ${R} ${R} 0 0 1 774 168`,
   ]
   const nodes = [
-    { x: 150, y: 57, icon: '◆', l1: 'Brand', l2: 'System' },
-    { x: 232, y: 199, icon: '◉', l1: 'Content', l2: 'Program' },
-    { x: 68, y: 199, icon: '◈', l1: 'Digital', l2: 'Product' },
+    { x: 860, y: 155, icon: '◆', l1: 'Brand', l2: 'System' },
+    { x: 1116, y: 598, icon: '◉', l1: 'Content', l2: 'Program' },
+    { x: 604, y: 598, icon: '◈', l1: 'Digital', l2: 'Product' },
   ]
   return (
-    <svg viewBox="0 0 300 285" className={styles.flywheelSvg} aria-hidden="true">
+    <svg viewBox="0 0 1600 900" className={styles.flywheelSvg} aria-hidden="true">
       <defs>
-        <marker id="fw-arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-          <path d="M0,1 L6,4 L0,7" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        <marker id="fw-arr" markerWidth="24" markerHeight="24" refX="18" refY="12" orient="auto">
+          <path d="M0,3 L18,12 L0,21" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </marker>
       </defs>
-      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 7" />
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="8 20" />
       {arcs.map((d, i) => (
-        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#fw-arr)" />
+        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2.5" markerEnd="url(#fw-arr)" />
       ))}
-      <circle cx={cx} cy={cy} r={22} fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx={cx} cy={cy} r={13} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={62} fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={38} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
       {nodes.map((n, i) => (
         <g key={i}>
-          <circle cx={n.x} cy={n.y} r={r} fill="#161616" stroke="rgba(255,255,255,0.14)" strokeWidth="1" />
-          <text x={n.x} y={n.y - 9} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.4)" fontSize="13" fontFamily="Georgia, serif">{n.icon}</text>
-          <text x={n.x} y={n.y + 5} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="7.5" fontFamily="'Roboto Mono', monospace" letterSpacing="0.1em">{n.l1.toUpperCase()}</text>
-          <text x={n.x} y={n.y + 15} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.42)" fontSize="7" fontFamily="'Roboto Mono', monospace" letterSpacing="0.08em">{n.l2.toUpperCase()}</text>
+          <circle cx={n.x} cy={n.y} r={r} fill="#111111" stroke="rgba(255,255,255,0.14)" strokeWidth="1.5" />
+          <text x={n.x} y={n.y - 22} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.35)" fontSize="38" fontFamily="Georgia, serif">{n.icon}</text>
+          <text x={n.x} y={n.y + 16} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.72)" fontSize="22" fontFamily="'Roboto Mono', monospace" letterSpacing="3">{n.l1.toUpperCase()}</text>
+          <text x={n.x} y={n.y + 42} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.38)" fontSize="18" fontFamily="'Roboto Mono', monospace" letterSpacing="2">{n.l2.toUpperCase()}</text>
         </g>
       ))}
     </svg>
@@ -605,18 +606,14 @@ function PitchFlywheel() {
 function PitchSlide({ slide }) {
   return (
     <section className={styles.pitchSlide}>
+      <PitchFlywheel />
       <div className={styles.pitchLeft}>
-        <div>
-          <Pill>{slide.pill}</Pill>
-          <h2 className={styles.pitchHeadline}>{slide.headline}</h2>
-          <p className={styles.pitchProblem}>{slide.problem}</p>
-        </div>
+        <Pill>{slide.pill}</Pill>
+        <h2 className={styles.pitchHeadline}>{slide.headline}</h2>
+        <p className={styles.pitchProblem}>{slide.problem}</p>
         <div className={styles.pitchResolution}>
           <p className={styles.pitchResolutionText}>{slide.resolution}</p>
         </div>
-      </div>
-      <div className={styles.pitchRight}>
-        <PitchFlywheel />
       </div>
     </section>
   )
