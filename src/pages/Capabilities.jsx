@@ -878,6 +878,10 @@ const STATIC_CATEGORY_MAP = {
   'fieldston': [
     { key: 'brand', achievement: "Defined Fieldston Power's positioning and narrative, delivering a confident, investor-ready brand for a large-scale battery storage company." },
   ],
+  'zbiotics': [
+    { key: 'brand',   achievement: "Defined ZBiotics' campaign foundation and strategy, making complex biotech science feel accessible and human." },
+    { key: 'content', achievement: 'Producing ongoing content and storytelling that earns attention, deepens engagement, and fuels growth in consumer health and biotech.' },
+  ],
 }
 
 function ClientSlide({ client }) {
