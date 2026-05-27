@@ -3702,7 +3702,6 @@ export default function ContentPackages() {
     ...mkVerticalSlides(SECTIONS[3], PACKAGES.slice(27, 32), SHOOT_SERVICES,   28, SECTIONS.length),
     { kind: 'closing' },
     { kind: 'media' },
-    { kind: 'tiers' },
   ]
 
   const tocData = slides.reduce((acc, s, i) => {
@@ -3757,7 +3756,6 @@ export default function ContentPackages() {
           {current.kind === 'service-area'  && <SvcAreaSlide area={current.area} count={current.count} section={current.section} />}
           {current.kind === 'service'       && <SvcSlide svc={current.svc} num={current.svcNum} total={current.svcTotal} />}
           {current.kind === 'media'            && <PkgMediaSlide />}
-          {current.kind === 'tiers'           && <PkgTiersSlide />}
         </div>
         <div className={styles.controls}>
           <div className={styles.menuWrap}>
