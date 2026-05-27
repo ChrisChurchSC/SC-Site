@@ -823,6 +823,13 @@ const STATIC_CATEGORY_MAP = {
   'google': [
     { key: 'content', achievement: 'Produced documentary and short-form content for Google across multiple programs.' },
   ],
+  'drip': [
+    { key: 'content', achievement: 'Brought DRIP to market with a launch narrative and video content that activated the Arbitrum ecosystem.' },
+  ],
+  'novi': [
+    { key: 'brand',   achievement: 'Defined the brand foundation and positioning for an AI-powered commerce platform.' },
+    { key: 'content', achievement: 'Produced ongoing content that earns attention and builds authority in the CPG commerce space.' },
+  ],
 }
 
 function ClientSlide({ client }) {
