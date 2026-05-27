@@ -202,6 +202,18 @@ const INTRO_SLIDES = [
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
   },
   {
+    id: 'pitch', layout: 'pitch',
+    pill: 'The opportunity',
+    headline: 'Most businesses lose money in the gaps.',
+    problem: 'The brand promises one thing. The content speaks to a different audience. The website converts like it was built by someone who never read either.',
+    gaps: [
+      { icon: '◆', tag: 'Brand system', body: 'The foundation. Positioning, identity, and narrative that sets every expectation downstream.' },
+      { icon: '◉', tag: 'Content program', body: 'The engine. Attention, intent, and audience growth that makes every other dollar worth spending.' },
+      { icon: '◈', tag: 'Digital product', body: 'The closer. The experience that converts what you built and the trust you earned into actual revenue.' },
+    ],
+    resolution: 'We build all three as one system, so every dollar you spend on attention actually turns into revenue.',
+  },
+  {
     id: 'what-we-do', layout: 'offering',
     pill: 'Our offering',
     headline: 'What we do.',
@@ -393,6 +405,7 @@ function IntroSlide({ slide, cardTiles, mosaicTiles }) {
     case 'who-we-are': return <WhoWeAreSlide slide={slide} />
     case 'compare': return <CompareSlide slide={slide} />
     case 'offering': return <OfferingSlide slide={slide} cardTiles={cardTiles ?? []} />
+    case 'pitch': return <PitchSlide slide={slide} />
     case 'outcomes': return <OutcomesSlide slide={slide} />
     case 'disciplines': return <DisciplinesSlide slide={slide} />
     case 'numbered': return <NumberedSlide slide={slide} mosaicTiles={mosaicTiles ?? []} />
@@ -552,6 +565,30 @@ function OfferingSlide({ slide, cardTiles }) {
             </div>
           )
         })}
+      </div>
+    </section>
+  )
+}
+
+function PitchSlide({ slide }) {
+  return (
+    <section className={styles.pitchSlide}>
+      <div className={styles.pitchTop}>
+        <Pill>{slide.pill}</Pill>
+        <h2 className={styles.pitchHeadline}>{slide.headline}</h2>
+        <p className={styles.pitchProblem}>{slide.problem}</p>
+      </div>
+      <div className={styles.pitchGaps}>
+        {slide.gaps.map(g => (
+          <div key={g.tag} className={styles.pitchGap}>
+            <span className={styles.pitchGapIcon}>{g.icon}</span>
+            <p className={styles.pitchGapTag}>{g.tag}</p>
+            <p className={styles.pitchGapBody}>{g.body}</p>
+          </div>
+        ))}
+      </div>
+      <div className={styles.pitchResolution}>
+        <p className={styles.pitchResolutionText}>{slide.resolution}</p>
       </div>
     </section>
   )

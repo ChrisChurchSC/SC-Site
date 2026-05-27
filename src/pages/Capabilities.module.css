@@ -3053,3 +3053,98 @@
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+/* ── Pitch / opportunity slide ── */
+.pitchSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 32px 28px;
+  gap: 20px;
+}
+
+.pitchTop {
+  display: flex;
+  flex-direction: column;
+}
+
+.pitchHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(30px, 3.2vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 28px 0 16px;
+  max-width: 860px;
+}
+
+.pitchProblem {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  max-width: 740px;
+}
+
+.pitchGaps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.pitchGap {
+  background: #141414;
+  border-radius: 4px;
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pitchGapIcon {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.28);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.pitchGapTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pitchGapBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.pitchResolution {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 20px 28px;
+  flex-shrink: 0;
+}
+
+.pitchResolutionText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
