@@ -871,6 +871,10 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: 'Built the Dimly Lit Chophouse brand from the ground up — identity, tone, and visual system for a Bitcoin-native steakhouse.' },
     { key: 'content', achievement: 'Producing ongoing content that earns attention, builds cultural momentum, and drives growth around its unique positioning.' },
   ],
+  'coldwater-club': [
+    { key: 'brand',   achievement: "Defined Coldwater Club's brand foundation and elevated positioning in a crowded hemp beverage category." },
+    { key: 'content', achievement: 'Producing ongoing content that builds cultural relevance and fuels community growth.' },
+  ],
 }
 
 function ClientSlide({ client }) {
