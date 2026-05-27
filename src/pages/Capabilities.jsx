@@ -583,6 +583,11 @@ function PitchFlywheel() {
         <marker id="fw-arr" markerWidth="18" markerHeight="18" refX="13" refY="9" orient="auto">
           <path d="M0,2 L13,9 L0,16" fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </marker>
+        <path id="fw-orbit" d={`M ${cx} ${cy - R} A ${R} ${R} 0 0 1 ${cx} ${cy + R} A ${R} ${R} 0 0 1 ${cx} ${cy - R}`} />
+        <filter id="fw-dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="8" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
       </defs>
       <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="8 20" />
       {arcs.map((d, i) => (
@@ -598,6 +603,13 @@ function PitchFlywheel() {
           <text x={n.x} y={n.y + 30} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">{n.l2.toUpperCase()}</text>
         </g>
       ))}
+      <g filter="url(#fw-dot-glow)">
+        <circle r="7" fill="rgba(255,255,255,0.9)">
+          <animateMotion dur="9s" repeatCount="indefinite" rotate="none">
+            <mpath href="#fw-orbit" />
+          </animateMotion>
+        </circle>
+      </g>
     </svg>
   )
 }
