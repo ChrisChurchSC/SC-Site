@@ -844,6 +844,10 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: 'Refined the brand foundation for Carbonite, leveraging efficiencies from our Webroot work to strengthen positioning and alignment.' },
     { key: 'content', achievement: 'Helping Carbonite earn attention and accelerate growth in a competitive data protection market.' },
   ],
+  'talos': [
+    { key: 'brand',   achievement: 'Led brand development and launch for Talos, shaping how it entered the market with clarity and authority.' },
+    { key: 'content', achievement: 'Produced the launch content that introduced an institutional-grade trading platform to the digital asset market.' },
+  ],
 }
 
 function ClientSlide({ client }) {
