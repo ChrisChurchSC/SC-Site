@@ -1,0 +1,366 @@
+.main {
+  padding: 0 305px 160px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* ── Hero ── */
+
+.hero {
+  padding: 80px 40px 64px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  max-width: 900px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 0 24px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 5vw, 64px);
+  line-height: 1.02;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 28px;
+  letter-spacing: -0.02em;
+}
+
+.answer {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 680px;
+}
+
+/* ── Shared section label ── */
+
+.sectionLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 0 32px;
+}
+
+/* ── Body ── */
+
+.body {
+  padding: 64px 40px;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.para {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.h2 {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 16px 0 -8px;
+}
+
+.figure {
+  margin: 8px 0;
+}
+
+.figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+/* ── Process ── */
+
+.process {
+  padding: 64px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.stepNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.15);
+  padding-top: 3px;
+  min-width: 20px;
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.stepLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.stepDesc {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* ── Related work ── */
+
+.work {
+  padding: 64px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.workGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.workCard {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.workCard:hover .workThumb {
+  opacity: 0.75;
+}
+
+.workThumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  transition: opacity 0.15s;
+}
+
+.workMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.workName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.workTagline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+}
+
+/* ── FAQ ── */
+
+.faq {
+  padding: 64px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  max-width: 800px;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+}
+
+.faqItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.faqQ {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.15s;
+}
+
+.faqQ:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.faqOpen .faqQ {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.faqToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.faqA {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  padding: 0 0 24px;
+  max-width: 640px;
+}
+
+/* ── CTA ── */
+
+.cta {
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.ctaHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.ctaBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 13px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  width: fit-content;
+}
+
+.ctaBtn:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 768px) {
+  .main {
+    padding: 0 0 120px;
+  }
+
+  .hero,
+  .body,
+  .process,
+  .work,
+  .faq,
+  .cta {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .workGrid {
+    grid-template-columns: 1fr;
+  }
+}

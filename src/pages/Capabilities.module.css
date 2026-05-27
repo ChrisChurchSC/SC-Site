@@ -1369,39 +1369,22 @@
 .bsDetailTitle {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(24px, 2.4vw, 36px);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-size: clamp(40px, 5.5vw, 80px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 14px;
+  margin: 0 0 auto;
   max-width: 900px;
-}
-
-.bsDetailMain {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
   flex: 1;
-  min-height: 0;
+  display: flex;
+  align-items: center;
 }
 
-.bsDetailImage {
-  aspect-ratio: 1 / 1;
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  background: #161616;
-  align-self: start;
-  height: 100%;
-  width: auto;
-}
-
-.bsDetailCards {
+.bsDetailRow {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  min-height: 0;
+  margin-top: 28px;
 }
 
 .bsDetailCard {
