@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
@@ -567,6 +567,25 @@ function OfferingSlide({ slide, cardTiles }) {
 
 function PitchFlywheel() {
   const cx = 860, cy = 450, R = 295, r = 80
+  const dotRef = useRef(null)
+
+  useEffect(() => {
+    let frame
+    const start = performance.now()
+    const tick = (now) => {
+      const t = ((now - start) / 9000) * Math.PI * 2
+      const x = cx + R * Math.sin(t)
+      const y = cy - R * Math.cos(t)
+      if (dotRef.current) {
+        dotRef.current.setAttribute('cx', x)
+        dotRef.current.setAttribute('cy', y)
+      }
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   const arcs = [
     `M 946 168 A ${R} ${R} 0 0 1 1147 516`,
     `M 1061 666 A ${R} ${R} 0 0 1 659 666`,
@@ -602,9 +621,7 @@ function PitchFlywheel() {
           <text x={n.x} y={n.y + 30} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">{n.l2.toUpperCase()}</text>
         </g>
       ))}
-      <g transform={`translate(${cx}, ${cy})`} className={styles.orbitGroup}>
-        <circle cx={0} cy={-R} r="8" fill="rgba(255,255,255,0.92)" filter="url(#fw-dot-glow)" />
-      </g>
+      <circle ref={dotRef} cx={cx} cy={cy - R} r="8" fill="rgba(255,255,255,0.92)" filter="url(#fw-dot-glow)" />
     </svg>
   )
 }

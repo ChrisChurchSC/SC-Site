@@ -3121,12 +3121,4 @@
   margin: 0;
 }
 
-@keyframes fw-orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
-.orbitGroup {
-  animation: fw-orbit 9s linear infinite;
-  transform-origin: 0px 0px;
-}
