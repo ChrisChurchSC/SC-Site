@@ -833,6 +833,9 @@ const STATIC_CATEGORY_MAP = {
   'sublime': [
     { key: 'brand', achievement: "Expanded Sublime's brand identity and narrative to match the sophistication of its email security platform." },
   ],
+  'offchain': [
+    { key: 'brand', achievement: "Led the rebrand from Offchain Labs, sharpening the positioning of the engineering company behind Arbitrum." },
+  ],
 }
 
 function ClientSlide({ client }) {
