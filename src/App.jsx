@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
@@ -14,19 +14,22 @@ import About from './pages/About'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
-import LandingHub from './pages/LandingHub'
-import Capabilities from './pages/Capabilities'
-import AgencyCapabilities from './pages/AgencyCapabilities'
-import BrandSystems from './pages/BrandSystems'
-import ContentPrograms from './pages/ContentPrograms'
-import DigitalProducts from './pages/DigitalProducts'
-import ContentPackages from './pages/ContentPackages'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
 import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
 import DeckGate from './components/DeckGate'
+
+// Heavy deck pages — lazy loaded so they don't bloat the initial bundle
+const LandingHub      = lazy(() => import('./pages/LandingHub'))
+const Capabilities    = lazy(() => import('./pages/Capabilities'))
+const AgencyCapabilities = lazy(() => import('./pages/AgencyCapabilities'))
+const BrandSystems    = lazy(() => import('./pages/BrandSystems'))
+const ContentPrograms = lazy(() => import('./pages/ContentPrograms'))
+const DigitalProducts = lazy(() => import('./pages/DigitalProducts'))
+const ContentPackages = lazy(() => import('./pages/ContentPackages'))
+
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -34,8 +37,6 @@ function ScrollToTop() {
 }
 
 function ChromeGate({ children }) {
-  // Hide global chrome (side nav, back button, theme toggle) on full-bleed
-  // presentation routes like /capabilities.
   const { pathname } = useLocation()
   const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
   if (fullBleed) return null
@@ -82,26 +83,28 @@ export default function App() {
             <BackButton />
           </ChromeGate>
           <div className="theme-layer">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/work" element={<Work />} />
-              <Route path="/work/:slug" element={<WorkRouter />} />
-              <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/thoughts" element={<Thoughts />} />
-              <Route path="/thoughts/:slug" element={<ThoughtPost />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/landing-pages" element={<LandingHub />} />
-              <Route path="/capabilities" element={<DeckGate><Capabilities /></DeckGate>} />
-              <Route path="/agency-capabilities" element={<DeckGate><AgencyCapabilities /></DeckGate>} />
-              <Route path="/brand-systems" element={<DeckGate><BrandSystems /></DeckGate>} />
-              <Route path="/content-programs" element={<DeckGate><ContentPrograms /></DeckGate>} />
-              <Route path="/digital-products" element={<DeckGate><DigitalProducts /></DeckGate>} />
-              <Route path="/content-packages" element={<DeckGate><ContentPackages /></DeckGate>} />
-              <Route path="/lp/:slug" element={<LandingPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/work" element={<Work />} />
+                <Route path="/work/:slug" element={<WorkRouter />} />
+                <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/thoughts" element={<Thoughts />} />
+                <Route path="/thoughts/:slug" element={<ThoughtPost />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/landing-pages" element={<Suspense fallback={null}><LandingHub /></Suspense>} />
+                <Route path="/capabilities" element={<DeckGate><Suspense fallback={null}><Capabilities /></Suspense></DeckGate>} />
+                <Route path="/agency-capabilities" element={<DeckGate><Suspense fallback={null}><AgencyCapabilities /></Suspense></DeckGate>} />
+                <Route path="/brand-systems" element={<DeckGate><Suspense fallback={null}><BrandSystems /></Suspense></DeckGate>} />
+                <Route path="/content-programs" element={<DeckGate><Suspense fallback={null}><ContentPrograms /></Suspense></DeckGate>} />
+                <Route path="/digital-products" element={<DeckGate><Suspense fallback={null}><DigitalProducts /></Suspense></DeckGate>} />
+                <Route path="/content-packages" element={<DeckGate><Suspense fallback={null}><ContentPackages /></Suspense></DeckGate>} />
+                <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </div>
         </ProjectsProvider>
         </ComingSoonProvider>

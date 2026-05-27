@@ -54,7 +54,7 @@ function flattenTiles(sections) {
 const BRAND_SLUGS = new Set([
   'arbitrum-rebrand', 'transcend', 'gigs', 'industry-standard',
   'wonderwerk', 'banzen', 'tbt', 'world-within', 'smallhold',
-  'photon', 'print-parlor', 'yura',
+  'photon', 'print-parlor', 'yura', 'novi',
 ])
 
 const BRAND_INTRO_SLIDES = [
@@ -551,6 +551,8 @@ const STATIC_CATEGORY_MAP = {
                                     { key: 'product', achievement: 'Built a clean, conversion-focused site that turned browsing into buying.' }],
   'yura':                          [{ key: 'brand',   achievement: 'Designed a brand that makes AI-powered benefits feel approachable and trustworthy.' },
                                     { key: 'product', achievement: 'Built a digital benefits platform that changes how employees access their coverage.' }],
+  'novi':                          [{ key: 'brand',   achievement: 'Defined the brand foundation and positioning for an AI-powered commerce platform.' },
+                                    { key: 'content', achievement: 'Produced ongoing content that earns attention and builds authority in the CPG commerce space.' }],
 }
 
 function ClientSlide({ client }) {

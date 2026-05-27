@@ -3036,3 +3036,148 @@
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+/* ── Pitch / opportunity slide ── */
+.pitchSlide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px),
+    linear-gradient(135deg, #1a35d4 0%, #d41a1a 100%);
+  background-size: 28px 28px, 100% 100%;
+}
+
+.flywheelSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pitchLeft {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  width: min(500px, 44%);
+  padding: 24px 28px 26px;
+  background: rgba(8, 8, 8, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 1;
+}
+
+.pitchHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.pitchProblem {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pitchResolution {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 14px 18px;
+}
+
+.pitchResolutionText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.pitchCaption {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  width: min(420px, 42%);
+  padding: 28px;
+  background: #161616;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 1;
+}
+
+.pitchCaptionHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 22px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.pitchCaptionBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.9vw, 13px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pitchPanel {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(220px, 22%, 300px);
+  padding: 28px;
+  background: #161616;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 1;
+}
+
+.pitchPanelSection {
+  opacity: 0.25;
+  transition: opacity 0.5s ease;
+}
+
+.pitchPanelSectionActive {
+  opacity: 1;
+}
+
+.pitchPanelLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(9px, 0.7vw, 11px);
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 8px 0;
+}
+
+.pitchPanelBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(11px, 0.9vw, 13px);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+

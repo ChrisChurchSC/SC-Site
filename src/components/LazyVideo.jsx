@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * Video that defers loading until the element scrolls within `rootMargin`
- * of the viewport. Once loaded, it autoplays muted/loop/playsInline.
- * Drop-in replacement for a stripped-down <video autoPlay muted loop playsInline>.
- */
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth <= 768
+
 export default function LazyVideo({
   src,
   className,
   style,
-  rootMargin = '300px',
+  rootMargin,
   pauseOffscreen = true,
   onError,
 }) {
   const ref = useRef(null)
   const [shouldLoad, setShouldLoad] = useState(false)
   const [inView, setInView] = useState(false)
+
+  // Tighter pre-load window on mobile to limit concurrent video decoders
+  const margin = rootMargin ?? (isMobile() ? '50px' : '300px')
 
   useEffect(() => {
     const el = ref.current
@@ -33,10 +33,10 @@ export default function LazyVideo({
           setInView(false)
         }
       }
-    }, { rootMargin })
+    }, { rootMargin: margin })
     obs.observe(el)
     return () => obs.disconnect()
-  }, [rootMargin])
+  }, [margin])
 
   useEffect(() => {
     const vid = ref.current

@@ -7,12 +7,20 @@ export default function Cursor() {
   const ref = useRef(null)
 
   useEffect(() => {
+    // Skip on touch/stylus-only devices — no mouse cursor to replace
+    if (window.matchMedia('(hover: none)').matches) return
+
     const el = ref.current
     if (!el) return
+
+    // Force cursor:none on html/body for Safari compatibility
+    document.documentElement.style.cursor = 'none'
+    document.body.style.cursor = 'none'
 
     const onMove = (e) => {
       el.style.left = `${e.clientX}px`
       el.style.top = `${e.clientY}px`
+      el.classList.remove(styles.hidden)
       if (e.target.closest(INTERACTIVE)) {
         el.classList.add(styles.large)
       } else {
@@ -31,6 +39,8 @@ export default function Cursor() {
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
       document.removeEventListener('mouseenter', onEnter)
+      document.documentElement.style.cursor = ''
+      document.body.style.cursor = ''
     }
   }, [])
 

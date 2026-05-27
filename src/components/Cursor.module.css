@@ -1,3 +1,5 @@
+:global(html),
+:global(body),
 :global(*),
 :global(*::before),
 :global(*::after) {

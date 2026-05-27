@@ -1,4 +1,5 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
+import { User, Megaphone, MousePointer2 } from 'lucide-react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
@@ -38,6 +39,23 @@ function pickVariant(uniqueCount) {
   return counts.find(c => c <= uniqueCount) ?? null
 }
 
+// Per-slug layout overrides — use explicit gridColumn/gridRow to force placement.
+// Dense auto-flow fills the remaining slots naturally around explicitly-placed tiles.
+const SLUG_VARIANT_OVERRIDE = {
+  talos: [
+    { shape: 'tall', gridColumn: '1', gridRow: '1 / 3' },
+    { shape: 'tall', gridColumn: '1', gridRow: '3 / 5' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'hero' },
+    { shape: 'tall' },
+    { shape: 'small' },
+    { shape: 'small' },
+    { shape: 'small' },
+  ],
+}
+
 const MIN_UNIQUE_TILES = 4
 
 function flattenTiles(sections) {
@@ -63,9 +81,11 @@ export default function Capabilities() {
   const clients = (data ?? [])
     .map(p => {
       const flat = flattenTiles(p.tiles)
+      const override = SLUG_VARIANT_OVERRIDE[p.slug]
       const variantCount = pickVariant(flat.length)
-      if (!variantCount || flat.length < MIN_UNIQUE_TILES) return { ...p, tiles: [], variant: null }
-      return { ...p, tiles: flat.slice(0, variantCount), variant: VARIANTS[variantCount] }
+      const variant = override ?? (variantCount ? VARIANTS[variantCount] : null)
+      if (!variant || flat.length < MIN_UNIQUE_TILES) return { ...p, tiles: [], variant: null }
+      return { ...p, tiles: flat.slice(0, variant.length), variant }
     })
     .filter(p => p.tiles.length > 0 && (p.summary || p.tagline))
 
@@ -183,6 +203,13 @@ const INTRO_SLIDES = [
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
   },
   {
+    id: 'pitch', layout: 'pitch',
+    pill: 'The opportunity',
+    headline: 'Most businesses lose money in the gaps.',
+    problem: 'The brand promises one thing. The content speaks to a different audience. The website converts like it was built by someone who never read either.',
+    resolution: 'We build all three as one system, so every dollar you spend on attention actually turns into revenue.',
+  },
+  {
     id: 'what-we-do', layout: 'offering',
     pill: 'Our offering',
     headline: 'What we do.',
@@ -214,21 +241,21 @@ const INTRO_SLIDES = [
     headline: 'How this helps your business.',
     cards: [
       {
-        tag: 'Volume',
+        tag: 'Content Program',
         title: 'Increased awareness.',
-        body: "Great work puts your brand in front of the right people, consistently. The more you show up with content worth stopping for, the more your audience grows. Attention you earned, not rented.",
+        body: "Consistent content that earns attention puts you in front of the right people, again and again. The more you show up with work worth stopping for, the more your audience grows. Attention earned, not rented.",
         source: 'Responsify',
       },
       {
-        tag: 'Quality',
+        tag: 'Brand System',
         title: 'Higher-quality leads.',
-        body: "Prospects who've consumed your content arrive pre-sold. The sales conversation starts at a different level — they've seen your work, understood your thinking, built confidence before you ever spoke.",
+        body: "A sharp brand does the selling before the meeting starts. Prospects who understand your positioning and trust your identity arrive pre-sold — the conversation starts at a different level.",
         source: 'HubSpot',
       },
       {
-        tag: 'Trust',
+        tag: 'Digital Product',
         title: 'More conversions.',
-        body: 'More trust built before the first meeting means fewer meetings to close. Shorter cycles, less sales effort, higher win rates.',
+        body: "The product is where brand promise meets behavior. A product that delivers on what the brand built — coherent in experience, familiar in tone — is where awareness converts to revenue.",
         source: 'McKinsey',
       },
     ],
@@ -374,6 +401,7 @@ function IntroSlide({ slide, cardTiles, mosaicTiles }) {
     case 'who-we-are': return <WhoWeAreSlide slide={slide} />
     case 'compare': return <CompareSlide slide={slide} />
     case 'offering': return <OfferingSlide slide={slide} cardTiles={cardTiles ?? []} />
+    case 'pitch': return <PitchSlide />
     case 'outcomes': return <OutcomesSlide slide={slide} />
     case 'disciplines': return <DisciplinesSlide slide={slide} />
     case 'numbered': return <NumberedSlide slide={slide} mosaicTiles={mosaicTiles ?? []} />
@@ -533,6 +561,142 @@ function OfferingSlide({ slide, cardTiles }) {
             </div>
           )
         })}
+      </div>
+    </section>
+  )
+}
+
+const FLYWHEEL_SECTIONS = [
+  {
+    label: 'ATTENTION',
+    body: 'Brand is what gets you noticed. It\'s the identity, the voice, and the positioning that makes someone stop and pay attention to you instead of everyone else. Without it, your content and product spend lands in a void.',
+  },
+  {
+    label: 'ENGAGEMENT',
+    body: 'Content is what keeps them around. It\'s the series, the campaigns, the videos that turn casual attention into genuine interest. Done right, it creates demand, not just awareness.',
+  },
+  {
+    label: 'CONVERSION',
+    body: 'Digital product is where attention and engagement convert. A site or tool built on the same brand and content foundation doesn\'t have to convince anyone. It just closes the loop.',
+  },
+]
+
+function PitchFlywheel({ onLabelChange }) {
+  const cx = 800, cy = 450, R = 295, r = 80
+  const groupRef = useRef(null)
+  const textRef = useRef(null)
+
+  const spokeDotRefs = useRef([])
+  const currentLabel = useRef('')
+  const onLabelChangeRef = useRef(onLabelChange)
+  useEffect(() => { onLabelChangeRef.current = onLabelChange }, [onLabelChange])
+
+  useEffect(() => {
+    const spokes = nodes.map(n => {
+      const dx = cx - n.x, dy = cy - n.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const nx = dx / dist, ny = dy / dist
+      return { x1: n.x + nx * r, y1: n.y + ny * r, x2: cx - nx * 65, y2: cy - ny * 65 }
+    })
+
+    let frame
+    const start = performance.now()
+    const sector = (Math.PI * 2) / 3
+    const tick = (now) => {
+      const t = (((now - start) / 9000) * Math.PI * 2) % (Math.PI * 2)
+      const x = cx + R * Math.sin(t)
+      const y = cy - R * Math.cos(t)
+      const label = FLYWHEEL_SECTIONS[Math.floor(t / sector)].label
+      if (groupRef.current) {
+        groupRef.current.setAttribute('transform', `translate(${x},${y})`)
+      }
+      if (label !== currentLabel.current) {
+        if (textRef.current) textRef.current.textContent = label
+        currentLabel.current = label
+        onLabelChangeRef.current?.(label)
+      }
+
+      spokeDotRefs.current.forEach((el, i) => {
+        if (!el) return
+        const p = ((now / 2200) + i / 3) % 1
+        el.setAttribute('cx', spokes[i].x1 + p * (spokes[i].x2 - spokes[i].x1))
+        el.setAttribute('cy', spokes[i].y1 + p * (spokes[i].y2 - spokes[i].y1))
+        el.setAttribute('opacity', 0.8 - p * 0.6)
+      })
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  const arcs = [
+    `M 886 168 A ${R} ${R} 0 0 1 1087 516`,
+    `M 1001 666 A ${R} ${R} 0 0 1 599 666`,
+    `M 513 516 A ${R} ${R} 0 0 1 714 168`,
+  ]
+  const nodes = [
+    { x: 800, y: 155, Icon: User, l1: 'Brand', l2: 'System' },
+    { x: 1056, y: 598, Icon: Megaphone, l1: 'Content', l2: 'Program' },
+    { x: 544, y: 598, Icon: MousePointer2, l1: 'Digital', l2: 'Product' },
+  ]
+  return (
+    <svg viewBox="0 0 1600 900" className={styles.flywheelSvg} aria-hidden="true">
+      <defs>
+        <marker id="fw-arr" markerWidth="18" markerHeight="18" refX="13" refY="9" orient="auto">
+          <path d="M0,2 L13,9 L0,16" fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </marker>
+      </defs>
+      {arcs.map((d, i) => (
+        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1.2" markerEnd="url(#fw-arr)" />
+      ))}
+      {nodes.map((n, i) => {
+        const dx = cx - n.x, dy = cy - n.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        const nx = dx / dist, ny = dy / dist
+        return <line key={i} x1={n.x + nx * r} y1={n.y + ny * r} x2={cx - nx * 68} y2={cy - ny * 68} stroke="rgba(255,255,255,0.14)" strokeWidth="1" strokeDasharray="4 6" markerEnd="url(#fw-arr)" />
+      })}
+      {[0, 1, 2].map(i => (
+        <circle key={i} ref={el => { spokeDotRefs.current[i] = el }} cx={cx} cy={cy} r="5" fill="rgba(255,255,255,0.8)" />
+      ))}
+      <circle cx={cx} cy={cy} r={62} fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
+      <text x={cx} y={cy - 9} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" fontSize="14" fontFamily="'Roboto Mono', monospace" letterSpacing="1">BUSINESS</text>
+      <text x={cx} y={cy + 11} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" fontSize="14" fontFamily="'Roboto Mono', monospace" letterSpacing="1">GROWTH</text>
+      <g ref={groupRef} transform={`translate(${cx},${cy - R})`}>
+        <rect x="-52" y="-14" width="104" height="28" rx="14" fill="rgba(10,10,10,0.9)" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+        <text ref={textRef} x="0" y="0" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.88)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">ATTENTION</text>
+      </g>
+      {nodes.map((n, i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r={r} fill="#111111" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+          <foreignObject x={n.x - 18} y={n.y - 42} width="36" height="36">
+            <div xmlns="http://www.w3.org/1999/xhtml" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+              <n.Icon size={28} color="rgba(255,255,255,0.4)" strokeWidth={1.25} />
+            </div>
+          </foreignObject>
+          <text x={n.x} y={n.y + 10} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.65)" fontSize="16" fontFamily="'Roboto Mono', monospace" letterSpacing="2">{n.l1.toUpperCase()}</text>
+          <text x={n.x} y={n.y + 30} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">{n.l2.toUpperCase()}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+function PitchSlide() {
+  const [activeLabel, setActiveLabel] = useState('ATTENTION')
+  return (
+    <section className={styles.pitchSlide}>
+      <PitchFlywheel onLabelChange={setActiveLabel} />
+      <div className={styles.pitchCaption}>
+        <p className={styles.pitchCaptionHeadline}>Your marketing spend works harder.</p>
+        <p className={styles.pitchCaptionBody}>When brand, content, and digital product share the same foundation, each investment amplifies the others. More reach, more conversion, more compounding return on everything you build.</p>
+      </div>
+      <div className={styles.pitchPanel}>
+        {FLYWHEEL_SECTIONS.map(s => (
+          <div key={s.label} className={`${styles.pitchPanelSection} ${s.label === activeLabel ? styles.pitchPanelSectionActive : ''}`}>
+            <p className={styles.pitchPanelLabel}>{s.label}</p>
+            <p className={styles.pitchPanelBody}>{s.body}</p>
+          </div>
+        ))}
       </div>
     </section>
   )
@@ -719,10 +883,10 @@ function SelectedWorkSlide({ slide, thumbnails }) {
 // Client (case study) slide
 // ────────────────────────────────────────────────────────────────────────
 
-function Tile({ tile, className }) {
+function Tile({ tile, className, style }) {
   if (!tile) return null
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       {tile.isVideo
         ? <LazyVideo src={tile.src} className={styles.tileMedia} />
         : <img src={`${tile.src}?w=1600&q=80&auto=format`} alt="" loading="lazy" className={styles.tileMedia} />}
@@ -823,6 +987,46 @@ const STATIC_CATEGORY_MAP = {
   'google': [
     { key: 'content', achievement: 'Produced documentary and short-form content for Google across multiple programs.' },
   ],
+  'drip': [
+    { key: 'content', achievement: 'Brought DRIP to market with a launch narrative and video content that activated the Arbitrum ecosystem.' },
+  ],
+  'novi': [
+    { key: 'brand',   achievement: 'Defined the brand foundation and positioning for an AI-powered commerce platform.' },
+    { key: 'content', achievement: 'Produced ongoing content that earns attention and builds authority in the CPG commerce space.' },
+  ],
+  'sublime': [
+    { key: 'brand', achievement: "Expanded Sublime's brand identity and narrative to match the sophistication of its email security platform." },
+  ],
+  'offchain': [
+    { key: 'brand', achievement: "Led the rebrand from Offchain Labs, sharpening the positioning of the engineering company behind Arbitrum." },
+  ],
+  'webroot': [
+    { key: 'brand',   achievement: 'Established a clearer strategic foundation for Webroot, shaping positioning and narrative for a global cybersecurity leader.' },
+    { key: 'content', achievement: 'Helping Webroot earn attention and accelerate growth, turning technical credibility into a more compelling, recognized brand.' },
+  ],
+  'carbonite': [
+    { key: 'brand',   achievement: 'Refined the brand foundation for Carbonite, leveraging efficiencies from our Webroot work to strengthen positioning and alignment.' },
+    { key: 'content', achievement: 'Helping Carbonite earn attention and accelerate growth in a competitive data protection market.' },
+  ],
+  'talos': [
+    { key: 'brand',   achievement: 'Led brand development and launch for Talos, shaping how it entered the market with clarity and authority.' },
+    { key: 'content', achievement: 'Produced the launch content that introduced an institutional-grade trading platform to the digital asset market.' },
+  ],
+  'dimly-lit-chophouse': [
+    { key: 'brand',   achievement: 'Built the Dimly Lit Chophouse brand from the ground up — identity, tone, and visual system for a Bitcoin-native steakhouse.' },
+    { key: 'content', achievement: 'Producing ongoing content that earns attention, builds cultural momentum, and drives growth around its unique positioning.' },
+  ],
+  'coldwater-club': [
+    { key: 'brand',   achievement: "Defined Coldwater Club's brand foundation and elevated positioning in a crowded hemp beverage category." },
+    { key: 'content', achievement: 'Producing ongoing content that builds cultural relevance and fuels community growth.' },
+  ],
+  'fieldston': [
+    { key: 'brand', achievement: "Defined Fieldston Power's positioning and narrative, delivering a confident, investor-ready brand for a large-scale battery storage company." },
+  ],
+  'zbiotics': [
+    { key: 'brand',   achievement: "Defined ZBiotics' campaign foundation and strategy, making complex biotech science feel accessible and human." },
+    { key: 'content', achievement: 'Producing ongoing content and storytelling that earns attention, deepens engagement, and fuels growth in consumer health and biotech.' },
+  ],
 }
 
 function ClientSlide({ client }) {
@@ -866,12 +1070,16 @@ function ClientSlide({ client }) {
 
       <div className={styles.mosaic}>
         {client.tiles.map((tile, i) => {
-          const shape = client.variant[i].shape
+          const slot = client.variant[i]
+          const gridStyle = slot.gridColumn || slot.gridRow
+            ? { gridColumn: slot.gridColumn, gridRow: slot.gridRow }
+            : undefined
           return (
             <Tile
               key={`${client._id}-${i}`}
               tile={tile}
-              className={`${styles.tile} ${styles[`tile_${shape}`]}`}
+              className={`${styles.tile} ${styles[`tile_${slot.shape}`]}`}
+              style={gridStyle}
             />
           )
         })}
