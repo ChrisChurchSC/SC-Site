@@ -830,6 +830,9 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: 'Defined the brand foundation and positioning for an AI-powered commerce platform.' },
     { key: 'content', achievement: 'Produced ongoing content that earns attention and builds authority in the CPG commerce space.' },
   ],
+  'sublime': [
+    { key: 'brand', achievement: "Expanded Sublime's brand identity and narrative to match the sophistication of its email security platform." },
+  ],
 }
 
 function ClientSlide({ client }) {
