@@ -206,11 +206,6 @@ const INTRO_SLIDES = [
     pill: 'The opportunity',
     headline: 'Most businesses lose money in the gaps.',
     problem: 'The brand promises one thing. The content speaks to a different audience. The website converts like it was built by someone who never read either.',
-    gaps: [
-      { icon: '◆', tag: 'Brand system', body: 'The foundation. Positioning, identity, and narrative that sets every expectation downstream.' },
-      { icon: '◉', tag: 'Content program', body: 'The engine. Attention, intent, and audience growth that makes every other dollar worth spending.' },
-      { icon: '◈', tag: 'Digital product', body: 'The closer. The experience that converts what you built and the trust you earned into actual revenue.' },
-    ],
     resolution: 'We build all three as one system, so every dollar you spend on attention actually turns into revenue.',
   },
   {
@@ -570,25 +565,58 @@ function OfferingSlide({ slide, cardTiles }) {
   )
 }
 
+function PitchFlywheel() {
+  const cx = 150, cy = 152, R = 95, r = 33
+  const arcs = [
+    `M 182.5 62.7 A ${R} ${R} 0 0 1 243.6 168.5`,
+    `M 211.1 224.8 A ${R} ${R} 0 0 1 88.9 224.8`,
+    `M 56.4 168.5 A ${R} ${R} 0 0 1 117.5 62.7`,
+  ]
+  const nodes = [
+    { x: 150, y: 57, icon: '◆', l1: 'Brand', l2: 'System' },
+    { x: 232, y: 199, icon: '◉', l1: 'Content', l2: 'Program' },
+    { x: 68, y: 199, icon: '◈', l1: 'Digital', l2: 'Product' },
+  ]
+  return (
+    <svg viewBox="0 0 300 285" className={styles.flywheelSvg} aria-hidden="true">
+      <defs>
+        <marker id="fw-arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M0,1 L6,4 L0,7" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        </marker>
+      </defs>
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 7" />
+      {arcs.map((d, i) => (
+        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#fw-arr)" />
+      ))}
+      <circle cx={cx} cy={cy} r={22} fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={13} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+      {nodes.map((n, i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r={r} fill="#161616" stroke="rgba(255,255,255,0.14)" strokeWidth="1" />
+          <text x={n.x} y={n.y - 9} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.4)" fontSize="13" fontFamily="Georgia, serif">{n.icon}</text>
+          <text x={n.x} y={n.y + 5} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="7.5" fontFamily="'Roboto Mono', monospace" letterSpacing="0.1em">{n.l1.toUpperCase()}</text>
+          <text x={n.x} y={n.y + 15} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.42)" fontSize="7" fontFamily="'Roboto Mono', monospace" letterSpacing="0.08em">{n.l2.toUpperCase()}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
 function PitchSlide({ slide }) {
   return (
     <section className={styles.pitchSlide}>
-      <div className={styles.pitchTop}>
-        <Pill>{slide.pill}</Pill>
-        <h2 className={styles.pitchHeadline}>{slide.headline}</h2>
-        <p className={styles.pitchProblem}>{slide.problem}</p>
+      <div className={styles.pitchLeft}>
+        <div>
+          <Pill>{slide.pill}</Pill>
+          <h2 className={styles.pitchHeadline}>{slide.headline}</h2>
+          <p className={styles.pitchProblem}>{slide.problem}</p>
+        </div>
+        <div className={styles.pitchResolution}>
+          <p className={styles.pitchResolutionText}>{slide.resolution}</p>
+        </div>
       </div>
-      <div className={styles.pitchGaps}>
-        {slide.gaps.map(g => (
-          <div key={g.tag} className={styles.pitchGap}>
-            <span className={styles.pitchGapIcon}>{g.icon}</span>
-            <p className={styles.pitchGapTag}>{g.tag}</p>
-            <p className={styles.pitchGapBody}>{g.body}</p>
-          </div>
-        ))}
-      </div>
-      <div className={styles.pitchResolution}>
-        <p className={styles.pitchResolutionText}>{slide.resolution}</p>
+      <div className={styles.pitchRight}>
+        <PitchFlywheel />
       </div>
     </section>
   )
