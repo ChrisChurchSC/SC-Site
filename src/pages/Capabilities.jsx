@@ -566,7 +566,6 @@ function OfferingSlide({ slide, cardTiles }) {
 }
 
 function PitchFlywheel() {
-  // 16:9 viewBox — flywheel fills the full slide
   const cx = 860, cy = 450, R = 295, r = 80
   const arcs = [
     `M 946 168 A ${R} ${R} 0 0 1 1147 516`,
@@ -578,25 +577,50 @@ function PitchFlywheel() {
     { x: 1116, y: 598, icon: '◉', l1: 'Content', l2: 'Program' },
     { x: 604, y: 598, icon: '◈', l1: 'Digital', l2: 'Product' },
   ]
+  // Example deliverables shown outside each node
+  const examples = [
+    // Brand: above the node (top edge at y=75)
+    { items: ['Positioning framework', 'Identity system', 'Voice + messaging'], x: 860, y: 14, dy: 22, anchor: 'middle' },
+    // Content: right of node (right edge at x=1196)
+    { items: ['Social content series', 'Video production', 'Ad campaigns'], x: 1216, y: 572, dy: 22, anchor: 'start' },
+    // Product: left of node (left edge at x=524)
+    { items: ['Marketing site', 'Web app or tool', 'Design system'], x: 490, y: 572, dy: 22, anchor: 'end' },
+  ]
   return (
     <svg viewBox="0 0 1600 900" className={styles.flywheelSvg} aria-hidden="true">
       <defs>
-        <marker id="fw-arr" markerWidth="24" markerHeight="24" refX="18" refY="12" orient="auto">
-          <path d="M0,3 L18,12 L0,21" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <marker id="fw-arr" markerWidth="18" markerHeight="18" refX="13" refY="9" orient="auto">
+          <path d="M0,2 L13,9 L0,16" fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </marker>
       </defs>
       <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="8 20" />
       {arcs.map((d, i) => (
-        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2.5" markerEnd="url(#fw-arr)" />
+        <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="1.2" markerEnd="url(#fw-arr)" />
       ))}
-      <circle cx={cx} cy={cy} r={62} fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx={cx} cy={cy} r={38} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={62} fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={38} fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
       {nodes.map((n, i) => (
         <g key={i}>
-          <circle cx={n.x} cy={n.y} r={r} fill="#111111" stroke="rgba(255,255,255,0.14)" strokeWidth="1.5" />
-          <text x={n.x} y={n.y - 22} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.35)" fontSize="38" fontFamily="Georgia, serif">{n.icon}</text>
-          <text x={n.x} y={n.y + 16} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.72)" fontSize="22" fontFamily="'Roboto Mono', monospace" letterSpacing="3">{n.l1.toUpperCase()}</text>
-          <text x={n.x} y={n.y + 42} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.38)" fontSize="18" fontFamily="'Roboto Mono', monospace" letterSpacing="2">{n.l2.toUpperCase()}</text>
+          <circle cx={n.x} cy={n.y} r={r} fill="#111111" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+          <text x={n.x} y={n.y - 14} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.28)" fontSize="26" fontFamily="Georgia, serif">{n.icon}</text>
+          <text x={n.x} y={n.y + 10} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.65)" fontSize="16" fontFamily="'Roboto Mono', monospace" letterSpacing="2">{n.l1.toUpperCase()}</text>
+          <text x={n.x} y={n.y + 30} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">{n.l2.toUpperCase()}</text>
+        </g>
+      ))}
+      {examples.map((eg, i) => (
+        <g key={i}>
+          {eg.items.map((item, j) => (
+            <text
+              key={j}
+              x={eg.x}
+              y={eg.y + j * eg.dy}
+              textAnchor={eg.anchor}
+              fill="rgba(255,255,255,0.25)"
+              fontSize="13"
+              fontFamily="'Roboto Mono', monospace"
+              letterSpacing="0.5"
+            >{item}</text>
+          ))}
         </g>
       ))}
     </svg>
