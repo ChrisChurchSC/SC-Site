@@ -867,6 +867,10 @@ const STATIC_CATEGORY_MAP = {
     { key: 'brand',   achievement: 'Led brand development and launch for Talos, shaping how it entered the market with clarity and authority.' },
     { key: 'content', achievement: 'Produced the launch content that introduced an institutional-grade trading platform to the digital asset market.' },
   ],
+  'dimly-lit-chophouse': [
+    { key: 'brand',   achievement: 'Built the Dimly Lit Chophouse brand from the ground up — identity, tone, and visual system for a Bitcoin-native steakhouse.' },
+    { key: 'content', achievement: 'Producing ongoing content that earns attention, builds cultural momentum, and drives growth around its unique positioning.' },
+  ],
 }
 
 function ClientSlide({ client }) {
