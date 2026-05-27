@@ -577,15 +577,6 @@ function PitchFlywheel() {
     { x: 1116, y: 598, icon: '◉', l1: 'Content', l2: 'Program' },
     { x: 604, y: 598, icon: '◈', l1: 'Digital', l2: 'Product' },
   ]
-  // Example deliverables shown outside each node
-  const examples = [
-    // Brand: above the node (top edge at y=75)
-    { items: ['Positioning framework', 'Identity system', 'Voice + messaging'], x: 860, y: 26, dy: 30, anchor: 'middle' },
-    // Content: right of node (right edge at x=1196)
-    { items: ['Social content series', 'Video production', 'Ad campaigns'], x: 1218, y: 568, dy: 30, anchor: 'start' },
-    // Product: left of node (left edge at x=524)
-    { items: ['Marketing site', 'Web app or tool', 'Design system'], x: 488, y: 568, dy: 30, anchor: 'end' },
-  ]
   return (
     <svg viewBox="0 0 1600 900" className={styles.flywheelSvg} aria-hidden="true">
       <defs>
@@ -605,22 +596,6 @@ function PitchFlywheel() {
           <text x={n.x} y={n.y - 14} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.28)" fontSize="26" fontFamily="Georgia, serif">{n.icon}</text>
           <text x={n.x} y={n.y + 10} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.65)" fontSize="16" fontFamily="'Roboto Mono', monospace" letterSpacing="2">{n.l1.toUpperCase()}</text>
           <text x={n.x} y={n.y + 30} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontFamily="'Roboto Mono', monospace" letterSpacing="1.5">{n.l2.toUpperCase()}</text>
-        </g>
-      ))}
-      {examples.map((eg, i) => (
-        <g key={i}>
-          {eg.items.map((item, j) => (
-            <text
-              key={j}
-              x={eg.x}
-              y={eg.y + j * eg.dy}
-              textAnchor={eg.anchor}
-              fill="rgba(255,255,255,0.42)"
-              fontSize="22"
-              fontFamily="'Roboto Mono', monospace"
-              letterSpacing="0.5"
-            >{item}</text>
-          ))}
         </g>
       ))}
     </svg>
