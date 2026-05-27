@@ -233,21 +233,21 @@ const INTRO_SLIDES = [
     headline: 'How this helps your business.',
     cards: [
       {
-        tag: 'Volume',
+        tag: 'Content Program',
         title: 'Increased awareness.',
-        body: "Great work puts your brand in front of the right people, consistently. The more you show up with content worth stopping for, the more your audience grows. Attention you earned, not rented.",
+        body: "Consistent content that earns attention puts you in front of the right people, again and again. The more you show up with work worth stopping for, the more your audience grows. Attention earned, not rented.",
         source: 'Responsify',
       },
       {
-        tag: 'Quality',
+        tag: 'Brand System',
         title: 'Higher-quality leads.',
-        body: "Prospects who've consumed your content arrive pre-sold. The sales conversation starts at a different level — they've seen your work, understood your thinking, built confidence before you ever spoke.",
+        body: "A sharp brand does the selling before the meeting starts. Prospects who understand your positioning and trust your identity arrive pre-sold — the conversation starts at a different level.",
         source: 'HubSpot',
       },
       {
-        tag: 'Trust',
+        tag: 'Digital Product',
         title: 'More conversions.',
-        body: 'More trust built before the first meeting means fewer meetings to close. Shorter cycles, less sales effort, higher win rates.',
+        body: "The product is where brand promise meets behavior. A product that delivers on what the brand built — coherent in experience, familiar in tone — is where awareness converts to revenue.",
         source: 'McKinsey',
       },
     ],
