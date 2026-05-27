@@ -580,11 +580,11 @@ function PitchFlywheel() {
   // Example deliverables shown outside each node
   const examples = [
     // Brand: above the node (top edge at y=75)
-    { items: ['Positioning framework', 'Identity system', 'Voice + messaging'], x: 860, y: 14, dy: 22, anchor: 'middle' },
+    { items: ['Positioning framework', 'Identity system', 'Voice + messaging'], x: 860, y: 26, dy: 30, anchor: 'middle' },
     // Content: right of node (right edge at x=1196)
-    { items: ['Social content series', 'Video production', 'Ad campaigns'], x: 1216, y: 572, dy: 22, anchor: 'start' },
+    { items: ['Social content series', 'Video production', 'Ad campaigns'], x: 1218, y: 568, dy: 30, anchor: 'start' },
     // Product: left of node (left edge at x=524)
-    { items: ['Marketing site', 'Web app or tool', 'Design system'], x: 490, y: 572, dy: 22, anchor: 'end' },
+    { items: ['Marketing site', 'Web app or tool', 'Design system'], x: 488, y: 568, dy: 30, anchor: 'end' },
   ]
   return (
     <svg viewBox="0 0 1600 900" className={styles.flywheelSvg} aria-hidden="true">
@@ -615,8 +615,8 @@ function PitchFlywheel() {
               x={eg.x}
               y={eg.y + j * eg.dy}
               textAnchor={eg.anchor}
-              fill="rgba(255,255,255,0.25)"
-              fontSize="13"
+              fill="rgba(255,255,255,0.42)"
+              fontSize="22"
               fontFamily="'Roboto Mono', monospace"
               letterSpacing="0.5"
             >{item}</text>
