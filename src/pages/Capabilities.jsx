@@ -576,7 +576,7 @@ const FLYWHEEL_SECTIONS = [
     body: 'Content is what keeps them around. It\'s the series, the campaigns, the videos that turn casual attention into genuine interest. Done right, it creates demand, not just awareness.',
   },
   {
-    label: 'REVENUE',
+    label: 'CONVERSION',
     body: 'Digital product is where attention and engagement convert. A site or tool built on the same brand and content foundation doesn\'t have to convince anyone. It just closes the loop.',
   },
 ]
