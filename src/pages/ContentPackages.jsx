@@ -656,6 +656,130 @@ const PACKAGES = [
     who: 'Companies building a large multi-template web presence that needs to scale: new pages without breaking the design, and templates the team can reuse.',
     have: 'A complete web platform: large multi-template marketing site, CMS, and a design system with component library so future pages stay consistent without starting from scratch.',
   },
+  // ── Shoot packages ────────────────────────────────────────────────────────
+  {
+    id: 'ugc-package',
+    name: 'UGC Package',
+    goal: 'Creator-shot content that feels native in the feed.',
+    price: '$2,800',
+    deliverables: [
+      { icon: 'strategy',  label: 'Creative brief' },
+      { icon: 'film',      label: 'Talent sourcing' },
+      { icon: 'video',     label: '10 raw creator clips' },
+      { icon: 'sprint',    label: '4–6 edited cuts' },
+    ],
+    target: 'Social / Paid',
+    flowLabel: 'Production flow',
+    flow: [
+      { icon: 'brain',  label: 'Brief',  sub: 'Formats, platforms, hooks, and tone defined',                deliverables: ['Creative brief'] },
+      { icon: 'person', label: 'Source', sub: 'Creator matched to brand, product, and target audience',     deliverables: ['Talent sourcing'] },
+      { icon: 'video',  label: 'Shoot',  sub: 'Creator shoots to brief — remote, no crew, no studio',       deliverables: ['10 raw creator clips'] },
+      { icon: 'bolt',   label: 'Edit',   sub: 'Cuts assembled, captioned, and formatted for each platform', deliverables: ['4–6 edited cuts'] },
+    ],
+    metrics: ['Hook rate', 'Completion rate', 'Cost per view', 'CTR'],
+    mediaSpend: 'Recommended',
+    cadence: 'Monthly batch',
+    who: 'Brands that need a high volume of authentic, native-feeling social content without the cost of a studio production.',
+    have: 'A library of creator-shot videos formatted for feed, story, and short-form — ready to test in paid or drop organically.',
+  },
+  {
+    id: 'webcam-session',
+    name: 'Webcam Session',
+    goal: 'Polished talking-head content shot remotely from your desk.',
+    price: '$1,800',
+    deliverables: [
+      { icon: 'concept',  label: 'Setup guide' },
+      { icon: 'video',    label: '2-hour directed session' },
+      { icon: 'sprint',   label: '4–6 edited cuts' },
+    ],
+    target: 'Trust / Thought leadership',
+    flowLabel: 'Production flow',
+    flow: [
+      { icon: 'brain', label: 'Prep',    sub: 'Equipment, framing, lighting, and talking points set',       deliverables: ['Setup guide'] },
+      { icon: 'video', label: 'Session', sub: 'Live-directed remote shoot — 2 hours, multiple takes',       deliverables: ['2-hour directed session'] },
+      { icon: 'bolt',  label: 'Edit',    sub: 'Cuts assembled, captioned, and formatted for platform',       deliverables: ['4–6 edited cuts'] },
+    ],
+    metrics: ['View duration', 'Comment rate', 'Profile visits', 'Follower conversion'],
+    mediaSpend: 'Not required',
+    cadence: 'Monthly or as needed',
+    who: 'Founders and executives who need trust-building video content without a full crew or production day.',
+    have: 'Polished talking-head video from your own space, formatted for LinkedIn, YouTube, or the sales deck.',
+  },
+  {
+    id: 'white-background-shoot',
+    name: 'White Background Shoot',
+    goal: 'Clean product or portrait imagery on white for ads, PDPs, and packaging.',
+    price: '$4,500',
+    deliverables: [
+      { icon: 'strategy',  label: 'Shot list' },
+      { icon: 'film',      label: 'Half-day studio' },
+      { icon: 'report',    label: '60–100 selects' },
+      { icon: 'sprint',    label: 'Retouched heroes' },
+    ],
+    target: 'Product / E-commerce',
+    flowLabel: 'Production flow',
+    flow: [
+      { icon: 'brain',   label: 'Prep',    sub: 'Shot list, product prep, and studio logistics confirmed',      deliverables: ['Shot list'] },
+      { icon: 'bolt',    label: 'Shoot',   sub: 'Half-day controlled studio with art direction',                deliverables: ['Half-day studio'] },
+      { icon: 'search',  label: 'Select',  sub: '60–100 selects delivered for review',                         deliverables: ['60–100 selects'] },
+      { icon: 'check',   label: 'Retouch', sub: 'Hero images retouched and delivered in web and print formats', deliverables: ['Retouched heroes'] },
+    ],
+    metrics: ['Asset reuse rate', 'Ad CTR', 'PDP conversion rate', 'Production turnaround'],
+    mediaSpend: 'Not required',
+    cadence: 'Per product launch',
+    who: 'Product and e-commerce brands that need clean, versatile images for ads, product pages, and packaging without lifestyle context.',
+    have: 'A library of retouched product images ready for any digital surface: website, ads, email, and retail.',
+  },
+  {
+    id: 'studio-shoot',
+    name: 'Studio Shoot',
+    goal: 'Full-day branded production with talent, props, and directed art direction.',
+    price: '$9,500',
+    deliverables: [
+      { icon: 'concept',  label: 'Creative direction' },
+      { icon: 'film',     label: 'Full-day studio' },
+      { icon: 'report',   label: '200+ selects' },
+      { icon: 'video',    label: 'B-roll footage' },
+    ],
+    target: 'Campaign / Brand',
+    flowLabel: 'Production flow',
+    flow: [
+      { icon: 'brain',  label: 'Pre-prod',  sub: 'Concept, shot list, talent booking, and prop sourcing',       deliverables: ['Creative direction'] },
+      { icon: 'bolt',   label: 'Shoot',     sub: 'Full-day studio with art direction, talent, and hero setups',  deliverables: ['Full-day studio'] },
+      { icon: 'search', label: 'Cull',      sub: '200+ selects with hero candidates flagged for review',         deliverables: ['200+ selects'] },
+      { icon: 'check',  label: 'Post',      sub: 'Hero retouches and B-roll delivered for campaign use',         deliverables: ['B-roll footage'] },
+    ],
+    metrics: ['Hero image approval rate', 'Asset channel coverage', 'Campaign launch speed'],
+    mediaSpend: 'Not required',
+    cadence: 'Per campaign or brand refresh',
+    who: 'Brands launching a campaign or refreshing their visual identity who need polished, directed hero content with talent and art direction.',
+    have: 'A library of directed brand imagery and footage ready for campaigns, website, social, and sales materials.',
+  },
+  {
+    id: 'live-action',
+    name: 'Live Action',
+    goal: 'On-location production for brand films, case studies, and campaign content.',
+    price: '$15,000',
+    deliverables: [
+      { icon: 'concept',      label: 'Creative direction' },
+      { icon: 'film',         label: 'Location production' },
+      { icon: 'launch-film',  label: 'Brand film (2–4 min)' },
+      { icon: 'sprint',       label: '30-second cut-downs' },
+    ],
+    target: 'Brand Film / Campaign',
+    flowLabel: 'Production flow',
+    flow: [
+      { icon: 'brain',  label: 'Pre-prod',   sub: 'Concept, script, location scouting, crew, and talent',         deliverables: ['Creative direction'] },
+      { icon: 'bolt',   label: 'Production', sub: 'Multi-setup location shoot with crew and direction',            deliverables: ['Location production'] },
+      { icon: 'search', label: 'Post',       sub: 'Edit, color, sound mix, and brand film assembly',              deliverables: ['Brand film (2–4 min)'] },
+      { icon: 'check',  label: 'Cut-downs',  sub: 'Short cuts for paid, social, and sales formatted per platform', deliverables: ['30-second cut-downs'] },
+    ],
+    metrics: ['Film completion rate', 'Video engagement rate', 'Pipeline influence', 'Brand recall lift'],
+    mediaSpend: 'Recommended',
+    cadence: 'Per campaign or annual refresh',
+    who: 'Brands with a story to tell: customer wins, founder narratives, and campaign heroes that need to live in the real world.',
+    have: 'A produced brand film and cut-downs ready for YouTube, paid social, and the sales deck.',
+  },
 ]
 
 // ── Services ──────────────────────────────────────────────────────────────
@@ -2541,7 +2665,219 @@ const DIGITAL_SERVICES = [
       },
     ],
   },
-];
+]
+
+const SHOOT_SERVICES = [
+  {
+    id: 'pre-production',
+    area: 'Pre-Production',
+    num: 1,
+    services: [
+      {
+        name: 'Creative direction',
+        hours: 12, price: '$1,800',
+        who: 'Teams that have a shoot booked but need strategic creative direction before the camera turns on. Prevents costly reshoots.',
+        have: 'A shoot-ready creative package covering concept, mood, shot list, and art direction notes your crew can execute from.',
+        deliverables: [
+          { label: 'Creative concept' },
+          { label: 'Mood board' },
+          { label: 'Shot list' },
+          { label: 'Art direction brief' },
+        ],
+        turnaround: '3-5 days', target: 'Pre-Production',
+        metrics: ['Shot coverage rate', 'Reshoots required', 'Brief-to-shoot alignment'],
+        flow: [
+          { icon: 'brain',  label: 'Brief',   sub: 'Objectives, audience, and visual reference aligned',       deliverables: [] },
+          { icon: 'search', label: 'Develop', sub: 'Concept, mood, and shot list built out and reviewed',      deliverables: [] },
+          { icon: 'check',  label: 'Deliver', sub: 'Art direction package handed off before shoot day',        deliverables: [] },
+        ],
+      },
+      {
+        name: 'Shot list + storyboard',
+        hours: 8, price: '$1,100',
+        who: 'Productions that need a detailed frame-by-frame plan before crew call. Keeps the shoot day on schedule and reduces setup overruns.',
+        have: 'A complete shot list and storyboard your director and crew can work from, with time estimates per setup.',
+        deliverables: [
+          { label: 'Shot list (full coverage)' },
+          { label: 'Storyboard frames' },
+          { label: 'Setup time estimates' },
+        ],
+        turnaround: '2-3 days', target: 'Pre-Production',
+        metrics: ['Shot coverage rate', 'Shoot day efficiency', 'Setup overruns'],
+        flow: [
+          { icon: 'brain', label: 'Brief',   sub: 'Script or concept and key deliverables reviewed',            deliverables: [] },
+          { icon: 'bolt',  label: 'Build',   sub: 'Shot list and storyboard frames completed and reviewed',     deliverables: [] },
+          { icon: 'check', label: 'Deliver', sub: 'Final documents handed off to director and crew',            deliverables: [] },
+        ],
+      },
+      {
+        name: 'Location scouting',
+        hours: 10, price: '$1,400',
+        who: 'Productions shooting on location that need confirmed, permitted, and appropriate locations before shoot day.',
+        have: 'Two to three scouted locations with photos, accessibility notes, and permits confirmed.',
+        deliverables: [
+          { label: '2–3 scouted locations' },
+          { label: 'Location photos' },
+          { label: 'Logistics notes' },
+          { label: 'Permit confirmation' },
+        ],
+        turnaround: '3-5 days', target: 'Pre-Production',
+        metrics: ['Location approval rate', 'Day-of logistics issues', 'Permit compliance'],
+        flow: [
+          { icon: 'search',  label: 'Scout',    sub: 'Options researched, visited, and photographed',            deliverables: [] },
+          { icon: 'brain',   label: 'Evaluate', sub: 'Best options assessed against shoot requirements',          deliverables: [] },
+          { icon: 'check',   label: 'Confirm',  sub: 'Locations confirmed, logistics documented, permits filed',  deliverables: [] },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'photography',
+    area: 'Photography',
+    num: 2,
+    services: [
+      {
+        name: 'Product photography (half day)',
+        hours: 16, price: '$2,800',
+        who: 'Product brands needing a focused session for one to three hero products with clean, consistent results.',
+        have: '40–60 selects of product imagery on white or minimal backgrounds, retouched and ready for ads, PDPs, and email.',
+        deliverables: [
+          { label: 'Half-day shoot' },
+          { label: '40–60 selects' },
+          { label: 'Hero retouches' },
+          { label: 'Web and print exports' },
+        ],
+        turnaround: '5-7 days', target: 'Product',
+        metrics: ['Asset reuse rate', 'Ad CTR lift', 'PDP conversion rate'],
+        flow: [
+          { icon: 'brain', label: 'Prep',    sub: 'Shot list, product prep, and setup confirmed',                deliverables: [] },
+          { icon: 'bolt',  label: 'Shoot',   sub: 'Half-day product session with art direction',                deliverables: [] },
+          { icon: 'check', label: 'Deliver', sub: 'Selects culled, retouched, and exported',                    deliverables: [] },
+        ],
+      },
+      {
+        name: 'Lifestyle photography (half day)',
+        hours: 18, price: '$3,200',
+        who: 'Brands that need product or service imagery in real-world contexts: people, environments, and moments that tell a story.',
+        have: '40–60 lifestyle selects placing your brand in context, formatted for social, ads, and web.',
+        deliverables: [
+          { label: 'Half-day location or studio shoot' },
+          { label: '40–60 selects' },
+          { label: 'Light retouching' },
+          { label: 'Platform-ready exports' },
+        ],
+        turnaround: '5-7 days', target: 'Brand / Social',
+        metrics: ['Engagement rate', 'Ad performance', 'Brand recall'],
+        flow: [
+          { icon: 'brain', label: 'Prep',    sub: 'Location, talent, wardrobe, and shot list confirmed',         deliverables: [] },
+          { icon: 'bolt',  label: 'Shoot',   sub: 'Half-day lifestyle session with art direction',               deliverables: [] },
+          { icon: 'check', label: 'Deliver', sub: 'Selects culled, lightly retouched, and exported',             deliverables: [] },
+        ],
+      },
+      {
+        name: 'Corporate portraits',
+        hours: 12, price: '$2,200',
+        who: 'Companies that need professional, consistent headshots for founders, leadership teams, or the full staff roster.',
+        have: 'Retouched professional portraits for each subject, formatted for LinkedIn, website bios, and press use.',
+        deliverables: [
+          { label: 'Up to 6 subjects' },
+          { label: '3 selects per subject' },
+          { label: 'Full retouch per select' },
+          { label: 'Web, social, and press exports' },
+        ],
+        turnaround: '3-5 days', target: 'Brand / PR',
+        metrics: ['Profile completion rate', 'Press pickup rate', 'Consistency across subjects'],
+        flow: [
+          { icon: 'brain', label: 'Prep',    sub: 'Background, wardrobe guidance, and shot style confirmed',     deliverables: [] },
+          { icon: 'bolt',  label: 'Shoot',   sub: 'Studio or office session, up to 6 subjects',                 deliverables: [] },
+          { icon: 'check', label: 'Deliver', sub: 'Selects retouched and delivered per export spec',             deliverables: [] },
+        ],
+      },
+      {
+        name: 'Full-day photo production',
+        hours: 28, price: '$4,800',
+        who: 'Brands running a campaign shoot or seasonal content day that needs maximum coverage across multiple setups and subjects.',
+        have: '100–200 selects across all setups, hero retouches delivered, and raw library archived for future use.',
+        deliverables: [
+          { label: 'Full-day shoot' },
+          { label: '100–200 selects' },
+          { label: 'Hero retouches' },
+          { label: 'Full resolution exports' },
+        ],
+        turnaround: '7-10 days', target: 'Campaign / Brand',
+        metrics: ['Setup coverage rate', 'Hero approval rate', 'Campaign asset velocity'],
+        flow: [
+          { icon: 'brain', label: 'Pre-prod', sub: 'Shot list, crew, talent, and logistics confirmed',           deliverables: [] },
+          { icon: 'bolt',  label: 'Shoot',    sub: 'Full-day multi-setup session with direction',                deliverables: [] },
+          { icon: 'check', label: 'Deliver',  sub: 'Full select cull, hero retouch, and archive delivered',      deliverables: [] },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'video-production',
+    area: 'Video Production',
+    num: 3,
+    services: [
+      {
+        name: 'Social clip edit',
+        hours: 10, price: '$1,400',
+        who: 'Brands with existing footage that need edited, captioned social cuts without a new production day.',
+        have: '3–5 platform-ready short clips edited from your existing footage, formatted for feed and story.',
+        deliverables: [
+          { label: '3–5 edited clips' },
+          { label: 'Captions + subtitles' },
+          { label: 'Platform format exports' },
+        ],
+        turnaround: '3-5 days', target: 'Social / Repurpose',
+        metrics: ['Completion rate', 'Engagement rate', 'Cost per clip'],
+        flow: [
+          { icon: 'search', label: 'Review',  sub: 'Footage reviewed and cut selection confirmed',               deliverables: [] },
+          { icon: 'bolt',   label: 'Edit',    sub: 'Clips assembled, captioned, and formatted',                  deliverables: [] },
+          { icon: 'check',  label: 'Deliver', sub: 'All formats exported and delivered',                         deliverables: [] },
+        ],
+      },
+      {
+        name: 'Interview edit',
+        hours: 14, price: '$1,900',
+        who: 'Teams with recorded interview footage that need a clean, compelling edit for thought leadership or testimonial use.',
+        have: 'A polished interview video with clean cuts, lower thirds, color grade, and a 30-second cut-down.',
+        deliverables: [
+          { label: 'Primary interview edit' },
+          { label: 'Lower thirds' },
+          { label: 'Color grade' },
+          { label: '30-second cut-down' },
+        ],
+        turnaround: '5-7 days', target: 'Thought leadership / Testimonial',
+        metrics: ['View duration', 'Quote pull rate', 'Sales usage rate'],
+        flow: [
+          { icon: 'search', label: 'Review',  sub: 'Footage logged and key moments identified',                  deliverables: [] },
+          { icon: 'bolt',   label: 'Edit',    sub: 'Primary cut assembled with lower thirds and grade',          deliverables: [] },
+          { icon: 'check',  label: 'Deliver', sub: 'Long-form and cut-down exported and delivered',              deliverables: [] },
+        ],
+      },
+      {
+        name: 'Short brand film edit',
+        hours: 28, price: '$3,800',
+        who: 'Brands with production footage that need a complete short film edit with music, color, and sound design.',
+        have: 'A complete 60–90 second brand film ready for YouTube, the homepage, and paid distribution.',
+        deliverables: [
+          { label: 'Brand film (60–90 sec)' },
+          { label: 'Color grade' },
+          { label: 'Sound mix' },
+          { label: '15-second cut-down' },
+        ],
+        turnaround: '10-14 days', target: 'Brand / Campaign',
+        metrics: ['Film completion rate', 'Engagement rate', 'Pipeline influence'],
+        flow: [
+          { icon: 'search', label: 'Review',  sub: 'All footage logged and story structure confirmed',           deliverables: [] },
+          { icon: 'bolt',   label: 'Edit',    sub: 'Film assembled with music, grade, and sound',               deliverables: [] },
+          { icon: 'check',  label: 'Deliver', sub: 'Film and cut-down exported for distribution',               deliverables: [] },
+        ],
+      },
+    ],
+  },
+]
 
 // ── SVG Icons ─────────────────────────────────────────────────────────────
 function DeliverableIcon({ type }) {
@@ -3059,7 +3395,7 @@ function PkgIntroSlide() {
         <p className={styles.pkgIntroEyebrow}>Creative Production Catalog</p>
         <h2 className={styles.pkgIntroHeadline}>Built from the briefs<br />we hear most often.</h2>
         <p className={styles.pkgIntroBody}>
-          These 27 packages span content programs, brand systems, and digital products. Each starts with a proven scope, a clear goal, and a defined set of deliverables.
+          These 32 packages span content programs, brand systems, digital products, and shoots. Each starts with a proven scope, a clear goal, and a defined set of deliverables.
           From there, the work is shaped around your market, your audience, and what you are trying to accomplish.
         </p>
       </div>
@@ -3108,7 +3444,7 @@ function PkgCoverSlide() {
       </svg>
       <div className={styles.coverCornerStack}>
         <div className={styles.coverCornerTitle}>Creative Production Catalog.</div>
-        <div className={styles.coverCorner}>27 packages, 106 services. Content Programs, Brand Systems, and Digital Products.</div>
+        <div className={styles.coverCorner}>32 packages, 116 services. Content Programs, Brand Systems, Digital Products, and Shoots.</div>
       </div>
     </section>
   )
@@ -3174,11 +3510,11 @@ function PkgSlide({ pkg, num, total }) {
 }
 
 
-function PkgSectionSlide({ section, svcCount }) {
+function PkgSectionSlide({ section, svcCount, sectionTotal }) {
   return (
     <section className={styles.pkgVerticalSlide}>
       <div className={styles.pkgVerticalLeft}>
-        <p className={styles.pkgSectionEyebrow}>{String(section.num).padStart(2, '0')} / 03</p>
+        <p className={styles.pkgSectionEyebrow}>{String(section.num).padStart(2, '0')} / {String(sectionTotal).padStart(2, '0')}</p>
         <h2 className={styles.pkgSectionTitle}>{section.title}</h2>
         <p className={styles.pkgSectionBody}>{section.body}</p>
         <div className={styles.pkgAreaCounts}>
@@ -3407,12 +3743,13 @@ export default function ContentPackages() {
     { num: 1, id: 'content', title: 'Content Programs', body: 'Demand generation, lead capture, retention, and awareness. Delivered as fixed-scope production programs.', count: 12 },
     { num: 2, id: 'brand',   title: 'Brand Systems',   body: 'Brand strategy, identity, verbal systems, and sales enablement. Built to last and easy to extend.',         count: 8  },
     { num: 3, id: 'digital', title: 'Digital Products', body: 'Websites, microsites, interactive experiences, and product builds. Designed and shipped in one engagement.', count: 7  },
+    { num: 4, id: 'shoots',  title: 'Shoots',           body: 'Photo and video production formats. Five formats from creator-shot UGC to full live action.',               count: 5  },
   ]
 
-  const mkVerticalSlides = (section, pkgs, svcAreas, pkgStartNum) => {
+  const mkVerticalSlides = (section, pkgs, svcAreas, pkgStartNum, sectionTotal) => {
     const svcCount = svcAreas.reduce((s, a) => s + a.services.length, 0)
     return [
-      { kind: 'section',  section, svcCount },
+      { kind: 'section',  section, svcCount, sectionTotal },
       { kind: 'pkg-sub',  section: section.title, count: pkgs.length },
       ...pkgs.map((pkg, i) => ({ kind: 'package', pkg, num: pkgStartNum + i })),
       { kind: 'svc-sub',  section: section.title, count: svcCount },
@@ -3428,11 +3765,13 @@ export default function ContentPackages() {
     { kind: 'intro' },
     { kind: 'inside-detail' },
     { kind: 'toc' },
-    ...mkVerticalSlides(SECTIONS[0], PACKAGES.slice(0, 12),  CONTENT_SERVICES, 1),
-    ...mkVerticalSlides(SECTIONS[1], PACKAGES.slice(12, 20), BRAND_SERVICES,   13),
-    ...mkVerticalSlides(SECTIONS[2], PACKAGES.slice(20, 27), DIGITAL_SERVICES, 21),
+    ...mkVerticalSlides(SECTIONS[0], PACKAGES.slice(0, 12),  CONTENT_SERVICES, 1,  SECTIONS.length),
+    ...mkVerticalSlides(SECTIONS[1], PACKAGES.slice(12, 20), BRAND_SERVICES,   13, SECTIONS.length),
+    ...mkVerticalSlides(SECTIONS[2], PACKAGES.slice(20, 27), DIGITAL_SERVICES, 21, SECTIONS.length),
+    ...mkVerticalSlides(SECTIONS[3], PACKAGES.slice(27, 32), SHOOT_SERVICES,   28, SECTIONS.length),
     { kind: 'closing' },
     { kind: 'tiers' },
+    { kind: 'media' },
   ]
 
   const tocData = slides.reduce((acc, s, i) => {
@@ -3513,7 +3852,7 @@ export default function ContentPackages() {
           {current.kind === 'cover'   && <PkgCoverSlide />}
           {current.kind === 'intro'   && <PkgIntroSlide />}
           {current.kind === 'toc'          && <PkgTocSlide tocData={tocData} goTo={setIdx} />}
-          {current.kind === 'section'       && <PkgSectionSlide section={current.section} svcCount={current.svcCount} />}
+          {current.kind === 'section'       && <PkgSectionSlide section={current.section} svcCount={current.svcCount} sectionTotal={current.sectionTotal} />}
           {current.kind === 'pkg-sub'       && <PkgSubSlide section={current.section} count={current.count} />}
           {current.kind === 'svc-sub'       && <SvcSubSlide section={current.section} count={current.count} />}
           {current.kind === 'package'       && <PkgSlide pkg={current.pkg} num={current.num} total={PACKAGES.length} />}
@@ -3522,7 +3861,6 @@ export default function ContentPackages() {
           {current.kind === 'service-area'  && <SvcAreaSlide area={current.area} count={current.count} section={current.section} />}
           {current.kind === 'service'       && <SvcSlide svc={current.svc} num={current.svcNum} total={current.svcTotal} />}
           {current.kind === 'media'            && <PkgMediaSlide />}
-          {current.kind === 'tiers'           && <PkgTiersSlide />}
         </div>
         <div className={styles.controls}>
           <div className={styles.menuWrap}>
