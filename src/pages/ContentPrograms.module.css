@@ -1,0 +1,22 @@
+/* ── Print / PDF ── */
+
+.printAll {
+  display: none;
+}
+
+.printSlide {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+}
+
+@media print {
+  .printAll {
+    display: block;
+  }
+  .stage {
+    display: none;
+  }
+}

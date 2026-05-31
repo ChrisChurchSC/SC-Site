@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
 import { CAPABILITIES_QUERY } from '../lib/queries'
 import LazyVideo from '../components/LazyVideo'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
 
 const VARIANTS = {
@@ -68,52 +69,6 @@ const DIGITAL_INTRO_SLIDES = [
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
   },
   {
-    id: 'outcomes', layout: 'outcomes',
-    pill: 'Why it matters',
-    cards: [
-      {
-        tag: 'Conversion',
-        title: 'Turn traffic into pipeline.',
-        body: "A well-designed site with clear messaging and deliberate conversion architecture moves visitors toward a decision. The site stops being a presence and starts being a sales tool.",
-      },
-      {
-        tag: 'Speed',
-        title: 'Launch faster.',
-        body: "Design and build in one engagement eliminates the handoff gap, the biggest source of delay, scope creep, and rework in most web projects. Weeks, not months.",
-      },
-      {
-        tag: 'Discovery',
-        title: 'Build what users actually need.',
-        body: "Discovery-led design surfaces what users need before a line of code is written, reducing the risk of building the wrong thing at the cost of the right one.",
-      },
-      {
-        tag: 'Data',
-        title: 'Own a stack that gives you data.',
-        body: "When CRM, email platform, and GTM infrastructure are wired together correctly, you can see the full pipeline from first touch to closed deal in one place.",
-      },
-      {
-        tag: 'Scale',
-        title: 'Build once, iterate forever.',
-        body: "A design system turns your website and product into a platform you can extend, not a bespoke build you have to break every time you need to change something.",
-      },
-      {
-        tag: 'Differentiation',
-        title: 'Compete on experience.',
-        body: "Interactive and 3D experiences are rare enough that a well-executed one is genuinely memorable, and measurably increases dwell time, shareability, and brand lift.",
-      },
-      {
-        tag: 'Sales',
-        title: 'Stop losing deals to your website.',
-        body: "A poor digital presence is costing you deals you don't even know about. Prospects check your site after every conversation. Make sure what they find helps, not hurts.",
-      },
-      {
-        tag: 'Simplicity',
-        title: 'Reduce agency sprawl.',
-        body: "One partner holds design and build. No translation between teams, no version control across agencies, no one pointing fingers when something breaks.",
-      },
-    ],
-  },
-  {
     id: 'outcome-conversion', layout: 'outcome-detail',
     pill: 'Conversion',
     headline: 'Turn traffic into pipeline.',
@@ -140,58 +95,6 @@ const DIGITAL_INTRO_SLIDES = [
     ],
   },
   {
-    id: 'outcome-discovery', layout: 'outcome-detail',
-    pill: 'Discovery',
-    headline: 'Build what users actually need.',
-    when: "When you have a product idea but limited certainty about which features matter most, or when a previous product failed to get traction and you need to understand why.",
-    before: "Features built on assumptions. A product that launches to silence. Expensive rework once real users encounter it.",
-    after: "User flows mapped, key interactions tested as prototypes, and the highest-value feature set identified before full build begins. Less waste. Better product.",
-    stats: [
-      { metric: 'Feature adoption rate', result: '+25–40%' },
-      { metric: 'Time-to-first-value', result: '30–50% faster' },
-      { metric: 'Post-launch rework cost', result: '40–60% lower (Nielsen Norman)' },
-    ],
-  },
-  {
-    id: 'outcome-data', layout: 'outcome-detail',
-    pill: 'Data',
-    headline: 'Own a stack that gives you data.',
-    when: "When you're scaling a sales or marketing function and need to know which channels, campaigns, and content are actually driving revenue.",
-    before: "Disconnected tools. Marketing can't see what sales is doing. No one knows which campaign sourced which deal. Reporting is a manual exercise.",
-    after: "A connected stack. Every lead tracked. Attribution visible. Marketing and sales working from the same data. Decisions made on evidence, not instinct.",
-    stats: [
-      { metric: 'Pipeline visibility', result: '2–3x improvement in tracked deals' },
-      { metric: 'Marketing attribution accuracy', result: '+40–60%' },
-      { metric: 'Manual reporting time', result: '50–70% reduction' },
-    ],
-  },
-  {
-    id: 'outcome-scale', layout: 'outcome-detail',
-    pill: 'Scale',
-    headline: 'Build once, iterate forever.',
-    when: "When you're planning to grow the site or product over time, when you have an internal team that will manage it, or when pace of iteration matters.",
-    before: "Every update requires a designer. Every new page is built from scratch. The site drifts from the brand over time. Changes take weeks.",
-    after: "A component library and token system your team can use. New pages built in hours, not days. Brand consistency maintained without agency involvement for every update.",
-    stats: [
-      { metric: 'Time per site update', result: '50–70% faster' },
-      { metric: 'Cost per new page or feature', result: '40–60% lower' },
-      { metric: 'Design system adoption', result: 'Near 100% with documented components' },
-    ],
-  },
-  {
-    id: 'outcome-experience', layout: 'outcome-detail',
-    pill: 'Differentiation',
-    headline: 'Compete on experience.',
-    when: "When you're in a crowded market where differentiation has to come from how you show up, not just what you're selling.",
-    before: "A flat site that looks like every competitor's flat site. Nothing to share. Nothing to remember. The brand is present but not felt.",
-    after: "An experience that people show each other. A flagship digital moment that signals your category of ambition. Traffic that comes back.",
-    stats: [
-      { metric: 'Average session duration', result: '+30–60%' },
-      { metric: 'Bounce rate', result: '20–35% reduction' },
-      { metric: 'Social shares and referral traffic', result: '+50–100% for flagship interactive builds' },
-    ],
-  },
-  {
     id: 'outcome-deals', layout: 'outcome-detail',
     pill: 'Sales',
     headline: 'Stop losing deals to your website.',
@@ -202,19 +105,6 @@ const DIGITAL_INTRO_SLIDES = [
       { metric: 'Post-demo to proposal conversion', result: '+15–25%' },
       { metric: 'Sales-assisted close rate', result: '+10–20%' },
       { metric: 'Prospect engagement after calls', result: 'Measurably higher with a credible digital presence' },
-    ],
-  },
-  {
-    id: 'outcome-sprawl', layout: 'outcome-detail',
-    pill: 'Simplicity',
-    headline: 'Reduce agency sprawl.',
-    when: "When you're managing two or more agencies for a single digital project and spending time project-managing the relationship between them instead of getting results.",
-    before: "Design agency, dev agency, and sometimes a third for CMS. Three invoices. Three timelines. Three places for things to fall through the gaps.",
-    after: "One point of contact. One team with full context. Faster decisions, cleaner output, and accountability that doesn't get lost between vendors.",
-    stats: [
-      { metric: 'Project delivery time', result: '20–40% faster' },
-      { metric: 'Cost overrun rate', result: '30–50% lower' },
-      { metric: 'Revision rounds', result: '40–60% fewer with single-team accountability' },
     ],
   },
   {
@@ -230,6 +120,16 @@ const DIGITAL_INTRO_SLIDES = [
       { name: 'Full Web Build', goal: 'Large multi-template site with a design system to extend it', includes: ['Web strategy & sitemap', 'Big marketing site + CMS', 'Design system/component library'], price: '$43,275' },
     ],
     note: 'CRM Setup, Email System, and Full GTM Stack are available as custom-scoped engagements — pricing on request. Engagements start from $11,210.',
+  },
+  {
+    id: 'how-we-work', layout: 'numbered',
+    pill: 'How we work',
+    videoUrl: '/sc-wip-v01.mp4',
+    items: [
+      { num: '01', title: 'Start with a project.', body: "Every engagement starts with a fixed-scope, fixed-price project — no retainer required. Packages start at $7,550. A pilot project first: proof that working together works, before committing to anything ongoing." },
+      { num: '02', title: 'Set a budget. Draw it down.', body: "Convert to a quarterly retainer drawn against any service at rate-card prices. From $3,000 per quarter. No AOR contract, no retainer bloat — prepaid credit you use when you need it, as long as you need it." },
+      { num: '03', title: 'We sit inside your business.', body: "Commit $10K+ per quarter and the full SC team sits inside your business: invited to meetings, doing the work, and advising on where creative and development spend should go. A dedicated Fractional Marketing Director coordinates it all — included free." },
+    ],
   },
   {
     id: 'services', layout: 'dp-services',
@@ -324,6 +224,18 @@ export default function DigitalProducts() {
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
 
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint || loading) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-digital-products-deck.pdf')
+    }, 1500)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint, loading])
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); setIdx(idx + 1) }
@@ -352,35 +264,63 @@ export default function DigitalProducts() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.stage}>
-        <div className={styles.slideFrame}>
-          {current.kind === 'closing'
-            ? <ClosingSlide />
-            : current.kind === 'intro'
-              ? <IntroSlide slide={current.slide} tile={current.tile} />
-              : <ClientSlide client={current.client} />}
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
+        <div className={styles.stage}>
+          <div className={styles.slideFrame}>
+            {current.kind === 'closing'
+              ? <ClosingSlide />
+              : current.kind === 'intro'
+                ? <IntroSlide slide={current.slide} tile={current.tile} />
+                : <ClientSlide client={current.client} />}
+          </div>
+
+          <div className={styles.controls}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx - 1)}
+              disabled={idx === 0}
+              aria-label="Previous slide"
+            >← Prev</button>
+            <span className={styles.counter}>
+              {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
+            </span>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx + 1)}
+              disabled={idx === total - 1}
+              aria-label="Next slide"
+            >Next →</button>
+          </div>
         </div>
 
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx - 1)}
-            disabled={idx === 0}
-            aria-label="Previous slide"
-          >← Prev</button>
-          <span className={styles.counter}>
-            {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
-          </span>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx + 1)}
-            disabled={idx === total - 1}
-            aria-label="Next slide"
-          >Next →</button>
+        <div className={styles.mobileScrollDeck}>
+          {slides.map((s, i) => (
+            <div key={i} className={styles.mobileSlideSection}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }
@@ -397,12 +337,39 @@ function IntroSlide({ slide, tile }) {
     case 'outcome-detail':  return <DpOutcomeDetailSlide slide={slide} tile={tile} />
     case 'dp-packages':     return <DpPackagesSlide slide={slide} />
     case 'dp-services':     return <DpServicesSlide slide={slide} />
+    case 'numbered':        return <NumberedSlide slide={slide} />
     default:                return null
   }
 }
 
 function Pill({ children }) {
   return <span className={styles.pill}>{children}</span>
+}
+
+function NumberedSlide({ slide }) {
+  return (
+    <section className={styles.introSlide}>
+      <Pill>{slide.pill}</Pill>
+      <div className={styles.numberedLayout}>
+        <div className={styles.numberedLeft}>
+          <div className={styles.numberedCards}>
+            {slide.items.map(item => (
+              <div key={item.num} className={styles.numberedCard}>
+                <span className={styles.numberedNum}>{item.num}</span>
+                <p className={styles.numberedTitle}>{item.title}</p>
+                {item.body && <p className={styles.numberedBody}>{item.body}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+        {slide.videoUrl && (
+          <div className={styles.numberedMosaic} style={{ borderRadius: 6, overflow: 'hidden', display: 'block' }}>
+            <video src={slide.videoUrl} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 // ────────────────────────────────────────────────────────────────────────
@@ -506,37 +473,34 @@ function DpOutcomesSlide({ slide }) {
   )
 }
 
-function DpOutcomeDetailSlide({ slide, tile }) {
+function DpOutcomeDetailSlide({ slide }) {
   return (
     <section className={styles.introSlide}>
       <Pill>{slide.pill}</Pill>
       <h2 className={styles.bsDetailTitle}>{slide.headline}</h2>
-      <div className={styles.bsDetailMain}>
-        {tile && <Tile tile={tile} className={styles.bsDetailImage} />}
-        <div className={styles.bsDetailCards}>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>When you need it</p>
-            <p className={styles.bsDetailBody}>{slide.when}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>Before</p>
-            <p className={styles.bsDetailBody}>{slide.before}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>After</p>
-            <p className={styles.bsDetailBody}>{slide.after}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>The numbers</p>
-            <ul className={styles.bsDetailStats}>
-              {slide.stats.map(s => (
-                <li key={s.metric} className={styles.bsDetailStat}>
-                  <span className={styles.bsDetailMetric}>{s.metric}</span>
-                  <span className={styles.bsDetailResult}>{s.result}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className={styles.bsDetailRow}>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>When you need it</p>
+          <p className={styles.bsDetailBody}>{slide.when}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>Before</p>
+          <p className={styles.bsDetailBody}>{slide.before}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>After</p>
+          <p className={styles.bsDetailBody}>{slide.after}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>The numbers</p>
+          <ul className={styles.bsDetailStats}>
+            {slide.stats.map(s => (
+              <li key={s.metric} className={styles.bsDetailStat}>
+                <span className={styles.bsDetailMetric}>{s.metric}</span>
+                <span className={styles.bsDetailResult}>{s.result}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

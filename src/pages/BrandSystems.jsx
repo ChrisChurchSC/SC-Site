@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
 import { CAPABILITIES_QUERY } from '../lib/queries'
 import LazyVideo from '../components/LazyVideo'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
 
 const VARIANTS = {
@@ -70,52 +71,6 @@ const BRAND_INTRO_SLIDES = [
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
   },
   {
-    id: 'outcomes', layout: 'outcomes',
-    pill: 'Why it matters',
-    cards: [
-      {
-        tag: 'Credibility',
-        title: 'Look credible before you speak.',
-        body: 'A cohesive identity signals that your business is established and trustworthy before a prospect has read a single word. Trust is established before the conversation starts.',
-      },
-      {
-        tag: 'Deal size',
-        title: 'Close bigger deals.',
-        body: 'Polished sales and investor materials raise perceived value and reduce the friction that kills deals. Buyers feel confident recommending you internally.',
-      },
-      {
-        tag: 'Velocity',
-        title: 'Shorten your sales cycle.',
-        body: 'Buyers decide faster when they trust what they see. Strong brand materials reduce the cognitive load of evaluating you. Prospects move because the brand signals reliability.',
-      },
-      {
-        tag: 'Fundraising',
-        title: 'Raise with confidence.',
-        body: 'Investor materials that tell a coherent, well-crafted story hold up under due diligence and competitive comparison. Decks in the top design quartile get 2x more follow-on meetings.',
-      },
-      {
-        tag: 'Scale',
-        title: 'Scale without brand drift.',
-        body: 'A proper system means any new hire, contractor, or agency produces on-brand work without pulling in a senior designer every time. One source of truth.',
-      },
-      {
-        tag: 'New markets',
-        title: 'Enter new markets without starting from scratch.',
-        body: "A refresh or reposition evolves your identity to match where the business is going, without throwing away what's already working. The brand grows with the business.",
-      },
-      {
-        tag: 'Design debt',
-        title: 'Reduce design debt.',
-        body: "Stop paying to redo one-off assets that don't connect to anything. A proper system means every asset built is an investment, not a sunk cost. Rework hours drop 40–60%.",
-      },
-      {
-        tag: 'AI',
-        title: 'Make AI work for your brand.',
-        body: 'Train your AI tools on your brand voice, visual identity, and guidelines so AI-generated content stays on-brand at scale. Editing time per AI asset drops 40–60%.',
-      },
-    ],
-  },
-  {
     id: 'outcome-credibility', layout: 'outcome-detail',
     pill: 'Credibility',
     headline: 'Look credible before you speak.',
@@ -142,19 +97,6 @@ const BRAND_INTRO_SLIDES = [
     ],
   },
   {
-    id: 'outcome-velocity', layout: 'outcome-detail',
-    pill: 'Velocity',
-    headline: 'Shorten your sales cycle.',
-    when: "When deals are dragging, prospects are stalling, or you're losing to competitors you know you're better than.",
-    before: "Long decision timelines. Prospects who say they'll circle back. Deals that die in the committee stage.",
-    after: "Prospects move faster because the brand signals reliability. Internal champions can sell you to their stakeholders with confidence.",
-    stats: [
-      { metric: 'Days to close', result: '20–30% reduction (Aberdeen Group)' },
-      { metric: 'Deal velocity', result: '+15–25% with strong collateral' },
-      { metric: 'Internal champion conversion', result: '+20–35%' },
-    ],
-  },
-  {
     id: 'outcome-fundraising', layout: 'outcome-detail',
     pill: 'Fundraising',
     headline: 'Raise with confidence.',
@@ -165,58 +107,6 @@ const BRAND_INTRO_SLIDES = [
       { metric: 'Meeting-to-term-sheet rate', result: 'Significant lift with top-quartile design' },
       { metric: 'Follow-on investor meetings', result: '2× more for top-quartile decks' },
       { metric: 'Deck engagement time', result: '+30–50% (time on content, not layout)' },
-    ],
-  },
-  {
-    id: 'outcome-scale', layout: 'outcome-detail',
-    pill: 'Scale',
-    headline: 'Scale without brand drift.',
-    when: "When your team is growing, you're working with external partners, or producing assets across multiple channels at the same time.",
-    before: "Every new joiner recreates the brand from scratch. Assets drift. No one is sure which logo is current.",
-    after: "One source of truth. New team members are brand-ready from day one. External partners produce to the same standard without a lengthy briefing.",
-    stats: [
-      { metric: 'Design rework hours', result: '40–60% reduction' },
-      { metric: 'Cost per asset', result: '30–50% lower with a reusable system' },
-      { metric: 'Revenue impact', result: 'Up to 23% increase with consistent brand (Lucidpress)' },
-    ],
-  },
-  {
-    id: 'outcome-markets', layout: 'outcome-detail',
-    pill: 'New markets',
-    headline: 'Enter new markets without starting from scratch.',
-    when: "When your business has changed but your brand hasn't caught up. When you're moving into a new segment, geography, or buyer profile.",
-    before: "A brand built for who you were three years ago. Prospects in the new market don't immediately understand who you are or why you're relevant.",
-    after: "An evolved identity that bridges your history and your ambition. The brand grows with the business rather than holding it back.",
-    stats: [
-      { metric: 'New segment win rate', result: '+15–25%' },
-      { metric: 'Time-to-market for reposition', result: '30–40% faster than rebuilding from scratch' },
-      { metric: 'Brand recognition in new segment', result: 'Measurable lift within 2–3 months of launch' },
-    ],
-  },
-  {
-    id: 'outcome-debt', layout: 'outcome-detail',
-    pill: 'Design debt',
-    headline: 'Reduce design debt.',
-    when: "When you've spent significant budget on one-off design work that can't be reused, or when your team is constantly recreating assets from memory.",
-    before: "A graveyard of one-off assets. Constant rework. Design time spent rebuilding rather than building forward.",
-    after: "A reusable system. Every new asset extends the brand rather than fragmenting it. Design time is spent creating, not correcting.",
-    stats: [
-      { metric: 'Cost per asset', result: '30–50% reduction' },
-      { metric: 'Design team capacity freed', result: '40–60% of hours previously spent on rework' },
-      { metric: 'Rework cost per quarter', result: '-35–55%' },
-    ],
-  },
-  {
-    id: 'outcome-ai', layout: 'outcome-detail',
-    pill: 'AI',
-    headline: 'Make AI work for your brand.',
-    when: "When your team is using AI tools to produce content and those tools are generating outputs that don't sound or look like you.",
-    before: "AI outputs that are generic, off-tone, and require heavy editing to bring them into brand. The efficiency gains disappear in the correction.",
-    after: "A branded AI setup: prompt libraries, trained guidelines, usage docs. Outputs your team can actually use. The efficiency gains are real.",
-    stats: [
-      { metric: 'Editing time per AI asset', result: '40–60% reduction' },
-      { metric: 'Brand consistency in AI outputs', result: '+50–70%' },
-      { metric: 'Content production time', result: '30–50% faster at scale' },
     ],
   },
   {
@@ -233,6 +123,16 @@ const BRAND_INTRO_SLIDES = [
       { name: 'Brand + Web Platform', goal: 'Brand platform paired with a marketing site', includes: ['Brand platform', 'Marketing site', 'CMS', 'Deck template system'], price: '$78,325' },
     ],
     note: 'All packages are fixed-scope and fixed-price. Custom scopes available.',
+  },
+  {
+    id: 'how-we-work', layout: 'numbered',
+    pill: 'How we work',
+    videoUrl: '/sc-wip-v01.mp4',
+    items: [
+      { num: '01', title: 'Start with a project.', body: "Every engagement starts with a fixed-scope, fixed-price project — no retainer required. Packages start at $7,550. A pilot project first: proof that working together works, before committing to anything ongoing." },
+      { num: '02', title: 'Set a budget. Draw it down.', body: "Convert to a quarterly retainer drawn against any service at rate-card prices. From $3,000 per quarter. No AOR contract, no retainer bloat — prepaid credit you use when you need it, as long as you need it." },
+      { num: '03', title: 'We sit inside your business.', body: "Commit $10K+ per quarter and the full SC team sits inside your business: invited to meetings, doing the work, and advising on where creative and development spend should go. A dedicated Fractional Marketing Director coordinates it all — included free." },
+    ],
   },
   {
     id: 'services', layout: 'bs-services',
@@ -330,6 +230,18 @@ export default function BrandSystems() {
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
 
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint || loading) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-brand-systems-deck.pdf')
+    }, 1500)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint, loading])
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); setIdx(idx + 1) }
@@ -358,35 +270,63 @@ export default function BrandSystems() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.stage}>
-        <div className={styles.slideFrame}>
-          {current.kind === 'closing'
-            ? <ClosingSlide />
-            : current.kind === 'intro'
-              ? <IntroSlide slide={current.slide} tile={current.tile} />
-              : <ClientSlide client={current.client} />}
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
+        <div className={styles.stage}>
+          <div className={styles.slideFrame}>
+            {current.kind === 'closing'
+              ? <ClosingSlide />
+              : current.kind === 'intro'
+                ? <IntroSlide slide={current.slide} tile={current.tile} />
+                : <ClientSlide client={current.client} />}
+          </div>
+
+          <div className={styles.controls}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx - 1)}
+              disabled={idx === 0}
+              aria-label="Previous slide"
+            >← Prev</button>
+            <span className={styles.counter}>
+              {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
+            </span>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx + 1)}
+              disabled={idx === total - 1}
+              aria-label="Next slide"
+            >Next →</button>
+          </div>
         </div>
 
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx - 1)}
-            disabled={idx === 0}
-            aria-label="Previous slide"
-          >← Prev</button>
-          <span className={styles.counter}>
-            {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
-          </span>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx + 1)}
-            disabled={idx === total - 1}
-            aria-label="Next slide"
-          >Next →</button>
+        <div className={styles.mobileScrollDeck}>
+          {slides.map((s, i) => (
+            <div key={i} className={styles.mobileSlideSection}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }
@@ -404,12 +344,39 @@ function IntroSlide({ slide, tile }) {
     case 'outcome-detail':    return <BsOutcomeDetailSlide slide={slide} tile={tile} />
     case 'bs-packages':       return <BsPackagesSlide slide={slide} />
     case 'bs-services':       return <BsServicesSlide slide={slide} />
+    case 'numbered':          return <NumberedSlide slide={slide} />
     default:                  return null
   }
 }
 
 function Pill({ children }) {
   return <span className={styles.pill}>{children}</span>
+}
+
+function NumberedSlide({ slide }) {
+  return (
+    <section className={styles.introSlide}>
+      <Pill>{slide.pill}</Pill>
+      <div className={styles.numberedLayout}>
+        <div className={styles.numberedLeft}>
+          <div className={styles.numberedCards}>
+            {slide.items.map(item => (
+              <div key={item.num} className={styles.numberedCard}>
+                <span className={styles.numberedNum}>{item.num}</span>
+                <p className={styles.numberedTitle}>{item.title}</p>
+                {item.body && <p className={styles.numberedBody}>{item.body}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+        {slide.videoUrl && (
+          <div className={styles.numberedMosaic} style={{ borderRadius: 6, overflow: 'hidden', display: 'block' }}>
+            <video src={slide.videoUrl} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 // ────────────────────────────────────────────────────────────────────────
@@ -539,32 +506,29 @@ function BsOutcomeDetailSlide({ slide, tile }) {
     <section className={styles.introSlide}>
       <Pill>{slide.pill}</Pill>
       <h2 className={styles.bsDetailTitle}>{slide.headline}</h2>
-      <div className={styles.bsDetailMain}>
-        {tile && <Tile tile={tile} className={styles.bsDetailImage} />}
-        <div className={styles.bsDetailCards}>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>When you need it</p>
-            <p className={styles.bsDetailBody}>{slide.when}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>Before</p>
-            <p className={styles.bsDetailBody}>{slide.before}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>After</p>
-            <p className={styles.bsDetailBody}>{slide.after}</p>
-          </div>
-          <div className={styles.bsDetailCard}>
-            <p className={styles.bsDetailLabel}>The numbers</p>
-            <ul className={styles.bsDetailStats}>
-              {slide.stats.map(s => (
-                <li key={s.metric} className={styles.bsDetailStat}>
-                  <span className={styles.bsDetailMetric}>{s.metric}</span>
-                  <span className={styles.bsDetailResult}>{s.result}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className={styles.bsDetailRow}>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>When you need it</p>
+          <p className={styles.bsDetailBody}>{slide.when}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>Before</p>
+          <p className={styles.bsDetailBody}>{slide.before}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>After</p>
+          <p className={styles.bsDetailBody}>{slide.after}</p>
+        </div>
+        <div className={styles.bsDetailCard}>
+          <p className={styles.bsDetailLabel}>The numbers</p>
+          <ul className={styles.bsDetailStats}>
+            {slide.stats.map(s => (
+              <li key={s.metric} className={styles.bsDetailStat}>
+                <span className={styles.bsDetailMetric}>{s.metric}</span>
+                <span className={styles.bsDetailResult}>{s.result}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

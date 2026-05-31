@@ -17,6 +17,7 @@ import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
 import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
+import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
 import DeckGate from './components/DeckGate'
 
@@ -45,7 +46,7 @@ function ChromeGate({ children }) {
 function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
-  if (location.pathname === '/') return null
+  if (location.pathname === '/' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
@@ -100,6 +101,7 @@ export default function App() {
                 <Route path="/content-programs" element={<DeckGate><Suspense fallback={null}><ContentPrograms /></Suspense></DeckGate>} />
                 <Route path="/digital-products" element={<DeckGate><Suspense fallback={null}><DigitalProducts /></Suspense></DeckGate>} />
                 <Route path="/content-packages" element={<DeckGate><Suspense fallback={null}><ContentPackages /></Suspense></DeckGate>} />
+                <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

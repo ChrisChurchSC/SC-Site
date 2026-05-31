@@ -230,6 +230,40 @@ export const CLIENT_LANDING_QUERY = `*[_type == "clientLanding" && slug.current 
   }
 }`
 
+export const LANDING_PAGE_QUERY = `*[_type == "landingPage" && slug.current == $slug][0] {
+  _id,
+  seoTitle,
+  seoDescription,
+  heroHeadline,
+  heroAnswer,
+  body[] {
+    _type,
+    _key,
+    text,
+    heading,
+    "imageUrl": image.asset->url,
+    alt
+  },
+  processLabel,
+  processSteps[] { label, description },
+  faqLabel,
+  faqs[] { question, answer },
+  ctaHeading,
+  ctaBody,
+  "relatedWork": relatedWork[]-> {
+    "slug": slug.current,
+    "n": string(order),
+    name,
+    type,
+    tagline,
+    "thumbnail": coalesce(
+      thumbnailImages[0].asset->url,
+      sections[_type == "imageFullSection" && defined(image.asset)][0].image.asset->url
+    ),
+    "thumbnailVideo": thumbnailVideoFile.asset->url
+  }
+}`
+
 export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepage-grid"][0] {
   blocks[] {
     _key,

@@ -1,6 +1,7 @@
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useMeta } from '../hooks/useMeta'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
 
 // ── Packages ─────────────────────────────────────────────────────────────
@@ -3654,11 +3655,78 @@ function SvcSlide({ svc, num, total }) {
   )
 }
 
+function PkgInsideSlide() {
+  return (
+    <section className={styles.pkgIntroSlide}>
+      <div className={styles.pkgIntroLeft}>
+        <p className={styles.pkgIntroEyebrow}>Inside — $10K+/quarter</p>
+        <h2 className={styles.pkgIntroHeadline}>A director on your team.<br />Included free.</h2>
+        <p className={styles.pkgIntroBody}>
+          At $10K+/quarter, you get an embedded director who works as part of your team — not billed against your budget, just there. Their job is to make sure every dollar of your spend goes to the right place.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 24px', marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          {[
+            'Fractional, not full-time. Available for key meetings, reviews, and advisory.',
+            'Director time is included free. The $10K is your production budget.',
+            'One director per active pillar. All three activate if all three pillars are running.',
+            'Quarterly commitment. 90-day cycles, renewed by agreement.',
+          ].map((note, i) => (
+            <p key={i} className={styles.pricingNote} style={{ margin: 0, lineHeight: 1.65 }}>{note}</p>
+          ))}
+        </div>
+      </div>
+      <div className={styles.pkgIntroRight}>
+        {[
+          { label: 'Content Programs', title: 'Fractional Marketing Director', body: 'Joins your marketing and pipeline meetings. Advises on where spend should go. Reviews briefs before work starts. Flags what is not worth doing before it costs anything.' },
+          { label: 'Brand Systems', title: 'Fractional Creative Director', body: 'Joins brand and creative reviews. Sets direction and keeps the system coherent. Briefs the team directly — no re-briefs. Reviews all creative output and advises on where brand spend is best used.' },
+          { label: 'Digital Products', title: 'Fractional Product Director', body: 'Joins product and roadmap meetings. Advises on scope and priorities. Reviews designs before development starts. Flags cost issues early. Keeps design and build aligned.' },
+        ].map(card => (
+          <div key={card.label} className={styles.pkgIntroCard}>
+            <p className={styles.pkgIntroCardLabel}>{card.label}</p>
+            <p className={styles.pkgIntroCardBody} style={{ fontWeight: 400, color: 'rgba(255,255,255,0.88)', fontSize: 'clamp(11px, 0.9vw, 13px)' }}>{card.title}</p>
+            <p className={styles.pkgIntroCardBody}>{card.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function PkgClosingSlide() {
   return (
-    <section className={styles.closingSlide}>
-      <img src="https://cdn.sanity.io/files/ppq16wpu/production/f4fbfd1cf112b5d16a11cd8800b9b8d5f02ae496.gif" alt="" className={styles.closingGif}/>
-      <div className={styles.closingSocials}>
+    <section className={styles.introSlide}>
+      <span className={styles.pill}>How to start</span>
+      <h2 className={styles.headline}>Ready when you are.</h2>
+      <div className={styles.commitmentTiers} style={{ flex: 1, minHeight: 0 }}>
+        <div className={styles.commitmentTier}>
+          <p className={styles.commitmentLabel}>01 — Projects & Packages</p>
+          <p className={styles.commitmentRate}>Start here.</p>
+          <p className={styles.commitmentBody}>Fixed-scope, fixed-price. Start with a pilot project — no retainer required. Packages start at $7,550.</p>
+          <div className={styles.pricingFooterRow}>
+            <p className={styles.commitmentLabel}>From $7,550</p>
+            <p className={styles.pricingNote}>per project</p>
+          </div>
+        </div>
+        <div className={styles.commitmentTier}>
+          <p className={styles.commitmentLabel}>02 — Studio Drawdown</p>
+          <p className={styles.commitmentRate}>Set a budget.</p>
+          <p className={styles.commitmentBody}>A quarterly retainer drawn against any service at rate-card prices. From $3,000 per quarter. No AOR contract, no bloat.</p>
+          <div className={styles.pricingFooterRow}>
+            <p className={styles.commitmentLabel}>From $3,000</p>
+            <p className={styles.pricingNote}>per quarter</p>
+          </div>
+        </div>
+        <div className={styles.commitmentTier}>
+          <p className={styles.commitmentLabel}>03 — Inside</p>
+          <p className={styles.commitmentRate}>Go deep.</p>
+          <p className={styles.commitmentBody}>The full SC team inside your business. Invited to meetings, doing the work, advising on spend. Fractional Marketing Director included free.</p>
+          <div className={styles.pricingFooterRow}>
+            <p className={styles.commitmentLabel}>From $10,000</p>
+            <p className={styles.pricingNote}>per quarter</p>
+          </div>
+        </div>
+      </div>
+      <div className={styles.closingSocials} style={{ marginTop: 24 }}>
         <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>Instagram</a>
         <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noopener noreferrer" className={styles.closingSocialLink}>LinkedIn</a>
       </div>
@@ -3695,12 +3763,14 @@ export default function ContentPackages() {
   const slides = [
     { kind: 'cover' },
     { kind: 'intro' },
+    { kind: 'inside-detail' },
     { kind: 'toc' },
     ...mkVerticalSlides(SECTIONS[0], PACKAGES.slice(0, 12),  CONTENT_SERVICES, 1,  SECTIONS.length),
     ...mkVerticalSlides(SECTIONS[1], PACKAGES.slice(12, 20), BRAND_SERVICES,   13, SECTIONS.length),
     ...mkVerticalSlides(SECTIONS[2], PACKAGES.slice(20, 27), DIGITAL_SERVICES, 21, SECTIONS.length),
     ...mkVerticalSlides(SECTIONS[3], PACKAGES.slice(27, 32), SHOOT_SERVICES,   28, SECTIONS.length),
     { kind: 'closing' },
+    { kind: 'tiers' },
     { kind: 'media' },
   ]
 
@@ -3721,6 +3791,18 @@ export default function ContentPackages() {
     params.set('slide', String(clamped + 1))
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
+
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-content-packages-deck.pdf')
+    }, 3000)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -3743,6 +3825,28 @@ export default function ContentPackages() {
 
   return (
     <main className={styles.main}>
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'cover'         && <PkgCoverSlide />}
+              {s.kind === 'intro'         && <PkgIntroSlide />}
+              {s.kind === 'toc'           && <PkgTocSlide tocData={tocData} goTo={setIdx} />}
+              {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} />}
+              {s.kind === 'pkg-sub'       && <PkgSubSlide section={s.section} count={s.count} />}
+              {s.kind === 'svc-sub'       && <SvcSubSlide section={s.section} count={s.count} />}
+              {s.kind === 'package'       && <PkgSlide pkg={s.pkg} num={s.num} total={PACKAGES.length} />}
+              {s.kind === 'inside-detail' && <PkgInsideSlide />}
+              {s.kind === 'closing'       && <PkgClosingSlide />}
+              {s.kind === 'service-area'  && <SvcAreaSlide area={s.area} count={s.count} section={s.section} />}
+              {s.kind === 'service'       && <SvcSlide svc={s.svc} num={s.svcNum} total={s.svcTotal} />}
+              {s.kind === 'media'         && <PkgMediaSlide />}
+              {s.kind === 'tiers'         && <PkgTiersSlide />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
       <div className={styles.stage}>
         <div className={styles.slideFrame}>
           {current.kind === 'cover'   && <PkgCoverSlide />}
@@ -3752,6 +3856,7 @@ export default function ContentPackages() {
           {current.kind === 'pkg-sub'       && <PkgSubSlide section={current.section} count={current.count} />}
           {current.kind === 'svc-sub'       && <SvcSubSlide section={current.section} count={current.count} />}
           {current.kind === 'package'       && <PkgSlide pkg={current.pkg} num={current.num} total={PACKAGES.length} />}
+          {current.kind === 'inside-detail' && <PkgInsideSlide />}
           {current.kind === 'closing'       && <PkgClosingSlide />}
           {current.kind === 'service-area'  && <SvcAreaSlide area={current.area} count={current.count} section={current.section} />}
           {current.kind === 'service'       && <SvcSlide svc={current.svc} num={current.svcNum} total={current.svcTotal} />}
@@ -3810,6 +3915,28 @@ export default function ContentPackages() {
           </button>
         </div>
       </div>
+
+      <div className={styles.mobileScrollDeck}>
+        {slides.map((s, i) => (
+          <div key={i} className={styles.mobileSlideSection}>
+            {s.kind === 'cover'         && <PkgCoverSlide />}
+            {s.kind === 'intro'         && <PkgIntroSlide />}
+            {s.kind === 'toc'           && <PkgTocSlide tocData={tocData} goTo={() => {}} />}
+            {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} />}
+            {s.kind === 'pkg-sub'       && <PkgSubSlide section={s.section} count={s.count} />}
+            {s.kind === 'svc-sub'       && <SvcSubSlide section={s.section} count={s.count} />}
+            {s.kind === 'package'       && <PkgSlide pkg={s.pkg} num={s.num} total={PACKAGES.length} />}
+            {s.kind === 'inside-detail' && <PkgInsideSlide />}
+            {s.kind === 'closing'       && <PkgClosingSlide />}
+            {s.kind === 'service-area'  && <SvcAreaSlide area={s.area} count={s.count} section={s.section} />}
+            {s.kind === 'service'       && <SvcSlide svc={s.svc} num={s.svcNum} total={s.svcTotal} />}
+            {s.kind === 'media'         && <PkgMediaSlide />}
+            {s.kind === 'tiers'         && <PkgTiersSlide />}
+          </div>
+        ))}
+      </div>
+      </>
+      )}
     </main>
   )
 }
