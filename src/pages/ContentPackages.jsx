@@ -3738,6 +3738,13 @@ function PkgClosingSlide() {
 export default function ContentPackages() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mobileTocOpen, setMobileTocOpen] = useState(false)
+
+  const scrollToSlide = useCallback((idx) => {
+    const sections = document.querySelectorAll('[class*="mobileSlideSection"]')
+    sections[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setMobileTocOpen(false)
+  }, [])
 
   const SECTIONS = [
     { num: 1, id: 'content', title: 'Content Programs', body: 'Demand generation, lead capture, retention, and awareness. Delivered as fixed-scope production programs.', count: 12 },
@@ -3832,7 +3839,7 @@ export default function ContentPackages() {
               {s.kind === 'cover'         && <PkgCoverSlide />}
               {s.kind === 'intro'         && <PkgIntroSlide />}
               {s.kind === 'toc'           && <PkgTocSlide tocData={tocData} goTo={setIdx} />}
-              {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} />}
+              {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} sectionTotal={s.sectionTotal} />}
               {s.kind === 'pkg-sub'       && <PkgSubSlide section={s.section} count={s.count} />}
               {s.kind === 'svc-sub'       && <SvcSubSlide section={s.section} count={s.count} />}
               {s.kind === 'package'       && <PkgSlide pkg={s.pkg} num={s.num} total={PACKAGES.length} />}
@@ -3917,12 +3924,48 @@ export default function ContentPackages() {
       </div>
 
       <div className={styles.mobileScrollDeck}>
+        {/* Floating Contents nav button */}
+        <button
+          className={styles.mobileTocBtn}
+          onClick={() => setMobileTocOpen(true)}
+          aria-label="Open contents"
+        >
+          Contents
+        </button>
+
+        {/* Mobile TOC overlay */}
+        {mobileTocOpen && (
+          <div className={styles.mobileTocOverlay} onClick={() => setMobileTocOpen(false)}>
+            <div className={styles.mobileTocSheet} onClick={e => e.stopPropagation()}>
+              <div className={styles.mobileTocHeader}>
+                <span className={styles.mobileTocTitle}>Contents</span>
+                <button className={styles.mobileTocClose} onClick={() => setMobileTocOpen(false)} aria-label="Close">✕</button>
+              </div>
+              <div className={styles.mobileTocList}>
+                {tocData.map(col => (
+                  <div key={col.title} className={styles.mobileTocSection}>
+                    <button className={styles.mobileTocSectionBtn} onClick={() => scrollToSlide(col.sectionIdx)}>
+                      {col.title}
+                    </button>
+                    {col.areas.map(a => (
+                      <button key={a.idx} className={styles.mobileTocAreaBtn} onClick={() => scrollToSlide(a.idx)}>
+                        <span>{a.title}</span>
+                        <span className={styles.mobileTocCount}>{a.count}</span>
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {slides.map((s, i) => (
-          <div key={i} className={styles.mobileSlideSection}>
+          <div key={i} data-slide-idx={i} className={styles.mobileSlideSection}>
             {s.kind === 'cover'         && <PkgCoverSlide />}
             {s.kind === 'intro'         && <PkgIntroSlide />}
             {s.kind === 'toc'           && <PkgTocSlide tocData={tocData} goTo={() => {}} />}
-            {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} />}
+            {s.kind === 'section'       && <PkgSectionSlide section={s.section} svcCount={s.svcCount} sectionTotal={s.sectionTotal} />}
             {s.kind === 'pkg-sub'       && <PkgSubSlide section={s.section} count={s.count} />}
             {s.kind === 'svc-sub'       && <SvcSubSlide section={s.section} count={s.count} />}
             {s.kind === 'package'       && <PkgSlide pkg={s.pkg} num={s.num} total={PACKAGES.length} />}

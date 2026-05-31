@@ -51,7 +51,6 @@
     position: relative;
     width: 100vw;
     height: auto;
-    min-height: 100svh;
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
@@ -63,13 +62,21 @@
   .mobileSlideSection .pkgIntroSlide,
   .mobileSlideSection .pkgTocSlide,
   .mobileSlideSection .pkgSectionSlide,
-  .mobileSlideSection .pkgSubSlide,
+  .mobileSlideSection .pkgVerticalSlide,
   .mobileSlideSection .pkgTiersSlide,
   .mobileSlideSection .pkgMediaSlide {
     position: relative;
     inset: auto;
     height: auto;
     min-height: 100svh;
+    box-sizing: border-box;
+  }
+
+  /* pkgSubSlide: compact divider, no min-height */
+  .mobileSlideSection .pkgSubSlide {
+    position: relative;
+    inset: auto;
+    height: auto;
     box-sizing: border-box;
   }
 
@@ -107,11 +114,137 @@
     margin: 12px 0 0;
   }
 
+  /* pkgVerticalSlide (section intro): stack left + right */
+  .mobileSlideSection .pkgVerticalSlide {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobileSlideSection .pkgVerticalLeft {
+    padding: 36px 24px 28px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    justify-content: flex-start;
+  }
+
+  .mobileSlideSection .pkgVerticalRight {
+    padding: 24px 24px 32px;
+    justify-content: flex-start;
+  }
+
+  .mobileSlideSection .pkgSectionTitle {
+    font-size: 32px;
+    line-height: 1.1;
+  }
+
+  .mobileSlideSection .pkgSectionBody {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 12px;
+  }
+
+  /* pkgIntroSlide: stack left (text) + right (cards) vertically */
+  .mobileSlideSection .pkgIntroSlide {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobileSlideSection .pkgIntroLeft {
+    padding: 36px 24px 32px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    justify-content: flex-start;
+  }
+
+  .mobileSlideSection .pkgIntroRight {
+    padding: 24px 20px 32px;
+    justify-content: flex-start;
+  }
+
+  .mobileSlideSection .pkgIntroHeadline {
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .mobileSlideSection .pkgIntroBody {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 100%;
+  }
+
   /* pkgTiersSlide and pkgMediaSlide: stack columns */
   .mobileSlideSection .pkgTiersLeft,
   .mobileSlideSection .pkgMediaLeft {
     width: 100%;
     box-sizing: border-box;
+  }
+
+  /* pkgSectionSlide */
+  .mobileSlideSection .pkgSectionSlide {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 40px 24px;
+  }
+
+  /* pkgSubSlide: just a divider header, keep it compact */
+  .mobileSlideSection .pkgSubSlide {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 0;
+    height: auto;
+    padding: 32px 24px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mobileSlideSection .pkgSectionInner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mobileSlideSection .pkgSectionTitle,
+  .mobileSlideSection .pkgSubTitle {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .mobileSlideSection .pkgTocSlide {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .mobileSlideSection .pkgTocLeft {
+    padding: 36px 24px 28px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    justify-content: flex-start;
+  }
+
+  .mobileSlideSection .pkgTocHeading {
+    font-size: 36px;
+  }
+
+  .mobileSlideSection .pkgTocBody {
+    grid-template-columns: 1fr;
+    padding: 20px 24px 32px;
+    gap: 0;
+    overflow: visible;
+  }
+
+  .mobileSlideSection .pkgTocColumn {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  .mobileSlideSection .pkgTocColumn:last-child {
+    border-bottom: none;
   }
 
   /* Who We Are: video on top, text below */
@@ -543,6 +676,144 @@
   .mobileSlideSection .pill {
     font-size: 11px;
     margin-bottom: 20px;
+  }
+
+  /* ── Mobile TOC floating button ── */
+  .mobileTocBtn {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(10, 10, 10, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 11px 24px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .mobileTocBtn:active {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* ── Mobile TOC overlay ── */
+  .mobileTocOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* ── Mobile TOC bottom sheet ── */
+  .mobileTocSheet {
+    width: 100%;
+    max-height: 75svh;
+    background: #111;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .mobileTocHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+  }
+
+  .mobileTocTitle {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .mobileTocClose {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+
+  .mobileTocClose:active { color: rgba(255, 255, 255, 0.9); }
+
+  /* ── Mobile TOC list ── */
+  .mobileTocList {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 0 32px;
+  }
+
+  .mobileTocSection {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 4px 0;
+  }
+
+  .mobileTocSection:last-child {
+    border-bottom: none;
+  }
+
+  .mobileTocSectionBtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-family: 'Signifier', Georgia, serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    background: transparent;
+    border: none;
+    padding: 16px 24px 10px;
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+
+  .mobileTocSectionBtn:active { color: #fff; }
+
+  .mobileTocAreaBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    background: transparent;
+    border: none;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: color 0.12s;
+  }
+
+  .mobileTocAreaBtn:active { color: rgba(255, 255, 255, 0.75); }
+
+  .mobileTocCount {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.22);
+    letter-spacing: 0.06em;
   }
 }
 
