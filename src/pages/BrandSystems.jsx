@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
 import { CAPABILITIES_QUERY } from '../lib/queries'
 import LazyVideo from '../components/LazyVideo'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
 
 const VARIANTS = {
@@ -124,6 +125,16 @@ const BRAND_INTRO_SLIDES = [
     note: 'All packages are fixed-scope and fixed-price. Custom scopes available.',
   },
   {
+    id: 'how-we-work', layout: 'numbered',
+    pill: 'How we work',
+    videoUrl: '/sc-wip-v01.mp4',
+    items: [
+      { num: '01', title: 'Start with a project.', body: "Every engagement starts with a fixed-scope, fixed-price project — no retainer required. Packages start at $7,550. A pilot project first: proof that working together works, before committing to anything ongoing." },
+      { num: '02', title: 'Set a budget. Draw it down.', body: "Convert to a quarterly retainer drawn against any service at rate-card prices. From $3,000 per quarter. No AOR contract, no retainer bloat — prepaid credit you use when you need it, as long as you need it." },
+      { num: '03', title: 'We sit inside your business.', body: "Commit $10K+ per quarter and the full SC team sits inside your business: invited to meetings, doing the work, and advising on where creative and development spend should go. A dedicated Fractional Marketing Director coordinates it all — included free." },
+    ],
+  },
+  {
     id: 'services', layout: 'bs-services',
     pill: 'Services',
     areas: [
@@ -219,6 +230,18 @@ export default function BrandSystems() {
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
 
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint || loading) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-brand-systems-deck.pdf')
+    }, 1500)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint, loading])
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); setIdx(idx + 1) }
@@ -247,35 +270,63 @@ export default function BrandSystems() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.stage}>
-        <div className={styles.slideFrame}>
-          {current.kind === 'closing'
-            ? <ClosingSlide />
-            : current.kind === 'intro'
-              ? <IntroSlide slide={current.slide} tile={current.tile} />
-              : <ClientSlide client={current.client} />}
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
+        <div className={styles.stage}>
+          <div className={styles.slideFrame}>
+            {current.kind === 'closing'
+              ? <ClosingSlide />
+              : current.kind === 'intro'
+                ? <IntroSlide slide={current.slide} tile={current.tile} />
+                : <ClientSlide client={current.client} />}
+          </div>
+
+          <div className={styles.controls}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx - 1)}
+              disabled={idx === 0}
+              aria-label="Previous slide"
+            >← Prev</button>
+            <span className={styles.counter}>
+              {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
+            </span>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx + 1)}
+              disabled={idx === total - 1}
+              aria-label="Next slide"
+            >Next →</button>
+          </div>
         </div>
 
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx - 1)}
-            disabled={idx === 0}
-            aria-label="Previous slide"
-          >← Prev</button>
-          <span className={styles.counter}>
-            {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
-          </span>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx + 1)}
-            disabled={idx === total - 1}
-            aria-label="Next slide"
-          >Next →</button>
+        <div className={styles.mobileScrollDeck}>
+          {slides.map((s, i) => (
+            <div key={i} className={styles.mobileSlideSection}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} tile={s.tile} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }
@@ -293,12 +344,39 @@ function IntroSlide({ slide, tile }) {
     case 'outcome-detail':    return <BsOutcomeDetailSlide slide={slide} tile={tile} />
     case 'bs-packages':       return <BsPackagesSlide slide={slide} />
     case 'bs-services':       return <BsServicesSlide slide={slide} />
+    case 'numbered':          return <NumberedSlide slide={slide} />
     default:                  return null
   }
 }
 
 function Pill({ children }) {
   return <span className={styles.pill}>{children}</span>
+}
+
+function NumberedSlide({ slide }) {
+  return (
+    <section className={styles.introSlide}>
+      <Pill>{slide.pill}</Pill>
+      <div className={styles.numberedLayout}>
+        <div className={styles.numberedLeft}>
+          <div className={styles.numberedCards}>
+            {slide.items.map(item => (
+              <div key={item.num} className={styles.numberedCard}>
+                <span className={styles.numberedNum}>{item.num}</span>
+                <p className={styles.numberedTitle}>{item.title}</p>
+                {item.body && <p className={styles.numberedBody}>{item.body}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+        {slide.videoUrl && (
+          <div className={styles.numberedMosaic} style={{ borderRadius: 6, overflow: 'hidden', display: 'block' }}>
+            <video src={slide.videoUrl} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 // ────────────────────────────────────────────────────────────────────────

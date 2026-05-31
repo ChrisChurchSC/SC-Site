@@ -218,7 +218,7 @@ export default function Nav() {
             const hover = { onMouseEnter: () => startCycling(cs), onMouseLeave: stopCycling }
             if (ext && !ext.startsWith('/')) return (
               <a
-                key={cs.n}
+                key={cs._id}
                 href={ext}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -231,7 +231,7 @@ export default function Nav() {
             )
             return cs.slug && !isComingSoon ? (
               <NavLink
-                key={cs.n}
+                key={cs._id}
                 to={ext || `/work/${cs.slug}`}
                 className={className}
                 {...hover}
@@ -240,7 +240,7 @@ export default function Nav() {
                 {inner}
               </NavLink>
             ) : (
-              <div key={cs.n} className={className} {...hover}>
+              <div key={cs._id} className={className} {...hover}>
                 {inner}
               </div>
             )

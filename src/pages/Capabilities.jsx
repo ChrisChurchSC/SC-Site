@@ -5,7 +5,20 @@ import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
 import { CAPABILITIES_QUERY, CAREERS_PHOTOS_QUERY } from '../lib/queries'
 import LazyVideo from '../components/LazyVideo'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
+
+// Parse original image dimensions from Sanity CDN URL (e.g. -1920x1080-jpg)
+// to determine mobile tile layout: landscape → full width, otherwise → 2-up.
+function mobileTileShape(tile) {
+  if (tile.isVideo) return 'portrait'
+  const m = tile.src?.match(/-(\d+)x(\d+)\.(?:jpg|png|webp|gif)/)
+  if (!m) return 'square'
+  const ratio = +m[1] / +m[2]
+  if (ratio > 1.4) return 'landscape'
+  if (ratio < 0.85) return 'portrait'
+  return 'square'
+}
 
 // ── Mosaic variants for the per-client slides ──
 // Each pattern fills a 4×4 grid (16 cells) with no repeats. Cells are
@@ -105,11 +118,18 @@ export default function Capabilities() {
     }
   }
 
+  const careerTiles = (careerPhotos ?? []).filter(p => p?.src)
   const howWeWorkIdx = slides.findIndex(s => s.kind === 'intro' && s.slide.id === 'how-we-work')
   if (howWeWorkIdx !== -1) {
-    const careerTiles = (careerPhotos ?? []).filter(p => p?.src)
     slides[howWeWorkIdx] = {
       ...slides[howWeWorkIdx],
+      mosaicTiles: careerTiles.length >= MIN_UNIQUE_TILES ? careerTiles : pool.slice(3, 10),
+    }
+  }
+  const whyItWorksIdx = slides.findIndex(s => s.kind === 'intro' && s.slide.id === 'why-it-works')
+  if (whyItWorksIdx !== -1) {
+    slides[whyItWorksIdx] = {
+      ...slides[whyItWorksIdx],
       mosaicTiles: careerTiles.length >= MIN_UNIQUE_TILES ? careerTiles : pool.slice(3, 10),
     }
   }
@@ -124,6 +144,18 @@ export default function Capabilities() {
     params.set('slide', String(clamped + 1))
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
+
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint || loading) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-capabilities-deck.pdf')
+    }, 1500)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint, loading])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -153,35 +185,65 @@ export default function Capabilities() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.stage}>
-        <div className={styles.slideFrame}>
-          {current.kind === 'closing'
-            ? <ClosingSlide />
-            : current.kind === 'intro'
-              ? <IntroSlide slide={current.slide} cardTiles={current.cardTiles} mosaicTiles={current.mosaicTiles} />
-              : <ClientSlide client={current.client} />}
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} cardTiles={s.cardTiles} mosaicTiles={s.mosaicTiles} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
+        {/* Desktop: single-slide navigation */}
+        <div className={styles.stage}>
+          <div className={styles.slideFrame}>
+            {current.kind === 'closing'
+              ? <ClosingSlide />
+              : current.kind === 'intro'
+                ? <IntroSlide slide={current.slide} cardTiles={current.cardTiles} mosaicTiles={current.mosaicTiles} />
+                : <ClientSlide client={current.client} />}
+          </div>
+
+          <div className={styles.controls}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx - 1)}
+              disabled={idx === 0}
+              aria-label="Previous slide"
+            >← Prev</button>
+            <span className={styles.counter}>
+              {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
+            </span>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx + 1)}
+              disabled={idx === total - 1}
+              aria-label="Next slide"
+            >Next →</button>
+          </div>
         </div>
 
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx - 1)}
-            disabled={idx === 0}
-            aria-label="Previous slide"
-          >← Prev</button>
-          <span className={styles.counter}>
-            {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
-          </span>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx + 1)}
-            disabled={idx === total - 1}
-            aria-label="Next slide"
-          >Next →</button>
+        {/* Mobile: all slides stacked vertically */}
+        <div className={styles.mobileScrollDeck}>
+          {slides.map((s, i) => (
+            <div key={i} className={styles.mobileSlideSection}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} cardTiles={s.cardTiles} mosaicTiles={s.mosaicTiles} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }
@@ -201,13 +263,6 @@ const INTRO_SLIDES = [
       "We stay close, we move fast, and we treat every project like it carries the weight of the company.",
     ],
     videoUrl: 'https://cdn.sanity.io/files/ppq16wpu/production/341eb794a01297458ce27c4d65b7ede0b37ca16a.mp4',
-  },
-  {
-    id: 'pitch', layout: 'pitch',
-    pill: 'The opportunity',
-    headline: 'Most businesses lose money in the gaps.',
-    problem: 'The brand promises one thing. The content speaks to a different audience. The website converts like it was built by someone who never read either.',
-    resolution: 'We build all three as one system, so every dollar you spend on attention actually turns into revenue.',
   },
   {
     id: 'what-we-do', layout: 'offering',
@@ -249,13 +304,13 @@ const INTRO_SLIDES = [
       {
         tag: 'Brand System',
         title: 'Higher-quality leads.',
-        body: "A sharp brand does the selling before the meeting starts. Prospects who understand your positioning and trust your identity arrive pre-sold — the conversation starts at a different level.",
+        body: "A sharp brand does the selling before the meeting starts. Prospects who understand your positioning and trust your identity arrive pre-sold. The conversation starts at a different level.",
         source: 'HubSpot',
       },
       {
         tag: 'Digital Product',
         title: 'More conversions.',
-        body: "The product is where brand promise meets behavior. A product that delivers on what the brand built — coherent in experience, familiar in tone — is where awareness converts to revenue.",
+        body: "The product is where brand promise meets behavior. A product that delivers on what the brand built, coherent in experience and familiar in tone, is where awareness converts to revenue.",
         source: 'McKinsey',
       },
     ],
@@ -281,10 +336,23 @@ const INTRO_SLIDES = [
     id: 'how-we-work', layout: 'numbered',
     pill: 'How we work',
     headline: 'Embedded, not engaged.',
+    videoUrl: '/sc-wip-v01.mp4',
     items: [
-      { num: '01', title: 'Flexible contracts. Transparent pricing.', body: "Month-to-month, annual, or hourly. We'll find the structure that fits. Pricing is always aligned upfront before anything starts, so there are no surprises mid-project and no awkward conversations at the end." },
-      { num: '02', title: 'A true creative partnership.', body: 'Consistent collaboration, shared context, no re-briefs. We stay close to your business, not just your brief. You get a team that shows up invested every time, not starting from scratch on every call.' },
-      { num: '03', title: 'Built to produce.', body: 'Whether you come with a full brief or a rough idea, we turn it into polished, ready-to-ship creative. Fast without being careless. High quality without the bloated agency timeline.' },
+      { num: '01', title: 'Start with a project.', body: "Every engagement starts with a fixed-scope, fixed-price project — no retainer required. Packages start at $7,550. A pilot project first: proof that working together works, before committing to anything ongoing." },
+      { num: '02', title: 'Set a budget. Draw it down.', body: "Convert to a quarterly retainer drawn against any service at rate-card prices. From $3,000 per quarter. No AOR contract, no retainer bloat — prepaid credit you use when you need it, as long as you need it." },
+      { num: '03', title: 'We sit inside your business.', body: "Commit $10K+ per quarter and the full SC team sits inside your business: invited to meetings, doing the work, and advising on where creative and development spend should go. A dedicated Fractional Marketing Director coordinates it all — included free." },
+    ],
+  },
+  {
+    id: 'why-it-works', layout: 'numbered',
+    pill: 'Why it works',
+    headline: 'Why it works.',
+    videoUrl: '/empy-post-05.mp4',
+    videoScale: 1.2,
+    items: [
+      { num: '01', title: 'We move fast because we are informed.', body: "We are inside your business before a brief lands. We know the context, the priorities, and the constraints. Less time getting up to speed, more time making things that matter." },
+      { num: '02', title: 'Nothing is wasted.', body: "We are aligned to your business goals, not just the brief. Every piece of work is measured against what you are actually trying to do. If something is not worth building, we will say so before anything starts." },
+      { num: '03', title: 'You win, we win.', body: "Our model only works when yours does. We are invested in the outcome, not just the output. That keeps the work sharp, the relationship honest, and the spend worth every dollar." },
     ],
   },
   {
@@ -336,7 +404,7 @@ const INTRO_SLIDES = [
         name: 'Brand Systems',
         tag: 'The foundation.',
         items: [
-          { name: 'Brand Pilot', goal: 'A focused first project that proves working together works.', price: 'From $14,000' },
+          { name: 'Brand Pilot', goal: 'A focused first project that proves working together works.', price: 'From $14,000', pilot: true },
           { name: 'Sales Deck System', goal: 'Strategy, master deck, and reusable template kit.', price: 'From $14,000' },
           { name: 'Enterprise Sales Toolkit', goal: 'Branded sales enablement for high-stakes rooms.', price: 'From $25,000' },
           { name: 'Brand Modernisation', goal: 'Bring an established brand in line with what the company has become.', price: 'From $27,000' },
@@ -348,7 +416,7 @@ const INTRO_SLIDES = [
         name: 'Digital Products',
         tag: 'The build.',
         items: [
-          { name: 'Microsite Build', goal: 'Campaign-driven microsite, 3 to 5 pages, with custom interactions.', price: 'From $14,000' },
+          { name: 'Microsite Build', goal: 'Campaign-driven microsite, 3 to 5 pages, with custom interactions.', price: 'From $14,000', pilot: true },
           { name: 'Marketing Site', goal: 'Full marketing site with a CMS you can manage yourself.', price: 'From $21,000' },
           { name: 'Product Design Sprint', goal: 'Take a product concept into a working interactive design.', price: 'From $17,000' },
           { name: 'Interactive Experience', goal: 'Immersive 3D/WebGL build, flagship interactive.', price: 'From $30,000' },
@@ -360,7 +428,7 @@ const INTRO_SLIDES = [
         name: 'Content Programs',
         tag: 'The fuel.',
         items: [
-          { name: 'Conversion Engine', goal: 'Turn the interest you\'ve earned into signed customers.', price: 'From $11,000' },
+          { name: 'Conversion Engine', goal: 'Turn the interest you\'ve earned into signed customers.', price: 'From $11,000', pilot: true },
           { name: 'Nurture Engine', goal: 'Keep aware prospects engaged until they\'re ready to buy.', price: 'From $13,000' },
           { name: 'Lead Gen Engine', goal: 'Demand-gen system that turns attention into sales-ready pipeline.', price: 'From $22,000' },
           { name: 'Retention Engine', goal: 'Keep the customers you\'ve won and grow what they\'re worth.', price: 'From $25,000' },
@@ -405,6 +473,7 @@ function IntroSlide({ slide, cardTiles, mosaicTiles }) {
     case 'outcomes': return <OutcomesSlide slide={slide} />
     case 'disciplines': return <DisciplinesSlide slide={slide} />
     case 'numbered': return <NumberedSlide slide={slide} mosaicTiles={mosaicTiles ?? []} />
+    case 'tiers': return <TiersSlide slide={slide} />
     case 'services': return <ServicesSlide slide={slide} />
     case 'packages': return <PackagesSlide slide={slide} />
     case 'pricing': return <PricingSlide slide={slide} />
@@ -606,7 +675,7 @@ function PitchFlywheel({ onLabelChange }) {
       const t = (((now - start) / 9000) * Math.PI * 2) % (Math.PI * 2)
       const x = cx + R * Math.sin(t)
       const y = cy - R * Math.cos(t)
-      const label = FLYWHEEL_SECTIONS[Math.floor(t / sector)].label
+      const label = (FLYWHEEL_SECTIONS[Math.floor(t / sector) % FLYWHEEL_SECTIONS.length] ?? FLYWHEEL_SECTIONS[0]).label
       if (groupRef.current) {
         groupRef.current.setAttribute('transform', `translate(${x},${y})`)
       }
@@ -742,6 +811,33 @@ function NumberedSlide({ slide, mosaicTiles }) {
   const variant = variantCount ? VARIANTS[variantCount] : null
   const tiles = variantCount ? mosaicTiles.slice(0, variantCount) : []
 
+  const right = slide.videoUrl
+    ? (
+      <div className={styles.numberedMosaic} style={{ borderRadius: 6, overflow: 'hidden', display: 'block' }}>
+        <video
+          src={slide.videoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: `scale(${slide.videoScale ?? 1})` }}
+        />
+      </div>
+    )
+    : variant && tiles.length > 0
+      ? (
+        <div className={styles.numberedMosaic}>
+          {tiles.map((tile, i) => (
+            <Tile
+              key={i}
+              tile={tile}
+              className={`${styles.mosaicTile} ${styles[`tile_${variant[i].shape}`]}`}
+            />
+          ))}
+        </div>
+      )
+      : null
+
   return (
     <section className={styles.introSlide}>
       <Pill>{slide.pill}</Pill>
@@ -749,25 +845,22 @@ function NumberedSlide({ slide, mosaicTiles }) {
         <div className={styles.numberedLeft}>
           <div className={styles.numberedCards}>
             {slide.items.map(item => (
-              <div key={item.num} className={styles.numberedCard}>
-                <span className={styles.numberedNum}>{item.num}</span>
-                <p className={styles.numberedTitle}>{item.title}</p>
-                <p className={styles.numberedBody}>{item.body}</p>
+              <div key={item.num}>
+                {item.sectionLabel && (
+                  <div className={styles.numberedDivider}>
+                    <span>{item.sectionLabel}</span>
+                  </div>
+                )}
+                <div className={item.compact ? styles.numberedCardCompact : styles.numberedCard}>
+                  <span className={styles.numberedNum}>{item.num}</span>
+                  <p className={styles.numberedTitle}>{item.title}</p>
+                  {!item.compact && item.body && <p className={styles.numberedBody}>{item.body}</p>}
+                </div>
               </div>
             ))}
           </div>
         </div>
-        {variant && tiles.length > 0 && (
-          <div className={styles.numberedMosaic}>
-            {tiles.map((tile, i) => (
-              <Tile
-                key={i}
-                tile={tile}
-                className={`${styles.mosaicTile} ${styles[`tile_${variant[i].shape}`]}`}
-              />
-            ))}
-          </div>
-        )}
+        {right}
       </div>
     </section>
   )
@@ -811,13 +904,38 @@ function PackagesSlide({ slide }) {
               {col.items.map(pkg => (
                 <li key={pkg.name} className={styles.packagesRow}>
                   <div className={styles.packagesText}>
-                    <p className={styles.packagesName}>{pkg.name}</p>
+                    <p className={styles.packagesName}>
+                      {pkg.name}
+                      {pkg.pilot && <span className={styles.packagesPilot}>Pilot</span>}
+                    </p>
                     <p className={styles.packagesGoal}>{pkg.goal}</p>
                   </div>
                   <span className={styles.packagesPrice}>{pkg.price}</span>
                 </li>
               ))}
             </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function TiersSlide({ slide }) {
+  return (
+    <section className={styles.introSlide}>
+      <Pill>{slide.pill}</Pill>
+      <h2 className={styles.headline}>{slide.headline}</h2>
+      <div className={styles.commitmentTiers}>
+        {slide.tiers.map(tier => (
+          <div key={tier.step} className={styles.commitmentTier}>
+            <p className={styles.commitmentLabel}>{tier.step} — {tier.label}</p>
+            <p className={styles.commitmentRate}>{tier.role}</p>
+            <p className={styles.commitmentBody}>{tier.body}</p>
+            <div className={styles.pricingFooterRow}>
+              <p className={styles.commitmentLabel}>{tier.price}</p>
+              <p className={styles.pricingNote}>{tier.priceNote}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -1078,7 +1196,7 @@ function ClientSlide({ client }) {
             <Tile
               key={`${client._id}-${i}`}
               tile={tile}
-              className={`${styles.tile} ${styles[`tile_${slot.shape}`]}`}
+              className={`${styles.tile} ${styles[`tile_${slot.shape}`]} ${styles[`mobileTile_${mobileTileShape(tile)}`]}`}
               style={gridStyle}
             />
           )

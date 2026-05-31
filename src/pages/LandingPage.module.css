@@ -18,21 +18,45 @@
   }
 }
 
+/* ── Top nav ── */
+
+.topNav {
+  padding: 24px 40px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 2px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.backBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* ── Hero ── */
 
 .hero {
-  padding: 80px 40px 64px;
+  padding: 48px 40px 64px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   max-width: 900px;
 }
 
-.eyebrow {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
-  margin: 0 0 24px;
+.logotype {
+  width: 160px;
+  margin: 0 0 32px;
 }
 
 .headline {
@@ -50,7 +74,7 @@
   font-weight: 300;
   font-size: clamp(16px, 1.6vw, 20px);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.65);
   margin: 0;
   max-width: 680px;
 }
@@ -58,11 +82,11 @@
 /* ── Shared section label ── */
 
 .sectionLabel {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0 0 32px;
 }
 
@@ -82,7 +106,7 @@
   font-weight: 300;
   font-size: clamp(15px, 1.4vw, 18px);
   line-height: 1.75;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 
@@ -92,7 +116,14 @@
   font-size: clamp(20px, 2.2vw, 30px);
   line-height: 1.15;
   color: rgba(255, 255, 255, 0.85);
-  margin: 16px 0 -8px;
+  margin: 0;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.body > :first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
 .figure {
@@ -133,11 +164,11 @@
 
 .stepNum {
   font-family: 'Roboto Mono', monospace;
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.4);
   padding-top: 3px;
-  min-width: 20px;
+  min-width: 24px;
 }
 
 .stepContent {
@@ -161,7 +192,7 @@
   font-weight: 300;
   font-size: clamp(14px, 1.2vw, 16px);
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
 }
 
@@ -225,7 +256,7 @@
   font-weight: 300;
   font-size: 13px;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
 }
 
@@ -234,7 +265,6 @@
 .faq {
   padding: 64px 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  max-width: 800px;
 }
 
 .faqList {
@@ -286,10 +316,60 @@
   font-weight: 300;
   font-size: clamp(14px, 1.3vw, 16px);
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
   padding: 0 0 24px;
   max-width: 640px;
+}
+
+/* ── Related questions ── */
+
+.related {
+  padding: 64px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.relatedList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.relatedLink {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 24px;
+  background: #161616;
+  border-radius: 4px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.3s cubic-bezier(0.25, 1, 0.4, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.relatedLink:hover {
+  background: #1c1c1c;
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 12px 28px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.relatedIcon {
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.relatedLink:hover .relatedIcon {
+  color: rgba(255, 255, 255, 0.7);
+  transform: translate(3px, -3px);
 }
 
 /* ── CTA ── */
@@ -299,7 +379,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 560px;
+  max-width: 760px;
 }
 
 .ctaHeading {
@@ -316,7 +396,7 @@
   font-weight: 300;
   font-size: clamp(14px, 1.3vw, 17px);
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
 }
 
@@ -326,7 +406,7 @@
   margin-top: 8px;
   padding: 13px 24px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   border-radius: 2px;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
@@ -355,12 +435,14 @@
   .process,
   .work,
   .faq,
+  .related,
   .cta {
     padding-left: 24px;
     padding-right: 24px;
   }
 
-  .workGrid {
+  .workGrid,
+  .relatedList {
     grid-template-columns: 1fr;
   }
 }

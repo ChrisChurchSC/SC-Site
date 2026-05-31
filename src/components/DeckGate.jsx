@@ -9,14 +9,14 @@ export default function DeckGate({ children }) {
   const [error, setError] = useState(false)
   const [manualUnlock, setManualUnlock] = useState(false)
 
-  const sessionUnlocked = typeof sessionStorage !== 'undefined'
-    && sessionStorage.getItem(SESSION_KEY) === '1'
+  const sessionUnlocked = typeof localStorage !== 'undefined'
+    && localStorage.getItem(SESSION_KEY) === '1'
   const unlocked = manualUnlock || sessionUnlocked
 
   const handleUnlock = (e) => {
     e.preventDefault()
     if (pw === HUB_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, '1')
+      localStorage.setItem(SESSION_KEY, '1')
       setManualUnlock(true)
     } else {
       setError(true)
