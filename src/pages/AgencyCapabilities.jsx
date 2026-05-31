@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import { useSanity } from '../hooks/useSanity'
 import { useMeta } from '../hooks/useMeta'
 import { CAPABILITIES_QUERY, CAREERS_PHOTOS_QUERY } from '../lib/queries'
 import LazyVideo from '../components/LazyVideo'
+import { generateDeckPdf } from '../lib/generateDeckPdf'
 import styles from './Capabilities.module.css'
 
 const VARIANTS = {
@@ -99,6 +100,18 @@ export default function AgencyCapabilities() {
     setSearchParams(params, { replace: true })
   }, [searchParams, setSearchParams, total])
 
+  const isPrint = searchParams.get('print') === '1'
+  const printRef = useRef(null)
+
+  useEffect(() => {
+    if (!isPrint || loading) return
+    let cancelled = false
+    const t = setTimeout(() => {
+      if (!cancelled && printRef.current) generateDeckPdf(printRef.current, 'sc-agency-capabilities-deck.pdf')
+    }, 1500)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [isPrint, loading])
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); setIdx(idx + 1) }
@@ -127,35 +140,63 @@ export default function AgencyCapabilities() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.stage}>
-        <div className={styles.slideFrame}>
-          {current.kind === 'closing'
-            ? <ClosingSlide />
-            : current.kind === 'intro'
-              ? <IntroSlide slide={current.slide} cardTiles={current.cardTiles} mosaicTiles={current.mosaicTiles} />
-              : <ClientSlide client={current.client} />}
+      {isPrint ? (
+        <div ref={printRef} className={styles.printAll}>
+          {slides.map((s, i) => (
+            <div key={i} data-print-slide="" className={styles.printSlide}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} cardTiles={s.cardTiles} mosaicTiles={s.mosaicTiles} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
+        </div>
+      ) : (
+      <>
+        <div className={styles.stage}>
+          <div className={styles.slideFrame}>
+            {current.kind === 'closing'
+              ? <ClosingSlide />
+              : current.kind === 'intro'
+                ? <IntroSlide slide={current.slide} cardTiles={current.cardTiles} mosaicTiles={current.mosaicTiles} />
+                : <ClientSlide client={current.client} />}
+          </div>
+
+          <div className={styles.controls}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx - 1)}
+              disabled={idx === 0}
+              aria-label="Previous slide"
+            >← Prev</button>
+            <span className={styles.counter}>
+              {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
+            </span>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => setIdx(idx + 1)}
+              disabled={idx === total - 1}
+              aria-label="Next slide"
+            >Next →</button>
+          </div>
         </div>
 
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx - 1)}
-            disabled={idx === 0}
-            aria-label="Previous slide"
-          >← Prev</button>
-          <span className={styles.counter}>
-            {String(idx + 1).padStart(2, '0')} <span className={styles.counterDim}>/ {String(total).padStart(2, '0')}</span>
-          </span>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => setIdx(idx + 1)}
-            disabled={idx === total - 1}
-            aria-label="Next slide"
-          >Next →</button>
+        <div className={styles.mobileScrollDeck}>
+          {slides.map((s, i) => (
+            <div key={i} className={styles.mobileSlideSection}>
+              {s.kind === 'closing'
+                ? <ClosingSlide />
+                : s.kind === 'intro'
+                  ? <IntroSlide slide={s.slide} cardTiles={s.cardTiles} mosaicTiles={s.mosaicTiles} />
+                  : <ClientSlide client={s.client} />}
+            </div>
+          ))}
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }

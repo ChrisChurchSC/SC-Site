@@ -37,6 +37,526 @@
   position: relative;
 }
 
+/* ── Mobile: hide desktop slide view, show scrollable deck ── */
+@media (max-width: 768px) {
+  .stage { display: none; }
+  .controls { display: none; }
+
+  .mobileScrollDeck {
+    display: block;
+    background: #0a0a0a;
+  }
+
+  .mobileSlideSection {
+    position: relative;
+    width: 100vw;
+    height: auto;
+    min-height: 100svh;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* ── Un-absolute every slide container type ── */
+  .mobileSlideSection .introSlide,
+  .mobileSlideSection .closingSlide,
+  .mobileSlideSection .coverSlide,
+  .mobileSlideSection .pkgIntroSlide,
+  .mobileSlideSection .pkgTocSlide,
+  .mobileSlideSection .pkgSectionSlide,
+  .mobileSlideSection .pkgSubSlide,
+  .mobileSlideSection .pkgTiersSlide,
+  .mobileSlideSection .pkgMediaSlide {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100svh;
+    box-sizing: border-box;
+  }
+
+  /* pkgSlide: stack info col + card area vertically */
+  .mobileSlideSection .pkgSlide {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  .mobileSlideSection .pkgInfo {
+    position: relative;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 28px 20px 24px;
+    box-sizing: border-box;
+  }
+
+  .mobileSlideSection .pkgCardArea {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    overflow: visible;
+  }
+
+  .mobileSlideSection .pkgInfoMid {
+    overflow: visible;
+    padding: 0;
+    margin: 12px 0 0;
+  }
+
+  /* pkgTiersSlide and pkgMediaSlide: stack columns */
+  .mobileSlideSection .pkgTiersLeft,
+  .mobileSlideSection .pkgMediaLeft {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Who We Are: video on top, text below */
+  .mobileSlideSection .whoWeAreSlide {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: #0e0e0e;
+  }
+
+  .mobileSlideSection .whoWeAreVideo {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .mobileSlideSection .whoWeAreScrim { display: none; }
+
+  .mobileSlideSection .whoWeAreCard {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    max-width: 100%;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 28px 20px 32px;
+    gap: 16px;
+  }
+
+  .mobileSlideSection .whoWeAreHeadline {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  .mobileSlideSection .whoWeAreBody p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  /* Client slides: stack text col + mosaic vertically */
+  .mobileSlideSection .slide {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100svh;
+    padding: 20px 20px 28px;
+    gap: 20px;
+    box-sizing: border-box;
+  }
+
+  /* Client slide mosaic: flex-wrap, tiles sized by aspect ratio */
+  .mobileSlideSection .mosaic {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    height: auto;
+    flex: none;
+  }
+
+  /* Override grid spans — flex handles layout now */
+  .mobileSlideSection .tile_wide,
+  .mobileSlideSection .tile_tall,
+  .mobileSlideSection .tile_hero,
+  .mobileSlideSection .tile_column,
+  .mobileSlideSection .tile_small {
+    grid-column: unset;
+    grid-row: unset;
+  }
+
+  /* Full-width for landscape (16:9-ish) */
+  .mobileSlideSection .mobileTile_landscape {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* 2-up for square and portrait */
+  .mobileSlideSection .mobileTile_square,
+  .mobileSlideSection .mobileTile_portrait {
+    width: calc(50% - 2px);
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Numbered slide (How We Work / Why It Works): video on top at 4:5, text below */
+  .mobileSlideSection .numberedLayout {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0;
+    height: auto;
+    flex: none;
+    overflow: visible;
+  }
+
+  .mobileSlideSection .numberedMosaic {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .mobileSlideSection .numberedLeft {
+    padding-top: 28px;
+  }
+
+  /* ── Single-column grids ── */
+  .mobileSlideSection .threeCol,
+  .mobileSlideSection .twoCol,
+  .mobileSlideSection .offeringStack,
+  .mobileSlideSection .servicesGrid,
+  .mobileSlideSection .servicesPillars,
+  .mobileSlideSection .packagesGrid,
+  .mobileSlideSection .packagesGrid,
+  .mobileSlideSection .commitmentTiers,
+  .mobileSlideSection .rateCard,
+  .mobileSlideSection .rateColumns,
+  .mobileSlideSection .bsPackGrid,
+  .mobileSlideSection .pkgDetailGrid {
+    grid-template-columns: 1fr;
+    height: auto;
+    flex: none;
+    overflow: visible;
+  }
+
+  /* ── Two-column grids (small enough cards) ── */
+  .mobileSlideSection .disciplinesGrid,
+  .mobileSlideSection .bsCapGrid,
+  .mobileSlideSection .bsSvcGrid,
+  .mobileSlideSection .bsOutcomesGrid,
+  .mobileSlideSection .cpSvcGrid,
+  .mobileSlideSection .bsDetailRow {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    height: auto;
+    flex: none;
+    overflow: visible;
+  }
+
+  .mobileSlideSection .selectedGrid {
+    grid-template-columns: repeat(3, 1fr);
+    height: auto;
+    flex: none;
+    overflow: visible;
+  }
+
+  /* Fix overflow on list/tag containers */
+  .mobileSlideSection .packagesList,
+  .mobileSlideSection .servicesTags,
+  .mobileSlideSection .servicesGroups {
+    overflow: visible;
+  }
+
+  .mobileSlideSection .servicesCol,
+  .mobileSlideSection .servicesPillar,
+  .mobileSlideSection .numberedCards,
+  .mobileSlideSection .numberedLeft {
+    overflow: visible;
+    min-height: 0;
+    height: auto;
+  }
+
+  /* ── Legibility: base text bumps ── */
+
+  /* Client slide: larger project name */
+  .mobileSlideSection .name {
+    font-size: 36px;
+    line-height: 1.05;
+  }
+
+  /* Client slide: body copy more readable */
+  .mobileSlideSection .body p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Pillar callout cards */
+  .mobileSlideSection .pillarLabel {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+  }
+  .mobileSlideSection .pillarSub {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Mosaic: 2-col so thumbnails are actually visible */
+  .mobileSlideSection .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    height: 420px;
+  }
+
+  /* Kill tile span modifiers so tiles fill uniformly in 2-col */
+  .mobileSlideSection .tile_wide,
+  .mobileSlideSection .tile_tall,
+  .mobileSlideSection .tile_hero,
+  .mobileSlideSection .tile_column,
+  .mobileSlideSection .tile_small {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  /* Offerings: image on top, text below */
+  .mobileSlideSection .offeringStack {
+    gap: 16px;
+  }
+
+  .mobileSlideSection .offeringCard {
+    overflow: visible;
+    background: #161616;
+    border-radius: 8px;
+    min-height: 0;
+  }
+
+  .mobileSlideSection .offeringImage {
+    position: relative;
+    inset: auto;
+    height: 260px;
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+  }
+
+  .mobileSlideSection .offeringCardText {
+    position: relative;
+    background: none;
+    margin-top: 0;
+    padding: 20px 20px 24px;
+    gap: 8px;
+  }
+
+  .mobileSlideSection .offeringName {
+    font-size: 26px;
+    line-height: 1.1;
+  }
+
+  .mobileSlideSection .offeringTag {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+
+  .mobileSlideSection .offeringBody {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* Services slide: stack pillars with clear section breaks */
+  .mobileSlideSection .servicesPillars {
+    gap: 0;
+  }
+
+  .mobileSlideSection .servicesPillar {
+    padding: 28px 0;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 16px;
+  }
+
+  .mobileSlideSection .servicesPillar:first-child {
+    border-top: none;
+    padding-top: 8px;
+  }
+
+  .mobileSlideSection .servicesPillar:last-child {
+    padding-left: 0;
+  }
+
+  .mobileSlideSection .servicesPillar:not(:first-child):not(:last-child) {
+    padding-left: 0;
+  }
+
+  .mobileSlideSection .servicesPillarHead {
+    padding-bottom: 14px;
+  }
+
+  .mobileSlideSection .servicesPillarName {
+    font-size: 26px;
+  }
+
+  .mobileSlideSection .servicesPillarTag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Packages grid (separate slide): same treatment */
+  .mobileSlideSection .servicesGrid {
+    gap: 0;
+  }
+
+  .mobileSlideSection .servicesCol {
+    background: transparent;
+    border-radius: 0;
+    padding: 28px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 16px;
+  }
+
+  .mobileSlideSection .servicesCol:first-child {
+    border-top: none;
+    padding-top: 8px;
+  }
+
+  .mobileSlideSection .servicesColHead {
+    padding-bottom: 16px;
+  }
+
+  .mobileSlideSection .servicesColName {
+    font-size: 26px;
+  }
+
+  .mobileSlideSection .servicesColTag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Shared tag styles */
+  .mobileSlideSection .servicesTags {
+    gap: 8px;
+  }
+
+  .mobileSlideSection .servicesTag {
+    font-size: 12px;
+    padding: 7px 12px;
+    letter-spacing: 0.12em;
+  }
+
+  /* Discipline cards */
+  .mobileSlideSection .disciplineName {
+    font-size: 22px;
+  }
+  .mobileSlideSection .disciplineBody {
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  /* Numbered items */
+  .mobileSlideSection .numberedTitle {
+    font-size: 22px;
+  }
+  .mobileSlideSection .numberedBody {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* Rate card rows */
+  .mobileSlideSection .rateRole {
+    font-size: 18px;
+  }
+  .mobileSlideSection .rateValue {
+    font-size: 14px;
+  }
+
+  /* Packages list */
+  .mobileSlideSection .packagesName {
+    font-size: 17px;
+  }
+  .mobileSlideSection .packagesGoal {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .mobileSlideSection .packagesPrice {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* Intro slide headline and body */
+  .mobileSlideSection .headline {
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .mobileSlideSection .subhead {
+    font-size: 17px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 28px;
+  }
+  .mobileSlideSection .proseHeadline {
+    font-size: 30px;
+    line-height: 1.1;
+  }
+  .mobileSlideSection .proseBody p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  /* Outcome cards */
+  .mobileSlideSection .outcomeTitle {
+    font-size: 22px;
+  }
+  .mobileSlideSection .outcomeBody {
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* Commitment tiers */
+  .mobileSlideSection .commitmentRate {
+    font-size: 52px;
+  }
+  .mobileSlideSection .commitmentBody {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Section pill labels */
+  .mobileSlideSection .pill {
+    font-size: 11px;
+    margin-bottom: 20px;
+  }
+}
+
+/* ── Desktop: hide mobile scroll deck ── */
+@media (min-width: 769px) {
+  .mobileScrollDeck { display: none; }
+}
+
+/* ── Desktop: hide mobile scroll deck ── */
+@media (min-width: 769px) {
+  .mobileScrollDeck { display: none; }
+}
+
+
 /* ── Slide content: 2-col text + mosaic, mosaic fills the slide height ── */
 .slide {
   position: absolute;
@@ -976,6 +1496,30 @@
   min-height: 0;
 }
 
+.numberedDivider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 0;
+}
+
+.numberedDivider::before,
+.numberedDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.numberedDivider span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  white-space: nowrap;
+}
+
 .numberedCard {
   background: #161616;
   border-radius: 4px;
@@ -983,6 +1527,17 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
+}
+
+.numberedCardCompact {
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 14px;
   min-height: 0;
 }
 
@@ -1230,6 +1785,20 @@
   color: rgba(255, 255, 255, 0.95);
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+.packagesPilot {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  padding: 3px 7px;
+  margin-left: 8px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 /* ── Pricing — simple: statement + rate card ── */
@@ -3178,6 +3747,40 @@
   line-height: 1.65;
   color: rgba(255, 255, 255, 0.75);
   margin: 0;
+}
+
+/* ── Print / PDF ── */
+
+.printAll {
+  background: #050505;
+}
+
+.printSlide {
+  position: relative;
+  width: 100vw;
+  height: 56.25vw;
+  overflow: hidden;
+  background: #0e0e0e;
+}
+
+@page {
+  size: landscape;
+  margin: 0;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .printSlide {
+    width: 100%;
+    height: 100vh;
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
 }
 
 

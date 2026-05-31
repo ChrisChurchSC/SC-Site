@@ -46,7 +46,7 @@ function ChromeGate({ children }) {
 function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
-  if (location.pathname === '/') return null
+  if (location.pathname === '/' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
