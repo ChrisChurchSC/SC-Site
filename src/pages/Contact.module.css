@@ -46,6 +46,17 @@
   max-width: 560px;
 }
 
+.bookLink {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.bookLink:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .formSection {
   padding: 48px 40px;
 }
