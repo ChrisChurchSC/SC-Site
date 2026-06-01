@@ -16,7 +16,8 @@ export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
-  const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100)
+  const HIDDEN_SLUGS = new Set(['webroot', 'carbonite'])
+  const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
   const comingSoon = useComingSoon()
 
   // Map project slug -> externalUrl for any homepage grid tile that links
