@@ -1,0 +1,68 @@
+.main {
+  padding: 120px 0 160px;
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+.inner {
+  max-width: 680px;
+  padding: 0 40px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 12px;
+}
+
+.updated {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 48px;
+}
+
+.h2 {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 24px);
+  color: rgba(255, 255, 255, 0.85);
+  margin: 48px 0 12px;
+}
+
+.h3 {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 24px 0 8px;
+}
+
+.body {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.link {
+  color: rgba(255, 255, 255, 0.6);
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
