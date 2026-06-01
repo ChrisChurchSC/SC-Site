@@ -122,6 +122,7 @@ export default async function handler(req, res) {
           }
         } catch (err) {
           console.error('[contact] Attio company/list error:', err.message)
+          errors.push(`Attio company/list: ${err.message}`)
         }
       }
     } catch (err) {
