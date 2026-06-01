@@ -110,8 +110,10 @@ export default async function handler(req, res) {
               data: {
                 parent_object: 'companies',
                 parent_record_id: companyId,
-                stage: 'Intro',
-                main_point_of_contact: [{ target_object: 'people', target_record_id: personId }],
+                entry_values: {
+                  stage: 'Intro',
+                  main_point_of_contact: [{ target_object: 'people', target_record_id: personId }],
+                },
               },
             }, ATTIO_KEY)
 
