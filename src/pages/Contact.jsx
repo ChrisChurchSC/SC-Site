@@ -25,6 +25,7 @@ export default function Contact() {
         headers: { 'Content-Type': 'application/json' },
       })
       if (res.ok) {
+        window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
         form.reset()
         setStatus('idle')
         setToast(true)
