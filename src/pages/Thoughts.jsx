@@ -28,7 +28,7 @@ const fromStatic = staticThoughts.map(t => ({
 
 export default function Thoughts() {
   useMeta({
-    title: 'Thoughts | Super Conscious',
+    title: 'Studio Notes & Ideas | Super Conscious',
     description: 'Ideas, notes, and process from the Super Conscious studio. Brand strategy, creative practice, and content thinking.',
     path: '/thoughts',
   })
