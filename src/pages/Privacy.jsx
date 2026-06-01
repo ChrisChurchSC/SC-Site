@@ -33,7 +33,10 @@ export default function Privacy() {
 
         <h3 className={styles.h3}>Visitor identification</h3>
         <p className={styles.body}>
-          We use RB2B, a third-party service, to identify business visitors to this site by matching IP addresses against LinkedIn profile data. If you visit this site from a business network, RB2B may identify your name, job title, company, and LinkedIn profile URL and provide that information to us. This is used solely for sales and business development purposes. RB2B's privacy policy is available at <a href="https://www.rb2b.com/privacy-policy" target="_blank" rel="noopener noreferrer" className={styles.link}>rb2b.com/privacy-policy</a>.
+          When you visit or log in to our website, cookies and similar technologies may be used by our online data partners or vendors to associate these activities with other personal information they or others have about you, including by association with your email.
+        </p>
+        <p className={styles.body} style={{ marginTop: '12px' }}>
+          We use RB2B, a third-party service, to identify business visitors to this site. If you visit this site, RB2B may identify your name, job title, company, and LinkedIn profile URL and provide that information to us. This is used solely for sales and business development purposes. You may opt out at <a href="https://app.retention.com/optout" target="_blank" rel="noopener noreferrer" className={styles.link}>app.retention.com/optout</a>. For GDPR opt-out, visit <a href="https://www.rb2b.com/rb2b-gdpr-opt-out" target="_blank" rel="noopener noreferrer" className={styles.link}>rb2b.com/rb2b-gdpr-opt-out</a>. RB2B's privacy policy is available at <a href="https://www.rb2b.com/privacy-policy" target="_blank" rel="noopener noreferrer" className={styles.link}>rb2b.com/privacy-policy</a>.
         </p>
 
         <h2 className={styles.h2}>How we use your information</h2>
