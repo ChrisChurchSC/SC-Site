@@ -4,6 +4,7 @@ export const MOCK_PAGES = {
 
   'what-does-a-brand-system-include': {
     heroHeadline: 'What does a brand system actually include?',
+    seoTitle: 'What does a brand system actually include? | Super Conscious',
     heroAnswer: 'A brand system is a complete set of decisions about how your company looks, sounds, and presents itself. It covers visual identity, messaging, voice, and the tools your team needs to stay consistent without asking a designer every time.',
     body: [
       { _type: 'headingBlock', heading: 'More than a logo' },
@@ -29,6 +30,7 @@ export const MOCK_PAGES = {
 
   'how-long-does-a-brand-system-take': {
     heroHeadline: 'How long does a brand system take?',
+    seoTitle: 'How long does a brand system take? | Super Conscious',
     heroAnswer: 'Most brand system engagements run 8–12 weeks. The range depends on scope, how quickly your team can review and give feedback, and whether we\'re building from scratch or working from existing brand foundations.',
     body: [
       { _type: 'headingBlock', heading: 'How the time breaks down' },
@@ -58,6 +60,7 @@ export const MOCK_PAGES = {
 
   'brand-system-cost': {
     heroHeadline: 'How much does a brand system cost?',
+    seoTitle: 'How much does a brand system cost? | Super Conscious',
     heroAnswer: 'A brand system from a professional studio typically runs $25,000–$80,000 depending on scope. That range reflects the difference between a focused identity system for an early-stage company and a full brand platform for a company operating across multiple markets and teams.',
     body: [
       { _type: 'headingBlock', heading: 'What drives the cost' },
@@ -88,6 +91,7 @@ export const MOCK_PAGES = {
 
   'brand-guidelines-vs-brand-system': {
     heroHeadline: 'What\'s the difference between brand guidelines and a brand system?',
+    seoTitle: 'What\'s the difference between brand guidelines and a brand system? | Super Conscious',
     heroAnswer: 'Brand guidelines tell people what to do. A brand system gives them everything they need to do it. Guidelines are a document. A system is the document plus the templates, the components, the logic, and the training that makes consistency possible without a designer in the room.',
     body: [
       { _type: 'headingBlock', heading: 'Why guidelines alone don\'t work' },
@@ -115,6 +119,7 @@ export const MOCK_PAGES = {
 
   'when-to-invest-in-a-brand-system': {
     heroHeadline: 'When should a company invest in a brand system?',
+    seoTitle: 'When should a company invest in a brand system? | Super Conscious',
     heroAnswer: 'When inconsistency is costing you something. That might be time: designers and writers recreating the wheel on every project. It might be trust: a brand that looks different across channels signals instability to buyers. Or it might be growth: you are about to hire, raise, or expand and need a brand that scales with you.',
     body: [
       { _type: 'headingBlock', heading: 'The signals that it\'s time' },
@@ -142,6 +147,7 @@ export const MOCK_PAGES = {
 
   'what-is-a-verbal-identity': {
     heroHeadline: 'What is a verbal identity?',
+    seoTitle: 'What is a verbal identity? | Super Conscious',
     heroAnswer: 'Verbal identity is the written equivalent of a visual identity. It defines how your company sounds: the words you use, the words you avoid, the rhythm of your sentences, and the point of view you bring to everything you publish. Most companies have a visual identity. Very few have a verbal one.',
     body: [
       { _type: 'headingBlock', heading: 'What it includes' },
@@ -169,6 +175,7 @@ export const MOCK_PAGES = {
 
   'brand-consistency-across-a-team': {
     heroHeadline: 'How do you maintain brand consistency across a team?',
+    seoTitle: 'How do you maintain brand consistency across a team? | Super Conscious',
     heroAnswer: 'With a system, not a document. The reason most brand guidelines fail is that they describe what the brand should look like without giving teams the tools to execute it. Consistency comes from templates, components, and clear decision rules — not a PDF that sits in a shared drive.',
     body: [
       { _type: 'headingBlock', heading: 'Why guidelines aren\'t enough' },
@@ -198,6 +205,7 @@ export const MOCK_PAGES = {
 
   'what-is-a-content-program': {
     heroHeadline: 'What is a content program?',
+    seoTitle: 'What is a content program? | Super Conscious',
     heroAnswer: 'A content program is a structured, ongoing system for producing and distributing content, as opposed to publishing whenever you have something to say. It has a strategy, a cadence, a voice, a set of formats, and a way of measuring whether it\'s working. Publishing is an activity. A program is infrastructure.',
     body: [
       { _type: 'headingBlock', heading: 'What separates a program from just posting' },
@@ -225,6 +233,7 @@ export const MOCK_PAGES = {
 
   'how-to-build-a-b2b-content-program': {
     heroHeadline: 'How do you build a B2B content program from scratch?',
+    seoTitle: 'How do you build a B2B content program from scratch? | Super Conscious',
     heroAnswer: 'Start with your audience and your point of view, not a content calendar. The companies that build programs that last begin with two things: a clear understanding of what their buyers are trying to figure out, and a genuine perspective on the category they operate in. Everything else follows from that.',
     body: [
       { _type: 'headingBlock', heading: 'Step one: define what you actually think' },
@@ -253,6 +262,7 @@ export const MOCK_PAGES = {
 
   'content-program-cost': {
     heroHeadline: 'How much does a content program cost?',
+    seoTitle: 'How much does a content program cost? | Super Conscious',
     heroAnswer: 'A professionally run B2B content program typically runs $8,000–$25,000 per month depending on volume, formats, and how much of the strategic and editorial work your team handles versus the studio. That range covers everything from a lean weekly program on one channel to a full-scale multi-format operation.',
     body: [
       { _type: 'headingBlock', heading: 'What drives the cost' },
@@ -282,6 +292,7 @@ export const MOCK_PAGES = {
 
   'how-long-until-content-marketing-works': {
     heroHeadline: 'How long does it take for content marketing to work?',
+    seoTitle: 'How long does it take for content marketing to work? | Super Conscious',
     heroAnswer: 'Six months before you see compounding returns, twelve before the program is self-sustaining. Content works through accumulation. Each piece builds on the last, search rankings take time to develop, and audiences take time to form habits. The companies that quit at month three almost always quit just before things start working.',
     body: [
       { _type: 'headingBlock', heading: 'What happens in the first 90 days' },
@@ -310,6 +321,7 @@ export const MOCK_PAGES = {
 
   'what-is-a-thought-leadership-program': {
     heroHeadline: 'What is a thought leadership program?',
+    seoTitle: 'What is a thought leadership program? | Super Conscious',
     heroAnswer: 'A thought leadership program is a structured effort to build a company or founder\'s reputation as a serious voice in their category. It combines original points of view, consistent publishing, and strategic distribution to make sure the right people are reading and sharing your thinking. It is different from content marketing. The goal is credibility, not traffic.',
     body: [
       { _type: 'headingBlock', heading: 'Content marketing vs. thought leadership' },
@@ -337,6 +349,7 @@ export const MOCK_PAGES = {
 
   'how-to-measure-a-content-program': {
     heroHeadline: 'How do you measure a content program?',
+    seoTitle: 'How do you measure a content program? | Super Conscious',
     heroAnswer: 'With a mix of leading and lagging indicators. Traffic and rankings tell you the program is building reach. Pipeline influence and sourced revenue tell you it is driving business. The mistake most companies make is measuring content only by what is easy to track — pageviews — and missing the slower-moving signals that indicate the program is actually working.',
     body: [
       { _type: 'headingBlock', heading: 'Leading indicators' },
@@ -367,6 +380,7 @@ export const MOCK_PAGES = {
 
   'what-does-a-digital-product-design-engagement-include': {
     heroHeadline: 'What does a digital product design engagement include?',
+    seoTitle: 'What does a digital product design engagement include? | Super Conscious',
     heroAnswer: 'A digital product design engagement typically covers user research, interaction design, visual design, and a design system: the components and patterns that allow your engineering team to build consistently without returning to design for every screen. The scope depends on whether you are building from scratch or working from an existing product.',
     body: [
       { _type: 'headingBlock', heading: 'Research and definition' },
@@ -396,6 +410,7 @@ export const MOCK_PAGES = {
 
   'how-much-does-product-design-cost': {
     heroHeadline: 'How much does product design cost?',
+    seoTitle: 'How much does product design cost? | Super Conscious',
     heroAnswer: 'A focused product design engagement typically runs $40,000–$150,000 depending on scope and duration. That range covers a 6–8 week sprint to design a core user flow at the low end, and a 4–6 month engagement covering research, full product design, and a design system at the high end.',
     body: [
       { _type: 'headingBlock', heading: 'What drives the cost' },
@@ -424,6 +439,7 @@ export const MOCK_PAGES = {
 
   'how-long-to-design-a-web-app': {
     heroHeadline: 'How long does it take to design a web app?',
+    seoTitle: 'How long does it take to design a web app? | Super Conscious',
     heroAnswer: 'A focused web application design engagement typically runs 8–16 weeks. The range depends on complexity: how many user types, how many core flows, and whether the engagement includes a design system or just the screens. Research and definition take the first 3–4 weeks. Design and iteration take the rest.',
     body: [
       { _type: 'headingBlock', heading: 'What affects the timeline' },
@@ -451,6 +467,7 @@ export const MOCK_PAGES = {
 
   'design-system-vs-brand-system': {
     heroHeadline: 'What\'s the difference between a design system and a brand system?',
+    seoTitle: 'What\'s the difference between a design system and a brand system? | Super Conscious',
     heroAnswer: 'A brand system covers how your company presents itself across every surface: visual identity, voice, messaging, and guidelines for print, digital, and everything in between. A design system is specifically for digital product development — the components, tokens, and patterns your engineering team uses to build consistent interfaces. Brand systems inform design systems. They are not the same thing.',
     body: [
       { _type: 'headingBlock', heading: 'What a brand system covers' },
@@ -480,6 +497,7 @@ export const MOCK_PAGES = {
 
   'what-to-look-for-in-a-product-design-studio': {
     heroHeadline: 'What should you look for in a product design studio?',
+    seoTitle: 'What should you look for in a product design studio? | Super Conscious',
     heroAnswer: 'Work that shows strategic thinking, not just craft. Any studio can produce good-looking screens. The ones worth hiring can show you why they made the decisions they made — how they identified the right problem to solve, how they tested their assumptions, and how the design performed after it shipped.',
     body: [
       { _type: 'headingBlock', heading: 'The case studies tell you everything' },
@@ -510,6 +528,7 @@ export const MOCK_PAGES = {
 
   'brand-or-content-first': {
     heroHeadline: 'What comes first: brand or content?',
+    seoTitle: 'What comes first: brand or content? | Super Conscious',
     heroAnswer: 'Brand. But the real answer depends on where you are. If you are still figuring out your positioning and voice, producing content before your brand is set means building something you will eventually redo. If you have a clear point of view and need to stay in market, content can start while brand is being built, as long as both are moving.',
     body: [
       { _type: 'headingBlock', heading: 'Why brand comes first' },
@@ -539,6 +558,7 @@ export const MOCK_PAGES = {
 
   'do-i-need-a-brand-system-before-content': {
     heroHeadline: 'Do you need a brand system before you start content marketing?',
+    seoTitle: 'Do you need a brand system before you start content marketing? | Super Conscious',
     heroAnswer: 'Not a full system, but you need something to work from. Content produced without a defined voice or point of view tends to be inconsistent, and inconsistency erodes trust faster than silence. You do not need a complete brand system before your first piece. You do need to know what you stand for, who you are talking to, and how you want to sound.',
     body: [
       { _type: 'headingBlock', heading: 'What you actually need before starting content' },
@@ -565,6 +585,7 @@ export const MOCK_PAGES = {
 
   'creative-studio-vs-freelancer': {
     heroHeadline: 'Creative studio versus freelancer: which is right for you?',
+    seoTitle: 'Creative studio versus freelancer: which is right for you? | Super Conscious',
     heroAnswer: 'It depends on scope and how much coordination you want to manage. Freelancers are right for contained, well-defined projects where you know exactly what you need. A studio makes sense when the work requires multiple disciplines working together — strategy, design, writing, and production — and when you want a single team accountable for the outcome.',
     body: [
       { _type: 'headingBlock', heading: 'When a freelancer is the right call' },
@@ -592,6 +613,7 @@ export const MOCK_PAGES = {
 
   'what-to-ask-a-creative-agency': {
     heroHeadline: 'What should you ask a creative agency before hiring them?',
+    seoTitle: 'What should you ask a creative agency before hiring them? | Super Conscious',
     heroAnswer: 'The questions that matter most are not about process or credentials — they are about how the agency thinks. What do they believe that most agencies do not? How do they handle disagreement with a client? Can they show you work that did not go as planned and what they learned? The answers reveal whether you are hiring a vendor or a partner.',
     body: [
       { _type: 'headingBlock', heading: 'Questions about thinking' },
