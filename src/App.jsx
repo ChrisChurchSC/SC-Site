@@ -21,6 +21,7 @@ import ThoughtPost from './pages/ThoughtPost'
 import Contact from './pages/Contact'
 import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
+import Privacy from './pages/Privacy'
 import DeckGate from './components/DeckGate'
 
 // Heavy deck pages — lazy loaded so they don't bloat the initial bundle
@@ -106,6 +107,7 @@ export default function App() {
                 <Route path="/content-packages" element={<DeckGate><Suspense fallback={null}><ContentPackages /></Suspense></DeckGate>} />
                 <Route path="/lp" element={<Suspense fallback={null}><LandingIndex /></Suspense>} />
                 <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
+                <Route path="/privacy" element={<Privacy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
