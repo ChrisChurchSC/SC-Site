@@ -2,10 +2,6 @@ import { useState } from 'react'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
 
-// Formspree form ID (https://formspree.io).
-const FORMSPREE_ID = 'xzdobjza'
-const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`
-
 export default function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | error
   const [toast, setToast] = useState(false)
@@ -20,12 +16,13 @@ export default function Contact() {
     e.preventDefault()
     if (status === 'sending') return
     const form = e.target
+    const data = Object.fromEntries(new FormData(form))
     setStatus('sending')
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
       })
       if (res.ok) {
         form.reset()

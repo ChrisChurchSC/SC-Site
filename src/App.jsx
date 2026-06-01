@@ -25,6 +25,7 @@ import DeckGate from './components/DeckGate'
 
 // Heavy deck pages — lazy loaded so they don't bloat the initial bundle
 const LandingHub      = lazy(() => import('./pages/LandingHub'))
+const LandingIndex    = lazy(() => import('./pages/LandingIndex'))
 const Capabilities    = lazy(() => import('./pages/Capabilities'))
 const AgencyCapabilities = lazy(() => import('./pages/AgencyCapabilities'))
 const BrandSystems    = lazy(() => import('./pages/BrandSystems'))
@@ -48,7 +49,7 @@ function ChromeGate({ children }) {
 function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
-  if (location.pathname === '/' || location.pathname.startsWith('/lp/')) return null
+  if (location.pathname === '/' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
@@ -103,6 +104,7 @@ export default function App() {
                 <Route path="/content-programs" element={<DeckGate><Suspense fallback={null}><ContentPrograms /></Suspense></DeckGate>} />
                 <Route path="/digital-products" element={<DeckGate><Suspense fallback={null}><DigitalProducts /></Suspense></DeckGate>} />
                 <Route path="/content-packages" element={<DeckGate><Suspense fallback={null}><ContentPackages /></Suspense></DeckGate>} />
+                <Route path="/lp" element={<Suspense fallback={null}><LandingIndex /></Suspense>} />
                 <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

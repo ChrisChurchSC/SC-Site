@@ -59,6 +59,40 @@ Creative direction, writing, design, illustration, film and photo, 3D and motion
 - [Rethinking the workweek](https://super-conscious.studio/thoughts/rethinking-the-workweek): Why we dropped the five-day norm for more meaningful work.
 - [The case for toolkits](https://super-conscious.studio/thoughts/the-case-for-toolkits): Our take on building toolkits that keep brands cohesive, flexible, and alive.
 
+## Brand Systems — Questions
+
+- [What does a brand system actually include?](https://super-conscious.studio/lp/what-does-a-brand-system-include): A complete set of decisions about how your company looks, sounds, and presents itself — visual identity, messaging, voice, and the tools your team needs to stay consistent.
+- [How long does a brand system take?](https://super-conscious.studio/lp/how-long-does-a-brand-system-take): Most brand system engagements run 8–12 weeks. Discovery and strategy take the first 3–4 weeks; design and system build takes the remaining time.
+- [How much does a brand system cost?](https://super-conscious.studio/lp/brand-system-cost): A brand system from a professional studio typically runs $25,000–$80,000 depending on scope, from a focused identity system to a full brand platform.
+- [What is the difference between brand guidelines and a brand system?](https://super-conscious.studio/lp/brand-guidelines-vs-brand-system): Brand guidelines tell people what to do. A brand system gives them everything they need to do it — the document plus templates, components, logic, and training.
+- [When should a company invest in a brand system?](https://super-conscious.studio/lp/when-to-invest-in-a-brand-system): When inconsistency is costing you something — time, trust, or growth. Common inflection points include Series A funding, hiring a marketing team, or entering a new market.
+- [What is a verbal identity?](https://super-conscious.studio/lp/what-is-a-verbal-identity): The written equivalent of a visual identity — defining how your company sounds: the words you use, the rhythm of your sentences, and the point of view you bring to everything you publish.
+- [How do you maintain brand consistency across a team?](https://super-conscious.studio/lp/brand-consistency-across-a-team): With a system, not a document. Consistency comes from templates, components, and clear decision rules — not a PDF that sits in a shared drive.
+
+## Content Programs — Questions
+
+- [What is a content program?](https://super-conscious.studio/lp/what-is-a-content-program): A structured, ongoing system for producing and distributing content — with a strategy, cadence, voice, set of formats, and a way of measuring whether it is working.
+- [How do you build a B2B content program from scratch?](https://super-conscious.studio/lp/how-to-build-a-b2b-content-program): Start with your audience and point of view, not a content calendar. Map your buyer's questions, pick two formats and one channel, then build the production machine.
+- [How much does a content program cost?](https://super-conscious.studio/lp/content-program-cost): A professionally run B2B content program typically runs $8,000–$25,000 per month depending on volume, formats, and how much strategic work your team handles versus the studio.
+- [How long does it take for content marketing to work?](https://super-conscious.studio/lp/how-long-until-content-marketing-works): Six months before you see compounding returns, twelve before the program is self-sustaining. Content works through accumulation.
+- [What is a thought leadership program?](https://super-conscious.studio/lp/what-is-a-thought-leadership-program): A structured effort to build a company or founder's reputation as a serious voice in their category — combining original points of view, consistent publishing, and strategic distribution.
+- [How do you measure a content program?](https://super-conscious.studio/lp/how-to-measure-a-content-program): With a mix of leading indicators (publishing consistency, engagement rates, ranking trajectories) and lagging indicators (organic traffic, pipeline influence, sourced revenue).
+
+## Digital Products — Questions
+
+- [What does a digital product design engagement include?](https://super-conscious.studio/lp/what-does-a-digital-product-design-engagement-include): User research, interaction design, visual design, and a design system — the components and patterns that allow your engineering team to build consistently.
+- [How much does product design cost?](https://super-conscious.studio/lp/how-much-does-product-design-cost): A focused product design engagement typically runs $40,000–$150,000 depending on scope and duration, from a 6–8 week sprint to a 4–6 month full engagement.
+- [How long does it take to design a web app?](https://super-conscious.studio/lp/how-long-to-design-a-web-app): A focused web application design engagement typically runs 8–16 weeks. Research and definition take the first 3–4 weeks; design and iteration take the rest.
+- [What is the difference between a design system and a brand system?](https://super-conscious.studio/lp/design-system-vs-brand-system): A brand system covers how your company presents itself across every surface. A design system is specifically for digital product development — components, tokens, and patterns for engineering teams.
+- [What should you look for in a product design studio?](https://super-conscious.studio/lp/what-to-look-for-in-a-product-design-studio): Work that shows strategic thinking, not just craft. Case studies that articulate the problem before showing the solution, and a clear process for research, decisions, and handoff.
+
+## Agency and Engagement — Questions
+
+- [What comes first: brand or content?](https://super-conscious.studio/lp/brand-or-content-first): Brand. But for companies already in market, content can start while brand is being built — as long as both are moving.
+- [Do you need a brand system before you start content marketing?](https://super-conscious.studio/lp/do-i-need-a-brand-system-before-content): Not a full system, but you need something to work from — a positioning statement, a voice definition, and a point of view on your category.
+- [Creative studio versus freelancer: which is right for you?](https://super-conscious.studio/lp/creative-studio-vs-freelancer): Freelancers are right for contained, well-defined projects. A studio makes sense when the work requires multiple disciplines working together and a single team accountable for the outcome.
+- [What should you ask a creative agency before hiring them?](https://super-conscious.studio/lp/what-to-ask-a-creative-agency): The questions that reveal how an agency thinks — what they believe, how they handle disagreement, and whether they can show work that did not go as planned.
+
 ## Contact
 
 - Email: contact@super-conscious.studio

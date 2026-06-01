@@ -184,7 +184,7 @@ export default function LandingPage() {
       <section className={styles.cta}>
         <p className={styles.ctaHeading}>{p.ctaHeading || 'Ready to build?'}</p>
         {p.ctaBody && <p className={styles.ctaBody}>{p.ctaBody}</p>}
-        <NavLink to="/contact" className={styles.ctaBtn}>Start a project</NavLink>
+        <NavLink to="/contact" className={styles.ctaBtn}>{p.ctaBtn || 'Start a project'}</NavLink>
       </section>
 
     </main>
