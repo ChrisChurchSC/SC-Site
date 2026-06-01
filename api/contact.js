@@ -108,7 +108,8 @@ export default async function handler(req, res) {
             // Add to Business Development list at Intro stage
             await attio('/lists/sales/entries', 'POST', {
               data: {
-                record_id: companyId,
+                parent_object: 'companies',
+                parent_record_id: companyId,
                 stage: 'Intro',
                 main_point_of_contact: [{ target_object: 'people', target_record_id: personId }],
               },
