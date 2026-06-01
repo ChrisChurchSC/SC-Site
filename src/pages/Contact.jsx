@@ -7,7 +7,7 @@ export default function Contact() {
   const [toast, setToast] = useState(false)
 
   useMeta({
-    title: 'Contact | Super Conscious',
+    title: 'Start a Project | Super Conscious',
     description: 'Tell us about your project. We build brands, content, and digital products with founders and marketing teams.',
     path: '/contact',
   })

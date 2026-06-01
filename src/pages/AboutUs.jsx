@@ -46,7 +46,7 @@ export default function AboutUs() {
   const roles = sanityRoles?.length ? sanityRoles : fallbackOpenRoles
 
   useMeta({
-    title: 'Careers | Super Conscious',
+    title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
     path: '/about-us',
   })

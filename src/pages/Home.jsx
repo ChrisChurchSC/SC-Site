@@ -54,7 +54,7 @@ export default function Home() {
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   const comingSoon = useComingSoon()
   const projects = useProjects()
-  useMeta({ path: '/', schema: HOME_SCHEMA })
+  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/', schema: HOME_SCHEMA })
 
   // Build a lookup map: label -> block data
   const grid = {}

@@ -37,7 +37,7 @@ export default function About() {
     })),
   } : null
   useMeta({
-    title: 'Capabilities | Super Conscious',
+    title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
     description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
     path: '/about',
     schema: faqSchema,
