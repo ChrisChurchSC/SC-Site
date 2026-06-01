@@ -59,11 +59,12 @@ export default async function handler(req, res) {
       const firstName = parts[0]
       const lastName = parts.slice(1).join(' ') || ''
 
+      // Upsert person by email
       const personRes = await attio('/objects/people/records', 'PUT', {
         matching_attribute: 'email_addresses',
         data: {
           values: {
-            name: [{ first_name: firstName, last_name: lastName }],
+            name: [{ first_name: firstName, last_name: lastName, full_name: name.trim() }],
             email_addresses: [{ email_address: email.trim() }],
           },
         },
@@ -71,6 +72,7 @@ export default async function handler(req, res) {
 
       const personId = personRes?.data?.id?.record_id
 
+      // Create note on person
       if (personId) {
         const noteLines = [
           'Inbound inquiry via super-conscious.studio',
@@ -89,6 +91,35 @@ export default async function handler(req, res) {
             content_plaintext: noteLines,
           },
         }, ATTIO_KEY)
+      }
+
+      // If company provided: create company, add to Business Development list, link to person
+      if (company?.trim() && personId) {
+        try {
+          const companyRes = await attio('/objects/companies/records', 'POST', {
+            data: { values: { name: [company.trim()] } },
+          }, ATTIO_KEY)
+
+          const companyId = companyRes?.data?.id?.record_id
+
+          if (companyId) {
+            // Add to Business Development list at Intro stage
+            await attio('/lists/sales/entries', 'POST', {
+              data: {
+                record_id: companyId,
+                stage: 'Intro',
+                main_point_of_contact: [{ target_object: 'people', target_record_id: personId }],
+              },
+            }, ATTIO_KEY)
+
+            // Link person to company
+            await attio(`/objects/people/records/${personId}`, 'PATCH', {
+              data: { values: { company: [{ target_object: 'companies', target_record_id: companyId }] } },
+            }, ATTIO_KEY)
+          }
+        } catch (err) {
+          console.error('[contact] Attio company/list error:', err.message)
+        }
       }
     } catch (err) {
       console.error('[contact] Attio error:', err.message)
