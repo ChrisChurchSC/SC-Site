@@ -91,7 +91,10 @@ export default function Capabilities() {
   const { data: careerPhotos } = useSanity(CAREERS_PHOTOS_QUERY)
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const HIDDEN_FROM_DECK = new Set(['webroot', 'carbonite'])
+
   const clients = (data ?? [])
+    .filter(p => !HIDDEN_FROM_DECK.has(p.slug))
     .map(p => {
       const flat = flattenTiles(p.tiles)
       const override = SLUG_VARIANT_OVERRIDE[p.slug]
