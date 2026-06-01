@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
 import styles from './CookieBanner.module.css'
 
 const CONSENT_KEY = 'cookie_consent'
@@ -49,7 +48,7 @@ export default function CookieBanner() {
     <div className={styles.banner} role="dialog" aria-label="Cookie consent">
       <p className={styles.text}>
         We use cookies and tracking to improve the site and identify business visitors.{' '}
-        <NavLink to="/privacy" className={styles.link}>Privacy Policy</NavLink>
+        <a href="/privacy" className={styles.link}>Privacy Policy</a>
       </p>
       <div className={styles.actions}>
         <button className={styles.decline} onClick={decline}>Decline</button>
