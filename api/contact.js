@@ -1,7 +1,9 @@
 const ATTIO_BASE = 'https://api.attio.com/v2'
 
-async function attio(path, method, body, key) {
-  const res = await fetch(`${ATTIO_BASE}${path}`, {
+async function attio(path, method, body, key, params) {
+  const url = new URL(`${ATTIO_BASE}${path}`)
+  if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
+  const res = await fetch(url.toString(), {
     method,
     headers: {
       Authorization: `Bearer ${key}`,
@@ -61,14 +63,13 @@ export default async function handler(req, res) {
 
       // Upsert person by email
       const personRes = await attio('/objects/people/records', 'PUT', {
-        matching_attribute: 'email_addresses',
         data: {
           values: {
             name: [{ first_name: firstName, last_name: lastName, full_name: name.trim() }],
             email_addresses: [{ email_address: email.trim() }],
           },
         },
-      }, ATTIO_KEY)
+      }, ATTIO_KEY, { matching_attribute: 'email_addresses' })
 
       const personId = personRes?.data?.id?.record_id
 
