@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import CookieBanner from './components/CookieBanner'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
@@ -22,6 +23,7 @@ import Contact from './pages/Contact'
 import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
 import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import DeckGate from './components/DeckGate'
 
 // Heavy deck pages — lazy loaded so they don't bloat the initial bundle
@@ -108,6 +110,7 @@ export default function App() {
                 <Route path="/lp" element={<Suspense fallback={null}><LandingIndex /></Suspense>} />
                 <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
                 <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
@@ -116,6 +119,7 @@ export default function App() {
         </ComingSoonProvider>
         </NavProvider>
       </BrowserRouter>
+      <CookieBanner />
       <Analytics />
       <SpeedInsights />
     </ThemeProvider>
