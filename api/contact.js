@@ -51,14 +51,14 @@ export default async function handler(req, res) {
   const RESEND_KEY = process.env.RESEND_API_KEY
   const RESEND_FROM = process.env.RESEND_FROM_EMAIL
 
-  try {
-    if (ATTIO_KEY) {
-      // Parse first / last name
+  const errors = []
+
+  if (ATTIO_KEY) {
+    try {
       const parts = name.trim().split(/\s+/)
       const firstName = parts[0]
       const lastName = parts.slice(1).join(' ') || ''
 
-      // Upsert person by email
       const personRes = await attio('/objects/people/records', 'PUT', {
         matching_attribute: 'email_addresses',
         data: {
@@ -71,7 +71,6 @@ export default async function handler(req, res) {
 
       const personId = personRes?.data?.id?.record_id
 
-      // Create note with full inquiry
       if (personId) {
         const noteLines = [
           'Inbound inquiry via super-conscious.studio',
@@ -91,15 +90,24 @@ export default async function handler(req, res) {
           },
         }, ATTIO_KEY)
       }
+    } catch (err) {
+      console.error('[contact] Attio error:', err.message)
+      errors.push(`Attio: ${err.message}`)
     }
+  }
 
-    if (RESEND_KEY) {
+  if (RESEND_KEY) {
+    try {
       await notify(name, email, company, message, RESEND_KEY, RESEND_FROM)
+    } catch (err) {
+      console.error('[contact] Resend error:', err.message)
+      errors.push(`Resend: ${err.message}`)
     }
+  }
 
-    return res.status(200).json({ ok: true })
-  } catch (err) {
-    console.error('[contact]', err)
+  if (errors.length && !RESEND_KEY && !ATTIO_KEY) {
     return res.status(500).json({ error: 'Something went wrong' })
   }
+
+  return res.status(200).json({ ok: true, errors: errors.length ? errors : undefined })
 }
