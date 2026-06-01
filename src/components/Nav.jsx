@@ -163,6 +163,7 @@ export default function Nav() {
         <div className="nav-socials">
           <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-social-link">Instagram</a>
           <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noreferrer" className="nav-social-link">LinkedIn</a>
+          <NavLink to="/privacy" className="nav-social-link">Privacy</NavLink>
         </div>
       </nav>
 
