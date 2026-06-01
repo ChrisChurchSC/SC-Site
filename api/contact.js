@@ -89,7 +89,8 @@ export default async function handler(req, res) {
             parent_object: 'people',
             parent_record_id: personId,
             title: `Website inquiry${company ? ` — ${company}` : ''}`,
-            content_plaintext: noteLines,
+            format: 'plaintext',
+            content: noteLines,
           },
         }, ATTIO_KEY)
       }
