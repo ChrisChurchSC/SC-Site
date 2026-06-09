@@ -25,6 +25,10 @@ export const thoughts = [
       { type: 'h2', text: 'Long-Term Creative Equity' },
       { type: 'p', text: 'Campaigns fade, but toolkits grow in value. Each new project adds to the visual library: more props, textures, poses, and treatments. Over time, you build a visual universe unique to your brand, one that no competitor can replicate. It becomes an asset in its own right, compounding in value as your company scales.' },
     ],
+    relatedLinks: [
+      { href: '/lp/what-does-a-brand-system-include', text: 'What does a brand system include?' },
+      { href: '/lp/brand-consistency-across-a-team', text: 'Brand consistency across a team' },
+    ],
   },
   {
     n: '002',
@@ -50,6 +54,10 @@ export const thoughts = [
       { type: 'p', text: 'The most effective strategy is not choosing between brand and sales, it is combining them. According to Binet and Field\'s landmark study The Long and the Short of It, the optimal balance for most companies is around sixty percent investment in brand building and forty percent in sales activation. Brand creates future demand by ensuring people know you, like you, and trust you when they are ready to buy. Sales captures present demand by converting that awareness into action and revenue.' },
       { type: 'p', text: 'Together, they create a cycle where brand fills the funnel and sales converts it. Over time, that balance compounds into sustainable growth. Growth is not about picking sides. It is about building a brand that makes people remember you and creating campaigns that move them to act. Do both well and you get the best of both worlds, momentum now and a foundation that lasts.' },
     ],
+    relatedLinks: [
+      { href: '/lp/when-to-invest-in-a-brand-system', text: 'When to invest in a brand system' },
+      { href: '/lp/how-to-build-a-b2b-content-program', text: 'How to build a B2B content program' },
+    ],
   },
   {
     n: '003',
@@ -72,6 +80,10 @@ export const thoughts = [
       { type: 'img', src: '/thoughts/sk2AzhgrAy4l5WLnEwtpHbQ6fY.png', alt: '' },
       { type: 'p', text: 'In the end, the four-day week is not about working less. It\'s about working smarter. It\'s about outcomes over hours. It\'s about rejecting the old model that said exhaustion equals commitment, and proving instead that great work can be done in a way that sustains both the people and the company. Working fewer days doesn\'t mean caring less. It means caring better: about the craft, about each other, and about building a studio that can last.' },
       { type: 'img', src: '/thoughts/a8S3BMvfQ7NUKGOU14sWbRBFg8k.png', alt: '' },
+    ],
+    relatedLinks: [
+      { href: '/lp/creative-studio-vs-freelancer', text: 'Creative studio vs. freelancer' },
+      { href: '/lp/what-to-ask-a-creative-agency', text: 'What to ask a creative agency' },
     ],
   },
 ]

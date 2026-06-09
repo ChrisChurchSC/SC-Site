@@ -33,6 +33,7 @@ function fromStaticThought(t) {
     publishedAt: t.isoDate,
     order: parseInt(t.n, 10),
     heroUrl: t.hero ? assetUrl(t.hero) : null,
+    relatedLinks: t.relatedLinks || [],
     body: t.body.map(b => {
       if (b.type === 'p') return { _type: 'paragraphBlock', text: b.text }
       if (b.type === 'h2') return { _type: 'headingBlock', text: b.text }
@@ -108,6 +109,19 @@ export default function ThoughtPost() {
           )
           return null
         })}
+
+        {post.relatedLinks?.length > 0 && (
+          <nav className={styles.related}>
+            <span className={styles.relatedLabel}>Related</span>
+            <ul className={styles.relatedList}>
+              {post.relatedLinks.map(link => (
+                <li key={link.href}>
+                  <a href={link.href} className={styles.relatedLink}>{link.text} →</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </article>
     </main>
   )
