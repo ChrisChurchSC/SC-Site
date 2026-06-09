@@ -77,10 +77,27 @@ export default function Nav() {
     <>
       {/* Right side nav */}
       <nav className="nav-side">
-        {/* Head logo */}
-        <NavLink to="/" className="nav-side-head">
-          <img src={logoSrc} alt="Super Conscious" width={28} height={33} />
-        </NavLink>
+        {/* Head */}
+        <div className="nav-top-bar">
+          <NavLink to="/" className="nav-side-head">
+            <img src={logoSrc} alt="Super Conscious" width={28} height={33} />
+          </NavLink>
+          <button
+            type="button"
+            className="nav-book-btn"
+            data-cal-namespace="discovery-call"
+            data-cal-link="super-conscious/discovery-call"
+            data-cal-origin="https://app.cal.com"
+            data-cal-config='{"layout":"month_view"}'
+            onClick={() => {
+              window.dataLayer = window.dataLayer || []
+              window.dataLayer.push({ event: 'discovery_call_click' })
+              window.dataLayer.push({ event: 'cta_click', cta_location: 'nav' })
+            }}
+          >
+            Book a discovery call
+          </button>
+        </div>
 
         {/* Gradient strips */}
         <div className="nav-gradient-blocks">
