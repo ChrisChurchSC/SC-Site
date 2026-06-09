@@ -1,6 +1,6 @@
 import styles from './About.module.css'
 import { useMeta } from '../hooks/useMeta'
-import KitForm from '../components/KitForm'
+import NewsletterForm from '../components/NewsletterForm'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
@@ -125,7 +125,7 @@ export default function About() {
         <div className={styles.pricingCard}>
           <p className={styles.pricingLabel}>{cfg.pricingLabel}</p>
           <p className={styles.pricingSub}>{cfg.pricingSub}</p>
-          <KitForm />
+          <NewsletterForm />
         </div>
       </section>
 
