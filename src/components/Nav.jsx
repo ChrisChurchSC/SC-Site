@@ -3,7 +3,6 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useNav } from '../context/NavContext'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { useProjects } from '../context/ProjectsContext'
-import { useContactDrawer } from '../context/ContactDrawerContext'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
@@ -13,7 +12,6 @@ import './Nav.css'
 
 export default function Nav() {
   const { menuOpen, setMenuOpen } = useNav()
-  const { open: openDrawer } = useContactDrawer()
   const { open: openCalDrawer } = useCalDrawer()
   const location = useLocation()
   const isHome = location.pathname === '/'
@@ -128,15 +126,12 @@ export default function Nav() {
                 <p className="nav-card-sub">Join the team.</p>
               </div>
             </NavLink>
-            <button className="nav-card" onClick={() => {
-              window.gtag?.('event', 'cta_click', { cta_location: 'nav_contact' })
-              openDrawer()
-            }}>
+            <NavLink to="/contact" className="nav-card" onClick={() => window.gtag?.('event', 'cta_click', { cta_location: 'nav_contact' })}>
               <div className="nav-card-text">
                 <p className="nav-card-title">Contact</p>
                 <p className="nav-card-sub">Get in touch.</p>
               </div>
-            </button>
+            </NavLink>
           </div>
         </div>
 
