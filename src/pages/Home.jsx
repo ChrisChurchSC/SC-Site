@@ -243,17 +243,22 @@ export default function Home() {
             </svg>
             <span>Watch with sound</span>
           </button>
-          <NavLink
-            to="/contact"
+          <button
+            type="button"
             className={styles.heroCta}
+            data-cal-namespace="discovery-call"
+            data-cal-link="super-conscious/discovery-call"
+            data-cal-origin="https://app.cal.com"
+            data-cal-config='{"layout":"month_view"}'
             onClick={(e) => {
               e.stopPropagation()
               window.dataLayer = window.dataLayer || []
               window.dataLayer.push({ event: 'cta_click', cta_location: 'home_hero' })
+              window.dataLayer.push({ event: 'discovery_call_click' })
             }}
           >
-            Start a project
-          </NavLink>
+            Book a discovery call
+          </button>
         </div>
       </section>
 
