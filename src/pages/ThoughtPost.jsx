@@ -123,6 +123,20 @@ export default function ThoughtPost() {
             </ul>
           </nav>
         )}
+
+        <div className={styles.postCta}>
+          <button
+            type="button"
+            className={styles.postCtaBtn}
+            data-cal-namespace="discovery-call"
+            data-cal-link="super-conscious/discovery-call"
+            data-cal-origin="https://app.cal.com"
+            data-cal-config='{"layout":"month_view"}'
+            onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }); }}
+          >
+            Book a discovery call →
+          </button>
+        </div>
       </article>
     </main>
   )
