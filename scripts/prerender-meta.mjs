@@ -53,8 +53,11 @@ function injectMeta(html, { title, description, url }) {
     .replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${esc(description)}"`)
 }
 
-function injectRoot(html, content) {
-  return html.replace('<div id="root"></div>', `<div id="root">${content}</div>`)
+function injectSeoContent(html, content) {
+  return html.replace(
+    '<div id="root"></div>',
+    `<div id="root"></div>\n<div id="seo-static" style="display:none" aria-hidden="true">${content}</div>`,
+  )
 }
 
 function writeHtml(segments, html) {
@@ -177,7 +180,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   let html = injectMeta(indexHtml, { title, description, url })
 
   // Inject H1 + description + nav links so crawlers see content and outgoing links
-  html = injectRoot(html, [
+  html = injectSeoContent(html, [
     `<h1>${esc(page.heroHeadline)}</h1>`,
     `<p>${esc(description)}</p>`,
     `<nav><a href="/">Super Conscious</a> · <a href="/contact">Start a project</a></nav>`,
@@ -190,7 +193,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
 // ── Homepage: inject LP links so crawlers can discover /lp/* pages ───────────
 
 const homepageHtml = fs.readFileSync(indexPath, 'utf8')
-const homepageWithLinks = injectRoot(
+const homepageWithLinks = injectSeoContent(
   homepageHtml,
   `<nav aria-label="Resources">\n${lpLinks}\n</nav>`,
 )
