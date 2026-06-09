@@ -26,6 +26,8 @@ export default function Contact() {
       })
       if (res.ok) {
         window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({ event: 'contact_form_submit' })
         form.reset()
         setStatus('idle')
         setToast(true)
