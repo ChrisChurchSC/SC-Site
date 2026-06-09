@@ -1,0 +1,68 @@
+.form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.input {
+  flex: 1;
+  min-width: 200px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.18s;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.input:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 3px;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.success {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 4px 0 0;
+}
+
+.error {
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: #e8908f;
+  margin: 4px 0 0;
+}
