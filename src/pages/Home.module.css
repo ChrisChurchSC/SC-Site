@@ -424,6 +424,34 @@
   border-color: #fff;
 }
 
+/* ── Hero CTA ── */
+.heroCta {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 2;
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 5px;
+  border: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.heroCta:hover {
+  opacity: 0.82;
+}
+
 /* ── Empty block crosshair ── */
 .blockEmpty::before {
   content: '';

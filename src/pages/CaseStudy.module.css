@@ -287,6 +287,30 @@
   max-width: 640px;
 }
 
+/* ── Case study CTA ── */
+.csCtaSection {
+  padding: 56px 40px 80px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.csCtaBtn {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: #fff;
+  border-radius: 5px;
+  padding: 13px 26px;
+  text-decoration: none;
+  transition: opacity 0.18s;
+}
+
+.csCtaBtn:hover {
+  opacity: 0.82;
+}
+
 /* ── Password gate ── */
 .gate {
   min-height: 100vh;
