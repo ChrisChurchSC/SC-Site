@@ -424,6 +424,10 @@
 }
 
 .ctaBook {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.14em;

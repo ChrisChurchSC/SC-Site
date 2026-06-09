@@ -46,7 +46,15 @@ export default function Contact() {
         <p className={styles.headerLabel}>Contact</p>
         <h1 className={styles.headline}>Let's build together.</h1>
         <p className={styles.sub}>
-          Tell us a little about what you're working on and we'll get back to you within a day or two. Prefer to talk? <a href="https://cal.com/super-conscious/discovery-call" target="_blank" rel="noopener noreferrer" className={styles.bookLink} onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }) }}>Book a discovery call →</a>
+          Tell us a little about what you're working on and we'll get back to you within a day or two. Prefer to talk? <button
+              type="button"
+              className={styles.bookLink}
+              data-cal-namespace="discovery-call"
+              data-cal-link="super-conscious/discovery-call"
+              data-cal-origin="https://app.cal.com"
+              data-cal-config='{"layout":"month_view"}'
+              onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }); }}
+            >Book a discovery call →</button>
         </p>
       </section>
 
