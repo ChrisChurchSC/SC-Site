@@ -24,6 +24,7 @@ import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+import BookingConfirmed from './pages/BookingConfirmed'
 import DeckGate from './components/DeckGate'
 
 // Heavy deck pages — lazy loaded so they don't bloat the initial bundle
@@ -111,6 +112,7 @@ export default function App() {
                 <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/booking-confirmed" element={<BookingConfirmed />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
