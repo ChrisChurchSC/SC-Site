@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, NavLink } from 'react-router-dom'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
 import { useProjects } from '../context/ProjectsContext'
 import styles from './CaseStudy.module.css'
@@ -290,6 +290,20 @@ export default function CaseStudy() {
           return null
         })}
       </div>
+
+      {/* CTA */}
+      <section className={styles.csCtaSection}>
+        <NavLink
+          to="/contact"
+          className={styles.csCtaBtn}
+          onClick={() => {
+            window.dataLayer = window.dataLayer || []
+            window.dataLayer.push({ event: 'cta_click', cta_location: 'case_study' })
+          }}
+        >
+          Start a project →
+        </NavLink>
+      </section>
 
     </main>
   )

@@ -243,6 +243,17 @@ export default function Home() {
             </svg>
             <span>Watch with sound</span>
           </button>
+          <NavLink
+            to="/contact"
+            className={styles.heroCta}
+            onClick={(e) => {
+              e.stopPropagation()
+              window.dataLayer = window.dataLayer || []
+              window.dataLayer.push({ event: 'cta_click', cta_location: 'home_hero' })
+            }}
+          >
+            Start a project
+          </NavLink>
         </div>
       </section>
 
