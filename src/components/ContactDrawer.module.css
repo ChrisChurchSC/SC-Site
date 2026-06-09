@@ -1,0 +1,190 @@
+/* ── Backdrop ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: background 0.35s ease;
+  pointer-events: none;
+}
+
+.overlayVisible {
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: all;
+}
+
+/* ── Drawer panel ── */
+.drawer {
+  background: #161616;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px 12px 0 0;
+  max-height: 85vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: all;
+  padding: 20px 40px 56px;
+}
+
+.drawerVisible {
+  transform: translateY(0);
+}
+
+/* ── Drag handle ── */
+.handle {
+  width: 36px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  margin: 0 auto 28px;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.title {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+  margin-top: 4px;
+}
+
+.closeBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 680px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.optional {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input,
+.textarea {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.textarea {
+  resize: none;
+  line-height: 1.6;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.submit {
+  align-self: flex-start;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: opacity 0.18s;
+}
+
+.submit:hover {
+  opacity: 0.82;
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ── Success / error states ── */
+.success {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 24px 0 32px;
+  max-width: 680px;
+}
+
+.error {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #e8908f;
+  margin: 0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .drawer {
+    padding: 16px 20px 48px;
+    max-height: 92vh;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

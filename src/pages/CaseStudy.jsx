@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams, NavLink } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useContactDrawer } from '../context/ContactDrawerContext'
 import { caseStudies as staticCaseStudies } from '../data/caseStudies'
 import { useProjects } from '../context/ProjectsContext'
 import styles from './CaseStudy.module.css'
@@ -91,6 +92,7 @@ function buildPlaceholder(project) {
 export default function CaseStudy() {
   const isMobile = useIsMobile()
   const { slug, clientSlug, workSlug } = useParams()
+  const { open: openDrawer } = useContactDrawer()
   // When accessed via /work/:clientSlug/:workSlug, resolve the Sanity slug as "clientSlug-workSlug"
   const sanitySlug = workSlug ? `${clientSlug}-${workSlug}` : slug
   const clientSlugResolved = clientSlug ?? slug
@@ -293,15 +295,15 @@ export default function CaseStudy() {
 
       {/* CTA */}
       <section className={styles.csCtaSection}>
-        <NavLink
-          to="/contact"
+        <button
           className={styles.csCtaBtn}
           onClick={() => {
             window.gtag?.('event', 'cta_click', { cta_location: 'case_study' })
+            openDrawer()
           }}
         >
           Start a project →
-        </NavLink>
+        </button>
       </section>
 
     </main>
