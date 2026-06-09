@@ -7,7 +7,9 @@ import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
 import { ProjectsProvider, useProjects } from './context/ProjectsContext'
+import { ContactDrawerProvider } from './context/ContactDrawerContext'
 import Nav from './components/Nav'
+import ContactDrawer from './components/ContactDrawer'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
@@ -81,6 +83,7 @@ export default function App() {
         <NavProvider>
         <ComingSoonProvider>
         <ProjectsProvider>
+        <ContactDrawerProvider>
           <ScrollToTop />
           <TransitionBar />
           <Cursor />
@@ -89,6 +92,7 @@ export default function App() {
             <ThemeToggle />
             <BackButton />
           </ChromeGate>
+          <ContactDrawer />
           <div className="theme-layer">
             <Suspense fallback={null}>
               <Routes>
@@ -117,6 +121,7 @@ export default function App() {
               </Routes>
             </Suspense>
           </div>
+        </ContactDrawerProvider>
         </ProjectsProvider>
         </ComingSoonProvider>
         </NavProvider>
