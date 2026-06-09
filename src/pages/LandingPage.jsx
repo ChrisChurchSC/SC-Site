@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, NavLink, Navigate } from 'react-router-dom'
+import { useCalDrawer } from '../context/CalDrawerContext'
 import styles from './LandingPage.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
@@ -11,6 +12,7 @@ import LogoWordmark from '../components/LogoWordmark'
 
 export default function LandingPage() {
   const { slug } = useParams()
+  const { open: openCalDrawer } = useCalDrawer()
   const { data: page, loading } = useSanity(LANDING_PAGE_QUERY, { slug })
   const [openFaq, setOpenFaq] = useState(null)
 
@@ -188,11 +190,10 @@ export default function LandingPage() {
         <button
           type="button"
           className={styles.ctaBook}
-          data-cal-namespace="discovery-call"
-          data-cal-link="super-conscious/discovery-call"
-          data-cal-origin="https://app.cal.com"
-          data-cal-config='{"layout":"month_view"}'
-          onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }); }}
+          onClick={() => {
+            window.gtag?.('event', 'cta_click', { cta_location: 'landing_page' })
+            openCalDrawer()
+          }}
         >Book a discovery call →</button>
       </section>
 

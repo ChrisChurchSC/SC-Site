@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
+import { useCalDrawer } from '../context/CalDrawerContext'
 
 export default function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | error
   const [toast, setToast] = useState(false)
+  const { open: openCalDrawer } = useCalDrawer()
 
   useMeta({
     title: 'Start a Project | Super Conscious',
@@ -51,14 +53,9 @@ export default function Contact() {
         <button
           type="button"
           className={styles.bookBtn}
-          data-cal-namespace="discovery-call"
-          data-cal-link="super-conscious/discovery-call"
-          data-cal-origin="https://app.cal.com"
-          data-cal-config='{"layout":"month_view"}'
           onClick={() => {
-            window.dataLayer = window.dataLayer || []
-            window.dataLayer.push({ event: 'discovery_call_click' })
             window.gtag?.('event', 'cta_click', { cta_location: 'contact' })
+            openCalDrawer()
           }}
         >
           Prefer to talk? Book a discovery call →
