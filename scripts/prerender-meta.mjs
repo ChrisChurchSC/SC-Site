@@ -159,7 +159,16 @@ for (const slug of workSlugs) {
   const title = `${name} | Super Conscious`
   const description = (tagline || `Work by Super Conscious for ${name}.`).slice(0, 155)
   const url = `${BASE_URL}/work/${slug}`
-  const html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url })
+  html = injectSchemas(html, [{
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Work', item: `${BASE_URL}/work` },
+      { '@type': 'ListItem', position: 3, name, item: url },
+    ],
+  }])
   writeHtml(['work', slug], html)
   count++
 }
@@ -175,32 +184,68 @@ for (const t of thoughts) {
 
   let html = injectMeta(indexHtml, { title, description, url })
 
-  html = injectSchemas(html, [{
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: t.title,
-    description: t.excerpt || '',
-    datePublished: t.isoDate || '',
-    author: {
-      '@type': 'Organization',
-      name: 'Super Conscious',
-      url: BASE_URL,
+  html = injectSchemas(html, [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: t.title,
+      description: t.excerpt || '',
+      datePublished: t.isoDate || '',
+      author: {
+        '@type': 'Organization',
+        name: 'Super Conscious',
+        url: BASE_URL,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Super Conscious',
+        url: BASE_URL,
+        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.svg` },
+      },
+      url,
+      image: t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE,
     },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Super Conscious',
-      url: BASE_URL,
-      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.svg` },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Thoughts', item: `${BASE_URL}/thoughts` },
+        { '@type': 'ListItem', position: 3, name: t.title, item: url },
+      ],
     },
-    url,
-    image: t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE,
-  }])
+  ])
 
   writeHtml(['thoughts', t.slug], html)
   count++
 }
 
-// ── AEO landing pages (canonical, H1, FAQ + HowTo JSON-LD, outgoing links) ───
+// ── AEO landing pages (canonical, H1, FAQ + HowTo + Breadcrumb JSON-LD, outgoing links) ──
+
+const LP_CATEGORY = {
+  'what-does-a-brand-system-include': 'Brand Systems',
+  'how-long-does-a-brand-system-take': 'Brand Systems',
+  'brand-system-cost': 'Brand Systems',
+  'brand-guidelines-vs-brand-system': 'Brand Systems',
+  'when-to-invest-in-a-brand-system': 'Brand Systems',
+  'what-is-a-verbal-identity': 'Brand Systems',
+  'brand-consistency-across-a-team': 'Brand Systems',
+  'what-is-a-content-program': 'Content Programs',
+  'how-to-build-a-b2b-content-program': 'Content Programs',
+  'content-program-cost': 'Content Programs',
+  'how-long-until-content-marketing-works': 'Content Programs',
+  'what-is-a-thought-leadership-program': 'Content Programs',
+  'how-to-measure-a-content-program': 'Content Programs',
+  'what-does-a-digital-product-design-engagement-include': 'Digital Products',
+  'how-much-does-product-design-cost': 'Digital Products',
+  'how-long-to-design-a-web-app': 'Digital Products',
+  'design-system-vs-brand-system': 'Digital Products',
+  'what-to-look-for-in-a-product-design-studio': 'Digital Products',
+  'brand-or-content-first': 'Hiring a Studio',
+  'do-i-need-a-brand-system-before-content': 'Hiring a Studio',
+  'creative-studio-vs-freelancer': 'Hiring a Studio',
+  'what-to-ask-a-creative-agency': 'Hiring a Studio',
+}
 
 const lpLinks = Object.entries(MOCK_PAGES)
   .map(([slug, p]) => `<a href="/lp/${slug}">${esc(p.heroHeadline)}</a>`)
@@ -239,6 +284,15 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
       })),
     })
   }
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: LP_CATEGORY[slug] || 'Resources', item: `${BASE_URL}/about` },
+      { '@type': 'ListItem', position: 3, name: page.heroHeadline, item: url },
+    ],
+  })
   html = injectSchemas(html, schemas)
 
   // H1 + description + nav links in hidden div for non-JS crawlers
