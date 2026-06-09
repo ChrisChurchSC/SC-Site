@@ -45,7 +45,12 @@ export default function KitForm({ uid = 'f036f942c2', formId = '9383718' }) {
       setTimeout(() => setToast(false), 4000)
     }
 
-    const onKitSubscribe = (id) => { if (id === formId) showToast() }
+    const onKitSubscribe = (id) => {
+      if (id !== formId) return
+      showToast()
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({ event: 'newsletter_signup' })
+    }
     kitSubscribeListeners.add(onKitSubscribe)
     return () => kitSubscribeListeners.delete(onKitSubscribe)
   }, [formId])

@@ -91,7 +91,7 @@ export const MOCK_PAGES = {
 
   'brand-guidelines-vs-brand-system': {
     heroHeadline: 'What\'s the difference between brand guidelines and a brand system?',
-    seoTitle: 'What\'s the difference between brand guidelines and a brand system? | Super Conscious',
+    seoTitle: 'Brand Guidelines vs. Brand System | Super Conscious',
     heroAnswer: 'Brand guidelines tell people what to do. A brand system gives them everything they need to do it. Guidelines are a document. A system is the document plus the templates, the components, the logic, and the training that makes consistency possible without a designer in the room.',
     body: [
       { _type: 'headingBlock', heading: 'Why guidelines alone don\'t work' },
@@ -119,7 +119,7 @@ export const MOCK_PAGES = {
 
   'when-to-invest-in-a-brand-system': {
     heroHeadline: 'When should a company invest in a brand system?',
-    seoTitle: 'When should a company invest in a brand system? | Super Conscious',
+    seoTitle: 'When to Invest in a Brand System | Super Conscious',
     heroAnswer: 'When inconsistency is costing you something. That might be time: designers and writers recreating the wheel on every project. It might be trust: a brand that looks different across channels signals instability to buyers. Or it might be growth: you are about to hire, raise, or expand and need a brand that scales with you.',
     body: [
       { _type: 'headingBlock', heading: 'The signals that it\'s time' },
@@ -175,7 +175,7 @@ export const MOCK_PAGES = {
 
   'brand-consistency-across-a-team': {
     heroHeadline: 'How do you maintain brand consistency across a team?',
-    seoTitle: 'How do you maintain brand consistency across a team? | Super Conscious',
+    seoTitle: 'Brand Consistency Across a Team | Super Conscious',
     heroAnswer: 'With a system, not a document. The reason most brand guidelines fail is that they describe what the brand should look like without giving teams the tools to execute it. Consistency comes from templates, components, and clear decision rules — not a PDF that sits in a shared drive.',
     body: [
       { _type: 'headingBlock', heading: 'Why guidelines aren\'t enough' },
@@ -233,7 +233,7 @@ export const MOCK_PAGES = {
 
   'how-to-build-a-b2b-content-program': {
     heroHeadline: 'How do you build a B2B content program from scratch?',
-    seoTitle: 'How do you build a B2B content program from scratch? | Super Conscious',
+    seoTitle: 'How to Build a B2B Content Program | Super Conscious',
     heroAnswer: 'Start with your audience and your point of view, not a content calendar. The companies that build programs that last begin with two things: a clear understanding of what their buyers are trying to figure out, and a genuine perspective on the category they operate in. Everything else follows from that.',
     body: [
       { _type: 'headingBlock', heading: 'Step one: define what you actually think' },
@@ -292,7 +292,7 @@ export const MOCK_PAGES = {
 
   'how-long-until-content-marketing-works': {
     heroHeadline: 'How long does it take for content marketing to work?',
-    seoTitle: 'How long does it take for content marketing to work? | Super Conscious',
+    seoTitle: 'How Long Until Content Marketing Works | Super Conscious',
     heroAnswer: 'Six months before you see compounding returns, twelve before the program is self-sustaining. Content works through accumulation. Each piece builds on the last, search rankings take time to develop, and audiences take time to form habits. The companies that quit at month three almost always quit just before things start working.',
     body: [
       { _type: 'headingBlock', heading: 'What happens in the first 90 days' },
@@ -380,7 +380,7 @@ export const MOCK_PAGES = {
 
   'what-does-a-digital-product-design-engagement-include': {
     heroHeadline: 'What does a digital product design engagement include?',
-    seoTitle: 'What does a digital product design engagement include? | Super Conscious',
+    seoTitle: 'What a Product Design Engagement Includes | Super Conscious',
     heroAnswer: 'A digital product design engagement typically covers user research, interaction design, visual design, and a design system: the components and patterns that allow your engineering team to build consistently without returning to design for every screen. The scope depends on whether you are building from scratch or working from an existing product.',
     body: [
       { _type: 'headingBlock', heading: 'Research and definition' },
@@ -467,7 +467,7 @@ export const MOCK_PAGES = {
 
   'design-system-vs-brand-system': {
     heroHeadline: 'What\'s the difference between a design system and a brand system?',
-    seoTitle: 'What\'s the difference between a design system and a brand system? | Super Conscious',
+    seoTitle: 'Design System vs. Brand System | Super Conscious',
     heroAnswer: 'A brand system covers how your company presents itself across every surface: visual identity, voice, messaging, and guidelines for print, digital, and everything in between. A design system is specifically for digital product development — the components, tokens, and patterns your engineering team uses to build consistent interfaces. Brand systems inform design systems. They are not the same thing.',
     body: [
       { _type: 'headingBlock', heading: 'What a brand system covers' },
@@ -497,7 +497,7 @@ export const MOCK_PAGES = {
 
   'what-to-look-for-in-a-product-design-studio': {
     heroHeadline: 'What should you look for in a product design studio?',
-    seoTitle: 'What should you look for in a product design studio? | Super Conscious',
+    seoTitle: 'Choosing a Product Design Studio | Super Conscious',
     heroAnswer: 'Work that shows strategic thinking, not just craft. Any studio can produce good-looking screens. The ones worth hiring can show you why they made the decisions they made — how they identified the right problem to solve, how they tested their assumptions, and how the design performed after it shipped.',
     body: [
       { _type: 'headingBlock', heading: 'The case studies tell you everything' },
@@ -558,7 +558,7 @@ export const MOCK_PAGES = {
 
   'do-i-need-a-brand-system-before-content': {
     heroHeadline: 'Do you need a brand system before you start content marketing?',
-    seoTitle: 'Do you need a brand system before you start content marketing? | Super Conscious',
+    seoTitle: 'Brand System Before Content Marketing? | Super Conscious',
     heroAnswer: 'Not a full system, but you need something to work from. Content produced without a defined voice or point of view tends to be inconsistent, and inconsistency erodes trust faster than silence. You do not need a complete brand system before your first piece. You do need to know what you stand for, who you are talking to, and how you want to sound.',
     body: [
       { _type: 'headingBlock', heading: 'What you actually need before starting content' },
@@ -585,7 +585,7 @@ export const MOCK_PAGES = {
 
   'creative-studio-vs-freelancer': {
     heroHeadline: 'Creative studio versus freelancer: which is right for you?',
-    seoTitle: 'Creative studio versus freelancer: which is right for you? | Super Conscious',
+    seoTitle: 'Creative Studio vs. Freelancer | Super Conscious',
     heroAnswer: 'It depends on scope and how much coordination you want to manage. Freelancers are right for contained, well-defined projects where you know exactly what you need. A studio makes sense when the work requires multiple disciplines working together — strategy, design, writing, and production — and when you want a single team accountable for the outcome.',
     body: [
       { _type: 'headingBlock', heading: 'When a freelancer is the right call' },
@@ -613,7 +613,7 @@ export const MOCK_PAGES = {
 
   'what-to-ask-a-creative-agency': {
     heroHeadline: 'What should you ask a creative agency before hiring them?',
-    seoTitle: 'What should you ask a creative agency before hiring them? | Super Conscious',
+    seoTitle: 'What to Ask a Creative Agency | Super Conscious',
     heroAnswer: 'The questions that matter most are not about process or credentials — they are about how the agency thinks. What do they believe that most agencies do not? How do they handle disagreement with a client? Can they show you work that did not go as planned and what they learned? The answers reveal whether you are hiring a vendor or a partner.',
     body: [
       { _type: 'headingBlock', heading: 'Questions about thinking' },
