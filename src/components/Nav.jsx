@@ -92,7 +92,7 @@ export default function Nav() {
             onClick={() => {
               window.dataLayer = window.dataLayer || []
               window.dataLayer.push({ event: 'discovery_call_click' })
-              window.dataLayer.push({ event: 'cta_click', cta_location: 'nav' })
+              window.gtag?.('event', 'cta_click', { cta_location: 'nav' })
             }}
           >
             Book a discovery call

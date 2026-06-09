@@ -297,8 +297,7 @@ export default function CaseStudy() {
           to="/contact"
           className={styles.csCtaBtn}
           onClick={() => {
-            window.dataLayer = window.dataLayer || []
-            window.dataLayer.push({ event: 'cta_click', cta_location: 'case_study' })
+            window.gtag?.('event', 'cta_click', { cta_location: 'case_study' })
           }}
         >
           Start a project →

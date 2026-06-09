@@ -58,7 +58,7 @@ export default function Contact() {
           onClick={() => {
             window.dataLayer = window.dataLayer || []
             window.dataLayer.push({ event: 'discovery_call_click' })
-            window.dataLayer.push({ event: 'cta_click', cta_location: 'contact' })
+            window.gtag?.('event', 'cta_click', { cta_location: 'contact' })
           }}
         >
           Prefer to talk? Book a discovery call →
