@@ -33,6 +33,7 @@ function fromStaticThought(t) {
     publishedAt: t.isoDate,
     order: parseInt(t.n, 10),
     heroUrl: t.hero ? assetUrl(t.hero) : null,
+    heroAlt: t.heroAlt || '',
     relatedLinks: t.relatedLinks || [],
     body: t.body.map(b => {
       if (b.type === 'p') return { _type: 'paragraphBlock', text: b.text }
@@ -94,7 +95,7 @@ export default function ThoughtPost() {
 
       {post.heroUrl && (
         <figure className={styles.hero}>
-          <img src={sanityImg(post.heroUrl, { w: 1800 })} alt="" />
+          <img src={sanityImg(post.heroUrl, { w: 1800 })} alt={post.heroAlt || ''} />
         </figure>
       )}
 
