@@ -185,7 +185,7 @@ export default function LandingPage() {
         <p className={styles.ctaHeading}>{p.ctaHeading || 'Ready to build?'}</p>
         {p.ctaBody && <p className={styles.ctaBody}>{p.ctaBody}</p>}
         <NavLink to="/contact" className={styles.ctaBtn}>{p.ctaBtn || 'Start a project'}</NavLink>
-        <a href="https://cal.com/super-conscious/discovery-call" target="_blank" rel="noopener noreferrer" className={styles.ctaBook}>Book a discovery call →</a>
+        <a href="https://cal.com/super-conscious/discovery-call" target="_blank" rel="noopener noreferrer" className={styles.ctaBook} onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }) }}>Book a discovery call →</a>
       </section>
 
     </main>
