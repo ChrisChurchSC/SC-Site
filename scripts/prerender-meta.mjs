@@ -3,11 +3,12 @@
  * see the correct title, description, and canonical for every sitemap page.
  *
  * Covers:
- *  - /lp/[slug]  — AEO landing pages (also injects H1 + outgoing links)
- *  - /work/[slug] — case studies (slugs parsed from sitemap.xml)
- *  - /thoughts/[slug] — thought posts (from src/data/thoughts.js)
+ *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
+ *  - /work/[slug] — case studies (canonical, title, description)
+ *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
  *  - static pages: /about, /about-us, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
+ *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
 import fs from 'fs'
@@ -53,6 +54,16 @@ function injectMeta(html, { title, description, url }) {
     .replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${esc(description)}"`)
 }
 
+// Inject JSON-LD schema scripts before </head>
+function injectSchemas(html, schemas) {
+  if (!schemas.length) return html
+  const scripts = schemas
+    .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
+    .join('\n    ')
+  return html.replace('</head>', `    ${scripts}\n  </head>`)
+}
+
+// Inject crawler-only content as a hidden div after #root (React never touches it)
 function injectSeoContent(html, content) {
   return html.replace(
     '<div id="root"></div>',
@@ -155,18 +166,41 @@ for (const slug of workSlugs) {
 
 console.log(`  work: ${workSlugs.length} pages`)
 
-// ── Thoughts posts ────────────────────────────────────────────────────────────
+// ── Thoughts posts (with Article JSON-LD) ─────────────────────────────────────
 
 for (const t of thoughts) {
   const title = `${t.title} | Super Conscious`
   const description = (t.excerpt || '').slice(0, 155)
   const url = `${BASE_URL}/thoughts/${t.slug}`
-  const html = injectMeta(indexHtml, { title, description, url })
+
+  let html = injectMeta(indexHtml, { title, description, url })
+
+  html = injectSchemas(html, [{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: t.title,
+    description: t.excerpt || '',
+    datePublished: t.isoDate || '',
+    author: {
+      '@type': 'Organization',
+      name: 'Super Conscious',
+      url: BASE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Super Conscious',
+      url: BASE_URL,
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.svg` },
+    },
+    url,
+    image: t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE,
+  }])
+
   writeHtml(['thoughts', t.slug], html)
   count++
 }
 
-// ── AEO landing pages (with H1 + outgoing links injected) ────────────────────
+// ── AEO landing pages (canonical, H1, FAQ + HowTo JSON-LD, outgoing links) ───
 
 const lpLinks = Object.entries(MOCK_PAGES)
   .map(([slug, p]) => `<a href="/lp/${slug}">${esc(p.heroHeadline)}</a>`)
@@ -179,7 +213,35 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
 
   let html = injectMeta(indexHtml, { title, description, url })
 
-  // Inject H1 + description + nav links so crawlers see content and outgoing links
+  // FAQ + HowTo JSON-LD in <head> so non-JS crawlers see structured data
+  const schemas = []
+  if (page.faqs?.length) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: page.faqs.map(f => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    })
+  }
+  if (page.processSteps?.length) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: page.heroHeadline,
+      step: page.processSteps.map((step, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: step.label,
+        text: step.description || step.label,
+      })),
+    })
+  }
+  html = injectSchemas(html, schemas)
+
+  // H1 + description + nav links in hidden div for non-JS crawlers
   html = injectSeoContent(html, [
     `<h1>${esc(page.heroHeadline)}</h1>`,
     `<p>${esc(description)}</p>`,
@@ -200,3 +262,55 @@ const homepageWithLinks = injectSeoContent(
 fs.writeFileSync(indexPath, homepageWithLinks)
 
 console.log(`Prerendered ${count} pages → dist/*/index.html`)
+
+// ── llms.txt: regenerate with AEO question/answer section appended ────────────
+
+const baseLlms = fs.readFileSync(path.join(ROOT, 'public/llms.txt'), 'utf8').trimEnd()
+
+const lpByCategory = {
+  'Brand Systems': [
+    'what-does-a-brand-system-include',
+    'how-long-does-a-brand-system-take',
+    'brand-system-cost',
+    'brand-guidelines-vs-brand-system',
+    'when-to-invest-in-a-brand-system',
+    'what-is-a-verbal-identity',
+    'brand-consistency-across-a-team',
+  ],
+  'Content Programs': [
+    'what-is-a-content-program',
+    'how-to-build-a-b2b-content-program',
+    'content-program-cost',
+    'how-long-until-content-marketing-works',
+    'what-is-a-thought-leadership-program',
+    'how-to-measure-a-content-program',
+  ],
+  'Digital Products': [
+    'what-does-a-digital-product-design-engagement-include',
+    'how-much-does-product-design-cost',
+    'how-long-to-design-a-web-app',
+    'design-system-vs-brand-system',
+    'what-to-look-for-in-a-product-design-studio',
+  ],
+  'Hiring a Studio': [
+    'brand-or-content-first',
+    'do-i-need-a-brand-system-before-content',
+    'creative-studio-vs-freelancer',
+    'what-to-ask-a-creative-agency',
+  ],
+}
+
+let aeoSection = '\n\n## Common Questions\n\nDetailed answers to questions about brand systems, content programs, and digital products:\n'
+
+for (const [category, slugs] of Object.entries(lpByCategory)) {
+  aeoSection += `\n### ${category}\n\n`
+  for (const slug of slugs) {
+    const p = MOCK_PAGES[slug]
+    if (!p) continue
+    const answer = (p.heroAnswer || '').replace(/\n/g, ' ').slice(0, 200)
+    aeoSection += `- [${p.heroHeadline}](${BASE_URL}/lp/${slug}): ${answer}\n`
+  }
+}
+
+fs.writeFileSync(path.join(distDir, 'llms.txt'), baseLlms + aeoSection + '\n')
+console.log('Regenerated dist/llms.txt with AEO section')
