@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { useCalDrawer } from '../context/CalDrawerContext'
 import { thoughts as staticThoughts } from '../data/thoughts'
 import styles from './ThoughtPost.module.css'
 import { useMeta } from '../hooks/useMeta'
@@ -46,6 +47,7 @@ function fromStaticThought(t) {
 
 export default function ThoughtPost() {
   const { slug } = useParams()
+  const { open: openCalDrawer } = useCalDrawer()
   const { data: sanityPost } = useSanity(THOUGHT_QUERY, { slug })
   const staticPost = staticThoughts.find(t => t.slug === slug)
   const post = sanityPost ?? (staticPost ? fromStaticThought(staticPost) : null)
@@ -128,11 +130,10 @@ export default function ThoughtPost() {
           <button
             type="button"
             className={styles.postCtaBtn}
-            data-cal-namespace="discovery-call"
-            data-cal-link="super-conscious/discovery-call"
-            data-cal-origin="https://app.cal.com"
-            data-cal-config='{"layout":"month_view"}'
-            onClick={() => { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'discovery_call_click' }); }}
+            onClick={() => {
+              window.gtag?.('event', 'cta_click', { cta_location: 'thought_post' })
+              openCalDrawer()
+            }}
           >
             Book a discovery call →
           </button>
