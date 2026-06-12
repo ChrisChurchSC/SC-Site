@@ -83,13 +83,16 @@
   flex: 1;
   min-height: 0;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Cal.com iframe fills the container */
+/* Cal.com auto-sizes its own iframe height; pin a min-height so it fills the
+   drawer when content is short, but let it grow (and the container scroll)
+   when the month view is taller than the drawer so nothing gets cropped. */
 .calContainer iframe {
   width: 100% !important;
-  height: 100% !important;
+  min-height: 100% !important;
   border: none !important;
 }
 
