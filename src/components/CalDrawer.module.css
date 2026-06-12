@@ -85,15 +85,27 @@
   width: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* top padding opens up space between the headline and the calendar; the
+     32px sides align the calendar's left edge with the headline above it. */
+  padding: 28px 32px 0;
+  /* Cal's own .cal-inline-container sets justify-content:center on this same
+     node; override it so the capped-width iframe sits at the left edge. */
+  justify-content: flex-start !important;
 }
 
 /* Cal.com auto-sizes its own iframe height; pin a min-height so it fills the
    drawer when content is short, but let it grow (and the container scroll)
-   when the month view is taller than the drawer so nothing gets cropped. */
+   when the month view is taller than the drawer so nothing gets cropped.
+   Cap the width and let the block iframe sit at its left edge so the booking
+   card is left-aligned instead of centered in the wide drawer. */
 .calContainer iframe {
   width: 100% !important;
+  max-width: 1040px !important;
   min-height: 100% !important;
   border: none !important;
+  /* Cal centers the iframe with margin:auto; pin it to the left instead. */
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 @media (max-width: 768px) {
@@ -103,5 +115,11 @@
 
   .header {
     padding: 16px 20px 12px;
+  }
+
+  /* Mobile uses Cal's full-width stacked view, so drop the side insets and
+     keep a smaller headline-to-calendar gap. */
+  .calContainer {
+    padding: 18px 0 0;
   }
 }
