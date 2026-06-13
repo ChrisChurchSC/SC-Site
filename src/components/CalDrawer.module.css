@@ -21,7 +21,9 @@
   background: #161616;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px 12px 0 0;
-  height: 92vh;
+  /* Tall enough to fit the calendar without scrolling, but capped so the
+     sheet doesn't slide up to near-full-screen on large displays. */
+  height: min(92vh, 700px);
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
@@ -45,9 +47,10 @@
 }
 
 .header {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 14px 32px 14px;
   flex-shrink: 0;
 }
@@ -59,9 +62,14 @@
   line-height: 1.05;
   color: rgba(255, 255, 255, 0.85);
   margin: 0;
+  text-align: center;
 }
 
 .closeBtn {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.35);
@@ -115,6 +123,10 @@
 
   .header {
     padding: 16px 20px 12px;
+  }
+
+  .closeBtn {
+    right: 20px;
   }
 
   /* Mobile uses Cal's full-width stacked view, so drop the side insets and
