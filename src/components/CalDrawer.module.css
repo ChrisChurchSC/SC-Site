@@ -58,7 +58,7 @@
 .title {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(18px, 2vw, 26px);
+  font-size: clamp(24px, 3.2vw, 40px);
   line-height: 1.05;
   color: rgba(255, 255, 255, 0.85);
   margin: 0;
@@ -93,12 +93,8 @@
   width: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* top padding opens up space between the headline and the calendar; the
-     32px sides align the calendar's left edge with the headline above it. */
+  /* top padding opens up space between the headline and the calendar */
   padding: 28px 32px 0;
-  /* Cal's own .cal-inline-container sets justify-content:center on this same
-     node; override it so the capped-width iframe sits at the left edge. */
-  justify-content: flex-start !important;
 }
 
 /* Cal.com auto-sizes its own iframe height; pin a min-height so it fills the
@@ -111,8 +107,8 @@
   max-width: 1040px !important;
   min-height: 100% !important;
   border: none !important;
-  /* Cal centers the iframe with margin:auto; pin it to the left instead. */
-  margin-left: 0 !important;
+  /* Center the capped-width iframe within the drawer. */
+  margin-left: auto !important;
   margin-right: auto !important;
 }
 
