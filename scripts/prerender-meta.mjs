@@ -81,12 +81,12 @@ function writeHtml(segments, html) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
     for (const p of (data.result || [])) {
-      if (p.slug) projectMeta[p.slug] = { name: p.name, tagline: p.tagline }
+      if (p.slug) projectMeta[p.slug] = { name: p.name, tagline: p.tagline, updatedAt: p._updatedAt }
     }
     console.log(`Fetched metadata for ${Object.keys(projectMeta).length} projects from Sanity`)
   }
@@ -316,6 +316,40 @@ const homepageWithLinks = injectSeoContent(
 fs.writeFileSync(indexPath, homepageWithLinks)
 
 console.log(`Prerendered ${count} pages → dist/*/index.html`)
+
+// ── Sitemap: inject <lastmod> per URL so Google can prioritize re-crawls ──────
+// Phase 1: real dates where cheaply available (thoughts isoDate, Sanity _updatedAt
+// for work). Static + /lp pages use a stable content-version date so the value
+// only moves on real content changes, not every build (Google distrusts lastmods
+// that churn). Phase 3 automates this fully per-URL from git/Sanity.
+
+const SITE_CONTENT_VERSION = '2026-06-13' // bump when static/lp/home/about copy changes
+
+const toDay = (iso) => (iso ? String(iso).slice(0, 10) : SITE_CONTENT_VERSION)
+
+const thoughtDateBySlug = Object.fromEntries(thoughts.map(t => [t.slug, toDay(t.isoDate)]))
+const newestThought = thoughts.map(t => toDay(t.isoDate)).sort().pop() || SITE_CONTENT_VERSION
+const newestWork = Object.values(projectMeta).map(p => toDay(p.updatedAt)).sort().pop() || SITE_CONTENT_VERSION
+
+function lastmodFor(loc) {
+  const route = loc.replace(BASE_URL, '') || '/'
+  if (route === '/thoughts') return newestThought
+  if (route === '/work') return newestWork
+  const t = route.match(/^\/thoughts\/(.+)$/)
+  if (t) return thoughtDateBySlug[t[1]] || SITE_CONTENT_VERSION
+  const w = route.match(/^\/work\/(.+)$/)
+  if (w) return toDay(projectMeta[w[1]]?.updatedAt)
+  return SITE_CONTENT_VERSION // /, /about, /about-us, /lp/*
+}
+
+const distSitemapPath = path.join(distDir, 'sitemap.xml')
+if (fs.existsSync(distSitemapPath)) {
+  let sm = fs.readFileSync(distSitemapPath, 'utf8')
+  sm = sm.replace(/\s*<lastmod>[^<]*<\/lastmod>/g, '') // idempotent: strip any prior lastmod
+  sm = sm.replace(/<loc>([^<]+)<\/loc>/g, (m, loc) => `<loc>${loc}</loc><lastmod>${lastmodFor(loc)}</lastmod>`)
+  fs.writeFileSync(distSitemapPath, sm)
+  console.log('Injected <lastmod> into dist/sitemap.xml')
+}
 
 // ── llms.txt: regenerate with AEO question/answer section appended ────────────
 
