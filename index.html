@@ -122,7 +122,17 @@
     <script>
       (function(l){if(l.search[1]=='/'){var d=l.search.slice(1).split('&').map(function(s){return s.replace(/~and~/g,'&')}).join('?');window.history.replaceState(null,null,l.pathname.slice(0,-1)+d+l.hash)}}(window.location))
     </script>
-    <style>html,body{background:#0a0a0a;margin:0}</style>
+    <style>
+      html,body{background:#0a0a0a;margin:0}
+      /* Moved out of main.jsx so it isn't injected via document.* (SSR/SSG-safe). Root-domain paths. */
+      @font-face {
+        font-family: 'Signifier';
+        src: url('/fonts/Signifier/WOFF2/signifier-light.woff2') format('woff2'),
+             url('/fonts/Signifier/OTF/Signifier-Light.otf') format('opentype');
+        font-weight: 300;
+        font-display: swap;
+      }
+    </style>
     <!-- RB2B loaded conditionally by CookieBanner on consent -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

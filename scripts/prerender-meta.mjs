@@ -77,6 +77,31 @@ function writeHtml(segments, html) {
   fs.writeFileSync(path.join(dir, 'index.html'), html)
 }
 
+// ── SSR: render real page content into #root so crawlers (incl. non-JS AI bots)
+// get the full page, not an empty shell. Pages with a sync static fallback
+// (LandingPage→MOCK_PAGES, ThoughtPost→staticThoughts) render fully; Sanity-only
+// pages render their shell (Phase 2b adds build-time data). A render failure
+// degrades gracefully to an empty #root (meta still injected) so one bad route
+// can't fail the build.
+let ssrRender = null
+try {
+  ({ render: ssrRender } = await import(path.join(ROOT, '.ssr/entry-server.js')))
+  console.log('SSR renderer loaded — injecting prerendered content into #root')
+} catch (e) {
+  console.warn('SSR renderer unavailable — shipping empty #root (meta only):', e.message)
+}
+
+function injectRoot(html, routePath) {
+  if (!ssrRender) return html
+  try {
+    const body = ssrRender(routePath)
+    return html.replace('<div id="root"></div>', `<div id="root">${body}</div>`)
+  } catch (e) {
+    console.warn(`  SSR render failed for ${routePath}: ${e.message}`)
+    return html
+  }
+}
+
 // ── Optional: fetch project names + taglines from Sanity ─────────────────────
 
 let projectMeta = {}
@@ -141,7 +166,8 @@ const STATIC_PAGES = [
 
 for (const page of STATIC_PAGES) {
   const url = `${BASE_URL}/${page.segments.join('/')}`
-  const html = injectMeta(indexHtml, { title: page.title, description: page.description, url })
+  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url })
+  html = injectRoot(html, `/${page.segments.join('/')}`)
   writeHtml(page.segments, html)
   count++
 }
@@ -169,6 +195,7 @@ for (const slug of workSlugs) {
       { '@type': 'ListItem', position: 3, name, item: url },
     ],
   }])
+  html = injectRoot(html, `/work/${slug}`)
   writeHtml(['work', slug], html)
   count++
 }
@@ -216,6 +243,7 @@ for (const t of thoughts) {
     },
   ])
 
+  html = injectRoot(html, `/thoughts/${t.slug}`)
   writeHtml(['thoughts', t.slug], html)
   count++
 }
@@ -302,6 +330,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
     `<nav><a href="/">Super Conscious</a> · <a href="/contact">Start a project</a></nav>`,
   ].join(''))
 
+  html = injectRoot(html, `/lp/${slug}`)
   writeHtml(['lp', slug], html)
   count++
 }
@@ -309,10 +338,11 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
 // ── Homepage: inject LP links so crawlers can discover /lp/* pages ───────────
 
 const homepageHtml = fs.readFileSync(indexPath, 'utf8')
-const homepageWithLinks = injectSeoContent(
+let homepageWithLinks = injectSeoContent(
   homepageHtml,
   `<nav aria-label="Resources">\n${lpLinks}\n</nav>`,
 )
+homepageWithLinks = injectRoot(homepageWithLinks, '/')
 fs.writeFileSync(indexPath, homepageWithLinks)
 
 console.log(`Prerendered ${count} pages → dist/*/index.html`)

@@ -2,7 +2,7 @@ import { useEffect, lazy, Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import CookieBanner from './components/CookieBanner'
-import { BrowserRouter, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
@@ -79,7 +79,6 @@ function WorkRouter() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
         <NavProvider>
         <ComingSoonProvider>
         <ProjectsProvider>
@@ -125,7 +124,6 @@ export default function App() {
         </ProjectsProvider>
         </ComingSoonProvider>
         </NavProvider>
-      </BrowserRouter>
       <CookieBanner />
       <Analytics />
       <SpeedInsights />
