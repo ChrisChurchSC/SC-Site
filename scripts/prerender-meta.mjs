@@ -345,6 +345,21 @@ let homepageWithLinks = injectSeoContent(
 homepageWithLinks = injectRoot(homepageWithLinks, '/')
 fs.writeFileSync(indexPath, homepageWithLinks)
 
+// ── Routing shells ───────────────────────────────────────────────────────────
+// Prerendered routes serve their own (SSR'd) file. Client-only routes (gated
+// decks, /lp index, /privacy, /terms, etc.) are rewritten to shell.html — the
+// pre-SSR base HTML with an empty #root, so the client createRoot-renders the
+// right route with NO hydration mismatch (vs. serving home content). 404.html is
+// the same empty shell; Vercel serves it with a real 404 for unmatched paths,
+// killing the soft-404s (every unknown URL used to return 200 + homepage).
+const shellHtml = indexHtml.replace(
+  '<meta name="viewport"',
+  '<meta name="robots" content="noindex" />\n    <meta name="viewport"',
+)
+fs.writeFileSync(path.join(distDir, 'shell.html'), shellHtml)
+fs.writeFileSync(path.join(distDir, '404.html'), shellHtml)
+console.log('Wrote dist/shell.html + dist/404.html (empty-root client shells, noindex)')
+
 console.log(`Prerendered ${count} pages → dist/*/index.html`)
 
 // ── Sitemap: inject <lastmod> per URL so Google can prioritize re-crawls ──────
