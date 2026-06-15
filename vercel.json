@@ -1,5 +1,13 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms|booking-confirmed)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
+    }
   ]
 }
