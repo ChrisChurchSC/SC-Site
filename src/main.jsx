@@ -3,6 +3,13 @@ import { hydrateRoot, createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
+import { setStore } from './lib/sanityCache'
+
+// Seed the build-time Sanity data so the first client render matches the SSR
+// output (no hydration mismatch); useSanity still revalidates after hydration.
+if (typeof window !== 'undefined' && window.__SANITY_DATA__) {
+  setStore(window.__SANITY_DATA__)
+}
 
 const rootEl = document.getElementById('root')
 
