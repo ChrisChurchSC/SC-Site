@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { client } from '../lib/sanity'
+import { getCached, recordQuery } from '../lib/sanityCache'
 
 export function useSanity(query, params = {}) {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  recordQuery(query, params) // no-op unless SSR pass-1 is collecting
+  const cached = getCached(query, params) // build-time/hydration seed, else undefined
+  const [data, setData] = useState(cached !== undefined ? cached : null)
+  const [loading, setLoading] = useState(cached === undefined)
   // Stringify so object identity changes don't trigger refetches, but
   // actual value changes (e.g. case study slug) do.
   const paramsKey = JSON.stringify(params)
