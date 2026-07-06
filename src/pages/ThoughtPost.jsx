@@ -10,6 +10,15 @@ import { sanityImg } from '../lib/sanityImg'
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
 
+// Sanity image URLs encode dimensions as `-<w>x<h>.<ext>`; use them to tell a
+// landscape (16:9 desktop) asset from a portrait (4:5 mobile) one. Returns null
+// for URLs without dimensions (e.g. static assets), meaning "show everywhere".
+const imgOrient = (url) => {
+  const m = /-(\d+)x(\d+)\.[a-z]+/i.exec(url || '')
+  if (!m) return null
+  return Number(m[2]) > Number(m[1]) ? 'portrait' : 'landscape'
+}
+
 const fmtDate = (iso) => {
   if (!iso) return ''
   const d = new Date(iso)
@@ -84,6 +93,23 @@ export default function ThoughtPost() {
 
   const n = String(post.order ?? 0).padStart(3, '0')
 
+  // Body illustrations ship as a 16:9 (desktop) and 4:5 (mobile) pair; show only
+  // the orientation that matches the breakpoint so neither duplicates. A portrait
+  // image appearing before the first inline landscape is a stray duplicate of the
+  // hero — drop it entirely.
+  const bodyBlocks = []
+  let seenLandscape = false
+  for (const item of post.body || []) {
+    if (item._type !== 'imageBlock') { bodyBlocks.push({ item }); continue }
+    const orient = imgOrient(item.imageUrl)
+    if (orient === 'landscape') { seenLandscape = true; bodyBlocks.push({ item, imgClass: styles.desktopImg }); continue }
+    if (orient === 'portrait') {
+      if (!seenLandscape) continue // stray hero duplicate
+      bodyBlocks.push({ item, imgClass: styles.mobileImg }); continue
+    }
+    bodyBlocks.push({ item }) // unknown ratio → show on all breakpoints
+  }
+
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -102,11 +128,11 @@ export default function ThoughtPost() {
       )}
 
       <article className={styles.body}>
-        {(post.body || []).map((item, i) => {
+        {bodyBlocks.map(({ item, imgClass }, i) => {
           if (item._type === 'paragraphBlock') return <p key={i} className={styles.para}>{item.text}</p>
           if (item._type === 'headingBlock') return <h2 key={i} className={styles.h2}>{item.text}</h2>
           if (item._type === 'imageBlock') return (
-            <figure key={i} className={styles.figure}>
+            <figure key={i} className={imgClass ? `${styles.figure} ${imgClass}` : styles.figure}>
               <img src={sanityImg(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} loading="lazy" />
             </figure>
           )

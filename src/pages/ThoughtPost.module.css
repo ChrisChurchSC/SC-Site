@@ -130,6 +130,10 @@
   border-radius: 4px;
 }
 
+/* Responsive illustration pairs: 16:9 on desktop, 4:5 on mobile. */
+.desktopImg { display: block; }
+.mobileImg { display: none; }
+
 .postCta {
   margin-top: 8px;
   padding-top: 32px;
@@ -216,4 +220,7 @@
   .body {
     padding: 40px 24px;
   }
+
+  .desktopImg { display: none; }
+  .mobileImg { display: block; }
 }
