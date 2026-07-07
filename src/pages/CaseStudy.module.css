@@ -215,6 +215,32 @@
   background: #161616;
   border-radius: 4px;
   overflow: hidden;
+  position: relative;
+}
+
+/* "View website" overlay button — matches the video corner-control style. */
+.websiteBtn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 8px 12px;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.websiteBtn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #fff;
 }
 
 .mediaFull img,

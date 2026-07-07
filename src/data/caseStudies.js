@@ -1,6 +1,150 @@
 const WW = (n) => `/cs/world-within/Super_Conscious_WW_${n}.jpg`
+const NZ = (file) => `/cs/nimruz/${file}`
+const EA = (file) => `/cs/entropy/${file}`
 
 export const caseStudies = {
+  'entropy': {
+    n: '031',
+    name: 'Entropy',
+    type: 'Brand',
+    year: '2025',
+    tagline: 'A brand and design system for a firm empowering decentralized governance.',
+    summary: 'Entropy Advisors works at the frontier of decentralized governance — helping DAOs manage treasuries, analyze on-chain activity, and make decisions with clarity. They needed a brand that could carry that credibility: technical enough to earn trust in crypto-native rooms, refined enough to stand alongside any modern software company. We developed the full identity and design system — a precise angular mark, a luminous cyan-to-jade gradient set against deep off-black, a typographic hierarchy built for dense information, and a data-visualization language that makes complex on-chain data legible at a glance. The system runs across web, social, dashboards, print, and merch.',
+    services: ['Brand Identity', 'Design System', 'Data Visualization', 'Web', 'Social', 'Merchandise'],
+    outcomes: [
+      { category: 'Identity', outcome: 'Built a complete brand and design system — mark, gradient, type, and guidelines — engineered for a technical, high-trust audience.' },
+      { category: 'Data', outcome: 'Developed a data-visualization language that turns treasuries, proposals, and on-chain flows into something legible at a glance.' },
+      { category: 'System', outcome: 'Delivered a modular toolkit spanning web, dashboards, social, print, and merch that the team runs at the speed crypto moves.' },
+    ],
+    sections: [
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_01.mp4') },
+      {
+        type: 'text',
+        heading: 'The Brief',
+        body: 'Governance is abstract. Treasuries, proposals, on-chain flows — it’s a world of data most people never see clearly. Entropy Advisors needed a brand that could make that world feel legible and trustworthy without dumbing it down, holding up in a crypto-native audience and a boardroom alike.',
+      },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_02.webp') },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_03.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: EA('SC_Entropy_04.mp4'), cols: 6, ratio: '4/5' },
+          { src: EA('SC_Entropy_05.mp4'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      {
+        type: 'text',
+        heading: 'The System',
+        body: 'We built the identity around a single idea: order emerging from entropy. A precise, angular mark; a luminous gradient moving from cyan to jade; deep off-black grounds; and a typographic stack — Surt Expanded for headlines, Basis Grotesque for body, Chivo Mono for data — tuned for information density. Every element is documented in a full set of brand guidelines the team runs against.',
+      },
+      { type: 'image-full', ratio: '1920 / 978', src: EA('SC_Entropy_06.mp4'), website: 'https://entropyadvisors.com/' },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_07.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: EA('SC_Entropy_08.webp'), cols: 6, ratio: '4/5' },
+          { src: EA('SC_Entropy_09.mp4'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      {
+        type: 'text',
+        heading: 'Out in the World',
+        body: 'The brand had to live everywhere Entropy shows up — a treasury dashboard, a promoted post, a conference keynote, a crewneck at a hackathon. We designed a data-visualization language and a modular content system so the team can produce on-brand work whether it’s a governance report or a launch announcement.',
+      },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_10.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: EA('SC_Entropy_11.mp4'), cols: 6, ratio: '4/5' },
+          { src: EA('SC_Entropy_12.mp4'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_13.webp') },
+      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_14.webp') },
+    ],
+  },
+
+  'nimruz': {
+    n: '016',
+    name: 'Nimruz',
+    type: 'Brand + Content',
+    year: '2025',
+    tagline: 'A rebrand and content system for a platform cultivating Iranian culture.',
+    summary: 'Nimruz set out to do something needed and relevant: cultivate Iranian culture for a new generation, in a way that feels warm, modern, and rooted all at once. They came to us with an established name and wordmark — Nimruz, the land of the midday sun — but a visual world that hadn’t yet caught up to the vision. So we rebranded: a near-total overhaul that kept the existing wordmarks untouched and rebuilt everything around them. We introduced a new sun brandmark as the anchor, then extended it into a sun-drenched visual language drawn from Persian art and architecture, a system of calligraphic flourishes, and a content framework designed to run across social every day without ever losing its soul. The result is a brand that feels like home and reads as new.',
+    services: ['Rebrand', 'Brandmark', 'Visual Language', 'Content System', 'Social', 'Motion'],
+    outcomes: [
+      { category: 'Identity', outcome: 'Introduced a new sun brandmark and rebuilt the full visual system — palette, motifs, and motion — around the existing wordmark, grounded in Persian art.' },
+      { category: 'Content', outcome: 'Built a modular content framework the team runs independently across social, day in and day out.' },
+      { category: 'Resonance', outcome: 'A brand that reads as both deeply familiar and unmistakably contemporary — heritage on one side, right now on the other.' },
+    ],
+    sections: [
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_01.mp4') },
+      {
+        type: 'text',
+        heading: 'The Vision',
+        body: 'Nimruz means the land of the midday sun — the place where light is at its fullest. That idea became the center of gravity for the entire brand. Everything radiates warmth: sunrise gradients, golden hour tones, and a sensibility that treats heritage not as a museum piece but as something living, generous, and worth passing on.',
+      },
+      {
+        type: 'image-grid',
+        images: [
+          { src: NZ('SC_Nimruz_02.mp4'), cols: 6, ratio: '4/5' },
+          { src: NZ('SC_Nimruz_03.webp'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_04.webp') },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_05.webp') },
+      {
+        type: 'text',
+        heading: 'The Challenge',
+        body: 'Cultural brands walk a narrow line. Lean too traditional and you speak only to the past; lean too modern and you lose the thread entirely. Nimruz needed a language that could hold both — reverent enough to honor Iranian art and identity, contemporary enough to live natively on a phone screen and earn a place in a young audience’s feed.',
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_06.mp4') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: NZ('SC_Nimruz_07.mp4'), cols: 6, ratio: '4/5' },
+          { src: NZ('SC_Nimruz_08.mp4'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_09.mp4'), website: 'https://www.nimruz.org/' },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_10.mp4') },
+      {
+        type: 'text',
+        heading: 'The System',
+        body: 'The overhaul centered on one new element: a sun brandmark, designed to sit alongside the existing wordmark rather than replace it. From there we extended a full toolkit — a warm, saturated palette pulled from Persian miniatures and tilework, and a library of calligraphic line flourishes that give every layout a handmade signature. It all flows naturally into apparel, editorial, and a content system the team can run on their own.',
+      },
+      {
+        type: 'image-grid',
+        images: [
+          { src: NZ('SC_Nimruz_11.webp'), cols: 6, ratio: '4/5' },
+          { src: NZ('SC_Nimruz_12.webp'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_13.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: NZ('SC_Nimruz_14.webp'), cols: 6, ratio: '4/5' },
+          { src: NZ('SC_Nimruz_15.webp'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_16.webp') },
+      {
+        type: 'text',
+        heading: 'In Motion',
+        body: 'Static was never going to be enough. We designed the brand to move — suns that rise, flourishes that draw themselves on, the wordmark catching the light — so that every post carries the same warmth in motion as it does on the page. The content system turns that language into a repeatable, ownable rhythm the team publishes against every week.',
+      },
+      {
+        type: 'image-grid',
+        images: [
+          { src: NZ('SC_Nimruz_17.mp4'), cols: 6, ratio: '4/5' },
+          { src: NZ('SC_Nimruz_18.mp4'), cols: 6, ratio: '4/5' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_19.webp') },
+    ],
+  },
+
   'world-within': {
     n: '018',
     name: 'World Within',

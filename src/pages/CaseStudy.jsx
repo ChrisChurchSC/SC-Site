@@ -23,7 +23,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile
 }
 
-function MediaItem({ src, mobileSrc, alt = '' }) {
+function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false }) {
   const isMobile = useIsMobile()
   const chosen = isMobile && mobileSrc ? mobileSrc : src
   if (!chosen) return null
@@ -31,10 +31,26 @@ function MediaItem({ src, mobileSrc, alt = '' }) {
   const onLoad = (e) => { e.target.style.display = '' }
   const onError = (e) => { e.target.style.display = 'none' }
   if (isVideo) return (
-    <CaseStudyVideo key={chosen} src={chosen} onError={onError} />
+    // When a "View website" button occupies the bottom-right, move the
+    // video's own mute/play controls to the bottom-left to avoid overlap.
+    <CaseStudyVideo key={chosen} src={chosen} onError={onError} controlsAlign={hasWebsite ? 'left' : 'right'} />
   )
   const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
   return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
+}
+
+function WebsiteButton({ href }) {
+  return (
+    <a
+      className={styles.websiteBtn}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => window.gtag?.('event', 'view_website', { url: href })}
+    >
+      View Website ↗
+    </a>
+  )
 }
 
 const servicesByType = {
@@ -138,9 +154,16 @@ export default function CaseStudy() {
     ? Object.fromEntries(Object.entries(sanityCs).filter(([, v]) => v !== null && v !== undefined))
     : null
   const normalizedSections = normalizeSections(sanityCs?.sections)
-  const cs = sanityCs
-    ? { ...placeholder, ...sanityStripped, sections: normalizedSections.length > 0 ? normalizedSections : (placeholder?.sections ?? []) }
-    : (staticCaseStudies[slug] ?? placeholder)
+  const staticCs = staticCaseStudies[slug]
+  // Sanity wins only when it actually carries case-study sections. A bare
+  // project stub (name/type/year for the work grid, no sections) must not
+  // shadow a hand-authored static case study — fall through to static first.
+  const cs = (sanityCs && normalizedSections.length > 0)
+    ? { ...placeholder, ...sanityStripped, sections: normalizedSections }
+    : (staticCs
+        ?? (sanityCs
+            ? { ...placeholder, ...sanityStripped, sections: placeholder?.sections ?? [] }
+            : placeholder))
 
   const heroImage = (cs?.sections ?? [])
     .flatMap(s => s._type === 'imageGridSection' ? (s.images ?? []) : [s])
@@ -253,7 +276,8 @@ export default function CaseStudy() {
             const ar = useMobile ? (section.mobileRatio ?? '4/5') : (section.ratio ?? '16/9')
             return (
               <div key={i} className={styles.mediaFull} style={{ aspectRatio: ar }}>
-                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} />
+                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!section.website} />
+                {section.website && <WebsiteButton href={section.website} />}
               </div>
             )
           }
@@ -278,8 +302,9 @@ export default function CaseStudy() {
                       className={styles.mediaGridItem}
                       style={{ gridColumn: `span ${item.cols}`, aspectRatio: ar }}
                     >
-                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} />
+                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!item.website} />
                       {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
+                      {item.website && <WebsiteButton href={item.website} />}
                     </div>
                   )
                 })}

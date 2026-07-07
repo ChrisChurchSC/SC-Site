@@ -260,6 +260,12 @@ export default function Home() {
           <span className={styles.csTag}>Case Study</span>
           <p className={styles.blockTitle}>{blockName('003') || 'Oxyle'}</p>
         </>)}
+        {blockLink('036', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '7 / span 3' }, <>
+          {blockMedia('036')}
+          <span className={styles.label}>036</span>
+          <span className={styles.csTag}>Case Study</span>
+          <p className={styles.blockTitle}>{blockName('036')}</p>
+        </>)}
         {blockLink('005', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: '10 / span 3' }, <>
           {blockMedia('005')}
           <span className={styles.label}>005</span>
@@ -554,12 +560,6 @@ export default function Home() {
 
       {/* Row 12 */}
       <section className={styles.row12}>
-        {blockLink('036', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
-          {blockMedia('036')}
-          <span className={styles.label}>036</span>
-          <span className={styles.csTag}>Case Study</span>
-          <p className={styles.blockTitle}>{blockName('036')}</p>
-        </>)}
         {blockLink('037', `${styles.block} ${styles.r45} ${styles.blockLink}`, { gridColumn: 'span 3' }, <>
           {blockMedia('037')}
           <span className={styles.label}>037</span>
