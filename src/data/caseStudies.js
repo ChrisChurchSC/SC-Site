@@ -18,7 +18,7 @@ export const caseStudies = {
       { category: 'System', outcome: 'Identity, packaging, and content built to scale across the product line.' },
     ],
     sections: [
-      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_01.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/417b83cc42855dd369963192be536dc9b32cbdfd.mp4' },
       {
         type: 'text',
         heading: 'The Idea',
@@ -60,8 +60,8 @@ export const caseStudies = {
         heading: 'The World',
         body: 'Suns, moons, flowers, clouds, and hand-formed props complete the kit — everything needed to build a scene.',
       },
-      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_13.mp4') },
-      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_14.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/54246a662c06d6b5126757878b3b056309540243.mp4' },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/f736b6d103d4bc2fa0fbfc6b719bb6abd4bc1ce4.mp4' },
     ],
   },
 
@@ -79,7 +79,7 @@ export const caseStudies = {
       { category: 'System', outcome: 'Delivered a modular toolkit spanning web, dashboards, social, print, and merch that the team runs at the speed crypto moves.' },
     ],
     sections: [
-      { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_01.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/e3249b7a60f724f81b185aacaca9630efaf9c2bd.mp4' },
       {
         type: 'text',
         heading: 'The Brief',
@@ -90,8 +90,8 @@ export const caseStudies = {
       {
         type: 'image-grid',
         images: [
-          { src: EA('SC_Entropy_04.mp4'), cols: 6, ratio: '4/5' },
-          { src: EA('SC_Entropy_05.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/d338780a809ce9f455bb2e2bd7a34d1c9b0e10b2.mp4', cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/b9985905347a0c2d3a4bc0dd26dd6924dc8eef65.mp4', cols: 6, ratio: '4/5' },
         ],
       },
       {
@@ -99,13 +99,13 @@ export const caseStudies = {
         heading: 'The System',
         body: 'We built the identity around a single idea: order emerging from entropy. A precise, angular mark; a luminous gradient moving from cyan to jade; deep off-black grounds; and a typographic stack — Surt Expanded for headlines, Basis Grotesque for body, Chivo Mono for data — tuned for information density. Every element is documented in a full set of brand guidelines the team runs against.',
       },
-      { type: 'image-full', ratio: '1920 / 978', src: EA('SC_Entropy_06.mp4'), website: 'https://entropyadvisors.com/' },
+      { type: 'image-full', ratio: '1920 / 978', src: 'https://cdn.sanity.io/files/ppq16wpu/production/9bdd81b8db9a09e17cb710ba72f0ef0133b57d16.mp4', website: 'https://entropyadvisors.com/' },
       { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_07.webp') },
       {
         type: 'image-grid',
         images: [
           { src: EA('SC_Entropy_08.webp'), cols: 6, ratio: '4/5' },
-          { src: EA('SC_Entropy_09.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/ace1f6468c36a451cbe6477c516d434fd00755e9.mp4', cols: 6, ratio: '4/5' },
         ],
       },
       {
@@ -117,8 +117,8 @@ export const caseStudies = {
       {
         type: 'image-grid',
         images: [
-          { src: EA('SC_Entropy_11.mp4'), cols: 6, ratio: '4/5' },
-          { src: EA('SC_Entropy_12.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/53246539e65e7ab99cd36fe8f8cda9974ad7b515.mp4', cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/4bd18a1692e469f947f1979a14b97abc1b5e2926.mp4', cols: 6, ratio: '4/5' },
         ],
       },
       { type: 'image-full', ratio: '16/9', src: EA('SC_Entropy_13.webp') },
@@ -140,7 +140,7 @@ export const caseStudies = {
       { category: 'Resonance', outcome: 'A brand that reads as both deeply familiar and unmistakably contemporary — heritage on one side, right now on the other.' },
     ],
     sections: [
-      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_01.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/030ea9ecc0c8557a8087f0c9a81c5cba613b699c.mp4', sound: true },
       {
         type: 'text',
         heading: 'The Vision',
@@ -149,7 +149,7 @@ export const caseStudies = {
       {
         type: 'image-grid',
         images: [
-          { src: NZ('SC_Nimruz_02.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/06b57444cac8eaad637cf5084664ee58c7a8edab.mp4', cols: 6, ratio: '4/5' },
           { src: NZ('SC_Nimruz_03.webp'), cols: 6, ratio: '4/5' },
         ],
       },
@@ -160,16 +160,16 @@ export const caseStudies = {
         heading: 'The Challenge',
         body: 'Cultural brands walk a narrow line. Lean too traditional and you speak only to the past; lean too modern and you lose the thread entirely. Nimruz needed a language that could hold both — reverent enough to honor Iranian art and identity, contemporary enough to live natively on a phone screen and earn a place in a young audience’s feed.',
       },
-      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_06.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/70d042ce90c9a611ba8dfae00c74c3b5ced71401.mp4', sound: true },
       {
         type: 'image-grid',
         images: [
-          { src: NZ('SC_Nimruz_07.mp4'), cols: 6, ratio: '4/5' },
-          { src: NZ('SC_Nimruz_08.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/90e8826c9a8db3635272a7f27383617432af34fe.mp4', cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/70dd9faeb543c43bce184daed08f411cca162e49.mp4', cols: 6, ratio: '4/5' },
         ],
       },
-      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_09.mp4'), website: 'https://www.nimruz.org/' },
-      { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_10.mp4') },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/38381453f7d2b8202babafb15973be1e64ee6916.mp4', website: 'https://www.nimruz.org/' },
+      { type: 'image-full', ratio: '16/9', src: 'https://cdn.sanity.io/files/ppq16wpu/production/4e015f26e5d002371516adf0365b348d29a33cfc.mp4' },
       {
         type: 'text',
         heading: 'The System',
@@ -199,8 +199,8 @@ export const caseStudies = {
       {
         type: 'image-grid',
         images: [
-          { src: NZ('SC_Nimruz_17.mp4'), cols: 6, ratio: '4/5' },
-          { src: NZ('SC_Nimruz_18.mp4'), cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/1fcf05f21538975a51fb81738afbca588bfbbf08.mp4', cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/b9aede65bc98e85a925dff87542152cf0ac6ad3f.mp4', cols: 6, ratio: '4/5' },
         ],
       },
       { type: 'image-full', ratio: '16/9', src: NZ('SC_Nimruz_19.webp') },
