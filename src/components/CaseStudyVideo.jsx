@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './CaseStudyVideo.module.css'
-import { REAL_AUDIO_VIDEOS } from '../data/videoAudio'
 
 /**
  * Case study video: autoplays muted and loops, lazy-loads when near the
- * viewport, and pauses when offscreen. Corner controls let the viewer
- * unmute for sound and — for clips longer than 10s — pause/play.
+ * viewport, and pauses when offscreen. The unmute control shows only when the
+ * clip is flagged `sound` (most case-study clips are silent); a play/pause
+ * control shows for clips longer than 10s.
  */
-export default function CaseStudyVideo({ src, onError, rootMargin = '300px', controlsAlign = 'right' }) {
+export default function CaseStudyVideo({ src, onError, rootMargin = '300px', controlsAlign = 'right', sound = false }) {
   const ref = useRef(null)
   const [shouldLoad, setShouldLoad] = useState(false)
   const [inView, setInView] = useState(false)
@@ -15,39 +15,8 @@ export default function CaseStudyVideo({ src, onError, rootMargin = '300px', con
   const [paused, setPaused] = useState(false) // explicit viewer intent
   const [playing, setPlaying] = useState(true)
   const [duration, setDuration] = useState(0)
-  // The build-time manifest (scripts/gen-video-audio.mjs) is authoritative for
-  // bundled /cs/ videos: it lists only clips whose audio is actually audible, so
-  // a silent AAC track no longer shows a mute button. Other sources (e.g. Sanity)
-  // fall back to live client-side track detection below.
-  const manifestKnows = typeof src === 'string' && src.startsWith('/cs/')
-  const [hasAudio, setHasAudio] = useState(manifestKnows ? REAL_AUDIO_VIDEOS.has(src) : false)
-  const audioChecked = useRef(manifestKnows) // manifest answer is final; skip client probing
 
-  const markAudio = (has) => {
-    if (audioChecked.current) return
-    audioChecked.current = true
-    setHasAudio(has)
-  }
-
-  // Detect whether the clip actually carries an audio track, across engines:
-  // Gecko exposes mozHasAudio, WebKit/Safari expose audioTracks, and Blink
-  // exposes a decoded-byte counter that only grows once audio decodes (resolved
-  // during playback in onTimeUpdate). If none exist, leave the button hidden.
-  const onLoadedMetadata = (e) => {
-    const v = e.target
-    setDuration(v.duration || 0)
-    if (typeof v.mozHasAudio === 'boolean') return markAudio(v.mozHasAudio)
-    if (v.audioTracks && typeof v.audioTracks.length === 'number') return markAudio(v.audioTracks.length > 0)
-  }
-
-  const onTimeUpdate = (e) => {
-    if (audioChecked.current) return
-    const v = e.target
-    if (typeof v.webkitAudioDecodedByteCount === 'number') {
-      if (v.webkitAudioDecodedByteCount > 0) markAudio(true)
-      else if (v.currentTime > 0.7) markAudio(false) // played long enough with no audio decoded
-    }
-  }
+  const onLoadedMetadata = (e) => setDuration(e.target.duration || 0)
 
   useEffect(() => {
     const el = ref.current
@@ -105,11 +74,10 @@ export default function CaseStudyVideo({ src, onError, rootMargin = '300px', con
         className={styles.video}
         onError={onError}
         onLoadedMetadata={onLoadedMetadata}
-        onTimeUpdate={onTimeUpdate}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       />
-      {(showPlayPause || hasAudio) && (
+      {(showPlayPause || sound) && (
       <div className={`${styles.controls}${controlsAlign === 'left' ? ` ${styles.controlsLeft}` : ''}`}>
         {showPlayPause && (
           <button
@@ -129,7 +97,7 @@ export default function CaseStudyVideo({ src, onError, rootMargin = '300px', con
             )}
           </button>
         )}
-        {hasAudio && (
+        {sound && (
         <button
           className={styles.ctrlBtn}
           onClick={toggleSound}

@@ -23,7 +23,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile
 }
 
-function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false }) {
+function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false, sound = false }) {
   const isMobile = useIsMobile()
   const chosen = isMobile && mobileSrc ? mobileSrc : src
   if (!chosen) return null
@@ -33,7 +33,7 @@ function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false }) {
   if (isVideo) return (
     // When a "View website" button occupies the bottom-right, move the
     // video's own mute/play controls to the bottom-left to avoid overlap.
-    <CaseStudyVideo key={chosen} src={chosen} onError={onError} controlsAlign={hasWebsite ? 'left' : 'right'} />
+    <CaseStudyVideo key={chosen} src={chosen} onError={onError} controlsAlign={hasWebsite ? 'left' : 'right'} sound={sound} />
   )
   const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
   return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
@@ -276,7 +276,7 @@ export default function CaseStudy() {
             const ar = useMobile ? (section.mobileRatio ?? '4/5') : (section.ratio ?? '16/9')
             return (
               <div key={i} className={styles.mediaFull} style={{ aspectRatio: ar }}>
-                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!section.website} />
+                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!section.website} sound={section.sound} />
                 {section.website && <WebsiteButton href={section.website} />}
               </div>
             )
@@ -302,7 +302,7 @@ export default function CaseStudy() {
                       className={styles.mediaGridItem}
                       style={{ gridColumn: `span ${item.cols}`, aspectRatio: ar }}
                     >
-                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!item.website} />
+                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!item.website} sound={item.sound} />
                       {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
                       {item.website && <WebsiteButton href={item.website} />}
                     </div>
