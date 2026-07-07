@@ -1,8 +1,70 @@
 const WW = (n) => `/cs/world-within/Super_Conscious_WW_${n}.jpg`
 const NZ = (file) => `/cs/nimruz/${file}`
 const EA = (file) => `/cs/entropy/${file}`
+const HY = (file) => `/cs/hylands/${file}`
 
 export const caseStudies = {
+  'hylands': {
+    n: '028',
+    name: 'Hylands',
+    type: 'Brand + Content',
+    year: '2025',
+    tagline: 'A handmade clay world for a kids’ wellness brand.',
+    summary: 'Hyland’s Kids makes gentle, organic remedies for little ones. We gave them a warm, tactile brand world — a cast of handmade clay characters and a claymation visual language that makes wellness feel like play, across identity, packaging, and 3D content.',
+    services: ['Brand Identity', 'Character Design', '3D Illustration', 'Packaging', 'Content'],
+    outcomes: [
+      { category: 'World', outcome: 'A handmade, claymation visual language that makes a wellness brand feel joyful and kid-first.' },
+      { category: 'Cast', outcome: 'A full cast of clay characters, designed from turnaround sheets to finished 3D renders.' },
+      { category: 'System', outcome: 'Identity, packaging, and content built to scale across the product line.' },
+    ],
+    sections: [
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_01.mp4') },
+      {
+        type: 'text',
+        heading: 'The Idea',
+        body: 'Kids’ medicine doesn’t have to feel clinical. We built a handmade clay world — warm, squishy, full of personality — so the brand feels like playtime.',
+      },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_02.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: HY('SC_Hylands_03.webp'), cols: 6, ratio: '1/1' },
+          { src: HY('SC_Hylands_04.webp'), cols: 6, ratio: '1/1' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_05.webp') },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_06.webp') },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_07.webp') },
+      {
+        type: 'text',
+        heading: 'The Cast',
+        body: 'A troupe of clay characters, each taken from line-art turnarounds to fully rendered 3D, carries the brand across packaging, animation, and social.',
+      },
+      {
+        type: 'image-grid',
+        images: [
+          { src: HY('SC_Hylands_08.webp'), cols: 6, ratio: '1/1' },
+          { src: HY('SC_Hylands_09.webp'), cols: 6, ratio: '1/1' },
+        ],
+      },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_10.webp') },
+      {
+        type: 'image-grid',
+        images: [
+          { src: HY('SC_Hylands_11.webp'), cols: 6, ratio: '1/1' },
+          { src: HY('SC_Hylands_12.webp'), cols: 6, ratio: '1/1' },
+        ],
+      },
+      {
+        type: 'text',
+        heading: 'The World',
+        body: 'Suns, moons, flowers, clouds, and hand-formed props complete the kit — everything needed to build a scene.',
+      },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_13.mp4') },
+      { type: 'image-full', ratio: '16/9', src: HY('SC_Hylands_14.mp4') },
+    ],
+  },
+
   'entropy': {
     n: '031',
     name: 'Entropy',
