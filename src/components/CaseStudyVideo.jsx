@@ -6,7 +6,7 @@ import styles from './CaseStudyVideo.module.css'
  * viewport, and pauses when offscreen. Corner controls let the viewer
  * unmute for sound and — for clips longer than 10s — pause/play.
  */
-export default function CaseStudyVideo({ src, onError, rootMargin = '300px' }) {
+export default function CaseStudyVideo({ src, onError, rootMargin = '300px', controlsAlign = 'right' }) {
   const ref = useRef(null)
   const [shouldLoad, setShouldLoad] = useState(false)
   const [inView, setInView] = useState(false)
@@ -74,7 +74,7 @@ export default function CaseStudyVideo({ src, onError, rootMargin = '300px' }) {
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       />
-      <div className={styles.controls}>
+      <div className={`${styles.controls}${controlsAlign === 'left' ? ` ${styles.controlsLeft}` : ''}`}>
         {showPlayPause && (
           <button
             className={styles.ctrlBtn}

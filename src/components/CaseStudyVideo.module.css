@@ -19,6 +19,12 @@
   gap: 6px;
 }
 
+/* Shift controls to the bottom-left so a "View website" button can occupy the bottom-right. */
+.controlsLeft {
+  right: auto;
+  left: 12px;
+}
+
 .ctrlBtn {
   width: 30px;
   height: 30px;
