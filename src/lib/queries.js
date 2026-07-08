@@ -113,6 +113,7 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug &
     "mobileSrc": coalesce(mobileVideoFile.asset->url, mobileImage.asset->url),
     ratio,
     mobileRatio,
+    website,
     // textSection
     heading,
     body,
@@ -122,7 +123,8 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug &
       "mobileSrc": coalesce(mobileVideoFile.asset->url, mobileImage.asset->url),
       cols,
       ratio,
-      mobileRatio
+      mobileRatio,
+      website
     }
   }
 }`
