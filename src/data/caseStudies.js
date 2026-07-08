@@ -117,7 +117,7 @@ export const caseStudies = {
       {
         type: 'image-grid',
         images: [
-          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/53246539e65e7ab99cd36fe8f8cda9974ad7b515.mp4', cols: 6, ratio: '4/5' },
+          { src: 'https://cdn.sanity.io/files/ppq16wpu/production/82b94ef079fe92e6a115889f9bfdf0692375baee.mp4', cols: 6, ratio: '4/5' },
           { src: 'https://cdn.sanity.io/files/ppq16wpu/production/4bd18a1692e469f947f1979a14b97abc1b5e2926.mp4', cols: 6, ratio: '4/5' },
         ],
       },
@@ -133,7 +133,7 @@ export const caseStudies = {
     year: '2025',
     tagline: 'A rebrand and content system for a platform cultivating Iranian culture.',
     summary: 'Nimruz set out to do something needed and relevant: cultivate Iranian culture for a new generation, in a way that feels warm, modern, and rooted all at once. They came to us with an established name and wordmark — Nimruz, the land of the midday sun — but a visual world that hadn’t yet caught up to the vision. So we rebranded: a near-total overhaul that kept the existing wordmarks untouched and rebuilt everything around them. We introduced a new sun brandmark as the anchor, then extended it into a sun-drenched visual language drawn from Persian art and architecture, a system of calligraphic flourishes, and a content framework designed to run across social every day without ever losing its soul. The result is a brand that feels like home and reads as new.',
-    services: ['Rebrand', 'Brandmark', 'Visual Language', 'Content System', 'Social', 'Motion'],
+    services: ['Rebrand', 'Brandmark', 'Visual Language', 'Web', 'Content System', 'Social', 'Motion'],
     outcomes: [
       { category: 'Identity', outcome: 'Introduced a new sun brandmark and rebuilt the full visual system — palette, motifs, and motion — around the existing wordmark, grounded in Persian art.' },
       { category: 'Content', outcome: 'Built a modular content framework the team runs independently across social, day in and day out.' },

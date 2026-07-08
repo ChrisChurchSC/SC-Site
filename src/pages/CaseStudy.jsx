@@ -143,7 +143,7 @@ export default function CaseStudy() {
 
   // Normalize Sanity sections to match existing renderer expectations
   const normalizeSections = (sections) => sections?.map(s => {
-    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, mobileSrc: s.mobileSrc, ratio: s.ratio, mobileRatio: s.mobileRatio }
+    if (s._type === 'imageFullSection') return { type: 'image-full', src: s.src, mobileSrc: s.mobileSrc, ratio: s.ratio, mobileRatio: s.mobileRatio, website: s.website }
     if (s._type === 'textSection') return { type: 'text', heading: s.heading, body: s.body }
     if (s._type === 'imageGridSection') return { type: 'image-grid', images: s.images }
     return s
