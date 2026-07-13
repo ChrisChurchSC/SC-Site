@@ -86,4 +86,28 @@ export const thoughts = [
       { href: '/lp/what-to-ask-a-creative-agency', text: 'What to ask a creative agency' },
     ],
   },
+  {
+    n: '004',
+    title: 'Agility Over Headcount',
+    excerpt: 'Why the future of creative work belongs to small teams — clarity, agility, and craft over headcount.',
+    date: 'Jul 2026',
+    slug: 'agility-over-headcount',
+    isoDate: '2026-07-15',
+    hero: '/thoughts/agility-over-headcount.webp',
+    heroAlt: 'Illustration of a balance scale: three blue toy figures crowded together on one pan, a single red toy figure vaulting a hurdle on the other, representing agility outweighing headcount',
+    body: [
+      { type: 'p', text: 'The creative industry has long been obsessed with size. Bigger agencies, bigger headcounts, bigger offices. Scale was treated as a proxy for capability, as if the number of people in the room automatically equated to better ideas. But in practice, we have seen the opposite. The best work rarely comes from rooms filled with dozens of people. It comes from small teams with the right mix of skills, trust, and focus.' },
+      { type: 'p', text: 'At Super-Conscious, we built our studio around this belief. Coming from large agencies, we experienced firsthand how scale can slow everything down. Layers of management, endless rounds of approval, too many voices in the room diluting the idea until it was safe but forgettable. The work may have been polished, but it lacked sharpness. Decisions dragged. Energy drained. By the time something finally launched, the cultural moment had already moved on.' },
+      { type: 'p', text: 'Small teams work differently. With fewer people, clarity emerges. Everyone knows their role. Everyone’s voice matters. Communication is faster because there are no middle layers to navigate. Decisions get made in real time. And instead of spending hours aligning stakeholders, the energy goes into the work itself. A lean team is forced to be intentional, to cut the noise and focus on what actually matters. That focus is what makes the work sharper.' },
+      { type: 'p', text: 'There is also a human element. In small teams, trust builds naturally. You know the people you are working with, not just their titles. Collaboration becomes less about process and more about genuine creative partnership. That intimacy breeds accountability — you don’t want to let the team down. It also creates space for risk-taking. When you are not presenting to a boardroom of thirty people, you are more willing to push ideas further.' },
+      { type: 'p', text: 'Clients feel the difference, too. With a small team, they are closer to the work. They talk directly to the people making it, not to layers of account handlers relaying information up and down a chain. That proximity builds trust and speed. It also means the people who pitch the work are the same ones who deliver it, ensuring consistency from the first conversation to the final output.' },
+      { type: 'p', text: 'None of this is to say small teams are easy. They require range. People wear multiple hats, stretch across disciplines, and step outside their comfort zones. But that adaptability is exactly what makes them resilient. In a world where projects are increasingly complex, a small, multidisciplinary team can pivot faster than a large, siloed one. It is not about doing everything; it is about doing the right things with precision and care.' },
+      { type: 'p', text: 'The impact of a small team is not measured in headcount but in the strength of the ideas and the speed at which they move. Big agencies may win on scale, but small studios win on clarity, agility, and craft. In an industry where attention is fleeting and cultural moments move fast, that edge is invaluable.' },
+      { type: 'p', text: 'We believe small teams will shape the future of creative work. Not because they are cheaper, but because they are sharper. Because the world does not need more bloated structures; it needs ideas that land with impact. And for that, small teams are not a disadvantage. They are the advantage.' },
+    ],
+    relatedLinks: [
+      { href: '/lp/creative-studio-vs-freelancer', text: 'Creative studio vs. freelancer' },
+      { href: '/lp/what-to-ask-a-creative-agency', text: 'What to ask a creative agency' },
+    ],
+  },
 ]
