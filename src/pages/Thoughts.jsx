@@ -15,16 +15,18 @@ const fmtDate = (iso) => {
   return d.toLocaleString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
-const fromStatic = staticThoughts.map(t => ({
-  _id: `static-${t.slug}`,
-  title: t.title,
-  slug: t.slug,
-  excerpt: t.excerpt,
-  publishedAt: t.isoDate,
-  order: parseInt(t.n, 10),
-  heroUrl: t.hero ? assetUrl(t.hero) : null,
-  _static: true,
-}))
+const fromStatic = staticThoughts
+  .map(t => ({
+    _id: `static-${t.slug}`,
+    title: t.title,
+    slug: t.slug,
+    excerpt: t.excerpt,
+    publishedAt: t.isoDate,
+    order: parseInt(t.n, 10),
+    heroUrl: t.hero ? assetUrl(t.hero) : null,
+    _static: true,
+  }))
+  .sort((a, b) => b.order - a.order) // newest (highest order) first
 
 export default function Thoughts() {
   useMeta({
