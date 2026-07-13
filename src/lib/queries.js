@@ -24,7 +24,7 @@ export const SITE_CONFIG_QUERY = `*[_type == "siteConfig" && _id == "site-config
   homeHeroTagline
 }`
 
-export const THOUGHTS_INDEX_QUERY = `*[_type == "thought"] | order(order asc) {
+export const THOUGHTS_INDEX_QUERY = `*[_type == "thought"] | order(order desc) {
   _id,
   title,
   "slug": slug.current,
