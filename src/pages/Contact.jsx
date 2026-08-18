@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
-import { submitLead } from '../lib/submitLead'
+import { FORMSPREE_ENDPOINT, submitLead } from '../lib/submitLead'
 export default function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | error
   const [error, setError] = useState('')
@@ -58,7 +58,17 @@ export default function Contact() {
       </section>
 
       <section className={styles.formSection}>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form
+      className={styles.form}
+      // Posting natively to Formspree means a submit that lands before
+      // hydration still captures the lead. The page is prerendered, so the
+      // form looks interactive well before React attaches: without this a
+      // fast submit did a native GET to the current URL and the enquiry
+      // vanished into a query string.
+      action={FORMSPREE_ENDPOINT}
+      method="POST"
+      onSubmit={handleSubmit}
+    >
             <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }} />
           <div className={styles.row}>
             <label className={styles.field}>
