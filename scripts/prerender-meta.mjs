@@ -28,31 +28,11 @@ if (!fs.existsSync(indexPath)) {
 
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
+const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
 const indexHtml = fs.readFileSync(indexPath, 'utf8')
-
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
-function injectMeta(html, { title, description, url }) {
-  return html
-    .replace(/(<title>)[^<]*(<\/title>)/, `$1${esc(title)}$2`)
-    .replace(/(<meta name="description" content=")[^"]*"/, `$1${esc(description)}"`)
-    .replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${esc(title)}"`)
-    .replace(/(<meta property="og:description" content=")[^"]*"/, `$1${esc(description)}"`)
-    .replace(/(<meta property="og:image" content=")[^"]*"/, `$1${DEFAULT_IMAGE}"`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${esc(title)}"`)
-    .replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${esc(description)}"`)
-}
 
 // Inject JSON-LD schema scripts before </head>
 function injectSchemas(html, schemas) {
@@ -172,7 +152,7 @@ const STATIC_PAGES = [
 
 for (const page of STATIC_PAGES) {
   const url = `${BASE_URL}/${page.segments.join('/')}`
-  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url })
+  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
   html = await injectRoot(html, `/${page.segments.join('/')}`)
   writeHtml(page.segments, html)
   count++
@@ -181,8 +161,25 @@ for (const page of STATIC_PAGES) {
 // ── Work / case study pages ───────────────────────────────────────────────────
 
 const sitemapXml = fs.readFileSync(path.join(ROOT, 'public/sitemap.xml'), 'utf8')
-const workSlugs = [...sitemapXml.matchAll(/<loc>https:\/\/super-conscious\.studio\/work\/([^<]+)<\/loc>/g)]
+const sitemapWorkSlugs = [...sitemapXml.matchAll(/<loc>https:\/\/super-conscious\.studio\/work\/([^<]+)<\/loc>/g)]
   .map(m => m[1])
+
+// Which case studies exist is Sanity's answer, not the sitemap's.
+//
+// These were the same list until 2026-08-18, when three fully written case
+// studies — talos (10 sections), webroot (10), carbonite (7) — turned out to be
+// published in Sanity but absent from this hand-edited file, so they were never
+// prerendered. They still rendered in the homepage grid, which made /work/talos
+// the most-linked URL on the site at 180 anchors, every one of them a 404.
+//
+// The sitemap is maintained by hand and drifts. Sanity is the system that
+// actually knows what is published, so ask it. If the fetch above failed,
+// projectMeta is empty and we fall back rather than building zero case studies
+// — a Sanity outage should degrade to the old behaviour, not empty the site.
+// scripts/assert-build.mjs then fails the build if the two lists disagree.
+const workSlugs = Object.keys(projectMeta).length
+  ? Object.keys(projectMeta).sort()
+  : sitemapWorkSlugs
 
 for (const slug of workSlugs) {
   const meta = projectMeta[slug]
@@ -191,7 +188,7 @@ for (const slug of workSlugs) {
   const title = `${name} | Super Conscious`
   const description = (tagline || `Work by Super Conscious for ${name}.`).slice(0, 155)
   const url = `${BASE_URL}/work/${slug}`
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
   html = injectSchemas(html, [{
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -215,7 +212,7 @@ for (const t of thoughts) {
   const description = (t.excerpt || '').slice(0, 155)
   const url = `${BASE_URL}/thoughts/${t.slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
 
   html = injectSchemas(html, [
     {
@@ -290,7 +287,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   const description = (page.seoDescription || page.heroAnswer || '').slice(0, 155)
   const url = `${BASE_URL}/lp/${slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
 
   // FAQ + HowTo JSON-LD in <head> so non-JS crawlers see structured data
   const schemas = []
@@ -453,3 +450,8 @@ for (const [category, slugs] of Object.entries(lpByCategory)) {
 
 fs.writeFileSync(path.join(distDir, 'llms.txt'), baseLlms + aeoSection + '\n')
 console.log('Regenerated dist/llms.txt with AEO section')
+
+// ── Post-build assertions on the emitted HTML ────────────────────────────────
+// Kept in its own script so it can be run against an existing dist/ without a
+// rebuild — a check you cannot invoke on demand is a check you cannot trust.
+await import(path.join(ROOT, 'scripts/assert-build.mjs'))
