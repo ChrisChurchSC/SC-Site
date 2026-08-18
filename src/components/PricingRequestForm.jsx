@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { submitLead } from '../lib/submitLead'
+import { FORMSPREE_ENDPOINT, submitLead } from '../lib/submitLead'
 
 /**
  * Email capture on the pricing card.
@@ -49,7 +49,17 @@ export default function PricingRequestForm({ styles }) {
   }
 
   return (
-    <form className={styles.pricingForm} onSubmit={handleSubmit}>
+    <form
+      className={styles.pricingForm}
+      // Posting natively to Formspree means a submit that lands before
+      // hydration still captures the lead. The page is prerendered, so the
+      // form looks interactive well before React attaches: without this a
+      // fast submit did a native GET to the current URL and the enquiry
+      // vanished into a query string.
+      action={FORMSPREE_ENDPOINT}
+      method="POST"
+      onSubmit={handleSubmit}
+    >
       <input type="hidden" name="_subject" value="Pricing request from super-conscious.studio" />
       <input type="hidden" name="request_type" value="pricing" />
       {/* Formspree's honeypot — bots complete it, people never see it. */}
