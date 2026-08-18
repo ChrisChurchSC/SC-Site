@@ -1,5 +1,6 @@
 import styles from './About.module.css'
 import { useMeta } from '../hooks/useMeta'
+import PricingRequestForm from '../components/PricingRequestForm'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
@@ -18,7 +19,7 @@ const FALLBACK = {
     { tag: 'Bringing to life', name: 'Develop', deliverables: ['Content production (video, social, design)', 'Asset creation & execution', 'Post-production & delivery'] },
   ],
   pricingLabel: 'Get Pricing',
-  pricingSub: 'Rate-card based, scoped to the work. Get in touch and we\'ll send over rates and current availability.',
+  pricingSub: "Drop your email and we'll send over rates and availability.",
   clientsLabel: 'Selected Clients',
   clients: ['World Within', 'Oxyle', 'Mindmatter', 'Big Buoy', 'Deep Dive Films', 'Concis Labs', 'Joon', 'Transcend', 'Halfday', 'Overland', 'Pollen', 'Vessel'],
 }
@@ -124,7 +125,7 @@ export default function About() {
         <div className={styles.pricingCard}>
           <p className={styles.pricingLabel}>{cfg.pricingLabel}</p>
           <p className={styles.pricingSub}>{cfg.pricingSub}</p>
-          <a className={styles.pricingSubmit} href="/contact">Request pricing &rarr;</a>
+          <PricingRequestForm styles={styles} />
         </div>
       </section>
 
