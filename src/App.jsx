@@ -1,7 +1,6 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
-import CookieBanner from './components/CookieBanner'
 import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
@@ -124,7 +123,6 @@ export default function App() {
         </ProjectsProvider>
         </ComingSoonProvider>
         </NavProvider>
-      <CookieBanner />
       <Analytics />
       <SpeedInsights />
     </ThemeProvider>
