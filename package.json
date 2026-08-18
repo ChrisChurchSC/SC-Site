@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir .ssr && node scripts/prerender-meta.mjs",
     "preview": "vite preview",
-    "export-decks": "node scripts/export-decks.mjs"
+    "export-decks": "node scripts/export-decks.mjs",
+    "baseline:capture": "node tests/baseline/capture.mjs",
+    "baseline:verify": "node tests/baseline/verify.mjs"
   },
   "dependencies": {
     "@sanity/client": "^7.22.0",
