@@ -1,0 +1,4 @@
+{
+  "_comment": "Intentional deltas from the hardening pass. Adding a property here means 'this route's property is EXPECTED to differ from the baseline'. Keep it small and prune it once a baseline is re-captured.",
+  "routes": {}
+}
