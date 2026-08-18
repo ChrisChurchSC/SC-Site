@@ -104,7 +104,7 @@ export default function App() {
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/landing-pages" element={<Suspense fallback={null}><LandingHub /></Suspense>} />
+                <Route path="/landing-pages" element={<DeckGate><Suspense fallback={null}><LandingHub /></Suspense></DeckGate>} />
                 <Route path="/capabilities" element={<DeckGate><Suspense fallback={null}><Capabilities /></Suspense></DeckGate>} />
                 <Route path="/agency-capabilities" element={<DeckGate><Suspense fallback={null}><AgencyCapabilities /></Suspense></DeckGate>} />
                 <Route path="/brand-systems" element={<DeckGate><Suspense fallback={null}><BrandSystems /></Suspense></DeckGate>} />
