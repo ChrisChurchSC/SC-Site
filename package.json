@@ -10,8 +10,7 @@
     "export-decks": "node scripts/export-decks.mjs",
     "baseline:capture": "node tests/baseline/capture.mjs",
     "baseline:verify": "node tests/baseline/verify.mjs",
-    "test": "node --test tests/api/*.test.mjs",
-    "test:api": "node --test tests/api/*.test.mjs"
+    "test": "node --test tests/lib/*.test.mjs"
   },
   "dependencies": {
     "@sanity/client": "^7.22.0",
