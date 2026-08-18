@@ -1,6 +1,5 @@
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
-import NewsletterForm from '../components/NewsletterForm'
 import { useSanity } from '../hooks/useSanity'
 import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
@@ -134,7 +133,7 @@ export default function AboutUs() {
         <div className={styles.ctaCard} style={{ alignItems: 'center', textAlign: 'center' }}>
           <p className={styles.ctaHeading}>{cfg.signupLabel || 'Stay in touch'}</p>
           <p className={styles.ctaSub}>{cfg.signupSub || "Drop your email and we'll let you know when new roles open up."}</p>
-          <NewsletterForm />
+          <a className={styles.pricingSubmit} href="/contact">Request pricing &rarr;</a>
         </div>
       </section>
 

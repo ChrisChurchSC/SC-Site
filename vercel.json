@@ -1,11 +1,11 @@
 {
   "rewrites": [
-    { "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms|booking-confirmed)", "destination": "/shell.html" },
+    { "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)", "destination": "/shell.html" },
     { "source": "/work/:clientSlug/:workSlug", "destination": "/shell.html" }
   ],
   "headers": [
     {
-      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms|booking-confirmed)",
+      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, follow" }
       ]
