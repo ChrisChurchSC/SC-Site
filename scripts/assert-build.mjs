@@ -42,6 +42,21 @@ const HEAD_TAGS = [
   ['og:description', /<meta property="og:description"/g],
 ]
 
+// Routes that legitimately render no <h1>.
+//
+// /work is `<Navigate to="/" />` — a five-line redirect component, so there is
+// no page to head. It is still submitted at priority 0.9 with zero inbound
+// links. Giving it an <h1> would mean building the case-study index it is
+// pretending to be; that is a real piece of work, not a heading fix. Until
+// then it stays listed here so the omission is deliberate and visible rather
+// than silently tolerated.
+const SKIP_H1 = new Set([
+  'work/index.html',
+  // Deliberately empty client shells carrying noindex — not routes.
+  'shell.html',
+  '404.html',
+])
+
 const problems = []
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8')
@@ -63,6 +78,26 @@ for (const file of htmlFiles) {
 
   const desc = html.match(/<meta name="description" content="([^"]*)"/)?.[1]?.trim()
   if (!desc) problems.push(`${rel}: empty meta description`)
+
+  // Exactly one <h1> in the rendered body.
+  //
+  // Checked against #root, not the whole file: the prerender also injects a
+  // crawler-only <h1> into the hidden #seo-static div on /lp pages, and that
+  // one is invisible to users. Counting it would let a page pass this check
+  // while showing a reader no heading at all.
+  //
+  // The homepage, /about and /work all shipped with zero. /about's was worse
+  // than absent — the markup was there, guarded on a Sanity field that is
+  // null, so it silently rendered nothing.
+  const rootStart = html.indexOf('<div id="root">')
+  if (rootStart !== -1) {
+    const seoStart = html.indexOf('<div id="seo-static"', rootStart)
+    const body = html.slice(rootStart, seoStart === -1 ? undefined : seoStart)
+    const h1s = (body.match(/<h1[\s>]/g) || []).length
+    if (h1s !== 1 && !SKIP_H1.has(rel)) {
+      problems.push(`${rel}: expected exactly 1 <h1> in #root, found ${h1s}`)
+    }
+  }
 }
 
 // ── sitemap parity ───────────────────────────────────────────────────────────
