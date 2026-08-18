@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
+import { submitLead } from '../lib/submitLead'
 export default function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | error
+  const [error, setError] = useState('')
   const [toast, setToast] = useState(false)
 
   useMeta({
@@ -15,28 +17,23 @@ export default function Contact() {
     e.preventDefault()
     if (status === 'sending') return
     const form = e.target
-    const data = Object.fromEntries(new FormData(form))
     setStatus('sending')
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      if (res.ok) {
-        window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
-        window.dataLayer = window.dataLayer || []
-        window.dataLayer.push({ event: 'contact_form_submit' })
-        form.reset()
-        setStatus('idle')
-        setToast(true)
-        setTimeout(() => setToast(false), 4500)
-      } else {
-        setStatus('error')
-      }
-    } catch {
+
+    const result = await submitLead(form)
+
+    if (!result.ok) {
+      setError(result.error)
       setStatus('error')
+      return
     }
+
+    window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({ event: 'contact_form_submit' })
+    form.reset()
+    setStatus('idle')
+    setToast(true)
+    setTimeout(() => setToast(false), 4500)
   }
 
   return (
@@ -62,6 +59,7 @@ export default function Contact() {
 
       <section className={styles.formSection}>
         <form className={styles.form} onSubmit={handleSubmit}>
+            <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }} />
           <div className={styles.row}>
             <label className={styles.field}>
               <span className={styles.label}>Name</span>
@@ -82,7 +80,7 @@ export default function Contact() {
           </label>
 
           {status === 'error' && (
-            <p className={styles.error}>Something went wrong. Email us directly at contact@super-conscious.studio.</p>
+            <p className={styles.error} role="alert">{error || 'Something went wrong.'} Email us directly at contact@super-conscious.studio.</p>
           )}
 
           <button className={styles.submit} type="submit" disabled={status === 'sending'}>
