@@ -1,13 +1,94 @@
 {
+  "redirects": [
+    {
+      "source": "/smallhold",
+      "destination": "/work/smallhold",
+      "statusCode": 301
+    },
+    {
+      "source": "/heard",
+      "destination": "/work/heard",
+      "statusCode": 301
+    },
+    {
+      "source": "/world-within",
+      "destination": "/work/world-within",
+      "statusCode": 301
+    },
+    {
+      "source": "/transcend",
+      "destination": "/work/transcend",
+      "statusCode": 301
+    },
+    {
+      "source": "/photon",
+      "destination": "/work/photon",
+      "statusCode": 301
+    },
+    {
+      "source": "/print-parlor",
+      "destination": "/work/print-parlor",
+      "statusCode": 301
+    },
+    {
+      "source": "/path-projects",
+      "destination": "/work/path-projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/yura",
+      "destination": "/work/yura",
+      "statusCode": 301
+    },
+    {
+      "source": "/tbt",
+      "destination": "/work/tbt",
+      "statusCode": 301
+    },
+    {
+      "source": "/gigs",
+      "destination": "/work/gigs",
+      "statusCode": 301
+    },
+    {
+      "source": "/industry-standard",
+      "destination": "/work/industry-standard",
+      "statusCode": 301
+    },
+    {
+      "source": "/marketing-dept",
+      "destination": "/work/arbitrum-marketing-dept-videos",
+      "statusCode": 301
+    },
+    {
+      "source": "/gigs-characters",
+      "destination": "/work/gigs",
+      "statusCode": 301
+    },
+    {
+      "source": "/rethinking-the-workweek",
+      "destination": "/thoughts/rethinking-the-workweek",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
-    { "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)", "destination": "/shell.html" },
-    { "source": "/work/:clientSlug/:workSlug", "destination": "/shell.html" }
+    {
+      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/work/:clientSlug/:workSlug",
+      "destination": "/shell.html"
+    }
   ],
   "headers": [
     {
       "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
       ]
     },
     {
