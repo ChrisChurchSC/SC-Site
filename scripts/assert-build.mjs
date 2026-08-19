@@ -44,14 +44,9 @@ const HEAD_TAGS = [
 
 // Routes that legitimately render no <h1>.
 //
-// /work is `<Navigate to="/" />` — a five-line redirect component, so there is
-// no page to head. It is still submitted at priority 0.9 with zero inbound
-// links. Giving it an <h1> would mean building the case-study index it is
-// pretending to be; that is a real piece of work, not a heading fix. Until
-// then it stays listed here so the omission is deliberate and visible rather
-// than silently tolerated.
+// /work was exempt while it was `<Navigate to="/" />`. It is a real index now
+// and carries a heading, so the exemption is gone — losing it is a failure.
 const SKIP_H1 = new Set([
-  'work/index.html',
   // Deliberately empty client shells carrying noindex — not routes.
   'shell.html',
   '404.html',
