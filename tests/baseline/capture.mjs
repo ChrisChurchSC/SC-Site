@@ -14,7 +14,7 @@
  *   node tests/baseline/capture.mjs --base URL # point at a preview/local build
  */
 
-import { writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { argv } from 'node:process'
 
 const arg = (name, fallback) => {
@@ -117,11 +117,47 @@ const paths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
   .map((m) => new URL(m[1]).pathname)
   .sort()
 
-// Routes worth pinning that the sitemap omits — /work is the portfolio index
-// and /contact is a conversion page; both are currently missing from it.
-for (const extra of ['/contact', '/work', '/privacy', '/terms', '/404-does-not-exist']) {
+// Routes worth pinning that the sitemap never lists: the client-only shells
+// and a URL that must stay a 404.
+for (const extra of ['/work', '/privacy', '/terms', '/404-does-not-exist']) {
   if (!paths.includes(extra)) paths.push(extra)
 }
+
+// Union with everything the previous baseline already covered.
+//
+// Coverage is a ratchet: it may grow, never shrink. Deriving the route list
+// from the CURRENT sitemap alone means a URL silently leaves the check the
+// moment it leaves the sitemap — and then verify.mjs reports it as
+// "ROUTE DISAPPEARED", because it is missing from the capture rather than
+// missing from the web.
+//
+// That fired for real: noindexing the thirty coming-soon case studies pulled
+// them from the sitemap, and the next verify produced thirty failures for
+// thirty URLs that all still answer 200. Thirty false alarms is worse than no
+// check, because it teaches you to skim the output.
+//
+// The two states are not the same and the tool has to tell them apart:
+//   left the sitemap, still 200  -> intentional, fine, keep watching it
+//   left the sitemap, now 404    -> a real regression, and exactly the kind
+//                                   this file exists to catch
+// Only a route list that outlives the sitemap can distinguish them.
+// Always the committed baseline, never OUT — verify.mjs captures to a scratch
+// file (.current.json), so keying off OUT would union against the previous
+// run's scratch instead of the recorded route set.
+const BASELINE_FILE = 'tests/baseline/prod-baseline.json'
+if (existsSync(BASELINE_FILE)) {
+  try {
+    const previous = JSON.parse(readFileSync(BASELINE_FILE, 'utf8'))
+    for (const known of Object.keys(previous.routes ?? {})) {
+      if (!paths.includes(known)) paths.push(known)
+    }
+  } catch {
+    // An unreadable baseline is not a reason to capture nothing; the sitemap
+    // routes above still get covered.
+  }
+}
+
+paths.sort()
 
 process.stderr.write(`Capturing ${paths.length} routes from ${BASE}\n`)
 const routes = await pooled(paths, fetchRoute, CONCURRENCY)
