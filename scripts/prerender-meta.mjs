@@ -29,6 +29,7 @@ if (!fs.existsSync(indexPath)) {
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
 const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
@@ -221,11 +222,19 @@ const workSlugs = Object.keys(projectMeta).length
  * visible; the flag already did that. If the page is not live, it is not ready
  * to be indexed.
  *
+ * HIDDEN_SLUGS covers a second case: case studies deliberately taken out of the
+ * nav on 2026-06-01 (b8f83a3). They are not comingSoon and they hold finished
+ * content, so nothing here caught them — and when this script began taking its
+ * routes from Sanity they were submitted to Google as ordinary case studies,
+ * despite having zero inbound links anywhere on the site. Client work someone
+ * had chosen to stop showing.
+ *
  * Nothing here decides whether a case study should be published. Clearing
- * comingSoon in the Studio makes the page real and puts it straight back into
- * the sitemap on the next build, with no code change.
+ * comingSoon in the Studio, or removing a slug from HIDDEN_SLUGS, makes the
+ * page real and puts it straight back into the sitemap on the next build.
  */
-const isPlaceholder = (slug) => projectMeta[slug]?.comingSoon === true
+const isPlaceholder = (slug) =>
+  projectMeta[slug]?.comingSoon === true || HIDDEN_SLUGS.has(slug)
 
 const placeholderSlugs = workSlugs.filter(isPlaceholder)
 
