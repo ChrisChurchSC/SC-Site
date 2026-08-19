@@ -58,9 +58,17 @@ const SKIP_H1 = new Set([
 ])
 
 const problems = []
+
+/** route path -> { noindex } for every emitted page. */
+const routes = new Map()
+
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8')
   const rel = path.relative(dir, file)
+
+  routes.set('/' + rel.replace(/\/?index\.html$/, ''), {
+    noindex: /<meta name="robots" content="[^"]*noindex/i.test(html),
+  })
 
   for (const [label, re] of HEAD_TAGS) {
     const n = (html.match(re) || []).length
@@ -101,7 +109,16 @@ for (const file of htmlFiles) {
 }
 
 // ── sitemap parity ───────────────────────────────────────────────────────────
-// Built pages and submitted URLs must be the same set.
+// An indexable page must be submitted, and a noindexed page must not be.
+//
+// Deriving this from each page's own robots tag rather than a list of
+// exceptions means the two can never drift: whatever decides the noindex
+// decides the sitemap entry, and adding a page to one without the other is a
+// build failure rather than something you find in Search Console months later.
+//
+// It catches both directions, and both had shipped: pages prerendered but
+// never submitted (/contact, the newest thoughts post), and URLs submitted but
+// never built (/work/talos, answering 404 to 180 inbound links).
 
 const BASE = 'https://super-conscious.studio'
 const sitemapPath = path.join(dir, 'sitemap.xml')
@@ -114,18 +131,19 @@ if (!fs.existsSync(sitemapPath)) {
     [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(BASE, '') || '/'),
   )
 
-  // shell.html and 404.html are deliberately unroutable; they carry noindex.
-  const built = new Set(
-    htmlFiles
-      .map((f) => '/' + path.relative(dir, f).replace(/\/?index\.html$/, ''))
-      .filter((u) => !/^\/(shell|404)\.html$/.test(u)),
-  )
-
-  for (const url of built) {
-    if (!submitted.has(url)) problems.push(`${url}: prerendered but not in sitemap.xml`)
+  for (const [url, { noindex }] of routes) {
+    // shell.html and 404.html are unroutable client shells; they carry
+    // noindex, so the rule below already expects them to be absent.
+    if (noindex && submitted.has(url)) {
+      problems.push(`${url}: noindexed but still submitted in sitemap.xml`)
+    }
+    if (!noindex && !submitted.has(url)) {
+      problems.push(`${url}: indexable but missing from sitemap.xml`)
+    }
   }
+
   for (const url of submitted) {
-    if (!built.has(url)) problems.push(`${url}: in sitemap.xml but never prerendered (404)`)
+    if (!routes.has(url)) problems.push(`${url}: in sitemap.xml but never prerendered (404)`)
   }
 }
 

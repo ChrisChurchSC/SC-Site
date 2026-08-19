@@ -72,7 +72,27 @@ try {
 }
 
 // Escape < so the JSON can't break out of the <script> tag.
-const serializeData = (data) => JSON.stringify(data || {}).replace(/</g, '\\u003c')
+//
+// Keys are sorted so the same content always serializes to the same bytes.
+// They are GROQ query strings, inserted in whatever order the queries resolved
+// during the two-pass render, which is a race — so /about and /about-us came
+// out byte-different on every build despite identical data. Two consecutive
+// builds of the same commit differed by 31,698 characters at an identical
+// length of 70,800.
+//
+// That cost more than tidiness. snapshot-dist.mjs compares built output to
+// prove a change is inert, and those two pages reported a diff no matter what
+// you did, so the one tool that can catch a rendering regression before deploy
+// was blind on the site's two most important static pages. It also busted
+// their cache on every deploy for no reason.
+//
+// Only the top level needs sorting; that is where the query keys live. Passing
+// an array replacer to JSON.stringify would apply to nested objects too and
+// silently drop their keys.
+const sortTopLevel = (o) =>
+  Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
+
+const serializeData = (data) => JSON.stringify(sortTopLevel(data || {})).replace(/</g, '\\u003c')
 
 async function injectRoot(html, routePath) {
   if (!renderRoute) return html
@@ -92,12 +112,17 @@ async function injectRoot(html, routePath) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, _updatedAt}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
     for (const p of (data.result || [])) {
-      if (p.slug) projectMeta[p.slug] = { name: p.name, tagline: p.tagline, updatedAt: p._updatedAt }
+      if (p.slug) projectMeta[p.slug] = {
+        name: p.name,
+        tagline: p.tagline,
+        updatedAt: p._updatedAt,
+        comingSoon: p.comingSoon === true,
+      }
     }
     console.log(`Fetched metadata for ${Object.keys(projectMeta).length} projects from Sanity`)
   }
@@ -181,6 +206,29 @@ const workSlugs = Object.keys(projectMeta).length
   ? Object.keys(projectMeta).sort()
   : sitemapWorkSlugs
 
+/**
+ * A case study that should not be in the index.
+ *
+ * CaseStudy.jsx:199 renders "This case study is coming soon." in place of the
+ * page whenever comingSoon is set, and the prerender captures that — so these
+ * URLs were being submitted to Google as placeholder pages. Thirty of them,
+ * against sixty-one real ones.
+ *
+ * The section count is deliberately NOT part of this test. Thirteen of the
+ * thirty do hold finished content in Sanity — arbitrum-openhouse has sixteen
+ * sections — but the flag suppresses it at render time, so a crawler sees the
+ * same placeholder either way. Noindexing them buries nothing that was
+ * visible; the flag already did that. If the page is not live, it is not ready
+ * to be indexed.
+ *
+ * Nothing here decides whether a case study should be published. Clearing
+ * comingSoon in the Studio makes the page real and puts it straight back into
+ * the sitemap on the next build, with no code change.
+ */
+const isPlaceholder = (slug) => projectMeta[slug]?.comingSoon === true
+
+const placeholderSlugs = workSlugs.filter(isPlaceholder)
+
 for (const slug of workSlugs) {
   const meta = projectMeta[slug]
   const name = meta?.name || slugToName(slug)
@@ -198,12 +246,18 @@ for (const slug of workSlugs) {
       { '@type': 'ListItem', position: 3, name, item: url },
     ],
   }])
+  if (isPlaceholder(slug)) {
+    // follow, not none: the links out of the page still carry equity, and the
+    // page becomes indexable again as soon as someone writes the case study.
+    html = html.replace('<meta name="viewport"', '<meta name="robots" content="noindex, follow" />\n    <meta name="viewport"')
+  }
+
   html = await injectRoot(html, `/work/${slug}`)
   writeHtml(['work', slug], html)
   count++
 }
 
-console.log(`  work: ${workSlugs.length} pages`)
+console.log(`  work: ${workSlugs.length} pages (${placeholderSlugs.length} noindexed as placeholders)`)
 
 // ── Thoughts posts (with Article JSON-LD) ─────────────────────────────────────
 
@@ -394,6 +448,14 @@ const distSitemapPath = path.join(distDir, 'sitemap.xml')
 if (fs.existsSync(distSitemapPath)) {
   let sm = fs.readFileSync(distSitemapPath, 'utf8')
   sm = sm.replace(/\s*<lastmod>[^<]*<\/lastmod>/g, '') // idempotent: strip any prior lastmod
+
+  // Drop placeholder case studies. Filtered here rather than deleted from
+  // public/sitemap.xml so the two can never disagree: the same Sanity answer
+  // decides both the noindex tag and the sitemap entry, and a project that
+  // gains content reappears in both on the next build.
+  for (const slug of placeholderSlugs) {
+    sm = sm.replace(new RegExp(`\\s*<url><loc>${BASE_URL}/work/${slug}</loc>[\\s\\S]*?</url>`), '')
+  }
   sm = sm.replace(/<loc>([^<]+)<\/loc>/g, (m, loc) => `<loc>${loc}</loc><lastmod>${lastmodFor(loc)}</lastmod>`)
   fs.writeFileSync(distSitemapPath, sm)
   console.log('Injected <lastmod> into dist/sitemap.xml')
