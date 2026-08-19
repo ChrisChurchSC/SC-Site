@@ -35,7 +35,10 @@ export default function ClientOverview() {
     const sanitySub = sanitySubs[sp.slug]
     return {
       name: sp.name,
-      slug: sp.slug.replace(`${slug}-`, ''),
+      // The project's own slug, kept whole. It used to be stripped of the
+      // client prefix here ("google-ads" -> "ads") purely so the card could
+      // rebuild it as a nested path, and nothing else read it that way.
+      slug: sp.slug,
       n: String(i + 1).padStart(2, '0'),
       thumbnail: sanitySub?.thumbnail ?? null,
       thumbnailVideo: sanitySub?.thumbnailVideo ?? null,
@@ -84,7 +87,13 @@ export default function ClientOverview() {
                 onClick={() => showToast(`${item.name} — coming soon`)}
               >{inner}</div>
             ) : (
-              <NavLink key={item.slug} to={`/work/${slug}/${item.slug}`} className={cardClass}>{inner}</NavLink>
+              // Links straight to the real page. This was `/work/${slug}/${item.slug}`,
+              // a URL that has never existed as a file: vercel.json rewrote every
+              // two-segment path under /work to shell.html, so all six of these
+              // answered 200 with an empty #root, a noindex tag, and a canonical
+              // pointing at the homepage. Any two-segment path did — /work/foo/bar
+              // included — which made it an unbounded space of soft-200s.
+              <NavLink key={item.slug} to={`/work/${item.slug}`} className={cardClass}>{inner}</NavLink>
             )
           })}
         </div>
