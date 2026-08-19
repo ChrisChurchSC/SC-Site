@@ -72,7 +72,27 @@ try {
 }
 
 // Escape < so the JSON can't break out of the <script> tag.
-const serializeData = (data) => JSON.stringify(data || {}).replace(/</g, '\\u003c')
+//
+// Keys are sorted so the same content always serializes to the same bytes.
+// They are GROQ query strings, inserted in whatever order the queries resolved
+// during the two-pass render, which is a race — so /about and /about-us came
+// out byte-different on every build despite identical data. Two consecutive
+// builds of the same commit differed by 31,698 characters at an identical
+// length of 70,800.
+//
+// That cost more than tidiness. snapshot-dist.mjs compares built output to
+// prove a change is inert, and those two pages reported a diff no matter what
+// you did, so the one tool that can catch a rendering regression before deploy
+// was blind on the site's two most important static pages. It also busted
+// their cache on every deploy for no reason.
+//
+// Only the top level needs sorting; that is where the query keys live. Passing
+// an array replacer to JSON.stringify would apply to nested objects too and
+// silently drop their keys.
+const sortTopLevel = (o) =>
+  Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
+
+const serializeData = (data) => JSON.stringify(sortTopLevel(data || {})).replace(/</g, '\\u003c')
 
 async function injectRoot(html, routePath) {
   if (!renderRoute) return html
