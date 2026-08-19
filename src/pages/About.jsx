@@ -1,6 +1,6 @@
 import styles from './About.module.css'
 import { useMeta } from '../hooks/useMeta'
-import PricingRequestForm from '../components/PricingRequestForm'
+import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
@@ -136,7 +136,13 @@ export default function About() {
         <div className={styles.pricingCard}>
           <p className={styles.pricingLabel}>{cfg.pricingLabel}</p>
           <p className={styles.pricingSub}>{cfg.pricingSub}</p>
-          <PricingRequestForm styles={styles} />
+          <EmailCaptureForm
+            styles={styles}
+            submitLabel="Get rates →"
+            confirmMessage="Thanks — we'll send rates over shortly."
+            subject="Pricing request from super-conscious.studio"
+            requestType="pricing"
+          />
         </div>
       </section>
 
