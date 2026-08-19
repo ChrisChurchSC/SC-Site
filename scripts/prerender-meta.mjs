@@ -11,6 +11,7 @@
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -452,23 +453,78 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-const SITE_CONTENT_VERSION = '2026-06-13' // bump when static/lp/home/about copy changes
+// The floor for pages with no better date: /, /about, /about-us and /lp/*.
+//
+// This was a hand-bumped constant, and the instruction to bump it was missed.
+// On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
+// headings changed, while every one of those URLs kept telling Google
+// "unchanged since 2026-06-13" — a lastmod two months stale on exactly the
+// pages whose snippets had just been rewritten. Google uses lastmod to
+// prioritise recrawls, so the sitemap was arguing against the change that had
+// just shipped.
+//
+// It is now derived from git, with this constant as a FLOOR rather than the
+// answer. Vercel builds from a depth-limited clone, so `git log` can return
+// nothing for a file whose last change falls outside the fetched history —
+// taking the max means that degrades to a date that is merely old rather than
+// wrong, and never regresses below what was true when this line was written.
+const SITE_CONTENT_VERSION = '2026-08-19'
 
-const toDay = (iso) => (iso ? String(iso).slice(0, 10) : SITE_CONTENT_VERSION)
+/** Last commit date for a path, or null when git cannot answer. */
+function gitDay(relPath) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', relPath], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null
+  } catch {
+    return null
+  }
+}
+
+// The sources that actually produce those pages.
+const STATIC_CONTENT_SOURCES = [
+  'src/lib/mockLandingPages.js',
+  'src/pages/Home.jsx',
+  'src/pages/About.jsx',
+  'src/pages/AboutUs.jsx',
+  'src/pages/LandingPage.jsx',
+  'src/pages/Work.jsx',
+]
+
+const gitDays = STATIC_CONTENT_SOURCES.map(gitDay).filter(Boolean)
+const staticContentDay = [SITE_CONTENT_VERSION, ...gitDays].sort().pop()
+
+// Reported explicitly, because the failure this replaces was silent. A build
+// where git answered for none of the sources is a build running on the floor,
+// and that is worth seeing in the log rather than inferring later from a
+// stale date in the sitemap.
+console.log(
+  gitDays.length
+    ? `lastmod for static/lp pages: ${staticContentDay} (git answered for ${gitDays.length}/${STATIC_CONTENT_SOURCES.length} sources)`
+    : `lastmod for static/lp pages: ${staticContentDay} (FLOOR — git answered for none; shallow clone?)`,
+)
+
+const toDay = (iso) => (iso ? String(iso).slice(0, 10) : staticContentDay)
 
 const thoughtDateBySlug = Object.fromEntries(thoughts.map(t => [t.slug, toDay(t.isoDate)]))
-const newestThought = thoughts.map(t => toDay(t.isoDate)).sort().pop() || SITE_CONTENT_VERSION
-const newestWork = Object.values(projectMeta).map(p => toDay(p.updatedAt)).sort().pop() || SITE_CONTENT_VERSION
+const newestThought = thoughts.map(t => toDay(t.isoDate)).sort().pop() || staticContentDay
+const newestWork = Object.values(projectMeta).map(p => toDay(p.updatedAt)).sort().pop() || staticContentDay
 
 function lastmodFor(loc) {
   const route = loc.replace(BASE_URL, '') || '/'
   if (route === '/thoughts') return newestThought
-  if (route === '/work') return newestWork
+  // The index changes when a case study changes OR when the page itself does.
+  // It was built on 2026-08-19 and still claimed 2026-07-08, the newest
+  // Sanity edit, because only the former was considered.
+  if (route === '/work') return [newestWork, staticContentDay].sort().pop()
   const t = route.match(/^\/thoughts\/(.+)$/)
-  if (t) return thoughtDateBySlug[t[1]] || SITE_CONTENT_VERSION
+  if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-  return SITE_CONTENT_VERSION // /, /about, /about-us, /lp/*
+  return staticContentDay // /, /about, /about-us, /lp/*
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')
