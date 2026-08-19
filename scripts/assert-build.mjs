@@ -57,6 +57,18 @@ const SKIP_H1 = new Set([
   '404.html',
 ])
 
+// Files that must NOT carry a canonical.
+//
+// One file answers for many routes here — shell.html serves /privacy and
+// /terms, 404.html serves every unmatched path — so no single canonical value
+// can be correct. They used to inherit the homepage's, which told Google that
+// the canonical version of a 404 was the homepage, alongside a noindex tag
+// saying the opposite.
+//
+// Inverted deliberately: absence is asserted, not merely tolerated, so
+// reintroducing the homepage canonical fails the build.
+const NO_CANONICAL = new Set(['shell.html', '404.html'])
+
 const problems = []
 
 /** route path -> { noindex } for every emitted page. */
@@ -72,7 +84,8 @@ for (const file of htmlFiles) {
 
   for (const [label, re] of HEAD_TAGS) {
     const n = (html.match(re) || []).length
-    if (n !== 1) problems.push(`${rel}: expected exactly 1 ${label}, found ${n}`)
+    const want = label === 'canonical' && NO_CANONICAL.has(rel) ? 0 : 1
+    if (n !== want) problems.push(`${rel}: expected exactly ${want} ${label}, found ${n}`)
   }
 
   // A tag opening inside an attribute value means the value was not escaped or

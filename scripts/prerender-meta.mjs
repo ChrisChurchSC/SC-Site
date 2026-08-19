@@ -409,10 +409,28 @@ fs.writeFileSync(indexPath, homepageWithLinks)
 // right route with NO hydration mismatch (vs. serving home content). 404.html is
 // the same empty shell; Vercel serves it with a real 404 for unmatched paths,
 // killing the soft-404s (every unknown URL used to return 200 + homepage).
-const shellHtml = indexHtml.replace(
-  '<meta name="viewport"',
-  '<meta name="robots" content="noindex" />\n    <meta name="viewport"',
-)
+// The canonical is stripped, not rewritten.
+//
+// This file is index.html with a noindex tag added, so it inherited the
+// homepage's canonical — and it serves /privacy, /terms and every 404 on the
+// site. All of them told Google "the canonical version of this URL is the
+// homepage" while simultaneously saying "do not index this", which are
+// contradictory instructions, on pages that in the 404 case are not URLs at
+// all. It surfaced when a redirect test asserted that a made-up path must not
+// claim the homepage as its canonical.
+//
+// It cannot be made correct instead: one file answers for many routes, so
+// there is no single right value. Absent beats wrong.
+//
+// The title and description are still the homepage's. That is untouched here
+// because fixing it means prerendering /privacy and /terms as real routes
+// rather than patching the shell, and both are noindexed today.
+const shellHtml = indexHtml
+  .replace(/\s*<link rel="canonical"[^>]*>/, '')
+  .replace(
+    '<meta name="viewport"',
+    '<meta name="robots" content="noindex" />\n    <meta name="viewport"',
+  )
 fs.writeFileSync(path.join(distDir, 'shell.html'), shellHtml)
 fs.writeFileSync(path.join(distDir, '404.html'), shellHtml)
 console.log('Wrote dist/shell.html + dist/404.html (empty-root client shells, noindex)')
