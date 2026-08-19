@@ -6,6 +6,7 @@ import { useProjects } from '../context/ProjectsContext'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 import { BLOCK_MAP } from '../lib/blockMap'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
@@ -18,7 +19,6 @@ export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
-  const HIDDEN_SLUGS = new Set(['webroot', 'carbonite'])
   const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
   const comingSoon = useComingSoon()
 
