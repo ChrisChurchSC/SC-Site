@@ -48,7 +48,18 @@ export default function About() {
 
       <section className={styles.header}>
         <p className={styles.headerLabel}>{cfg.headerLabel}</p>
-        {cfg.headline && <h1 className={styles.headline}>{cfg.headline}</h1>}
+        {/* Falls back at the FIELD level, not the object level.
+            `cfg = data ?? FALLBACK` only substitutes when Sanity returns
+            nothing at all. Sanity returns an aboutPage document whose
+            `headline` is null, so the whole FALLBACK was skipped and this
+            guard suppressed the heading — /about shipped with no <h1>.
+
+            Applied to this field alone, on purpose. A blanket merge would
+            mean an editor could never remove anything: clearing a field in
+            the Studio would silently resurrect the hardcoded value. A page
+            heading is structural rather than editorial — it should always
+            exist — so it is the one field that gets a guaranteed default. */}
+        <h1 className={styles.headline}>{cfg.headline || FALLBACK.headline}</h1>
         {cfg.intro?.split(/\n\n+/).map((para, i) => (
           <p key={i} className={styles.sub}>{para}</p>
         ))}
