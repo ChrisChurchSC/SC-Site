@@ -37,8 +37,6 @@ export default function Work() {
     .filter((p) => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
     .sort((a, b) => a.name.localeCompare(b.name))
 
-  const live = caseStudies.filter((p) => !comingSoon.has(p.slug))
-
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -46,7 +44,7 @@ export default function Work() {
         <h1 className={styles.headline}>Case studies</h1>
         <p className={styles.intro}>
           Brand systems, content programs, and digital products, built with founders and
-          marketing teams. {live.length} published, {caseStudies.length} in total.
+          marketing teams.
         </p>
       </header>
 
