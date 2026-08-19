@@ -112,7 +112,7 @@ async function injectRoot(html, routePath) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, "sectionCount": count(sections), _updatedAt}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
@@ -122,8 +122,6 @@ try {
         tagline: p.tagline,
         updatedAt: p._updatedAt,
         comingSoon: p.comingSoon === true,
-        // count() over an undefined field returns null, not 0.
-        sectionCount: p.sectionCount ?? 0,
       }
     }
     console.log(`Fetched metadata for ${Object.keys(projectMeta).length} projects from Sanity`)
@@ -211,22 +209,23 @@ const workSlugs = Object.keys(projectMeta).length
 /**
  * A case study that should not be in the index.
  *
- * CaseStudy.jsx renders "This case study is coming soon." in place of the page
- * whenever comingSoon is set, and the prerender captures that — so these URLs
- * were being submitted to Google as placeholder pages. Thirty of them, against
- * sixty-one real ones.
+ * CaseStudy.jsx:199 renders "This case study is coming soon." in place of the
+ * page whenever comingSoon is set, and the prerender captures that — so these
+ * URLs were being submitted to Google as placeholder pages. Thirty of them,
+ * against sixty-one real ones.
  *
- * The flag alone is not the test. Thirteen coming-soon projects hold finished
- * content in Sanity — arbitrum-openhouse has sixteen sections — that the flag
- * suppresses. Those are a publishing decision, not a placeholder, and
- * noindexing them would bury real work. So the rule is "flagged AND nothing
- * written yet", which lets a project rejoin the index the moment it has
- * content, with no hand edit anywhere.
+ * The section count is deliberately NOT part of this test. Thirteen of the
+ * thirty do hold finished content in Sanity — arbitrum-openhouse has sixteen
+ * sections — but the flag suppresses it at render time, so a crawler sees the
+ * same placeholder either way. Noindexing them buries nothing that was
+ * visible; the flag already did that. If the page is not live, it is not ready
+ * to be indexed.
+ *
+ * Nothing here decides whether a case study should be published. Clearing
+ * comingSoon in the Studio makes the page real and puts it straight back into
+ * the sitemap on the next build, with no code change.
  */
-const isPlaceholder = (slug) => {
-  const m = projectMeta[slug]
-  return m?.comingSoon === true && m.sectionCount === 0
-}
+const isPlaceholder = (slug) => projectMeta[slug]?.comingSoon === true
 
 const placeholderSlugs = workSlugs.filter(isPlaceholder)
 
