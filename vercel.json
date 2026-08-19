@@ -69,15 +69,16 @@
       "source": "/rethinking-the-workweek",
       "destination": "/thoughts/rethinking-the-workweek",
       "statusCode": 301
+    },
+    {
+      "source": "/work/:client/:sub",
+      "destination": "/work/:client-:sub",
+      "statusCode": 301
     }
   ],
   "rewrites": [
     {
       "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
-      "destination": "/shell.html"
-    },
-    {
-      "source": "/work/:clientSlug/:workSlug",
       "destination": "/shell.html"
     }
   ],
