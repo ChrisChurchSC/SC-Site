@@ -1,13 +1,129 @@
 {
+  "redirects": [
+    {
+      "source": "/smallhold",
+      "destination": "/work/smallhold",
+      "statusCode": 301
+    },
+    {
+      "source": "/heard",
+      "destination": "/work/heard",
+      "statusCode": 301
+    },
+    {
+      "source": "/world-within",
+      "destination": "/work/world-within",
+      "statusCode": 301
+    },
+    {
+      "source": "/transcend",
+      "destination": "/work/transcend",
+      "statusCode": 301
+    },
+    {
+      "source": "/photon",
+      "destination": "/work/photon",
+      "statusCode": 301
+    },
+    {
+      "source": "/print-parlor",
+      "destination": "/work/print-parlor",
+      "statusCode": 301
+    },
+    {
+      "source": "/path-projects",
+      "destination": "/work/path-projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/yura",
+      "destination": "/work/yura",
+      "statusCode": 301
+    },
+    {
+      "source": "/tbt",
+      "destination": "/work/tbt",
+      "statusCode": 301
+    },
+    {
+      "source": "/gigs",
+      "destination": "/work/gigs",
+      "statusCode": 301
+    },
+    {
+      "source": "/industry-standard",
+      "destination": "/work/industry-standard",
+      "statusCode": 301
+    },
+    {
+      "source": "/marketing-dept",
+      "destination": "/work/arbitrum-marketing-dept-videos",
+      "statusCode": 301
+    },
+    {
+      "source": "/gigs-characters",
+      "destination": "/work/gigs",
+      "statusCode": 301
+    },
+    {
+      "source": "/rethinking-the-workweek",
+      "destination": "/thoughts/rethinking-the-workweek",
+      "statusCode": 301
+    },
+    {
+      "source": "/work/:client/:sub",
+      "destination": "/work/:client-:sub",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
-    { "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms|booking-confirmed)", "destination": "/shell.html" },
-    { "source": "/work/:clientSlug/:workSlug", "destination": "/shell.html" }
+    {
+      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
+      "destination": "/shell.html"
+    }
   ],
   "headers": [
     {
-      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms|booking-confirmed)",
+      "source": "/(capabilities|agency-capabilities|brand-systems|content-programs|digital-products|content-packages|landing-pages|lp|privacy|terms)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://app.cal.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://cdn.sanity.io https://www.googletagmanager.com https://www.google-analytics.com; media-src 'self' blob: https://cdn.sanity.io; connect-src 'self' https://ppq16wpu.api.sanity.io https://cdn.sanity.io https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://formspree.io https://app.cal.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-src 'self' https://app.cal.com https://www.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://formspree.io; object-src 'none'; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ]

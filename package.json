@@ -9,7 +9,11 @@
     "preview": "vite preview",
     "export-decks": "node scripts/export-decks.mjs",
     "baseline:capture": "node tests/baseline/capture.mjs",
-    "baseline:verify": "node tests/baseline/verify.mjs"
+    "baseline:verify": "node tests/baseline/verify.mjs",
+    "test": "node --test tests/lib/*.test.mjs",
+    "test:headers": "node tests/security/headers.test.mjs",
+    "test:redirects": "node tests/seo/redirects.test.mjs",
+    "test:build": "node scripts/assert-build.mjs"
   },
   "dependencies": {
     "@sanity/client": "^7.22.0",

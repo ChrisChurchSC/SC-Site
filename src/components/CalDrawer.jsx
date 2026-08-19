@@ -20,7 +20,17 @@ export default function CalDrawer() {
     window.Cal?.('on', {
       action: 'bookingSuccessful',
       callback: () => {
-        window.gtag?.('event', 'discovery_call_booked')
+        // dataLayer, not gtag. GTM owns a GA4 tag for this event and also
+        // listens on dataLayer — and gtag() writes to dataLayer, so a gtag call
+        // fired BOTH the gtag config and the GTM tag. Verified in Realtime: one
+        // gtag call produced 2 events, one dataLayer push produced 1.
+        //
+        // Deleting the GTM tag and standardising on gtag would be tidier, but
+        // container GTM-W47TGDKM is not accessible from the account that owns
+        // this property. Routing through GTM matches what /contact already does
+        // and gives exactly one event per booking with the access we have.
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({ event: 'discovery_call_booked' })
         setTimeout(close, 1200)
       },
     })

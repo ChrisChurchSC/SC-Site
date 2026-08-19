@@ -11,6 +11,7 @@
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -28,31 +29,12 @@ if (!fs.existsSync(indexPath)) {
 
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
+const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
 const indexHtml = fs.readFileSync(indexPath, 'utf8')
-
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
-function injectMeta(html, { title, description, url }) {
-  return html
-    .replace(/(<title>)[^<]*(<\/title>)/, `$1${esc(title)}$2`)
-    .replace(/(<meta name="description" content=")[^"]*"/, `$1${esc(description)}"`)
-    .replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`)
-    .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${esc(title)}"`)
-    .replace(/(<meta property="og:description" content=")[^"]*"/, `$1${esc(description)}"`)
-    .replace(/(<meta property="og:image" content=")[^"]*"/, `$1${DEFAULT_IMAGE}"`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${esc(title)}"`)
-    .replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${esc(description)}"`)
-}
 
 // Inject JSON-LD schema scripts before </head>
 function injectSchemas(html, schemas) {
@@ -92,7 +74,27 @@ try {
 }
 
 // Escape < so the JSON can't break out of the <script> tag.
-const serializeData = (data) => JSON.stringify(data || {}).replace(/</g, '\\u003c')
+//
+// Keys are sorted so the same content always serializes to the same bytes.
+// They are GROQ query strings, inserted in whatever order the queries resolved
+// during the two-pass render, which is a race — so /about and /about-us came
+// out byte-different on every build despite identical data. Two consecutive
+// builds of the same commit differed by 31,698 characters at an identical
+// length of 70,800.
+//
+// That cost more than tidiness. snapshot-dist.mjs compares built output to
+// prove a change is inert, and those two pages reported a diff no matter what
+// you did, so the one tool that can catch a rendering regression before deploy
+// was blind on the site's two most important static pages. It also busted
+// their cache on every deploy for no reason.
+//
+// Only the top level needs sorting; that is where the query keys live. Passing
+// an array replacer to JSON.stringify would apply to nested objects too and
+// silently drop their keys.
+const sortTopLevel = (o) =>
+  Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
+
+const serializeData = (data) => JSON.stringify(sortTopLevel(data || {})).replace(/</g, '\\u003c')
 
 async function injectRoot(html, routePath) {
   if (!renderRoute) return html
@@ -112,12 +114,17 @@ async function injectRoot(html, routePath) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, _updatedAt}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
     for (const p of (data.result || [])) {
-      if (p.slug) projectMeta[p.slug] = { name: p.name, tagline: p.tagline, updatedAt: p._updatedAt }
+      if (p.slug) projectMeta[p.slug] = {
+        name: p.name,
+        tagline: p.tagline,
+        updatedAt: p._updatedAt,
+        comingSoon: p.comingSoon === true,
+      }
     }
     console.log(`Fetched metadata for ${Object.keys(projectMeta).length} projects from Sanity`)
   }
@@ -172,7 +179,7 @@ const STATIC_PAGES = [
 
 for (const page of STATIC_PAGES) {
   const url = `${BASE_URL}/${page.segments.join('/')}`
-  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url })
+  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
   html = await injectRoot(html, `/${page.segments.join('/')}`)
   writeHtml(page.segments, html)
   count++
@@ -181,8 +188,56 @@ for (const page of STATIC_PAGES) {
 // ── Work / case study pages ───────────────────────────────────────────────────
 
 const sitemapXml = fs.readFileSync(path.join(ROOT, 'public/sitemap.xml'), 'utf8')
-const workSlugs = [...sitemapXml.matchAll(/<loc>https:\/\/super-conscious\.studio\/work\/([^<]+)<\/loc>/g)]
+const sitemapWorkSlugs = [...sitemapXml.matchAll(/<loc>https:\/\/super-conscious\.studio\/work\/([^<]+)<\/loc>/g)]
   .map(m => m[1])
+
+// Which case studies exist is Sanity's answer, not the sitemap's.
+//
+// These were the same list until 2026-08-18, when three fully written case
+// studies — talos (10 sections), webroot (10), carbonite (7) — turned out to be
+// published in Sanity but absent from this hand-edited file, so they were never
+// prerendered. They still rendered in the homepage grid, which made /work/talos
+// the most-linked URL on the site at 180 anchors, every one of them a 404.
+//
+// The sitemap is maintained by hand and drifts. Sanity is the system that
+// actually knows what is published, so ask it. If the fetch above failed,
+// projectMeta is empty and we fall back rather than building zero case studies
+// — a Sanity outage should degrade to the old behaviour, not empty the site.
+// scripts/assert-build.mjs then fails the build if the two lists disagree.
+const workSlugs = Object.keys(projectMeta).length
+  ? Object.keys(projectMeta).sort()
+  : sitemapWorkSlugs
+
+/**
+ * A case study that should not be in the index.
+ *
+ * CaseStudy.jsx:199 renders "This case study is coming soon." in place of the
+ * page whenever comingSoon is set, and the prerender captures that — so these
+ * URLs were being submitted to Google as placeholder pages. Thirty of them,
+ * against sixty-one real ones.
+ *
+ * The section count is deliberately NOT part of this test. Thirteen of the
+ * thirty do hold finished content in Sanity — arbitrum-openhouse has sixteen
+ * sections — but the flag suppresses it at render time, so a crawler sees the
+ * same placeholder either way. Noindexing them buries nothing that was
+ * visible; the flag already did that. If the page is not live, it is not ready
+ * to be indexed.
+ *
+ * HIDDEN_SLUGS covers a second case: case studies deliberately taken out of the
+ * nav on 2026-06-01 (b8f83a3). They are not comingSoon and they hold finished
+ * content, so nothing here caught them — and when this script began taking its
+ * routes from Sanity they were submitted to Google as ordinary case studies,
+ * despite having zero inbound links anywhere on the site. Client work someone
+ * had chosen to stop showing.
+ *
+ * Nothing here decides whether a case study should be published. Clearing
+ * comingSoon in the Studio, or removing a slug from HIDDEN_SLUGS, makes the
+ * page real and puts it straight back into the sitemap on the next build.
+ */
+const isPlaceholder = (slug) =>
+  projectMeta[slug]?.comingSoon === true || HIDDEN_SLUGS.has(slug)
+
+const placeholderSlugs = workSlugs.filter(isPlaceholder)
 
 for (const slug of workSlugs) {
   const meta = projectMeta[slug]
@@ -191,7 +246,7 @@ for (const slug of workSlugs) {
   const title = `${name} | Super Conscious`
   const description = (tagline || `Work by Super Conscious for ${name}.`).slice(0, 155)
   const url = `${BASE_URL}/work/${slug}`
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
   html = injectSchemas(html, [{
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -201,12 +256,18 @@ for (const slug of workSlugs) {
       { '@type': 'ListItem', position: 3, name, item: url },
     ],
   }])
+  if (isPlaceholder(slug)) {
+    // follow, not none: the links out of the page still carry equity, and the
+    // page becomes indexable again as soon as someone writes the case study.
+    html = html.replace('<meta name="viewport"', '<meta name="robots" content="noindex, follow" />\n    <meta name="viewport"')
+  }
+
   html = await injectRoot(html, `/work/${slug}`)
   writeHtml(['work', slug], html)
   count++
 }
 
-console.log(`  work: ${workSlugs.length} pages`)
+console.log(`  work: ${workSlugs.length} pages (${placeholderSlugs.length} noindexed as placeholders)`)
 
 // ── Thoughts posts (with Article JSON-LD) ─────────────────────────────────────
 
@@ -215,7 +276,7 @@ for (const t of thoughts) {
   const description = (t.excerpt || '').slice(0, 155)
   const url = `${BASE_URL}/thoughts/${t.slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
 
   html = injectSchemas(html, [
     {
@@ -290,7 +351,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   const description = (page.seoDescription || page.heroAnswer || '').slice(0, 155)
   const url = `${BASE_URL}/lp/${slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url })
+  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
 
   // FAQ + HowTo JSON-LD in <head> so non-JS crawlers see structured data
   const schemas = []
@@ -358,10 +419,28 @@ fs.writeFileSync(indexPath, homepageWithLinks)
 // right route with NO hydration mismatch (vs. serving home content). 404.html is
 // the same empty shell; Vercel serves it with a real 404 for unmatched paths,
 // killing the soft-404s (every unknown URL used to return 200 + homepage).
-const shellHtml = indexHtml.replace(
-  '<meta name="viewport"',
-  '<meta name="robots" content="noindex" />\n    <meta name="viewport"',
-)
+// The canonical is stripped, not rewritten.
+//
+// This file is index.html with a noindex tag added, so it inherited the
+// homepage's canonical — and it serves /privacy, /terms and every 404 on the
+// site. All of them told Google "the canonical version of this URL is the
+// homepage" while simultaneously saying "do not index this", which are
+// contradictory instructions, on pages that in the 404 case are not URLs at
+// all. It surfaced when a redirect test asserted that a made-up path must not
+// claim the homepage as its canonical.
+//
+// It cannot be made correct instead: one file answers for many routes, so
+// there is no single right value. Absent beats wrong.
+//
+// The title and description are still the homepage's. That is untouched here
+// because fixing it means prerendering /privacy and /terms as real routes
+// rather than patching the shell, and both are noindexed today.
+const shellHtml = indexHtml
+  .replace(/\s*<link rel="canonical"[^>]*>/, '')
+  .replace(
+    '<meta name="viewport"',
+    '<meta name="robots" content="noindex" />\n    <meta name="viewport"',
+  )
 fs.writeFileSync(path.join(distDir, 'shell.html'), shellHtml)
 fs.writeFileSync(path.join(distDir, '404.html'), shellHtml)
 console.log('Wrote dist/shell.html + dist/404.html (empty-root client shells, noindex)')
@@ -374,29 +453,92 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-const SITE_CONTENT_VERSION = '2026-06-13' // bump when static/lp/home/about copy changes
+// The floor for pages with no better date: /, /about, /about-us and /lp/*.
+//
+// This was a hand-bumped constant, and the instruction to bump it was missed.
+// On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
+// headings changed, while every one of those URLs kept telling Google
+// "unchanged since 2026-06-13" — a lastmod two months stale on exactly the
+// pages whose snippets had just been rewritten. Google uses lastmod to
+// prioritise recrawls, so the sitemap was arguing against the change that had
+// just shipped.
+//
+// It is now derived from git, with this constant as a FLOOR rather than the
+// answer. Vercel builds from a depth-limited clone, so `git log` can return
+// nothing for a file whose last change falls outside the fetched history —
+// taking the max means that degrades to a date that is merely old rather than
+// wrong, and never regresses below what was true when this line was written.
+const SITE_CONTENT_VERSION = '2026-08-19'
 
-const toDay = (iso) => (iso ? String(iso).slice(0, 10) : SITE_CONTENT_VERSION)
+/** Last commit date for a path, or null when git cannot answer. */
+function gitDay(relPath) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', relPath], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null
+  } catch {
+    return null
+  }
+}
+
+// The sources that actually produce those pages.
+const STATIC_CONTENT_SOURCES = [
+  'src/lib/mockLandingPages.js',
+  'src/pages/Home.jsx',
+  'src/pages/About.jsx',
+  'src/pages/AboutUs.jsx',
+  'src/pages/LandingPage.jsx',
+  'src/pages/Work.jsx',
+]
+
+const gitDays = STATIC_CONTENT_SOURCES.map(gitDay).filter(Boolean)
+const staticContentDay = [SITE_CONTENT_VERSION, ...gitDays].sort().pop()
+
+// Reported explicitly, because the failure this replaces was silent. A build
+// where git answered for none of the sources is a build running on the floor,
+// and that is worth seeing in the log rather than inferring later from a
+// stale date in the sitemap.
+console.log(
+  gitDays.length
+    ? `lastmod for static/lp pages: ${staticContentDay} (git answered for ${gitDays.length}/${STATIC_CONTENT_SOURCES.length} sources)`
+    : `lastmod for static/lp pages: ${staticContentDay} (FLOOR — git answered for none; shallow clone?)`,
+)
+
+const toDay = (iso) => (iso ? String(iso).slice(0, 10) : staticContentDay)
 
 const thoughtDateBySlug = Object.fromEntries(thoughts.map(t => [t.slug, toDay(t.isoDate)]))
-const newestThought = thoughts.map(t => toDay(t.isoDate)).sort().pop() || SITE_CONTENT_VERSION
-const newestWork = Object.values(projectMeta).map(p => toDay(p.updatedAt)).sort().pop() || SITE_CONTENT_VERSION
+const newestThought = thoughts.map(t => toDay(t.isoDate)).sort().pop() || staticContentDay
+const newestWork = Object.values(projectMeta).map(p => toDay(p.updatedAt)).sort().pop() || staticContentDay
 
 function lastmodFor(loc) {
   const route = loc.replace(BASE_URL, '') || '/'
   if (route === '/thoughts') return newestThought
-  if (route === '/work') return newestWork
+  // The index changes when a case study changes OR when the page itself does.
+  // It was built on 2026-08-19 and still claimed 2026-07-08, the newest
+  // Sanity edit, because only the former was considered.
+  if (route === '/work') return [newestWork, staticContentDay].sort().pop()
   const t = route.match(/^\/thoughts\/(.+)$/)
-  if (t) return thoughtDateBySlug[t[1]] || SITE_CONTENT_VERSION
+  if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-  return SITE_CONTENT_VERSION // /, /about, /about-us, /lp/*
+  return staticContentDay // /, /about, /about-us, /lp/*
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')
 if (fs.existsSync(distSitemapPath)) {
   let sm = fs.readFileSync(distSitemapPath, 'utf8')
   sm = sm.replace(/\s*<lastmod>[^<]*<\/lastmod>/g, '') // idempotent: strip any prior lastmod
+
+  // Drop placeholder case studies. Filtered here rather than deleted from
+  // public/sitemap.xml so the two can never disagree: the same Sanity answer
+  // decides both the noindex tag and the sitemap entry, and a project that
+  // gains content reappears in both on the next build.
+  for (const slug of placeholderSlugs) {
+    sm = sm.replace(new RegExp(`\\s*<url><loc>${BASE_URL}/work/${slug}</loc>[\\s\\S]*?</url>`), '')
+  }
   sm = sm.replace(/<loc>([^<]+)<\/loc>/g, (m, loc) => `<loc>${loc}</loc><lastmod>${lastmodFor(loc)}</lastmod>`)
   fs.writeFileSync(distSitemapPath, sm)
   console.log('Injected <lastmod> into dist/sitemap.xml')
@@ -453,3 +595,8 @@ for (const [category, slugs] of Object.entries(lpByCategory)) {
 
 fs.writeFileSync(path.join(distDir, 'llms.txt'), baseLlms + aeoSection + '\n')
 console.log('Regenerated dist/llms.txt with AEO section')
+
+// ── Post-build assertions on the emitted HTML ────────────────────────────────
+// Kept in its own script so it can be run against an existing dist/ without a
+// rebuild — a check you cannot invoke on demand is a check you cannot trust.
+await import(path.join(ROOT, 'scripts/assert-build.mjs'))

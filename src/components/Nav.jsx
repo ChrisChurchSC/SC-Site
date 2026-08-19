@@ -6,6 +6,7 @@ import { useProjects } from '../context/ProjectsContext'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
+import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 import { BLOCK_MAP } from '../lib/blockMap'
 import logoSrc from '../assets/logo.svg'
 import './Nav.css'
@@ -18,7 +19,6 @@ export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false)
   const projects = useProjects()
   const { data: gridData } = useSanity(HOMEPAGE_GRID_QUERY)
-  const HIDDEN_SLUGS = new Set(['webroot', 'carbonite'])
   const caseStudies = projects.all.filter(p => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
   const comingSoon = useComingSoon()
 
@@ -169,7 +169,17 @@ export default function Nav() {
             )
           })}
           <li className="nav-cs-item nav-cs-all">
-            <button className="nav-cs-see-all" onClick={() => setWorkOpen(true)}>See all case studies →</button>
+            {/* A real link, not a button. This was the only path to the case
+                study list on desktop, and a <button> is not a crawlable edge:
+                /work had zero inbound links while sitting in the sitemap at
+                priority 0.9. The click still opens the drawer, so the
+                behaviour visitors know is unchanged — but the href is real,
+                so a crawler can follow it and cmd-click opens the page. */}
+            <NavLink
+              to="/work"
+              className="nav-cs-see-all"
+              onClick={(e) => { e.preventDefault(); setWorkOpen(true) }}
+            >See all case studies →</NavLink>
           </li>
         </ul>
 
@@ -195,7 +205,11 @@ export default function Nav() {
           <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
           <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
-          <button className="nav-mobile-link" onClick={() => { setMenuOpen(false); setWorkOpen(true) }}>Work</button>
+          <NavLink
+            to="/work"
+            className="nav-mobile-link"
+            onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
+          >Work</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>

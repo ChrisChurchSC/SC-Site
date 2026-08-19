@@ -584,9 +584,24 @@
     max-width: 160px;
   }
 
-  /* Tagline hidden on mobile — no room in compact card */
+  /* Tagline hidden on mobile — no room in compact card.
+     Visually hidden rather than display:none, because this element is the
+     page <h1>. Google indexes mobile-first, so display:none here would mean
+     the homepage headline is absent from the rendering Google actually reads,
+     and screen readers would lose it too. Clipping takes it out of flow and
+     off screen with the same visual result, while keeping it in the
+     accessibility tree. */
   .cornerText {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 
   /* Intro row: logo takes remaining space, menu card width = its own height */

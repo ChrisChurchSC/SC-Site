@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useContactDrawer } from '../context/ContactDrawerContext'
 import styles from './ContactDrawer.module.css'
+import { FORMSPREE_ENDPOINT, submitLead } from '../lib/submitLead'
 
 export default function ContactDrawer() {
   const { isOpen, close } = useContactDrawer()
   const [mounted, setMounted] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [status, setStatus] = useState('idle') // idle | sending | done | error
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('') // idle | sending | done | error
 
   // Mount before animating in; unmount after animating out
   useEffect(() => {
@@ -32,26 +34,23 @@ export default function ContactDrawer() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (status === 'sending') return
-    const data = Object.fromEntries(new FormData(e.target))
     setStatus('sending')
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      if (res.ok) {
-        window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
-        window.dataLayer = window.dataLayer || []
-        window.dataLayer.push({ event: 'contact_form_submit' })
-        setStatus('done')
-        setTimeout(close, 2200)
-      } else {
-        setStatus('error')
-      }
-    } catch {
+
+    const result = await submitLead(e.target)
+
+    if (!result.ok) {
+      // Only ever a confirmed store counts as sent. The previous version
+      // showed success whenever the request resolved, regardless of outcome.
+      setError(result.error)
       setStatus('error')
+      return
     }
+
+    window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({ event: 'contact_form_submit' })
+    setStatus('done')
+    setTimeout(close, 2200)
   }
 
   if (!mounted) return null
@@ -79,7 +78,18 @@ export default function ContactDrawer() {
         {status === 'done' ? (
           <p className={styles.success}>Message sent. We'll be in touch shortly.</p>
         ) : (
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <form
+      className={styles.form}
+      // Posting natively to Formspree means a submit that lands before
+      // hydration still captures the lead. The page is prerendered, so the
+      // form looks interactive well before React attaches: without this a
+      // fast submit did a native GET to the current URL and the enquiry
+      // vanished into a query string.
+      action={FORMSPREE_ENDPOINT}
+      method="POST"
+      onSubmit={handleSubmit}
+    >
+            <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }} />
             <div className={styles.row}>
               <label className={styles.field}>
                 <span className={styles.label}>Name</span>
@@ -99,7 +109,7 @@ export default function ContactDrawer() {
               <textarea className={styles.textarea} name="message" rows={4} required />
             </label>
             {status === 'error' && (
-              <p className={styles.error}>Something went wrong. Email us at contact@super-conscious.studio.</p>
+              <p className={styles.error} role="alert">{error || 'Something went wrong.'} Email us at contact@super-conscious.studio.</p>
             )}
             <button className={styles.submit} type="submit" disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending…' : 'Send message'}

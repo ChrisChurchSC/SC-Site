@@ -430,7 +430,7 @@
   z-index: 1;
 }
 
-.pricingForm {
+.emailForm {
   display: flex;
   gap: 8px;
   width: 100%;
@@ -439,7 +439,7 @@
   z-index: 1;
 }
 
-.pricingInput {
+.emailInput {
   flex: 1;
   background: #0a0a0a;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -453,16 +453,16 @@
   transition: border-color 0.15s, background 0.15s;
 }
 
-.pricingInput::placeholder {
+.emailInput::placeholder {
   color: rgba(255, 255, 255, 0.2);
 }
 
-.pricingInput:focus {
+.emailInput:focus {
   background: #111;
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.pricingSubmit {
+.emailSubmit {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 4px;
@@ -477,12 +477,12 @@
   flex-shrink: 0;
 }
 
-.pricingSubmit:hover {
+.emailSubmit:hover {
   background: rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.9);
 }
 
-.pricingConfirm {
+.emailConfirm {
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.06em;
@@ -578,12 +578,12 @@
     padding: 40px 24px;
   }
 
-  .pricingForm {
+  .emailForm {
     flex-direction: column;
     max-width: 100%;
   }
 
-  .pricingSubmit {
+  .emailSubmit {
     width: 100%;
   }
 
@@ -605,4 +605,24 @@
   .clientsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.emailSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.emailError {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #e8908f;
+  margin: 10px 0 0;
 }
