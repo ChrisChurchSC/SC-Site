@@ -1,6 +1,6 @@
 import styles from './AboutUs.module.css'
 import { useMeta } from '../hooks/useMeta'
-import PricingRequestForm from '../components/PricingRequestForm'
+import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
 import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
@@ -134,7 +134,13 @@ export default function AboutUs() {
         <div className={styles.ctaCard} style={{ alignItems: 'center', textAlign: 'center' }}>
           <p className={styles.ctaHeading}>{cfg.signupLabel || 'Stay in touch'}</p>
           <p className={styles.ctaSub}>{cfg.signupSub || "Drop your email and we'll let you know when new roles open up."}</p>
-          <PricingRequestForm styles={styles} />
+          <EmailCaptureForm
+            styles={styles}
+            submitLabel="Join the roster →"
+            confirmMessage="Thanks — we'll be in touch when freelance work comes up."
+            subject="Freelancer roster signup from super-conscious.studio"
+            requestType="freelancer"
+          />
         </div>
       </section>
 
