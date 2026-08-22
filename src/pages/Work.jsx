@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import styles from './Work.module.css'
+import WorkGrid from '../components/WorkGrid'
 import { useMeta } from '../hooks/useMeta'
 import { useProjects } from '../context/ProjectsContext'
 import { useComingSoon } from '../context/ComingSoonContext'
@@ -20,6 +21,15 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
  * with the same filters — top-level projects only, minus the deliberately
  * hidden ones. What differs is that these are real anchors at a real URL, so
  * a crawler can follow them and a visitor can link to the page.
+ *
+ * The curated grid above it is the wall that used to be the homepage, moved
+ * here when the homepage grew a positioning top half. The two are not
+ * redundant and the list is not decoration: the grid is a curated subset —
+ * roughly forty blocks, chosen for how they look together — while the list
+ * is every non-hidden case study. Replacing the list with the grid would put
+ * the uncurated remainder back where they were before PR #122, with no
+ * crawlable route in. If the grid ever covers all of them, revisit; until
+ * then both stay.
  */
 export default function Work() {
   const projects = useProjects()
@@ -47,6 +57,16 @@ export default function Work() {
           marketing teams.
         </p>
       </header>
+
+      <section className={styles.gridSection} aria-label="Selected work, visual index">
+        <WorkGrid />
+      </section>
+
+      <div className={styles.listHead}>
+        <p className={styles.listLabel}>All work</p>
+        <span className={styles.listRule} aria-hidden="true" />
+        <p className={styles.listCount}>{String(caseStudies.length).padStart(3, '0')} case studies</p>
+      </div>
 
       <ol className={styles.list}>
         {caseStudies.map((p) => {

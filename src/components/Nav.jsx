@@ -112,6 +112,17 @@ export default function Nav() {
             </div>
           </NavLink>
 
+          {/* Sits under Capabilities, above Thoughts. /work already existed
+              as the case study index — this is the first card-level route
+              into it; until now the only ways in were the "see all" link at
+              the bottom of this list and the drawer's button. */}
+          <NavLink to="/work" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Work</p>
+              <p className="nav-card-sub">Selected case studies.</p>
+            </div>
+          </NavLink>
+
           <NavLink to="/thoughts" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Thoughts</p>
@@ -203,13 +214,13 @@ export default function Nav() {
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
           <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
-          <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink
             to="/work"
             className="nav-mobile-link"
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
+          <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
+          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>
