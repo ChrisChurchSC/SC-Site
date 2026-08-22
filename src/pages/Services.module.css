@@ -23,9 +23,9 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Every section, not the first five. The page had five when this was
-   written; the rewrite took it to nine, and the unlisted ones simply
-   appeared while the ones above them faded in. */
+/* Every section, not the first five. The page had five when this rule was
+   written and the rewrite took it past that; any section left off the list
+   simply appeared while the ones above it faded in. */
 .main section:nth-of-type(1) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.45s both; }
 .main section:nth-of-type(2) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.55s both; }
 .main section:nth-of-type(3) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.65s both; }
@@ -34,7 +34,6 @@
 .main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
 .main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
 .main section:nth-of-type(8) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.15s both; }
-.main section:nth-of-type(9) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.25s both; }
 
 /* ── Back button ── */
 .backBtn {
@@ -88,16 +87,6 @@
   max-width: 800px;
 }
 
-.sub {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(20px, 2.4vw, 32px);
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-  max-width: 800px;
-}
-
 /* ── Shared section row ── */
 .textSection {
   padding: 48px 40px;
@@ -124,17 +113,6 @@
   color: rgba(255, 255, 255, 0.55);
   margin: 0;
   max-width: 720px;
-}
-
-/* The one line on the page that is allowed to be a slogan. */
-.pullQuote {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(22px, 3vw, 40px);
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 8px 0 0;
-  max-width: 900px;
 }
 
 /* ── Who we're for ──
@@ -180,35 +158,64 @@
   .audienceGrid { grid-template-columns: 1fr; }
 }
 
-/* ── On AI ──
-   No card, no grid. Every other section here is a box in a row; this one is
-   the studio taking a position, and the shift in form is the emphasis. The
-   trend is stated dim, the stance answers it bright. */
-.stanceTrend {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(18px, 2vw, 28px);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0;
-  max-width: 760px;
-}
-
-.stancePosition {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(18px, 2vw, 28px);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 4px 0 0;
-  max-width: 760px;
-}
-
 /* ── Principles grid (2x2) ── */
 .principlesGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 5px;
+}
+
+/* ── Outcomes (3x3 benefit grid) ──
+   No card background, unlike the audience and point-of-view grids. This is a
+   long list and boxing nine of them turns the page into a wall of tiles; the
+   rule above each item does the separating instead. */
+.outcomesIntro {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 12px;
+  max-width: 720px;
+}
+
+.outcomeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 40px;
+}
+
+.outcomeItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.outcomeName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.outcomeBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .outcomeGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .outcomeGrid { grid-template-columns: 1fr; }
 }
 
 /* ── Embedded ── */
@@ -266,7 +273,7 @@
 .serviceCol {
   background: #161616;
   border-radius: 4px;
-  padding: 24px 20px 28px;
+  padding: 32px 28px 36px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -274,7 +281,7 @@
 
 .serviceTag {
   font-family: 'Roboto Mono', monospace;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.2);
@@ -284,9 +291,10 @@
 .serviceName {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0 0 20px;
+  font-size: clamp(28px, 2.6vw, 36px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 22px;
 }
 
 .serviceList {
@@ -295,15 +303,16 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .serviceItem {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.35);
-  padding-left: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 16px;
   position: relative;
 }
 
@@ -312,16 +321,6 @@
   position: absolute;
   left: 0;
   color: rgba(255, 255, 255, 0.15);
-}
-
-.servicesIntro {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  line-height: 1.6;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.55);
-  margin: 0 0 24px;
-  max-width: 640px;
 }
 
 /* ── Roles / Disciplines ── */

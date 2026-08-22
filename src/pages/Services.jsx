@@ -7,8 +7,8 @@ import { ABOUT_PAGE_QUERY } from '../lib/queries'
 /**
  * The positioning copy, in code on purpose.
  *
- * This is the studio's own argument for itself — mission, who it is for, the
- * category it claims, where it stands on AI. It is not editorial content that
+ * This is the studio's own argument for itself — its mission, who it is for,
+ * and its point of view. It is not editorial content that
  * changes week to week, and it only works as a whole: a half-edited
  * positioning statement is worse than none, and a CMS field invites exactly
  * that. It also renders without a network call, so crawlers and the SSG get
@@ -20,8 +20,10 @@ import { ABOUT_PAGE_QUERY } from '../lib/queries'
  */
 const COPY = {
   eyebrow: '[ Services ]',
-  headline: 'We build your brand, then grow it.',
-  intro: 'For challenger brands ready to accelerate — new, pivoting, or fighting to stand out — we are the embedded creative and marketing team that does both halves.',
+  // The positioning statement verbatim, carrying the whole hero. Long for an
+  // h1, and deliberately so: it is the one place the page states who it is for
+  // and what it does in a single breath.
+  headline: 'For challenger brands — new, pivoting, or fighting to stand out — who are ready to accelerate their business, Super-Conscious is the embedded creative and marketing team that builds your brand and then grows it.',
 
   audienceLabel: "Who We're For",
   audience: [
@@ -30,9 +32,20 @@ const COPY = {
     { name: 'Underdog', body: 'A brand in a crowded category that needs to stand out.' },
   ],
 
-  categoryLabel: 'Your Outsourced Marketing & Creative Department',
-  categoryStatement: 'One embedded team handles brand creation and evolution alongside the growth media and content that follow — so you are not stitching together a branding studio, a media shop, and whoever built your last campaign.',
-  categoryPull: 'We are creatives who also do marketing.',
+
+  outcomesLabel: 'Building & Growing Your Brand',
+  outcomesIntro: "We've worked with challenger brands at every stage — new, pivoting, and fighting for room in a crowded category. One team builds the brand and then runs the engine that grows it, to help you:",
+  outcomes: [
+    { name: 'Define the Brand', body: 'Identity, visual system, and the rules that keep it coherent — from scratch, or rebuilt from what you already have.' },
+    { name: 'Claim a Position', body: 'Stake out ground you can actually own in a category that is already crowded and already loud.' },
+    { name: 'Find the Voice', body: 'Naming, messaging, and a way of speaking that survives contact with every channel you put it on.' },
+    { name: 'Build the Website', body: 'The site the brand lives on, built to carry the story and convert the traffic you send it.' },
+    { name: 'Launch with Momentum', body: 'Put the new brand in front of the people who should see it first, rather than hoping it is found.' },
+    { name: 'Scale Paid Media', body: 'Buying and creative testing that find the spend which returns, and stop the spend that does not.' },
+    { name: 'Feed Every Channel', body: 'Organic and social content at the volume the platforms demand, without the drop in taste that usually comes with it.' },
+    { name: 'Prove What Works', body: 'Measurement and analytics that answer which half of the budget is working, and what to do about the other half.' },
+    { name: 'Move as One Team', body: 'An embedded group in your Slack and your standups — not an agency you brief and then wait on.' },
+  ],
 
   povLabel: 'Our Point of View',
   pov: [
@@ -49,10 +62,6 @@ const COPY = {
       body: 'Our thinking does not sit in a deck. It goes into brand, creative, and paid media — and we revisit it through analytics, testing for bias and confirming the assumptions still hold.',
     },
   ],
-
-  aiLabel: 'On AI',
-  aiTrend: 'AI is collapsing the cost and time of production. Templates, campaigns, and content can be generated in minutes — which makes the upstream thinking the scarce part: positioning, voice, taste, and judgment about what is actually worth making.',
-  aiStance: 'We use AI to enhance our work, not to do our work. Every project begins and ends with human ingenuity and discernment. AI helps us move faster and with more precision; the creative output is always our own.',
 
   mission: 'We exist to level up challenger brands: world-class creative and analytics-driven marketing, at a price that is actually accessible.',
 }
@@ -120,7 +129,6 @@ export default function Services() {
       <section className={styles.header}>
         <p className={styles.headerLabel}>{COPY.eyebrow}</p>
         <h1 className={styles.headline}>{COPY.headline}</h1>
-        <p className={styles.sub}>{COPY.intro}</p>
       </section>
 
       <section className={styles.textSection}>
@@ -152,10 +160,21 @@ export default function Services() {
         </div>
       </section>
 
+      {/* The benefit grid: what the work actually produces, in the client's
+          terms rather than ours. Nine items in a 3x3, each a verb-led outcome
+          and one supporting line — the first four are Build, the next four are
+          Grow, and the last is the operating model. */}
       <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.categoryLabel}</p>
-        <p className={styles.approachStatement}>{COPY.categoryStatement}</p>
-        <p className={styles.pullQuote}>{COPY.categoryPull}</p>
+        <p className={styles.sectionLabel}>{COPY.outcomesLabel}</p>
+        <p className={styles.outcomesIntro}>{COPY.outcomesIntro}</p>
+        <div className={styles.outcomeGrid}>
+          {COPY.outcomes.map(({ name, body }) => (
+            <div key={name} className={styles.outcomeItem}>
+              <p className={styles.outcomeName}>{name}</p>
+              <p className={styles.outcomeBody}>{body}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* The three-up that used to be "Embedded Partnership", carrying the
@@ -173,15 +192,6 @@ export default function Services() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Deliberately typographic, with no cards or grid. Every other section
-          on this page is a grid of boxes; this one is the studio taking a
-          position, and it stands out by not looking like the rest. */}
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.aiLabel}</p>
-        <p className={styles.stanceTrend}>{COPY.aiTrend}</p>
-        <p className={styles.stancePosition}>{COPY.aiStance}</p>
       </section>
 
       {cfg.roles?.length > 0 && (
