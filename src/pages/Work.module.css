@@ -179,69 +179,17 @@
   .listHead { gap: 12px; margin-bottom: 20px; }
 }
 
-/* ── The two actions ──
-   Sits between the page headline and the Build / Grow strips, saying what the
-   page is sorting by before it starts sorting. Set as a definition list
-   because that is what it is: the name in Signifier to match the strips it
-   introduces, the definition in mono to match every other body run on the
-   site. */
 
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin: 4px 0 0;
-  padding: 0;
-  max-width: 78ch;
-}
 
-.action {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.actionName {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(17px, 1.6vw, 22px);
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.85);
-  flex-shrink: 0;
-}
-
-/* An em rule rather than a dash character, so the gap between the name and
-   its definition is the same on both rows regardless of word width. */
-.actionName::after {
-  content: '—';
-  margin-left: 12px;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.actionBody {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  line-height: 1.85;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-}
-
-.actionsNote {
+/* One line under the intro, saying what the two strips below are sorting by.
+   Mono and dim on purpose: the page is a list of work, and this is a caption
+   to it rather than a second headline. */
+.introNote {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
-  line-height: 1.85;
-  color: rgba(255, 255, 255, 0.35);
-  max-width: 78ch;
-  margin: 18px 0 0;
-}
-
-@media (max-width: 720px) {
-  /* Name over definition — side by side leaves the body a sliver on a phone. */
-  .action {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .actionName::after { display: none; }
-  .actionBody { font-size: 11px; }
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.32);
+  max-width: 62ch;
+  margin: 10px 0 0;
 }
