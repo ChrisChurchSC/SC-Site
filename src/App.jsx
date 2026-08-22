@@ -16,6 +16,7 @@ import Home from './pages/Home'
 import Work from './pages/Work'
 import About from './pages/About'
 import AboutUs from './pages/AboutUs'
+import AboutStudio from './pages/AboutStudio'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
@@ -99,6 +100,7 @@ export default function App() {
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/who-we-are" element={<AboutStudio />} />
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
                 <Route path="/contact" element={<Contact />} />
