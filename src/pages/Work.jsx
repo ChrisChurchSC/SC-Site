@@ -1,51 +1,51 @@
-import { Link } from 'react-router-dom'
-
 import styles from './Work.module.css'
 import WorkGrid from '../components/WorkGrid'
 import { useMeta } from '../hooks/useMeta'
-import { useProjects } from '../context/ProjectsContext'
-import { useComingSoon } from '../context/ComingSoonContext'
-import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
 /**
- * The case study index.
+ * The case study index — cards only.
  *
- * This route used to be `<Navigate to="/" replace />` — five lines that sent
- * every visitor to the homepage. It was still submitted to Google at priority
- * 0.9, still returned 200 with a self-canonical, and had zero inbound links,
- * because the only two paths to the case study list were <button> elements
- * that open a drawer. A button is not a crawlable edge and carries no link
- * equity, so fifty-eight case studies had no hub at all.
+ * This route used to be `<Navigate to="/" replace />`, then became a
+ * typographic list of every case study (PR #122), because the only two paths
+ * to the list were <button> elements that open a drawer. A button is not a
+ * crawlable edge and carries no link equity, so fifty-eight case studies had
+ * no hub at all.
  *
- * The list here is the same one the nav drawer renders, from the same context,
- * with the same filters — top-level projects only, minus the deliberately
- * hidden ones. What differs is that these are real anchors at a real URL, so
- * a crawler can follow them and a visitor can link to the page.
+ * The list is gone again. Measured before and after, that costs exactly two
+ * inbound links, and they are worth knowing about:
  *
- * The curated grid above it is the wall that used to be the homepage, moved
- * here when the homepage grew a positioning top half. The two are not
- * redundant and the list is not decoration: the grid is a curated subset —
- * roughly forty blocks, chosen for how they look together — while the list
- * is every non-hidden case study. Replacing the list with the grid would put
- * the uncurated remainder back where they were before PR #122, with no
- * crawlable route in. If the grid ever covers all of them, revisit; until
- * then both stay.
+ *   with the list     23 slugs linked, 6 indexable pages unlinked
+ *   without it        21 slugs linked, 8 indexable pages unlinked
+ *
+ * Six of those eight were already unreachable from here either way — the
+ * Google sub-pages, which are sub-projects reached through /work/google
+ * rather than listed at top level.
+ *
+ * The two this actually orphaned are /work/big-buoy and /work/girlfight.
+ * Both are written, published and indexable, and both have a card in the
+ * grid — but the Sanity homepageGrid documents set `externalUrl` on blocks
+ * 002 and 007, which overrides their slug, so those cards point at
+ * big-buoy.com and girlfightapparel.com instead of at the case studies.
+ * That is an editorial choice made in the Studio, not a bug here, which is
+ * why it is not overridden in code. Clearing those two externalUrl fields
+ * would restore the internal links.
+ *
+ * The other case studies that left the list — Arbitrum, Offchain, OpenText,
+ * Ari's, Concis Labs, Yellow Dog — are all `noindex, follow` placeholders,
+ * or in OpenText's case have no page built at all. Losing a link to a page
+ * Google is told to skip costs nothing.
+ *
+ * If a placeholder is ever written up and made indexable, it needs a card in
+ * the grid or a link from somewhere. The check is: does every non-noindex
+ * /work/<slug> page have an inbound link.
  */
 export default function Work() {
-  const projects = useProjects()
-  const comingSoon = useComingSoon()
-
   useMeta({
     title: 'Selected Work | Super Conscious',
     description:
       'Case studies from Super Conscious. Brand systems, content programs, and digital products for founders and marketing teams.',
     path: '/work',
   })
-
-  // Sub-projects carry n >= 100 and belong to their client's overview page.
-  const caseStudies = projects.all
-    .filter((p) => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
-    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <main className={styles.main}>
@@ -54,47 +54,7 @@ export default function Work() {
         <h1 className={styles.headline}>Case studies</h1>
       </header>
 
-      <section className={styles.gridSection} aria-label="Selected work, visual index">
-        <WorkGrid />
-      </section>
-
-      <div className={styles.listHead}>
-        <p className={styles.listLabel}>All work</p>
-        <span className={styles.listRule} aria-hidden="true" />
-        <p className={styles.listCount}>{String(caseStudies.length).padStart(3, '0')} case studies</p>
-      </div>
-
-      <ol className={styles.list}>
-        {caseStudies.map((p) => {
-          const isSoon = comingSoon.has(p.slug)
-          const inner = (
-            <>
-              <span className={styles.num}>{p.n}</span>
-              <span className={styles.name}>{p.name}</span>
-              <span className={styles.type}>
-                {p.type}
-                {isSoon && <span className={styles.soon}>Soon</span>}
-              </span>
-            </>
-          )
-
-          return (
-            <li key={p.slug} className={styles.row}>
-              {isSoon ? (
-                // Matches the nav and the homepage grid: shown, not linked.
-                // These pages are noindex, so linking them would spend equity
-                // on a page that cannot rank and promise a visitor a case
-                // study that is not written yet.
-                <span className={`${styles.item} ${styles.itemSoon}`}>{inner}</span>
-              ) : (
-                <Link className={styles.item} to={`/work/${p.slug}`}>
-                  {inner}
-                </Link>
-              )}
-            </li>
-          )
-        })}
-      </ol>
+      <WorkGrid />
     </main>
   )
 }
