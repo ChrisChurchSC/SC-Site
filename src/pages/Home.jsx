@@ -15,6 +15,7 @@ import LazyVideo from '../components/LazyVideo'
 import { useToast, Toast } from '../components/Toast'
 import ClientStrip from '../components/ClientStrip'
 import BuildGrowCards from '../components/BuildGrowCards'
+import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
 
 let didLoad = false
 
@@ -259,6 +260,9 @@ export default function Home() {
 
       {/* Build / Grow two-up — the offer, before the work that proves it */}
       <BuildGrowCards />
+
+      {/* Featured case studies — four, with their numbers */}
+      <FeaturedCaseStudies />
 
       {/* Row 2 */}
       <section className={styles.row12}>
