@@ -41,16 +41,6 @@
   text-wrap: balance;
 }
 
-.intro {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(14px, 1.4vw, 18px);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.45);
-  max-width: 52ch;
-  margin: 0;
-}
-
 .list {
   list-style: none;
   margin: 0;
@@ -181,15 +171,3 @@
 
 
 
-/* One line under the intro, saying what the two strips below are sorting by.
-   Mono and dim on purpose: the page is a list of work, and this is a caption
-   to it rather than a second headline. */
-.introNote {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  line-height: 1.8;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.32);
-  max-width: 62ch;
-  margin: 10px 0 0;
-}

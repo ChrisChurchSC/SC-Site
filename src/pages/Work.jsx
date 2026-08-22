@@ -52,10 +52,6 @@ export default function Work() {
       <header className={styles.header}>
         <p className={styles.label}>[ Selected Work ]</p>
         <h1 className={styles.headline}>Case studies</h1>
-        <p className={styles.intro}>Some of the teams we've been a part of.</p>
-        <p className={styles.introNote}>
-          Grouped by what the work was for — building the brand, or growing it.
-        </p>
       </header>
 
       <section className={styles.gridSection} aria-label="Selected work, visual index">
