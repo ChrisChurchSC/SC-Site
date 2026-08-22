@@ -4,19 +4,20 @@ import LazyVideo from './LazyVideo'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 
 /**
- * Featured case studies: four 16:9 cards, each with its stats beneath.
+ * Featured case studies: four full-width 16:9 cards, stacked.
  *
- * The same four measures run across all four entries — win rate, follower
- * growth, SQL growth, time to market — so the section reads as one
- * comparable table rather than four unrelated brag sheets.
+ * Name and stats both live inside the card — name bottom-left, the four
+ * measures along the bottom-right. The same four run across all four
+ * entries (win rate, follower growth, SQL growth, time to market), so the
+ * stack reads as one comparable table rather than four brag sheets.
  *
  * Entries with no `href` render as plain cards rather than links, which is
  * how the wall, the nav and the client strip already treat work that is
  * hidden, unpublished or unwritten. Three of the four are in that state
  * today; see src/data/featuredCaseStudies.js for which and why.
  *
- * Entries with no `media` render the name on an empty field. That is the
- * designed state for missing media, not a broken image.
+ * Entries with no `media` render on an empty field. That is the designed
+ * state for missing media, not a broken image.
  */
 function Card({ name, type, href, media, stats }) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
@@ -27,27 +28,26 @@ function Card({ name, type, href, media, stats }) {
       {media && (isVideo
         ? <LazyVideo src={`${base}${media}`} className={styles.media} />
         : <img src={`${base}${media}`} alt="" loading="lazy" className={styles.media} />)}
-      <span className={styles.frameName}>{name}</span>
+
       {type && <span className={styles.frameType}>{type}</span>}
+
+      <div className={styles.frameFoot}>
+        <span className={styles.frameName}>{name}</span>
+        <dl className={styles.stats}>
+          {stats.map(({ value, label }) => (
+            <div key={label} className={styles.stat}>
+              <dt className={styles.statLabel}>{label}</dt>
+              <dd className={styles.statValue}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </div>
   )
 
-  return (
-    <article className={styles.entry}>
-      {href
-        ? <NavLink to={href} className={styles.frameLink}>{frame}</NavLink>
-        : frame}
-
-      <dl className={styles.stats}>
-        {stats.map(({ value, label }) => (
-          <div key={label} className={styles.stat}>
-            <dt className={styles.statLabel}>{label}</dt>
-            <dd className={styles.statValue}>{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </article>
-  )
+  return href
+    ? <NavLink to={href} className={styles.entryLink}>{frame}</NavLink>
+    : <article className={styles.entry}>{frame}</article>
 }
 
 export default function FeaturedCaseStudies() {
