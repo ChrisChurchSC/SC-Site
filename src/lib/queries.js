@@ -65,9 +65,7 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   rolesIntro,
   roles,
   faqLabel,
-  faqs[] { question, answer },
-  pricingLabel,
-  pricingSub
+  faqs[] { question, answer }
 }`
 
 export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {

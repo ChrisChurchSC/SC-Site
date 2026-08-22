@@ -8,10 +8,11 @@ import { defineType, defineField } from 'sanity'
 //
 // This document no longer holds the page's positioning copy or its offer. The
 // header, the three-up, the clients list, and the Build/Grow services array
-// all moved into code across the August 2026 rewrite — the copy because it is
-// the studio's argument for itself and only works as a whole, the services
-// because What We Do became a rate card carrying prices. Their fields were
-// removed from here rather than left in place:
+// all moved into code across the August 2026 rewrite, and the closing call to
+// action followed them. The copy went because it is the studio's argument for
+// itself and only works as a whole; the prices went because a stale price is
+// worse than a stale sentence. Their fields were removed from here rather
+// than left in place:
 // a field an editor can still fill in, that no longer reaches the page, is a
 // trap. Removing a field from a schema does not delete what is stored, so
 // every old value is still in the dataset if this needs reverting.
@@ -32,8 +33,6 @@ export const aboutPage = defineType({
     defineField({ name: 'rolesLabel', title: 'Roles — Label', type: 'string', initialValue: 'Roles' }),
     defineField({ name: 'rolesIntro', title: 'Roles — Intro', type: 'text', rows: 2 }),
     defineField({ name: 'roles', title: 'Roles', type: 'array', of: [{ type: 'string' }] }),
-    defineField({ name: 'pricingLabel', title: 'Pricing — Label', type: 'string' }),
-    defineField({ name: 'pricingSub', title: 'Pricing — Subtitle', type: 'text', rows: 2 }),
   ],
   preview: { prepare: () => ({ title: 'Services Page' }) },
 })
