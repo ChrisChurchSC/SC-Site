@@ -14,6 +14,7 @@ import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { useToast, Toast } from '../components/Toast'
 import ClientStrip from '../components/ClientStrip'
+import BuildGrowCards from '../components/BuildGrowCards'
 
 let didLoad = false
 
@@ -253,6 +254,9 @@ export default function Home() {
 
       {/* Client strip — sits under the reel, above the wall */}
       <ClientStrip />
+
+      {/* Build / Grow two-up — the offer, before the work that proves it */}
+      <BuildGrowCards />
 
       {/* Row 2 */}
       <section className={styles.row12}>
