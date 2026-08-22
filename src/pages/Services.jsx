@@ -72,7 +72,7 @@ const COPY = {
   // commitment rises, so the tiers are shown with their per-hour figure rather
   // than only the monthly one — that is the whole argument for the bigger tier.
   growLabel: 'Grow — Ongoing Support, Billed Hourly',
-  growIntro: 'With the brand and marketing apparatus in good shape, we can pivot our focus towards optimizations, extensions, additions, and anything else you might need as you engage with your audience. This work is billed quarterly with a one quarter engagement minimum. Media spend is separate, paid directly by you to the platforms. Our media management fee is flat, never a percentage of the buy.',
+  growIntro: 'With the brand and marketing apparatus in good shape, we can pivot our focus towards optimizations, extensions, additions, and anything else you might need as you engage with your audience.',
   tiers: [
     { hours: '25', price: '$4,500', rate: '$180 per hour', body: 'Focus on one pillar to keep things current.' },
     { hours: '50', price: '$8,250', rate: '$165 per hour', body: 'Focus on two pillars to ensure things are running properly across your most important channels.' },
