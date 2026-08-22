@@ -33,7 +33,60 @@
 .main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
 .main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
 .main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
-.main section:nth-of-type(8) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.15s both; }
+
+/* ── Build / Grow band ──
+   The homepage intro card's treatment, reused as a section label: #1a1a1a
+   ground, 4px radius, name left, right-aligned Space Mono definition. It
+   names the half of the offer that follows it, so the two grids under What
+   We Do read as Build and Grow rather than as one long price list. */
+.band {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 18px 22px;
+  margin-bottom: 5px;
+}
+
+/* The second band separates two grids rather than opening the section, so it
+   needs air above it that the first one does not. */
+.packageList + .band {
+  margin-top: 28px;
+}
+
+.bandName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 2.4vw, 34px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.bandText {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: pre-line;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .band {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .bandText { text-align: left; }
+}
 
 /* ── Back button ── */
 .backBtn {
@@ -216,19 +269,24 @@
    how it is read. Collapses to stacked at narrow widths where the two
    columns would each be too tight to scan. */
 .packageList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 5px;
 }
 
+/* 4:5 portrait, matching the Build/Grow two-up on the homepage. aspect-ratio
+   sets the floor rather than the ceiling — 02 carries eleven deliverables and
+   03 a three-line scope note, and a card that clipped them would be worse than
+   one that runs tall, so the ratio yields when the content needs the room. */
 .packageCard {
   background: #161616;
   border-radius: 4px;
-  padding: 32px 30px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: start;
+  padding: 34px 32px;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
 }
 
 .packageMain {
@@ -277,8 +335,8 @@
 .packagePrice {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
+  align-items: flex-start;
+  text-align: left;
   white-space: nowrap;
 }
 
@@ -308,14 +366,10 @@
 }
 
 @media (max-width: 760px) {
-  .packageCard {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .packagePrice {
-    align-items: flex-start;
-    text-align: left;
-  }
+  .packageList { grid-template-columns: 1fr; }
+  /* Let the card find its own height once it is full-width and the type is
+     wrapping less predictably. */
+  .packageCard { aspect-ratio: auto; }
 }
 
 /* ── Grow: the retainer tiers ──

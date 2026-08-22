@@ -33,6 +33,19 @@ const COPY = {
   ],
 
 
+  // The two halves of the offer, each introduced by a band in the homepage
+  // intro card's style: name on the left, definition right-aligned in mono.
+  // The definitions are the client's own Build/Grow lines from the module
+  // spec, the same copy the homepage two-up carries.
+  buildBand: {
+    name: 'Build',
+    text: 'We make your brand and its assets:\nfrom scratch, or refreshed from what you have.',
+  },
+  growBand: {
+    name: 'Grow',
+    text: 'We take that brand to market and run it:\ncampaigns, paid media, content, an embedded team.',
+  },
+
   // What We Do, as the offer is actually sold: four packages, each with its
   // deliverable list and an entry price. This replaced the Build/Grow pair and
   // the nine outcome cards, both of which described the work without ever
@@ -71,7 +84,6 @@ const COPY = {
   // is what it costs to keep it running afterwards. Rates fall as the
   // commitment rises, so the tiers are shown with their per-hour figure rather
   // than only the monthly one — that is the whole argument for the bigger tier.
-  growLabel: 'Grow — Ongoing Support, Billed Hourly',
   growIntro: 'With the brand and marketing apparatus in good shape, we can pivot our focus towards optimizations, extensions, additions, and anything else you might need as you engage with your audience.',
   tiers: [
     { hours: '25', price: '$4,500', rate: '$180 per hour', body: 'Focus on one pillar to keep things current.' },
@@ -174,6 +186,10 @@ export default function Services() {
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>What We Do</p>
+        <div className={styles.band}>
+          <p className={styles.bandName}>{COPY.buildBand.name}</p>
+          <p className={styles.bandText}>{COPY.buildBand.text}</p>
+        </div>
         <div className={styles.packageList}>
           {COPY.packages.map(({ n, name, items, note, price, priceSuffix }) => (
             <div key={n} className={styles.packageCard}>
@@ -194,10 +210,11 @@ export default function Services() {
             </div>
           ))}
         </div>
-      </section>
 
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.growLabel}</p>
+        <div className={styles.band}>
+          <p className={styles.bandName}>{COPY.growBand.name}</p>
+          <p className={styles.bandText}>{COPY.growBand.text}</p>
+        </div>
         <p className={styles.growIntro}>{COPY.growIntro}</p>
         <div className={styles.tierGrid}>
           {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
