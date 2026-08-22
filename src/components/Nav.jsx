@@ -105,14 +105,14 @@ export default function Nav() {
 
         {/* Action cards */}
         <div className="nav-action-cards">
-          <NavLink to="/about" className="nav-card">
+          <NavLink to="/services" className="nav-card">
             <div className="nav-card-text">
-              <p className="nav-card-title">Capabilities</p>
+              <p className="nav-card-title">Services</p>
               <p className="nav-card-sub">Design, motion, engineering.</p>
             </div>
           </NavLink>
 
-          {/* Sits under Capabilities, above Thoughts. /work already existed
+          {/* Sits under Services, above Thoughts. /work already existed
               as the case study index — this is the first card-level route
               into it; until now the only ways in were the "see all" link at
               the bottom of this list and the drawer's button. */}
@@ -213,7 +213,7 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
+          <NavLink to="/services" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
           <NavLink
             to="/work"
             className="nav-mobile-link"

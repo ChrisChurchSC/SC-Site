@@ -134,7 +134,7 @@
    right edge lands at roughly x=1306 on a 1512px viewport — under the rail,
    which is 300px wide and always there. The text list mostly got away with
    that; a case study card half-hidden behind the nav is not a card. So the
-   page now reserves the rail the way /about and /about-us already do: full
+   page now reserves the rail the way /services and /about-us already do: full
    width minus the rail, left-aligned, no centring. */
 
 .gridSection {

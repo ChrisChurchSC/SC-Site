@@ -102,9 +102,9 @@ for (const file of htmlFiles) {
   // one is invisible to users. Counting it would let a page pass this check
   // while showing a reader no heading at all.
   //
-  // The homepage, /about and /work all shipped with zero. /about's was worse
-  // than absent — the markup was there, guarded on a Sanity field that is
-  // null, so it silently rendered nothing.
+  // The homepage, /services and /work all shipped with zero. The services
+  // page's was worse than absent — the markup was there, guarded on a Sanity
+  // field that is null, so it silently rendered nothing.
   const rootStart = html.indexOf('<div id="root">')
   if (rootStart !== -1) {
     const seoStart = html.indexOf('<div id="seo-static"', rootStart)

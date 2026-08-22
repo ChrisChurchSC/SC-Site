@@ -23,9 +23,14 @@ const serviceItem = defineArrayMember({
   preview: { select: { title: 'name', subtitle: 'tag' } },
 })
 
+// The page this drives is Services, at /services. The type name stays
+// `aboutPage` and the doc id stays `about-page`: renaming a Sanity type does
+// not migrate the documents already stored under the old name, so a rename
+// here would strand every field the client has filled in. Only the Studio
+// title changes, since that is the part an editor actually reads.
 export const aboutPage = defineType({
   name: 'aboutPage',
-  title: 'About Page (Capabilities)',
+  title: 'Services Page',
   type: 'document',
   __experimental_actions: ['update', 'publish'],
   fields: [

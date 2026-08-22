@@ -6,7 +6,7 @@
  *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
- *  - static pages: /about, /about-us, /work, /thoughts, /contact
+ *  - static pages: /services, /about-us, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
@@ -151,8 +151,8 @@ let count = 0
 
 const STATIC_PAGES = [
   {
-    segments: ['about'],
-    title: 'Capabilities | Super Conscious',
+    segments: ['services'],
+    title: 'Services | Super Conscious',
     description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
   },
   {
@@ -384,7 +384,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: LP_CATEGORY[slug] || 'Resources', item: `${BASE_URL}/about` },
+      { '@type': 'ListItem', position: 2, name: LP_CATEGORY[slug] || 'Resources', item: `${BASE_URL}/services` },
       { '@type': 'ListItem', position: 3, name: page.heroHeadline, item: url },
     ],
   })
@@ -453,7 +453,7 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-// The floor for pages with no better date: /, /about, /about-us and /lp/*.
+// The floor for pages with no better date: /, /services, /about-us and /lp/*.
 //
 // This was a hand-bumped constant, and the instruction to bump it was missed.
 // On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
@@ -524,7 +524,7 @@ function lastmodFor(loc) {
   if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-  return staticContentDay // /, /about, /about-us, /lp/*
+  return staticContentDay // /, /services, /about-us, /lp/*
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')

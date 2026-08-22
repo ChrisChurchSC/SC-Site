@@ -164,7 +164,7 @@ export const buildRates = [
 export const buildBlendedRate = 146
 
 // Three disciplines that contribute to Build work. Mirrors the
-// /about "What We Do" pattern: tag + name + list of capabilities.
+// /services "What We Do" pattern: tag + name + list of capabilities.
 export const buildDisciplines = [
   {
     tag: 'What it says',

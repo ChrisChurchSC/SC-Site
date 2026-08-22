@@ -1,11 +1,11 @@
-import styles from './About.module.css'
+import styles from './Services.module.css'
 import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
 const FALLBACK = {
-  headerLabel: '[ Capabilities ]',
+  headerLabel: '[ Services ]',
   headline: 'Creative Strategy & Production Partner',
   intro: 'We help founders and marketing teams decide what to make, why it matters, and bring it to life.',
   embeddedPoints: [
@@ -24,7 +24,21 @@ const FALLBACK = {
   clients: ['World Within', 'Oxyle', 'Mindmatter', 'Big Buoy', 'Deep Dive Films', 'Concis Labs', 'Joon', 'Transcend', 'Halfday', 'Overland', 'Pollen', 'Vessel'],
 }
 
-export default function About() {
+/**
+ * The studio's services page, at /services.
+ *
+ * It was called Capabilities and lived at /about until this rename; the old
+ * URL is 301'd in vercel.json (and mapped client-side in App.jsx, since a
+ * Vercel redirect never runs on an in-app navigation).
+ *
+ * The CMS side deliberately did NOT follow. The Sanity type is still
+ * `aboutPage`, doc id `about-page`, queried through ABOUT_PAGE_QUERY —
+ * renaming a type in Sanity does not migrate the documents stored under the
+ * old name, so it would orphan every field the client has edited. The names
+ * differ on purpose: /services is what the visitor sees, aboutPage is where
+ * the content is kept.
+ */
+export default function Services() {
   const { data } = useSanity(ABOUT_PAGE_QUERY)
   const cfg = data ?? FALLBACK
   const faqSchema = cfg.faqs?.length ? {
@@ -39,7 +53,7 @@ export default function About() {
   useMeta({
     title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
     description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
-    path: '/about',
+    path: '/services',
     schema: faqSchema,
   })
 
@@ -52,7 +66,7 @@ export default function About() {
             `cfg = data ?? FALLBACK` only substitutes when Sanity returns
             nothing at all. Sanity returns an aboutPage document whose
             `headline` is null, so the whole FALLBACK was skipped and this
-            guard suppressed the heading — /about shipped with no <h1>.
+            guard suppressed the heading — the page shipped with no <h1>.
 
             Applied to this field alone, on purpose. A blanket merge would
             mean an editor could never remove anything: clearing a field in

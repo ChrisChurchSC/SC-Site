@@ -11,9 +11,8 @@ import styles from './BuildGrowCards.module.css'
  *
  * Copy is the client's own, from the Build/Grow module spec.
  *
- * Both cards currently point at /about, the Capabilities page. Dedicated
- * /build and /grow pages do not exist yet; when they do, change `href` here
- * and nothing else changes.
+ * Both cards currently point at /services. Dedicated /build and /grow pages
+ * do not exist yet; when they do, change `href` here and nothing else changes.
  */
 const CARDS = [
   {
@@ -24,7 +23,7 @@ const CARDS = [
     // says Build and printing it twice in one card reads as a mistake.
     body: 'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app.',
     cta: 'How we build',
-    href: '/about',
+    href: '/services',
   },
   {
     id: 'grow',
@@ -33,7 +32,7 @@ const CARDS = [
     // source line's 'Grow — ' label is dropped, since the headline says it.
     body: 'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
     cta: 'How we grow',
-    href: '/about',
+    href: '/services',
   },
 ]
 

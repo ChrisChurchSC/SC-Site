@@ -1,7 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
-import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
@@ -14,7 +14,7 @@ import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import Work from './pages/Work'
-import About from './pages/About'
+import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
@@ -97,7 +97,13 @@ export default function App() {
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
-                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                {/* Capabilities lived at /about until the Services rename.
+                    vercel.json 301s it, but that only fires on a request to
+                    the server — an in-app <NavLink to="/about"> never leaves
+                    the client, so without this the old path would fall through
+                    to NotFound for anyone still linking it internally. */}
+                <Route path="/about" element={<Navigate to="/services" replace />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
