@@ -207,16 +207,18 @@ export default function Home() {
 
       {/* Intro card */}
       <section className={`${styles.row12} ${styles.introRow}`}>
-        <div className={styles.cornerNote} style={{ gridColumn: '1 / span 12' }}>
+        <div className={`${styles.introCard} ${styles.logoCard}`} style={{ gridColumn: '1 / span 4' }}>
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
+        </div>
+        <div className={`${styles.introCard} ${styles.descriptorCard}`} style={{ gridColumn: '5 / span 8' }}>
           <div className={styles.cornerTextStack}>
             {/* The page headline, and now marked up as one. This text was
                 already here as a <p>, so the homepage shipped with no <h1> at
                 all. The tag change is style-neutral — .cornerText is selected
                 by class, never by element. */}
-            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'For challenger brands — new, pivoting, or fighting to stand out — Super-Conscious is the embedded creative and marketing team that builds your brand and then grows it.'}</h1>
+            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'For challenger brands — new, pivoting, or fighting to stand out —\nSuper-Conscious is the embedded creative and marketing team that builds your brand and then grows it.'}</h1>
             {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>

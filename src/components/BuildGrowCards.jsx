@@ -19,16 +19,19 @@ const CARDS = [
   {
     id: 'build',
     name: 'Build',
-    sub: 'The Foundation',
-    body: 'Great businesses have great brands. Period. More than a memorable tagline or nice colors or cute doodles, your brand identity communicates your value—and values—to your audience.',
+    // v5's Build definition. The source line opens 'Build — we make…' as a
+    // label; that prefix is dropped here because the card's headline already
+    // says Build and printing it twice in one card reads as a mistake.
+    body: 'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app.',
     cta: 'How we build',
     href: '/about',
   },
   {
     id: 'grow',
     name: 'Grow',
-    sub: 'The Journey',
-    body: "Brands are living things—they need to be malleable, responsive to culture, engaged with the world just like the audience you're trying to attract. Content may be king, but it's meaningless if you aren't reaching the right people at the right time.",
+    // v5's Grow definition, matching the Build card. Same treatment: the
+    // source line's 'Grow — ' label is dropped, since the headline says it.
+    body: 'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
     cta: 'How we grow',
     href: '/about',
   },
@@ -37,9 +40,8 @@ const CARDS = [
 export default function BuildGrowCards() {
   return (
     <section className={styles.row}>
-      {CARDS.map(({ id, name, sub, body, cta, href }) => (
+      {CARDS.map(({ id, name, body, cta, href }) => (
         <NavLink key={id} to={href} className={styles.card}>
-          <p className={styles.sub}>{sub}</p>
           <h2 className={styles.name}>{name}</h2>
           <p className={styles.body}>{body}</p>
           <span className={styles.cta}>{cta} →</span>

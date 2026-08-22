@@ -94,6 +94,13 @@
   align-items: start;
 }
 
+/* The rest of the grid tops out its cards; this row matches their heights,
+   so the wordmark card is as tall as the descriptor beside it instead of
+   shrinking to the height of a logo. */
+.introRow {
+  align-items: stretch;
+}
+
 /* ── Labels & type ── */
 .label {
   position: absolute;
@@ -106,16 +113,24 @@
   color: rgba(255, 255, 255, 0.55);
 }
 
-.cornerNote {
+/* The intro row is two cards now — wordmark and descriptor — where it used
+   to be one card holding both. Shared treatment here, the difference is
+   only how each one aligns its contents. */
+.introCard {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
   background: #1a1a1a;
   border-radius: 4px;
   padding: 14px 16px;
   animation: blockIn 0.5s ease both;
+}
+
+.logoCard {
+  justify-content: flex-start;
+}
+
+.descriptorCard {
+  justify-content: flex-start;
 }
 
 .cornerWordmark {
@@ -144,7 +159,7 @@
 .cornerTextStack {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 4px;
 }
 
@@ -153,7 +168,7 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  text-align: right;
+  text-align: left;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.85);
   white-space: pre-line;
@@ -164,7 +179,7 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  text-align: right;
+  text-align: left;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.45);
   white-space: pre-line;
@@ -572,8 +587,8 @@
     grid-column: 1 / -1 !important;
   }
 
-  /* Intro card: takes left column, natural height */
-  .cornerNote {
+  /* Intro cards: take their column, natural height */
+  .introCard {
     grid-column: auto !important;
     aspect-ratio: auto !important;
   }
@@ -584,14 +599,20 @@
     max-width: 160px;
   }
 
-  /* Tagline hidden on mobile — no room in compact card.
-     Visually hidden rather than display:none, because this element is the
-     page <h1>. Google indexes mobile-first, so display:none here would mean
-     the homepage headline is absent from the rendering Google actually reads,
-     and screen readers would lose it too. Clipping takes it out of flow and
-     off screen with the same visual result, while keeping it in the
-     accessibility tree. */
-  .cornerText {
+  /* The descriptor has no room beside a wordmark and a hamburger on a phone,
+     so the whole card goes — but visually, not structurally.
+
+     display:none would be wrong twice over: this card carries the page <h1>,
+     Google indexes mobile-first, so the homepage headline would be absent
+     from the rendering Google actually reads, and screen readers would lose
+     it too. The clip takes it off screen and out of the grid's flow (it is
+     position:absolute, so it no longer occupies a column — which is what
+     leaves the row as wordmark + hamburger) while keeping it in the
+     accessibility tree.
+
+     Applied to the card rather than to .cornerText, because now there is a
+     card around the text that would otherwise sit there as an empty box. */
+  .descriptorCard {
     position: absolute;
     width: 1px;
     height: 1px;
