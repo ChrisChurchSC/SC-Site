@@ -33,8 +33,6 @@ const COPY = {
   ],
 
 
-  outcomesLabel: 'Building & Growing Your Brand',
-  outcomesIntro: "We've worked with challenger brands at every stage — new, pivoting, and fighting for room in a crowded category. One team builds the brand and then runs the engine that grows it, to help you:",
   outcomes: [
     { name: 'Define the Brand', body: 'Identity, visual system, and the rules that keep it coherent — from scratch, or rebuilt from what you already have.' },
     { name: 'Claim a Position', body: 'Stake out ground you can actually own in a category that is already crowded and already loud.' },
@@ -158,15 +156,12 @@ export default function Services() {
             </div>
           ))}
         </div>
-      </section>
 
-      {/* The benefit grid: what the work actually produces, in the client's
-          terms rather than ours. Nine items in a 3x3, each a verb-led outcome
-          and one supporting line — the first four are Build, the next four are
-          Grow, and the last is the operating model. */}
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.outcomesLabel}</p>
-        <p className={styles.outcomesIntro}>{COPY.outcomesIntro}</p>
+        {/* The same two halves as the cards above, in the reader's terms
+            rather than ours: nine verb-led outcomes, the first four Build,
+            the next four Grow, the last the operating model. It sits inside
+            this section rather than beside it because it is not a separate
+            claim — it is what the Build and Grow cards mean in practice. */}
         <div className={styles.outcomeGrid}>
           {COPY.outcomes.map(({ name, body }) => (
             <div key={name} className={styles.outcomeItem}>

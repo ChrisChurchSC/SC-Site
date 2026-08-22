@@ -33,7 +33,6 @@
 .main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
 .main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
 .main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
-.main section:nth-of-type(8) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.15s both; }
 
 /* ── Back button ── */
 .backBtn {
@@ -166,31 +165,23 @@
 }
 
 /* ── Outcomes (3x3 benefit grid) ──
-   No card background, unlike the audience and point-of-view grids. This is a
-   long list and boxing nine of them turns the page into a wall of tiles; the
-   rule above each item does the separating instead. */
-.outcomesIntro {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(16px, 1.6vw, 20px);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0 0 12px;
-  max-width: 720px;
-}
-
+   Cards, on the same 5px gutter and #161616 fill as every other grid on the
+   page, sitting inside the What We Do section under the Build/Grow pair they
+   expand on. */
 .outcomeGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px 40px;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 .outcomeItem {
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px 22px 26px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .outcomeName {
