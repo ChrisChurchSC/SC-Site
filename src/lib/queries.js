@@ -55,14 +55,12 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
 // studio/schemaTypes/aboutPage.js for why the CMS name did not follow the
 // page rename).
 //
-// Only the fields the page still renders. The header, the three-up and the
-// clients list moved into code with the positioning rewrite, so headerLabel,
-// intro, embeddedPoints, servicesIntro, clientsLabel and clients came out of
-// here and out of the schema together. Fetching them would have been harmless
-// and misleading in equal measure: the next person to read this would assume
-// the page uses them.
+// Only the fields the page still renders. Everything else on /services is in
+// code: the positioning rewrite took the header, the three-up and the clients
+// list, and the package rate card then took `services` (the Build/Grow pair)
+// too, since the offer is now stated with its prices. Each of those came out
+// of the schema in the same change rather than being left fetched-but-unused.
 export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
-  services[] { tag, name, deliverables },
   rolesLabel,
   rolesIntro,
   roles,

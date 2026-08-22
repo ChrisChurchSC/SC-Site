@@ -33,16 +33,38 @@ const COPY = {
   ],
 
 
-  outcomes: [
-    { name: 'Define the Brand', body: 'Identity, visual system, and the rules that keep it coherent — from scratch, or rebuilt from what you already have.' },
-    { name: 'Claim a Position', body: 'Stake out ground you can actually own in a category that is already crowded and already loud.' },
-    { name: 'Find the Voice', body: 'Naming, messaging, and a way of speaking that survives contact with every channel you put it on.' },
-    { name: 'Build the Website', body: 'The site the brand lives on, built to carry the story and convert the traffic you send it.' },
-    { name: 'Launch with Momentum', body: 'Put the new brand in front of the people who should see it first, rather than hoping it is found.' },
-    { name: 'Scale Paid Media', body: 'Buying and creative testing that find the spend which returns, and stop the spend that does not.' },
-    { name: 'Feed Every Channel', body: 'Organic and social content at the volume the platforms demand, without the drop in taste that usually comes with it.' },
-    { name: 'Prove What Works', body: 'Measurement and analytics that answer which half of the budget is working, and what to do about the other half.' },
-    { name: 'Move as One Team', body: 'An embedded group in your Slack and your standups — not an agency you brief and then wait on.' },
+  // What We Do, as the offer is actually sold: four packages, each with its
+  // deliverable list and an entry price. This replaced the Build/Grow pair and
+  // the nine outcome cards, both of which described the work without ever
+  // saying what it costs.
+  packages: [
+    {
+      n: '01',
+      name: 'Your Brand',
+      items: ['New Brand', 'Rebrand', 'Brand Refresh', 'Sub-brand', 'Brand Guidelines', 'Product Positioning'],
+      price: '$15,000',
+    },
+    {
+      n: '02',
+      name: 'Your Website & App',
+      items: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
+      price: '$10,000',
+    },
+    {
+      n: '03',
+      name: 'Your Marketing Mix',
+      items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
+      note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work billed separately. All production costs are billed separately.',
+      price: '$15,000',
+    },
+    {
+      n: '04',
+      name: 'Your Channels',
+      items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
+      note: 'Covers initial channel set-up and two months of organic content.',
+      price: '$10,000',
+      priceSuffix: 'per channel',
+    },
   ],
 
   povLabel: 'Our Point of View',
@@ -72,10 +94,6 @@ const COPY = {
  * Sanity does answer, so a value in this object would never render.
  */
 const FALLBACK = {
-  services: [
-    { tag: 'The foundation', name: 'Build', deliverables: ['Brand strategy & identity', 'Voice & messaging', 'Web & interactive'] },
-    { tag: 'The engine', name: 'Grow', deliverables: ['Campaigns & paid media', 'Organic content', 'Measurement & optimization'] },
-  ],
   pricingLabel: "Let's build together.",
   pricingSub: "Drop your email and we'll send over rates and availability.",
 }
@@ -143,30 +161,23 @@ export default function Services() {
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>What We Do</p>
-        <div className={styles.servicesGrid}>
-          {cfg.services?.map(({ tag, name, deliverables }) => (
-            <div key={name} className={styles.serviceCol}>
-              <p className={styles.serviceTag}>{tag}</p>
-              <p className={styles.serviceName}>{name}</p>
-              <ul className={styles.serviceList}>
-                {deliverables?.map(d => (
-                  <li key={d} className={styles.serviceItem}>{d}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* The same two halves as the cards above, in the reader's terms
-            rather than ours: nine verb-led outcomes, the first four Build,
-            the next four Grow, the last the operating model. It sits inside
-            this section rather than beside it because it is not a separate
-            claim — it is what the Build and Grow cards mean in practice. */}
-        <div className={styles.outcomeGrid}>
-          {COPY.outcomes.map(({ name, body }) => (
-            <div key={name} className={styles.outcomeItem}>
-              <p className={styles.outcomeName}>{name}</p>
-              <p className={styles.outcomeBody}>{body}</p>
+        <div className={styles.packageList}>
+          {COPY.packages.map(({ n, name, items, note, price, priceSuffix }) => (
+            <div key={n} className={styles.packageCard}>
+              <div className={styles.packageMain}>
+                <span className={styles.packageN}>{n}</span>
+                <p className={styles.packageName}>{name}</p>
+                {/* Joined rather than a <ul>: these read as one line of scope,
+                    not as a checklist, and the middot is the separator the
+                    client wrote them with. */}
+                <p className={styles.packageItems}>{items.join(' · ')}</p>
+                {note && <p className={styles.packageNote}>{note}</p>}
+              </div>
+              <div className={styles.packagePrice}>
+                <span className={styles.packagePriceLabel}>Starting at</span>
+                <span className={styles.packagePriceValue}>{price}</span>
+                {priceSuffix && <span className={styles.packagePriceSuffix}>{priceSuffix}</span>}
+              </div>
             </div>
           ))}
         </div>

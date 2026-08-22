@@ -164,51 +164,6 @@
   gap: 5px;
 }
 
-/* ── Outcomes (3x3 benefit grid) ──
-   Cards, on the same 5px gutter and #161616 fill as every other grid on the
-   page, sitting inside the What We Do section under the Build/Grow pair they
-   expand on. */
-.outcomeGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  margin-top: 5px;
-}
-
-.outcomeItem {
-  background: #161616;
-  border-radius: 4px;
-  padding: 24px 22px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.outcomeName {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 20px;
-  line-height: 1.15;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
-}
-
-.outcomeBody {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0;
-}
-
-@media (max-width: 900px) {
-  .outcomeGrid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .outcomeGrid { grid-template-columns: 1fr; }
-}
-
 /* ── Embedded ── */
 .embeddedGrid {
   display: grid;
@@ -255,63 +210,111 @@
 }
 
 /* ── Services ── */
-.servicesGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* ── What We Do: the package rate card ──
+   A row, not a tile: scope on the left, price on the right, because that is
+   how it is read. Collapses to stacked at narrow widths where the two
+   columns would each be too tight to scan. */
+.packageList {
+  display: flex;
+  flex-direction: column;
   gap: 5px;
 }
 
-.serviceCol {
+.packageCard {
   background: #161616;
   border-radius: 4px;
-  padding: 32px 28px 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  padding: 32px 30px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: start;
 }
 
-.serviceTag {
+.packageMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.packageN {
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
-  margin: 0 0 10px;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 10px;
 }
 
-.serviceName {
+.packageName {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(28px, 2.6vw, 36px);
+  font-size: clamp(26px, 2.4vw, 34px);
   line-height: 1.1;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 22px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 14px;
 }
 
-.serviceList {
-  list-style: none;
+.packageItems {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
-  padding: 0;
+  max-width: 760px;
+}
+
+.packageNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 16px 0 0;
+  max-width: 640px;
+}
+
+.packagePrice {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: flex-end;
+  text-align: right;
+  white-space: nowrap;
 }
 
-.serviceItem {
+.packagePriceLabel {
   font-family: 'Roboto Mono', monospace;
-  font-size: 13px;
-  line-height: 1.4;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.5);
-  padding-left: 16px;
-  position: relative;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 6px;
 }
 
-.serviceItem::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: rgba(255, 255, 255, 0.15);
+.packagePriceValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.packagePriceSuffix {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 6px;
+}
+
+@media (max-width: 760px) {
+  .packageCard {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .packagePrice {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 /* ── Roles / Disciplines ── */
@@ -648,8 +651,7 @@
     padding: 36px 24px;
   }
 
-  .embeddedGrid,
-  .servicesGrid {
+  .embeddedGrid {
     grid-template-columns: 1fr;
   }
 
