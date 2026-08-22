@@ -167,8 +167,6 @@ export default function WorkGrid() {
     <section className={styles.group} aria-label={`${title} work`}>
       <div className={styles.groupHead}>
         <h2 className={styles.groupTitle}>{title}</h2>
-        <span className={styles.groupRule} aria-hidden="true" />
-        <p className={styles.groupCount}>{String(labels.length).padStart(3, '0')}</p>
       </div>
       <div className={styles.row12}>
         {labels.map(renderBlock)}

@@ -24,35 +24,26 @@
   gap: 20px;
 }
 
+/* Built to match the intro card at the top of the homepage: a full-width
+   #1a1a1a bar with the same 4px radius and the same 14px/16px padding. The
+   word alone — no rule, no count — so the strip reads as a title bar rather
+   than as a table header. */
 .groupHead {
   display: flex;
   align-items: center;
-  gap: 20px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 14px 16px;
+  animation: blockIn 0.5s ease both;
 }
 
 .groupTitle {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(26px, 3vw, 42px);
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
-  flex-shrink: 0;
-}
-
-.groupRule {
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.groupCount {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.32);
-  margin: 0;
-  flex-shrink: 0;
 }
 
 @keyframes blockIn {
@@ -244,6 +235,6 @@
 @media (max-width: 768px) {
   .grid { gap: 52px; }
   .row12 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .groupHead { gap: 12px; }
+  .groupHead { padding: 12px 14px; }
   .blockTitle { font-size: 13px; }
 }
