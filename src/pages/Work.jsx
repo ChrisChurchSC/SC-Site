@@ -52,9 +52,30 @@ export default function Work() {
       <header className={styles.header}>
         <p className={styles.label}>[ Selected Work ]</p>
         <h1 className={styles.headline}>Case studies</h1>
-        <p className={styles.intro}>
-          Brand systems, content programs, and digital products, built with founders and
-          marketing teams.
+        <p className={styles.intro}>Everything we do falls into one of two actions:</p>
+
+        {/* The same two definitions the strips below head up, so the page says
+            what it is sorting by before it starts sorting. */}
+        <dl className={styles.actions}>
+          <div className={styles.action}>
+            <dt className={styles.actionName}>Build</dt>
+            <dd className={styles.actionBody}>
+              we make your brand and its assets, from scratch or refreshed from what you
+              have: brand strategy, identity, voice, messaging, website, app.
+            </dd>
+          </div>
+          <div className={styles.action}>
+            <dt className={styles.actionName}>Grow</dt>
+            <dd className={styles.actionBody}>
+              we take that brand to market and run it: campaigns, paid media, organic
+              content, and an embedded marketing team, measured and optimized every month.
+            </dd>
+          </div>
+        </dl>
+
+        <p className={styles.actionsNote}>
+          Most clients do both, but they're not strictly sequential or mutually exclusive
+          — some come in for Grow first and build into Build later, or run both at once.
         </p>
       </header>
 
