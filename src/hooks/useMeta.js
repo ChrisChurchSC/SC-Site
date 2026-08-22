@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 const DEFAULT_TITLE = 'Super Conscious | Creative Studio'
 const DEFAULT_DESC = 'Super Conscious is a creative strategy and production studio building brands, content, and digital products for founders and marketing teams. Philadelphia, PA.'
-const DEFAULT_OG_DESC = 'The makers and purveyors of high quality brands, content, and digital products'
+const DEFAULT_OG_DESC = 'Your fractional marketing and creative department'
 const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.gif'
 const SITE_BASE = 'https://super-conscious.studio'
 

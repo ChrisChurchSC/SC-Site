@@ -13,6 +13,7 @@ import { BLOCK_MAP } from '../lib/blockMap'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { useToast, Toast } from '../components/Toast'
+import ClientStrip from '../components/ClientStrip'
 
 let didLoad = false
 
@@ -214,7 +215,7 @@ export default function Home() {
                 already here as a <p>, so the homepage shipped with no <h1> at
                 all. The tag change is style-neutral — .cornerText is selected
                 by class, never by element. */}
-            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'The makers and purveyors of\nhigh quality brands, content, and digital products'}</h1>
+            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'Your fractional marketing and creative department'}</h1>
             {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>
@@ -249,6 +250,9 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      {/* Client strip — sits under the reel, above the wall */}
+      <ClientStrip />
 
       {/* Row 2 */}
       <section className={styles.row12}>
