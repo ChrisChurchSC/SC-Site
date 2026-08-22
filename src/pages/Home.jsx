@@ -7,6 +7,7 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
 import ClientStrip from '../components/ClientStrip'
+import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
 
@@ -158,6 +159,9 @@ export default function Home() {
 
       {/* Client strip — sits under the reel, above the wall */}
       <ClientStrip />
+
+      {/* What we are, at size — the hinge into Build and Grow */}
+      <StatementCard />
 
       {/* Build / Grow two-up — the offer, before the work that proves it */}
       <BuildGrowCards />
