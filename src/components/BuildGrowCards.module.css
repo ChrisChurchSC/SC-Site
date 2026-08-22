@@ -5,8 +5,12 @@
 
    No media in these. The reel is above and the wall is below; this is the
    still point between them, and the only place on the page that says the
-   offer in words. Height comes from the content, not a forced aspect ratio,
-   and the grid stretches both cards to match the taller one. */
+   offer in words.
+
+   4:5, the same ratio the wall's case study blocks use, so the two-up and
+   the grid under it are cut from one set of proportions. Content is
+   bottom-aligned for the same reason — that is where a .block puts its
+   title. */
 
 .row {
   display: grid;
@@ -19,10 +23,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: 4 / 5;
   background: #161616;
   border-radius: 4px;
   padding: 40px 36px 34px;
-  min-height: 300px;
   animation: cardIn 0.5s ease both;
   transition: background 0.2s ease,
               transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
@@ -70,16 +75,15 @@
   margin: 16px 0 0;
 }
 
-/* Pinned to the bottom so both cards' links sit on the same line, whichever
-   paragraph runs longer. */
+/* Both stacks end at the same bottom padding, so the links already sit on
+   one line — no margin-top: auto needed once the card is bottom-aligned. */
 .cta {
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
-  margin-top: auto;
-  padding-top: 28px;
+  padding-top: 26px;
   transition: color 0.15s;
 }
 
@@ -90,7 +94,6 @@
 
   .card {
     padding: 28px 22px 24px;
-    min-height: 0;
   }
 
   .cta { padding-top: 22px; }
