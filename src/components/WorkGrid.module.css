@@ -7,7 +7,52 @@
 .grid {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 72px;
+}
+
+/* ── Build / Grow groups ──
+   The wall used to be twenty-one hand-composed rows carrying eighteen
+   different column spans. Splitting the blocks into Build and Grow made
+   those compositions impossible to keep — a row designed around a 5-wide
+   beside two 3-wides cannot survive half its cards moving to another
+   section — so the grid flows now: uniform 4-up 4:5 cards, which was
+   already the wall's most common shape. */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.groupTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 42px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.groupRule {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.groupCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0;
+  flex-shrink: 0;
 }
 
 @keyframes blockIn {
@@ -17,7 +62,7 @@
 
 .row12 {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 5px;
   align-items: start;
 }
@@ -192,19 +237,13 @@
   background: rgba(0, 0, 0, 0.6);
 }
 
+@media (max-width: 1100px) {
+  .row12 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 768px) {
-  .row12 { grid-template-columns: 1fr 1fr; }
-
-  /* Reset all inline grid-column spans to auto-flow 2 cols */
-  .row12 > * {
-    grid-column: auto !important;
-    aspect-ratio: 4 / 5 !important;
-  }
-
-  /* An odd-count last card would sit alone at 50% — span it full width */
-  .row12 > *:last-child:nth-child(odd) {
-    grid-column: 1 / -1 !important;
-  }
-
+  .grid { gap: 52px; }
+  .row12 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .groupHead { gap: 12px; }
   .blockTitle { font-size: 13px; }
 }

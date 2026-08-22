@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 // THE STAT VALUES BELOW ARE PLACEHOLDERS. DO NOT SHIP THEM.
 //
-// The four labels are the client's and are final. Every `value` is "––" on
+// The labels are the client's and are final. Every `value` is "––" on
 // purpose: there is no source for these numbers
 // anywhere in the repo or in Sanity — the `project` schema has no stats
 // field, and caseStudies.js carries qualitative `outcomes`, not metrics.
@@ -28,14 +28,13 @@
 // component renders those as unlinked cards. Matching how the wall, the nav
 // and the client strip already treat unwritten or hidden work.
 
-// The four measures, same set across all four case studies so the section
+// The measures, same set across all four case studies so the section
 // reads as one comparable table rather than four unrelated brag sheets.
 // Labels are final. Values are not — see the warning above.
 const PLACEHOLDER = [
   { value: '––', label: 'Win rate' },
   { value: '––', label: 'Follower growth' },
   { value: '––', label: 'SQL growth' },
-  { value: '––', label: 'Time to market' },
 ]
 
 export const featuredCaseStudies = [
