@@ -23,11 +23,18 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Every section, not the first five. The page had five when this was
+   written; the rewrite took it to nine, and the unlisted ones simply
+   appeared while the ones above them faded in. */
 .main section:nth-of-type(1) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.45s both; }
 .main section:nth-of-type(2) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.55s both; }
 .main section:nth-of-type(3) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.65s both; }
 .main section:nth-of-type(4) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both; }
 .main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
+.main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
+.main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
+.main section:nth-of-type(8) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.15s both; }
+.main section:nth-of-type(9) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.25s both; }
 
 /* ── Back button ── */
 .backBtn {
@@ -117,6 +124,84 @@
   color: rgba(255, 255, 255, 0.55);
   margin: 0;
   max-width: 720px;
+}
+
+/* The one line on the page that is allowed to be a slogan. */
+.pullQuote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 3vw, 40px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 8px 0 0;
+  max-width: 900px;
+}
+
+/* ── Who we're for ──
+   Deliberately NOT the .embeddedPoint treatment. Both are three-ups a screen
+   apart, and giving them the same numbered card turned the page into a
+   template; here the word is the whole point, so it carries the size and the
+   numeral is gone. */
+.audienceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.audienceCard {
+  background: #161616;
+  border-radius: 4px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 150px;
+}
+
+.audienceName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.audienceBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .audienceGrid { grid-template-columns: 1fr; }
+}
+
+/* ── On AI ──
+   No card, no grid. Every other section here is a box in a row; this one is
+   the studio taking a position, and the shift in form is the emphasis. The
+   trend is stated dim, the stance answers it bright. */
+.stanceTrend {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  max-width: 760px;
+}
+
+.stancePosition {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 4px 0 0;
+  max-width: 760px;
 }
 
 /* ── Principles grid (2x2) ── */
@@ -408,6 +493,18 @@
   opacity: 0.035;
   pointer-events: none;
   border-radius: inherit;
+}
+
+.pricingMission {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.3vw, 16px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 4px;
+  max-width: 560px;
+  position: relative;
+  z-index: 1;
 }
 
 .pricingLabel {

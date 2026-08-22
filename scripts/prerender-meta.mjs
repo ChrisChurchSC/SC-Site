@@ -153,7 +153,10 @@ const STATIC_PAGES = [
   {
     segments: ['services'],
     title: 'Services | Super Conscious',
-    description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
+    // Must match the useMeta() call in src/pages/Services.jsx. This one is what
+    // crawlers read; that one retitles the tab after hydration, and the two
+    // said different things until the positioning rewrite aligned them.
+    description: 'An embedded creative and marketing team for challenger brands. We build your brand — identity, voice, web — then grow it with content and paid media.',
   },
   {
     segments: ['about-us'],

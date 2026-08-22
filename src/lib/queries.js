@@ -51,12 +51,17 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
   }
 }`
 
+// Drives /services (the type is still `aboutPage` — see the note in
+// studio/schemaTypes/aboutPage.js for why the CMS name did not follow the
+// page rename).
+//
+// Only the fields the page still renders. The header, the three-up and the
+// clients list moved into code with the positioning rewrite, so headerLabel,
+// intro, embeddedPoints, servicesIntro, clientsLabel and clients came out of
+// here and out of the schema together. Fetching them would have been harmless
+// and misleading in equal measure: the next person to read this would assume
+// the page uses them.
 export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
-  headerLabel,
-  headline,
-  intro,
-  embeddedPoints[] { heading, body },
-  servicesIntro,
   services[] { tag, name, deliverables },
   rolesLabel,
   rolesIntro,
@@ -64,9 +69,7 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][
   faqLabel,
   faqs[] { question, answer },
   pricingLabel,
-  pricingSub,
-  clientsLabel,
-  clients
+  pricingSub
 }`
 
 export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {
