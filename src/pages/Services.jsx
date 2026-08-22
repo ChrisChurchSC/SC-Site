@@ -67,6 +67,19 @@ const COPY = {
     },
   ],
 
+  // The other half of the money: the four packages above are the build, this
+  // is what it costs to keep it running afterwards. Rates fall as the
+  // commitment rises, so the tiers are shown with their per-hour figure rather
+  // than only the monthly one — that is the whole argument for the bigger tier.
+  growLabel: 'Grow — Ongoing Support, Billed Hourly',
+  growIntro: 'With the brand and marketing apparatus in good shape, we can pivot our focus towards optimizations, extensions, additions, and anything else you might need as you engage with your audience. This work is billed quarterly with a one quarter engagement minimum. Media spend is separate, paid directly by you to the platforms. Our media management fee is flat, never a percentage of the buy.',
+  tiers: [
+    { hours: '25', price: '$4,500', rate: '$180 per hour', body: 'Focus on one pillar to keep things current.' },
+    { hours: '50', price: '$8,250', rate: '$165 per hour', body: 'Focus on two pillars to ensure things are running properly across your most important channels.' },
+    { hours: '100', price: '$15,000', rate: '$150 per hour', body: 'Focus on three pillars, every month, for a comprehensive view of performance and quick optimizations.', flag: 'Most common' },
+    { hours: '150', price: '$21,000', rate: '$140 per hour', body: 'Focus on all four pillars, the most robust support for optimal brand oversight, maintenance, and seamless evolution.' },
+  ],
+
   povLabel: 'Our Point of View',
   pov: [
     {
@@ -178,6 +191,27 @@ export default function Services() {
                 <span className={styles.packagePriceValue}>{price}</span>
                 {priceSuffix && <span className={styles.packagePriceSuffix}>{priceSuffix}</span>}
               </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.textSection}>
+        <p className={styles.sectionLabel}>{COPY.growLabel}</p>
+        <p className={styles.growIntro}>{COPY.growIntro}</p>
+        <div className={styles.tierGrid}>
+          {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
+            <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
+              {/* The badge slot is always rendered, empty or not, so all four
+                  cards align on the number rather than the flagged one sitting
+                  a line lower than its neighbours. CSS reserves the height, so
+                  the empty ones stay out of the accessibility tree. */}
+              <span className={styles.tierFlag} aria-hidden={!flag}>{flag}</span>
+              <p className={styles.tierHours}>{hours}</p>
+              <p className={styles.tierUnit}>hours / month</p>
+              <p className={styles.tierPrice}>{price}</p>
+              <p className={styles.tierRate}>{rate}</p>
+              <p className={styles.tierBody}>{body}</p>
             </div>
           ))}
         </div>
