@@ -119,7 +119,7 @@ export default function Home() {
                 already here as a <p>, so the homepage shipped with no <h1> at
                 all. The tag change is style-neutral — .cornerText is selected
                 by class, never by element. */}
-            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'For challenger brands —\nnew, pivoting, or fighting to stand out.'}</h1>
+            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'For challenger brands:\nnew, pivoting, or fighting to stand out.'}</h1>
             {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>
