@@ -138,19 +138,19 @@ const COPY = {
   // rather than what the studio believes, which is what this section is for —
   // and they put 'embedded' back on a page that had lost the word entirely.
   howLabel: 'What You Get',
-  howLead: 'One team, on the inside, for both halves of the work.',
+  howLead: 'A whole department, at the fraction of it you actually use.',
   how: [
     {
-      heading: 'Build and Grow, one embedded team.',
-      body: 'Most of the field only does one half: identity and web, or campaigns and content. We do both, with the same people who already know the brand.',
+      heading: 'Twelve disciplines, one bench.',
+      body: 'Creative direction, design, writing, film, motion, engineering, media and search — the full list is below. An in-house team takes years to assemble that, and you would carry all of it every month whether the work called for it or not.',
     },
     {
-      heading: 'Digital-first, by priority not by rule.',
-      body: 'If it is digital, it is core to what we do. Print, events, and partnerships are available as needed; the door is not closed.',
+      heading: 'The same people, brand through market.',
+      body: 'Whoever built the identity runs the campaigns against it. No re-briefing an agency on your own brand, and no handoff between the studio that made the thing and the shop that spends behind it.',
     },
     {
-      heading: 'Strategy that gets executed.',
-      body: 'Our thinking does not sit in a deck. It goes into brand, creative, and paid media — and we revisit it through analytics, testing for bias and confirming the assumptions still hold.',
+      heading: 'A department you do not have to hire.',
+      body: 'Add a discipline for a launch and drop it after. You are buying hours across the four pillars, not twelve salaries and the hope that the work arrives in the shape you hired for.',
     },
   ],
 
