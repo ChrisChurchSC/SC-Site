@@ -30,6 +30,17 @@ import { sanityImg } from '../lib/sanityImg'
  */
 const isPlaceholder = (s) => !s || /\[|\]/.test(s)
 
+/** "Stuart Friedman, Founder, Big Buoy" -> { name, role } */
+function splitAttribution(attribution) {
+  if (!attribution) return null
+  const i = attribution.indexOf(',')
+  if (i === -1) return { name: attribution.trim(), role: null }
+  return {
+    name: attribution.slice(0, i).trim(),
+    role: attribution.slice(i + 1).trim() || null,
+  }
+}
+
 export default function TestimonialStrip() {
   const { data } = useSanity(TESTIMONIALS_QUERY)
 
@@ -37,7 +48,7 @@ export default function TestimonialStrip() {
     .filter(t => t?.quote)
     .map(t => ({
       quote: t.quote,
-      attribution: isPlaceholder(t.attribution) ? null : t.attribution,
+      person: isPlaceholder(t.attribution) ? null : splitAttribution(t.attribution),
       avatar: t.avatar || null,
     }))
 
@@ -54,7 +65,12 @@ export default function TestimonialStrip() {
               /* Not initials: without a real name there is nothing to take
                  them from, and a made-up monogram would read as a person. */
               : <span className={styles.avatarEmpty} aria-hidden="true" />}
-            {t.attribution && <span className={styles.attribution}>{t.attribution}</span>}
+            {t.person && (
+              <span className={styles.person}>
+                <span className={styles.personName}>{t.person.name}</span>
+                {t.person.role && <span className={styles.personRole}>{t.person.role}</span>}
+              </span>
+            )}
           </figcaption>
         </figure>
       ))}
