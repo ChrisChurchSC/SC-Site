@@ -145,7 +145,7 @@ const COPY = {
       body: 'Creative direction, design, writing, film, motion, engineering, media and search — the full list is below. An in-house team takes years to assemble that, and you would carry all of it every month whether the work called for it or not.',
     },
     {
-      heading: 'The same people, brand through market.',
+      heading: 'The same team, from brand to market.',
       body: 'Whoever built the identity runs the campaigns against it. No re-briefing an agency on your own brand, and no handoff between the studio that made the thing and the shop that spends behind it.',
     },
     {
