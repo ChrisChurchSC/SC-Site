@@ -88,8 +88,8 @@ const COPY = {
       name: 'Your Channels',
       items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
       value: 'Nobody is searching for you by name yet, so you go to them — at the volume the platforms demand.',
-      price: '$10,000',
-      priceSuffix: 'per channel',
+      price: '$6,000',
+      priceSuffix: 'per channel, including two months of content',
     },
   ],
 
@@ -388,9 +388,16 @@ export default function Services() {
             them first made the reader work through the fine print to reach
             the prices. */}
         <div className={styles.growFootnotes}>
+          {/* Two halves, and the second is the one that matters. The first
+              gives the hours a size; on its own it invites the reader to price
+              us against a single hire, which is the wrong comparison and the
+              unflattering one. The second says what the hours actually buy —
+              a department drawing on whichever disciplines the work needs,
+              not one person's week. */}
           <p className={styles.growBenchmark}>
-            For scale: one full-time employee works about{' '}
-            <span className={styles.growBenchmarkNum}>{active.fte} hours {active.fteUnit}</span>.
+            For scale: one full-time employee works about {active.fte} hours{' '}
+            {active.fteUnit}. Yours are spread across a full marketing and
+            creative department, not a single employee.
           </p>
           <p className={styles.growTerms}>{COPY.growTerms}</p>
         </div>

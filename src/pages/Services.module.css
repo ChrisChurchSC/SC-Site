@@ -62,28 +62,17 @@
   max-width: 900px;
 }
 
-/* Set above the terms and brighter than them, because it is not a condition
-   on the prices — it is the ruler the hours above are measured against, and
-   it changes with the toggle so it is always in the unit being shown. */
-.growBenchmark {
+/* Both footnotes, one treatment. The first is the ruler the hours above are
+   measured against and follows the toggle; the second is the conditions the
+   prices are sold under. Different jobs, but the same standing on the page —
+   notes on the numbers, meant to be read rather than skipped. */
+.growBenchmark,
+.growTerms {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   line-height: 1.7;
   letter-spacing: 0.03em;
   color: rgba(255, 255, 255, 0.72);
-  margin: 0;
-}
-
-.growBenchmarkNum {
-  color: #fff;
-}
-
-.growTerms {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  line-height: 1.8;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.62);
   margin: 0;
 }
 
@@ -421,10 +410,12 @@
 .packagePriceSuffix {
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
+  line-height: 1.5;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.35);
   margin-top: 6px;
-  min-height: 11px;
+  min-height: 27px;
+  white-space: normal;
 }
 
 @media (max-width: 760px) {
