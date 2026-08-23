@@ -58,8 +58,8 @@ const COPY = {
   growBand: { name: 'Grow' },
 
   buildIntro: [
-    "Typically one-time engagements: you build a brand, you build a website. But brands aren't static. When you launch a new offering and your positioning suddenly feels a half-step behind, we're here for the refresh.",
-    "Almost everything in branding and marketing falls into one of four pillars — the four below. Don't see what you need? Ask — our capabilities run deep, and if we can't help, we probably know who can.",
+    "One-time engagements, mostly. You build a brand. You build a website. But nothing stays built — launch a new offering and the positioning you paid for last year is suddenly half a step behind. We are here for that too.",
+    "Almost everything in branding and marketing lands in one of four pillars — the four below. Don't see yours? Ask. We do more than fits on a page, and when we can't help we will tell you who can.",
   ],
 
   packages: [
@@ -74,13 +74,14 @@ const COPY = {
       n: '02',
       name: 'Your Website & App',
       items: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
-      value: 'Design and engineering under one roof, so nothing gets lost in the handoff.',
+      value: 'Designed and built by the same people. There is no handoff to get lost in.',
       price: '$10,000',
     },
     {
       n: '03',
       name: 'Your Marketing Mix',
       items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Film & Video Production', 'Motion Graphics', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
+      value: 'Where the money goes, and the numbers that prove it went somewhere.',
       note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work are billed separately. All production costs are billed separately.',
       price: '$15,000',
     },
@@ -88,13 +89,14 @@ const COPY = {
       n: '04',
       name: 'Your Channels',
       items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
+      value: 'Showing up where they already are, at the volume the platforms demand.',
       note: 'Covers initial channel set-up and two months of organic content, including short-form social video and motion assets.',
       price: '$10,000',
       priceSuffix: 'per channel',
     },
   ],
 
-  growIntro: 'Ongoing support, billed hourly. With the brand and marketing apparatus in good shape, we pivot toward optimizations, extensions, additions, and whatever else you need as you engage your audience. The tiers below are priced by how many of those four pillars you want us keeping current.',
+  growIntro: 'Ongoing support, billed hourly. The brand exists and the machine runs. From here it is tuning, extending and adding — whatever the month asks for. The tiers below are priced by how many of those four pillars you want us keeping current.',
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
   // NOTE ON THE FIGURES: the source table labelled this column "Quarterly
@@ -106,9 +108,9 @@ const COPY = {
   // quarterly" is stated in the terms above the grid.
   tiers: [
     { hours: '25', price: '$4,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
-    { hours: '50', price: '$8,250', rate: '$165 / hour', body: 'Two pillars, running properly across your most important channels.' },
-    { hours: '100', price: '$15,000', rate: '$150 / hour', body: 'Three pillars, every month — comprehensive performance view and quick optimizations.', flag: 'Most common' },
-    { hours: '150', price: '$21,000', rate: '$140 / hour', body: 'All four pillars. The most robust support for brand oversight, maintenance, and seamless evolution.' },
+    { hours: '50', price: '$8,250', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
+    { hours: '100', price: '$15,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
+    { hours: '150', price: '$21,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
   ],
 
   // Lifted out of Sanity so Media and Search could be added — there is no
