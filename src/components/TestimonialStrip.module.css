@@ -120,8 +120,8 @@
 .personName {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: 12px;
+  line-height: 1.25;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -145,11 +145,10 @@
   .item { width: 300px; padding: 22px 20px; }
 }
 
-/* Dev-only placeholder attribution. Italic and dimmed so it never reads as a
-   real byline while it is on screen — and it is only ever on screen locally,
-   since the component drops it from every build. */
+/* Dev-only placeholder attribution, dimmed. The brackets already say what it
+   is, and it is only ever on screen locally — the component drops it from
+   every build. */
 .personPlaceholder .personName,
 .personPlaceholder .personRole {
-  font-style: italic;
   color: rgba(255, 255, 255, 0.3);
 }
