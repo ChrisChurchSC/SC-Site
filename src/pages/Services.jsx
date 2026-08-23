@@ -58,9 +58,9 @@ const COPY = {
   growBand: { name: 'Grow' },
 
   buildIntro: [
-    "One-time engagements, mostly. You build a brand. You build a website. But nothing stays built — launch a new offering and the positioning you paid for last year is suddenly half a step behind. We are here for that too.",
-    'That matters more when you are the challenger. An incumbent survives a scattered brand because everyone already knows who they are. You are still being introduced, so every asset has to do two jobs at once: sell the thing, and establish who is selling it.',
-    "Almost everything in branding and marketing lands in one of four pillars — the four below. Don't see yours? Ask. We do more than fits on a page, and when we can't help we will tell you who can.",
+    'Build is project work: one engagement, one outcome. Almost everything in branding and marketing falls into one of four pillars — the four below.',
+    'It matters more for a challenger than for an incumbent. A market leader survives a scattered brand, because everyone already knows the name. You are still being introduced, so every asset does two jobs at once: sells the thing, and establishes who is selling it.',
+    "Brands don't stay built, either. Launch a new offering and the positioning you paid for last year is half a step behind, so the refresh is part of this too. Don't see what you need? Ask. If we can't help, we will tell you who can.",
   ],
 
   packages: [
