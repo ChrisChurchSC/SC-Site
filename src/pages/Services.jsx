@@ -25,7 +25,7 @@ const REEL_FALLBACK = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407c
 
 const COPY = {
   eyebrow: '[ Services ]',
-  headline: "For brands that don't have incumbent money — and don't need it.",
+  headline: 'For challenger brands — new, pivoting, or fighting to stand out — who are ready to accelerate their business, Super-Conscious is the embedded creative and marketing team that builds your brand and then grows it.',
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
     'We build challenger brands that use that. Then we take them to market.',
