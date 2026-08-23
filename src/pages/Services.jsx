@@ -175,6 +175,10 @@ const COPY = {
       body: 'Whoever built the identity runs the campaigns against it. No re-briefing an agency on your own brand, and no handoff between the studio that made the thing and the shop that spends behind it.',
     },
     {
+      heading: 'One team reads the work and the numbers.',
+      body: 'Creative judgment and marketing analytics in the same people. Nobody translates between the studio that made it and whoever is measuring whether it worked, because they are the same room.',
+    },
+    {
       heading: 'A department you do not have to hire.',
       body: 'Add a discipline for a launch and drop it after. You are buying hours across the four pillars, not twelve salaries and the hope that the work arrives in the shape you hired for.',
     },
