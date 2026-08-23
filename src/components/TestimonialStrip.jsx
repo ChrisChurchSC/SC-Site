@@ -19,12 +19,17 @@ import { sanityImg } from '../lib/sanityImg'
  * Name], Founder, [Company]" — and none has an avatar, because the field
  * did not exist until this change added it.
  *
- * So `usable` drops any attribution still in brackets rather than printing
- * them on the homepage, and the avatar slot renders a neutral mark when
- * there is no image. Nothing here invents a name or a face: an unattributed
- * quote is weak social proof, but a fabricated attribution is not proof at
- * all. Fill in testimonialAttribution and testimonialAvatar in the Studio
- * and both appear with no code change.
+ * So a bracketed attribution is dropped from any BUILD rather than printed
+ * on the homepage, and the avatar slot renders a neutral mark when there is
+ * no image. Nothing here invents a name or a face: an unattributed quote is
+ * weak social proof, but a fabricated attribution is not proof at all.
+ *
+ * On the dev server those placeholders DO render, dimmed and italic, so the
+ * byline can be reviewed with something in it. import.meta.env.DEV is false
+ * in every build, so this cannot reach production by being forgotten.
+ *
+ * Fill in testimonialAttribution and testimonialAvatar in the Studio and
+ * both appear for real, with no code change.
  *
  * Renders nothing if there are no quotes, rather than an empty band.
  */
@@ -48,7 +53,14 @@ export default function TestimonialStrip() {
     .filter(t => t?.quote)
     .map(t => ({
       quote: t.quote,
-      person: isPlaceholder(t.attribution) ? null : splitAttribution(t.attribution),
+      person: isPlaceholder(t.attribution)
+        // Placeholders render on the dev server only, so the byline can be
+        // reviewed with something in it. import.meta.env.DEV is false in
+        // every build, so a deploy shows the quote alone rather than
+        // "[Founder Name]" presented as a real client.
+        ? (import.meta.env.DEV ? splitAttribution(t.attribution) : null)
+        : splitAttribution(t.attribution),
+      placeholder: isPlaceholder(t.attribution),
       avatar: t.avatar || null,
     }))
 
@@ -66,7 +78,7 @@ export default function TestimonialStrip() {
                  them from, and a made-up monogram would read as a person. */
               : <span className={styles.avatarEmpty} aria-hidden="true" />}
             {t.person && (
-              <span className={styles.person}>
+              <span className={`${styles.person}${t.placeholder ? ' ' + styles.personPlaceholder : ''}`}>
                 <span className={styles.personName}>{t.person.name}</span>
                 {t.person.role && <span className={styles.personRole}>{t.person.role}</span>}
               </span>

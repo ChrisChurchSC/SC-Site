@@ -144,3 +144,12 @@
 @media (max-width: 720px) {
   .item { width: 300px; padding: 22px 20px; }
 }
+
+/* Dev-only placeholder attribution. Italic and dimmed so it never reads as a
+   real byline while it is on screen — and it is only ever on screen locally,
+   since the component drops it from every build. */
+.personPlaceholder .personName,
+.personPlaceholder .personRole {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.3);
+}
