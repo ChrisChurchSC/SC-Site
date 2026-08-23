@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from './WorkGrid.module.css'
 import { useComingSoon } from '../context/ComingSoonContext'
@@ -5,6 +6,7 @@ import { useSanity } from '../hooks/useSanity'
 import { HOMEPAGE_GRID_QUERY } from '../lib/queries'
 import { useProjects } from '../context/ProjectsContext'
 import { BLOCK_MAP } from '../lib/blockMap'
+import { groupFor } from '../lib/workGroup'
 import { sanityImg } from '../lib/sanityImg'
 import LazyVideo from './LazyVideo'
 import { useToast, Toast } from './Toast'
@@ -33,6 +35,11 @@ export default function WorkGrid() {
   const comingSoon = useComingSoon()
   const projects = useProjects()
   const { toast, showToast } = useToast()
+
+  // 'all' | 'build' | 'grow'. Filtering, not grouping: the blocks keep their
+  // curated order and the non-matching ones are hidden, so the wall still
+  // reads as one composition rather than being re-sorted into two piles.
+  const [filter, setFilter] = useState('all')
 
   // Build a lookup map: label -> block data
   const grid = {}
@@ -78,6 +85,12 @@ export default function WorkGrid() {
     return null
   }
 
+  const groupClass = (label) => {
+    const slug = BLOCK_MAP[label]?.slug ?? grid[label]?.projectSlug
+    const type = slug ? projects.bySlug(slug)?.type : undefined
+    return groupFor(type, slug) === 'grow' ? styles.groupGrow : styles.groupBuild
+  }
+
   // Wrap block in NavLink/anchor — BLOCK_MAP wins; Sanity externalUrl still overrides
   const blockLink = (label, className, style, children) => {
     const b = grid[label]
@@ -88,7 +101,7 @@ export default function WorkGrid() {
     const isComingSoon = slug && comingSoon.has(slug) && !externalUrl
     const csBadge = isComingSoon ? <span key="cs" className={styles.comingSoonBadge}>Coming Soon</span> : null
     const inner = <>{children}{badge}{csBadge}</>
-    const finalClass = `${className}${isComingSoon ? ' ' + styles.blockComingSoon : ''}${externalUrl ? ' ' + styles.blockExternal : ''}`
+    const finalClass = `${className} ${groupClass(label)}${isComingSoon ? ' ' + styles.blockComingSoon : ''}${externalUrl ? ' ' + styles.blockExternal : ''}`
     if (externalUrl) {
       const isInternal = externalUrl.startsWith('/')
       if (isInternal) return <NavLink to={externalUrl} className={finalClass} style={style}>{inner}</NavLink>
@@ -126,8 +139,29 @@ export default function WorkGrid() {
     return slug ? (projects.bySlug(slug)?.subCount ?? 0) : 0
   }
 
+  const FILTERS = [
+    ['all', 'All work'],
+    ['build', 'Build'],
+    ['grow', 'Grow'],
+  ]
+
   return (
-    <div className={styles.grid}>
+    <>
+      <div className={styles.filters} role="group" aria-label="Filter case studies">
+        {FILTERS.map(([key, text]) => (
+          <button
+            key={key}
+            type="button"
+            className={`${styles.filterBtn}${filter === key ? ' ' + styles.filterBtnOn : ''}`}
+            aria-pressed={filter === key}
+            onClick={() => setFilter(key)}
+          >
+            {text}
+          </button>
+        ))}
+      </div>
+
+    <div className={styles.grid} data-filter={filter}>
       {/* Row 2 */}
       <section className={styles.row12}>
         {blockLink('002', `${styles.block} ${styles.r45} ${styles.blockLink} ${styles.wwCard}`, { gridColumn: '1 / span 3' }, <>
@@ -496,5 +530,6 @@ export default function WorkGrid() {
 
       <Toast toast={toast} />
     </div>
+    </>
   )
 }
