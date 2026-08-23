@@ -5,9 +5,10 @@
    itself and has to sit inside one. */
 
 .grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 5px;
+  align-items: start;
 }
 
 @keyframes blockIn {
@@ -16,10 +17,11 @@
 }
 
 .row12 {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 5px;
-  align-items: start;
+  display: contents;
+}
+
+.row12 > * {
+  grid-column: auto !important;
 }
 
 .block {
@@ -82,10 +84,19 @@
   border-radius: 0 0 4px 4px;
 }
 
-.r169 { aspect-ratio: 16 / 9; }
-.r916 { aspect-ratio: 9 / 16; }
-.r45  { aspect-ratio: 4 / 5; }
-.r11  { aspect-ratio: 1 / 1; }
+/* Every block in the grid is 4:5.
+
+   The four class names are the ratios they used to carry. They are left in
+   place rather than collapsed to one because the grid applies them from data
+   in dozens of call sites, and renaming there would be churn for no change in
+   behaviour — but nothing distinguishes them any more.
+
+   Note the 768px breakpoint below already forced 4:5 on every block, so this
+   only changes the desktop grid; mobile has always looked like this. */
+.r169,
+.r916,
+.r45,
+.r11 { aspect-ratio: 4 / 5; }
 
 .label {
   position: absolute;
@@ -193,18 +204,7 @@
 }
 
 @media (max-width: 768px) {
-  .row12 { grid-template-columns: 1fr 1fr; }
-
-  /* Reset all inline grid-column spans to auto-flow 2 cols */
-  .row12 > * {
-    grid-column: auto !important;
-    aspect-ratio: 4 / 5 !important;
-  }
-
-  /* An odd-count last card would sit alone at 50% — span it full width */
-  .row12 > *:last-child:nth-child(odd) {
-    grid-column: 1 / -1 !important;
-  }
+  .grid { grid-template-columns: 1fr 1fr; }
 
   .blockTitle { font-size: 13px; }
 }
