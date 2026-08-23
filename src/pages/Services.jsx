@@ -180,7 +180,7 @@ const COPY = {
     },
     {
       heading: 'A department you do not have to hire.',
-      body: 'Add a discipline for a launch and drop it after. You are buying hours across the four pillars, not twelve salaries and the hope that the work arrives in the shape you hired for.',
+      body: 'Add a discipline for a launch and drop it after. You are buying hours across the full team, not twelve salaries and the hope that the work arrives in the shape you hired for.',
     },
   ],
 
@@ -240,9 +240,9 @@ export default function Services() {
   const [period, setPeriod] = useState('month')
 
   const PERIODS = [
-    { key: 'month', label: 'Per month', unit: 'hours / month', per: 'per month' },
-    { key: 'quarter', label: 'Per quarter', unit: 'hours / quarter', per: 'per quarter' },
-    { key: 'year', label: 'Per year', unit: 'hours / year', per: 'per year' },
+    { key: 'month', label: 'Per month', unit: 'hours / month', per: 'per month', fte: '173', fteUnit: 'a month' },
+    { key: 'quarter', label: 'Per quarter', unit: 'hours / quarter', per: 'per quarter', fte: '520', fteUnit: 'a quarter' },
+    { key: 'year', label: 'Per year', unit: 'hours / year', per: 'per year', fte: '2,080', fteUnit: 'a year' },
   ]
   const active = PERIODS.find(x => x.key === period)
   const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
@@ -388,6 +388,10 @@ export default function Services() {
             them first made the reader work through the fine print to reach
             the prices. */}
         <div className={styles.growFootnotes}>
+          <p className={styles.growBenchmark}>
+            For scale: one full-time employee works about{' '}
+            <span className={styles.growBenchmarkNum}>{active.fte} hours {active.fteUnit}</span>.
+          </p>
           <p className={styles.growTerms}>{COPY.growTerms}</p>
         </div>
       </section>
