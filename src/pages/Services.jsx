@@ -57,7 +57,7 @@ const COPY = {
   growBand: { name: 'Grow' },
 
   buildIntro: [
-    'Build is project work: one engagement, one outcome. Almost everything in branding and marketing falls into one of four pillars — the four below.',
+    'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app. Almost everything in branding and marketing falls into one of four pillars — the four below.',
     'It matters more for a challenger. A market leader survives a scattered brand; everyone already knows the name. You are still being introduced, so every asset sells the thing and establishes who is selling it.',
     "Most brands assume that costs more than it does. Nothing stays built either, so refreshes are part of this — and if you don't see what you need, ask.",
   ],
@@ -95,7 +95,8 @@ const COPY = {
   ],
 
   growIntro: [
-    'Ongoing support, billed hourly — and the half we would point at first. Grow is a fractional creative team: the people who built the brand stay on it, for a fraction of hiring them. Most studios hand over the files and disappear.',
+    'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
+    'Ongoing support, billed hourly — and the half we would point at first. A fractional creative team: the people who built the brand stay on it, for a fraction of hiring them. Most studios hand over the files and disappear.',
     'Media management at this level costs less than you would guess. The tiers below are priced by how many of those four pillars you want us keeping current.',
   ],
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
