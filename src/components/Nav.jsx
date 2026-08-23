@@ -112,10 +112,11 @@ export default function Nav() {
             </div>
           </NavLink>
 
-          {/* Sits under Services, above Thoughts. /work already existed
-              as the case study index — this is the first card-level route
-              into it; until now the only ways in were the "see all" link at
-              the bottom of this list and the drawer's button. */}
+          {/* Sits under Services, above Thoughts. This is now the only
+              crawlable route to /work from the desktop nav — the "see all"
+              link that used to close the case study list is gone, and the
+              drawer opens from a <button>, which is not an edge a crawler
+              can follow. */}
           <NavLink to="/work" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Work</p>
@@ -179,19 +180,6 @@ export default function Nav() {
               </li>
             )
           })}
-          <li className="nav-cs-item nav-cs-all">
-            {/* A real link, not a button. This was the only path to the case
-                study list on desktop, and a <button> is not a crawlable edge:
-                /work had zero inbound links while sitting in the sitemap at
-                priority 0.9. The click still opens the drawer, so the
-                behaviour visitors know is unchanged — but the href is real,
-                so a crawler can follow it and cmd-click opens the page. */}
-            <NavLink
-              to="/work"
-              className="nav-cs-see-all"
-              onClick={(e) => { e.preventDefault(); setWorkOpen(true) }}
-            >See all case studies →</NavLink>
-          </li>
         </ul>
 
         {/* Socials */}
