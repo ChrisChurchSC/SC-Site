@@ -23,20 +23,10 @@ const COPY = {
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
     'We build brands that use that. Then we take them to market.',
-    "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't. Our infrastructure is lean, our scoping is flexible, and our media fee is flat, so the work costs what the work costs.",
+    "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't.",
   ],
-  // The one intro line that names the two halves, split so the weight lands on
-  // the two words the rest of the page is organised around.
-  introOffer: {
-    lead: 'Two ways to work with us: ',
-    build: 'Build',
-    mid: ' and ',
-    grow: 'Grow',
-    rest: '. Most clients do a mix of both. Nothing here is off the shelf — every recommendation is scoped to your goals, your budget, and your timeline.',
-  },
-
   audienceLabel: "Where You're Starting",
-  audienceLead: 'Most of the brands we work with arrive in one of three situations. Find yours — it determines what we scope first.',
+  audienceLead: 'Most of the brands we work with arrive in one of three situations.',
   audience: [
     {
       name: 'New',
@@ -60,13 +50,12 @@ const COPY = {
 
   // The two halves of the offer, each opened by a band in the homepage intro
   // card's style: name on the left, its one-line definition right-aligned.
-  buildBand: { name: 'Build', text: 'Project-based,\nscoped specifically.' },
-  growBand: { name: 'Grow', text: 'Ongoing support,\nbilled hourly.' },
+  buildBand: { name: 'Build' },
+  growBand: { name: 'Grow' },
 
   buildIntro: [
     "Typically one-time engagements: you build a brand, you build a website. But brands aren't static. When you launch a new offering and your positioning suddenly feels a half-step behind, we're here for the refresh.",
     "Almost everything in branding and marketing falls into one of four pillars. Don't see what you need? Ask — our capabilities run deep, and if we can't help, we probably know who can.",
-    'The starting prices below are real starting prices, not anchors designed to make a conversation necessary. Most brands are surprised by them.',
   ],
 
   packages: [
@@ -101,12 +90,8 @@ const COPY = {
     },
   ],
 
-  growIntro: 'With the brand and marketing apparatus in good shape, we pivot toward optimizations, extensions, additions, and whatever else you need as you engage your audience.',
+  growIntro: 'Ongoing support, billed hourly. With the brand and marketing apparatus in good shape, we pivot toward optimizations, extensions, additions, and whatever else you need as you engage your audience.',
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
-  growFee: {
-    lead: 'Our media management fee is flat — never a percentage of your buy.',
-    rest: ' Scale your spend without scaling what you pay us to manage it.',
-  },
 
   // NOTE ON THE FIGURES: the source table labelled this column "Quarterly
   // rate", but every row is hours-per-month times the effective rate — 25 ×
@@ -124,26 +109,24 @@ const COPY = {
 
   proofLabel: 'Proof',
   proofLead: 'What Build → Grow looks like in practice.',
+  // `image` is the Sanity CDN URL for the card's picture. Arbitrum's is the
+  // rebrand project's thumbnail, the only Arbitrum asset in the dataset.
+  // iScribe has none: there is no iScribe project in Sanity at all, so its
+  // card renders the empty frame until an asset is supplied. The frame holds
+  // the 4:5 either way, so a missing image costs alignment, not layout.
   proof: [
-    { name: 'iScribe', body: 'Came to us for a website. We sold in branding, marketing, and ongoing channel support, including for their conference season.' },
-    { name: 'Arbitrum', body: 'Came to us for a campaign, which was subsequently adopted and adapted across their key channels, including Meta, LinkedIn, and X.' },
+    {
+      name: 'iScribe',
+      body: 'Came to us for a website. We sold in branding, marketing, and ongoing channel support, including for their conference season.',
+      image: null,
+    },
+    {
+      name: 'Arbitrum',
+      body: 'Came to us for a campaign, which was subsequently adopted and adapted across their key channels, including Meta, LinkedIn, and X.',
+      image: 'https://cdn.sanity.io/images/ppq16wpu/production/287033702920964323315b0505937fc161be77d1-720x1280.jpg',
+    },
   ],
 
-  povLabel: 'Our Point of View',
-  pov: [
-    {
-      heading: 'Build and Grow, one embedded team.',
-      body: 'Most of the field only does one half: identity and web, or campaigns and content. We do both, with the same people who already know the brand.',
-    },
-    {
-      heading: 'Digital-first, by priority not by rule.',
-      body: 'If it is digital, it is core to what we do. Print, events, and partnerships are available as needed; the door is not closed.',
-    },
-    {
-      heading: 'Strategy that gets executed.',
-      body: 'Our thinking does not sit in a deck. It goes into brand, creative, and paid media — and we revisit it through analytics, testing for bias and confirming the assumptions still hold.',
-    },
-  ],
 
   ctaLabel: 'Talk to a Super-Conscious human.',
   ctaSub: 'It might change your life. At minimum, we can probably answer some of your burning marketing questions.',
@@ -199,13 +182,6 @@ export default function Services() {
           {COPY.intro.map(para => (
             <p key={para.slice(0, 24)} className={styles.introPara}>{para}</p>
           ))}
-          <p className={styles.introPara}>
-            {COPY.introOffer.lead}
-            <strong className={styles.introStrong}>{COPY.introOffer.build}</strong>
-            {COPY.introOffer.mid}
-            <strong className={styles.introStrong}>{COPY.introOffer.grow}</strong>
-            {COPY.introOffer.rest}
-          </p>
         </div>
       </section>
 
@@ -233,9 +209,10 @@ export default function Services() {
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>What We Do</p>
 
-        <div className={styles.band}>
-          <p className={styles.bandName}>{COPY.buildBand.name}</p>
-          <p className={styles.bandText}>{COPY.buildBand.text}</p>
+        {/* Both halves are set as plain type now; the band card they used to
+            sit in is gone. */}
+        <div className={styles.halfHead}>
+          <p className={styles.halfName}>{COPY.buildBand.name}</p>
         </div>
         <div className={styles.bandBody}>
           {COPY.buildIntro.map(para => (
@@ -248,36 +225,30 @@ export default function Services() {
               <div className={styles.packageMain}>
                 <span className={styles.packageN}>{n}</span>
                 <p className={styles.packageName}>{name}</p>
-                {/* Joined rather than a <ul>: these read as one line of scope,
-                    not as a checklist, and the middot is the separator the
-                    client wrote them with. */}
-                <p className={styles.packageItems}>{items.join(' · ')}</p>
+                <ul className={styles.packageItems}>
+                  {items.map(i => (
+                    <li key={i} className={styles.packageItem}>{i}</li>
+                  ))}
+                </ul>
                 {value && <p className={styles.packageValue}>{value}</p>}
                 {note && <p className={styles.packageNote}>{note}</p>}
               </div>
               <div className={styles.packagePrice}>
                 <span className={styles.packagePriceLabel}>Starting at</span>
                 <span className={styles.packagePriceValue}>{price}</span>
-                {priceSuffix && <span className={styles.packagePriceSuffix}>{priceSuffix}</span>}
+                {/* Rendered on every card, empty or not, so all four prices sit
+                    on one line — only 04 carries a suffix. */}
+                <span className={styles.packagePriceSuffix} aria-hidden={!priceSuffix}>{priceSuffix}</span>
               </div>
             </div>
           ))}
         </div>
 
-        <div className={styles.band}>
-          <p className={styles.bandName}>{COPY.growBand.name}</p>
-          <p className={styles.bandText}>{COPY.growBand.text}</p>
+        <div className={styles.halfHead}>
+          <p className={styles.halfName}>{COPY.growBand.name}</p>
         </div>
         <div className={styles.bandBody}>
           <p className={styles.bandPara}>{COPY.growIntro}</p>
-          <p className={styles.growTerms}>{COPY.growTerms}</p>
-          {/* The flat fee is the differentiator in this half of the offer, so
-              it carries its own weight rather than sitting inside the terms
-              paragraph, where it would read as one more piece of small print. */}
-          <p className={styles.growFee}>
-            <strong className={styles.growFeeLead}>{COPY.growFee.lead}</strong>
-            {COPY.growFee.rest}
-          </p>
         </div>
         <div className={styles.tierGrid}>
           {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
@@ -295,29 +266,28 @@ export default function Services() {
             </div>
           ))}
         </div>
+        {/* The terms belong after the numbers they qualify, not before them.
+            Set small: they are the conditions on the rates above, and reading
+            them first made the reader work through the fine print to reach
+            the prices. */}
+        <div className={styles.growFootnotes}>
+          <p className={styles.growTerms}>{COPY.growTerms}</p>
+        </div>
       </section>
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.proofLabel}</p>
         <p className={styles.sectionLead}>{COPY.proofLead}</p>
         <div className={styles.proofGrid}>
-          {COPY.proof.map(({ name, body }) => (
+          {COPY.proof.map(({ name, body, image }) => (
             <div key={name} className={styles.proofCard}>
-              <p className={styles.proofName}>{name}</p>
-              <p className={styles.proofBody}>{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.povLabel}</p>
-        <div className={styles.embeddedGrid}>
-          {COPY.pov.map(({ heading, body }, i) => (
-            <div key={heading} className={styles.embeddedPoint}>
-              <span className={styles.embeddedN}>{String(i + 1).padStart(2, '0')}</span>
-              <p className={styles.embeddedHeading}>{heading}</p>
-              <p className={styles.embeddedBody}>{body}</p>
+              <div className={styles.proofFrame}>
+                {image && <img className={styles.proofImage} src={image} alt="" loading="lazy" />}
+              </div>
+              <div className={styles.proofText}>
+                <p className={styles.proofName}>{name}</p>
+                <p className={styles.proofBody}>{body}</p>
+              </div>
             </div>
           ))}
         </div>
