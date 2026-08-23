@@ -59,7 +59,7 @@ const COPY = {
 
   buildIntro: [
     "Typically one-time engagements: you build a brand, you build a website. But brands aren't static. When you launch a new offering and your positioning suddenly feels a half-step behind, we're here for the refresh.",
-    "Almost everything in branding and marketing falls into one of four pillars. Don't see what you need? Ask — our capabilities run deep, and if we can't help, we probably know who can.",
+    "Almost everything in branding and marketing falls into one of four pillars — the four below. Don't see what you need? Ask — our capabilities run deep, and if we can't help, we probably know who can.",
   ],
 
   packages: [
@@ -94,7 +94,7 @@ const COPY = {
     },
   ],
 
-  growIntro: 'Ongoing support, billed hourly. With the brand and marketing apparatus in good shape, we pivot toward optimizations, extensions, additions, and whatever else you need as you engage your audience.',
+  growIntro: 'Ongoing support, billed hourly. With the brand and marketing apparatus in good shape, we pivot toward optimizations, extensions, additions, and whatever else you need as you engage your audience. The tiers below are priced by how many of those four pillars you want us keeping current.',
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
   // NOTE ON THE FIGURES: the source table labelled this column "Quarterly
