@@ -1,9 +1,10 @@
 import styles from './TestimonialStrip.module.css'
 import { useSanity } from '../hooks/useSanity'
 import { TESTIMONIALS_QUERY } from '../lib/queries'
+import { sanityImg } from '../lib/sanityImg'
 
 /**
- * A slow marquee of client quotes, under the featured case studies.
+ * A slow marquee of client quotes, above the featured case studies.
  *
  * Built on ClientStrip's mechanism deliberately rather than a second one: the
  * list is duplicated so the -50% translate loops with no seam, the second
@@ -12,16 +13,20 @@ import { TESTIMONIALS_QUERY } from '../lib/queries'
  * dead. Quotes are long, so this runs slower than the client strip — 90s
  * against 48s — and it is the only difference that matters between them.
  *
- * ATTRIBUTION IS THE POINT, AND IT IS NOT READY. The quotes come from the
- * clientLanding documents in Sanity, which is where they were already
- * written. All three currently carry bracketed placeholders for the name —
- * "[Founder Name], Founder, [Company]" — so `usable` below drops any
- * attribution still in that state rather than printing brackets on the
- * homepage. An unattributed quote is weaker social proof than an attributed
- * one and arguably not proof at all, so until real names are filled in this
- * strip is showing what it will look like, not what it should say.
+ * ATTRIBUTION IS THE POINT, AND IT IS NOT READY. Quotes come from the
+ * clientLanding documents in Sanity, where they were already written. All
+ * three currently carry bracketed placeholders for the name — "[Founder
+ * Name], Founder, [Company]" — and none has an avatar, because the field
+ * did not exist until this change added it.
  *
- * Renders nothing at all if there are no quotes, rather than an empty band.
+ * So `usable` drops any attribution still in brackets rather than printing
+ * them on the homepage, and the avatar slot renders a neutral mark when
+ * there is no image. Nothing here invents a name or a face: an unattributed
+ * quote is weak social proof, but a fabricated attribution is not proof at
+ * all. Fill in testimonialAttribution and testimonialAvatar in the Studio
+ * and both appear with no code change.
+ *
+ * Renders nothing if there are no quotes, rather than an empty band.
  */
 const isPlaceholder = (s) => !s || /\[|\]/.test(s)
 
@@ -33,6 +38,7 @@ export default function TestimonialStrip() {
     .map(t => ({
       quote: t.quote,
       attribution: isPlaceholder(t.attribution) ? null : t.attribution,
+      avatar: t.avatar || null,
     }))
 
   if (!items.length) return null
@@ -42,7 +48,14 @@ export default function TestimonialStrip() {
       {items.map((t, i) => (
         <figure key={`${hidden ? 'b' : 'a'}-${i}`} className={styles.item}>
           <blockquote className={styles.quote}>{t.quote}</blockquote>
-          {t.attribution && <figcaption className={styles.attribution}>{t.attribution}</figcaption>}
+          <figcaption className={styles.byline}>
+            {t.avatar
+              ? <img className={styles.avatar} src={sanityImg(t.avatar, { w: 96 })} alt="" loading="lazy" />
+              /* Not initials: without a real name there is nothing to take
+                 them from, and a made-up monogram would read as a person. */
+              : <span className={styles.avatarEmpty} aria-hidden="true" />}
+            {t.attribution && <span className={styles.attribution}>{t.attribution}</span>}
+          </figcaption>
         </figure>
       ))}
     </div>

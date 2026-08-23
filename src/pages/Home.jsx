@@ -165,12 +165,11 @@ export default function Home() {
       {/* Build / Grow two-up — the offer, before the work that proves it */}
       <BuildGrowCards />
 
+      {/* Client quotes, ahead of the work they are about */}
+      <TestimonialStrip />
+
       {/* Featured case studies — four, with their numbers */}
       <FeaturedCaseStudies />
-
-      {/* Client quotes, after the work rather than before it: the case
-          studies are the evidence and these are people agreeing with it. */}
-      <TestimonialStrip />
 
 
       {reelOpen && (

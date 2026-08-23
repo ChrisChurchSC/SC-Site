@@ -268,5 +268,7 @@ export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepag
 // has a stable sequence rather than whatever order the dataset returns.
 export const TESTIMONIALS_QUERY = `*[_type == "clientLanding" && defined(testimonialQuote)] | order(_createdAt asc) {
   "quote": testimonialQuote,
-  "attribution": testimonialAttribution
+  "attribution": testimonialAttribution,
+  "avatar": testimonialAvatar.asset->url,
+  "client": clientName
 }`
