@@ -130,13 +130,6 @@ export default function Nav() {
             </div>
           </NavLink>
 
-          <NavLink to="/who-we-are" className="nav-card">
-            <div className="nav-card-text">
-              <p className="nav-card-title">About</p>
-              <p className="nav-card-sub">Who we are, and why fractional.</p>
-            </div>
-          </NavLink>
-
           <div className="nav-card-pair">
             <NavLink to="/about-us" className="nav-card">
               <div className="nav-card-text">
@@ -227,7 +220,6 @@ export default function Nav() {
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/who-we-are" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>About</NavLink>
           <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
