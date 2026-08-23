@@ -1,11 +1,6 @@
-import { Link } from 'react-router-dom'
-
 import styles from './Work.module.css'
 import WorkGrid from '../components/WorkGrid'
 import { useMeta } from '../hooks/useMeta'
-import { useProjects } from '../context/ProjectsContext'
-import { useComingSoon } from '../context/ComingSoonContext'
-import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
 /**
  * The case study index.
@@ -17,35 +12,28 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
  * that open a drawer. A button is not a crawlable edge and carries no link
  * equity, so fifty-eight case studies had no hub at all.
  *
- * The list here is the same one the nav drawer renders, from the same context,
- * with the same filters — top-level projects only, minus the deliberately
- * hidden ones. What differs is that these are real anchors at a real URL, so
- * a crawler can follow them and a visitor can link to the page.
+ * A text list of every case study sat under the grid for exactly that reason:
+ * the grid was a curated subset, so the list was the crawlable route to the
+ * remainder. It has been removed, and the note it carried set the condition
+ * for removing it — that the grid covers them all.
  *
- * The curated grid above it is the wall that used to be the homepage, moved
- * here when the homepage grew a positioning top half. The two are not
- * redundant and the list is not decoration: the grid is a curated subset —
- * roughly forty blocks, chosen for how they look together — while the list
- * is every non-hidden case study. Replacing the list with the grid would put
- * the uncurated remainder back where they were before PR #122, with no
- * crawlable route in. If the grid ever covers all of them, revisit; until
- * then both stay.
+ * Checked rather than assumed, against live Sanity: the list linked 36 case
+ * studies and the grid links 44, but count is not coverage. Three were in the
+ * list and not the grid — aris, yellow-dog, concis-labs — and all three are
+ * noindexed coming-soon placeholders. They are already absent from the
+ * sitemap and cannot rank, so the route the list gave them was not worth
+ * anything to lose.
+ *
+ * If any of those three ships as a real case study, it needs a grid block or
+ * another crawlable link before it goes indexable.
  */
 export default function Work() {
-  const projects = useProjects()
-  const comingSoon = useComingSoon()
-
   useMeta({
     title: 'Selected Work | Super Conscious',
     description:
       'Case studies from Super Conscious. Brand systems, content programs, and digital products for founders and marketing teams.',
     path: '/work',
   })
-
-  // Sub-projects carry n >= 100 and belong to their client's overview page.
-  const caseStudies = projects.all
-    .filter((p) => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
-    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <main className={styles.main}>
@@ -62,43 +50,6 @@ export default function Work() {
         <WorkGrid />
       </section>
 
-      <div className={styles.listHead}>
-        <p className={styles.listLabel}>All work</p>
-        <span className={styles.listRule} aria-hidden="true" />
-        <p className={styles.listCount}>{String(caseStudies.length).padStart(3, '0')} case studies</p>
-      </div>
-
-      <ol className={styles.list}>
-        {caseStudies.map((p) => {
-          const isSoon = comingSoon.has(p.slug)
-          const inner = (
-            <>
-              <span className={styles.num}>{p.n}</span>
-              <span className={styles.name}>{p.name}</span>
-              <span className={styles.type}>
-                {p.type}
-                {isSoon && <span className={styles.soon}>Soon</span>}
-              </span>
-            </>
-          )
-
-          return (
-            <li key={p.slug} className={styles.row}>
-              {isSoon ? (
-                // Matches the nav and the homepage grid: shown, not linked.
-                // These pages are noindex, so linking them would spend equity
-                // on a page that cannot rank and promise a visitor a case
-                // study that is not written yet.
-                <span className={`${styles.item} ${styles.itemSoon}`}>{inner}</span>
-              ) : (
-                <Link className={styles.item} to={`/work/${p.slug}`}>
-                  {inner}
-                </Link>
-              )}
-            </li>
-          )
-        })}
-      </ol>
     </main>
   )
 }
