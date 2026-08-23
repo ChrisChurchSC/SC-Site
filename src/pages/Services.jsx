@@ -133,10 +133,10 @@ const COPY = {
   // month here so the page cannot understate the price threefold; "billed
   // quarterly" is stated in the terms above the grid.
   tiers: [
-    { hours: '25', hoursQuarter: '75', hoursYear: '300', month: '$4,500', quarter: '$13,500', year: '$54,000', rate: '$180 / hour', body: 'One pillar, kept current.' },
-    { hours: '50', hoursQuarter: '150', hoursYear: '600', month: '$8,250', quarter: '$24,750', year: '$99,000', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
-    { hours: '100', hoursQuarter: '300', hoursYear: '1,200', month: '$15,000', quarter: '$45,000', year: '$180,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
-    { hours: '150', hoursQuarter: '450', hoursYear: '1,800', month: '$21,000', quarter: '$63,000', year: '$252,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
+    { hours: '25', hoursQuarter: '75', hoursYear: '300', month: '$4,500', quarter: '$13,500', year: '$54,000', rate: '$180 / hour' },
+    { hours: '50', hoursQuarter: '150', hoursYear: '600', month: '$8,250', quarter: '$24,750', year: '$99,000', rate: '$165 / hour' },
+    { hours: '100', hoursQuarter: '300', hoursYear: '1,200', month: '$15,000', quarter: '$45,000', year: '$180,000', rate: '$150 / hour', flag: 'Most common' },
+    { hours: '150', hoursQuarter: '450', hoursYear: '1,800', month: '$21,000', quarter: '$63,000', year: '$252,000', rate: '$140 / hour' },
   ],
 
   // Lifted out of Sanity so Media and Search could be added — there is no
@@ -360,17 +360,18 @@ export default function Services() {
         </div>
 
         <div className={styles.tierGrid}>
-          {COPY.tiers.map(({ hours, hoursQuarter, hoursYear, month, quarter, year, rate, body, flag }) => (
+          {COPY.tiers.map(({ hours, hoursQuarter, hoursYear, month, quarter, year, rate, flag }) => (
             <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
               {/* The badge slot is always rendered, empty or not, so all four
                   cards align on the number rather than the flagged one sitting
                   a line lower than its neighbours. CSS reserves the height, so
                   the empty ones stay out of the accessibility tree. */}
               <span className={styles.tierFlag} aria-hidden={!flag}>{flag}</span>
-              {/* Three groups, not six loose lines: what the tier IS (hours),
-                  what it COSTS (price over its effective rate, which is the
-                  argument for stepping up), and what it BUYS (the body, pinned
-                  to the foot so all four align). */}
+              {/* Two groups, not four loose lines: what the tier IS (hours)
+                  and what it COSTS (price over its effective rate, which is
+                  the argument for stepping up). The line naming how many
+                  pillars each tier bought is gone — four cards side by side
+                  already answer that, and the hours are the comparison. */}
               <div className={styles.tierId}>
                 <p className={styles.tierHours}>{{ month: hours, quarter: hoursQuarter, year: hoursYear }[period]}</p>
                 <p className={styles.tierUnit}>{active.unit}</p>
@@ -379,7 +380,6 @@ export default function Services() {
                 <p className={styles.tierPrice}>{{ month, quarter, year }[period]}</p>
                 <p className={styles.tierRate}>{active.per} · {rate}</p>
               </div>
-              <p className={styles.tierBody}>{body}</p>
             </div>
           ))}
         </div>
