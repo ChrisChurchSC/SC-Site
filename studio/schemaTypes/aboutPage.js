@@ -1,4 +1,17 @@
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
+
+// Unnamed on purpose. The seven entries already in the document were written
+// without a named type and carry `_type: 'object'`, which is what an inline
+// object member serialises to — naming this would leave every existing entry
+// showing as an unknown type in the Studio.
+const faqItem = defineArrayMember({
+  type: 'object',
+  fields: [
+    defineField({ name: 'question', title: 'Question', type: 'string' }),
+    defineField({ name: 'answer', title: 'Answer', type: 'text', rows: 4 }),
+  ],
+  preview: { select: { title: 'question', subtitle: 'answer' } },
+})
 
 // The page this drives is Services, at /services. The type name stays
 // `aboutPage` and the doc id stays `about-page`: renaming a Sanity type does
@@ -17,22 +30,22 @@ import { defineType, defineField } from 'sanity'
 // trap. Removing a field from a schema does not delete what is stored, so
 // every old value is still in the dataset if this needs reverting.
 //
-// KNOWN DRIFT, deliberately not fixed here: the live document also carries
-// `faqs` (7 entries) and `faqLabel`, which the page renders but this schema
-// never declared — so they are invisible in the Studio and cannot be edited.
-// `roles` has the same problem in reverse: declared as an array of strings,
-// stored as objects with `name` and `description`. Both want a content
-// migration and a Studio test rather than a blind schema edit, so they are
-// reported rather than changed.
+// The FAQ is now all this document holds, and it is declared here for the
+// first time: the seven entries were live on the page while the schema never
+// mentioned them, so nobody could edit them in the Studio. Declaring a field
+// that already has data does not touch the data.
+//
+// The other half of that drift is gone rather than fixed — `roles` was
+// declared as an array of strings but stored as objects with `name` and
+// `description`, and the discipline list has since moved into code.
 export const aboutPage = defineType({
   name: 'aboutPage',
   title: 'Services Page',
   type: 'document',
   __experimental_actions: ['update', 'publish'],
   fields: [
-    defineField({ name: 'rolesLabel', title: 'Roles — Label', type: 'string', initialValue: 'Roles' }),
-    defineField({ name: 'rolesIntro', title: 'Roles — Intro', type: 'text', rows: 2 }),
-    defineField({ name: 'roles', title: 'Roles', type: 'array', of: [{ type: 'string' }] }),
+    defineField({ name: 'faqLabel', title: 'FAQ — Label', type: 'string', initialValue: 'FAQ' }),
+    defineField({ name: 'faqs', title: 'FAQ', type: 'array', of: [faqItem] }),
   ],
   preview: { prepare: () => ({ title: 'Services Page' }) },
 })

@@ -55,15 +55,12 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
 // studio/schemaTypes/aboutPage.js for why the CMS name did not follow the
 // page rename).
 //
-// Only the fields the page still renders. Everything else on /services is in
-// code: the positioning rewrite took the header, the three-up and the clients
-// list, and the package rate card then took `services` (the Build/Grow pair)
-// too, since the offer is now stated with its prices. Each of those came out
-// of the schema in the same change rather than being left fetched-but-unused.
+// The FAQ is the last thing /services reads from the CMS. Everything else —
+// the header, the three-up, the clients list, the Build/Grow services array,
+// the pricing block and finally the discipline list — moved into code across
+// the August 2026 rewrite, each coming out of the schema in the same change
+// rather than being left fetched-but-unused.
 export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
-  rolesLabel,
-  rolesIntro,
-  roles,
   faqLabel,
   faqs[] { question, answer }
 }`

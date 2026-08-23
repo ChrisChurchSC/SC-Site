@@ -1,6 +1,7 @@
 import styles from './Services.module.css'
 import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
+import LazyVideo from '../components/LazyVideo'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
 
@@ -107,6 +108,26 @@ const COPY = {
     { hours: '150', price: '$21,000', rate: '$140 / hour', body: 'All four pillars. The most robust support for brand oversight, maintenance, and seamless evolution.' },
   ],
 
+  // Lifted out of Sanity so Media and Search could be added — there is no
+  // write token here, and every other block on this page is already in code.
+  // The first ten are the client's own wording from the aboutPage document,
+  // verbatim; Media and Search are new.
+  disciplinesLabel: 'Disciplines',
+  disciplines: [
+    { name: 'Creative direction', body: 'Brand strategy, concept development, and the creative through-line that holds a project together from first idea to final asset.' },
+    { name: 'Writing', body: 'Naming, taglines, scripts, voice, and body copy. The verbal half of a brand, shaped to earn its space across every surface.' },
+    { name: 'Design', body: 'Identity systems, visual languages, layout, and typography. The framework that lets every piece of output feel like the same brand.' },
+    { name: 'Illustration', body: 'Custom marks, characters, editorial pieces, and full toolkit systems built to extend the brand into any context.' },
+    { name: 'Film & photo', body: 'Direction, shoots, casting, lighting, and styling for stills and moving image, from product capture to campaign storytelling.' },
+    { name: '3D & motion', body: 'Modeling, rendering, and motion design across formats: brand films, product explainers, social spots, and platform-native work.' },
+    { name: 'Animation', body: 'Cel, rigged, and procedural animation built for any platform, from social loops to broadcast spots to interactive experiences.' },
+    { name: 'Editing', body: 'Story structure, pacing, and color. The post-production craft that turns footage into a finished piece with rhythm and intent.' },
+    { name: 'Production', body: 'Planning, scheduling, budgeting, casting, and the on-the-ground logistics that turn a creative brief into a finished, shipped piece of work.' },
+    { name: 'Media', body: 'Paid strategy, buying, and creative testing across social, search, and programmatic. Planned, flighted, and optimized against the numbers rather than the impressions.' },
+    { name: 'Search', body: 'SEO and AEO: the technical foundations, the content that earns the position, and the structured data that makes a brand legible to engines and to models.' },
+    { name: 'Engineering', body: 'Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.' },
+  ],
+
   proofLabel: 'Proof',
   proofLead: 'What Build → Grow looks like in practice.',
   // `image` is the Sanity CDN URL for the card's picture. Arbitrum's is the
@@ -118,7 +139,7 @@ const COPY = {
     {
       name: 'iScribe',
       body: 'Came to us for a website. We sold in branding, marketing, and ongoing channel support, including for their conference season.',
-      image: null,
+      video: '/iscribe-linkedin.mp4',
     },
     {
       name: 'Arbitrum',
@@ -258,10 +279,18 @@ export default function Services() {
                   a line lower than its neighbours. CSS reserves the height, so
                   the empty ones stay out of the accessibility tree. */}
               <span className={styles.tierFlag} aria-hidden={!flag}>{flag}</span>
-              <p className={styles.tierHours}>{hours}</p>
-              <p className={styles.tierUnit}>hours / month</p>
-              <p className={styles.tierPrice}>{price}</p>
-              <p className={styles.tierRate}>{rate}</p>
+              {/* Three groups, not six loose lines: what the tier IS (hours),
+                  what it COSTS (price over its effective rate, which is the
+                  argument for stepping up), and what it BUYS (the body, pinned
+                  to the foot so all four align). */}
+              <div className={styles.tierId}>
+                <p className={styles.tierHours}>{hours}</p>
+                <p className={styles.tierUnit}>hours / month</p>
+              </div>
+              <div className={styles.tierMoney}>
+                <p className={styles.tierPrice}>{price}</p>
+                <p className={styles.tierRate}>{rate}</p>
+              </div>
               <p className={styles.tierBody}>{body}</p>
             </div>
           ))}
@@ -279,10 +308,15 @@ export default function Services() {
         <p className={styles.sectionLabel}>{COPY.proofLabel}</p>
         <p className={styles.sectionLead}>{COPY.proofLead}</p>
         <div className={styles.proofGrid}>
-          {COPY.proof.map(({ name, body, image }) => (
+          {COPY.proof.map(({ name, body, image, video }) => (
             <div key={name} className={styles.proofCard}>
+              {/* LazyVideo, not a bare <video>: preload="none" until the frame
+                  intersects, then autoplay muted and pause again offscreen. The
+                  file is large, and this is well down the page — most visitors
+                  should never pay for it. */}
               <div className={styles.proofFrame}>
-                {image && <img className={styles.proofImage} src={image} alt="" loading="lazy" />}
+                {video && <LazyVideo src={video} className={styles.proofImage} />}
+                {image && !video && <img className={styles.proofImage} src={image} alt="" loading="lazy" />}
               </div>
               <div className={styles.proofText}>
                 <p className={styles.proofName}>{name}</p>
@@ -293,24 +327,17 @@ export default function Services() {
         </div>
       </section>
 
-      {cfg.roles?.length > 0 && (
-        <section className={styles.textSection}>
-          <p className={styles.sectionLabel}>{cfg.rolesLabel || 'Roles'}</p>
-          {cfg.rolesIntro && <p className={styles.rolesIntro}>{cfg.rolesIntro}</p>}
-          <div className={styles.rolesGrid}>
-            {cfg.roles.map(r => {
-              const name = typeof r === 'string' ? r : r.name
-              const description = typeof r === 'string' ? null : r.description
-              return (
-                <div key={name} className={styles.roleCard}>
-                  <p className={styles.roleName}>{name}</p>
-                  {description && <p className={styles.roleDesc}>{description}</p>}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
+      <section className={styles.textSection}>
+        <p className={styles.sectionLabel}>{COPY.disciplinesLabel}</p>
+        <div className={styles.rolesGrid}>
+          {COPY.disciplines.map(({ name, body }) => (
+            <div key={name} className={styles.roleCard}>
+              <p className={styles.roleName}>{name}</p>
+              <p className={styles.roleDesc}>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {cfg.faqs?.length > 0 && (
         <section className={styles.textSection}>
