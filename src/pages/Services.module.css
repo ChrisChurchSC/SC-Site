@@ -573,24 +573,22 @@
   gap: 5px;
 }
 
-/* The picture holds the 4:5, not the card. Putting the ratio on the card
-   fixed its height, so a body that wrapped to an extra line ran over the
-   frame; this way the card is the picture plus whatever the text needs, and
-   the grid still squares both cards off against each other. */
+/* 4:5, with the text laid over the picture rather than stacked under it. The
+   ratio is safe on the card again now that .proofText is positioned and out
+   of flow — it can no longer push the frame around, which is why it had been
+   moved onto the picture. */
 .proofCard {
+  position: relative;
+  aspect-ratio: 4 / 5;
   background: #161616;
   border-radius: 4px;
   overflow: hidden;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .proofFrame {
-  aspect-ratio: 4 / 5;
-  flex-shrink: 0;
+  position: absolute;
+  inset: 0;
   background: #1c1c1c;
-  overflow: hidden;
 }
 
 .proofImage {
@@ -601,11 +599,22 @@
 }
 
 .proofText {
-  padding: 22px 24px 26px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 64px 26px 26px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex-shrink: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.72) 35%,
+    rgba(0, 0, 0, 0.35) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .proofName {
@@ -613,7 +622,7 @@
   font-weight: 300;
   font-size: clamp(22px, 2.1vw, 28px);
   line-height: 1.1;
-  color: rgba(255, 255, 255, 0.9);
+  color: #fff;
   margin: 0;
 }
 
@@ -622,7 +631,7 @@
   font-weight: 300;
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.78);
   margin: 0;
 }
 
