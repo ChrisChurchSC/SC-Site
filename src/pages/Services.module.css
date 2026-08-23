@@ -32,7 +32,6 @@
 .main section:nth-of-type(4) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.75s both; }
 .main section:nth-of-type(5) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.85s both; }
 .main section:nth-of-type(6) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 0.95s both; }
-.main section:nth-of-type(7) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.05s both; }
 .main section:nth-of-type(8) { animation: cascadeIn 0.75s cubic-bezier(0.25, 1, 0.4, 1) 1.15s both; }
 
 /* Prose sitting between a band and the grid it introduces. */
@@ -231,64 +230,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.audienceGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-}
-
-.audienceCard {
-  background: #161616;
-  border-radius: 4px;
-  padding: 28px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Pins the route line to the foot so the three line up across the row even
-   though the bodies above them differ in length. */
-.audienceDefinition {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-}
-
-.audienceName {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(24px, 2.6vw, 34px);
-  line-height: 1.1;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
-}
-
-/* Same value as .audienceDefinition above it: the definition and the
-   paragraph that expands on it are one voice, and the two-tone version read
-   as though the longer half mattered less. */
-.audienceBody {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-}
-
-@media (max-width: 700px) {
-  .audienceGrid { grid-template-columns: 1fr; }
-}
-
-/* ── Principles grid (2x2) ── */
-.principlesGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 5px;
 }
 
 /* ── What We Do: the package rate card ──

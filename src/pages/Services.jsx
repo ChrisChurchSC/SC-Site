@@ -31,25 +31,6 @@ const COPY = {
     'We build brands that use that. Then we take them to market.',
     "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't.",
   ],
-  audienceLabel: "Where You're Starting",
-  audienceLead: 'Most of the brands we work with arrive in one of three situations.',
-  audience: [
-    {
-      name: 'New',
-      definition: 'A brand that needs to be defined from scratch: identity, visual system, voice.',
-      body: 'Nothing to protect and nothing to unwind. The advantage is that every decision is still available to you; the risk is making them in the wrong order. We start with positioning, then build the system outward.',
-    },
-    {
-      name: 'Pivoting',
-      definition: 'An existing brand reworking what it has. A facelift, or a full-scale overhaul to retain and amplify relevancy.',
-      body: "You have equity worth keeping and baggage worth dropping, and the hard part is telling them apart. We audit what's actually load-bearing before we touch anything.",
-    },
-    {
-      name: 'Underdog',
-      definition: 'A brand in a crowded category that needs to stand out.',
-      body: "The category has conventions, and the leader wrote them. Blending in is the default failure. We find the position your competitors can't copy without contradicting themselves, then put weight behind it.",
-    },
-  ],
 
   // The two halves of the offer, each opened by a band in the homepage intro
   // card's style: name on the left, its one-line definition right-aligned.
@@ -212,20 +193,6 @@ export default function Services() {
             as the Proof films — nothing loads until it is on screen. */}
         <div className={styles.reelFrame}>
           <LazyVideo src={reelUrl} className={styles.reelVideo} />
-        </div>
-      </section>
-
-      <section className={styles.textSection}>
-        <p className={styles.sectionLabel}>{COPY.audienceLabel}</p>
-        <p className={styles.sectionLead}>{COPY.audienceLead}</p>
-        <div className={styles.audienceGrid}>
-          {COPY.audience.map(({ name, definition, body }) => (
-            <div key={name} className={styles.audienceCard}>
-              <p className={styles.audienceName}>{name}</p>
-              <p className={styles.audienceDefinition}>{definition}</p>
-              <p className={styles.audienceBody}>{body}</p>
-            </div>
-          ))}
         </div>
       </section>
 
