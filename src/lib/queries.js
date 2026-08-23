@@ -260,3 +260,13 @@ export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepag
     externalUrl
   }
 }`
+
+// Client quotes for the homepage marquee.
+//
+// They live on clientLanding documents because that is where they were
+// already written, one per landing page. Ordered by _createdAt so the strip
+// has a stable sequence rather than whatever order the dataset returns.
+export const TESTIMONIALS_QUERY = `*[_type == "clientLanding" && defined(testimonialQuote)] | order(_createdAt asc) {
+  "quote": testimonialQuote,
+  "attribution": testimonialAttribution
+}`

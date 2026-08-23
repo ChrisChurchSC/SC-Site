@@ -7,6 +7,7 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
 import ClientStrip from '../components/ClientStrip'
+import TestimonialStrip from '../components/TestimonialStrip'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
@@ -166,6 +167,10 @@ export default function Home() {
 
       {/* Featured case studies — four, with their numbers */}
       <FeaturedCaseStudies />
+
+      {/* Client quotes, after the work rather than before it: the case
+          studies are the evidence and these are people agreeing with it. */}
+      <TestimonialStrip />
 
 
       {reelOpen && (
