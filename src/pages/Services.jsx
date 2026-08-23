@@ -28,11 +28,11 @@ const COPY = {
   headline: "For brands that don't have incumbent money — and don't need it.",
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
-    'We build brands that use that. Then we take them to market.',
+    'We build challenger brands that use that. Then we take them to market.',
     "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't.",
   ],
 
-  audienceLabel: "Where You're Starting",
+  audienceLabel: 'Challenger Brands, Three Ways',
   audienceLead: 'Most of the brands we work with arrive in one of three situations.',
   audience: [
     {
@@ -214,7 +214,7 @@ export default function Services() {
   } : null
   useMeta({
     title: 'Services | Super Conscious',
-    description: "For brands that don't have incumbent money. Brand, website, marketing mix and channels from $10,000, plus ongoing support billed hourly with a flat media fee.",
+    description: 'Brand, website, marketing mix and channels for challenger brands, from $10,000 — plus ongoing support billed hourly. We build the brand, then grow it.',
     path: '/services',
     schema: faqSchema,
   })
