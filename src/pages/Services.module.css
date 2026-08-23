@@ -374,15 +374,6 @@
   margin: 14px 0 0;
 }
 
-.packageNote {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  line-height: 1.7;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.32);
-  margin: 14px 0 0;
-}
-
 .packagePrice {
   display: flex;
   flex-direction: column;

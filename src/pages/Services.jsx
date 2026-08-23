@@ -83,7 +83,6 @@ const COPY = {
       name: 'Your Marketing Mix',
       items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Film & Video Production', 'Motion Graphics', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
       value: 'Where the money goes, and the numbers that prove it went somewhere.',
-      note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work are billed separately. All production costs are billed separately.',
       price: '$15,000',
     },
     {
@@ -91,13 +90,12 @@ const COPY = {
       name: 'Your Channels',
       items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
       value: 'Showing up where they already are, at the volume the platforms demand.',
-      note: 'Covers initial channel set-up and two months of organic content, including short-form social video and motion assets.',
       price: '$10,000',
       priceSuffix: 'per channel',
     },
   ],
 
-  growIntro: 'Ongoing support, billed hourly. The brand exists and the machine runs. From here it is tuning, extending and adding — whatever the month asks for. The tiers below are priced by how many of those four pillars you want us keeping current.',
+  growIntro: 'Ongoing support, billed hourly — and the half of this we would point at first. Grow is a fractional creative team: the people who built the brand stay on it every month, for a fraction of what the same bench costs in-house. Most studios hand over the files and disappear. The tiers below are priced by how many of those four pillars you want us keeping current.',
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
   // NOTE ON THE FIGURES: the source table labelled this column "Quarterly
@@ -256,7 +254,7 @@ export default function Services() {
           ))}
         </div>
         <div className={styles.packageList}>
-          {COPY.packages.map(({ n, name, items, value, note, price, priceSuffix }) => (
+          {COPY.packages.map(({ n, name, items, value, price, priceSuffix }) => (
             <div key={n} className={styles.packageCard}>
               <div className={styles.packageMain}>
                 <span className={styles.packageN}>{n}</span>
@@ -267,7 +265,6 @@ export default function Services() {
                   ))}
                 </ul>
                 {value && <p className={styles.packageValue}>{value}</p>}
-                {note && <p className={styles.packageNote}>{note}</p>}
               </div>
               <div className={styles.packagePrice}>
                 <span className={styles.packagePriceLabel}>Starting at</span>
