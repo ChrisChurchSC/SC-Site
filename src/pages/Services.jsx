@@ -133,10 +133,10 @@ const COPY = {
   // month here so the page cannot understate the price threefold; "billed
   // quarterly" is stated in the terms above the grid.
   tiers: [
-    { hours: '25', hoursQuarter: '75', month: '$4,500', quarter: '$13,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
-    { hours: '50', hoursQuarter: '150', month: '$8,250', quarter: '$24,750', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
-    { hours: '100', hoursQuarter: '300', month: '$15,000', quarter: '$45,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
-    { hours: '150', hoursQuarter: '450', month: '$21,000', quarter: '$63,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
+    { hours: '25', hoursQuarter: '75', hoursYear: '300', month: '$4,500', quarter: '$13,500', year: '$54,000', rate: '$180 / hour', body: 'One pillar, kept current.' },
+    { hours: '50', hoursQuarter: '150', hoursYear: '600', month: '$8,250', quarter: '$24,750', year: '$99,000', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
+    { hours: '100', hoursQuarter: '300', hoursYear: '1,200', month: '$15,000', quarter: '$45,000', year: '$180,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
+    { hours: '150', hoursQuarter: '450', hoursYear: '1,800', month: '$21,000', quarter: '$63,000', year: '$252,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
   ],
 
   // Lifted out of Sanity so Media and Search could be added — there is no
@@ -229,10 +229,18 @@ const COPY = {
 export default function Services() {
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
 
-  // 'month' | 'quarter'. Billing is quarterly, so a quarter is what lands on
-  // the invoice; the monthly figure is what people compare against a salary.
-  // Neither is the obviously right default, so both are one click apart.
+  // 'month' | 'quarter' | 'year'. Billing is quarterly, so a quarter is what
+  // lands on the invoice; the monthly figure is what people compare against a
+  // salary; the annual one is what a budget is approved in. None is the
+  // obviously right default, so all three are one click apart.
   const [period, setPeriod] = useState('month')
+
+  const PERIODS = [
+    { key: 'month', label: 'Per month', unit: 'hours / month', per: 'per month' },
+    { key: 'quarter', label: 'Per quarter', unit: 'hours / quarter', per: 'per quarter' },
+    { key: 'year', label: 'Per year', unit: 'hours / year', per: 'per year' },
+  ]
+  const active = PERIODS.find(x => x.key === period)
   const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
   useMeta({
     title: 'Services | Super Conscious',
@@ -334,7 +342,7 @@ export default function Services() {
         </div>
 
         <div className={styles.periodToggle} role="group" aria-label="Show prices per month or per quarter">
-          {[['month', 'Per month'], ['quarter', 'Per quarter']].map(([key, text]) => (
+          {PERIODS.map(({ key, label }) => (
             <button
               key={key}
               type="button"
@@ -342,13 +350,13 @@ export default function Services() {
               aria-pressed={period === key}
               onClick={() => setPeriod(key)}
             >
-              {text}
+              {label}
             </button>
           ))}
         </div>
 
         <div className={styles.tierGrid}>
-          {COPY.tiers.map(({ hours, hoursQuarter, month, quarter, rate, body, flag }) => (
+          {COPY.tiers.map(({ hours, hoursQuarter, hoursYear, month, quarter, year, rate, body, flag }) => (
             <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
               {/* The badge slot is always rendered, empty or not, so all four
                   cards align on the number rather than the flagged one sitting
@@ -360,14 +368,12 @@ export default function Services() {
                   argument for stepping up), and what it BUYS (the body, pinned
                   to the foot so all four align). */}
               <div className={styles.tierId}>
-                <p className={styles.tierHours}>{period === 'month' ? hours : hoursQuarter}</p>
-                <p className={styles.tierUnit}>{period === 'month' ? 'hours / month' : 'hours / quarter'}</p>
+                <p className={styles.tierHours}>{{ month: hours, quarter: hoursQuarter, year: hoursYear }[period]}</p>
+                <p className={styles.tierUnit}>{active.unit}</p>
               </div>
               <div className={styles.tierMoney}>
-                <p className={styles.tierPrice}>{period === 'month' ? month : quarter}</p>
-                <p className={styles.tierRate}>
-                  {period === 'month' ? 'per month' : 'per quarter'} · {rate}
-                </p>
+                <p className={styles.tierPrice}>{{ month, quarter, year }[period]}</p>
+                <p className={styles.tierRate}>{active.per} · {rate}</p>
               </div>
               <p className={styles.tierBody}>{body}</p>
             </div>
