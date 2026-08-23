@@ -137,7 +137,7 @@ const COPY = {
   // an About page that does not exist. They are about how an engagement runs
   // rather than what the studio believes, which is what this section is for —
   // and they put 'embedded' back on a page that had lost the word entirely.
-  howLabel: 'How We Work',
+  howLabel: 'What You Get',
   howLead: 'One team, on the inside, for both halves of the work.',
   how: [
     {
