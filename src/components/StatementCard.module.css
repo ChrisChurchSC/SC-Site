@@ -19,6 +19,17 @@
   to   { opacity: 1; translate: 0 0; }
 }
 
+/* Sits tight to the statement it labels rather than on the card's own
+   24px rhythm, which is spaced for the display line and the mono block. */
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 0 -12px;
+}
+
 .statement {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
