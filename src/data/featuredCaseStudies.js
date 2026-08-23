@@ -73,6 +73,17 @@ export const featuredCaseStudies = [
     stats: PLACEHOLDER,
   },
   {
+    slug: 'world-within',
+    name: 'World Within',
+    type: 'Brand + Content',
+    // Checked rather than assumed: published:true and comingSoon:false in
+    // Sanity, the page builds, it is indexable and it is in the sitemap. So
+    // it links, which makes it the second of these cards with anywhere to go.
+    href: '/work/world-within',
+    media: null,
+    stats: PLACEHOLDER,
+  },
+  {
     slug: 'wonderwerk',
     name: 'Wonderwerk',
     type: 'Brand + Content',
