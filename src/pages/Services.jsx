@@ -25,13 +25,13 @@ const REEL_FALLBACK = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407c
 
 const COPY = {
   eyebrow: '[ Services ]',
-  headline: 'For challenger brands — new, pivoting, or fighting to stand out — who are ready to accelerate their business, Super-Conscious is the embedded creative and marketing team that builds your brand and then grows it.',
+  headline: 'Super-Conscious exists to level up challenger brands by combining world-class creative with analytics-driven marketing at an accessible price.',
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
     'We build challenger brands that use that. Then we take them to market.',
   ],
 
-  audienceLabel: 'Challenger Brands, Three Ways',
+  audienceLabel: "Who We're For",
   audienceLead: 'Most of the brands we work with arrive in one of three situations.',
   audience: [
     {
@@ -59,7 +59,6 @@ const COPY = {
   buildIntro: [
     'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app. Almost everything in branding and marketing falls into one of four pillars — the four below.',
     'It matters more for a challenger. A market leader survives a scattered brand; everyone already knows the name. You are still being introduced, so every asset sells the thing and establishes who is selling it.',
-    "Most brands assume that costs more than it does. Nothing stays built either, so refreshes are part of this — and if you don't see what you need, ask.",
   ],
 
   packages: [
@@ -97,7 +96,6 @@ const COPY = {
   growIntro: [
     'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
     'Ongoing support, billed hourly — and the half we would point at first. A fractional creative team: the people who built the brand stay on it, for a fraction of hiring them. Most studios hand over the files and disappear.',
-    'Media management at this level costs less than you would guess. The tiers below are priced by how many of those four pillars you want us keeping current.',
   ],
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
@@ -217,11 +215,6 @@ export default function Services() {
       <section className={styles.header}>
         <p className={styles.headerLabel}>{COPY.eyebrow}</p>
         <h1 className={styles.headline}>{COPY.headline}</h1>
-        <div className={styles.introStack}>
-          {COPY.intro.map(para => (
-            <p key={para.slice(0, 24)} className={styles.introPara}>{para}</p>
-          ))}
-        </div>
         {/* Closes the hero: the argument, then the work. Same lazy treatment
             as the Proof films — nothing loads until it is on screen. */}
         <div className={styles.reelFrame}>
@@ -231,7 +224,11 @@ export default function Services() {
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.audienceLabel}</p>
-        <p className={styles.sectionLead}>{COPY.audienceLead}</p>
+        <div className={styles.introStack}>
+          {[...COPY.intro, COPY.audienceLead].map(para => (
+            <p key={para.slice(0, 24)} className={styles.introPara}>{para}</p>
+          ))}
+        </div>
         <div className={styles.audienceGrid}>
           {COPY.audience.map(({ name, definition, body }) => (
             <div key={name} className={styles.audienceCard}>
