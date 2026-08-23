@@ -29,7 +29,6 @@ const COPY = {
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
     'We build challenger brands that use that. Then we take them to market.',
-    "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't.",
   ],
 
   audienceLabel: 'Challenger Brands, Three Ways',
@@ -59,8 +58,8 @@ const COPY = {
 
   buildIntro: [
     'Build is project work: one engagement, one outcome. Almost everything in branding and marketing falls into one of four pillars — the four below.',
-    'It matters more for a challenger than for an incumbent. A market leader survives a scattered brand, because everyone already knows the name. You are still being introduced, so every asset does two jobs at once: sells the thing, and establishes who is selling it.',
-    "Brands don't stay built, either. Launch a new offering and the positioning you paid for last year is half a step behind, so the refresh is part of this too. Don't see what you need? Ask. If we can't help, we will tell you who can.",
+    'It matters more for a challenger. A market leader survives a scattered brand; everyone already knows the name. You are still being introduced, so every asset sells the thing and establishes who is selling it.',
+    "Most brands assume that costs more than it does. Nothing stays built either, so refreshes are part of this — and if you don't see what you need, ask.",
   ],
 
   packages: [
@@ -95,7 +94,10 @@ const COPY = {
     },
   ],
 
-  growIntro: 'Ongoing support, billed hourly — and the half of this we would point at first. Grow is a fractional creative team: the people who built the brand stay on it every month, for a fraction of what the same bench costs in-house. Most studios hand over the files and disappear. The tiers below are priced by how many of those four pillars you want us keeping current.',
+  growIntro: [
+    'Ongoing support, billed hourly — and the half we would point at first. Grow is a fractional creative team: the people who built the brand stay on it, for a fraction of hiring them. Most studios hand over the files and disappear.',
+    'Media management at this level costs less than you would guess. The tiers below are priced by how many of those four pillars you want us keeping current.',
+  ],
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
   // NOTE ON THE FIGURES: the source table labelled this column "Quarterly
@@ -281,7 +283,9 @@ export default function Services() {
           <p className={styles.halfName}>{COPY.growBand.name}</p>
         </div>
         <div className={styles.bandBody}>
-          <p className={styles.bandPara}>{COPY.growIntro}</p>
+          {COPY.growIntro.map(para => (
+            <p key={para.slice(0, 24)} className={styles.bandPara}>{para}</p>
+          ))}
         </div>
         <div className={styles.tierGrid}>
           {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
