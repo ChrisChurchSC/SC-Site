@@ -133,10 +133,10 @@ const COPY = {
   // month here so the page cannot understate the price threefold; "billed
   // quarterly" is stated in the terms above the grid.
   tiers: [
-    { hours: '25', month: '$4,500', quarter: '$13,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
-    { hours: '50', month: '$8,250', quarter: '$24,750', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
-    { hours: '100', month: '$15,000', quarter: '$45,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
-    { hours: '150', month: '$21,000', quarter: '$63,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
+    { hours: '25', hoursQuarter: '75', month: '$4,500', quarter: '$13,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
+    { hours: '50', hoursQuarter: '150', month: '$8,250', quarter: '$24,750', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
+    { hours: '100', hoursQuarter: '300', month: '$15,000', quarter: '$45,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
+    { hours: '150', hoursQuarter: '450', month: '$21,000', quarter: '$63,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
   ],
 
   // Lifted out of Sanity so Media and Search could be added — there is no
@@ -348,7 +348,7 @@ export default function Services() {
         </div>
 
         <div className={styles.tierGrid}>
-          {COPY.tiers.map(({ hours, month, quarter, rate, body, flag }) => (
+          {COPY.tiers.map(({ hours, hoursQuarter, month, quarter, rate, body, flag }) => (
             <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
               {/* The badge slot is always rendered, empty or not, so all four
                   cards align on the number rather than the flagged one sitting
@@ -360,8 +360,8 @@ export default function Services() {
                   argument for stepping up), and what it BUYS (the body, pinned
                   to the foot so all four align). */}
               <div className={styles.tierId}>
-                <p className={styles.tierHours}>{hours}</p>
-                <p className={styles.tierUnit}>hours / month</p>
+                <p className={styles.tierHours}>{period === 'month' ? hours : hoursQuarter}</p>
+                <p className={styles.tierUnit}>{period === 'month' ? 'hours / month' : 'hours / quarter'}</p>
               </div>
               <div className={styles.tierMoney}>
                 <p className={styles.tierPrice}>{period === 'month' ? month : quarter}</p>
