@@ -51,20 +51,6 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
   }
 }`
 
-// Drives /services (the type is still `aboutPage` — see the note in
-// studio/schemaTypes/aboutPage.js for why the CMS name did not follow the
-// page rename).
-//
-// The FAQ is the last thing /services reads from the CMS. Everything else —
-// the header, the three-up, the clients list, the Build/Grow services array,
-// the pricing block and finally the discipline list — moved into code across
-// the August 2026 rewrite, each coming out of the schema in the same change
-// rather than being left fetched-but-unused.
-export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
-  faqLabel,
-  faqs[] { question, answer }
-}`
-
 export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {
   "src": coalesce(videoFile.asset->url, image.asset->url),
   "isVideo": defined(videoFile.asset)

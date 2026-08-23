@@ -3,7 +3,7 @@ import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import LazyVideo from '../components/LazyVideo'
 import { useSanity } from '../hooks/useSanity'
-import { ABOUT_PAGE_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
+import { SITE_CONFIG_QUERY } from '../lib/queries'
 
 /**
  * The page's copy, in code on purpose.
@@ -59,6 +59,7 @@ const COPY = {
 
   buildIntro: [
     "One-time engagements, mostly. You build a brand. You build a website. But nothing stays built — launch a new offering and the positioning you paid for last year is suddenly half a step behind. We are here for that too.",
+    'That matters more when you are the challenger. An incumbent survives a scattered brand because everyone already knows who they are. You are still being introduced, so every asset has to do two jobs at once: sell the thing, and establish who is selling it.',
     "Almost everything in branding and marketing lands in one of four pillars — the four below. Don't see yours? Ask. We do more than fits on a page, and when we can't help we will tell you who can.",
   ],
 
@@ -201,24 +202,12 @@ const COPY = {
  * untouched in Sanity if any of this needs reverting.
  */
 export default function Services() {
-  const { data } = useSanity(ABOUT_PAGE_QUERY)
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
-  const cfg = data ?? {}
   const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
-  const faqSchema = cfg.faqs?.length ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: cfg.faqs.map(({ question, answer }) => ({
-      '@type': 'Question',
-      name: question,
-      acceptedAnswer: { '@type': 'Answer', text: answer },
-    })),
-  } : null
   useMeta({
     title: 'Services | Super Conscious',
     description: 'Brand, website, marketing mix and channels for challenger brands, from $10,000 — plus ongoing support billed hourly. We build the brand, then grow it.',
     path: '/services',
-    schema: faqSchema,
   })
 
   return (
@@ -384,23 +373,6 @@ export default function Services() {
           ))}
         </div>
       </section>
-
-      {cfg.faqs?.length > 0 && (
-        <section className={styles.textSection}>
-          <p className={styles.sectionLabel}>{cfg.faqLabel || 'FAQ'}</p>
-          <div className={styles.faqList}>
-            {cfg.faqs.map(({ question, answer }) => (
-              <details key={question} className={styles.faqItem}>
-                <summary className={styles.faqQ}>
-                  <span>{question}</span>
-                  <span className={styles.faqToggle} aria-hidden="true" />
-                </summary>
-                <p className={styles.faqA}>{answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
 
       <section className={styles.pricingSection}>
         <div className={styles.pricingCard}>

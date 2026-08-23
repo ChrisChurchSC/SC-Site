@@ -13,6 +13,18 @@ const faqItem = defineArrayMember({
   preview: { select: { title: 'question', subtitle: 'answer' } },
 })
 
+// ORPHANED as of the FAQ cut. Nothing on the site reads this document any
+// more — /services was its only consumer, and the FAQ was the last field it
+// still rendered. The type is left registered rather than deleted because
+// removing a document type is a call for whoever owns the content, not a
+// side effect of cutting a page section; but be aware that editing anything
+// here now changes nothing on the site.
+//
+// Everything ever stored on about-page is still in the dataset, including
+// the seven FAQ entries — no field removed during the August 2026 rewrite
+// deleted its data. If a FAQ is wanted on another page, the content is
+// there to query.
+//
 // The page this drives is Services, at /services. The type name stays
 // `aboutPage` and the doc id stays `about-page`: renaming a Sanity type does
 // not migrate the documents already stored under the old name, so a rename
