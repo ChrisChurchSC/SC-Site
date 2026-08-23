@@ -58,7 +58,6 @@ const COPY = {
 
   buildIntro: [
     'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app. Almost everything in branding and marketing falls into one of four pillars — the four below.',
-    'It matters more for a challenger. A market leader survives a scattered brand; everyone already knows the name. You are still being introduced, so every asset sells the thing and establishes who is selling it.',
   ],
 
   packages: [
@@ -93,9 +92,35 @@ const COPY = {
     },
   ],
 
+  growPillars: [
+    {
+      n: '01',
+      name: 'Your Brand',
+      items: ['Brand Governance', 'Asset Extension', 'Sub-brand Support', 'Guideline Upkeep', 'New Collateral'],
+      value: 'The system stays coherent as it stretches into things it was never drawn for.',
+    },
+    {
+      n: '02',
+      name: 'Your Website & App',
+      items: ['Conversion Optimization', 'Landing Pages', 'A/B Testing', 'New Features', 'Performance', 'Ongoing SEO/AEO'],
+      value: 'The site stops being a launch and becomes something you tune every month.',
+    },
+    {
+      n: '03',
+      name: 'Your Marketing Mix',
+      items: ['Campaign Extensions', 'Paid Media Management', 'Creative Testing', 'Audience Expansion', 'Reporting & Dashboards'],
+      value: 'Budget moves toward what is working, on evidence rather than instinct.',
+    },
+    {
+      n: '04',
+      name: 'Your Channels',
+      items: ['Always-On Content', 'Short-Form Video', 'Community Management', 'Email & SMS', 'Channel Expansion'],
+      value: 'The feed keeps moving at the volume the platforms want, without the work getting worse.',
+    },
+  ],
+
   growIntro: [
     'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
-    'Ongoing support, billed hourly — and the half we would point at first. A fractional creative team: the people who built the brand stay on it, for a fraction of hiring them. Most studios hand over the files and disappear.',
   ],
   growTerms: 'Billed quarterly. One-quarter minimum engagement. Media spend is separate and paid directly by you to the platforms.',
 
@@ -285,6 +310,23 @@ export default function Services() {
             <p key={para.slice(0, 24)} className={styles.bandPara}>{para}</p>
           ))}
         </div>
+        <div className={styles.packageList}>
+          {COPY.growPillars.map(({ n, name, items, value }) => (
+            <div key={n} className={styles.packageCard}>
+              <div className={styles.packageMain}>
+                <span className={styles.packageN}>{n}</span>
+                <p className={styles.packageName}>{name}</p>
+                <ul className={styles.packageItems}>
+                  {items.map(i => (
+                    <li key={i} className={styles.packageItem}>{i}</li>
+                  ))}
+                </ul>
+                <p className={styles.packageValue}>{value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className={styles.tierGrid}>
           {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
             <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
