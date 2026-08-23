@@ -3,7 +3,7 @@ import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import LazyVideo from '../components/LazyVideo'
 import { useSanity } from '../hooks/useSanity'
-import { ABOUT_PAGE_QUERY } from '../lib/queries'
+import { ABOUT_PAGE_QUERY, SITE_CONFIG_QUERY } from '../lib/queries'
 
 /**
  * The page's copy, in code on purpose.
@@ -18,6 +18,11 @@ import { ABOUT_PAGE_QUERY } from '../lib/queries'
  * What is left in Sanity is what genuinely churns: the discipline list and the
  * FAQ. See the note on the component below.
  */
+// The studio reel, same source and same fallback as the homepage: it reads
+// siteConfig.reelVideoUrl so changing the reel in the Studio moves both pages
+// at once, rather than leaving /services on a URL nobody remembers pasting.
+const REEL_FALLBACK = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
+
 const COPY = {
   eyebrow: '[ Services ]',
   headline: "For brands that don't have incumbent money — and don't need it.",
@@ -33,19 +38,16 @@ const COPY = {
       name: 'New',
       definition: 'A brand that needs to be defined from scratch: identity, visual system, voice.',
       body: 'Nothing to protect and nothing to unwind. The advantage is that every decision is still available to you; the risk is making them in the wrong order. We start with positioning, then build the system outward.',
-      startsWith: 'Your Brand',
     },
     {
       name: 'Pivoting',
       definition: 'An existing brand reworking what it has. A facelift, or a full-scale overhaul to retain and amplify relevancy.',
       body: "You have equity worth keeping and baggage worth dropping, and the hard part is telling them apart. We audit what's actually load-bearing before we touch anything.",
-      startsWith: 'Your Brand → Your Website & App',
     },
     {
       name: 'Underdog',
       definition: 'A brand in a crowded category that needs to stand out.',
       body: "The category has conventions, and the leader wrote them. Blending in is the default failure. We find the position your competitors can't copy without contradicting themselves, then put weight behind it.",
-      startsWith: 'Your Marketing Mix → Your Channels',
     },
   ],
 
@@ -176,7 +178,9 @@ const COPY = {
  */
 export default function Services() {
   const { data } = useSanity(ABOUT_PAGE_QUERY)
+  const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   const cfg = data ?? {}
+  const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
   const faqSchema = cfg.faqs?.length ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -209,19 +213,17 @@ export default function Services() {
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.audienceLabel}</p>
         <p className={styles.sectionLead}>{COPY.audienceLead}</p>
+        {/* 16:9 above the three, on the same lazy treatment as the Proof
+            films — nothing loads until the frame is on screen. */}
+        <div className={styles.reelFrame}>
+          <LazyVideo src={reelUrl} className={styles.reelVideo} />
+        </div>
         <div className={styles.audienceGrid}>
-          {COPY.audience.map(({ name, definition, body, startsWith }) => (
+          {COPY.audience.map(({ name, definition, body }) => (
             <div key={name} className={styles.audienceCard}>
               <p className={styles.audienceName}>{name}</p>
               <p className={styles.audienceDefinition}>{definition}</p>
               <p className={styles.audienceBody}>{body}</p>
-              {/* Pushed to the foot of the card so the three routes line up
-                  across the row and can be compared without reading all
-                  three cards top to bottom. */}
-              <p className={styles.audienceStarts}>
-                <span className={styles.audienceStartsLabel}>Usually starts with</span>
-                {startsWith}
-              </p>
             </div>
           ))}
         </div>

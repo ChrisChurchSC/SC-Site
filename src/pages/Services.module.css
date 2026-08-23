@@ -216,6 +216,23 @@
    apart, and giving them the same numbered card turned the page into a
    template; here the word is the whole point, so it carries the size and the
    numeral is gone. */
+/* 16:9 band above the three cards, on the grid's own 4px radius so it reads
+   as part of the same set rather than a banner dropped in above them. */
+.reelFrame {
+  aspect-ratio: 16 / 9;
+  background: #161616;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.reelVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .audienceGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -233,30 +250,6 @@
 
 /* Pins the route line to the foot so the three line up across the row even
    though the bodies above them differ in length. */
-/* Its own inset box, pinned to the foot so the three line up across the row
-   even though the bodies above them differ in length. */
-.audienceStarts {
-  margin-top: auto;
-  padding: 12px 14px;
-  background: #1c1c1c;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.03em;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.audienceStartsLabel {
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.28);
-}
-
 .audienceDefinition {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
