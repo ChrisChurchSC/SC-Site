@@ -32,6 +32,26 @@ const COPY = {
     "Most of the brands who come to us assumed this level of work was out of reach — that agency-caliber branding, film, and media management was something you graduated into after a raise or a good year. It isn't.",
   ],
 
+  audienceLabel: "Where You're Starting",
+  audienceLead: 'Most of the brands we work with arrive in one of three situations.',
+  audience: [
+    {
+      name: 'New',
+      definition: 'A brand that needs to be defined from scratch: identity, visual system, voice.',
+      body: 'Nothing to protect and nothing to unwind. The advantage is that every decision is still available to you; the risk is making them in the wrong order. We start with positioning, then build the system outward.',
+    },
+    {
+      name: 'Pivoting',
+      definition: 'An existing brand reworking what it has. A facelift, or a full-scale overhaul to retain and amplify relevancy.',
+      body: "You have equity worth keeping and baggage worth dropping, and the hard part is telling them apart. We audit what's actually load-bearing before we touch anything.",
+    },
+    {
+      name: 'Underdog',
+      definition: 'A brand in a crowded category that needs to stand out.',
+      body: "The category has conventions, and the leader wrote them. Blending in is the default failure. We find the position your competitors can't copy without contradicting themselves, then put weight behind it.",
+    },
+  ],
+
   // The two halves of the offer, each opened by a band in the homepage intro
   // card's style: name on the left, its one-line definition right-aligned.
   buildBand: { name: 'Build' },
@@ -109,6 +129,27 @@ const COPY = {
     { name: 'Media', body: 'Paid strategy, buying, and creative testing across social, search, and programmatic. Planned, flighted, and optimized against the numbers rather than the impressions.' },
     { name: 'Search', body: 'SEO and AEO: the technical foundations, the content that earns the position, and the structured data that makes a brand legible to engines and to models.' },
     { name: 'Engineering', body: 'Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.' },
+  ],
+
+  // The three points that were 'Our Point of View' until they were pulled for
+  // an About page that does not exist. They are about how an engagement runs
+  // rather than what the studio believes, which is what this section is for —
+  // and they put 'embedded' back on a page that had lost the word entirely.
+  howLabel: 'How We Work',
+  howLead: 'One team, on the inside, for both halves of the work.',
+  how: [
+    {
+      heading: 'Build and Grow, one embedded team.',
+      body: 'Most of the field only does one half: identity and web, or campaigns and content. We do both, with the same people who already know the brand.',
+    },
+    {
+      heading: 'Digital-first, by priority not by rule.',
+      body: 'If it is digital, it is core to what we do. Print, events, and partnerships are available as needed; the door is not closed.',
+    },
+    {
+      heading: 'Strategy that gets executed.',
+      body: 'Our thinking does not sit in a deck. It goes into brand, creative, and paid media — and we revisit it through analytics, testing for bias and confirming the assumptions still hold.',
+    },
   ],
 
   proofLabel: 'Proof',
@@ -197,6 +238,20 @@ export default function Services() {
       </section>
 
       <section className={styles.textSection}>
+        <p className={styles.sectionLabel}>{COPY.audienceLabel}</p>
+        <p className={styles.sectionLead}>{COPY.audienceLead}</p>
+        <div className={styles.audienceGrid}>
+          {COPY.audience.map(({ name, definition, body }) => (
+            <div key={name} className={styles.audienceCard}>
+              <p className={styles.audienceName}>{name}</p>
+              <p className={styles.audienceDefinition}>{definition}</p>
+              <p className={styles.audienceBody}>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.textSection}>
         <p className={styles.sectionLabel}>What We Do</p>
 
         {/* Both halves are set as plain type now; the band card they used to
@@ -274,6 +329,20 @@ export default function Services() {
       </section>
 
       <section className={styles.textSection}>
+        <p className={styles.sectionLabel}>{COPY.howLabel}</p>
+        <p className={styles.sectionLead}>{COPY.howLead}</p>
+        <div className={styles.howGrid}>
+          {COPY.how.map(({ heading, body }, i) => (
+            <div key={heading} className={styles.howPoint}>
+              <span className={styles.howN}>{String(i + 1).padStart(2, '0')}</span>
+              <p className={styles.howHeading}>{heading}</p>
+              <p className={styles.howBody}>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.proofLabel}</p>
         <p className={styles.sectionLead}>{COPY.proofLead}</p>
         <div className={styles.proofGrid}>
@@ -299,11 +368,17 @@ export default function Services() {
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.disciplinesLabel}</p>
         <div className={styles.rolesGrid}>
+          {/* <details>, on the FAQ's pattern further down the page — twelve
+              descriptions open at once was most of a screen of body copy for a
+              list whose job is to be scanned. */}
           {COPY.disciplines.map(({ name, body }) => (
-            <div key={name} className={styles.roleCard}>
-              <p className={styles.roleName}>{name}</p>
+            <details key={name} className={styles.roleCard}>
+              <summary className={styles.roleSummary}>
+                <span className={styles.roleName}>{name}</span>
+                <span className={styles.roleToggle} aria-hidden="true" />
+              </summary>
               <p className={styles.roleDesc}>{body}</p>
-            </div>
+            </details>
           ))}
         </div>
       </section>

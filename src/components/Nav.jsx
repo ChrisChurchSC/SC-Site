@@ -108,7 +108,7 @@ export default function Nav() {
           <NavLink to="/services" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Services</p>
-              <p className="nav-card-sub">Design, motion, engineering.</p>
+              <p className="nav-card-sub">Build the brand, then grow it.</p>
             </div>
           </NavLink>
 
