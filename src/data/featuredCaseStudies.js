@@ -34,9 +34,9 @@
 // nothing about whether the work performed.
 // Labels are final. Values are not — see the warning above.
 const PLACEHOLDER = [
-  { value: '––', label: 'Win rate' },
-  { value: '––', label: 'Follower growth' },
+  { value: '––', label: 'Audience growth' },
   { value: '––', label: 'SQL growth' },
+  { value: '––', label: 'Win rate' },
 ]
 
 export const featuredCaseStudies = [
@@ -68,6 +68,19 @@ export const featuredCaseStudies = [
     type: 'Brand + Content',
     // comingSoon:true in Sanity — shown but not linked everywhere else on
     // the site. Left unlinked here for the same reason.
+    href: null,
+    media: null,
+    stats: PLACEHOLDER,
+  },
+  {
+    slug: 'smashburger',
+    name: 'Smashburger',
+    type: 'Brand + Content',
+    // comingSoon:true in Sanity — its page builds but is noindexed and absent
+    // from the sitemap, so it is shown and not linked, the same treatment
+    // Arbitrum gets here and the wall, the nav and the client strip already
+    // give it. It was already on the homepage in the client strip; this puts
+    // it in the featured set too.
     href: null,
     media: null,
     stats: PLACEHOLDER,
