@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styles from './Services.module.css'
 import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
@@ -132,10 +133,10 @@ const COPY = {
   // month here so the page cannot understate the price threefold; "billed
   // quarterly" is stated in the terms above the grid.
   tiers: [
-    { hours: '25', price: '$4,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
-    { hours: '50', price: '$8,250', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
-    { hours: '100', price: '$15,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
-    { hours: '150', price: '$21,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
+    { hours: '25', month: '$4,500', quarter: '$13,500', rate: '$180 / hour', body: 'One pillar, kept current.' },
+    { hours: '50', month: '$8,250', quarter: '$24,750', rate: '$165 / hour', body: 'Two pillars, held steady across the channels that matter most.' },
+    { hours: '100', month: '$15,000', quarter: '$45,000', rate: '$150 / hour', body: 'Three pillars, every month. You see what is working, and we act on it fast.', flag: 'Most common' },
+    { hours: '150', month: '$21,000', quarter: '$63,000', rate: '$140 / hour', body: 'All four pillars, every month. Nothing drifts.' },
   ],
 
   // Lifted out of Sanity so Media and Search could be added — there is no
@@ -227,6 +228,11 @@ const COPY = {
  */
 export default function Services() {
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
+
+  // 'month' | 'quarter'. Billing is quarterly, so a quarter is what lands on
+  // the invoice; the monthly figure is what people compare against a salary.
+  // Neither is the obviously right default, so both are one click apart.
+  const [period, setPeriod] = useState('month')
   const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
   useMeta({
     title: 'Services | Super Conscious',
@@ -327,8 +333,22 @@ export default function Services() {
           ))}
         </div>
 
+        <div className={styles.periodToggle} role="group" aria-label="Show prices per month or per quarter">
+          {[['month', 'Per month'], ['quarter', 'Per quarter']].map(([key, text]) => (
+            <button
+              key={key}
+              type="button"
+              className={`${styles.periodBtn}${period === key ? ' ' + styles.periodBtnOn : ''}`}
+              aria-pressed={period === key}
+              onClick={() => setPeriod(key)}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+
         <div className={styles.tierGrid}>
-          {COPY.tiers.map(({ hours, price, rate, body, flag }) => (
+          {COPY.tiers.map(({ hours, month, quarter, rate, body, flag }) => (
             <div key={hours} className={flag ? styles.tierCardFlagged : styles.tierCard}>
               {/* The badge slot is always rendered, empty or not, so all four
                   cards align on the number rather than the flagged one sitting
@@ -344,8 +364,10 @@ export default function Services() {
                 <p className={styles.tierUnit}>hours / month</p>
               </div>
               <div className={styles.tierMoney}>
-                <p className={styles.tierPrice}>{price}</p>
-                <p className={styles.tierRate}>{rate}</p>
+                <p className={styles.tierPrice}>{period === 'month' ? month : quarter}</p>
+                <p className={styles.tierRate}>
+                  {period === 'month' ? 'per month' : 'per quarter'} · {rate}
+                </p>
               </div>
               <p className={styles.tierBody}>{body}</p>
             </div>
