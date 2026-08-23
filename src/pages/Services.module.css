@@ -216,14 +216,14 @@
    apart, and giving them the same numbered card turned the page into a
    template; here the word is the whole point, so it carries the size and the
    numeral is gone. */
-/* 16:9 band above the three cards, on the grid's own 4px radius so it reads
-   as part of the same set rather than a banner dropped in above them. */
+/* 16:9, closing the hero under the intro paragraphs. The header stacks on a
+   20px gap, so this needs no margin of its own. */
 .reelFrame {
   aspect-ratio: 16 / 9;
   background: #161616;
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 5px;
+  margin-top: 12px;
 }
 
 .reelVideo {

@@ -208,16 +208,16 @@ export default function Services() {
             <p key={para.slice(0, 24)} className={styles.introPara}>{para}</p>
           ))}
         </div>
+        {/* Closes the hero: the argument, then the work. Same lazy treatment
+            as the Proof films — nothing loads until it is on screen. */}
+        <div className={styles.reelFrame}>
+          <LazyVideo src={reelUrl} className={styles.reelVideo} />
+        </div>
       </section>
 
       <section className={styles.textSection}>
         <p className={styles.sectionLabel}>{COPY.audienceLabel}</p>
         <p className={styles.sectionLead}>{COPY.audienceLead}</p>
-        {/* 16:9 above the three, on the same lazy treatment as the Proof
-            films — nothing loads until the frame is on screen. */}
-        <div className={styles.reelFrame}>
-          <LazyVideo src={reelUrl} className={styles.reelVideo} />
-        </div>
         <div className={styles.audienceGrid}>
           {COPY.audience.map(({ name, definition, body }) => (
             <div key={name} className={styles.audienceCard}>
