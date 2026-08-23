@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './Services.module.css'
 import { useMeta } from '../hooks/useMeta'
-import EmailCaptureForm from '../components/EmailCaptureForm'
+import ContactCTA from '../components/ContactCTA'
 import LazyVideo from '../components/LazyVideo'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
@@ -447,19 +447,15 @@ export default function Services() {
         </div>
       </section>
 
-      <section className={styles.pricingSection}>
-        <div className={styles.pricingCard}>
-          <p className={styles.pricingLabel}>{COPY.ctaLabel}</p>
-          <p className={styles.pricingSub}>{COPY.ctaSub}</p>
-          <EmailCaptureForm
-            styles={styles}
-            submitLabel="Get in touch →"
-            confirmMessage="Thanks — we'll be in touch shortly."
-            subject="Enquiry from super-conscious.studio"
-            requestType="pricing"
-          />
-        </div>
-      </section>
+      {/* The same block the homepage closes on. Its own subject and request
+          type, so a services enquiry is not filed as whatever the homepage
+          files. */}
+      <ContactCTA
+        label={COPY.ctaLabel}
+        sub={COPY.ctaSub}
+        subject="Pricing request from super-conscious.studio"
+        requestType="pricing"
+      />
 
     </main>
   )

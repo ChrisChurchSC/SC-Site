@@ -8,6 +8,7 @@ import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
 import ClientStrip from '../components/ClientStrip'
 import TestimonialStrip from '../components/TestimonialStrip'
+import ContactCTA from '../components/ContactCTA'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
@@ -165,6 +166,9 @@ export default function Home() {
 
       {/* Featured case studies — four, with their numbers */}
       <FeaturedCaseStudies />
+
+      {/* Closes the page on the ask */}
+      <ContactCTA />
 
 
       {reelOpen && (

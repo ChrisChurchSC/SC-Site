@@ -25,26 +25,35 @@ test('the component actually asks for classes', () => {
   assert.ok(REQUIRED.length >= 5, `expected several styles.* references, found ${REQUIRED.length}`)
 })
 
-/** Every page that renders the component, found rather than listed. */
-const consumers = readdirSync(path.join(ROOT, 'src/pages'))
-  .filter((f) => f.endsWith('.jsx'))
-  .filter((f) => readFileSync(path.join(ROOT, 'src/pages', f), 'utf8').includes('EmailCaptureForm'))
+/** Everything that renders the component, found rather than listed.
+ *
+ * Both directories, because a consumer is whatever passes `styles` to the
+ * form — the CTA is a component shared by two pages, and scanning only
+ * src/pages would miss exactly the consumer that matters most.
+ *
+ * EmailCaptureForm itself matches its own name, so it is excluded. */
+const consumers = ['src/pages', 'src/components'].flatMap((dir) =>
+  readdirSync(path.join(ROOT, dir))
+    .filter((f) => f.endsWith('.jsx') && f !== 'EmailCaptureForm.jsx')
+    .filter((f) => readFileSync(path.join(ROOT, dir, f), 'utf8').includes('EmailCaptureForm'))
+    .map((f) => ({ dir, file: f, id: `${dir}/${f}` })),
+)
 
-test('every page rendering the form was discovered', () => {
+test('every file rendering the form was discovered', () => {
   // Guards against the regex silently matching nothing and the suite passing
   // by testing an empty list.
   assert.ok(consumers.length >= 2, `expected at least 2 consumers, found ${consumers.length}`)
 })
 
-for (const page of consumers) {
-  test(`${page} defines every class EmailCaptureForm uses`, () => {
-    const jsx = readFileSync(path.join(ROOT, 'src/pages', page), 'utf8')
+for (const { dir, file, id } of consumers) {
+  test(`${id} defines every class EmailCaptureForm uses`, () => {
+    const jsx = readFileSync(path.join(ROOT, dir, file), 'utf8')
 
     // The component takes styles={...}; resolve which module that is.
     const importMatch = jsx.match(/import\s+styles\s+from\s+'\.\/([\w.]+\.css)'/)
-    assert.ok(importMatch, `${page} imports a CSS module as \`styles\``)
+    assert.ok(importMatch, `${id} imports a CSS module as \`styles\``)
 
-    const css = readFileSync(path.join(ROOT, 'src/pages', importMatch[1]), 'utf8')
+    const css = readFileSync(path.join(ROOT, dir, importMatch[1]), 'utf8')
     // Requires the BASE rule. `.emailInput:focus { }` alone must not count as
     // defining .emailInput — a pseudo-class variant with no base rule leaves
     // the control unstyled in its normal state, which is the bug.
@@ -66,14 +75,14 @@ test('each consumer supplies its own copy and labelling', () => {
   // the careers page with pricing's button text, confirmation, _subject and
   // request_type, so freelancer signups were filed as pricing leads.
   const seen = new Map()
-  for (const page of consumers) {
-    const jsx = readFileSync(path.join(ROOT, 'src/pages', page), 'utf8')
+  for (const { dir, file, id } of consumers) {
+    const jsx = readFileSync(path.join(ROOT, dir, file), 'utf8')
     for (const prop of ['submitLabel', 'confirmMessage', 'subject', 'requestType']) {
-      const m = jsx.match(new RegExp(`${prop}=["{]([^"}]*)`))
-      assert.ok(m, `${page} must pass ${prop} explicitly`)
+      const m = jsx.match(new RegExp(`${prop}[=:]\\s*["{']?([^"}',\\n]*)`))
+      assert.ok(m, `${id} must pass ${prop} explicitly`)
       const key = `${prop}:${m[1]}`
-      assert.ok(!seen.has(key), `${page} reuses ${prop} from ${seen.get(key)} — contexts must differ`)
-      seen.set(key, page)
+      assert.ok(!seen.has(key), `${id} reuses ${prop} from ${seen.get(key)} — contexts must differ`)
+      seen.set(key, id)
     }
   }
 })
