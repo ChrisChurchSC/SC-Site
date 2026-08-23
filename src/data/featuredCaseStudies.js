@@ -28,14 +28,15 @@
 // component renders those as unlinked cards. Matching how the wall, the nav
 // and the client strip already treat unwritten or hidden work.
 
-// The four measures, same set across all four case studies so the section
-// reads as one comparable table rather than four unrelated brag sheets.
+// The measures, same set across all four case studies so the section reads
+// as one comparable table rather than four unrelated brag sheets. Three now;
+// Time to market came out because it is the one of the four that says
+// nothing about whether the work performed.
 // Labels are final. Values are not — see the warning above.
 const PLACEHOLDER = [
   { value: '––', label: 'Win rate' },
   { value: '––', label: 'Follower growth' },
   { value: '––', label: 'SQL growth' },
-  { value: '––', label: 'Time to market' },
 ]
 
 export const featuredCaseStudies = [

@@ -23,12 +23,29 @@
   border-radius: 4px;
 }
 
-/* Matches the wall's hover, so a linked card behaves like a case study block. */
+/* Matches the wall's hover, so a linked card behaves like a case study block.
+   The lift and ring were already here; what follows brings the card's own
+   contents with it, so the whole thing responds rather than just its frame.
+
+   Only .entryLink gets any of this. A card without a written case study
+   renders as an <article> and stays inert on purpose — the same rule the
+   work list, the nav and the client strip already follow, so whether there
+   is something to click is legible before you click rather than after. */
 .entryLink:hover {
   transform: translateY(-6px);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
               0 16px 36px rgba(0, 0, 0, 0.6);
 }
+
+.entryLink .name,
+.entryLink .statValue,
+.entryLink .statLabel {
+  transition: color 0.25s ease;
+}
+
+.entryLink:hover .name { color: #fff; }
+.entryLink:hover .statValue { color: #fff; }
+.entryLink:hover .statLabel { color: rgba(255, 255, 255, 0.75); }
 
 .frame {
   position: relative;

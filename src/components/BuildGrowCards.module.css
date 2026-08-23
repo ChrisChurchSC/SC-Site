@@ -89,3 +89,35 @@
 
   .cta { padding-top: 22px; }
 }
+
+/* A card carrying artwork.
+
+   grayscale then invert, in that order: the cream ground goes to near-black
+   and the dark green marks come back as light grey, which puts the drawing
+   on the same ground as every other card rather than making this one the
+   cream exception. Doing it in CSS keeps the source file the drawing as
+   delivered.
+
+   No background-position here on purpose. The default 0% 0% is the crop the
+   client picked from what was on screen; naming a position would move it.
+
+   The filter lives on .media rather than the card because a filter applies
+   to descendants, and the type has to stay unfiltered. */
+.media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: grayscale(1) invert(1);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Everything above the artwork. The stack is bottom-aligned by .card, so
+   these only need lifting out of the layer the image occupies. */
+.cardMedia .name,
+.cardMedia .body,
+.cardMedia .cta {
+  position: relative;
+  z-index: 1;
+}

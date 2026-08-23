@@ -4,10 +4,17 @@ import styles from './BuildGrowCards.module.css'
 /**
  * The two-up under the client strip: the whole offer in two cards.
  *
- * Type only — no media. The reel sits directly above and the wall directly
- * below, both of them moving pictures; these two are the still point between
- * them, and the one place on the homepage that says in words what the studio
- * actually sells.
+ * Grow carries artwork; Build does not, yet. The pair was type-only on
+ * purpose — the reel sits directly above and the wall directly below, both
+ * moving pictures, and these two were the still point between them — so the
+ * asymmetry is a deliberate half-step rather than a finished state.
+ *
+ * The artwork is inverted and desaturated in CSS rather than re-exported, so
+ * the source file stays the drawing as delivered and the card matches the
+ * dark ground instead of the type flipping to suit a cream image. It sits on
+ * its own layer for that reason — filtering the card would filter the words
+ * with it. Give Build a media of its own and the same class does the same
+ * thing for it.
  *
  * Copy is the client's own, from the Build/Grow module spec.
  *
@@ -33,14 +40,26 @@ const CARDS = [
     body: 'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
     cta: 'How we grow',
     href: '/services',
+    media: '/grow-card.gif',
   },
 ]
 
 export default function BuildGrowCards() {
   return (
     <section className={styles.row}>
-      {CARDS.map(({ id, name, body, cta, href }) => (
-        <NavLink key={id} to={href} className={styles.card}>
+      {CARDS.map(({ id, name, body, cta, href, media }) => (
+        <NavLink
+          key={id}
+          to={href}
+          className={`${styles.card}${media ? ' ' + styles.cardMedia : ''}`}
+        >
+          {media && (
+            <span
+              className={styles.media}
+              style={{ backgroundImage: `url(${media})` }}
+              aria-hidden="true"
+            />
+          )}
           <h2 className={styles.name}>{name}</h2>
           <p className={styles.body}>{body}</p>
           <span className={styles.cta}>{cta} →</span>
