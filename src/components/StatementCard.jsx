@@ -18,7 +18,7 @@ import styles from './StatementCard.module.css'
  * only by Home.jsx, so the tag cannot collide anywhere else. The change is
  * style-neutral: .statement is selected by class, never by element.
  */
-const STATEMENT = 'Super-Conscious is the go-to fractional marketing and creative department for building and growing challenger brands.'
+const STATEMENT = 'Super-Conscious is the go-to fractional marketing and creative department for challenger brands.'
 const SUPPORT = "One embedded team handles both brand creation/evolution and growth media and content tactics, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign."
 
 export default function StatementCard() {
