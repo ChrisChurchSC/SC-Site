@@ -102,7 +102,13 @@ export const featuredCaseStudies = [
     type: 'Brand + Content',
     // The only one of the four with a real, reachable case study page.
     href: '/work/wonderwerk',
-    media: null,
+    // A 9s cut of the case study's own delivered assets — wordmark, posters,
+    // packaging, social, identity, web, 3D, and the tagline to land on. Built
+    // at 16:9 from the seven assets that were already 16:9 plus five moments
+    // pulled from the films, so nothing in it is a portrait frame squeezed
+    // into a landscape one. LazyVideo means it costs nothing until the card
+    // is near the viewport.
+    media: '/wonderwerk-montage-compressed.mp4',
     stats: PLACEHOLDER,
   },
 ]
