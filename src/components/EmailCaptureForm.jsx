@@ -129,9 +129,10 @@ export default function EmailCaptureForm({
  * this function's body to work out which classes only the contact variant
  * requires, and does not hold the compact callers to those.
  *
- * Labels are visible rather than placeholder-only. A placeholder disappears
- * the moment someone types, so on a three-field form the person filling in
- * the last box can no longer see what the first two were.
+ * The names sit inside the boxes. Each field still carries a real <label>,
+ * hidden visually — a placeholder is not a label to a screen reader, so
+ * dropping the element would leave three unnamed boxes. This way the form
+ * looks the way it is meant to and still announces itself.
  *
  * Every field here is submitted: submitLead posts new FormData(form).
  */
@@ -140,35 +141,38 @@ function ContactFields({ styles, requestType }) {
     <>
       <div className={styles.emailRow}>
         <div className={styles.emailField}>
-          <label className={styles.emailLabel} htmlFor={`name-${requestType}`}>Name</label>
+          <label className={styles.emailSrOnly} htmlFor={`name-${requestType}`}>Name</label>
           <input
             id={`name-${requestType}`}
             className={styles.emailInput}
             type="text"
             name="name"
+            placeholder="Name"
             required
             autoComplete="name"
           />
         </div>
         <div className={styles.emailField}>
-          <label className={styles.emailLabel} htmlFor={`email-${requestType}`}>Email</label>
+          <label className={styles.emailSrOnly} htmlFor={`email-${requestType}`}>Email</label>
           <input
             id={`email-${requestType}`}
             className={styles.emailInput}
             type="email"
             name="email"
+            placeholder="Email"
             required
             autoComplete="email"
           />
         </div>
       </div>
       <div className={styles.emailField}>
-        <label className={styles.emailLabel} htmlFor={`message-${requestType}`}>What do you need?</label>
+        <label className={styles.emailSrOnly} htmlFor={`message-${requestType}`}>What's on your mind?</label>
         <textarea
           id={`message-${requestType}`}
           className={styles.emailTextarea}
           name="message"
           rows={4}
+          placeholder="What's on your mind?"
           required
         />
       </div>

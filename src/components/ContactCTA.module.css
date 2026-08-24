@@ -118,23 +118,17 @@
   gap: 10px;
 }
 
-/* The card centres its heading and sub; a field's label belongs over the left
-   edge of its box, not floating in the middle of it. The form block stays
-   centred in the card — only its contents go left. */
+/* The card centres its heading and sub, and a control inherits that — which
+   would centre the placeholder text inside its own box. The form block stays
+   centred in the card; its contents read from the left.
+
+   min-width: 0 because this is a grid item wrapping an input, and an input's
+   intrinsic width would otherwise push the column past its track. */
 .emailField {
   display: flex;
   flex-direction: column;
-  gap: 6px;
   min-width: 0;
   text-align: left;
-}
-
-.emailLabel {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Matches .emailInput, plus the things only a textarea needs: a readable
@@ -156,14 +150,22 @@
   transition: border-color 0.15s, background 0.15s;
 }
 
+/* A textarea does not pick up .emailInput::placeholder, and an unstyled
+   placeholder here is near-white on near-black. */
+.emailTextarea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
 .emailTextarea:focus {
   background: #111;
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* The button stretches to the column width otherwise. */
+/* Centred under the stack, matching the heading and the line above it. Left
+   to itself it would stretch the full column width, which reads as a bar
+   rather than a button. */
 .emailForm[data-variant='contact'] .emailSubmit {
-  align-self: flex-start;
+  align-self: center;
 }
 
 .emailInput:focus {
@@ -171,24 +173,32 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* Solid white, the same primary submit /contact already uses — this is the
+   one thing on the card being asked for, and the ghost treatment it had made
+   it read as secondary to nothing. Values match Contact.module.css .submit so
+   the two forms are the same button. */
 .emailSubmit {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.5);
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  color: #0a0a0a;
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 11px 20px;
+  padding: 13px 26px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: opacity 0.18s;
   flex-shrink: 0;
 }
 
 .emailSubmit:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.82;
+}
+
+.emailSubmit:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .emailConfirm {
