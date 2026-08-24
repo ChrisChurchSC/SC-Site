@@ -94,6 +94,78 @@
   color: rgba(255, 255, 255, 0.2);
 }
 
+/* ── The contact variant ──
+   .emailForm is a row for the one-line capture; this turns it into a column
+   and lets the fields set their own widths. Wider than the 440px the single
+   input sits in, because a message box at that measure is a slot, not a box
+   you would write a paragraph in.
+
+   Keyed off the attribute rather than a second class so the compact callers
+   are not made to define a class they never apply — the style test holds
+   every caller to the classes the component references. */
+.emailForm[data-variant='contact'] {
+  flex-direction: column;
+  gap: 14px;
+  max-width: 620px;
+}
+
+/* Name and email share a line, the message gets its own. minmax(0, 1fr) and
+   not 1fr: an input's default size attribute gives it an intrinsic minimum
+   wider than half the row, and bare 1fr honours that and overflows. */
+.emailRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* The card centres its heading and sub; a field's label belongs over the left
+   edge of its box, not floating in the middle of it. The form block stays
+   centred in the card — only its contents go left. */
+.emailField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  text-align: left;
+}
+
+.emailLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Matches .emailInput, plus the things only a textarea needs: a readable
+   line-height, a resize handle that cannot break the card's width, and the
+   inherited font a textarea otherwise refuses. */
+.emailTextarea {
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  width: 100%;
+  resize: vertical;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.emailTextarea:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* The button stretches to the column width otherwise. */
+.emailForm[data-variant='contact'] .emailSubmit {
+  align-self: flex-start;
+}
+
 .emailInput:focus {
   background: #111;
   border-color: rgba(255, 255, 255, 0.2);

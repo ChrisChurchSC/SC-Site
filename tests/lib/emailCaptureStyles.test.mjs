@@ -17,12 +17,28 @@ import test from 'node:test'
 const ROOT = path.join(import.meta.dirname, '../..')
 const COMPONENT = path.join(ROOT, 'src/components/EmailCaptureForm.jsx')
 
-const required = [...readFileSync(COMPONENT, 'utf8').matchAll(/styles\.(\w+)/g)]
-  .map((m) => m[1])
-const REQUIRED = [...new Set(required)].sort()
+const SOURCE = readFileSync(COMPONENT, 'utf8')
+
+const classesIn = (src) => new Set([...src.matchAll(/styles\.(\w+)/g)].map((m) => m[1]))
+
+/**
+ * The contact variant needs classes the compact one never renders, so holding
+ * every caller to all of them would demand dead rules from the careers page.
+ * ContactFields is a separate function for exactly this reason: its body is
+ * the contact-only contract, and everything else is what all callers owe.
+ *
+ * Still derived from real usage rather than a hand-kept list — a list drifts
+ * from the component the first time somebody adds a field.
+ */
+const contactFn = SOURCE.slice(SOURCE.indexOf('function ContactFields'))
+assert.ok(contactFn, 'ContactFields must exist for the variant split to be derivable')
+
+const CONTACT_ONLY = [...classesIn(contactFn)].sort()
+const BASE = [...classesIn(SOURCE.slice(0, SOURCE.indexOf('function ContactFields')))].sort()
 
 test('the component actually asks for classes', () => {
-  assert.ok(REQUIRED.length >= 5, `expected several styles.* references, found ${REQUIRED.length}`)
+  assert.ok(BASE.length >= 5, `expected several styles.* references, found ${BASE.length}`)
+  assert.ok(CONTACT_ONLY.length >= 3, `expected ContactFields to use its own classes, found ${CONTACT_ONLY.length}`)
 })
 
 /** Everything that renders the component, found rather than listed.
@@ -61,7 +77,11 @@ for (const { dir, file, id } of consumers) {
       [...css.matchAll(/^\.(\w+)\s*[,{]/gm)].map((m) => m[1]),
     )
 
-    const missing = REQUIRED.filter((c) => !defined.has(c))
+    // A consumer only owes the contact classes if it asks for that variant.
+    const wantsContact = /variant\s*=\s*["{']contact/.test(jsx)
+    const required = wantsContact ? [...BASE, ...CONTACT_ONLY] : BASE
+
+    const missing = required.filter((c) => !defined.has(c))
     assert.deepEqual(
       missing,
       [],

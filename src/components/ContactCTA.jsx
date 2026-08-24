@@ -32,6 +32,7 @@ export default function ContactCTA({
         <p className={styles.pricingSub}>{sub}</p>
         <EmailCaptureForm
           styles={styles}
+          variant="contact"
           submitLabel={submitLabel}
           confirmMessage={confirmMessage}
           subject={subject}
