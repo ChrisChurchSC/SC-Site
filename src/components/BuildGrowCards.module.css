@@ -127,18 +127,22 @@
 /* The source is 1440x800 and the card is 4:5, so cover shows 640 of 1440 —
    most of the frame never appears, and which 640 is a real choice.
 
-   Measured rather than eyeballed: mean luma of the crop across all 97 frames
-   is the amount of line-work actually on screen, and it peaks around the
-   middle (22.7) and falls to 19.3 at the left edge and 20.8 at the right.
-   Both extremes spend the card on empty black. 75% is a visible move right —
-   onto the leading end of the chain and the dimension arrow, the part that
-   reads as being built rather than just sitting there — while still holding
-   22.3, within a rounding error of the peak. */
+   Mind the direction. object-position moves the WINDOW, not the picture, so a
+   LOWER number slides the artwork right on screen: at 100% the chain sits in
+   the bottom-left corner, at 0% it sits on the right. This read backwards the
+   first time and the value went the wrong way.
+
+   30% puts the chain high and to the right, on its leading end and the
+   dimension arrows — the part that reads as being built rather than just
+   sitting there. Below about 20% the window runs off the front of the
+   drawing into empty black, and above 80% the chain drops out of the bottom;
+   mean luma across the 97 frames peaks mid-frame and falls off at both ends,
+   so this is as far right as the artwork goes. */
 .mediaVideo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 75% 50%;
+  object-position: 30% 50%;
   display: block;
 }
 
