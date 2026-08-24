@@ -26,7 +26,7 @@ const REEL_FALLBACK = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407c
 
 const COPY = {
   eyebrow: '[ Services ]',
-  headline: 'Super-Conscious exists to level up challenger brands by combining world-class creative with analytics-driven marketing at an accessible price.',
+  headline: 'Super-Conscious is the go-to fractional marketing and creative department for challenger brands.',
   intro: [
     "You're competing against companies with bigger budgets, bigger teams, and a decade of brand equity you don't have yet. What you do have is speed, a sharper point of view, and no legacy to protect.",
     'We build challenger brands that use that. Then we take them to market.',

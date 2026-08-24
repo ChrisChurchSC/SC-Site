@@ -37,9 +37,10 @@
   line-height: 1.08;
   color: rgba(255, 255, 255, 0.92);
   /* Measured in characters rather than pixels so the line count holds as the
-     type scales — three lines at every width above the breakpoint. Widened
-     from 26ch when the statement grew from nine words to fifteen; at the old
-     measure the same sentence ran to five. */
+     type scales. It has been 26ch and 40ch as the statement changed length;
+     at 21 words this one sets to four lines, and three is not available to it
+     — the column runs out before the measure does, so a three-line version
+     would have to come off the type size rather than off here. */
   max-width: 40ch;
   margin: 0;
   text-wrap: balance;
