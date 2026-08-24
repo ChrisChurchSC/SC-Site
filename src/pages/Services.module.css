@@ -62,11 +62,10 @@
   max-width: 900px;
 }
 
-/* Both footnotes, one treatment. The first is the ruler the hours above are
-   measured against and follows the toggle; the second is the conditions the
-   prices are sold under. Different jobs, but the same standing on the page —
-   notes on the numbers, meant to be read rather than skipped. */
-.growBenchmark,
+/* The conditions the prices above are sold under. Kept at the weight the pair
+   of footnotes shared before the other one was cut — a one-quarter minimum
+   and a media-spend exclusion are terms, not fine print, and they were set
+   too faint to be read. */
 .growTerms {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;

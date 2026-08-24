@@ -240,9 +240,9 @@ export default function Services() {
   const [period, setPeriod] = useState('month')
 
   const PERIODS = [
-    { key: 'month', label: 'Per month', unit: 'hours / month', per: 'per month', fte: '173', fteUnit: 'a month' },
-    { key: 'quarter', label: 'Per quarter', unit: 'hours / quarter', per: 'per quarter', fte: '520', fteUnit: 'a quarter' },
-    { key: 'year', label: 'Per year', unit: 'hours / year', per: 'per year', fte: '2,080', fteUnit: 'a year' },
+    { key: 'month', label: 'Per month', unit: 'hours / month', per: 'per month' },
+    { key: 'quarter', label: 'Per quarter', unit: 'hours / quarter', per: 'per quarter' },
+    { key: 'year', label: 'Per year', unit: 'hours / year', per: 'per year' },
   ]
   const active = PERIODS.find(x => x.key === period)
   const reelUrl = siteConfig?.reelVideoUrl ?? REEL_FALLBACK
@@ -388,17 +388,6 @@ export default function Services() {
             them first made the reader work through the fine print to reach
             the prices. */}
         <div className={styles.growFootnotes}>
-          {/* Two halves, and the second is the one that matters. The first
-              gives the hours a size; on its own it invites the reader to price
-              us against a single hire, which is the wrong comparison and the
-              unflattering one. The second says what the hours actually buy —
-              a department drawing on whichever disciplines the work needs,
-              not one person's week. */}
-          <p className={styles.growBenchmark}>
-            For scale: one full-time employee works about {active.fte} hours{' '}
-            {active.fteUnit}. Yours are spread across a full marketing and
-            creative department, not a single employee.
-          </p>
           <p className={styles.growTerms}>{COPY.growTerms}</p>
         </div>
       </section>
