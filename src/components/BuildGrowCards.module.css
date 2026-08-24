@@ -146,6 +146,20 @@
   display: block;
 }
 
+/* Light mode inverts .theme-layer and then counter-inverts img/video, so
+   photographs keep their real colours. This is not a photograph — it is line
+   art on black, the same kind of thing as Grow's drawing, which does flip
+   with the theme. Counter-inverting it left a black card under text that had
+   already gone dark, which is the one place on the homepage light mode was
+   unreadable. Opting out lets the layer's invert through: white ground,
+   black lines, and the scrim inverts with it so the type still has a floor.
+
+   Specificity, not order, is what does this: the global rule is
+   [data-theme="light"] video at (0,1,1) and this is (0,2,0). */
+:global([data-theme='light']) .mediaVideo {
+  filter: none;
+}
+
 /* The card's type is bottom-aligned over full-colour footage, so it needs a
    floor to sit on. Weighted to the bottom only — a scrim across the whole
    frame would flatten the artwork to hold three lines of text. */
