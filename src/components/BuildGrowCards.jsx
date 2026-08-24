@@ -1,20 +1,26 @@
 import { NavLink } from 'react-router-dom'
 import styles from './BuildGrowCards.module.css'
+import LazyVideo from './LazyVideo'
+
+/** Artwork can be a still or a film, and they cannot share a mechanism: a
+ *  background-image will not play, so a film needs a real element. */
+const isVideo = src => /\.(mp4|webm|mov)$/i.test(src)
 
 /**
  * The two-up under the client strip: the whole offer in two cards.
  *
- * Grow carries artwork; Build does not, yet. The pair was type-only on
- * purpose — the reel sits directly above and the wall directly below, both
- * moving pictures, and these two were the still point between them — so the
- * asymmetry is a deliberate half-step rather than a finished state.
+ * Both cards carry artwork now, and not the same kind. Grow has a still
+ * drawing; Build has film. They take different paths through here because a
+ * background-image cannot play — see isVideo below.
  *
- * The artwork is inverted and desaturated in CSS rather than re-exported, so
- * the source file stays the drawing as delivered and the card matches the
- * dark ground instead of the type flipping to suit a cream image. It sits on
- * its own layer for that reason — filtering the card would filter the words
- * with it. Give Build a media of its own and the same class does the same
- * thing for it.
+ * Grow's drawing is inverted and desaturated in CSS rather than re-exported,
+ * so the source file stays the drawing as delivered and the card matches the
+ * dark ground instead of the type flipping to suit a cream image. Build's
+ * film gets neither treatment: it is finished brand work, shown as made, with
+ * a scrim under the type instead.
+ *
+ * Either way the artwork sits on its own layer, because filtering or dimming
+ * the card would take the words with it.
  *
  * Copy is the client's own, from the Build/Grow module spec.
  *
@@ -31,6 +37,12 @@ const CARDS = [
     body: 'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app.',
     cta: 'How we build',
     href: '/services',
+    // The OffChain Labs homepage hero animation, transcoded from the 23MB
+    // ProRes master to a 2MB h264 cut — the master is a delivery file and has
+    // no business in a page load or in git. It is a finished piece of brand
+    // work, so unlike Grow's drawing it is shown as made: no invert, no
+    // desaturation, just a scrim under the type.
+    media: '/build-card-compressed.mp4',
   },
   {
     id: 'grow',
@@ -53,13 +65,22 @@ export default function BuildGrowCards() {
           to={href}
           className={`${styles.card}${media ? ' ' + styles.cardMedia : ''}`}
         >
-          {media && (
+          {media && (isVideo(media) ? (
+            // Wrapped rather than filtered: the span carries the scrim and
+            // hides the whole layer from the accessibility tree, which is not
+            // something LazyVideo takes a prop for. LazyVideo itself is what
+            // keeps this honest — preload="none" until the card is near the
+            // viewport, then muted autoplay, paused again once it leaves.
+            <span className={styles.mediaLayer} aria-hidden="true">
+              <LazyVideo src={media} className={styles.mediaVideo} />
+            </span>
+          ) : (
             <span
               className={styles.media}
               style={{ backgroundImage: `url(${media})` }}
               aria-hidden="true"
             />
-          )}
+          ))}
           <h2 className={styles.name}>{name}</h2>
           <p className={styles.body}>{body}</p>
           <span className={styles.cta}>{cta} →</span>

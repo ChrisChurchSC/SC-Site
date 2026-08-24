@@ -14,6 +14,11 @@ public/**/*.mov
 # Allow compressed grid videos
 !public/grid/*-compressed.mp4
 
+# Same allowance for card artwork, which lives a directory up. The -compressed
+# suffix is the contract either way: a file carrying it has been through a
+# transcode and is small enough to live in git. Masters do not, and stay out.
+!public/*-compressed.mp4
+
 # Grid placeholder images — serve from CDN or Sanity, not git
 public/grid/*.png
 public/grid/*.jpg
