@@ -129,3 +129,58 @@ export const LAYOUT = [
   { name: 'Mobile breakpoint', value: '768px',
     detail: 'The only breakpoint that matters; a few components add 1024px.' },
 ]
+
+/* ── Component inventory ─────────────────────────────────────────────────────
+ *
+ * `status` is the honest bit. SHIPPED means the pattern was read out of a real
+ * component and the demo reproduces its actual CSS. NEW means the pattern does
+ * not exist on the site yet and was designed here, in the system's language,
+ * to be lifted into a component when it is needed. Never quietly promote a NEW
+ * entry to SHIPPED — change the code first, then the label.
+ */
+
+export const BUTTONS = [
+  { name: 'Solid', status: 'SHIPPED', where: 'Contact submit, case-study CTA',
+    spec: '#fff on #0a0a0a · 5px · 13/26 · 10px/0.12em',
+    note: 'The only high-emphasis control. One per view.' },
+  { name: 'Outline', status: 'SHIPPED', where: 'Contact "book a call"',
+    spec: 'transparent · border 0.18 · 5px · 11/20 · 10px/0.1em',
+    note: 'Secondary action sitting beside a solid.' },
+  { name: 'Ghost', status: 'SHIPPED', where: 'Kit form submit',
+    spec: 'fill 0.07 · border 0.12 · 4px · 11/20 · 9px/0.12em',
+    note: 'Low emphasis, on a dark card.' },
+  { name: 'Chip', status: 'SHIPPED', where: 'Global back control',
+    spec: '#161616 · 4px · 8/12 · 9px/0.1em',
+    note: 'Reads as a surface rather than a control until hovered.' },
+  { name: 'Overlay', status: 'SHIPPED', where: '"View website" over media',
+    spec: 'black 0.55 · border 0.4 · 5px · 8/12 · 9px/0.12em',
+    note: 'Must stay legible over an unknown image.' },
+  { name: 'Gate', status: 'SHIPPED', where: 'Deck password gate',
+    spec: 'white 0.9 · no radius · 12/18 · 11px/0.1em',
+    note: 'The only square control on the site. Almost certainly unintentional.' },
+]
+
+export const FIELDS = [
+  { name: 'Contact', status: 'SHIPPED', spec: 'fill 0.03 · border 0.14 · 3px · 13px',
+    focus: 'border 0.5, fill 0.05' },
+  { name: 'Kit', status: 'SHIPPED', spec: '#0a0a0a · border 0.08 · 4px · 10px',
+    focus: 'border 0.2, fill #111' },
+  { name: 'Gate', status: 'SHIPPED', spec: '#161616 · border 0.08 · no radius · 12px',
+    focus: 'border 0.25' },
+]
+
+export const RATIOS = [
+  { name: '16:9', css: '16 / 9', cls: '.r169', where: 'Showreel, thought thumbnails, landscape media.' },
+  { name: '4:5',  css: '4 / 5',  cls: '.r45',  where: 'Portrait cards. What most ratios collapse to on mobile.' },
+  { name: '1:1',  css: '1 / 1',  cls: '.r11',  where: 'Square blocks in the grid.' },
+  { name: '9:16', css: '9 / 16', cls: '.r916', where: 'Vertical video and social cuts.' },
+]
+
+export const GRIDS = [
+  { name: 'Homepage', status: 'SHIPPED', spec: 'repeat(12, 1fr) · gap 5px',
+    note: 'The site grid. Blocks span columns; the gutter is deliberately hairline-tight.' },
+  { name: 'Media', status: 'SHIPPED', spec: 'repeat(12, 1fr) · gap 5px',
+    note: 'Case-study media, on the same 12/5 as the homepage.' },
+  { name: 'Editorial', status: 'SHIPPED', spec: 'repeat(3, 1fr) · 28px / 56px · pad 40px',
+    note: 'Thoughts index. A second, unrelated grid system — see drift.' },
+]

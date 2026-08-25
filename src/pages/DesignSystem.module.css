@@ -828,11 +828,991 @@
   color: rgba(255, 255, 255, 0.2);
 }
 
+/* ── Status badge ── */
+
+.demoHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+  flex-shrink: 0;
+}
+
+/* NEW earns a brighter chip: it is the one thing on this page that is a
+   proposal rather than a description, and it must not be mistaken for the
+   site's current state. */
+.statusNew {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.demoWide {
+  grid-column: 1 / -1;
+}
+
+.demoStack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Button variants ── */
+
+.btnSolid {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 13px 26px;
+  transition: opacity 0.18s;
+}
+
+.btnSolid:hover:not(:disabled) {
+  opacity: 0.82;
+}
+
+.btnSolid:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btnOutline {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  padding: 11px 20px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btnOutline:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Sits on a mid-grey plate so the "survives any image" claim is visible. */
+.overlayStage,
+.mediaDemo {
+  position: relative;
+  display: block;
+  width: 168px;
+  height: 96px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px
+  );
+}
+
+.btnOverlay,
+.btnOverlayInner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 8px 12px;
+  transition: background 0.15s;
+}
+
+.btnOverlay:hover,
+.btnOverlayInner:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.btnGate {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0a0a0a;
+  border: none;
+  padding: 12px 18px;
+  transition: background 0.15s;
+}
+
+.btnGate:hover {
+  background: #fff;
+}
+
+/* Reuses the error red already in DeckGate rather than inventing a fourth. */
+.btnDanger {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 80, 80, 0.9);
+  background: rgba(255, 80, 80, 0.08);
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  border-radius: 5px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDanger:hover {
+  background: rgba(255, 80, 80, 0.16);
+  color: rgba(255, 120, 120, 1);
+}
+
+/* Shared three-dot pulse — the loading button and the chat use the same one
+   so the two patterns agree about what "working" looks like. */
+.btnDots,
+.thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btnDots i,
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+.btnDots i:nth-child(2),
+.thinking i:nth-child(2) { animation-delay: 0.15s; }
+.btnDots i:nth-child(3),
+.thinking i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50%      { opacity: 1;    transform: translateY(-2px); }
+}
+
+.thinking {
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 0;
+}
+
+/* ── Field variants ── */
+
+.fieldContact {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldContact:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldContact::placeholder,
+.fieldTextarea::placeholder,
+.fieldGate::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldGate {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fieldGate:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldTextarea {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldTextarea:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldErrorWrap,
+.labelledField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.labelledField {
+  gap: 6px;
+}
+
+.fieldError {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 80, 80, 0.6);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.errorText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 80, 80, 0.8);
+}
+
+/* ── Navigation ── */
+
+.navCardDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  background: #161616;
+  border-radius: 4px;
+  padding: 12px;
+  transition: background 0.15s;
+}
+
+.navCardDemo:hover {
+  background: #1c1c1c;
+}
+
+.navCardTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navCardSub {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.navListDemo {
+  width: 100%;
+}
+
+.navRow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: opacity 0.15s;
+}
+
+.navRow:hover {
+  opacity: 0.6;
+}
+
+.navRowNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.navRowName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navRowType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chipNavDemo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mobileNavDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.mobileLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.15s;
+}
+
+.mobileLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.crumb,
+.crumbOn,
+.crumbSep {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.crumb {
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.15s;
+}
+
+.crumb:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.crumbSep {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.crumbOn {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pager {
+  display: flex;
+  gap: 4px;
+}
+
+.pageBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  min-width: 28px;
+  padding: 8px 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.pageBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+}
+
+.pageBtnOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.pageBtnOn:hover {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+/* ── Grids ── */
+
+.gridDemos {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gridDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+}
+
+.gridCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.span3 { grid-column: span 3; }
+.span4 { grid-column: span 4; }
+.span6 { grid-column: span 6; }
+
+.gridEditorial {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 28px;
+  row-gap: 56px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  padding: 40px;
+}
+
+.editorialCell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editorialThumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #262626;
+  border-radius: 4px;
+}
+
+/* ── Ratios ── */
+
+.ratioRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.ratioChip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.ratioChip:hover {
+  background: #1c1c1c;
+}
+
+/* Fixed-height well so the four ratios are compared at equal height rather
+   than equal width — otherwise 9:16 dwarfs the row. */
+.ratioBoxWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 128px;
+}
+
+.ratioBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #262626;
+  border-radius: 4px;
+}
+
+.ratioName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ratioMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Media ── */
+
+.mediaTag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.captionDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.mediaDemoSmall {
+  display: block;
+  width: 168px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px
+  );
+}
+
+.caption {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Marquee ── */
+
+.marquee {
+  display: flex;
+  align-items: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  height: 52px;
+  overflow: hidden;
+}
+
+.marqueeWindow {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 48s linear infinite;
+}
+
+.marqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marqueePass {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 22px;
+  white-space: nowrap;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.18s;
+}
+
+.marqueeItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Paged carousel ── */
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.carouselWindow {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.slide {
+  flex: 0 0 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 132px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+
+.slideNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.carouselControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.dotOn {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.15);
+}
+
+.arrows {
+  display: flex;
+  gap: 4px;
+}
+
+.arrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: color 0.15s, background 0.15s, opacity 0.15s;
+}
+
+.arrow:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* ── Chat ── */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chatLog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 20px;
+  min-height: 180px;
+}
+
+.turnUser {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.turnBot {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* The reader's turn is UI, so it is mono in a chip. */
+.userBubble {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 10px 12px;
+  max-width: 68%;
+}
+
+/* The reply is prose, so it is Signifier at reading size and takes no chip —
+   the same rule the rest of the site follows. */
+.botText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.composer {
+  display: flex;
+  gap: 5px;
+}
+
+.composerInput {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.composerInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.composerInput:focus {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #111;
+}
+
+.composerSend {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.composerSend:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.composerSend:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Feedback ── */
+
+.toastDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 12px 18px;
+}
+
+.loaderDemo {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.loaderDemo i {
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, #1a1a1a, #ffffff, #1a1a1a);
+  animation: loaderSweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes loaderSweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(350%); }
+}
+
+.toggleDemo {
+  display: block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.toggleDemo i {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  animation: thumbSlide 2.4s ease-in-out infinite;
+}
+
+@keyframes thumbSlide {
+  0%, 40%   { transform: translate(0, -50%); }
+  50%, 90%  { transform: translate(16px, -50%); }
+  100%      { transform: translate(0, -50%); }
+}
+
+.cursorDemo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.cursorDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.cursorRing {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+}
+
+.emptyDemo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.emptyLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.skeleton i {
+  display: block;
+  height: 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+.skeleton i:nth-child(2) { animation-delay: 0.15s; }
+.skeleton i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes skeletonPulse {
+  0%, 100% { background: rgba(255, 255, 255, 0.06); }
+  50%      { background: rgba(255, 255, 255, 0.12); }
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 1024px) {
   .demoGrid,
-  .radii {
+  .radii,
+  .ratioRow {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -858,8 +1838,29 @@
 
   .demoGrid,
   .radii,
+  .ratioRow,
   .lightPair {
     grid-template-columns: 1fr;
+  }
+
+  /* The 12-column proof shrinks to 6 so the cells stay wider than they are
+     tall — at 12 across on a phone they become unreadable slivers. */
+  .grid12 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .gridEditorial {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+    padding: 20px;
+  }
+
+  .ratioBoxWrap {
+    height: 96px;
+  }
+
+  .userBubble {
+    max-width: 85%;
   }
 
   .row {
