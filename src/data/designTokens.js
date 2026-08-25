@@ -184,19 +184,71 @@ export const GRIDS = [
     note: 'Thoughts index. A second, unrelated grid system on the same site.' },
 ]
 
-/* ── Backlog ─────────────────────────────────────────────────────────────────
+/* ── Charts ──────────────────────────────────────────────────────────────────
  *
- * UI the site is likely to need and does not have. Not a plan — an inventory,
- * so that when one of these is needed it gets designed once, into the system,
- * rather than improvised into whichever page needed it first. That is how the
- * three input designs happened.
+ * Instrument colours, not brand colours. The obvious starting point was the
+ * three accents the site declares and never uses — but they were wrong twice
+ * over, and both reasons are worth keeping:
+ *
+ *   - Measurably. #4ecfb3 sits at OKLCH L 0.776, outside the 0.48–0.67 band a
+ *     dark chart surface needs, and #5a76e5 and #df4ed6 are ΔE 2.5 apart under
+ *     protanopia — side by side in a legend, a red-blind reader cannot tell
+ *     them apart at all.
+ *   - Editorially. They are pitched to catch the eye once. A chart is read for
+ *     minutes at a time, and saturated brand hues turn a dashboard into
+ *     decoration.
+ *
+ * So the chart palette is its own thing: low-chroma, cool-leaning, closer to
+ * an instrument than a brand. It cannot go all the way to grey, though — the
+ * first attempt at that failed both the chroma floor and the normal-vision
+ * floor, meaning adjacent series were hard to separate even with full colour
+ * vision. These values sit just above both floors, deliberately.
+ *
+ * Both columns pass all six checks of the validator against their own surface
+ * — dark on #0a0a0a, light on #e9e9e9. The light column's closest adjacent
+ * pair sits in the 6–8 CVD band, which is legal only alongside a secondary
+ * encoding; every chart on the page carries a legend, direct labels, or gaps.
+ * Do not hand-edit a value here without re-running the validator.
+ */
+
+export const CHART_PALETTE = [
+  { slot: 1, hue: 'Teal',   dark: '#1d9077', light: '#007a5e', note: 'Primary series' },
+  { slot: 2, hue: 'Rust',   dark: '#b35f3c', light: '#8f4526', note: 'Second series' },
+  { slot: 3, hue: 'Steel',  dark: '#4a7fb5', light: '#1e5f9c', note: 'Third series' },
+  { slot: 4, hue: 'Ochre',  dark: '#9c8320', light: '#7a6300', note: 'Fourth series' },
+  { slot: 5, hue: 'Slate',  dark: '#7b6bb0', light: '#5b4c8c', note: 'Fifth series' },
+  { slot: 6, hue: 'Moss',   dark: '#5b8f3a', light: '#416b25', note: 'Sixth — then stop' },
+]
+
+/* Sequential is one hue, light to dark — never a rainbow. Stepped from the
+   steel so magnitude reads as "more of the same thing". */
+export const CHART_SEQUENTIAL = ['#0d1b26', '#16303f', '#21485d', '#2e6285', '#4a7fb5', '#7aa3ce']
+
+/* Diverging is two poles and a neutral grey midpoint — never a hue in the
+   middle. Rust and steel are the furthest-apart pair in the set. */
+export const CHART_DIVERGING = ['#b35f3c', '#8a6a5a', '#6b6b6b', '#486a86', '#4a7fb5']
+
+/* Status is reserved and never reused as "series 7". These are the values the
+   site already uses for state, not new ones. */
+export const CHART_STATUS = [
+  { name: 'Good', value: 'rgba(190, 220, 150, 0.9)', where: 'Capabilities' },
+  { name: 'Warning', value: '#bd842c', where: 'New — amber, slot 4' },
+  { name: 'Critical', value: 'rgba(255, 80, 80, 0.85)', where: 'DeckGate' },
+]
+
+/* ── Inventory ───────────────────────────────────────────────────────────────
+ *
+ * Every entry here is now either backed by real code or drawn on this page.
+ * The list started as a backlog of gaps; the gaps were closed, and what it
+ * tracks now is the distance still left to travel — from a pattern that exists
+ * on the styleguide to a component that exists in src/.
  *
  * state: 'have'  — a real component exists in src/
- *        'proto' — prototyped on this page, no component behind it yet
- *        'gap'   — neither
+ *        'proto' — drawn on this page, no component behind it yet
  *
- * `why` is the trigger, not a justification. If the trigger has not happened,
- * the component should not be built.
+ * `why` is the trigger that would justify promoting a proto to a component.
+ * If the trigger has not happened, it should stay a proto — a drawn pattern
+ * costs nothing to keep and a premature component costs maintenance forever.
  */
 
 export const BACKLOG = [
@@ -205,13 +257,13 @@ export const BACKLOG = [
     note: 'The weakest area. Three input designs already exist and nothing else does.',
     items: [
       { name: 'Field primitive', state: 'proto', why: 'One labelled input the three current designs collapse into. Everything below depends on it.' },
-      { name: 'Select', state: 'gap', why: 'Any filter, sort or country field. The native control cannot be styled to match.' },
-      { name: 'Checkbox / radio', state: 'gap', why: 'Consent, preferences, multi-select filters.' },
+      { name: 'Select', state: 'proto', why: 'Any filter, sort or country field. The native control cannot be styled to match.' },
+      { name: 'Checkbox / radio', state: 'proto', why: 'Consent, preferences, multi-select filters.' },
       { name: 'Toggle', state: 'have', why: 'Exists as the theme switch; not generalised for use inside forms.' },
-      { name: 'Inline validation', state: 'gap', why: 'Only the deck gate validates anything, and it shakes. Contact fails silently.' },
-      { name: 'Multi-step form', state: 'gap', why: 'A brief or intake longer than the contact form, with progress and back.' },
-      { name: 'File upload', state: 'gap', why: 'Clients sending assets or briefs without email.' },
-      { name: 'Search field', state: 'gap', why: 'Once the work index or thoughts outgrows a single scannable page.' },
+      { name: 'Inline validation', state: 'proto', why: 'Only the deck gate validates anything, and it shakes. Contact fails silently.' },
+      { name: 'Multi-step form', state: 'proto', why: 'A brief or intake longer than the contact form, with progress and back.' },
+      { name: 'File upload', state: 'proto', why: 'Clients sending assets or briefs without email.' },
+      { name: 'Search field', state: 'proto', why: 'Once the work index or thoughts outgrows a single scannable page.' },
     ],
   },
   {
@@ -220,25 +272,25 @@ export const BACKLOG = [
     items: [
       { name: 'Breadcrumb', state: 'proto', why: 'Case studies nest two levels and offer only a back button.' },
       { name: 'Pagination', state: 'proto', why: 'The thoughts index renders every post ever written.' },
-      { name: 'Tabs', state: 'gap', why: 'A case study with distinct phases, or a service page with audience cuts.' },
-      { name: 'Filter bar', state: 'gap', why: 'Filtering work by discipline or year — currently the drawer is the only cut.' },
-      { name: 'Sort control', state: 'gap', why: 'Pairs with the filter bar. Order is currently fixed in Sanity.' },
+      { name: 'Tabs', state: 'proto', why: 'A case study with distinct phases, or a service page with audience cuts.' },
+      { name: 'Filter bar', state: 'proto', why: 'Filtering work by discipline or year — currently the drawer is the only cut.' },
+      { name: 'Sort control', state: 'proto', why: 'Pairs with the filter bar. Order is currently fixed in Sanity.' },
       { name: 'In-page TOC', state: 'proto', why: 'Long thought posts and deck pages. The chip nav on this page is the pattern.' },
-      { name: 'Back to top', state: 'gap', why: 'Any page past roughly three screens — this one included.' },
+      { name: 'Back to top', state: 'proto', why: 'Any page past roughly three screens — this one included.' },
     ],
   },
   {
     group: 'Content',
     note: 'Prose components. The site sets long text well and structures it barely at all.',
     items: [
-      { name: 'Accordion', state: 'gap', why: 'FAQs on landing pages, currently written out in full.' },
-      { name: 'Table', state: 'gap', why: 'Pricing, scope comparisons, deliverable matrices. No table style exists anywhere.' },
-      { name: 'Pull quote', state: 'gap', why: 'Client words inside a case study, at display scale.' },
-      { name: 'Blockquote', state: 'gap', why: 'Quoting a source in a thought post.' },
-      { name: 'Code block', state: 'gap', why: 'Any thought post about how something was built.' },
-      { name: 'Tooltip', state: 'gap', why: 'Defining a term without leaving the sentence.' },
+      { name: 'Accordion', state: 'proto', why: 'FAQs on landing pages, currently written out in full.' },
+      { name: 'Table', state: 'proto', why: 'Pricing, scope comparisons, deliverable matrices. No table style exists anywhere.' },
+      { name: 'Pull quote', state: 'proto', why: 'Client words inside a case study, at display scale.' },
+      { name: 'Blockquote', state: 'proto', why: 'Quoting a source in a thought post.' },
+      { name: 'Code block', state: 'proto', why: 'Any thought post about how something was built.' },
+      { name: 'Tooltip', state: 'proto', why: 'Defining a term without leaving the sentence.' },
       { name: 'Modal', state: 'have', why: 'Drawers exist (Cal, contact). A centred confirm dialog does not.' },
-      { name: 'Stat block', state: 'gap', why: 'Outcome numbers. Case studies have outcome cards but no number treatment.' },
+      { name: 'Stat block', state: 'proto', why: 'Outcome numbers. Case studies have outcome cards but no number treatment.' },
     ],
   },
   {
@@ -248,30 +300,30 @@ export const BACKLOG = [
       { name: 'Toast', state: 'have', why: 'Exists. Not currently reused outside the Kit form.' },
       { name: 'Empty state', state: 'proto', why: 'No page has one. A filtered work index would need it immediately.' },
       { name: 'Skeleton', state: 'proto', why: 'Sanity-backed pages flash empty before data lands.' },
-      { name: 'Progress bar', state: 'gap', why: 'Upload, multi-step form, or a long deck. Distinct from the route loader.' },
-      { name: 'Status badge', state: 'gap', why: '"Coming soon" is handled ad hoc in the nav today.' },
-      { name: 'Confirm dialog', state: 'gap', why: 'Any destructive or irreversible action. None exist yet — but the button does.' },
+      { name: 'Progress bar', state: 'proto', why: 'Upload, multi-step form, or a long deck. Distinct from the route loader.' },
+      { name: 'Status badge', state: 'proto', why: '"Coming soon" is handled ad hoc in the nav today.' },
+      { name: 'Confirm dialog', state: 'proto', why: 'Any destructive or irreversible action. None exist yet — but the button does.' },
     ],
   },
   {
     group: 'Media',
     note: 'The site is image-led and has almost no image UI.',
     items: [
-      { name: 'Lightbox', state: 'gap', why: 'Case-study media at full size without leaving the page.' },
-      { name: 'Gallery', state: 'gap', why: 'More images than a media grid holds comfortably.' },
+      { name: 'Lightbox', state: 'proto', why: 'Case-study media at full size without leaving the page.' },
+      { name: 'Gallery', state: 'proto', why: 'More images than a media grid holds comfortably.' },
       { name: 'Carousel', state: 'proto', why: 'Sequential work someone has to get through in order.' },
       { name: 'Caption', state: 'proto', why: 'Every case-study image currently runs unattributed.' },
-      { name: 'Before / after', state: 'gap', why: 'Rebrands. The single most obvious missing component for this studio.' },
-      { name: 'Video controls', state: 'gap', why: 'Case-study video is autoplay-muted with no scrub or sound.' },
+      { name: 'Before / after', state: 'proto', why: 'Rebrands. The single most obvious missing component for this studio.' },
+      { name: 'Video controls', state: 'proto', why: 'Case-study video is autoplay-muted with no scrub or sound.' },
     ],
   },
   {
     group: 'Conversion',
     note: 'The pages that have to ask for something.',
     items: [
-      { name: 'Pricing table', state: 'gap', why: 'Package data already exists in src/data; nothing renders it as a comparison.' },
-      { name: 'Testimonial', state: 'gap', why: 'Client quotes with attribution, on work and landing pages.' },
-      { name: 'CTA band', state: 'gap', why: 'The end-of-page ask, currently rebuilt per page.' },
+      { name: 'Pricing table', state: 'proto', why: 'Package data already exists in src/data; nothing renders it as a comparison.' },
+      { name: 'Testimonial', state: 'proto', why: 'Client quotes with attribution, on work and landing pages.' },
+      { name: 'CTA band', state: 'proto', why: 'The end-of-page ask, currently rebuilt per page.' },
       { name: 'Logo wall', state: 'have', why: 'ClientStrip. A static grid variant would suit decks better than the marquee.' },
       { name: 'Inline capture', state: 'have', why: 'Kit form. Not generalised beyond its one placement.' },
     ],
@@ -280,11 +332,37 @@ export const BACKLOG = [
     group: 'AI',
     note: 'Only worth building behind a real feature — but worth designing once, not per surface.',
     items: [
-      { name: 'Chat', state: 'proto', why: 'Prototyped here. Needs a model and a purpose before it is a component.' },
-      { name: 'Streaming text', state: 'gap', why: 'Tokens arriving progressively without the layout jumping.' },
-      { name: 'Citation', state: 'gap', why: 'Pointing an answer back at the case study or post it came from.' },
-      { name: 'Prompt suggestions', state: 'gap', why: 'The empty state of a chat — what to ask before anyone has typed.' },
-      { name: 'Response feedback', state: 'gap', why: 'Thumbs or a flag, so answers can be judged rather than assumed.' },
+      { name: 'Chat', state: 'proto', why: 'Needs a model and a purpose before it is a component.' },
+      { name: 'Streaming text', state: 'proto', why: 'Tokens arriving progressively without the layout jumping.' },
+      { name: 'Citation', state: 'proto', why: 'Pointing an answer back at the case study or post it came from.' },
+      { name: 'Prompt suggestions', state: 'proto', why: 'The empty state of a chat — what to ask before anyone has typed.' },
+      { name: 'Response feedback', state: 'proto', why: 'Thumbs or a flag, so answers can be judged rather than assumed.' },
+    ],
+  },
+  {
+    group: 'Charts',
+    note: 'The palette is validated and the types are drawn. What is missing is data — none of these are wired to anything.',
+    items: [
+      { name: 'KPI row', state: 'proto', why: 'A dashboard, a client report, or the numbers on a case study.' },
+      { name: 'Time series', state: 'proto', why: 'Anything measured more than twice.' },
+      { name: 'Bar / ranked bar', state: 'proto', why: 'Comparison across a handful of categories.' },
+      { name: 'Waterfall', state: 'proto', why: 'Explaining how a total changed — pipeline, budget, headcount.' },
+      { name: 'Bullet', state: 'proto', why: 'Any metric with a target attached.' },
+      { name: 'Distribution', state: 'proto', why: 'Histogram or box plot, whenever the average is hiding the spread.' },
+      { name: 'Funnel', state: 'proto', why: 'Conversion reporting on a landing page or a campaign.' },
+      { name: 'Cohort', state: 'proto', why: 'Retention over time, for a product engagement.' },
+      { name: 'Chart tooltip', state: 'proto', why: 'Ships with the time series; needs extracting to be reused.' },
+      { name: 'Table view', state: 'proto', why: 'Every chart owes one — approximate shape, exact numbers.' },
+    ],
+  },
+  {
+    group: 'Texture',
+    note: 'Eight fills defined as SVG patterns. The only foundation on this page with no prior art in the codebase at all.',
+    items: [
+      { name: 'Dither set', state: 'proto', why: 'Three densities on one grid. Section grounds and hover fills.' },
+      { name: 'Halftone', state: 'proto', why: 'Under an image, or behind a quote.' },
+      { name: 'Stair 45 / 135', state: 'proto', why: 'Directional grain where a flat plane needs an edge.' },
+      { name: 'Stipple', state: 'proto', why: 'Placeholders and empty states — already used by both above.' },
     ],
   },
 ]
