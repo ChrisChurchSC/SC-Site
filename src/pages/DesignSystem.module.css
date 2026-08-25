@@ -1,0 +1,894 @@
+/* Styleguide page.
+   Written in the system it documents — #161616 on #0a0a0a, 4px radius, mono
+   labels at 8/9/10/11px, Signifier for anything that reads as prose. If this
+   file ever needs a value that isn't in designTokens.js, that's a finding
+   about the system, not a licence to invent one. */
+
+/* The fixed nav rail is 312px wide and shows above 768px, so the page reserves
+   it the same way the homepage grid does. Without this the right-hand column —
+   which is where every copyable value sits — slides underneath the nav. */
+.main {
+  padding: 96px 312px 160px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Masthead ── */
+
+.masthead {
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0 0 18px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 20px;
+}
+
+.lede {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 62ch;
+  margin: 0 0 32px;
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tocLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.tocLink:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+}
+
+/* ── Section scaffolding ── */
+
+.section {
+  padding: 64px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  scroll-margin-top: 24px;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.sectionHead {
+  margin-bottom: 36px;
+}
+
+.sectionNum {
+  display: block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 10px;
+}
+
+.sectionTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 12px;
+}
+
+.sectionBlurb {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.subhead {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 40px 0 14px;
+}
+
+.subhead:first-of-type {
+  margin-top: 0;
+}
+
+.subnote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 62ch;
+  margin: 0 0 18px;
+}
+
+.prose {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 68ch;
+  margin: 0 0 20px;
+}
+
+.code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.82em;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 2px 5px;
+}
+
+.inlineLink {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: 4px;
+  transition: color 0.15s;
+}
+
+.inlineLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ── Generic token row ── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 12px 14px;
+  transition: background 0.15s;
+}
+
+.row:hover {
+  background: #1c1c1c;
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rowNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* The value is a button because it copies; it must not look like one. */
+.value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 5px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+
+.value:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.swatchText {
+  width: 40px;
+  font-family: 'Signifier', Georgia, serif;
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.swatchLine {
+  width: 40px;
+  height: 0;
+  border-top: 1px solid;
+  flex-shrink: 0;
+}
+
+.alpha {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.count {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+/* ── Accents ── */
+
+.accentRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.accentChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.accentChip:hover {
+  background: #1c1c1c;
+}
+
+.accentSwatch {
+  width: 100%;
+  height: 44px;
+  border-radius: 4px;
+}
+
+.accentName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.accentValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.accentVar {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.accentUnused {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+/* ── Families ── */
+
+.families {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.family {
+  display: flex;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.familySpecimen {
+  font-size: 72px;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+.familyMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.familyName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.familyRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.familySource {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Specimens ── */
+
+.specRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 8px 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 14px;
+  transition: background 0.15s;
+}
+
+.specRow:hover {
+  background: #1c1c1c;
+}
+
+.specMono {
+  font-family: 'Roboto Mono', monospace;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 0;
+}
+
+.specDisplay {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 0;
+}
+
+.specMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.specSize {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.specRole {
+  grid-column: 1 / -1;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Radii ── */
+
+.radii {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.radiusChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.radiusChip:hover {
+  background: #1c1c1c;
+}
+
+.radiusBox {
+  width: 100%;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.radiusValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.radiusRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Component demos ── */
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+.demoLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Demos sit on the ground colour so a #161616 component reads as a component
+   rather than melting into the card holding it. */
+.demoStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 28px 20px;
+  min-height: 132px;
+}
+
+.demoNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.cardDemo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 150px;
+  height: 76px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px 16px;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+.cardDemo:hover {
+  background: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+.cardDemoLink {
+  cursor: pointer;
+}
+
+.cardDemoLink:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cardEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.cardTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.btnDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDemo:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.backDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.backDemo:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1e1e1e;
+}
+
+.inputDemo {
+  width: 100%;
+  max-width: 220px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.inputDemo::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.inputDemo:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pairDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.pairHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Stagger demo ── */
+
+.staggerDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+  margin-top: 8px;
+}
+
+.staggerRow {
+  display: flex;
+  gap: 5px;
+}
+
+@keyframes blockIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.staggerBlock {
+  flex: 1;
+  height: 64px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  animation: blockIn 0.5s ease both;
+}
+
+.staggerBlock:nth-child(1) { animation-delay: 0.05s; }
+.staggerBlock:nth-child(2) { animation-delay: 0.12s; }
+.staggerBlock:nth-child(3) { animation-delay: 0.19s; }
+.staggerBlock:nth-child(4) { animation-delay: 0.26s; }
+
+/* ── Light mode pair ── */
+
+.lightPair {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.lightSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+/* Inverted by the same filter the site uses, so this pair stays honest even
+   if the ground colours change. */
+.lightSwatchInv {
+  filter: invert(1);
+}
+
+.lightLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.lightValues {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Drift ── */
+
+.driftList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.drift {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px;
+}
+
+.driftStat {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.85);
+  width: 92px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.driftBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.driftTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.driftNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 68ch;
+  margin: 0;
+}
+
+.driftClose {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 68ch;
+  margin: 28px 0 0;
+}
+
+/* ── Footer ── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 40px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.footerDim {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1024px) {
+  .demoGrid,
+  .radii {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .families,
+  .accentRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Nav rail is hidden here, so give the reserved space back. */
+  .main {
+    padding: 64px 0 96px;
+  }
+
+  .inner {
+    padding: 0 24px;
+  }
+
+  .section {
+    padding: 44px 0;
+  }
+
+  .demoGrid,
+  .radii,
+  .lightPair {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .family {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .familySpecimen {
+    font-size: 56px;
+  }
+
+  .drift {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .driftStat {
+    width: auto;
+    text-align: left;
+    font-size: 34px;
+  }
+
+  .specRow {
+    grid-template-columns: 1fr;
+  }
+}

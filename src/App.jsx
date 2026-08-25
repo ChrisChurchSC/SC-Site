@@ -37,6 +37,9 @@ const ContentPrograms = lazy(() => import('./pages/ContentPrograms'))
 const DigitalProducts = lazy(() => import('./pages/DigitalProducts'))
 const ContentPackages = lazy(() => import('./pages/ContentPackages'))
 
+// Internal styleguide — noindex, no nav entry, reached by typing the URL
+const DesignSystem    = lazy(() => import('./pages/DesignSystem'))
+
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -113,6 +116,7 @@ export default function App() {
                 <Route path="/lp/:slug" element={<Suspense fallback={null}><LandingPage /></Suspense>} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/design-system" element={<Suspense fallback={null}><DesignSystem /></Suspense>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
