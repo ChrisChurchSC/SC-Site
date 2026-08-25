@@ -748,66 +748,106 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* ── Drift ── */
+/* ── Backlog ── */
 
-.driftList {
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.backlog {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.drift {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+.backlogGroup {
   background: #161616;
   border-radius: 4px;
   padding: 22px 20px;
 }
 
-.driftStat {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 40px;
-  line-height: 0.9;
-  color: rgba(255, 255, 255, 0.85);
-  width: 92px;
-  flex-shrink: 0;
-  text-align: right;
-}
-
-.driftBody {
+.backlogHead {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.driftTitle {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.driftNote {
+.backlogTitle {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: 14px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.45);
-  max-width: 68ch;
+  font-size: 22px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
 }
 
-.driftClose {
+.backlogCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.backlogNote {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(14px, 1.3vw, 16px);
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.4);
   max-width: 68ch;
-  margin: 28px 0 0;
+  margin: 8px 0 18px;
+}
+
+.backlogList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Name and badge on a fixed measure so the badges form a column and the
+   reasons all start at the same place — the list is meant to be scanned down
+   the state, not read across. */
+.backlogItem {
+  display: grid;
+  grid-template-columns: 148px 56px 1fr;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.backlogItem:last-child {
+  border-bottom: none;
+}
+
+.backlogName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.backlogWhy {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 /* ── Footer ── */
@@ -855,6 +895,13 @@
 .statusNew {
   color: rgba(255, 255, 255, 0.85);
   background: rgba(255, 255, 255, 0.14);
+}
+
+/* Neither built nor drawn — an outline with nothing in it. */
+.statusGap {
+  color: rgba(255, 255, 255, 0.4);
+  background: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 .demoWide {
@@ -1878,18 +1925,18 @@
     font-size: 56px;
   }
 
-  .drift {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .driftStat {
-    width: auto;
-    text-align: left;
-    font-size: 34px;
-  }
-
   .specRow {
     grid-template-columns: 1fr;
+  }
+
+  /* Name and badge share a row, the reason drops below — three columns at this
+     width leaves the reason too narrow to read. */
+  .backlogItem {
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+  }
+
+  .backlogWhy {
+    grid-column: 1 / -1;
   }
 }

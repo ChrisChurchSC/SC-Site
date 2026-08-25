@@ -8,8 +8,7 @@
  *
  * Where a token is declared in :root but the modules hardcode the literal
  * instead, `cssVar` records the custom property that exists, and the counts
- * tell you how little it is actually reached for. See the "drift" section of
- * the page for what that costs.
+ * tell you how little it is actually reached for.
  */
 
 export const SURFACES = [
@@ -97,7 +96,7 @@ export const DISPLAY_SCALE = [
 export const RADII = [
   { value: 4, uses: 85, role: 'The radius. Cards, buttons, inputs, drawers.' },
   { value: 2, uses: 27, role: 'Small inline chips and bars.' },
-  { value: 3, uses: 12, role: 'Drift — visually identical to 4 and 2 at these sizes.' },
+  { value: 3, uses: 12, role: 'Visually identical to 4 and 2 at these sizes.' },
   { value: 16, uses: 8,  role: 'Large media wells.' },
   { value: 999, uses: 5, role: 'Pills and dots.' },
 ]
@@ -182,5 +181,110 @@ export const GRIDS = [
   { name: 'Media', status: 'SHIPPED', spec: 'repeat(12, 1fr) · gap 5px',
     note: 'Case-study media, on the same 12/5 as the homepage.' },
   { name: 'Editorial', status: 'SHIPPED', spec: 'repeat(3, 1fr) · 28px / 56px · pad 40px',
-    note: 'Thoughts index. A second, unrelated grid system — see drift.' },
+    note: 'Thoughts index. A second, unrelated grid system on the same site.' },
+]
+
+/* ── Backlog ─────────────────────────────────────────────────────────────────
+ *
+ * UI the site is likely to need and does not have. Not a plan — an inventory,
+ * so that when one of these is needed it gets designed once, into the system,
+ * rather than improvised into whichever page needed it first. That is how the
+ * three input designs happened.
+ *
+ * state: 'have'  — a real component exists in src/
+ *        'proto' — prototyped on this page, no component behind it yet
+ *        'gap'   — neither
+ *
+ * `why` is the trigger, not a justification. If the trigger has not happened,
+ * the component should not be built.
+ */
+
+export const BACKLOG = [
+  {
+    group: 'Forms',
+    note: 'The weakest area. Three input designs already exist and nothing else does.',
+    items: [
+      { name: 'Field primitive', state: 'proto', why: 'One labelled input the three current designs collapse into. Everything below depends on it.' },
+      { name: 'Select', state: 'gap', why: 'Any filter, sort or country field. The native control cannot be styled to match.' },
+      { name: 'Checkbox / radio', state: 'gap', why: 'Consent, preferences, multi-select filters.' },
+      { name: 'Toggle', state: 'have', why: 'Exists as the theme switch; not generalised for use inside forms.' },
+      { name: 'Inline validation', state: 'gap', why: 'Only the deck gate validates anything, and it shakes. Contact fails silently.' },
+      { name: 'Multi-step form', state: 'gap', why: 'A brief or intake longer than the contact form, with progress and back.' },
+      { name: 'File upload', state: 'gap', why: 'Clients sending assets or briefs without email.' },
+      { name: 'Search field', state: 'gap', why: 'Once the work index or thoughts outgrows a single scannable page.' },
+    ],
+  },
+  {
+    group: 'Navigation',
+    note: 'Everything is a list today, which works until a page needs more than one axis.',
+    items: [
+      { name: 'Breadcrumb', state: 'proto', why: 'Case studies nest two levels and offer only a back button.' },
+      { name: 'Pagination', state: 'proto', why: 'The thoughts index renders every post ever written.' },
+      { name: 'Tabs', state: 'gap', why: 'A case study with distinct phases, or a service page with audience cuts.' },
+      { name: 'Filter bar', state: 'gap', why: 'Filtering work by discipline or year — currently the drawer is the only cut.' },
+      { name: 'Sort control', state: 'gap', why: 'Pairs with the filter bar. Order is currently fixed in Sanity.' },
+      { name: 'In-page TOC', state: 'proto', why: 'Long thought posts and deck pages. The chip nav on this page is the pattern.' },
+      { name: 'Back to top', state: 'gap', why: 'Any page past roughly three screens — this one included.' },
+    ],
+  },
+  {
+    group: 'Content',
+    note: 'Prose components. The site sets long text well and structures it barely at all.',
+    items: [
+      { name: 'Accordion', state: 'gap', why: 'FAQs on landing pages, currently written out in full.' },
+      { name: 'Table', state: 'gap', why: 'Pricing, scope comparisons, deliverable matrices. No table style exists anywhere.' },
+      { name: 'Pull quote', state: 'gap', why: 'Client words inside a case study, at display scale.' },
+      { name: 'Blockquote', state: 'gap', why: 'Quoting a source in a thought post.' },
+      { name: 'Code block', state: 'gap', why: 'Any thought post about how something was built.' },
+      { name: 'Tooltip', state: 'gap', why: 'Defining a term without leaving the sentence.' },
+      { name: 'Modal', state: 'have', why: 'Drawers exist (Cal, contact). A centred confirm dialog does not.' },
+      { name: 'Stat block', state: 'gap', why: 'Outcome numbers. Case studies have outcome cards but no number treatment.' },
+    ],
+  },
+  {
+    group: 'Feedback',
+    note: 'What the site says when something is loading, empty or wrong.',
+    items: [
+      { name: 'Toast', state: 'have', why: 'Exists. Not currently reused outside the Kit form.' },
+      { name: 'Empty state', state: 'proto', why: 'No page has one. A filtered work index would need it immediately.' },
+      { name: 'Skeleton', state: 'proto', why: 'Sanity-backed pages flash empty before data lands.' },
+      { name: 'Progress bar', state: 'gap', why: 'Upload, multi-step form, or a long deck. Distinct from the route loader.' },
+      { name: 'Status badge', state: 'gap', why: '"Coming soon" is handled ad hoc in the nav today.' },
+      { name: 'Confirm dialog', state: 'gap', why: 'Any destructive or irreversible action. None exist yet — but the button does.' },
+    ],
+  },
+  {
+    group: 'Media',
+    note: 'The site is image-led and has almost no image UI.',
+    items: [
+      { name: 'Lightbox', state: 'gap', why: 'Case-study media at full size without leaving the page.' },
+      { name: 'Gallery', state: 'gap', why: 'More images than a media grid holds comfortably.' },
+      { name: 'Carousel', state: 'proto', why: 'Sequential work someone has to get through in order.' },
+      { name: 'Caption', state: 'proto', why: 'Every case-study image currently runs unattributed.' },
+      { name: 'Before / after', state: 'gap', why: 'Rebrands. The single most obvious missing component for this studio.' },
+      { name: 'Video controls', state: 'gap', why: 'Case-study video is autoplay-muted with no scrub or sound.' },
+    ],
+  },
+  {
+    group: 'Conversion',
+    note: 'The pages that have to ask for something.',
+    items: [
+      { name: 'Pricing table', state: 'gap', why: 'Package data already exists in src/data; nothing renders it as a comparison.' },
+      { name: 'Testimonial', state: 'gap', why: 'Client quotes with attribution, on work and landing pages.' },
+      { name: 'CTA band', state: 'gap', why: 'The end-of-page ask, currently rebuilt per page.' },
+      { name: 'Logo wall', state: 'have', why: 'ClientStrip. A static grid variant would suit decks better than the marquee.' },
+      { name: 'Inline capture', state: 'have', why: 'Kit form. Not generalised beyond its one placement.' },
+    ],
+  },
+  {
+    group: 'AI',
+    note: 'Only worth building behind a real feature — but worth designing once, not per surface.',
+    items: [
+      { name: 'Chat', state: 'proto', why: 'Prototyped here. Needs a model and a purpose before it is a component.' },
+      { name: 'Streaming text', state: 'gap', why: 'Tokens arriving progressively without the layout jumping.' },
+      { name: 'Citation', state: 'gap', why: 'Pointing an answer back at the case study or post it came from.' },
+      { name: 'Prompt suggestions', state: 'gap', why: 'The empty state of a chat — what to ask before anyone has typed.' },
+      { name: 'Response feedback', state: 'gap', why: 'Thumbs or a flag, so answers can be judged rather than assumed.' },
+    ],
+  },
 ]

@@ -3,7 +3,7 @@ import { useMeta } from '../hooks/useMeta'
 import {
   SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, FAMILIES,
   MONO_SCALE, DISPLAY_SCALE, RADII, MOTION, LAYOUT,
-  BUTTONS, FIELDS, RATIOS, GRIDS,
+  BUTTONS, FIELDS, RATIOS, GRIDS, BACKLOG,
 } from '../data/designTokens'
 import styles from './DesignSystem.module.css'
 
@@ -110,11 +110,26 @@ function Row({ label, value, onCopy, copied, children, note }) {
 
 /* SHIPPED means this demo reproduces the CSS of a component that exists in
    src/. NEW means the pattern is proposed here and has no component behind it
-   yet — the badge is the difference between documentation and a wish. */
+   yet — the badge is the difference between documentation and a wish.
+   HAVE / PROTO / GAP are the backlog's version of the same distinction. */
+
+const STATE_LABEL = { have: 'HAVE', proto: 'PROTO', gap: 'GAP' }
+
+/* Two tones only, deliberately: something is either backed by real code
+   (SHIPPED, HAVE — dim, settled) or it is not (NEW, PROTO — bright, unfinished).
+   GAP is neither, so it gets an outline and no fill. */
+const STATUS_TONE = {
+  SHIPPED: '',
+  HAVE: '',
+  NEW: 'statusNew',
+  PROTO: 'statusNew',
+  GAP: 'statusGap',
+}
+
 function Status({ value }) {
-  const isNew = value === 'NEW'
+  const tone = STATUS_TONE[value] ?? ''
   return (
-    <span className={`${styles.status} ${isNew ? styles.statusNew : ''}`}>
+    <span className={`${styles.status} ${tone ? styles[tone] : ''}`}>
       {value}
     </span>
   )
@@ -310,7 +325,7 @@ export default function DesignSystem() {
               ['Buttons', 'buttons'], ['Fields', 'fields'], ['Nav', 'nav'],
               ['Grids', 'grids'], ['Media', 'media'], ['Carousels', 'carousels'],
               ['Chat', 'chat'], ['Feedback', 'feedback'], ['Motion', 'motion'],
-              ['Layout', 'layout'], ['Light', 'light'], ['Drift', 'drift'],
+              ['Layout', 'layout'], ['Light', 'light'], ['Backlog', 'backlog'],
             ].map(([label, id]) => (
               <a key={id} href={`#${id}`} className={styles.tocLink}>{label}</a>
             ))}
@@ -396,8 +411,9 @@ export default function DesignSystem() {
           <h3 className={styles.subhead}>Accents</h3>
           <p className={styles.subnote}>
             Declared in <code className={styles.code}>:root</code> — and used nowhere.
-            Each appears exactly once in the codebase: its own definition. See
-            <a href="#drift" className={styles.inlineLink}>drift</a>.
+            Each appears exactly once in the codebase: its own definition. The
+            colour the site does use is semantic rather than brand — the error red
+            in <a href="#fields" className={styles.inlineLink}>fields</a>.
           </p>
           <div className={styles.accentRow}>
             {ACCENTS.map((a) => (
@@ -551,7 +567,7 @@ export default function DesignSystem() {
           id="buttons"
           index={4}
           title="Buttons"
-          blurb="Six variants ship today. They agree on the type and disagree on almost everything else — hover them, then read the drift note at the bottom."
+          blurb="Six variants ship today. They agree on the type and disagree on almost everything else — three different radii between them, and one with none at all."
         >
           <div className={styles.demoGrid}>
             <Demo label="Solid" note={BUTTONS[0].note}>
@@ -1081,155 +1097,56 @@ export default function DesignSystem() {
           </div>
         </Section>
 
-        {/* ── 08 Drift ── */}
+        {/* ── 15 Backlog ── */}
         <Section
-          id="drift"
+          id="backlog"
           index={15}
-          title="Drift"
-          blurb="What the audit turned up. This section is the reason the page is worth keeping."
+          title="Backlog"
+          blurb="UI the site is likely to need and doesn't have. Not a plan — an inventory, so that when one of these is needed it gets designed once, into the system, rather than improvised into whichever page needed it first."
         >
-          <div className={styles.driftList}>
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>2</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>
-                  var() calls across every stylesheet
-                </span>
-                <p className={styles.driftNote}>
-                  <code className={styles.code}>--bg</code>, <code className={styles.code}>--text</code>,
-                  {' '}<code className={styles.code}>--text-muted</code>, <code className={styles.code}>--text-faint</code>,
-                  {' '}<code className={styles.code}>--pink</code>, <code className={styles.code}>--teal</code> and
-                  {' '}<code className={styles.code}>--blue</code> are declared in
-                  {' '}<code className={styles.code}>:root</code>. Between them they are read
-                  twice — both in <code className={styles.code}>index.css</code> itself. Every
-                  module hardcodes the literal instead, which is why changing
-                  {' '}<code className={styles.code}>--bg</code> today changes nothing.
-                </p>
-              </div>
-            </div>
+          <p className={styles.prose}>
+            The reason to keep this list is the three input designs in
+            {' '}<a href="#fields" className={styles.inlineLink}>fields</a>. None of
+            them was a decision — each was the fastest thing to write on the day that
+            page needed a field, and now there are three. Everything below is a chance
+            to make that decision once instead. The right time to build any of them is
+            when its trigger actually happens, not before.
+          </p>
 
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>0</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Uses of the three accent colours</span>
-                <p className={styles.driftNote}>
-                  Pink, teal and blue exist only as their own definitions. The shipped
-                  site is entirely monochrome. Either they are a palette waiting to be
-                  used, or they are three lines to delete — but right now they describe
-                  a site that does not exist.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>4</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>
-                  Undeclared semantic colours, in near-duplicate pairs
-                </span>
-                <p className={styles.driftNote}>
-                  The site is not quite monochrome after all — it just uses colour
-                  for status rather than brand, and never declared it. Errors are
-                  {' '}<code className={styles.code}>rgba(255, 80, 80, …)</code> in DeckGate,
-                  ClientLanding and LandingHub, but
-                  {' '}<code className={styles.code}>rgba(220, 80, 80, …)</code> in CaseStudy.
-                  Success is <code className={styles.code}>rgba(190, 220, 150, …)</code> in
-                  one place and <code className={styles.code}>rgba(200, 225, 170, …)</code> in
-                  another. Two reds and two greens, each pair doing one job. These are
-                  the tokens the site actually needs — unlike the three that are declared.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>3</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Radii on the six button variants</span>
-                <p className={styles.driftNote}>
-                  Solid, outline and overlay are 5px; ghost and chip are 4px; the gate
-                  submit has none at all and is the only square control on the site.
-                  Nothing else on the page uses 5px, so the buttons are the one place
-                  the radius scale doesn't hold.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>3</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Input designs, for one input</span>
-                <p className={styles.driftNote}>
-                  Contact fields are a 0.03 fill with a 0.14 border at 3px and 13px type.
-                  Kit fields are <code className={styles.code}>#0a0a0a</code> with a 0.08
-                  border at 4px and 10px. Gate fields are
-                  {' '}<code className={styles.code}>#161616</code>, square, at 12px. They
-                  disagree on fill, border, radius, size and what focus looks like — see
-                  <a href="#fields" className={styles.inlineLink}>fields</a>.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>2</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Grid systems</span>
-                <p className={styles.driftNote}>
-                  Everything runs on 12 columns with a 5px gutter, except the thoughts
-                  index, which runs 3 columns with 28px and 56px gutters inside 40px of
-                  padding. Both look fine alone; they just aren't the same site.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>0.28</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>
-                  <code className={styles.code}>--text-faint</code> matches no value in use
-                </span>
-                <p className={styles.driftNote}>
-                  The faint labels on the site are set at 0.20 and 0.22.
-                  {' '}<code className={styles.code}>--text-muted</code> has the same problem:
-                  declared 0.5, but 0.4 is what the labels actually use, 42 times.
-                  The tokens were written from intent and the CSS from eye.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>12</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Uses of a 3px radius</span>
-                <p className={styles.driftNote}>
-                  Alongside 85 uses of 4px and 27 of 2px. At these box sizes 3px is
-                  indistinguishable from either — it is noise in the system rather
-                  than a third step, and the cheapest cleanup on this page.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.drift}>
-              <span className={styles.driftStat}>20</span>
-              <div className={styles.driftBody}>
-                <span className={styles.driftTitle}>Distinct white alphas</span>
-                <p className={styles.driftNote}>
-                  The ten above carry almost all of it, but there is a long tail —
-                  0.25, 0.45, 0.6, 0.7, 0.75 — where two neighbouring values do the
-                  same job in different files. Worth collapsing onto the ramp before
-                  the next big page.
-                </p>
-              </div>
-            </div>
+          <div className={styles.legend}>
+            <span className={styles.legendItem}>
+              <Status value="HAVE" /> a component exists
+            </span>
+            <span className={styles.legendItem}>
+              <Status value="PROTO" /> prototyped on this page
+            </span>
+            <span className={styles.legendItem}>
+              <Status value="GAP" /> neither
+            </span>
           </div>
 
-          <p className={styles.driftClose}>
-            None of this is broken, and none of it is urgent — the site is visually
-            consistent because it was built by one pair of eyes, not because the code
-            enforces anything. The risk is the second pair. If these values move into
-            <code className={styles.code}> :root</code> and the modules start reading
-            them, this page stops being a description of the system and starts being
-            the system.
-          </p>
+          <div className={styles.backlog}>
+            {BACKLOG.map((g) => (
+              <div key={g.group} className={styles.backlogGroup}>
+                <div className={styles.backlogHead}>
+                  <h3 className={styles.backlogTitle}>{g.group}</h3>
+                  <span className={styles.backlogCount}>
+                    {g.items.filter((i) => i.state === 'gap').length} / {g.items.length} missing
+                  </span>
+                </div>
+                <p className={styles.backlogNote}>{g.note}</p>
+                <div className={styles.backlogList}>
+                  {g.items.map((it) => (
+                    <div key={it.name} className={styles.backlogItem}>
+                      <span className={styles.backlogName}>{it.name}</span>
+                      <Status value={STATE_LABEL[it.state]} />
+                      <span className={styles.backlogWhy}>{it.why}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </Section>
 
         <footer className={styles.footer}>
