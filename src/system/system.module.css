@@ -787,6 +787,14 @@
   flex-shrink: 0;
 }
 
+/* A reference key is drawn as the line it actually is on the chart. */
+.legendDash {
+  width: 12px;
+  height: 0;
+  border-top: 1px dashed;
+  flex-shrink: 0;
+}
+
 .plotWrap { position: relative; }
 
 .tip {

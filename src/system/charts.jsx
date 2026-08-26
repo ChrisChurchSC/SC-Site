@@ -42,12 +42,18 @@ function Axis({ ticks, y, x0, x1, unit }) {
 }
 
 /* Always present for two or more series, so identity is never colour alone. */
+/* A reference line gets a dashed rule in the legend rather than a filled
+   swatch, because that is what it is on the chart. A target drawn as a solid
+   block reads as a fourth series. */
 export function Legend({ items }) {
   return (
     <div className={s.legend}>
-      {items.map(({ label, colour }) => (
+      {items.map(({ label, colour, dashed }) => (
         <span key={label} className={s.legendKey}>
-          <span className={s.legendSwatch} style={{ background: colour }} />
+          <span
+            className={dashed ? s.legendDash : s.legendSwatch}
+            style={dashed ? { borderColor: colour } : { background: colour }}
+          />
           {label}
         </span>
       ))}

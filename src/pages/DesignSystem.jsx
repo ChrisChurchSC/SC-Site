@@ -6,6 +6,12 @@ import {
   BUTTONS, FIELDS, RATIOS, GRIDS, BACKLOG,
   CHART_PALETTE, CHART_SEQUENTIAL, CHART_DIVERGING, CHART_STATUS,
 } from '../data/designTokens'
+import '../system/tokens.css'
+import {
+  Icon, Avatar, Legend, ICONS,
+  Segmented as SysSegmented, Switch as SysSwitch, Tabs as SysTabs,
+  BarChart as SysBarChart,
+} from '../system'
 import styles from './DesignSystem.module.css'
 
 /* Internal styleguide. Noindex, not in the sitemap, no nav entry — reached by
@@ -742,77 +748,7 @@ function SearchField() {
   )
 }
 
-/* ── Icons (NEW) ─────────────────────────────────────────────────────────────
- *
- * The site ships lucide-react and uses it for almost nothing. Lucide is a good
- * set and the wrong one here: it is drawn with round caps and 2px strokes on a
- * 24px grid, which reads friendly. This system is 8–11px mono and hairlines,
- * and a rounded icon beside 8px uppercase looks borrowed.
- *
- * So: a 16px grid, 1.25px strokes, butt caps and miter joins, every terminal
- * landing on a whole pixel. Geometry only — no tapers, no rounded corners, no
- * optical curves. Closer to a technical drawing than to an app icon.
- *
- * Everything is stroke-based and inherits currentColor, so an icon takes the
- * colour of the text beside it and needs no per-context variant.
- */
-const ICONS = {
-  'arrow-right': 'M2 8h12M9 3l5 5-5 5',
-  'arrow-left': 'M14 8H2M7 3L2 8l5 5',
-  'arrow-up': 'M8 14V2M3 7l5-5 5 5',
-  'arrow-down': 'M8 2v12M3 9l5 5 5-5',
-  'chevron-right': 'M6 3l5 5-5 5',
-  'chevron-left': 'M10 3L5 8l5 5',
-  'chevron-down': 'M3 6l5 5 5-5',
-  'chevron-up': 'M3 10l5-5 5 5',
-  close: 'M3 3l10 10M13 3L3 13',
-  plus: 'M8 2v12M2 8h12',
-  minus: 'M2 8h12',
-  check: 'M2 8.5l4 4L14 4',
-  menu: 'M2 4h12M2 8h12M2 12h12',
-  search: 'M7 12a5 5 0 100-10 5 5 0 000 10M10.5 10.5L14 14',
-  external: 'M9 2h5v5M14 2L7 9M12 9v5H2V4h5',
-  copy: 'M5 5h9v9H5zM11 5V2H2v9h3',
-  download: 'M8 2v9M4 7l4 4 4-4M2 14h12',
-  upload: 'M8 11V2M4 6l4-4 4 4M2 14h12',
-  link: 'M6.5 9.5l3-3M6 4l1.5-1.5a3 3 0 014 4L10 8M10 12l-1.5 1.5a3 3 0 01-4-4L6 8',
-  refresh: 'M14 3v4h-4M13.2 9A5.5 5.5 0 112.5 8',
-  filter: 'M2 3h12l-4.5 5.5V13L6.5 11V8.5z',
-  sort: 'M4 12V3M2 5l2-2 2 2M8 4h6M8 8h4M8 12h2',
-  info: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 7.5v4M8 5h.01',
-  warning: 'M8 2l6 11H2zM8 6.5v3M8 11.5h.01',
-  error: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.8 5.8l4.4 4.4M10.2 5.8l-4.4 4.4',
-  success: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.2 8l2 2 3.6-3.6',
-  clock: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 4.5V8l2.5 1.5',
-  lock: 'M4 7h8v7H4zM6 7V5a2 2 0 014 0v2',
-  play: 'M4 2l9 6-9 6z',
-  pause: 'M5 3v10M11 3v10',
-  image: 'M2 3h12v10H2zM2 10l3.5-3.5L9 10l2-2 3 3M5.5 5.5h.01',
-  video: 'M2 4h9v8H2zM11 7l3-2v6l-3-2',
-  file: 'M4 2h5l3 3v9H4zM9 2v3h3',
-  calendar: 'M2 4h12v10H2zM2 7h12M5 2v3M11 2v3',
-  mail: 'M2 4h12v8H2zM2 4l6 5 6-5',
-  user: 'M8 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5M3 14c0-2.5 2.2-4 5-4s5 1.5 5 4',
-  chart: 'M2 2v12h12M5 11V7M8 11V4M11 11V9',
-  grid: 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z',
-  list: 'M2 4h1M2 8h1M2 12h1M6 4h8M6 8h8M6 12h8',
-  sliders: 'M3 3v10M8 3v10M13 3v10M1.5 6h3M6.5 10h3M11.5 5h3',
-}
 
-function Icon({ name, size = 16 }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      width={size}
-      height={size}
-      className={styles.icon}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d={ICONS[name]} />
-    </svg>
-  )
-}
 
 /* ── Drawer (SHIPPED, undocumented) ──────────────────────────────────────────
    Cal and contact both ship this and neither is in the system. Reproduced here
@@ -944,21 +880,7 @@ function ConsentBanner() {
    different things. Confusing the two is why so many toolbars have both. */
 function Segmented() {
   const [on, setOn] = useState('Grid')
-  return (
-    <div className={styles.segmented} role="group" aria-label="View">
-      {[['Grid', 'grid'], ['List', 'list'], ['Chart', 'chart']].map(([label, icon]) => (
-        <button
-          key={label}
-          type="button"
-          aria-pressed={on === label}
-          className={`${styles.segItem} ${on === label ? styles.segItemOn : ''}`}
-          onClick={() => setOn(label)}
-        >
-          <Icon name={icon} size={14} />{label}
-        </button>
-      ))}
-    </div>
-  )
+  return <SysSegmented value={on} onChange={setOn} options={['Grid', 'List', 'Map']} />
 }
 
 /* Copy button. Used about fifty times on this page and never a component
@@ -1401,20 +1323,7 @@ function Combobox() {
 
 function Switch() {
   const [on, setOn] = useState(true)
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={on}
-      className={styles.switchRow}
-      onClick={() => setOn((o) => !o)}
-    >
-      <span className={`${styles.switchTrack} ${on ? styles.switchOn : ''}`}>
-        <span className={styles.switchThumb} />
-      </span>
-      <span className={styles.choiceLabel}>Email me a copy</span>
-    </button>
-  )
+  return <SysSwitch checked={on} onChange={setOn} label="Auto-publish on approval" />
 }
 
 /* Steppers exist so a number can be nudged without selecting and retyping.
@@ -2042,22 +1951,6 @@ function DataGrid() {
   )
 }
 
-/* ── People (NEW) ────────────────────────────────────────────────────────────
-   No avatar exists anywhere in the codebase, and both About and Careers want
-   one. Initials rather than a photo as the default: a studio of five has no
-   headshot pipeline, and a missing image is worse than no image. */
-function Avatar({ name, size = 32 }) {
-  const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2)
-  return (
-    <span
-      className={styles.avatar}
-      style={{ width: size, height: size, fontSize: size * 0.34 }}
-      aria-hidden="true"
-    >
-      {initials}
-    </span>
-  )
-}
 
 function PersonCard() {
   return (
@@ -2301,29 +2194,7 @@ function CommandPalette() {
 
 function Tabs() {
   const [on, setOn] = useState('Approach')
-  const tabs = ['Approach', 'Craft', 'Outcome']
-
-  return (
-    <div className={styles.tabs}>
-      <div className={styles.tabRow} role="tablist">
-        {tabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            role="tab"
-            aria-selected={on === t}
-            className={`${styles.tab} ${on === t ? styles.tabOn : ''}`}
-            onClick={() => setOn(t)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className={styles.tabPanel} role="tabpanel">
-        <span className={styles.tabPanelText}>{on}</span>
-      </div>
-    </div>
-  )
+  return <SysTabs value={on} onChange={setOn} options={['Approach', 'Craft', 'Outcome']} />
 }
 
 function FilterBar() {
@@ -2696,21 +2567,6 @@ function YAxis({ ticks, y, x0, x1, unit, minor = [] }) {
   )
 }
 
-function Legend({ items }) {
-  return (
-    <div className={styles.legend2}>
-      {items.map(([label, colour, dashed]) => (
-        <span key={label} className={styles.legendKey}>
-          <span
-            className={dashed ? styles.legendDash : styles.legendSwatch}
-            style={dashed ? { borderColor: colour } : { background: colour }}
-          />
-          {label}
-        </span>
-      ))}
-    </div>
-  )
-}
 
 /* KPI row: figure, delta, and the shape behind it. A number with no trend is a
    number you can't act on, so the sparkline is part of the tile rather than a
@@ -2827,7 +2683,7 @@ function TimeSeries() {
         )}
       </div>
       <div className={styles.figFoot}>
-        <Legend items={[['Revenue', 'var(--s1)'], ['Pipeline', 'var(--s2)'], ['Target', 'rgba(255,255,255,0.35)', true]]} />
+        <Legend items={[{ label: 'Revenue', colour: 'var(--s1)' }, { label: 'Pipeline', colour: 'var(--s2)' }, { label: 'Target', colour: 'rgba(255,255,255,0.35)', dashed: true }]} />
         <button type="button" className={styles.tableToggle} onClick={() => setTable(true)}>Show table</button>
       </div>
     </figure>
@@ -2838,26 +2694,9 @@ function TimeSeries() {
    the chart rather than in a caption. */
 function BarChart() {
   const mean = Math.round(REVENUE.reduce((a, b) => a + b, 0) / REVENUE.length)
-  const y = (v) => 150 - (v / 100) * 124
-  const w = 22
   return (
     <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue by period against mean">
-        <YAxis ticks={[0, 50, 100]} minor={[25, 75]} y={y} x0={40} x1={396} unit="$k" />
-        {REVENUE.map((v, i) => (
-          <rect
-            key={i} x={44 + i * 29} y={y(v)} width={w} height={150 - y(v)}
-            rx="0" fill={SERIES[0]} className={styles.mark}
-          >
-            <title>P{i + 1}: ${v}k</title>
-          </rect>
-        ))}
-        <line x1="40" x2="396" y1={y(mean)} y2={y(mean)} className={styles.refLine} />
-        <text x="396" y={y(mean) - 4} className={styles.refText} textAnchor="end">Mean {mean}</text>
-        {MO.map((m, i) => (
-          <text key={i} x={55 + i * 29} y="165" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
+      <SysBarChart data={REVENUE} labels={MO} unit="k" reference={mean} referenceLabel={`Mean ${mean}`} />
       <figcaption className={styles.figCap}>Axis starts at zero — a truncated baseline exaggerates every difference.</figcaption>
     </figure>
   )
@@ -2921,7 +2760,7 @@ function StackedBar() {
           )
         })}
       </svg>
-      <Legend items={[['Brand', 'var(--s1)'], ['Content', 'var(--s2)'], ['Product', 'var(--s3)']]} />
+      <Legend items={[{ label: 'Brand', colour: 'var(--s1)' }, { label: 'Content', colour: 'var(--s2)' }, { label: 'Product', colour: 'var(--s3)' }]} />
       <figcaption className={styles.figCap}>100% stacked — mix over time, where the total isn't the question.</figcaption>
     </figure>
   )
@@ -2993,7 +2832,7 @@ function Bullet() {
           )
         })}
       </svg>
-      <Legend items={[['At or above target', 'var(--s2)'], ['Below target', 'var(--s1)']]} />
+      <Legend items={[{ label: 'At or above target', colour: 'var(--s2)' }, { label: 'Below target', colour: 'var(--s1)' }]} />
       <figcaption className={styles.figCap}>Bullet — actual, target tick, and qualitative bands.</figcaption>
     </figure>
   )
@@ -3236,7 +3075,7 @@ function Dumbbell() {
           )
         })}
       </svg>
-      <Legend items={[['Before', 'var(--s3)'], ['After', 'var(--s1)']]} />
+      <Legend items={[{ label: 'Before', colour: 'var(--s3)' }, { label: 'After', colour: 'var(--s1)' }]} />
       <figcaption className={styles.figCap}>Dumbbell — the gap is the measure.</figcaption>
     </figure>
   )
@@ -3349,7 +3188,7 @@ function StackedArea() {
           <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
         ))}
       </svg>
-      <Legend items={[['Brand', 'var(--s1)'], ['Content', 'var(--s2)'], ['Product', 'var(--s3)']]} />
+      <Legend items={[{ label: 'Brand', colour: 'var(--s1)' }, { label: 'Content', colour: 'var(--s2)' }, { label: 'Product', colour: 'var(--s3)' }]} />
       <figcaption className={styles.figCap}>Stacked area — only when the total itself means something.</figcaption>
     </figure>
   )
