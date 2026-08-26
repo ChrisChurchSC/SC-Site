@@ -35,7 +35,7 @@ export {
 } from './shell'
 
 export {
-  Legend, Sparkline, LineChart, BarChart, RankedBar, Donut,
+  Axis, SERIES, Legend, Sparkline, LineChart, BarChart, RankedBar, Donut,
 } from './charts'
 
 export { Path, FileBrowser, FileView, CodeLines, MediaPreview, Tree } from './browser'
@@ -67,6 +67,12 @@ export {
   Select, Combobox, CheckGroup, RadioGroup, ValidatedField, SearchField,
   TagInput, SliderControl, DatePicker, FileUpload, FilterBar, SortControl,
 } from './forms'
+
+export {
+  Histogram, BoxPlot, Scatter, Bubble, DotPlot, Dumbbell, SlopeChart,
+  StepLine, TimeSeries, StackedArea, StackedBar, Waterfall, Funnel, Pareto,
+  Bullet, ControlChart, Treemap, CalendarHeat, Cohort, Gantt, SmallMultiples,
+} from './plots'
 
 export { Wiki } from './wiki'
 

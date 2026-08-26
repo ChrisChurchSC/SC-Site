@@ -5712,3 +5712,85 @@
 }
 
 .sortDir:hover { color: var(--sc-text-peak); border-color: var(--sc-text-faint); }
+
+/* ── Plots ─────────────────────────────────────────────────────────────────
+   Marks for the analytical half of the chart set. Everything recessive except
+   the data: axes and grids sit low in the ink ramp, and only a mark or a
+   breach gets colour. */
+
+.tickMinor {
+  stroke: var(--sc-line-strong);
+  stroke-width: 1;
+}
+
+.whisker {
+  stroke: var(--sc-text-faint);
+  stroke-width: 1;
+}
+
+/* The median is the number people actually read off a box, so it is the one
+   line drawn at full strength. */
+.median {
+  stroke: var(--sc-text-peak);
+  stroke-width: 1.5;
+}
+
+.connector {
+  stroke: var(--sc-line-strong);
+  stroke-width: 2;
+}
+
+.bubble {
+  opacity: 0.75;
+  transition: opacity var(--sc-fast);
+}
+
+.bubble:hover { opacity: 1; }
+
+/* A band is the same hue as its line at low opacity, never a second colour —
+   it is the same measure, drawn as a range. */
+.bandFill { opacity: 0.14; }
+
+.refCurve {
+  stroke: var(--sc-text-support);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.targetTick {
+  stroke: var(--sc-text-peak);
+  stroke-width: 2;
+}
+
+/* An unfinished task is outlined rather than tinted, so progress reads without
+   spending a second colour on it. */
+.ganttOpen {
+  fill: none;
+  stroke: var(--sc-text-faint);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.treeLabel {
+  font-family: var(--sc-font-mono);
+  font-size: 10px;
+  fill: var(--sc-text-peak);
+}
+
+.cellText {
+  font-family: var(--sc-font-mono);
+  font-size: 9px;
+  fill: var(--sc-text-peak);
+}
+
+/* The note under a chart, saying what the reader should take from it or what
+   the chart refuses to do. Set small and low in the ink ramp: it explains the
+   plot, so it must never compete with it. */
+.figCap {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--sc-text-meta);
+  margin-top: var(--sc-space-2);
+}

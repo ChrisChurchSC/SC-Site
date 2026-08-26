@@ -17,12 +17,12 @@ import s from './system.module.css'
  *   - A reference line is dashed and neutral: context, never a series.
  */
 
-const SERIES = ['var(--sc-s1)', 'var(--sc-s2)', 'var(--sc-s3)']
+export const SERIES = ['var(--sc-s1)', 'var(--sc-s2)', 'var(--sc-s3)']
 
 /* Ticks as well as gridlines: a gridline helps you read across, a tick says
    exactly where the value sits. Spines are drawn, because a plot with a
    baseline is a measurement and one without is a picture of data. */
-function Axis({ ticks, y, x0, x1, unit }) {
+export function Axis({ ticks, y, x0, x1, unit, minor = [] }) {
   const base = ticks[0]
   const top = ticks[ticks.length - 1]
   return (
@@ -33,6 +33,11 @@ function Axis({ ticks, y, x0, x1, unit }) {
           <line x1={x0 - 4} x2={x0} y1={y(v)} y2={y(v)} className={s.tick} />
           <text x={x0 - 7} y={y(v) + 2.5} className={s.axisText} textAnchor="end">{v}</text>
         </g>
+      ))}
+      {/* Minor ticks get no gridline — a rule for every unlabelled value turns
+          the plot into graph paper and buries the marks. */}
+      {minor.map((v) => (
+        <line key={v} x1={x0 - 2} x2={x0} y1={y(v)} y2={y(v)} className={s.tickMinor} />
       ))}
       <line x1={x0} x2={x0} y1={y(top)} y2={y(base)} className={s.spine} />
       <line x1={x0} x2={x1} y1={y(base)} y2={y(base)} className={s.spine} />

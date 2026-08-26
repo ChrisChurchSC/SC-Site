@@ -19,6 +19,15 @@ import {
   RadioGroup as SysRadioGroup, ValidatedField as SysValidated,
   SearchField as SysSearch, TagInput as SysTagInput,
   SliderControl as SysSlider, DatePicker as SysDatePicker,
+  RankedBar as SysRanked,
+  Histogram as SysHistogram, BoxPlot as SysBoxPlot, Scatter as SysScatter,
+  Bubble as SysBubble, DotPlot as SysDotPlot, Dumbbell as SysDumbbell,
+  SlopeChart as SysSlope, StepLine as SysStepLine, TimeSeries as SysTimeSeries,
+  StackedArea as SysStackedArea, StackedBar as SysStackedBar,
+  Waterfall as SysWaterfall, Funnel as SysFunnel, Pareto as SysPareto,
+  Bullet as SysBullet, ControlChart as SysControl, Treemap as SysTreemap,
+  CalendarHeat as SysCalHeat, Cohort as SysCohort, Gantt as SysGantt,
+  SmallMultiples as SysSmallMultiples,
   FileUpload as SysUpload, FilterBar as SysFilterBar, SortControl as SysSort,
   Segmented as SysSegmented, Switch as SysSwitch, Tabs as SysTabs,
   BarChart as SysBarChart,
@@ -1988,30 +1997,6 @@ const REVENUE = [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96]
 const PIPELINE = [28, 33, 39, 41, 52, 49, 61, 58, 67, 72, 70, 81]
 const TARGET = 75
 
-/* Shared axis furniture. Ticks as well as gridlines: a gridline helps you read
-   across, a tick tells you exactly where the value sits. */
-function YAxis({ ticks, y, x0, x1, unit, minor = [] }) {
-  const base = ticks[0]
-  const top = ticks[ticks.length - 1]
-  return (
-    <g>
-      {ticks.map((v) => (
-        <g key={v}>
-          <line x1={x0} x2={x1} y1={y(v)} y2={y(v)} className={styles.grid} />
-          <line x1={x0 - 4} x2={x0} y1={y(v)} y2={y(v)} className={styles.tick} />
-          <text x={x0 - 7} y={y(v) + 2.5} className={styles.axisText} textAnchor="end">{v}</text>
-        </g>
-      ))}
-      {minor.map((v) => (
-        <line key={v} x1={x0 - 2} x2={x0} y1={y(v)} y2={y(v)} className={styles.tickMinor} />
-      ))}
-      {/* Drawn spines: a plot with a baseline is a measurement, not a picture. */}
-      <line x1={x0} x2={x0} y1={y(top)} y2={y(base)} className={styles.spine} />
-      <line x1={x0} x2={x1} y1={y(base)} y2={y(base)} className={styles.spine} />
-      {unit && <text x={x0 - 7} y={y(top) - 9} className={styles.unitText} textAnchor="end">{unit}</text>}
-    </g>
-  )
-}
 
 
 /* KPI row: figure, delta, and the shape behind it. A number with no trend is a
@@ -2051,88 +2036,15 @@ function KpiRow() {
    x-position, and a table view — the numbers have to be available exactly,
    not just approximately. */
 function TimeSeries() {
-  const [hover, setHover] = useState(null)
-  const [table, setTable] = useState(false)
-  const x = (i) => 52 + i * 55
-  const y = (v) => 176 - (v / 100) * 150
-  const path = (d) => d.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')
-
-  if (table) {
-    return (
-      <figure className={styles.fig}>
-        <div className={styles.tableWrap}>
-          <table className={styles.dataTable}>
-            <thead>
-              <tr><th>Period</th><th className={styles.tNum}>Revenue</th><th className={styles.tNum}>Pipeline</th><th className={styles.tNum}>vs target</th></tr>
-            </thead>
-            <tbody>
-              {MO.map((m, i) => (
-                <tr key={i}>
-                  <td>P{i + 1}</td>
-                  <td className={styles.tNum}>{REVENUE[i]}</td>
-                  <td className={styles.tNum}>{PIPELINE[i]}</td>
-                  <td className={styles.tNum}>{REVENUE[i] - TARGET > 0 ? `+${REVENUE[i] - TARGET}` : REVENUE[i] - TARGET}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <button type="button" className={styles.tableToggle} onClick={() => setTable(false)}>Show chart</button>
-      </figure>
-    )
-  }
-
+  const data = [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96]
   return (
-    <figure className={styles.fig}>
-      <div className={styles.plotWrap}>
-        <svg
-          viewBox="0 0 720 200"
-          className={styles.svgWide}
-          role="img"
-          aria-label="Revenue and pipeline over twelve periods against target"
-          onMouseLeave={() => setHover(null)}
-        >
-          <YAxis ticks={[0, 25, 50, 75, 100]} minor={[12.5, 37.5, 62.5, 87.5]} y={y} x0={46} x1={712} unit="$k" />
-          {/* Reference line — the number these series are being judged against. */}
-          <line x1="46" x2="712" y1={y(TARGET)} y2={y(TARGET)} className={styles.refLine} />
-          <text x="712" y={y(TARGET) - 5} className={styles.refText} textAnchor="end">Target {TARGET}</text>
-
-          {hover !== null && <line x1={x(hover)} x2={x(hover)} y1="12" y2="176" className={styles.crosshair} />}
-
-          <path d={path(PIPELINE)} fill="none" stroke={SERIES[1]} strokeWidth="1.5" />
-          <path d={path(REVENUE)} fill="none" stroke={SERIES[0]} strokeWidth="1.5" />
-          {[REVENUE, PIPELINE].map((d, s) =>
-            d.map((v, i) => (
-              <circle
-                key={`${s}-${i}`}
-                cx={x(i)} cy={y(v)} r={hover === i ? 4 : 2.5}
-                fill={SERIES[s]} className={styles.dot}
-              />
-            )),
-          )}
-          {MO.map((m, i) => (
-            <rect key={i} x={x(i) - 27} y="8" width="55" height="168" fill="transparent" onMouseEnter={() => setHover(i)} />
-          ))}
-          {MO.map((m, i) => (
-            <text key={i} x={x(i)} y="192" className={styles.axisText} textAnchor="middle">{m}</text>
-          ))}
-        </svg>
-        {hover !== null && (
-          <div className={styles.tipBox} style={{ left: `${(x(hover) / 720) * 100}%` }}>
-            <span className={styles.tipMonth}>Period {hover + 1}</span>
-            <span className={styles.tipRow}><i style={{ background: 'var(--s1)' }} />Revenue<b>${REVENUE[hover]}k</b></span>
-            <span className={styles.tipRow}><i style={{ background: 'var(--s2)' }} />Pipeline<b>${PIPELINE[hover]}k</b></span>
-            <span className={styles.tipDelta}>
-              {REVENUE[hover] >= TARGET ? '+' : ''}{REVENUE[hover] - TARGET} vs target
-            </span>
-          </div>
-        )}
-      </div>
-      <div className={styles.figFoot}>
-        <Legend items={[{ label: 'Revenue', colour: 'var(--s1)' }, { label: 'Pipeline', colour: 'var(--s2)' }, { label: 'Target', colour: 'rgba(255,255,255,0.35)', dashed: true }]} />
-        <button type="button" className={styles.tableToggle} onClick={() => setTable(true)}>Show table</button>
-      </div>
-    </figure>
+    <SysTimeSeries
+      max={120} unit="$k"
+      data={data}
+      band={data.map((v) => [Math.max(0, v - 12), v + 12])}
+      labels={MO}
+      caption="The band is the same hue at low opacity — it is the same measure, drawn as a range."
+    />
   )
 }
 
@@ -2151,290 +2063,144 @@ function BarChart() {
 /* Ranked, with the share stated. A ranking chart whose bars aren't sorted is
    making the reader do the sorting. */
 function BarH() {
-  const data = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14]]
-  const total = data.reduce((a, [, v]) => a + v, 0)
-  const max = 70
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Projects by discipline, ranked">
-        {data.map(([label, v], i) => {
-          const wpx = (v / max) * 232
-          return (
-            <g key={label}>
-              <text x="0" y={24 + i * 32} className={styles.axisText}>{label}</text>
-              <rect x="76" y={13 + i * 32} width={wpx} height="16" rx="0" fill={SERIES[1]} className={styles.mark}>
-                <title>{label}: {v} ({Math.round((v / total) * 100)}%)</title>
-              </rect>
-              <text x={76 + wpx + 8} y={25 + i * 32} className={styles.valueText}>{v}</text>
-              <text x="396" y={25 + i * 32} className={styles.axisMuted} textAnchor="end">
-                {Math.round((v / total) * 100)}%
-              </text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Sorted descending, count and share both shown.</figcaption>
-    </figure>
+    <SysRanked data={[
+      { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+      { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+      { label: 'Advisory', value: 14 },
+    ]} />
   )
 }
 
 /* 100% stacked: for composition over time, where the mix matters and the
    total doesn't. */
 function StackedBar() {
-  const mix = [[46, 30, 24], [44, 31, 25], [42, 33, 25], [40, 32, 28], [38, 34, 28], [35, 35, 30],
-    [34, 34, 32], [32, 35, 33], [31, 34, 35], [29, 35, 36], [28, 34, 38], [26, 34, 40]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue mix over time">
-        <YAxis ticks={[0, 50, 100]} y={(v) => 150 - (v / 100) * 124} x0={40} x1={396} unit="%" />
-        {mix.map((col, i) => {
-          let acc = 0
-          return (
-            <g key={i}>
-              {col.map((v, s) => {
-                const h = (v / 100) * 124
-                const yy = 150 - acc - h
-                acc += h
-                return (
-                  <rect key={s} x={44 + i * 29} y={yy + 1} width="22" height={Math.max(0, h - 2)} rx="0" fill={SERIES[s]} className={styles.mark}>
-                    <title>P{i + 1} {['Brand', 'Content', 'Product'][s]}: {v}%</title>
-                  </rect>
-                )
-              })}
-              <text x={55 + i * 29} y="165" className={styles.axisText} textAnchor="middle">{MO[i]}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[{ label: 'Brand', colour: 'var(--s1)' }, { label: 'Content', colour: 'var(--s2)' }, { label: 'Product', colour: 'var(--s3)' }]} />
-      <figcaption className={styles.figCap}>100% stacked — mix over time, where the total isn't the question.</figcaption>
-    </figure>
+    <SysStackedBar
+      parts={['Brand', 'Content', 'Product']}
+      caption="A 2px surface gap between segments, so two adjacent parts never read as one longer one."
+      rows={[
+        { label: 'Q1', values: [24, 14, 8] },
+        { label: 'Q2', values: [31, 18, 11] },
+        { label: 'Q3', values: [38, 21, 16] },
+        { label: 'Q4', values: [42, 26, 19] },
+      ]}
+    />
   )
 }
 
 /* Waterfall: how a total got from one number to another. The single most
    useful analytical chart the site doesn't have. */
 function Waterfall() {
-  const steps = [['Open', 42, 'base'], ['New', 31, 'up'], ['Expand', 14, 'up'], ['Churn', -11, 'down'], ['Contract', -6, 'down'], ['Close', 70, 'base']]
-  const y = (v) => 150 - (v / 90) * 124
-  let run = 0
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Pipeline bridge">
-        <YAxis ticks={[0, 45, 90]} y={y} x0={40} x1={396} unit="$k" />
-        {steps.map(([label, v, kind], i) => {
-          const isBase = kind === 'base'
-          const start = isBase ? 0 : run
-          const end = isBase ? v : run + v
-          if (!isBase) run += v
-          else run = v
-          const top = Math.min(start, end)
-          const h = Math.abs(end - start)
-          const fill = isBase ? 'rgba(255,255,255,0.28)' : kind === "up" ? SERIES[1] : SERIES[0]
-          return (
-            <g key={label}>
-              <rect x={48 + i * 58} y={y(top + h)} width="40" height={Math.max(1, (h / 90) * 124)} rx="0" fill={fill} className={styles.mark}>
-                <title>{label}: {v > 0 && !isBase ? '+' : ''}{v}</title>
-              </rect>
-              {/* Connector to the next step, so the running total is legible. */}
-              {i < steps.length - 1 && (
-                <line x1={48 + i * 58 + 40} x2={48 + (i + 1) * 58} y1={y(end)} y2={y(end)} className={styles.connector} />
-              )}
-              <text x={68 + i * 58} y={y(top + h) - 5} className={styles.valueText} textAnchor="middle">
-                {!isBase && v > 0 ? '+' : ''}{v}
-              </text>
-              <text x={68 + i * 58} y="165" className={styles.axisMuted} textAnchor="middle">{label}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Bridge — how the opening number became the closing one.</figcaption>
-    </figure>
+    <SysWaterfall
+      max={90} unit="n"
+      caption="Colour carries direction and the sign is on the label too — never colour alone."
+      steps={[
+        { label: 'Open', value: 42, kind: 'base' },
+        { label: 'New', value: 31 },
+        { label: 'Expand', value: 14 },
+        { label: 'Churn', value: -11 },
+        { label: 'Contract', value: -6 },
+        { label: 'Close', value: 70, kind: 'base' },
+      ]}
+    />
   )
 }
 
 /* Bullet: actual against target and a qualitative range, in the space a
    gauge would waste. */
 function Bullet() {
-  const rows = [['Revenue', 96, 90, 100], ['Pipeline', 81, 95, 120], ['Retention', 88, 85, 100], ['Utilisation', 67, 80, 100]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Metrics against target">
-        {rows.map(([label, actual, target, max], i) => {
-          const sc = (v) => (v / max) * 232
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 38} className={styles.axisText}>{label}</text>
-              {/* Qualitative bands, deliberately low-contrast greys. */}
-              <rect x="86" y={14 + i * 38} width={sc(max)} height="16" rx="0" fill="rgba(255,255,255,0.04)" />
-              <rect x="86" y={14 + i * 38} width={sc(max * 0.75)} height="16" rx="0" fill="rgba(255,255,255,0.07)" />
-              <rect x="86" y={18 + i * 38} width={sc(actual)} height="8" rx="0" fill={actual >= target ? SERIES[1] : SERIES[0]} className={styles.mark}>
-                <title>{label}: {actual} of target {target}</title>
-              </rect>
-              {/* Target as a tick across the measure — the reference, not a bar. */}
-              <line x1={86 + sc(target)} x2={86 + sc(target)} y1={12 + i * 38} y2={32 + i * 38} className={styles.targetTick} />
-              <text x="396" y={26 + i * 38} className={styles.valueText} textAnchor="end">{actual}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[{ label: 'At or above target', colour: 'var(--s2)' }, { label: 'Below target', colour: 'var(--s1)' }]} />
-      <figcaption className={styles.figCap}>Bullet — actual, target tick, and qualitative bands.</figcaption>
-    </figure>
+    <SysBullet
+      caption="Bar is actual, tick is target. Four gauges take four times the room and say less."
+      rows={[
+        { label: 'Revenue', value: 96, target: 90, max: 100 },
+        { label: 'Pipeline', value: 81, target: 95, max: 120 },
+        { label: 'Retention', value: 88, target: 85, max: 100 },
+        { label: 'Utilisation', value: 67, target: 80, max: 100 },
+      ]}
+    />
   )
 }
 
 /* Distribution, not average. A mean hides the shape; a histogram is how you
    find out the average is lying to you. */
 function Histogram() {
-  const bins = [2, 5, 9, 14, 19, 22, 17, 11, 6, 3]
-  const labels = ['0', '', '20', '', '40', '', '60', '', '80', '']
-  const max = 24
-  const y = (v) => 150 - (v / max) * 124
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project value distribution">
-        <YAxis ticks={[0, 12, 24]} y={y} x0={40} x1={396} unit="n" />
-        {bins.map((v, i) => (
-          <rect key={i} x={45 + i * 35.4} y={y(v)} width="34" height={150 - y(v)} fill={SERIES[2]} className={styles.mark}>
-            <title>Bin {i + 1}: {v} projects</title>
-          </rect>
-        ))}
-        {/* Median marker — the number a skewed distribution should be read by. */}
-        <line x1={45 + 5.2 * 35.4} x2={45 + 5.2 * 35.4} y1="20" y2="150" className={styles.refLine} />
-        <text x={45 + 5.2 * 35.4 + 6} y="28" className={styles.refText}>Median</text>
-        {labels.map((l, i) => l && (
-          <text key={i} x={62 + i * 35.4} y="165" className={styles.axisText} textAnchor="middle">{l}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Histogram — bars touch, because the x-axis is continuous.</figcaption>
-    </figure>
+    <SysHistogram
+      unit="n"
+      caption="Bars touch: the axis is continuous, and gaps would make it a bar chart of unrelated categories."
+      bins={[
+        { label: '0', value: 2 }, { label: '5', value: 6 }, { label: '10', value: 14 },
+        { label: '15', value: 23 }, { label: '20', value: 31 }, { label: '25', value: 27 },
+        { label: '30', value: 18 }, { label: '35', value: 9 }, { label: '40', value: 4 },
+      ]}
+    />
   )
 }
 
 /* Box plot: five numbers per category, for comparing spread rather than
    centre. */
 function BoxPlot() {
-  const groups = [['Brand', 18, 34, 47, 61, 88], ['Content', 8, 16, 24, 33, 52], ['Product', 26, 44, 62, 78, 96], ['Motion', 6, 12, 19, 28, 41]]
-  const y = (v) => 148 - (v / 100) * 120
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project value spread by discipline">
-        <YAxis ticks={[0, 50, 100]} minor={[25, 75]} y={y} x0={40} x1={396} unit="$k" />
-        {groups.map(([label, lo, q1, med, q3, hi], i) => {
-          const cx = 84 + i * 82
-          return (
-            <g key={label}>
-              <line x1={cx} x2={cx} y1={y(hi)} y2={y(lo)} className={styles.whisker} />
-              <line x1={cx - 10} x2={cx + 10} y1={y(hi)} y2={y(hi)} className={styles.whisker} />
-              <line x1={cx - 10} x2={cx + 10} y1={y(lo)} y2={y(lo)} className={styles.whisker} />
-              <rect x={cx - 20} y={y(q3)} width="40" height={y(q1) - y(q3)} rx="0" fill={SERIES[2]} fillOpacity="0.45" stroke={SERIES[2]} strokeWidth="1" className={styles.mark}>
-                <title>{label}: median {med}, IQR {q1}–{q3}</title>
-              </rect>
-              <line x1={cx - 20} x2={cx + 20} y1={y(med)} y2={y(med)} className={styles.medianLine} />
-              <text x={cx} y="165" className={styles.axisMuted} textAnchor="middle">{label}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Box — min, quartiles, median, max. Spread, not just centre.</figcaption>
-    </figure>
+    <SysBoxPlot
+      max={100}
+      caption="Five numbers a bar chart of averages would have thrown away."
+      groups={[
+        { label: 'Brand', min: 18, q1: 34, median: 47, q3: 61, max: 88 },
+        { label: 'Content', min: 8, q1: 16, median: 24, q3: 33, max: 52 },
+        { label: 'Product', min: 26, q1: 44, median: 62, q3: 78, max: 96 },
+        { label: 'Motion', min: 6, q1: 12, median: 19, q3: 28, max: 41 },
+      ]}
+    />
   )
 }
 
 /* Funnel with the step conversion stated. A funnel that only shows volumes
    makes you do the division. */
 function Funnel() {
-  const steps = [['Visits', 4820], ['Enquiries', 412], ['Calls', 168], ['Proposals', 74], ['Won', 31]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Conversion funnel">
-        {steps.map(([label, v], i) => {
-          const wpx = (v / steps[0][1]) ** 0.42 * 300
-          const prev = i ? steps[i - 1][1] : null
-          return (
-            <g key={label}>
-              <rect x={50} y={8 + i * 32} width={wpx} height="22" rx="0" fill={SERIES[0]} fillOpacity={1 - i * 0.14} className={styles.mark}>
-                <title>{label}: {v.toLocaleString()}</title>
-              </rect>
-              <text x={56} y={23 + i * 32} className={styles.funnelLabel}>{label}</text>
-              <text x={50 + wpx + 8} y={23 + i * 32} className={styles.valueText}>{v.toLocaleString()}</text>
-              {prev && (
-                <text x="396" y={23 + i * 32} className={styles.axisMuted} textAnchor="end">
-                  {((v / prev) * 100).toFixed(1)}%
-                </text>
-              )}
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Step conversion on the right — the number people actually want.</figcaption>
-    </figure>
+    <SysFunnel
+      caption="Each stage as a share of the one above it — the number somebody can act on."
+      steps={[
+        { label: 'Visits', value: 4820 }, { label: 'Enquiries', value: 412 },
+        { label: 'Calls', value: 168 }, { label: 'Proposals', value: 74 },
+        { label: 'Won', value: 31 },
+      ]}
+    />
   )
 }
 
 /* Cohort retention: the grid that answers "is the product getting stickier".
    Sequential ramp, because every cell is the same measure. */
 function Cohort() {
-  const rows = [
-    ['P1', [100, 82, 71, 64, 58, 55]],
-    ['P2', [100, 85, 74, 68, 63, null]],
-    ['P3', [100, 88, 79, 72, null, null]],
-    ['P4', [100, 86, 80, null, null, null]],
-    ['P5', [100, 91, null, null, null, null]],
-  ]
-  const q = (v) => (v === null ? 0 : v >= 90 ? 5 : v >= 80 ? 4 : v >= 70 ? 3 : v >= 60 ? 2 : 1)
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Cohort retention">
-        {['M0', 'M1', 'M2', 'M3', 'M4', 'M5'].map((m, ci) => (
-          <text key={m} x={62 + ci * 56} y="14" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-        {rows.map(([label, vals], ri) => (
-          <g key={label}>
-            <text x="0" y={38 + ri * 29} className={styles.axisText}>{label}</text>
-            {vals.map((v, ci) => (
-              <g key={ci}>
-                <rect x={36 + ci * 56} y={22 + ri * 29} width="52" height="24" rx="0" fill={`var(--q${q(v)})`} className={styles.mark}>
-                  {v !== null && <title>{label} · M{ci}: {v}%</title>}
-                </rect>
-                {v !== null && (
-                  <text x={62 + ci * 56} y={38 + ri * 29} className={styles.cellText} textAnchor="middle">{v}</text>
-                )}
-              </g>
-            ))}
-          </g>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Retention by cohort — the diagonal is incomplete, not zero.</figcaption>
-    </figure>
+    <SysCohort
+      caption="Reads down for 'does this get better', across for 'how long do they stay'."
+      rows={[
+        { label: 'Jan', cells: [100, 82, 71, 64, 58] },
+        { label: 'Feb', cells: [100, 85, 74, 66, null] },
+        { label: 'Mar', cells: [100, 88, 79, null, null] },
+        { label: 'Apr', cells: [100, 91, null, null, null] },
+      ]}
+    />
   )
 }
 
 /* Scatter with a fitted line and the correlation stated, so the relationship
    is quantified rather than implied by the eye. */
 function Scatter() {
-  const pts = [[22, 31], [38, 44], [45, 39], [52, 58], [61, 55], [68, 71], [74, 66], [81, 84], [33, 28], [57, 52], [88, 79], [29, 36], [64, 61], [47, 50]]
-  const sx = (v) => 46 + (v / 100) * 340
-  const sy = (v) => 148 - (v / 100) * 122
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Spend against return">
-        <YAxis ticks={[0, 50, 100]} y={sy} x0={40} x1={396} unit="$k" />
-        {/* Fit line, dashed so it never reads as data. */}
-        <line x1={sx(18)} y1={sy(22)} x2={sx(90)} y2={sy(84)} className={styles.fitLine} />
-        <text x={sx(90)} y={sy(84) - 6} className={styles.refText} textAnchor="end">r = 0.91</text>
-        {pts.map(([a, b], i) => (
-          <circle key={i} cx={sx(a)} cy={sy(b)} r="4" fill={SERIES[1]} className={styles.dot}>
-            <title>Spend ${a}k · Return ${b}k</title>
-          </circle>
-        ))}
-        {[0, 50, 100].map((v) => (
-          <text key={v} x={sx(v)} y="165" className={styles.axisText} textAnchor="middle">{v}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Scatter with fit — spend, $k, against return.</figcaption>
-    </figure>
+    <SysScatter
+      xLabel="Spend" yLabel="Reach" xMax={100} yMax={100}
+      points={[
+        { label: 'Meta', x: 38, y: 62 }, { label: 'LinkedIn', x: 27, y: 44 },
+        { label: 'Search', x: 12, y: 21 }, { label: 'Newsletter', x: 7, y: 33 },
+        { label: 'Outreach', x: 18, y: 29 }, { label: 'Events', x: 61, y: 74 },
+        { label: 'Podcast', x: 44, y: 39 },
+      ]}
+    />
   )
 }
 
@@ -2442,88 +2208,43 @@ function Scatter() {
    change legible at a glance — and it refuses to be read as a trend, because
    there is nothing between the ends to misread. */
 function SlopeChart() {
-  const rows = [['Brand', 61, 84], ['Content', 44, 61], ['Product', 38, 70], ['Motion', 22, 19]]
-  const y = (v) => 150 - (v / 100) * 124
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Change by discipline">
-        <line x1="120" x2="120" y1="20" y2="150" className={styles.spine} />
-        <line x1="280" x2="280" y1="20" y2="150" className={styles.spine} />
-        <text x="120" y="165" className={styles.axisMuted} textAnchor="middle">2025</text>
-        <text x="280" y="165" className={styles.axisMuted} textAnchor="middle">2026</text>
-        {rows.map(([label, a, b], i) => (
-          <g key={label} className={styles.mark}>
-            <line x1="120" y1={y(a)} x2="280" y2={y(b)} stroke={SERIES[i]} strokeWidth="1.5" />
-            <circle cx="120" cy={y(a)} r="3" fill={SERIES[i]} className={styles.dot} />
-            <circle cx="280" cy={y(b)} r="3" fill={SERIES[i]} className={styles.dot} />
-            <text x="112" y={y(a) + 3} className={styles.axisText} textAnchor="end">{a}</text>
-            <text x="288" y={y(b) + 3} className={styles.valueText}>{b}</text>
-            <text x="396" y={y(b) + 3} className={styles.axisMuted} textAnchor="end">{label}</text>
-          </g>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Slope — start, end, and nothing invented in between.</figcaption>
-    </figure>
+    <SysSlope
+      left="Q1" right="Q4" max={100}
+      rows={[
+        { label: 'Brand', from: 42, to: 84 },
+        { label: 'Content', from: 61, to: 44 },
+        { label: 'Product', from: 26, to: 70 },
+      ]}
+    />
   )
 }
 
 /* Lollipop: a bar's information with a fraction of its ink. Better than a bar
    whenever the categories are sparse and the baseline is not in question. */
 function DotPlot() {
-  const rows = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Projects by discipline">
-        {rows.map(([label, v], i) => {
-          const x = 86 + (v / 70) * 250
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
-              <line x1="86" y1={22 + i * 30} x2={x} y2={22 + i * 30} className={styles.stem} />
-              <circle cx={x} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}>
-                <title>{label}: {v}</title>
-              </circle>
-              <text x={x + 10} y={26 + i * 30} className={styles.valueText}>{v}</text>
-            </g>
-          )
-        })}
-        <line x1="86" x2="86" y1="12" y2="158" className={styles.spine} />
-      </svg>
-      <figcaption className={styles.figCap}>Lollipop — a bar's information at a fraction of the ink.</figcaption>
-    </figure>
+    <SysDotPlot
+      max={100}
+      rows={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+      ]}
+    />
   )
 }
 
 /* Dumbbell: two states per category and the distance between them. The gap is
    the measure, so the connector is the mark, not decoration. */
 function Dumbbell() {
-  const rows = [['Brand', 42, 84], ['Content', 31, 61], ['Product', 26, 70], ['Motion', 18, 34]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Before and after by discipline">
-        {[0, 50, 100].map((v) => (
-          <g key={v}>
-            <line x1={86 + (v / 100) * 260} x2={86 + (v / 100) * 260} y1="10" y2="140" className={styles.grid} />
-            <text x={86 + (v / 100) * 260} y="155" className={styles.axisText} textAnchor="middle">{v}</text>
-          </g>
-        ))}
-        {rows.map(([label, a, b], i) => {
-          const xa = 86 + (a / 100) * 260
-          const xb = 86 + (b / 100) * 260
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
-              <line x1={xa} y1={22 + i * 30} x2={xb} y2={22 + i * 30} className={styles.dumbbellBar} />
-              <circle cx={xa} cy={22 + i * 30} r="4" fill={SERIES[2]} className={styles.dot}><title>{label} before: {a}</title></circle>
-              <circle cx={xb} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}><title>{label} after: {b}</title></circle>
-              <text x="396" y={26 + i * 30} className={styles.axisMuted} textAnchor="end">+{b - a}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[{ label: 'Before', colour: 'var(--s3)' }, { label: 'After', colour: 'var(--s1)' }]} />
-      <figcaption className={styles.figCap}>Dumbbell — the gap is the measure.</figcaption>
-    </figure>
+    <SysDumbbell
+      max={100} labels={['Before', 'After']}
+      rows={[
+        { label: 'Brand', from: 42, to: 84 }, { label: 'Content', from: 31, to: 61 },
+        { label: 'Product', from: 26, to: 70 }, { label: 'Motion', from: 18, to: 34 },
+      ]}
+    />
   )
 }
 
@@ -2531,35 +2252,19 @@ function Dumbbell() {
    with today marked — a schedule nobody can locate themselves on is a
    decoration. */
 function Gantt() {
-  const rows = [
-    ['Discovery', 0, 2, 0], ['Identity', 1.5, 4, 1], ['System', 3.5, 3.5, 2],
-    ['Build', 6, 4, 3], ['Handover', 9.5, 1.5, 4],
-  ]
-  const W = 11
-  const x = (w) => 86 + (w / W) * 270
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project schedule">
-        {[0, 2, 4, 6, 8, 10].map((w) => (
-          <g key={w}>
-            <line x1={x(w)} x2={x(w)} y1="8" y2="140" className={styles.grid} />
-            <text x={x(w)} y="155" className={styles.axisText} textAnchor="middle">W{w}</text>
-          </g>
-        ))}
-        {rows.map(([label, start, len, s], i) => (
-          <g key={label}>
-            <text x="0" y={26 + i * 26} className={styles.axisText}>{label}</text>
-            <rect x={x(start)} y={16 + i * 26} width={(len / W) * 270} height="13" fill={SERIES[s]} className={styles.mark}>
-              <title>{label}: week {start} to {start + len}</title>
-            </rect>
-          </g>
-        ))}
-        {/* Today. Without it a schedule can't be read against the present. */}
-        <line x1={x(5.2)} x2={x(5.2)} y1="8" y2="140" className={styles.todayLine} />
-        <text x={x(5.2) + 5} y="16" className={styles.refText}>Today</text>
-      </svg>
-      <figcaption className={styles.figCap}>Gantt — phases against weeks, with today marked.</figcaption>
-    </figure>
+    <SysGantt
+      span={12}
+      labels={['W1', 'W3', 'W5', 'W7', 'W9', 'W11']}
+      caption="Done is filled, in flight is outlined — progress without spending a second colour."
+      tasks={[
+        { label: 'Messaging', start: 0, span: 3, done: true },
+        { label: 'Identity', start: 2, span: 4, done: true },
+        { label: 'Channels', start: 5, span: 3 },
+        { label: 'Site', start: 7, span: 4 },
+        { label: 'Launch', start: 10, span: 2 },
+      ]}
+    />
   )
 }
 
@@ -2567,101 +2272,44 @@ function Gantt() {
    is defensible, because the line is a percentage of the bars themselves and
    not an unrelated measure. */
 function Pareto() {
-  const data = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14], ['Other', 8]]
-  const total = data.reduce((a, [, v]) => a + v, 0)
-  const y = (v) => 148 - (v / 70) * 122
-  const yc = (p) => 148 - (p / 100) * 122
-  let acc = 0
-  const pts = data.map(([, v], i) => {
-    acc += v
-    return `${i ? 'L' : 'M'}${58 + i * 55},${yc((acc / total) * 100)}`
-  }).join(' ')
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Pareto of projects by discipline">
-        <YAxis ticks={[0, 35, 70]} y={y} x0={40} x1={392} unit="n" />
-        {data.map(([label, v], i) => (
-          <rect key={label} x={40 + i * 55} y={y(v)} width="36" height={148 - y(v)} fill={SERIES[0]} className={styles.mark}>
-            <title>{label}: {v}</title>
-          </rect>
-        ))}
-        <line x1="392" x2="392" y1={yc(100)} y2={yc(0)} className={styles.spine} />
-        <text x="392" y={yc(100) - 6} className={styles.unitText} textAnchor="end">cum %</text>
-        <path d={pts} fill="none" stroke={SERIES[1]} strokeWidth="1.5" />
-        {data.map(([label], i) => {
-          let a = 0
-          data.slice(0, i + 1).forEach(([, v]) => { a += v })
-          return <circle key={label} cx={58 + i * 55} cy={yc((a / total) * 100)} r="2.5" fill={SERIES[1]} className={styles.dot} />
-        })}
-        <line x1="40" x2="392" y1={yc(80)} y2={yc(80)} className={styles.refLine} />
-        <text x="392" y={yc(80) - 4} className={styles.refText} textAnchor="end">80%</text>
-        {data.map(([label], i) => (
-          <text key={label} x={58 + i * 55} y="163" className={styles.axisMuted} textAnchor="middle">{label.slice(0, 4)}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Pareto — the only defensible second axis: it's a share of the bars.</figcaption>
-    </figure>
+    <SysPareto
+      caption="The 80% rule is only visible with the cumulative curve on it."
+      data={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+        { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+      ]}
+    />
   )
 }
 
 /* Stacked area: composition over time. Only legitimate when the total means
    something; otherwise it's a 100% stack or three lines. */
 function StackedArea() {
-  const series = [
-    [30, 34, 36, 41, 44, 48, 52, 56, 58, 62, 66, 70],
-    [22, 24, 26, 27, 30, 32, 33, 36, 38, 39, 42, 44],
-    [12, 14, 17, 19, 20, 23, 26, 28, 30, 33, 35, 38],
-  ]
-  const x = (i) => 44 + i * 31
-  const yv = (v) => 148 - (v / 160) * 122
-  const bands = []
-  const running = new Array(12).fill(0)
-  series.forEach((s) => {
-    const lower = [...running]
-    s.forEach((v, i) => { running[i] += v })
-    const top = running.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${yv(v)}`).join(' ')
-    const bottom = lower.map((v, i) => `L${x(11 - i)},${yv(lower[11 - i])}`).join(' ')
-    bands.push(`${top} ${bottom} Z`)
-  })
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Composition over time">
-        <YAxis ticks={[0, 80, 160]} y={yv} x0={40} x1={392} unit="$k" />
-        {bands.map((d, s) => (
-          <path key={s} d={d} fill={SERIES[s]} fillOpacity="0.75" className={styles.mark} />
-        ))}
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <Legend items={[{ label: 'Brand', colour: 'var(--s1)' }, { label: 'Content', colour: 'var(--s2)' }, { label: 'Product', colour: 'var(--s3)' }]} />
-      <figcaption className={styles.figCap}>Stacked area — only when the total itself means something.</figcaption>
-    </figure>
+    <SysStackedArea
+      max={120} unit="n" labels={MO}
+      caption="Composition, so the sequential ramp — the bands are parts of one total, not rival series."
+      series={[
+        { label: 'Brand', data: [12, 14, 16, 19, 21, 24, 26, 29, 31, 34, 36, 39] },
+        { label: 'Content', data: [8, 9, 11, 12, 14, 15, 17, 18, 20, 21, 23, 24] },
+        { label: 'Product', data: [4, 5, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18] },
+      ]}
+    />
   )
 }
 
 /* Step: a value that holds until it changes. Interpolating between price
    changes or headcount would be a lie, and a straight line tells it. */
 function StepLine() {
-  const d = [12, 12, 14, 14, 14, 18, 18, 18, 22, 22, 26, 26]
-  const x = (i) => 46 + i * 30
-  const y = (v) => 148 - (v / 30) * 122
-  let path = `M${x(0)},${y(d[0])}`
-  d.forEach((v, i) => {
-    if (i === 0) return
-    path += ` L${x(i)},${y(d[i - 1])} L${x(i)},${y(v)}`
-  })
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Headcount over time">
-        <YAxis ticks={[0, 15, 30]} y={y} x0={40} x1={392} unit="ppl" />
-        <path d={path} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Step — the value holds until it changes. No invented slope.</figcaption>
-    </figure>
+    <SysStepLine
+      max={100} unit="$k"
+      caption="A value that holds until it changes did not drift between readings, and a diagonal says it did."
+      data={[20, 20, 35, 35, 35, 50, 50, 65, 65, 65, 80, 80]}
+      labels={MO}
+    />
   )
 }
 
@@ -2674,101 +2322,44 @@ function StepLine() {
  * the point a treemap encodes one measure: the cells are degrees of the same
  * thing, which is what a sequential ramp is for. */
 function Treemap() {
-  const cells = [
-    ['Brand', 61, 5, 0, 0, 58, 90], ['Content', 44, 4, 58, 0, 42, 62],
-    ['Product', 38, 3, 58, 62, 42, 28], ['Motion', 22, 2, 0, 90, 34, 55],
-    ['Advisory', 14, 1, 34, 90, 24, 55],
-  ]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue share by discipline">
-        <g transform="translate(100, 8)">
-          {cells.map(([label, v, s, x, y, w, h]) => (
-            <g key={label}>
-              <rect x={x * 2} y={y * 1.6} width={w * 2 - 2} height={h * 1.6 - 2} fill={`var(--q${s})`} className={styles.mark}>
-                <title>{label}: {v}</title>
-              </rect>
-              {w * 2 > 60 && (
-                <>
-                  <text
-                    x={x * 2 + 8} y={y * 1.6 + 16}
-                    /* Label ink flips on the two lightest steps — a dark label
-                       on a dark cell is the classic treemap failure. */
-                    className={s >= 4 ? styles.treeLabel : styles.treeLabelLight}
-                  >
-                    {label}
-                  </text>
-                  <text
-                    x={x * 2 + 8} y={y * 1.6 + 30}
-                    className={s >= 4 ? styles.treeVal : styles.treeValLight}
-                  >
-                    {v}
-                  </text>
-                </>
-              )}
-            </g>
-          ))}
-        </g>
-      </svg>
-      <figcaption className={styles.figCap}>Treemap — area is the measure; labels only where they fit.</figcaption>
-    </figure>
+    <SysTreemap
+      caption="For 'which of these is big'. Comparing two areas precisely is what a bar is for."
+      data={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+        { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+      ]}
+    />
   )
 }
 
 /* Calendar heatmap: one cell per day. Density over a year, where a line chart
    would smooth away exactly the pattern you're looking for. */
 function CalendarHeat() {
-  const vals = Array.from({ length: 7 * 26 }, (_, i) =>
-    (i % 7 === 5 || i % 7 === 6) ? (i % 11 === 0 ? 1 : 0) : (i * 7 % 5) + (i % 3))
+  const weeks = Array.from({ length: 20 }, (_, w) =>
+    Array.from({ length: 7 }, (_, d) => ((w * 7 + d * 3) % 11 === 0 ? 0 : (w + d * 2) % 10)))
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 130" className={styles.svg} role="img" aria-label="Activity by day">
-        {['M', 'W', 'F'].map((d, i) => (
-          <text key={d} x="0" y={24 + i * 22} className={styles.axisText}>{d}</text>
-        ))}
-        {vals.map((v, i) => {
-          const col = Math.floor(i / 7)
-          const row = i % 7
-          return (
-            <rect
-              key={i}
-              x={20 + col * 14.5} y={12 + row * 11} width="12" height="9"
-              fill={`var(--q${Math.min(5, v)})`} className={styles.mark}
-            >
-              <title>Day {i + 1}: {v}</title>
-            </rect>
-          )
-        })}
-        {['Jan', 'Apr', 'Jul', 'Oct'].map((m, i) => (
-          <text key={m} x={22 + i * 94} y="106" className={styles.axisMuted}>{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Calendar — one cell a day. The weekend gaps are the finding.</figcaption>
-    </figure>
+    <SysCalHeat
+      weeks={weeks} max={10}
+      caption="One hue, five steps. A heatmap on a categorical palette asks the reader to learn an order the colours do not have."
+    />
   )
 }
 
 /* Bubble: a third measure as area, never as radius — area is what the eye
    compares, and sizing by radius overstates big values fourfold. */
 function Bubble() {
-  const pts = [[22, 31, 8], [38, 44, 22], [52, 58, 14], [61, 55, 34], [74, 66, 18], [81, 84, 42], [33, 28, 11], [64, 41, 26]]
-  const sx = (v) => 50 + (v / 100) * 330
-  const sy = (v) => 146 - (v / 100) * 120
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Spend, return and team size">
-        <YAxis ticks={[0, 50, 100]} y={sy} x0={44} x1={392} unit="$k" />
-        {pts.map(([a, b, r], i) => (
-          <circle key={i} cx={sx(a)} cy={sy(b)} r={Math.sqrt(r) * 2.1} fill={SERIES[1]} fillOpacity="0.45" stroke={SERIES[1]} strokeWidth="1" className={styles.mark}>
-            <title>Spend {a} · Return {b} · Team {r}</title>
-          </circle>
-        ))}
-        {[0, 50, 100].map((v) => (
-          <text key={v} x={sx(v)} y="163" className={styles.axisText} textAnchor="middle">{v}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Bubble — team size as area, never as radius.</figcaption>
-    </figure>
+    <SysBubble
+      xLabel="Spend" yLabel="Reach" rMax={200}
+      caption="Area carries the third measure, not radius — doubling a radius quadruples the ink."
+      points={[
+        { label: 'Meta', x: 38, y: 62, r: 140 }, { label: 'LinkedIn', x: 27, y: 44, r: 88 },
+        { label: 'Search', x: 12, y: 21, r: 34 }, { label: 'Events', x: 61, y: 74, r: 190 },
+        { label: 'Podcast', x: 44, y: 39, r: 62 },
+      ]}
+    />
   )
 }
 
@@ -2776,36 +2367,13 @@ function Bubble() {
    fluctuation from a real signal. The point outside the band is the whole
    reason the chart exists. */
 function ControlChart() {
-  const d = [52, 48, 55, 51, 49, 58, 53, 47, 68, 50, 54, 51]
-  const mean = 53
-  const sd = 6
-  const x = (i) => 48 + i * 30
-  const y = (v) => 148 - (v / 90) * 122
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Process control">
-        <YAxis ticks={[0, 45, 90]} y={y} x0={42} x1={392} unit="hrs" />
-        <rect x="42" y={y(mean + 2 * sd)} width="350" height={y(mean - 2 * sd) - y(mean + 2 * sd)} fill="rgba(255,255,255,0.03)" />
-        <line x1="42" x2="392" y1={y(mean)} y2={y(mean)} className={styles.refLine} />
-        <text x="392" y={y(mean) - 4} className={styles.refText} textAnchor="end">Mean {mean}</text>
-        <line x1="42" x2="392" y1={y(mean + 2 * sd)} y2={y(mean + 2 * sd)} className={styles.sigmaLine} />
-        <line x1="42" x2="392" y1={y(mean - 2 * sd)} y2={y(mean - 2 * sd)} className={styles.sigmaLine} />
-        <text x="392" y={y(mean + 2 * sd) - 4} className={styles.refText} textAnchor="end">+2σ</text>
-        <path d={d.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
-        {d.map((v, i) => {
-          const out = v > mean + 2 * sd || v < mean - 2 * sd
-          return (
-            <circle key={i} cx={x(i)} cy={y(v)} r={out ? 4 : 2.5} fill={out ? 'rgba(255, 80, 80, 0.9)' : SERIES[2]} className={styles.dot}>
-              <title>P{i + 1}: {v}{out ? ' — outside control limits' : ''}</title>
-            </circle>
-          )
-        })}
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Control — the point outside ±2σ is why the chart exists.</figcaption>
-    </figure>
+    <SysControl
+      max={100} mean={52} sigma={9}
+      labels={MO}
+      caption="A point outside the limits is the only thing on this chart worth acting on."
+      data={[48, 55, 51, 58, 47, 53, 49, 82, 54, 50, 56, 52]}
+    />
   )
 }
 
@@ -3016,27 +2584,17 @@ function TextureSwatches({ onCopy, copied, items = TEXTURES }) {
 }
 
 function SmallMultiples() {
-  const sets = [['Brand', [30, 38, 41, 52, 58, 61, 64, 69, 71, 76, 80, 84], 0],
-    ['Content', [22, 26, 24, 31, 36, 44, 41, 48, 52, 55, 58, 61], 1],
-    ['Product', [12, 18, 26, 29, 33, 38, 44, 47, 52, 58, 63, 70], 2]]
   return (
-    <div className={styles.multiples}>
-      {sets.map(([label, d, s]) => {
-        const pts = d.map((v, i) => `${i ? 'L' : 'M'}${i * 20},${52 - (v / 90) * 46}`).join(' ')
-        return (
-          <div key={label} className={styles.multiple}>
-            <div className={styles.multipleHead}>
-              <span className={styles.sparkLabel}>{label}</span>
-              <span className={styles.sparkVal}>{d[d.length - 1]}</span>
-            </div>
-            <svg viewBox="0 0 232 60" className={styles.multipleSvg} role="img" aria-label={`${label} trend`}>
-              <line x1="0" x2="232" y1="53" y2="53" className={styles.grid} />
-              <path d={pts} fill="none" stroke={SERIES[s]} strokeWidth="1.5" />
-            </svg>
-          </div>
-        )
-      })}
-    </div>
+    <SysSmallMultiples
+      max={100}
+      caption="One scale shared across panels. A panel with its own axis makes every comparison a lie."
+      panels={[
+        { label: 'Brand', data: [12, 24, 31, 44, 52, 61] },
+        { label: 'Content', data: [8, 14, 19, 26, 34, 44] },
+        { label: 'Product', data: [26, 30, 33, 35, 37, 38] },
+        { label: 'Motion', data: [6, 9, 12, 16, 19, 22] },
+      ]}
+    />
   )
 }
 
