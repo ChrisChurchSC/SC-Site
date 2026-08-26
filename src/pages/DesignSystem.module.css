@@ -2963,6 +2963,52 @@
   background: rgba(217, 78, 182, 0.1);
 }
 
+.gFindInput {
+  width: 86px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 2px;
+  padding: 5px 7px;
+  outline: none;
+}
+
+.gFindInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* A find hit tints the whole row rather than the matched cell — you are
+   looking for the record, not the string. */
+.gFound {
+  background: rgba(125, 90, 224, 0.16);
+}
+
+.gSortRank {
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 2px;
+}
+
+.gridStat {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gridFoot {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.tableToggle:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .gAggMode {
   font-size: 7px;
   letter-spacing: 0.14em;
@@ -5879,14 +5925,18 @@
   gap: 12px;
 }
 
+/* Fixed height with its own scroll, so the composer below it never moves as
+   the conversation grows. */
 .chatLog {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   background: #0a0a0a;
   border-radius: 4px;
   padding: 20px;
-  min-height: 180px;
+  height: 300px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .turnUser {
@@ -5924,24 +5974,244 @@
   margin: 0;
 }
 
+/* ── Chat chrome ── */
+
+.chatHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chatModel {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.chatHeadRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatCtx {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chatEmpty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.chatEmptyLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.botTurn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* A tool call is shown, never hidden — an answer that quietly searched
+   something is an answer nobody can check. */
+.toolCall {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  padding: 8px 10px;
+}
+
+.chatCode {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.citeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Revealed on hover but never removed from the tab order — a keyboard user
+   cannot hover, and hiding actions from them is the commonest chat failure. */
+.msgActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.botTurn:hover .msgActions,
+.msgActions:focus-within {
+  opacity: 1;
+}
+
+.msgAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  padding: 5px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.msgAction:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stoppedTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.chatError {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.08);
+  border-left: 2px solid rgba(255, 80, 80, 0.7);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+
+.attachChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+  padding: 4px 6px;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+
+.chatFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chatHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.chatFail {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.chatFail:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chatFailOn {
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.composerField {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: border-color 0.15s;
+}
+
+.composerField:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* The composer never moves. A control that jumps as the log grows is
+   unusable while something is streaming into it. */
 .composer {
   display: flex;
+  align-items: flex-end;
   gap: 5px;
 }
 
 .composerInput {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.85);
-  background: #0a0a0a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 12px 14px;
+  background: none;
+  border: none;
+  padding: 6px 0;
   outline: none;
-  transition: border-color 0.15s, background 0.15s;
 }
 
 .composerInput::placeholder {

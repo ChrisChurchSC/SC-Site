@@ -212,84 +212,318 @@ function Carousel() {
   )
 }
 
-/* ── AI chat (NEW) ───────────────────────────────────────────────────────────
-   No chat exists on the site. This is the pattern in the studio's language:
-   the reader's turn sits in a chip, because it is UI; the reply is set in
-   Signifier, because it is prose and wants to be read rather than scanned.
-   The replies below are canned strings — nothing is sent anywhere, and this
-   demo is not wired to a model. It exists to pin down the states: resting,
-   thinking, answered. */
 
-const CANNED = [
-  'The card surface is #161616 on a #0a0a0a ground, at a 4px radius.',
-  'Body copy sits at rgba(255, 255, 255, 0.55) — the most common reading colour on the site.',
-  'Labels are Roboto Mono, 8–11px, uppercase, tracked between 0.1em and 0.16em.',
+/* ── AI chat (NEW) ───────────────────────────────────────────────────────────
+ *
+ * No chat exists on the site. The pattern in the studio's language: the
+ * reader's turn sits in a chip because it is UI; the reply is set in Signifier
+ * because it is prose and wants to be read rather than scanned.
+ *
+ * Nothing here is wired to a model — the replies are canned and the "tool
+ * call" is theatre. The point is to pin down every state a real one has to
+ * survive, which is where chat UIs actually fail:
+ *
+ *   empty · thinking · working (tool call) · streaming · answered ·
+ *   errored · retrying · stopped
+ *
+ * Two rules the layout is built around. The composer never moves — a control
+ * that jumps as content grows is unusable while streaming. And actions on a
+ * reply appear on hover but stay in the tab order, because a keyboard user
+ * cannot hover.
+ */
+
+const CHAT_SUGGESTIONS = [
+  'What surface do cards use?',
+  'Show me the type scale',
+  'Which colours are unused?',
 ]
 
-function Chat() {
-  const [turns, setTurns] = useState([
-    { role: 'user', text: 'What surface do cards use?' },
-    { role: 'bot', text: CANNED[0] },
-  ])
-  const [draft, setDraft] = useState('')
-  const [thinking, setThinking] = useState(false)
+const CHAT_REPLIES = {
+  'What surface do cards use?': {
+    text: 'Cards use #161616 on a #0a0a0a ground at a 4px radius. It is the only surface on the site — every block, drawer and strip is this colour.',
+    cite: [['Colour', '#colour'], ['Cards', '#cards']],
+    tool: 'Read src/data/designTokens.js · SURFACES',
+  },
+  'Show me the type scale': {
+    text: 'Two families. Signifier Light carries anything read for meaning; Roboto Mono carries anything that labels or counts — 8, 9, 10 and 11px, uppercase, tracked between 0.10 and 0.16em.',
+    cite: [['Type', '#type']],
+    tool: 'Read src/data/designTokens.js · MONO_SCALE',
+    code: `.label {\n  font-size: 9px;\n  letter-spacing: 0.12em;\n}`,
+  },
+  'Which colours are unused?': {
+    text: '--teal and --blue are declared in :root and appear nowhere else in the codebase. The system now marks both retire rather than finding work for them.',
+    cite: [['Colour', '#colour']],
+    tool: 'Searched src/**/*.css · 0 matches',
+  },
+}
 
-  const send = (e) => {
-    e.preventDefault()
-    const text = draft.trim()
-    if (!text || thinking) return
-    setTurns((t) => [...t, { role: 'user', text }])
-    setDraft('')
-    setThinking(true)
-    // Canned, deliberately: the demo is about the states, not an answer.
-    setTimeout(() => {
-      setTurns((t) => [
-        ...t,
-        { role: 'bot', text: CANNED[(t.length / 2 | 0) % CANNED.length] },
-      ])
-      setThinking(false)
-    }, 900)
+const DEFAULT_REPLY = {
+  text: 'That is outside what this demo knows — the replies here are canned strings, not a model. Try one of the suggested questions.',
+  cite: [],
+  tool: null,
+}
+
+function Chat() {
+  const [turns, setTurns] = useState([])
+  const [draft, setDraft] = useState('')
+  const [phase, setPhase] = useState('idle') // idle | thinking | tool | streaming | error
+  const [stream, setStream] = useState('')
+  const [attach, setAttach] = useState(null)
+  const [model, setModel] = useState('Studio')
+  const [failNext, setFailNext] = useState(false)
+  const timers = useRef([])
+  const logRef = useRef(null)
+
+  // Every timeout is tracked, so unmounting mid-stream cannot leave one
+  // firing into a component that no longer exists.
+  const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = [] }
+  useEffect(() => clearTimers, [])
+
+  const scrollDown = () => {
+    const el = logRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }
+  useEffect(scrollDown, [turns, stream, phase])
+
+  const answer = (question) => {
+    const reply = CHAT_REPLIES[question] ?? DEFAULT_REPLY
+    setPhase('thinking')
+    timers.current.push(setTimeout(() => {
+      if (reply.tool) setPhase('tool')
+      timers.current.push(setTimeout(() => {
+        if (failNext) { setPhase('error'); setFailNext(false); return }
+        setPhase('streaming')
+        setStream('')
+        let i = 0
+        const tick = () => {
+          i += 3
+          setStream(reply.text.slice(0, i))
+          if (i < reply.text.length) timers.current.push(setTimeout(tick, 22))
+          else {
+            setTurns((t) => [...t, { role: 'bot', ...reply }])
+            setStream('')
+            setPhase('idle')
+          }
+        }
+        tick()
+      }, reply.tool ? 700 : 0))
+    }, 500))
+  }
+
+  const send = (text) => {
+    const q = (text ?? draft).trim()
+    if (!q || phase !== 'idle') return
+    setTurns((t) => [...t, { role: 'user', text: q, attach }])
+    setDraft('')
+    setAttach(null)
+    answer(q)
+  }
+
+  const stop = () => {
+    clearTimers()
+    if (stream) setTurns((t) => [...t, { role: 'bot', text: stream, cite: [], stopped: true }])
+    setStream('')
+    setPhase('idle')
+  }
+
+  const retry = () => {
+    const lastUser = [...turns].reverse().find((t) => t.role === 'user')
+    if (lastUser) { setPhase('idle'); answer(lastUser.text) }
+  }
+
+  const regenerate = (i) => {
+    const q = [...turns.slice(0, i)].reverse().find((t) => t.role === 'user')
+    if (!q) return
+    setTurns((t) => t.filter((_, n) => n !== i))
+    answer(q.text)
+  }
+
+  const busy = phase !== 'idle' && phase !== 'error'
 
   return (
     <div className={styles.chat}>
-      <div className={styles.chatLog}>
-        {turns.map((t, n) => (
-          <div
-            key={n}
-            className={t.role === 'user' ? styles.turnUser : styles.turnBot}
+      {/* Header: model, context, reset. A chat with no visible model is a
+          chat nobody can reason about when the answer is wrong. */}
+      <div className={styles.chatHead}>
+        <div className={styles.chatModel}>
+          {['Studio', 'Fast'].map((m) => (
+            <button
+              key={m}
+              type="button"
+              aria-pressed={model === m}
+              className={`${styles.segItem} ${model === m ? styles.segItemOn : ''}`}
+              onClick={() => setModel(m)}
+            >
+              {m}
+            </button>
+          ))}
+        </div>
+        <div className={styles.chatHeadRight}>
+          <span className={styles.chatCtx}>{turns.length} / 20 turns</span>
+          <button
+            type="button"
+            className={styles.tableToggle}
+            onClick={() => { clearTimers(); setTurns([]); setStream(''); setPhase('idle') }}
           >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.chatLog} ref={logRef}>
+        {turns.length === 0 && phase === 'idle' && (
+          /* Empty state. A blank composer is a blank page — the suggestions
+             are what make the first question possible. */
+          <div className={styles.chatEmpty}>
+            <span className={styles.cardEyebrow}>Ask the system</span>
+            <span className={styles.chatEmptyLine}>
+              It knows the tokens, not your project.
+            </span>
+            <div className={styles.promptRow}>
+              {CHAT_SUGGESTIONS.map((p) => (
+                <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {turns.map((t, i) => (
+          <div key={i} className={t.role === 'user' ? styles.turnUser : styles.turnBot}>
             {t.role === 'user' ? (
-              <span className={styles.userBubble}>{t.text}</span>
+              <span className={styles.userBubble}>
+                {t.attach && (
+                  <span className={styles.attachChip}>
+                    <Icon name="file" size={11} />{t.attach}
+                  </span>
+                )}
+                {t.text}
+              </span>
             ) : (
-              <p className={styles.botText}>{t.text}</p>
+              <div className={styles.botTurn}>
+                <p className={styles.botText}>
+                  {t.text}
+                  {t.stopped && <span className={styles.stoppedTag}>stopped</span>}
+                </p>
+                {t.code && <pre className={styles.chatCode}>{t.code}</pre>}
+                {t.cite?.length > 0 && (
+                  <span className={styles.citeRow}>
+                    {t.cite.map(([label, href]) => (
+                      <a key={label} href={href} className={styles.citation}>{label}</a>
+                    ))}
+                  </span>
+                )}
+                {/* Visible on hover, but always in the tab order — a keyboard
+                    user cannot hover. */}
+                <div className={styles.msgActions}>
+                  <button type="button" className={styles.msgAction} onClick={() => writeToClipboard(t.text)}>
+                    <Icon name="copy" size={12} />Copy
+                  </button>
+                  <button type="button" className={styles.msgAction} onClick={() => regenerate(i)}>
+                    <Icon name="refresh" size={12} />Regenerate
+                  </button>
+                  <ResponseFeedback />
+                </div>
+              </div>
             )}
           </div>
         ))}
-        {thinking && (
+
+        {phase === 'thinking' && (
           <div className={styles.turnBot}>
-            <span className={styles.thinking} aria-label="Thinking">
-              <i /><i /><i />
+            <span className={styles.thinking} aria-label="Thinking"><i /><i /><i /></span>
+          </div>
+        )}
+
+        {phase === 'tool' && (
+          /* A tool call is shown, not hidden. An answer that quietly searched
+             something is an answer nobody can check. */
+          <div className={styles.turnBot}>
+            <span className={styles.toolCall}>
+              <Icon name="search" size={12} />
+              {CHAT_REPLIES[[...turns].reverse().find((t) => t.role === 'user')?.text]?.tool ?? 'Working'}
+              <span className={styles.thinking}><i /><i /><i /></span>
             </span>
           </div>
         )}
+
+        {phase === 'streaming' && (
+          <div className={styles.turnBot}>
+            <p className={styles.botText}>{stream}<span className={styles.caret} /></p>
+          </div>
+        )}
+
+        {phase === 'error' && (
+          <div className={styles.turnBot}>
+            <div className={styles.chatError} role="alert">
+              <Icon name="warning" size={13} />
+              <span>That request didn't complete.</span>
+              <button type="button" className={styles.msgAction} onClick={retry}>
+                <Icon name="refresh" size={12} />Retry
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-      <form className={styles.composer} onSubmit={send}>
-        <input
-          className={styles.composerInput}
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask about a token…"
-          aria-label="Message"
-        />
+
+      {/* Follow-ups after an answer — the next question is usually easier to
+          recognise than to compose. */}
+      {phase === 'idle' && turns.length > 0 && (
+        <div className={styles.promptRow}>
+          {CHAT_SUGGESTIONS.filter((s) => !turns.some((t) => t.text === s)).slice(0, 2).map((p) => (
+            <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
+              {p}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <form className={styles.composer} onSubmit={(e) => { e.preventDefault(); send() }}>
+        <div className={styles.composerField}>
+          {attach && (
+            <span className={styles.attachChip}>
+              <Icon name="file" size={11} />{attach}
+              <button type="button" onClick={() => setAttach(null)} aria-label="Remove attachment">
+                <Icon name="close" size={10} />
+              </button>
+            </span>
+          )}
+          <input
+            className={styles.composerInput}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder={busy ? 'Working…' : 'Ask about a token…'}
+            aria-label="Message"
+          />
+        </div>
         <button
-          type="submit"
-          className={styles.composerSend}
-          disabled={!draft.trim() || thinking}
+          type="button"
+          className={styles.iconOnly}
+          onClick={() => setAttach('brief.pdf')}
+          aria-label="Attach a file"
         >
-          Send
+          <Icon name="upload" size={14} />
         </button>
+        {busy ? (
+          <button type="button" className={styles.composerSend} onClick={stop}>Stop</button>
+        ) : (
+          <button type="submit" className={styles.composerSend} disabled={!draft.trim()}>Send</button>
+        )}
       </form>
+
+      <div className={styles.chatFoot}>
+        <span className={styles.chatHint}>
+          Canned replies · {model} · {draft.length}/500
+        </span>
+        <button
+          type="button"
+          className={`${styles.chatFail} ${failNext ? styles.chatFailOn : ''}`}
+          onClick={() => setFailNext((f) => !f)}
+        >
+          {failNext ? 'Next reply will fail' : 'Simulate failure'}
+        </button>
+      </div>
     </div>
   )
 }
@@ -1318,21 +1552,64 @@ function gridFmt(v, type) {
 const colLetter = (i) => String.fromCharCode(65 + i)
 
 function DataGrid() {
-  const [sort, setSort] = useState({ key: 'fee', dir: 'desc' })
+  /* Multi-column sort as an ordered list rather than a single key: shift-click
+     appends, so "by discipline, then by fee" is expressible. The priority
+     number is shown, because a sort nobody can see the order of is a sort
+     nobody trusts. */
+  const [sorts, setSorts] = useState([{ key: 'fee', dir: 'desc' }])
   const [sel, setSel] = useState({ r: 0, c: 0 })
   const [anchor, setAnchor] = useState({ r: 0, c: 0 })
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
   const [data, setData] = useState(ROWS)
+  const [history, setHistory] = useState([])
+  const [future, setFuture] = useState([])
   const [picked, setPicked] = useState([])
   const [dense, setDense] = useState(false)
   const [filters, setFilters] = useState({})
+  const [find, setFind] = useState('')
   const [aggs, setAggs] = useState({ fee: 'sum', share: 'sum', year: 'max' })
   const [hidden, setHidden] = useState([])
   const [copied, setCopied] = useState(false)
   const gridRef = useRef(null)
+  const editRef = useRef(null)
+
+  /* Focus and select when an edit opens, from an effect rather than
+     autoFocus: the autofocus attribute fires before React attaches onFocus,
+     so the handler never runs and typing appends to the old value instead of
+     replacing it. Every spreadsheet selects on entry; nobody notices until
+     it's missing. */
+  useEffect(() => {
+    if (!editing) return
+    const el = editRef.current
+    if (!el) return
+    el.focus()
+    el.select()
+  }, [editing])
 
   const cols = COLS.filter((c) => !hidden.includes(c.key))
+
+  /* Every mutation goes through here, so undo is a fact of the data layer
+     rather than something each handler has to remember. */
+  const mutate = (next) => {
+    setHistory((h) => [...h.slice(-24), data])
+    setFuture([])
+    setData(next)
+  }
+
+  const undo = () => {
+    if (!history.length) return
+    setFuture((f) => [data, ...f])
+    setData(history[history.length - 1])
+    setHistory((h) => h.slice(0, -1))
+  }
+
+  const redo = () => {
+    if (!future.length) return
+    setHistory((h) => [...h, data])
+    setData(future[0])
+    setFuture((f) => f.slice(1))
+  }
 
   // Filter first, then sort — the order the reader assumes, and the order the
   // aggregations below depend on.
@@ -1341,10 +1618,28 @@ function DataGrid() {
       !q || String(row[k]).toLowerCase().includes(q.toLowerCase())))
 
   const rows = [...filtered].sort((a, b) => {
-    const x = a[sort.key], y = b[sort.key]
-    const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
-    return sort.dir === 'asc' ? cmp : -cmp
+    for (const s of sorts) {
+      const x = a[s.key], y = b[s.key]
+      const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
+      if (cmp !== 0) return s.dir === 'asc' ? cmp : -cmp
+    }
+    return 0
   })
+
+  const toggleSort = (key, additive) =>
+    setSorts((s) => {
+      const at = s.findIndex((x) => x.key === key)
+      if (at === -1) return additive ? [...s, { key, dir: 'desc' }] : [{ key, dir: 'desc' }]
+      const flipped = { key, dir: s[at].dir === 'desc' ? 'asc' : 'desc' }
+      if (!additive) return [flipped]
+      const next = [...s]
+      next[at] = flipped
+      return next
+    })
+
+  const matchesFind = (row) =>
+    find && Object.values(row).some((v) =>
+      String(Array.isArray(v) ? '' : v).toLowerCase().includes(find.toLowerCase()))
 
   const range = {
     r0: Math.min(sel.r, anchor.r), r1: Math.max(sel.r, anchor.r),
@@ -1362,17 +1657,56 @@ function DataGrid() {
 
   const commit = () => {
     const col = cols[sel.c]
+    const key = rows[sel.r].client
     if (['text', 'person'].includes(col.type)) {
-      const key = rows[sel.r].client
-      setData((d) => d.map((row) => (row.client === key ? { ...row, [col.key]: draft } : row)))
+      mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: draft } : row)))
     } else if (['num', 'money'].includes(col.type)) {
       const n = Number(draft.replace(/[^0-9.-]/g, ''))
-      if (!Number.isNaN(n)) {
-        const key = rows[sel.r].client
-        setData((d) => d.map((row) => (row.client === key ? { ...row, [col.key]: n } : row)))
+      // Invalid input is rejected rather than silently coerced to zero —
+      // a blank cell is a fact, and 0 would be a different one.
+      if (!Number.isNaN(n) && draft.trim() !== '') {
+        mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: n } : row)))
       }
     }
     setEditing(false)
+  }
+
+  const addRow = () => mutate([...data, {
+    client: `New ${data.length + 1}`, lead: 'Chris Church', disc: 'Brand',
+    year: 2026, fee: 0, share: 0, status: 'Draft', trend: [0, 0, 0, 0, 0, 0],
+  }])
+
+  const deleteRows = () => {
+    if (!picked.length) return
+    const kill = new Set(picked.map((i) => rows[i]?.client).filter(Boolean))
+    mutate(data.filter((r) => !kill.has(r.client)))
+    setPicked([])
+  }
+
+  const exportCsv = () => {
+    const head = cols.map((c) => c.label).join(',')
+    const body = rows.map((r) => cols.map((c) =>
+      c.type === 'spark' ? `"${r[c.key].join(' ')}"` : `"${gridFmt(r[c.key], c.type)}"`).join(','))
+    writeToClipboard([head, ...body].join('\n'))
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1400)
+  }
+
+  /* Excel's most-used feature that nobody names: the sum of whatever is
+     selected, in the status bar, without touching the sheet. */
+  const rangeStats = () => {
+    const nums = []
+    for (let r = range.r0; r <= range.r1; r++) {
+      for (let c = range.c0; c <= range.c1; c++) {
+        const col = cols[c]
+        const v = rows[r]?.[col.key]
+        if (typeof v === 'number') nums.push(v)
+      }
+    }
+    const cells = (range.r1 - range.r0 + 1) * (range.c1 - range.c0 + 1)
+    if (!nums.length) return `${cells} cells`
+    const sum = nums.reduce((a, b) => a + b, 0)
+    return `${cells} cells · sum ${sum.toLocaleString()} · avg ${Math.round(sum / nums.length).toLocaleString()}`
   }
 
   const copyRange = () => {
@@ -1409,6 +1743,10 @@ function DataGrid() {
         setEditing(true)
       }
     } else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'c') { e.preventDefault(); copyRange() }
+    else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'z') {
+      e.preventDefault()
+      e.shiftKey ? redo() : undo()
+    }
   }
 
   const aggValue = (col) => {
@@ -1446,8 +1784,25 @@ function DataGrid() {
           {multi && ` · ${(range.r1 - range.r0 + 1)}×${(range.c1 - range.c0 + 1)} range`}
         </span>
         <div className={styles.gridBarRight}>
-          <button type="button" className={styles.tableToggle} onClick={copyRange}>
-            {copied ? 'Copied TSV' : 'Copy'}
+          <input
+            className={styles.gFindInput}
+            value={find}
+            onChange={(e) => setFind(e.target.value)}
+            placeholder="Find…"
+            aria-label="Find in grid"
+          />
+          <button type="button" className={styles.tableToggle} onClick={undo} disabled={!history.length}>
+            Undo
+          </button>
+          <button type="button" className={styles.tableToggle} onClick={redo} disabled={!future.length}>
+            Redo
+          </button>
+          <button type="button" className={styles.tableToggle} onClick={addRow}>Add row</button>
+          <button type="button" className={styles.tableToggle} onClick={deleteRows} disabled={!picked.length}>
+            Delete
+          </button>
+          <button type="button" className={styles.tableToggle} onClick={exportCsv}>
+            {copied ? 'Copied' : 'CSV'}
           </button>
           <button type="button" className={styles.tableToggle} onClick={() => setDense((d) => !d)}>
             {dense ? 'Comfortable' : 'Compact'}
@@ -1506,11 +1861,26 @@ function DataGrid() {
                 ['num', 'money', 'pct'].includes(c.type) ? styles.gNum : '',
               ].join(' ')}
               style={c.frozen ? { left: 30 } : undefined}
-              onClick={() => setSort((s) => ({ key: c.key, dir: s.key === c.key && s.dir === 'desc' ? 'asc' : 'desc' }))}
-              aria-sort={sort.key === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={(e) => toggleSort(c.key, e.shiftKey)}
+              aria-sort={(() => {
+                const s = sorts.find((x) => x.key === c.key)
+                return s ? (s.dir === 'asc' ? 'ascending' : 'descending') : 'none'
+              })()}
+              title="Click to sort · Shift-click to add"
             >
               {c.label}
-              <span className={styles.gSort}>{sort.key === c.key ? (sort.dir === 'desc' ? '↓' : '↑') : ''}</span>
+              {(() => {
+                const at = sorts.findIndex((x) => x.key === c.key)
+                if (at === -1) return <span className={styles.gSort} />
+                return (
+                  <span className={styles.gSort}>
+                    {/* Priority shown only when more than one column sorts —
+                        a lone "1" is noise. */}
+                    {sorts.length > 1 && <span className={styles.gSortRank}>{at + 1}</span>}
+                    {sorts[at].dir === 'desc' ? '↓' : '↑'}
+                  </span>
+                )
+              })()}
             </button>
           ))}
 
@@ -1562,6 +1932,7 @@ function DataGrid() {
                       isSel ? styles.gSel : '',
                       !isSel && inRange(r, ci) ? styles.gInRange : '',
                       picked.includes(r) ? styles.gRowOn : '',
+                      matchesFind(row) ? styles.gFound : '',
                     ].join(' ')}
                     style={c.frozen ? { left: 30 } : undefined}
                     onMouseDown={(e) => {
@@ -1577,7 +1948,7 @@ function DataGrid() {
                   >
                     {isSel && editing ? (
                       <input
-                        autoFocus
+                        ref={editRef}
                         className={styles.gEdit}
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
@@ -1659,10 +2030,12 @@ function DataGrid() {
         </div>
       </div>
 
+      {/* Status bar. The left half is what is selected right now — Excel's
+          most-used feature that nobody names. */}
       <div className={styles.gridFoot}>
+        <span className={styles.gridStat}>{rangeStats()}</span>
         <span className={styles.gridCell}>
-          Arrows move · Shift+arrows extend · Enter edits · Esc cancels ·
-          {' '}{navigator.platform?.includes('Mac') ? '⌘' : 'Ctrl+'}C copies as TSV
+          Arrows · Shift+arrows range · Enter edit · ⌘C copy · ⌘Z undo
         </span>
       </div>
     </div>
