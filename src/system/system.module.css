@@ -2863,3 +2863,515 @@
 }
 
 .railAction:hover { color: var(--sc-text-peak); }
+
+/* ── PDF preview ───────────────────────────────────────────────────────────
+   A thumbnail rail and one page, because that is how a deck is read: you scan
+   for the page you half-remember, then look at it. */
+
+.pdf {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: var(--sc-space-4);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  background: var(--sc-recessed);
+  padding: var(--sc-space-3);
+  align-items: start;
+}
+
+.pdfRail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.pdfThumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* A 4:3 plate, sized so a whole deck's shape is visible in the rail at once. */
+.pdfThumbPage {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: 2px;
+  transition: border-color var(--sc-fast);
+}
+
+.pdfThumb:hover .pdfThumbPage { border-color: var(--sc-text-faint); }
+.pdfThumbOn .pdfThumbPage { border-color: var(--sc-pink); }
+
+.pdfThumbNum {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.pdfThumbOn .pdfThumbNum { color: var(--sc-text-peak); }
+
+/* Capped, not stretched. A 4:3 page given a full column is 800px tall and you
+   scroll a preview, which is the one thing a preview must not make you do. */
+.pdfStage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  min-width: 0;
+  max-width: 720px;
+}
+
+.pdfToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+}
+
+.pdfTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-support);
+}
+
+.pdfPager { display: inline-flex; align-items: center; gap: var(--sc-space-2); }
+
+.pdfCount {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  min-width: 44px;
+  text-align: center;
+}
+
+/* The page. 4:3 rather than A4 — a deck, not a document — and a real border
+   with a shadow, because a page that does not sit on top of anything reads as
+   a panel with text in it. */
+.pdfPage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  box-shadow: var(--sc-elev-menu);
+  overflow: hidden;
+}
+
+.pdfBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  height: 100%;
+  padding: clamp(20px, 5%, 44px);
+}
+
+/* The thumbnail is the same component at a smaller scale rather than a second
+   drawing of it, so a page can never look one way in the rail and another on
+   the stage. */
+.pdfBodyMini {
+  gap: 3px;
+  padding: 6px;
+}
+
+.pdfEyebrow {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}
+
+.pdfBodyMini .pdfEyebrow { font-size: 4px; letter-spacing: 0.06em; }
+
+.pdfH {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(20px, 3.4vw, 34px);
+  line-height: 1.15;
+  color: var(--sc-text-peak);
+}
+
+.pdfBodyMini .pdfH { font-size: 7px; line-height: 1.2; }
+
+.pdfP {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  max-width: 54ch;
+}
+
+.pdfBodyMini .pdfP {
+  font-size: 3.5px;
+  line-height: 1.5;
+  color: var(--sc-text-meta);
+}
+
+.pdfRule {
+  height: 1px;
+  background: var(--sc-line-strong);
+  flex-shrink: 0;
+}
+
+.pdfImage {
+  display: block;
+  background:
+    repeating-linear-gradient(45deg,
+      var(--sc-fill-faint) 0 6px,
+      transparent 6px 12px),
+    var(--sc-recessed);
+  border: 1px solid var(--sc-line);
+  border-radius: var(--sc-radius-sm);
+  flex-shrink: 0;
+}
+
+.pdfFolio {
+  position: absolute;
+  right: clamp(20px, 5%, 44px);
+  bottom: clamp(14px, 3%, 26px);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-faint);
+}
+
+/* ── Canvas ────────────────────────────────────────────────────────────────
+   An artboard with placed frames. The grid is the ground: without it the
+   frames float and nothing says this is a canvas rather than a card layout. */
+
+.canvasWrap,
+.waveWrap {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.canvasBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.canvasName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-support);
+}
+
+.canvasPicked {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+}
+
+.canvasDims { color: var(--sc-text-meta); }
+
+.canvas {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background:
+    linear-gradient(var(--sc-line) 1px, transparent 1px) 0 0 / 100% 40px,
+    linear-gradient(90deg, var(--sc-line) 1px, transparent 1px) 0 0 / 40px 100%,
+    var(--sc-ground);
+}
+
+.artFrame {
+  position: absolute;
+  display: block;
+  background: none;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: 2px;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color var(--sc-fast);
+}
+
+.artFrame:hover { border-color: var(--sc-text-faint); }
+
+/* Selection is a ring rather than a heavier border, so picking a frame does
+   not change its size on screen by a pixel. */
+.artFrameOn {
+  border-color: var(--sc-pink);
+  box-shadow: 0 0 0 1px var(--sc-pink);
+}
+
+/* Clipped to the frame it names. Labels ran full-length and collided with
+   the next frame's label wherever two sat on the same row. */
+.artFrameLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  margin-bottom: 4px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  color: var(--sc-text-meta);
+}
+
+.artFrame:hover .artFrameLabel { color: var(--sc-text-support); }
+.artFrameOn .artFrameLabel { color: var(--sc-pink); overflow: visible; }
+
+.artFrameFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sc-card);
+}
+
+/* Tinted by what the frame holds, but barely: a canvas is a container, and
+   nine solid ramp steps read as a purple wall rather than as artboards. The
+   tint is there to group, not to be looked at. */
+.artFrameFillart { background: rgba(125, 90, 224, 0.2); }
+.artFrameFilltype { background: rgba(125, 90, 224, 0.1); }
+.artFrameFillplate { background: var(--sc-card); }
+
+/* ── Waveform ──────────────────────────────────────────────────────────── */
+
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 120px;
+  background: var(--sc-ground);
+  padding: var(--sc-space-3);
+}
+
+.wavePeak {
+  flex: 1;
+  min-width: 0;
+  background: var(--sc-fill-hover);
+  border: none;
+  border-radius: 1px;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--sc-fast);
+}
+
+.wavePeakOn { background: var(--sc-s1); }
+.wave:hover .wavePeak { background: var(--sc-fill-hover); }
+.wave:hover .wavePeakOn { background: var(--sc-s1); }
+
+/* ── Projects ──────────────────────────────────────────────────────────────
+   A project is what the brand is being used for. It gets a name, a state and
+   a percentage, because those are the three things asked of it in a standup. */
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+}
+
+.projectsHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+}
+
+.projectsTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: var(--sc-text-peak);
+  margin: 0;
+}
+
+.projectsActions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.projectsSearch {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-text-meta);
+  background: var(--sc-recessed);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: 0 var(--sc-space-3);
+}
+
+.projectsSearch:focus-within { border-color: var(--sc-text-faint); }
+
+.projectsSearchField {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  background: none;
+  border: none;
+}
+
+.projectsSearchField::placeholder { color: var(--sc-text-faint); }
+.projectsSearchField:focus { outline: none; }
+
+.projectRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sc-fast);
+}
+
+.projectRow:last-child { border-bottom: none; }
+.projectRow:hover { background: var(--sc-fill-faint); }
+
+.projectMain {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.projectName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--sc-text-strong);
+}
+
+.projectRow:hover .projectName { color: var(--sc-text-peak); }
+
+.projectBadge {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-pill);
+  padding: 2px 8px;
+}
+
+.projectSide {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  flex-shrink: 0;
+}
+
+.projectProgress {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+}
+
+.projectTrack {
+  display: block;
+  width: 88px;
+  height: 4px;
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-pill);
+  overflow: hidden;
+}
+
+.projectFill {
+  display: block;
+  height: 100%;
+  background: var(--sc-s1);
+}
+
+.projectPct {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  min-width: 32px;
+  text-align: right;
+}
+
+.projectBrief {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.projectBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+}
+
+.projectTeam { display: inline-flex; }
+.projectTeam > * + * { margin-left: -7px; box-shadow: 0 0 0 2px var(--sc-ground); }
+
+.projectAssetRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  width: 100%;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sc-fast);
+}
+
+.projectAssetRow:last-child { border-bottom: none; }
+.projectAssetRow:hover { background: var(--sc-fill-faint); }
+
+.projectAssetKind {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-pill);
+  padding: 2px 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .pdf { grid-template-columns: minmax(0, 1fr); }
+  .pdfRail { flex-direction: row; max-height: none; overflow-x: auto; }
+  .pdfThumb { width: 68px; flex-shrink: 0; }
+  .projectSide { gap: var(--sc-space-3); }
+  .projectTrack { width: 56px; }
+}

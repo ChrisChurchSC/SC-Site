@@ -6,7 +6,8 @@ import {
   Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
   SectionNav, Segmented, Field, Input, Switch,
   Tree, Path, FileBrowser, FileView, CodeLines, MediaPreview,
-  RequestList, RequestDetail,
+  RequestList, RequestDetail, ProjectList, ProjectView,
+  PdfPreview, CanvasPreview, WavePreview,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, RefSelect, FindField,
   LineChart, BarChart, RankedBar, Donut,
@@ -41,7 +42,59 @@ const FS = {
       visual: {
         label: 'Visual', icon: 'brand', message: 'Refit the logo lockup for small sizes', when: '2h',
         children: {
-          'logo-lockup.fig': { message: 'Refit for small sizes', when: '2h', status: 'Live', icon: 'image' },
+          /* A .fig opens onto its artboard, a .pdf onto its pages and a .wav
+             onto its waveform. Filing every one of them behind a grey plate
+             tells you the file exists, which the listing already told you. */
+          'logo-lockup.fig': {
+            message: 'Refit for small sizes', when: '2h', status: 'Live', icon: 'image',
+            render: 'canvas',
+            canvas: {
+              label: 'logo-lockup.fig', width: 1600, height: 900,
+              frames: [
+                { name: 'Primary — horizontal', x: 80, y: 90, w: 620, h: 200, tone: 'art' },
+                { name: 'Primary — stacked', x: 760, y: 90, w: 300, h: 300, tone: 'art' },
+                { name: 'Mark only', x: 1120, y: 90, w: 300, h: 300, tone: 'plate' },
+                { name: 'Small size — 24px', x: 80, y: 460, w: 300, h: 100, tone: 'type' },
+                { name: 'Small size — 16px', x: 440, y: 460, w: 220, h: 70, tone: 'type' },
+                { name: 'Clear space', x: 760, y: 460, w: 660, h: 300, tone: 'plate' },
+              ],
+            },
+          },
+          'brand-guidelines.pdf': {
+            message: 'Regenerated from the token file', when: '4h', status: 'Live', icon: 'file',
+            render: 'pdf',
+            pdf: {
+              file: 'brand-guidelines.pdf',
+              pages: [
+                { blocks: [
+                  { kind: 'eyebrow', text: 'Super Conscious · v2.1' },
+                  { kind: 'h', text: 'Brand guidelines' },
+                  { kind: 'rule' },
+                  { kind: 'p', text: 'Generated from the token file. If this document and the tokens disagree, the tokens are right and this is stale.' },
+                ] },
+                { blocks: [
+                  { kind: 'eyebrow', text: 'The mark' },
+                  { kind: 'h', text: 'Clear space is half the mark height' },
+                  { kind: 'image' },
+                  { kind: 'p', text: 'On all four sides, at every size. Below 24px use the small-size lockup — the counter fills in otherwise.' },
+                ] },
+                { blocks: [
+                  { kind: 'eyebrow', text: 'Colour' },
+                  { kind: 'h', text: 'Two accents' },
+                  { kind: 'p', text: 'Pink and purple. Teal and blue were declared for two years and used nowhere, so they were removed rather than found work for.' },
+                  { kind: 'rule' },
+                  { kind: 'p', text: 'Charts get three categorical slots. A fourth either leaves the lightness band or fails colour-vision separation against the other two.' },
+                ] },
+                { blocks: [
+                  { kind: 'eyebrow', text: 'Type' },
+                  { kind: 'h', text: 'A serif for people, a mono for machines' },
+                  { kind: 'p', text: 'Signifier carries anything a person wrote. Roboto Mono carries anything a machine produced — timestamps, hashes, counts, file names.' },
+                  { kind: 'rule' },
+                  { kind: 'p', text: 'It means a number never has to explain where it came from.' },
+                ] },
+              ],
+            },
+          },
           'colour-tokens.json': {
             message: 'Retire teal and blue', when: '1d', status: 'Live', icon: 'file',
             text: `{
@@ -55,7 +108,27 @@ const FS = {
 }`,
           },
           'type-scale.fig': { message: 'Drop the 3px radius step', when: '3d', status: 'Live', icon: 'image' },
-          'grid-system.fig': { message: 'Document the 5px gutter', when: '1w', status: 'Live', icon: 'image' },
+          'grid-system.fig': {
+            message: 'Document the 5px gutter', when: '1w', status: 'Live', icon: 'image',
+            render: 'canvas',
+            canvas: {
+              label: 'grid-system.fig', width: 1600, height: 900,
+              frames: [
+                { name: 'col 1', x: 80, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 2', x: 200, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 3', x: 320, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 4', x: 440, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 5', x: 560, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 6', x: 680, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 7', x: 800, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 8', x: 920, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 9', x: 1040, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 10', x: 1160, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 11', x: 1280, y: 90, w: 115, h: 700, tone: 'plate' },
+                { name: 'col 12', x: 1400, y: 90, w: 115, h: 700, tone: 'plate' },
+              ],
+            },
+          },
           'iconography.svg': { message: 'Forty marks on a 16px grid', when: '1w', status: 'Review', icon: 'image' },
         },
       },
@@ -120,73 +193,59 @@ the system has to outlive the engagement.`,
       audio: {
         label: 'Audio', icon: 'video', message: 'Cut the sting to 1.2s', when: '3d',
         children: {
-          'brand-sting.wav': { message: 'Cut to 1.2s', when: '3d', status: 'Review', icon: 'video' },
+          'brand-sting.wav': {
+            message: 'Cut to 1.2s', when: '3d', status: 'Review', icon: 'video',
+            render: 'wave',
+            wave: {
+              label: 'brand-sting.wav', duration: 1.2,
+              peaks: [0.08, 0.14, 0.3, 0.62, 0.94, 0.86, 0.7, 0.58, 0.72, 0.88, 0.64, 0.46,
+                0.38, 0.52, 0.44, 0.3, 0.36, 0.28, 0.2, 0.26, 0.18, 0.12, 0.14, 0.08, 0.05],
+            },
+          },
           'motion-timings.md': { message: 'Match the 0.15s UI easing', when: '1w', status: 'Live', icon: 'file' },
           'voice-guide.md': { message: 'Read pace and warmth for VO', when: '3w', status: 'Live', icon: 'file' },
         },
       },
     },
   },
-  /* Projects is not a folder of the brand — it is what the brand is being used
-     for. It hangs off the section nav rather than the tree for that reason. */
-  projects: {
-    label: 'Projects', icon: 'layers',
-    children: {
-      assets: {
-        label: 'Assets', icon: 'layers', message: '38 across five disciplines', when: '2h',
-        children: {
-          'exports': { message: 'PNG and SVG, all sizes', when: '2h', status: 'Live', kind: 'folder' },
-          'source': { message: 'Working files', when: '2h', status: 'Live', kind: 'folder' },
-          'manifest.json': { message: 'Regenerated on publish', when: '2h', status: 'Live', icon: 'file' },
-        },
-      },
-      plan: {
-        label: 'Plan', icon: 'route', message: 'Q3 rollout', when: '1w',
-        children: {
-          'q3-rollout.md': { message: 'Six weeks, three phases', when: '1w', status: 'Live', icon: 'file' },
-          'dependencies.md': { message: 'Blocked on channel sign-off', when: '1w', status: 'Review', icon: 'file' },
-        },
-      },
-      reports: {
-        label: 'Reports', icon: 'chart', message: 'Usage up 9pt this quarter', when: '3h',
-        children: {
-          'usage.csv': { message: 'Usage up 9pt this quarter', when: '3h', status: 'Live', icon: 'file' },
-          'adoption.csv': { message: '71% of assets in use', when: '3h', status: 'Live', icon: 'file' },
-        },
-      },
-    },
-  },
 }
 
-/* The sidebar is the brand's own tree. Projects reached the section nav instead:
-   it is a different area of the workspace, not a folder inside this one, and
-   a rail that mixes the two makes "where am I" unanswerable. */
-const TREE = [FS.brand].map((node) => ({
+/* The brand's own folders. The projects group is built further down, once the
+   projects it lists exist. */
+const BRAND_TREE = {
   key: 'brand',
-  label: node.label,
-  icon: node.icon,
-  children: Object.entries(node.children).map(([ck, c]) => ({
+  label: FS.brand.label,
+  icon: FS.brand.icon,
+  children: Object.entries(FS.brand.children).map(([ck, c]) => ({
     key: `brand/${ck}`,
     label: c.label,
     icon: c.icon,
     count: c.children ? Object.keys(c.children).length : undefined,
   })),
-}))
+}
 
-/* Where each section starts. Files and Projects are the same browser over two
-   different roots rather than two browsers. */
-const ROOTS = { Files: ['brand', 'visual'], Projects: ['projects'] }
+const ROOT = ['brand', 'visual']
 
 const at = (path) =>
   path.reduce((node, seg) => node?.children?.[seg], { children: FS })
+
+/* How big is this — a different question for text, a canvas, a deck and a
+   sound file, and answered wrong for all four when one line covers them all. */
+const fileMeta = (node, isText) => {
+  if (!node) return []
+  if (isText) return [`${node.text.split('\n').length} lines`, `${node.text.length} bytes`, node.status]
+  if (node.render === 'canvas') {
+    return [`${node.canvas.width} × ${node.canvas.height}`, `${node.canvas.frames.length} frames`, node.status]
+  }
+  if (node.render === 'pdf') return [`${node.pdf.pages.length} pages`, 'PDF', node.status]
+  if (node.render === 'wave') return [`${node.wave.duration}s`, '48 kHz · WAV', node.status]
+  return ['1600 × 1000', 'SVG', node.status]
+}
 
 /* Fails quietly: copying a path is a convenience, and a thrown promise in a
    webview with no clipboard permission is worse than nothing happening. */
 const writeText = (t) => { try { navigator.clipboard?.writeText?.(t) } catch {} }
 
-/* Review requests. Each is a proposed change to an asset with its own id,
-   author, conversation and outcome — it outlives the file it changes, which
-   is exactly what a status field on a file cannot do. */
 /* Review requests. Each is a proposed change to an asset with its own id,
    author, conversation and outcome — it outlives the file it changes, which
    is exactly what a status field on a file cannot do.
@@ -404,6 +463,199 @@ const REVIEWS = [
 ]
 
 
+/* Projects. A project is what the brand is being used for, which is why it is
+   not a folder: it has an owner, a percentage and a shape, and it opens onto
+   the work rendered rather than onto a list of filenames. */
+const PROJECTS = [
+  {
+    id: 4,
+    name: 'Challenger positioning launch',
+    owner: 'dana',
+    updated: '2h',
+    done: 68,
+    closed: false,
+    visibility: 'Private',
+    team: ['Dana Cole', 'Chris Church', 'Ravi Menon'],
+    brief: 'Six weeks, three phases. The messaging house names the challengers, the channels carry it, and the site lands the week after.',
+    canvas: {
+      label: 'launch-layouts.fig',
+      width: 1600,
+      height: 900,
+      frames: [
+        { name: 'Hero — 1440', x: 60, y: 70, w: 620, h: 350, tone: 'art' },
+        { name: 'Hero — mobile', x: 720, y: 70, w: 170, h: 350, tone: 'art' },
+        { name: 'Statement', x: 930, y: 70, w: 600, h: 170, tone: 'type' },
+        { name: 'Proof row', x: 930, y: 260, w: 600, h: 160, tone: 'plate' },
+        { name: 'Social — 1:1', x: 60, y: 490, w: 260, h: 260, tone: 'art' },
+        { name: 'Social — 9:16', x: 360, y: 490, w: 150, h: 260, tone: 'art' },
+        { name: 'Email header', x: 550, y: 490, w: 420, h: 120, tone: 'plate' },
+        { name: 'Signature', x: 550, y: 640, w: 420, h: 110, tone: 'type' },
+        { name: 'Deck cover', x: 1010, y: 490, w: 520, h: 260, tone: 'art' },
+      ],
+    },
+    deck: {
+      file: 'challenger-launch.pdf',
+      pages: [
+        { blocks: [
+          { kind: 'eyebrow', text: 'Super Conscious · Q3' },
+          { kind: 'h', text: 'The category stopped meaning anything' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'Four brands took the same three words and said them louder. This is what we say instead.' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'The problem' },
+          { kind: 'h', text: 'Everyone is a platform' },
+          { kind: 'p', text: 'Read the four homepages back to back and the only difference is the logo. The words are interchangeable because they were chosen to be safe.' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'Safe language cannot be argued with, which is the same as not being believed.' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'The move' },
+          { kind: 'h', text: 'Name the four' },
+          { kind: 'image' },
+          { kind: 'p', text: 'Naming a competitor is a claim you have to stand behind. That is the point — it is the only sentence on the page that could be wrong.' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'Proof' },
+          { kind: 'h', text: 'Three things we can show' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'Sixty-one shipped projects. Four systems still running two years after the engagement ended. One rebrand that survived a merger.' },
+          { kind: 'image' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'Rollout' },
+          { kind: 'h', text: 'Six weeks, three phases' },
+          { kind: 'p', text: 'Messaging house lands week one. Channels follow in week three, once the matrix is signed off. Site goes live week six.' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'Blocked on channel sign-off — see #40.' },
+        ] },
+      ],
+    },
+    assets: [
+      { name: 'messaging-house.md', from: 'Brand / Verbal', kind: 'Document', icon: 'file' },
+      { name: 'logo-lockup.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
+      { name: 'social-kit.fig', from: 'Brand / Channels', kind: 'Artwork', icon: 'image' },
+      { name: 'channel-matrix.md', from: 'Brand / Channels', kind: 'Document', icon: 'file' },
+      { name: 'chart-palette.json', from: 'Brand / Data', kind: 'Tokens', icon: 'file' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Site refresh — v2.1',
+    owner: 'chris',
+    updated: '1d',
+    done: 42,
+    closed: false,
+    visibility: 'Private',
+    team: ['Chris Church', 'Dana Cole'],
+    brief: 'The identity refresh applied to the site. Mostly a token migration — the modules already have the right shapes, they just declare their own colours.',
+    canvas: {
+      label: 'site-v2.1.fig',
+      width: 1600,
+      height: 900,
+      frames: [
+        { name: 'Home', x: 60, y: 60, w: 420, h: 640, tone: 'art' },
+        { name: 'Work index', x: 520, y: 60, w: 420, h: 400, tone: 'plate' },
+        { name: 'Case study', x: 520, y: 500, w: 420, h: 200, tone: 'plate' },
+        { name: 'Capabilities', x: 980, y: 60, w: 300, h: 320, tone: 'type' },
+        { name: 'Contact', x: 980, y: 420, w: 300, h: 280, tone: 'type' },
+        { name: '404', x: 1320, y: 60, w: 220, h: 180, tone: 'plate' },
+      ],
+    },
+    deck: null,
+    assets: [
+      { name: 'colour-tokens.json', from: 'Brand / Visual', kind: 'Tokens', icon: 'file' },
+      { name: 'grid-system.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
+      { name: 'type-scale.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
+      { name: 'table-rules.md', from: 'Brand / Data', kind: 'Document', icon: 'file' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Sonic identity',
+    owner: 'ravi',
+    updated: '3d',
+    done: 25,
+    closed: false,
+    visibility: 'Private',
+    team: ['Ravi Menon'],
+    brief: 'A sting, a set of UI timings that match it, and a read guide for voiceover. Earliest stage of the five — there is one file and it is still in review.',
+    canvas: null,
+    deck: null,
+    audio: {
+      label: 'brand-sting.wav',
+      duration: 1.2,
+      peaks: [0.08, 0.14, 0.3, 0.62, 0.94, 0.86, 0.7, 0.58, 0.72, 0.88, 0.64, 0.46,
+        0.38, 0.52, 0.44, 0.3, 0.36, 0.28, 0.2, 0.26, 0.18, 0.12, 0.14, 0.08, 0.05],
+    },
+    assets: [
+      { name: 'brand-sting.wav', from: 'Brand / Audio', kind: 'Audio', icon: 'video' },
+      { name: 'motion-timings.md', from: 'Brand / Audio', kind: 'Document', icon: 'file' },
+      { name: 'voice-guide.md', from: 'Brand / Audio', kind: 'Document', icon: 'file' },
+    ],
+  },
+  {
+    id: 1,
+    name: 'Identity refresh — v2.0',
+    owner: 'dana',
+    updated: '5w',
+    done: 100,
+    closed: true,
+    visibility: 'Private',
+    team: ['Dana Cole', 'Chris Church', 'Ravi Menon', 'Super Conscious'],
+    brief: 'Shipped. The mark, the type scale, the grid and the two accents that replaced five.',
+    canvas: null,
+    deck: {
+      file: 'identity-v2.pdf',
+      pages: [
+        { blocks: [
+          { kind: 'eyebrow', text: 'Super Conscious · v2.0' },
+          { kind: 'h', text: 'Two accents, not five' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'Pink and purple carry everything. Teal and blue were declared and never used.' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'The mark' },
+          { kind: 'h', text: 'One shape, four sizes' },
+          { kind: 'image' },
+          { kind: 'p', text: 'Clear space is half the mark height on all four sides, at every size.' },
+        ] },
+        { blocks: [
+          { kind: 'eyebrow', text: 'Type' },
+          { kind: 'h', text: 'A serif and a mono, nothing else' },
+          { kind: 'p', text: 'Signifier carries anything a person reads. Roboto Mono carries anything a machine produced — timestamps, hashes, counts, labels.' },
+          { kind: 'rule' },
+          { kind: 'p', text: 'The distinction is doing real work: it means a number never has to explain where it came from.' },
+        ] },
+      ],
+    },
+    assets: [
+      { name: 'logo-lockup.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
+      { name: 'type-scale.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
+      { name: 'colour-tokens.json', from: 'Brand / Visual', kind: 'Tokens', icon: 'file' },
+    ],
+  },
+]
+
+/* Both roots in one rail: the brand's folders, and the projects using them.
+   The projects are named individually rather than hidden behind one entry —
+   a rail that says "Projects" and nothing else makes you click to find out
+   whether there are three of them or thirty. */
+const TREE = [
+  BRAND_TREE,
+  {
+    key: 'projects',
+    label: 'Projects',
+    icon: 'layers',
+    children: PROJECTS.filter((p) => !p.closed).map((p) => ({
+      key: `project/${p.id}`,
+      label: p.name,
+      icon: 'layers',
+      count: p.assets.length,
+    })),
+  },
+]
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function Dashboard() {
@@ -415,11 +667,12 @@ export default function Dashboard() {
   })
 
   const { collapsed, toggle } = useSidebar()
-  const [path, setPath] = useState(ROOTS.Files)
+  const [path, setPath] = useState(ROOT)
   const [tab, setTab] = useState('Files')
-  /* Files and Projects are the same browser over two roots. One flag rather than
-     two copies of every listing condition. */
-  const browsing = tab === 'Files' || tab === 'Projects'
+  /* Which of the two rail roots is selected. The section nav sits on top of
+     whichever one it is, so a project needs no section of its own. */
+  const [scope, setScope] = useState('brand')
+  const browsing = tab === 'Files' && scope === 'brand'
   const [version, setVersion] = useState('v2.1 — current')
   const [search, setSearch] = useState('')
   const [find, setFind] = useState('')
@@ -432,6 +685,9 @@ export default function Dashboard() {
   const [reviews, setReviews] = useState(REVIEWS)
   const [reviewId, setReviewId] = useState(null)
   const [reviewFilter, setReviewFilter] = useState('open')
+  const [projectId, setProjectId] = useState(null)
+  const [projectFilter, setProjectFilter] = useState('open')
+  const [projectQuery, setProjectQuery] = useState('')
 
   const node = at(path)
   const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
@@ -461,6 +717,34 @@ export default function Dashboard() {
   }
   const visibleReviews = reviews.filter((r) => (reviewFilter === 'open' ? isOpen(r) : !isOpen(r)))
   const openReview = reviews.find((r) => r.id === reviewId) ?? null
+
+  const projectCounts = {
+    open: PROJECTS.filter((p) => !p.closed).length,
+    closed: PROJECTS.filter((p) => p.closed).length,
+  }
+  const openProject = PROJECTS.find((p) => p.id === projectId) ?? null
+
+  /* One rail over two kinds of thing, and the section nav on top of whichever
+     one is selected. The rail picks the thing; the sections pick the view of
+     it. Keeping those two jobs separate is why selecting a project does not
+     have to invent a sixth section. */
+  const activeKey = scope === 'projects'
+    ? (projectId ? `project/${projectId}` : 'projects')
+    : path.join('/')
+
+  const selectNode = (n) => {
+    setFile(null)
+    setReviewId(null)
+    setTab('Files')
+    if (n.key === 'projects') { setScope('projects'); setProjectId(null); return }
+    if (n.key.startsWith('project/')) {
+      setScope('projects')
+      setProjectId(Number(n.key.slice('project/'.length)))
+      return
+    }
+    setScope('brand')
+    setPath(n.key.split('/'))
+  }
 
   /* Acting on a review writes to the timeline as well as the state, so the
      record of who decided what survives the decision itself. Marking a draft
@@ -533,9 +817,9 @@ export default function Dashboard() {
         {!collapsed && (
           <Tree
             nodes={TREE}
-            activeKey={path.join('/')}
-            defaultOpen={['brand']}
-            onSelect={(n) => { setPath(n.key.split('/')); setFile(null); setTab('Files') }}
+            activeKey={activeKey}
+            defaultOpen={['brand', 'projects']}
+            onSelect={selectNode}
           />
         )}
         {collapsed && (
@@ -545,7 +829,7 @@ export default function Dashboard() {
                 key={c.key}
                 icon={c.icon}
                 label={c.label}
-                onClick={() => setPath(c.key.split('/'))}
+                onClick={() => selectNode(c)}
               />
             ))}
           </div>
@@ -575,14 +859,13 @@ export default function Dashboard() {
               setFile(null)
               /* Files and Projects are the same browser over two roots, so moving
                  between them moves the path rather than swapping components. */
-              if (ROOTS[t]) setPath(ROOTS[t])
+              if (t === 'Files') setPath(ROOT)
             }}
             sections={[
               { key: 'Files', label: 'Files', icon: 'folder' },
               { key: 'Reviews', label: 'Reviews', icon: 'request', count: reviewCounts.open },
-              { key: 'Projects', label: 'Projects', icon: 'layers', count: 3 },
               { key: 'Activity', label: 'Activity', icon: 'refresh' },
-              { key: 'Results', label: 'Results', icon: 'chart' },
+              { key: 'Usage', label: 'Usage', icon: 'chart' },
               { key: 'Settings', label: 'Settings', icon: 'sliders' },
             ]}
           />
@@ -612,6 +895,30 @@ export default function Dashboard() {
             >
               <p className={styles.reviewSummary}>{openReview.summary}</p>
             </RequestDetail>
+          )}
+
+          {/* Projects is deliberately not a second folder listing. A folder
+              answers "what is in here"; a project answers "what is this for
+              and what does it look like" — so it opens onto the work rendered:
+              the canvas it is laid out on, the deck it goes out as. */}
+          {tab === 'Files' && scope === 'projects' && !openProject && (
+            <ProjectList
+              projects={PROJECTS}
+              filter={projectFilter}
+              onFilter={setProjectFilter}
+              counts={projectCounts}
+              query={projectQuery}
+              onQuery={setProjectQuery}
+              onOpen={(p) => setProjectId(p.id)}
+            />
+          )}
+
+          {tab === 'Files' && scope === 'projects' && openProject && (
+            <ProjectView
+              project={openProject}
+              path={['Projects', openProject.name]}
+              onNavigate={() => setProjectId(null)}
+            />
           )}
 
           {/* Hidden while a file is open: the file view carries its own path,
@@ -667,9 +974,10 @@ export default function Dashboard() {
               views={isText ? ['Preview', 'Raw'] : ['Preview', 'Details']}
               view={fileView}
               onView={setFileView}
-              meta={isText
-                ? [`${openNode.text.split('\n').length} lines`, `${openNode.text.length} bytes`, openNode?.status]
-                : ['1600 × 1000', 'SVG', openNode?.status]}
+              /* The meta line answers "how big is this", which is a different
+                 question for a canvas, a deck and a sound file. It used to say
+                 1600 × 1000 SVG for all three. */
+              meta={fileMeta(openNode, isText)}
               actions={
                 <span className={styles.fileActions}>
                   <Button size="sm" icon="copy"
@@ -685,7 +993,18 @@ export default function Dashboard() {
               {fileView === 'Raw' && (
                 <pre className={styles.raw}>{openNode.text}</pre>
               )}
-              {fileView === 'Preview' && !isText && <MediaPreview label={file} />}
+              {/* Rendered by what it is, not by what it isn't. Only a file with
+                  no renderer of its own falls back to the plate. */}
+              {fileView === 'Preview' && !isText && openNode?.render === 'canvas' && (
+                <CanvasPreview {...openNode.canvas} />
+              )}
+              {fileView === 'Preview' && !isText && openNode?.render === 'pdf' && (
+                <PdfPreview title={openNode.pdf.file} pages={openNode.pdf.pages} />
+              )}
+              {fileView === 'Preview' && !isText && openNode?.render === 'wave' && (
+                <WavePreview {...openNode.wave} />
+              )}
+              {fileView === 'Preview' && !isText && !openNode?.render && <MediaPreview label={file} />}
               {fileView === 'Details' && (
                 <div className={styles.details}>
                   <FactRow icon="user" label={`Owned by ${openNode?.owner ?? 'Dana Cole'}`} />
@@ -771,7 +1090,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {tab === 'Results' && (
+          {tab === 'Usage' && (
             <>
               <Grid>
                 <Col span={3}>
