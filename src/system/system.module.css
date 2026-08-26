@@ -4603,3 +4603,1112 @@
   .wdRampRow { grid-template-columns: 56px minmax(0, 1fr); }
   .wdRampRow > :last-child { display: none; }
 }
+
+/* ── Overlays ──────────────────────────────────────────────────────────────
+   One backdrop, one dialog surface, four placements. The variants change where
+   the panel sits, never what dismissing it means. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--sc-layer-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: var(--sc-space-4);
+}
+
+.backdropBottom { align-items: flex-end; padding: 0; }
+.backdropTop { align-items: flex-start; padding-top: 12vh; }
+.backdropSolid { background: rgba(0, 0, 0, 0.86); }
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+  max-height: 84vh;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  box-shadow: var(--sc-elev-dialog);
+  overflow: hidden;
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 18px;
+  color: var(--sc-text-peak);
+}
+
+.modalBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  padding: var(--sc-space-4);
+  overflow-y: auto;
+}
+
+/* Cancel first, confirm last: the destructive one sits where the eye lands
+   last and the thumb reaches deliberately. */
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  background: var(--sc-recessed);
+  border-top: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  flex-shrink: 0;
+}
+
+/* ── Drawer and sheet ──────────────────────────────────────────────────── */
+
+.drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 92vw);
+  background: var(--sc-card);
+  border-left: 1px solid var(--sc-line-strong);
+  box-shadow: var(--sc-elev-dialog);
+}
+
+.drawerRight { right: 0; }
+.drawerLeft { left: 0; border-left: none; border-right: 1px solid var(--sc-line-strong); }
+
+.drawerBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sc-space-4);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.7;
+  color: var(--sc-text-body);
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 80vh;
+  background: var(--sc-card);
+  border-top: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-lg) var(--sc-radius-lg) 0 0;
+  box-shadow: var(--sc-elev-drawer);
+  overflow: hidden;
+}
+
+.sheetGrab {
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: var(--sc-fill-hover);
+  border-radius: var(--sc-radius-pill);
+  margin: var(--sc-space-2) auto 0;
+  flex-shrink: 0;
+}
+
+/* ── Menu and popover ──────────────────────────────────────────────────── */
+
+.menuWrap { position: relative; display: inline-flex; }
+
+.menu,
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: var(--sc-layer-nav);
+  min-width: 180px;
+  background: var(--sc-raised);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  box-shadow: var(--sc-elev-menu);
+  padding: var(--sc-space-1);
+}
+
+.menuEnd { left: auto; right: 0; }
+
+.popover {
+  min-width: 240px;
+  padding: var(--sc-space-3);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.7;
+  color: var(--sc-text-body);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 30px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.menuItem:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+
+/* The destructive item is the only coloured thing in the menu, and it is
+   below a rule so it cannot be hit on the way to something else. */
+.menuItemBad { color: var(--sc-bad); }
+.menuItemBad:hover { color: var(--sc-bad); background: var(--sc-bad-fill); }
+
+.menuRule {
+  display: block;
+  height: 1px;
+  background: var(--sc-line-strong);
+  margin: var(--sc-space-1) 0;
+}
+
+/* ── Tooltip ───────────────────────────────────────────────────────────── */
+
+.tipWrap { position: relative; display: inline-flex; }
+
+.tip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--sc-layer-nav);
+  white-space: nowrap;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-peak);
+  background: var(--sc-raised);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 5px var(--sc-space-2);
+  box-shadow: var(--sc-elev-menu);
+  pointer-events: none;
+}
+
+.tipBottom { bottom: auto; top: calc(100% + 7px); }
+
+/* ── Lightbox ──────────────────────────────────────────────────────────── */
+
+.lightbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  width: min(880px, 94vw);
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  color: var(--sc-text-support);
+}
+
+.lightboxCount {
+  margin-left: auto;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+}
+
+.lightboxStage {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+}
+
+.lightboxArt {
+  flex: 1;
+  min-width: 0;
+  border-radius: var(--sc-radius-sm);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(125, 90, 224, 0.16) 0 10px,
+      transparent 10px 20px),
+    var(--sc-recessed);
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+/* ── Toasts ────────────────────────────────────────────────────────────────
+   Bottom right, stacked upward, so a new one never moves the one you are
+   reading. */
+
+.toasts {
+  position: fixed;
+  right: var(--sc-space-4);
+  bottom: var(--sc-space-4);
+  z-index: var(--sc-layer-toast);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sc-space-2);
+  max-width: 380px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-good);
+  background: var(--sc-raised);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  box-shadow: var(--sc-elev-menu);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.toastBad { color: var(--sc-bad); }
+
+.toastText {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+}
+
+.toastAction {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  text-transform: uppercase;
+  color: var(--sc-text-peak);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Command palette ───────────────────────────────────────────────────── */
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 94vw);
+  max-height: 60vh;
+  background: var(--sc-raised);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  box-shadow: var(--sc-elev-dialog);
+  overflow: hidden;
+}
+
+.paletteField {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-text-meta);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: 0 var(--sc-space-3);
+  flex-shrink: 0;
+}
+
+.paletteInput {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-body);
+  color: var(--sc-text-peak);
+  background: none;
+  border: none;
+}
+
+.paletteInput::placeholder { color: var(--sc-text-faint); }
+.paletteInput:focus { outline: none; }
+
+.paletteCount {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.paletteList { overflow-y: auto; padding: var(--sc-space-1); }
+
+.paletteItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 34px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.paletteItem:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+.paletteLabel { flex: 1; min-width: 0; }
+
+.paletteHint {
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-faint);
+}
+
+.paletteEmpty {
+  display: block;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-faint);
+  padding: var(--sc-space-3);
+}
+
+/* ── Navigation ────────────────────────────────────────────────────────── */
+
+.accordion {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.accItem { border-bottom: 1px solid var(--sc-line); }
+.accItem:last-child { border-bottom: none; }
+
+.accHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 42px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  padding: 0 var(--sc-space-3);
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.accHead:hover { color: var(--sc-text-peak); background: var(--sc-fill-faint); }
+.accTitle { flex: 1; min-width: 0; }
+.accMeta { font-size: var(--sc-size-label); color: var(--sc-text-meta); }
+
+.accBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  padding: 0 var(--sc-space-3) var(--sc-space-3) 30px;
+  max-width: 68ch;
+}
+
+/* ── Stepper ───────────────────────────────────────────────────────────── */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  min-width: 0;
+}
+
+.stepMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+}
+
+.stepMark:disabled { cursor: default; }
+
+/* Done is filled, current is ringed, ahead is outlined. Three states drawn
+   three ways rather than three shades of one. */
+.stepDone {
+  color: var(--sc-ground);
+  background: var(--sc-text-peak);
+  border-color: var(--sc-text-peak);
+}
+
+.stepNow {
+  color: var(--sc-text-peak);
+  border-color: var(--sc-pink);
+  box-shadow: 0 0 0 1px var(--sc-pink);
+}
+
+.stepLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  white-space: nowrap;
+}
+
+.stepLabelNow { color: var(--sc-text-peak); }
+
+.stepRule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--sc-line-strong);
+  margin: 0 var(--sc-space-2);
+  flex-shrink: 0;
+}
+
+.multiStep {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-4);
+}
+
+.multiBody { min-height: 96px; }
+
+.multiActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  border-top: 1px solid var(--sc-line);
+  padding-top: var(--sc-space-3);
+}
+
+/* ── Scrollspy & sidebar nav ───────────────────────────────────────────── */
+
+.spy { display: flex; flex-direction: column; }
+
+.spyLink,
+.sideLink {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 28px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  text-align: left;
+  text-decoration: none;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  border-left: 2px solid var(--sc-line);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.spyLink:hover,
+.sideLink:hover { color: var(--sc-text-peak); }
+
+.spyLinkOn,
+.sideLinkOn { color: var(--sc-text-peak); border-left-color: var(--sc-pink); }
+
+.sideNav { display: flex; flex-direction: column; gap: 2px; }
+.sideLabel { flex: 1; min-width: 0; }
+
+/* ── Prev / next ───────────────────────────────────────────────────────── */
+
+.prevNext {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  border-top: 1px solid var(--sc-line-strong);
+  padding-top: var(--sc-space-4);
+}
+
+.pnItem {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 46%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pnNext { text-align: right; align-items: flex-end; }
+
+.pnDir {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}
+
+/* Each direction names where it goes. An arrow labelled only "Previous" makes
+   you click to find out whether you want it. */
+.pnLabel {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--sc-text-strong);
+}
+
+.pnItem:hover .pnLabel { color: var(--sc-text-peak); }
+
+/* ── Select & combobox ─────────────────────────────────────────────────── */
+
+.select { position: relative; display: inline-flex; min-width: 160px; }
+
+.selectTrigger,
+.comboField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 34px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: border-color var(--sc-fast);
+}
+
+.selectTrigger:hover,
+.comboField:hover { border-color: var(--sc-text-faint); }
+.selectPlaceholder { color: var(--sc-text-faint); }
+
+.comboInput {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  background: none;
+  border: none;
+}
+
+.comboInput::placeholder { color: var(--sc-text-faint); }
+.comboInput:focus { outline: none; }
+
+.comboClear {
+  display: inline-flex;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.comboClear:hover { color: var(--sc-text-peak); }
+
+.selectMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: var(--sc-layer-nav);
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--sc-raised);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  box-shadow: var(--sc-elev-menu);
+  padding: var(--sc-space-1);
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 30px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+}
+
+.selectOption:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+.selectOptionOn { color: var(--sc-text-peak); }
+
+.selectEmpty {
+  display: block;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-faint);
+  padding: var(--sc-space-2);
+}
+
+/* ── Choice groups ─────────────────────────────────────────────────────── */
+
+.choiceGroup { display: flex; flex-direction: column; gap: 2px; }
+
+.choiceRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  min-height: 30px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--sc-fast);
+}
+
+.choiceRow:hover { color: var(--sc-text-peak); }
+
+/* 14px at a 2px radius. Any rounder and a checkbox reads as a radio, which
+   promises the wrong behaviour before it is touched. */
+.check,
+.radio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  transition: border-color var(--sc-fast), background var(--sc-fast);
+}
+
+.radio { border-radius: 50%; }
+.checkOn, .radioOn { border-color: var(--sc-pink); background: var(--sc-pink); }
+
+/* The tick is a rotated border rather than a glyph, so it inherits colour and
+   needs no icon font. */
+.checkOn i {
+  display: block;
+  width: 3px;
+  height: 7px;
+  border: solid var(--sc-ground);
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-1px) rotate(45deg);
+}
+
+.radioOn i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  background: var(--sc-ground);
+  border-radius: 50%;
+}
+
+.choiceLabel { min-width: 0; }
+
+/* ── Validated field, hints and errors ─────────────────────────────────── */
+
+.vField { display: flex; flex-direction: column; gap: 5px; }
+
+.vLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+}
+
+.vHint {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* The error replaces the hint rather than joining it, so the field never grows
+   and shoves the rest of the form down while you type. */
+.vError {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-bad);
+}
+
+/* ── Search ────────────────────────────────────────────────────────────── */
+
+.searchField {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  min-height: 34px;
+  color: var(--sc-text-meta);
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+}
+
+.searchField:focus-within { border-color: var(--sc-text-faint); }
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  background: none;
+  border: none;
+}
+
+.searchInput::placeholder { color: var(--sc-text-faint); }
+.searchInput:focus { outline: none; }
+.searchInput::-webkit-search-cancel-button { display: none; }
+
+.searchCount {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* ── Tags ──────────────────────────────────────────────────────────────── */
+
+.tagField { display: flex; flex-direction: column; gap: 5px; }
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 34px;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 5px var(--sc-space-2);
+}
+
+.tagRow:focus-within { border-color: var(--sc-text-faint); }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-pill);
+  padding: 3px 5px 3px 9px;
+}
+
+.tag button {
+  display: inline-flex;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  padding: 1px;
+  cursor: pointer;
+}
+
+.tag button:hover { color: var(--sc-text-peak); }
+
+.tagInput {
+  flex: 1;
+  min-width: 80px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  background: none;
+  border: none;
+}
+
+.tagInput:focus { outline: none; }
+.tagInput::placeholder { color: var(--sc-text-faint); }
+
+/* ── Slider ────────────────────────────────────────────────────────────────
+   A native range input, restyled. Rebuilding one from divs loses keyboard
+   support and the value announcement and gains nothing. */
+
+.slider { display: flex; flex-direction: column; gap: var(--sc-space-2); }
+
+.sliderHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+}
+
+.sliderValue {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-peak);
+}
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 20px;
+  background: none;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--sc-radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--sc-pink) 0 var(--pct, 50%),
+    var(--sc-fill) var(--pct, 50%) 100%
+  );
+}
+
+.range::-moz-range-track {
+  height: 4px;
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-fill);
+}
+
+.range::-moz-range-progress {
+  height: 4px;
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-pink);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  background: var(--sc-text-peak);
+  border: none;
+  border-radius: 50%;
+}
+
+.range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--sc-text-peak);
+  border: none;
+  border-radius: 50%;
+}
+
+/* ── Calendar ──────────────────────────────────────────────────────────── */
+
+.cal {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-3);
+}
+
+.calHead { display: flex; align-items: center; justify-content: space-between; }
+
+.calMonth {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-peak);
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 28px);
+  gap: 2px;
+}
+
+.calDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-faint);
+}
+
+.calCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-support);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--sc-radius-sm);
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.calCell:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+
+/* Today is outlined and the selection is filled, so the two can be on the
+   same cell without either disappearing. */
+.calToday { border-color: var(--sc-line-strong); color: var(--sc-text-peak); }
+.calOn { color: var(--sc-ground); background: var(--sc-pink); border-color: var(--sc-pink); }
+.calOn:hover { color: var(--sc-ground); background: var(--sc-pink); }
+
+/* ── File upload ───────────────────────────────────────────────────────── */
+
+.upload { display: flex; flex-direction: column; gap: var(--sc-space-3); }
+
+.dropZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-text-meta);
+  background: var(--sc-recessed);
+  border: 1px dashed var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-5);
+  text-align: center;
+  transition: border-color var(--sc-fast), background var(--sc-fast);
+}
+
+.dropOver { border-color: var(--sc-pink); background: var(--sc-fill-faint); }
+
+.dropText {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+}
+
+.fileInput { display: none; }
+
+.fileList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-text-meta);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.fileRow:last-child { border-bottom: none; }
+
+.fileRow button {
+  display: inline-flex;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.fileRow button:hover { color: var(--sc-bad); }
+
+.fileName {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Filter & sort ─────────────────────────────────────────────────────── */
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+.filterSet { display: flex; gap: var(--sc-space-2); flex-wrap: wrap; }
+.filterState { display: inline-flex; align-items: center; gap: var(--sc-space-3); }
+
+/* A filter you cannot clear is a product that looks broken. */
+.filterClear {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.filterClear:hover { color: var(--sc-text-peak); }
+
+.sortWrap { display: inline-flex; align-items: stretch; gap: 4px; }
+
+.sortDir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  color: var(--sc-text-support);
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.sortDir:hover { color: var(--sc-text-peak); border-color: var(--sc-text-faint); }

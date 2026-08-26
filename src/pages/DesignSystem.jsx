@@ -8,7 +8,18 @@ import {
 } from '../data/designTokens'
 import '../system/tokens.css'
 import {
-  Icon, Avatar, Legend, ICONS,
+  Icon, Avatar, Legend, ICONS, Button,
+  Modal as SysModal, ConfirmDialog as SysConfirm, Drawer as SysDrawer,
+  BottomSheet as SysSheet, DropdownMenu as SysMenu, Popover as SysPopover,
+  Tooltip as SysTooltip, Lightbox as SysLightbox, ToastStack as SysToasts,
+  useToasts, CommandPalette as SysPalette,
+  Accordion as SysAccordion, Stepper as SysStepper, MultiStep as SysMultiStep,
+  Scrollspy as SysScrollspy, SidebarNav as SysSideNav, PrevNext as SysPrevNext,
+  Select as SysSelect, Combobox as SysCombobox, CheckGroup as SysCheckGroup,
+  RadioGroup as SysRadioGroup, ValidatedField as SysValidated,
+  SearchField as SysSearch, TagInput as SysTagInput,
+  SliderControl as SysSlider, DatePicker as SysDatePicker,
+  FileUpload as SysUpload, FilterBar as SysFilterBar, SortControl as SysSort,
   Segmented as SysSegmented, Switch as SysSwitch, Tabs as SysTabs,
   BarChart as SysBarChart,
 } from '../system'
@@ -541,39 +552,8 @@ function Chat() {
    none of it is wired to anything. */
 
 function Select({ options, label }) {
-  const [open, setOpen] = useState(false)
   const [value, setValue] = useState(options[0])
-
-  return (
-    <div className={styles.select}>
-      <button
-        type="button"
-        className={styles.selectTrigger}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label={label}
-      >
-        <span>{value}</span>
-        <span className={`${styles.selectCaret} ${open ? styles.selectCaretOpen : ''}`}>▾</span>
-      </button>
-      {open && (
-        <div className={styles.selectMenu} role="listbox">
-          {options.map((o) => (
-            <button
-              key={o}
-              type="button"
-              role="option"
-              aria-selected={o === value}
-              className={`${styles.selectOption} ${o === value ? styles.selectOptionOn : ''}`}
-              onClick={() => { setValue(o); setOpen(false) }}
-            >
-              {o}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+  return <SysSelect options={options} value={value} onChange={setValue} label={label} />
 }
 
 /* A 14px box at a 2px radius — the checkbox is small enough that 4px would
@@ -581,171 +561,54 @@ function Select({ options, label }) {
    inherits colour and needs no icon font. */
 function CheckGroup() {
   const [on, setOn] = useState(['Brand'])
-  const toggle = (v) =>
-    setOn((s) => (s.includes(v) ? s.filter((x) => x !== v) : [...s, v]))
-
-  return (
-    <div className={styles.choiceGroup}>
-      {['Brand', 'Content', 'Product'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          role="checkbox"
-          aria-checked={on.includes(v)}
-          className={styles.choiceRow}
-          onClick={() => toggle(v)}
-        >
-          <span className={`${styles.check} ${on.includes(v) ? styles.checkOn : ''}`}>
-            {on.includes(v) && <i />}
-          </span>
-          <span className={styles.choiceLabel}>{v}</span>
-        </button>
-      ))}
-    </div>
-  )
+  return <SysCheckGroup options={['Brand', 'Content', 'Product']} value={on} onChange={setOn} label="Disciplines" />
 }
 
 function RadioGroup() {
   const [on, setOn] = useState('Now')
-
-  return (
-    <div className={styles.choiceGroup}>
-      {['Now', 'This quarter', 'Exploring'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          role="radio"
-          aria-checked={on === v}
-          className={styles.choiceRow}
-          onClick={() => setOn(v)}
-        >
-          <span className={`${styles.radio} ${on === v ? styles.radioOn : ''}`}>
-            {on === v && <i />}
-          </span>
-          <span className={styles.choiceLabel}>{v}</span>
-        </button>
-      ))}
-    </div>
-  )
+  return <SysRadioGroup options={['Now', 'This quarter', 'Exploring']} value={on} onChange={setOn} label="Timing" />
 }
 
 /* Validates on blur rather than on every keystroke — telling someone their
    email is invalid while they are still typing the domain is noise. */
 function ValidatedField() {
   const [value, setValue] = useState('chris@')
-  const [touched, setTouched] = useState(false)
-  const invalid = touched && !/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(value)
-
   return (
-    <div className={styles.labelledField}>
-      <span className={styles.cardEyebrow}>Email</span>
-      <input
-        className={`${styles.fieldContact} ${invalid ? styles.fieldInvalid : ''}`}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onBlur={() => setTouched(true)}
-        aria-invalid={invalid}
-        aria-label="Email"
-      />
-      <span className={invalid ? styles.errorText : styles.hintText}>
-        {invalid ? 'That address looks incomplete.' : 'Click out of the field to validate.'}
-      </span>
-    </div>
+    <SysValidated
+      label="Email"
+      value={value}
+      onChange={setValue}
+      validate={(v) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(v)}
+      hint="Click out of the field to validate."
+      error="That address looks incomplete."
+    />
   )
 }
 
 function MultiStep() {
-  const [step, setStep] = useState(0)
-  const steps = ['Scope', 'Timing', 'Contact']
-
   return (
-    <div className={styles.multiStep}>
-      <div className={styles.stepRail}>
-        {steps.map((s, n) => (
-          <div key={s} className={styles.stepItem}>
-            <span className={`${styles.stepDot} ${n <= step ? styles.stepDotOn : ''}`} />
-            <span className={`${styles.stepLabel} ${n === step ? styles.stepLabelOn : ''}`}>{s}</span>
-          </div>
-        ))}
-      </div>
-      <div className={styles.stepBody}>
-        <span className={styles.stepBodyText}>Step {step + 1} — {steps[step]}</span>
-      </div>
-      <div className={styles.stepNav}>
-        <button
-          type="button"
-          className={styles.btnOutline}
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
-          disabled={step === 0}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className={styles.btnSolid}
-          onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}
-          disabled={step === steps.length - 1}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    <SysMultiStep steps={['Scope', 'Timing', 'Contact']}>
+      {[
+        <p key="a" className={styles.stepCopy}>What are we making? Brand, content, product, or some of each.</p>,
+        <p key="b" className={styles.stepCopy}>When does it need to be live?</p>,
+        <p key="c" className={styles.stepCopy}>Where do we send the scope?</p>,
+      ]}
+    </SysMultiStep>
   )
 }
 
 /* Dashed border is the one place the system uses a non-solid stroke — it is
    the convention for "drop here" and fighting it costs more than it gains. */
 function FileUpload() {
-  const [over, setOver] = useState(false)
-  const [file, setFile] = useState(null)
-
-  return (
-    <div
-      className={`${styles.upload} ${over ? styles.uploadOver : ''}`}
-      onDragOver={(e) => { e.preventDefault(); setOver(true) }}
-      onDragLeave={() => setOver(false)}
-      onDrop={(e) => {
-        e.preventDefault()
-        setOver(false)
-        setFile(e.dataTransfer.files?.[0]?.name ?? 'brief.pdf')
-      }}
-    >
-      {file ? (
-        <>
-          <span className={styles.uploadName}>{file}</span>
-          <button type="button" className={styles.uploadClear} onClick={() => setFile(null)}>
-            Remove
-          </button>
-        </>
-      ) : (
-        <>
-          <span className={styles.uploadLine}>Drop a file</span>
-          <span className={styles.uploadHint}>PDF, up to 20MB</span>
-        </>
-      )}
-    </div>
-  )
+  const [files, setFiles] = useState([{ name: 'logo-lockup.fig', size: 184320 }])
+  return <SysUpload files={files} onChange={setFiles} />
 }
 
 function SearchField() {
   const [q, setQ] = useState('')
-  return (
-    <div className={styles.search}>
-      <span className={styles.searchIcon} aria-hidden="true">⌕</span>
-      <input
-        className={styles.searchInput}
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search work"
-        aria-label="Search"
-      />
-      {q && (
-        <button type="button" className={styles.searchClear} onClick={() => setQ('')} aria-label="Clear">
-          ×
-        </button>
-      )}
-    </div>
-  )
+  const all = ['Arbitrum', 'Openhouse', 'Brand systems', 'Content programs']
+  const hits = all.filter((x) => x.toLowerCase().includes(q.toLowerCase()))
+  return <SysSearch value={q} onChange={setQ} placeholder="Search projects" count={hits.length} />
 }
 
 
@@ -756,37 +619,13 @@ function SearchField() {
    so the documented version is the fixed one. */
 function Drawer() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
-
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
-        Open drawer
-      </button>
-      {open && (
-        <div className={styles.drawerBackdrop} onMouseDown={close}>
-          <div
-            ref={ref}
-            className={styles.drawer}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ds-drawer-title"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHead}>
-              <span id="ds-drawer-title" className={styles.modalTitle}>Book a call</span>
-              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
-                <Icon name="close" />
-              </button>
-            </div>
-            <p className={styles.modalBody}>
-              Rises from the bottom edge, which is why its shadow casts upward.
-            </p>
-            <button type="button" className={styles.btnSolid} onClick={close}>Confirm</button>
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open drawer</Button>
+      <SysDrawer open={open} onClose={() => setOpen(false)} title="Asset details">
+        A drawer is for adjacent work — the thing you opened it from stays on
+        screen behind it, which is the whole reason it is not a page.
+      </SysDrawer>
     </div>
   )
 }
@@ -795,55 +634,24 @@ function Drawer() {
    behind it stays usable. That is the whole distinction from a modal, and
    getting it wrong is why so many filter panels feel like a trap. */
 function Popover() {
-  const [open, setOpen] = useState(false)
-  const wrap = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDoc)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
   return (
-    <div className={styles.menuWrap} ref={wrap}>
-      <button type="button" className={styles.btnDemo} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-        <Icon name="filter" size={14} />Filter
-      </button>
-      {open && (
-        <div className={styles.popover} role="group" aria-label="Filter">
-          <span className={styles.popTitle}>Discipline</span>
-          <CheckGroup />
-        </div>
-      )}
-    </div>
+    <SysPopover trigger="Why three colours?">
+      Pink and purple are adjacent hues. A fourth categorical value either
+      leaves the lightness band or fails colour-vision separation against one
+      of the other three.
+    </SysPopover>
   )
 }
 
 function BottomSheet() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>Open sheet</button>
-      {open && (
-        <div className={styles.drawerBackdrop} onMouseDown={close}>
-          <div ref={ref} className={styles.sheet} role="dialog" aria-modal="true" aria-label="Options" onMouseDown={(e) => e.stopPropagation()}>
-            {/* The grabber is the affordance that says "this drags" — without
-                it a sheet is just a modal stuck to the bottom. */}
-            <span className={styles.sheetGrab} />
-            {['Share', 'Copy link', 'Open in new tab'].map((t) => (
-              <button key={t} type="button" className={styles.sheetItem} onClick={close}>{t}</button>
-            ))}
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open sheet</Button>
+      <SysSheet open={open} onClose={() => setOpen(false)} title="Share">
+        The same dialog contract at the bottom edge, for a decision on a small
+        screen where a centred modal has nowhere to go.
+      </SysSheet>
     </div>
   )
 }
@@ -920,22 +728,16 @@ function ErrorFallback() {
 /* Toast stack. One toast exists; two at once currently overlap, because
    nothing owns the queue. Newest on top, and they push rather than cover. */
 function ToastStack() {
-  const [items, setItems] = useState([{ id: 1, text: 'Link copied' }])
-  const [n, setN] = useState(2)
-  const push = () => {
-    const id = n
-    setN((v) => v + 1)
-    setItems((t) => [{ id, text: `Saved · ${id}` }, ...t].slice(0, 3))
-    setTimeout(() => setItems((t) => t.filter((x) => x.id !== id)), 3200)
-  }
+  const { toasts, push, dismiss } = useToasts()
   return (
-    <div className={styles.toastStageBox}>
-      <button type="button" className={styles.btnDemo} onClick={push}>Add toast</button>
-      <div className={styles.toastStack} role="status" aria-live="polite">
-        {items.map((t) => (
-          <span key={t.id} className={styles.toastDemo}>{t.text}</span>
-        ))}
-      </div>
+    <div className={styles.tipRow}>
+      <Button size="sm" icon="check" onClick={() => push({ tone: 'good', message: 'Published to the workspace.' })}>
+        Publish
+      </Button>
+      <Button size="sm" icon="error" onClick={() => push({ tone: 'bad', message: 'Contrast check failed.', action: { label: 'Details', onSelect: () => {} } })}>
+        Fail a check
+      </Button>
+      <SysToasts toasts={toasts} onDismiss={dismiss} />
     </div>
   )
 }
@@ -1056,86 +858,26 @@ function CardVariants() {
  * fixed` and the layers scale from Depth.
  */
 
-/* Focus trap. Three obligations, all of them easy to miss:
- *   - move focus in when it opens,
- *   - cycle Tab and Shift+Tab at the two ends,
- *   - put focus back where it came from on close, or the reader is dumped at
- *     the top of the document with no idea what happened. */
-function useFocusTrap(open, onClose) {
-  const ref = useRef(null)
-  const restoreTo = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    restoreTo.current = document.activeElement
-    const node = ref.current
-    if (!node) return
-
-    const focusables = () =>
-      [...node.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
-        .filter((el) => !el.hasAttribute('disabled'))
-
-    focusables()[0]?.focus()
-
-    const onKey = (e) => {
-      if (e.key === 'Escape') { onClose(); return }
-      if (e.key !== 'Tab') return
-      const f = focusables()
-      if (!f.length) return
-      const first = f[0]
-      const last = f[f.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
-    }
-
-    node.addEventListener('keydown', onKey)
-    return () => {
-      node.removeEventListener('keydown', onKey)
-      // Restore, or the reader lands back at the top of the document.
-      if (restoreTo.current instanceof HTMLElement) restoreTo.current.focus()
-    }
-  }, [open, onClose])
-
-  return ref
-}
 
 function Modal() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
-
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
-        Open modal
-      </button>
-      {open && (
-        <div className={styles.modalBackdrop} onMouseDown={close}>
-          <div
-            ref={ref}
-            className={styles.modal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ds-modal-title"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHead}>
-              <span id="ds-modal-title" className={styles.modalTitle}>Send this brief?</span>
-              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
-                <Icon name="close" />
-              </button>
-            </div>
-            <p className={styles.modalBody}>
-              Tab around — focus cycles inside and cannot escape. Escape closes, and
-              focus returns to the button that opened it.
-            </p>
-            <div className={styles.confirmActions}>
-              <button type="button" className={styles.btnOutline} onClick={close}>Cancel</button>
-              <button type="button" className={styles.btnSolid} onClick={close}>Send</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open modal</Button>
+      <SysModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Send this brief?"
+        actions={
+          <>
+            <Button size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button size="sm" variant="solid" onClick={() => setOpen(false)}>Send</Button>
+          </>
+        }
+      >
+        Tab around — focus cycles inside and cannot escape. Escape closes, and
+        focus returns to the button that opened it.
+      </SysModal>
     </div>
   )
 }
@@ -1144,52 +886,18 @@ function Modal() {
    Forms. A select returns a value; a menu performs a verb. They look similar
    and behave differently, so they carry different roles. */
 function DropdownMenu() {
-  const [open, setOpen] = useState(false)
   const [last, setLast] = useState(null)
-  const wrap = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDoc)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
-  const items = [['copy', 'Duplicate'], ['download', 'Export'], ['link', 'Copy link'], ['close', 'Delete']]
-
   return (
-    <div className={styles.menuWrap} ref={wrap}>
-      <button
-        type="button"
-        className={styles.btnDemo}
-        onClick={() => setOpen((o) => !o)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-      >
-        Actions <Icon name="chevron-down" size={14} />
-      </button>
-      {open && (
-        <div className={styles.menu} role="menu">
-          {items.map(([icon, label], i) => (
-            <Fragment key={label}>
-              {i === items.length - 1 && <span className={styles.menuRule} />}
-              <button
-                type="button"
-                role="menuitem"
-                className={`${styles.menuItem} ${i === items.length - 1 ? styles.menuItemBad : ''}`}
-                onClick={() => { setLast(label); setOpen(false) }}
-              >
-                <Icon name={icon} size={14} />{label}
-              </button>
-            </Fragment>
-          ))}
-        </div>
-      )}
+    <div className={styles.menuWrap}>
+      <SysMenu
+        items={[
+          { label: 'Duplicate', icon: 'copy', onSelect: () => setLast('Duplicate') },
+          { label: 'Export', icon: 'download', onSelect: () => setLast('Export') },
+          { label: 'Copy link', icon: 'link', onSelect: () => setLast('Copy link') },
+          { divider: true },
+          { label: 'Delete', icon: 'close', tone: 'bad', onSelect: () => setLast('Delete') },
+        ]}
+      />
       {last && <span className={styles.menuEcho}>{last}</span>}
     </div>
   )
@@ -1200,122 +908,22 @@ function DropdownMenu() {
    from every visitor. Weeks start Monday, and today is marked whether or not
    it is selected. */
 function DatePicker() {
-  const [sel, setSel] = useState(14)
-  const [open, setOpen] = useState(true)
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-  // Fixed month so the demo is deterministic — no Date() at render.
-  const offset = 3
-  const total = 31
-  const today = 9
-
-  return (
-    <div className={styles.dateWrap}>
-      <button
-        type="button"
-        className={styles.dateField}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-      >
-        <Icon name="calendar" size={14} />
-        <span>2026 · 03 · {String(sel).padStart(2, '0')}</span>
-      </button>
-      {open && (
-        <div className={styles.calendar} role="dialog" aria-label="Choose a date">
-          <div className={styles.calHead}>
-            <button type="button" className={styles.iconOnly} aria-label="Previous month"><Icon name="chevron-left" size={14} /></button>
-            <span className={styles.calMonth}>March 2026</span>
-            <button type="button" className={styles.iconOnly} aria-label="Next month"><Icon name="chevron-right" size={14} /></button>
-          </div>
-          <div className={styles.calGrid}>
-            {days.map((d, i) => (
-              <span key={i} className={styles.calDay}>{d}</span>
-            ))}
-            {Array.from({ length: offset }, (_, i) => <span key={`b${i}`} />)}
-            {Array.from({ length: total }, (_, i) => {
-              const n = i + 1
-              const weekend = (i + offset) % 7 >= 5
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  aria-current={n === today ? 'date' : undefined}
-                  aria-pressed={n === sel}
-                  className={[
-                    styles.calCell,
-                    n === sel ? styles.calCellOn : '',
-                    n === today ? styles.calToday : '',
-                    weekend ? styles.calWeekend : '',
-                  ].join(' ')}
-                  onClick={() => setSel(n)}
-                >
-                  {n}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  const [day, setDay] = useState(14)
+  return <SysDatePicker value={day} onChange={setDay} />
 }
 
 /* Combobox: type to filter, arrow to move, enter to choose. Distinct from the
    select — a select shows every option, a combobox exists because there are
    too many to show. */
 function Combobox() {
-  const all = ['Arbitrum', 'Banzen', 'Entropy', 'Google', 'Heard', 'Hylands', 'Nimruz', 'Photon', 'Talos', 'Transcend']
-  const [q, setQ] = useState('')
-  const [open, setOpen] = useState(false)
-  const [cursor, setCursor] = useState(0)
-  const hits = all.filter((a) => a.toLowerCase().includes(q.toLowerCase()))
-
-  const onKey = (e) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setCursor((c) => Math.min(hits.length - 1, c + 1)) }
-    if (e.key === 'ArrowUp') { e.preventDefault(); setCursor((c) => Math.max(0, c - 1)) }
-    if (e.key === 'Enter' && open && hits[cursor]) { e.preventDefault(); setQ(hits[cursor]); setOpen(false) }
-    if (e.key === 'Escape') setOpen(false)
-  }
-
+  const [value, setValue] = useState(null)
   return (
-    <div className={styles.comboWrap}>
-      <input
-        className={styles.fieldContact}
-        value={q}
-        placeholder="Type a client"
-        aria-expanded={open}
-        aria-autocomplete="list"
-        role="combobox"
-        onChange={(e) => { setQ(e.target.value); setOpen(true); setCursor(0) }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={onKey}
-      />
-      {open && (
-        <div className={styles.comboList} role="listbox">
-          {hits.length ? hits.slice(0, 5).map((h, i) => (
-            <button
-              key={h}
-              type="button"
-              role="option"
-              aria-selected={i === cursor}
-              className={`${styles.comboItem} ${i === cursor ? styles.comboItemOn : ''}`}
-              onMouseEnter={() => setCursor(i)}
-              onClick={() => { setQ(h); setOpen(false) }}
-            >
-              {/* The matched run is marked, so it is obvious why a row is here. */}
-              {q && h.toLowerCase().includes(q.toLowerCase()) ? (
-                <>
-                  {h.slice(0, h.toLowerCase().indexOf(q.toLowerCase()))}
-                  <mark className={styles.comboMark}>
-                    {h.slice(h.toLowerCase().indexOf(q.toLowerCase()), h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
-                  </mark>
-                  {h.slice(h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
-                </>
-              ) : h}
-            </button>
-          )) : <span className={styles.comboEmpty}>No matches</span>}
-        </div>
-      )}
-    </div>
+    <SysCombobox
+      label="Client"
+      value={value}
+      onChange={setValue}
+      options={['Arbitrum', 'Openhouse', 'Super Conscious', 'Offchain Labs', 'Espresso']}
+    />
   )
 }
 
@@ -1330,78 +938,18 @@ function Switch() {
    The field stays editable — a stepper that forces you through the buttons is
    worse than a plain input. */
 function Stepper() {
-  const [n, setN] = useState(6)
-  return (
-    <div className={styles.stepper}>
-      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.max(1, v - 1))} aria-label="Decrease">
-        <Icon name="minus" size={14} />
-      </button>
-      <input
-        className={styles.stepInput}
-        value={n}
-        onChange={(e) => setN(Math.max(1, Math.min(52, Number(e.target.value) || 1)))}
-        aria-label="Weeks"
-      />
-      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.min(52, v + 1))} aria-label="Increase">
-        <Icon name="plus" size={14} />
-      </button>
-      <span className={styles.stepUnit}>weeks</span>
-    </div>
-  )
+  const [step, setStep] = useState(1)
+  return <SysStepper steps={['Scope', 'Timing', 'Contact']} current={step} onStep={setStep} />
 }
 
 function TagInput() {
-  const [tags, setTags] = useState(['Brand', 'Motion'])
-  const [draft, setDraft] = useState('')
-  const add = (e) => {
-    e.preventDefault()
-    const v = draft.trim()
-    if (!v || tags.includes(v)) return
-    setTags((t) => [...t, v])
-    setDraft('')
-  }
-  return (
-    <form className={styles.tagField} onSubmit={add}>
-      {tags.map((t) => (
-        <span key={t} className={styles.tag}>
-          {t}
-          <button type="button" onClick={() => setTags((x) => x.filter((y) => y !== t))} aria-label={`Remove ${t}`}>
-            <Icon name="close" size={12} />
-          </button>
-        </span>
-      ))}
-      <input
-        className={styles.tagInput}
-        value={draft}
-        onChange={(e) => setDraft(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Backspace' && !draft) setTags((t) => t.slice(0, -1)) }}
-        placeholder={tags.length ? '' : 'Add a tag'}
-        aria-label="Add tag"
-      />
-    </form>
-  )
+  const [tags, setTags] = useState(['Brand', 'Blocking'])
+  return <SysTagInput tags={tags} onChange={setTags} />
 }
 
 function SliderControl() {
-  const [v, setV] = useState(40)
-  return (
-    <div className={styles.sliderWrap}>
-      <div className={styles.sliderHead}>
-        <span className={styles.cardEyebrow}>Budget</span>
-        <span className={styles.sliderVal}>${v}k</span>
-      </div>
-      <input
-        type="range" min="10" max="120" step="5" value={v}
-        onChange={(e) => setV(Number(e.target.value))}
-        className={styles.baRange}
-        aria-label="Budget"
-      />
-      <div className={styles.sliderEnds}>
-        <span className={styles.axisMutedText}>$10k</span>
-        <span className={styles.axisMutedText}>$120k</span>
-      </div>
-    </div>
-  )
+  const [v, setV] = useState(60)
+  return <SysSlider label="Budget" value={v} min={10} max={150} step={5} onChange={setV} format={(n) => `$${n}k`} />
 }
 
 
@@ -1976,18 +1524,10 @@ function PersonCard() {
    alone, because the name is what decides whether anyone clicks. */
 function PrevNext() {
   return (
-    <nav className={styles.prevNext} aria-label="Case studies">
-      <a href="#content" className={styles.pnItem}>
-        <span className={styles.pnDir}><Icon name="arrow-left" size={14} />Previous</span>
-        <span className={styles.pnName}>Transcend</span>
-        <span className={styles.pnMeta}>Brand system</span>
-      </a>
-      <a href="#content" className={`${styles.pnItem} ${styles.pnNext}`}>
-        <span className={styles.pnDir}>Next<Icon name="arrow-right" size={14} /></span>
-        <span className={styles.pnName}>Photon</span>
-        <span className={styles.pnMeta}>Brand + Product</span>
-      </a>
-    </nav>
+    <SysPrevNext
+      prev={{ label: 'Motion & focus' }}
+      next={{ label: 'Accessibility' }}
+    />
   )
 }
 
@@ -1995,36 +1535,14 @@ function PrevNext() {
    they are in it. Uses IntersectionObserver rather than a scroll handler, so
    it costs nothing per frame. */
 function Scrollspy() {
-  const ids = ['colour', 'type', 'radius', 'spacing']
-  const [active, setActive] = useState('colour')
-
-  useEffect(() => {
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean)
-    if (!els.length) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
-        if (hit) setActive(hit.target.id)
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-
   return (
-    <div className={styles.spyRow}>
-      {ids.map((id) => (
-        <a
-          key={id}
-          href={`#${id}`}
-          aria-current={active === id ? 'true' : undefined}
-          className={`${styles.spyLink} ${active === id ? styles.spyLinkOn : ''}`}
-        >
-          {id}
-        </a>
-      ))}
-    </div>
+    <SysScrollspy
+      sections={[
+        { id: 'sec-foundations', label: 'Foundations' },
+        { id: 'sec-components', label: 'Components' },
+        { id: 'sec-data', label: 'Data' },
+      ]}
+    />
   )
 }
 
@@ -2130,64 +1648,40 @@ function ComposedForm() {
 /* Sidebar: sections, an active row, and a count. The site's rail is flat and
    ungrouped, which is fine at eight links and breaks at twenty. */
 function SidebarNav() {
-  const [on, setOn] = useState('Talos')
-  const groups = [
-    ['Brand', ['Talos', 'Transcend', 'Photon']],
-    ['Content', ['Heard', 'Hylands']],
-  ]
+  const [on, setOn] = useState('Workspace')
   return (
-    <nav className={styles.sidebar}>
-      {groups.map(([group, items]) => (
-        <div key={group} className={styles.sidebarGroup}>
-          <div className={styles.sidebarHead}>
-            <span className={styles.sidebarTitle}>{group}</span>
-            <span className={styles.sidebarCount}>{items.length}</span>
-          </div>
-          {items.map((it) => (
-            <button
-              key={it}
-              type="button"
-              aria-current={on === it ? 'page' : undefined}
-              className={`${styles.sidebarItem} ${on === it ? styles.sidebarItemOn : ''}`}
-              onClick={() => setOn(it)}
-            >
-              {it}
-            </button>
-          ))}
-        </div>
-      ))}
-    </nav>
+    <SysSideNav
+      title="Settings"
+      value={on}
+      onChange={setOn}
+      items={[
+        { label: 'Workspace', icon: 'sliders' },
+        { label: 'Members', icon: 'user', count: 4 },
+        { label: 'Publishing', icon: 'upload' },
+        { label: 'Danger zone', icon: 'warning' },
+      ]}
+    />
   )
 }
 
 /* Command palette: the fastest navigation on a site with ninety-six routes,
    and the only pattern here that scales without a redesign. */
 function CommandPalette() {
-  const [q, setQ] = useState('')
-  const all = ['Work — Talos', 'Work — Transcend', 'Thoughts — Rethinking the workweek', 'Contact', 'Design system', 'Careers']
-  const hits = all.filter((r) => r.toLowerCase().includes(q.toLowerCase())).slice(0, 4)
+  const [open, setOpen] = useState(false)
   return (
-    <div className={styles.palette}>
-      <div className={styles.paletteBar}>
-        <span className={styles.paletteHint}>⌘K</span>
-        <input
-          className={styles.paletteInput}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Jump to…"
-          aria-label="Command palette"
-        />
-      </div>
-      <div className={styles.paletteList}>
-        {hits.length ? hits.map((r, i) => (
-          <div key={r} className={`${styles.paletteRow} ${i === 0 ? styles.paletteRowOn : ''}`}>
-            <span>{r}</span>
-            {i === 0 && <span className={styles.paletteEnter}>↵</span>}
-          </div>
-        )) : (
-          <div className={styles.paletteEmpty}>No matches</div>
-        )}
-      </div>
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" icon="search" onClick={() => setOpen(true)}>Open palette</Button>
+      <SysPalette
+        open={open}
+        onClose={() => setOpen(false)}
+        commands={[
+          { label: 'New asset', icon: 'plus', hint: 'N' },
+          { label: 'Open reviews', icon: 'request', hint: 'R' },
+          { label: 'Search assets', icon: 'search', hint: '/' },
+          { label: 'Publish changes', icon: 'merged' },
+          { label: 'Workspace settings', icon: 'sliders' },
+        ]}
+      />
     </div>
   )
 }
@@ -2198,107 +1692,58 @@ function Tabs() {
 }
 
 function FilterBar() {
-  const [on, setOn] = useState(['Brand'])
-  const toggle = (v) =>
-    setOn((s) => (s.includes(v) ? s.filter((x) => x !== v) : [...s, v]))
-
+  const [value, setValue] = useState({ discipline: 'Brand' })
   return (
-    <div className={styles.filterBar}>
-      {['Brand', 'Content', 'Product', 'Motion'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          aria-pressed={on.includes(v)}
-          className={`${styles.filterChip} ${on.includes(v) ? styles.filterChipOn : ''}`}
-          onClick={() => toggle(v)}
-        >
-          {v}
-        </button>
-      ))}
-      {on.length > 0 && (
-        <button type="button" className={styles.filterClear} onClick={() => setOn([])}>
-          Clear
-        </button>
-      )}
-    </div>
+    <SysFilterBar
+      count={12}
+      value={value}
+      onChange={setValue}
+      onClear={() => setValue({})}
+      filters={[
+        { key: 'discipline', label: 'Discipline', options: ['Brand', 'Content', 'Product'] },
+        { key: 'status', label: 'Status', options: ['Live', 'Review', 'Draft'] },
+      ]}
+    />
   )
 }
 
 /* The arrow carries the direction so the label never has to say "ascending",
    which at 9px would wrap. */
 function SortControl() {
-  const [by, setBy] = useState('Year')
-  const [desc, setDesc] = useState(true)
-
+  const [by, setBy] = useState('Recently updated')
+  const [dir, setDir] = useState('desc')
   return (
-    <div className={styles.sortRow}>
-      <span className={styles.cardEyebrow}>Sort</span>
-      {['Year', 'Client'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          className={`${styles.sortBtn} ${by === v ? styles.sortBtnOn : ''}`}
-          onClick={() => (by === v ? setDesc((d) => !d) : setBy(v))}
-        >
-          {v}
-          {by === v && <span className={styles.sortArrow}>{desc ? '↓' : '↑'}</span>}
-        </button>
-      ))}
-    </div>
+    <SysSort
+      options={['Recently updated', 'Name', 'Most used']}
+      value={by}
+      direction={dir}
+      onChange={(v, d) => { setBy(v); setDir(d) }}
+    />
   )
 }
 
 /* ── Content patterns (NEW) ──────────────────────────────────────────────── */
 
 function Accordion() {
-  const [open, setOpen] = useState(0)
-  const items = [
-    ['What does a brand system include?', 'Identity, voice, and the rules that keep both intact once other people start using them.'],
-    ['How long does it take?', 'Six to ten weeks for most systems, depending on how much needs to exist at the end.'],
-    ['Do you work with in-house teams?', 'Usually. The handover matters more than the artefact.'],
-  ]
-
   return (
-    <div className={styles.accordion}>
-      {items.map(([q, a], n) => (
-        <div key={q} className={styles.accItem}>
-          <button
-            type="button"
-            className={styles.accHead}
-            onClick={() => setOpen((o) => (o === n ? -1 : n))}
-            aria-expanded={open === n}
-          >
-            <span className={styles.accQ}>{q}</span>
-            <span className={`${styles.accMark} ${open === n ? styles.accMarkOpen : ''}`}>+</span>
-          </button>
-          {open === n && <p className={styles.accA}>{a}</p>}
-        </div>
-      ))}
-    </div>
+    <SysAccordion
+      defaultOpen={['What happens after the first call?']}
+      items={[
+        { title: 'What happens after the first call?', meta: '1 min', body: 'A written scope within two working days — what we would do, in what order, and what it costs.' },
+        { title: 'Who owns the work?', meta: '1 min', body: 'You do, on delivery. Source files and all.' },
+        { title: 'What if it needs to change later?', meta: '2 min', body: 'The system is built to be changed. That is what the tokens are for.' },
+      ]}
+    />
   )
 }
 
 /* Tooltip on hover and focus both — hover alone makes it keyboard-invisible. */
 function Tooltip() {
-  const [show, setShow] = useState(false)
   return (
-    <span className={styles.tipWrap}>
-      <button
-        type="button"
-        className={styles.tipTrigger}
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-        onFocus={() => setShow(true)}
-        onBlur={() => setShow(false)}
-      >
-        brand system
-      </button>
-      {show && (
-        <span className={styles.tip} role="tooltip">
-          The rules that keep an identity intact once other people use it.
-        </span>
-      )}
-    </span>
+    <div className={styles.tipRow}>
+      <SysTooltip label="Copy path"><Button size="sm" icon="copy">Copy</Button></SysTooltip>
+      <SysTooltip label="Opens in a new tab" side="bottom"><Button size="sm" icon="external">Open</Button></SysTooltip>
+    </div>
   )
 }
 
@@ -2328,19 +1773,17 @@ function ProgressBar() {
 function ConfirmDialog() {
   const [open, setOpen] = useState(false)
   return (
-    <div className={styles.confirmStage}>
-      {open ? (
-        <div className={styles.confirm} role="dialog" aria-label="Confirm">
-          <span className={styles.confirmTitle}>Delete this case study?</span>
-          <p className={styles.confirmBody}>This cannot be undone.</p>
-          <div className={styles.confirmActions}>
-            <button type="button" className={styles.btnOutline} onClick={() => setOpen(false)}>Cancel</button>
-            <button type="button" className={styles.btnDanger} onClick={() => setOpen(false)}>Delete</button>
-          </div>
-        </div>
-      ) : (
-        <button type="button" className={styles.btnDanger} onClick={() => setOpen(true)}>Delete</button>
-      )}
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" onClick={() => setOpen(true)}>Delete asset</Button>
+      <SysConfirm
+        open={open}
+        onClose={() => setOpen(false)}
+        onConfirm={() => {}}
+        tone="bad"
+        title="Delete logo-lockup.fig?"
+        confirm="Delete"
+        body="It is used in 12 places. This cannot be undone."
+      />
     </div>
   )
 }
@@ -2349,18 +1792,21 @@ function ConfirmDialog() {
 
 function Lightbox() {
   const [open, setOpen] = useState(false)
+  const [i, setI] = useState(0)
   return (
-    <div className={styles.lightStage}>
-      <button type="button" className={styles.lightThumb} onClick={() => setOpen(true)} aria-label="Open">
-        <span className={styles.lightThumbHint}>Open</span>
-      </button>
-      {open && (
-        <div className={styles.lightOverlay} role="dialog" aria-label="Lightbox">
-          <button type="button" className={styles.lightClose} onClick={() => setOpen(false)} aria-label="Close">×</button>
-          <span className={styles.lightFrame} />
-          <span className={styles.caption}>Identity system, 2026 — 1 of 6</span>
-        </div>
-      )}
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" icon="image" onClick={() => setOpen(true)}>Open lightbox</Button>
+      <SysLightbox
+        open={open}
+        onClose={() => setOpen(false)}
+        index={i}
+        onIndex={setI}
+        items={[
+          { label: 'Identity — primary', ratio: '16 / 9' },
+          { label: 'Identity — stacked', ratio: '1 / 1' },
+          { label: 'Social kit', ratio: '4 / 5' },
+        ]}
+      />
     </div>
   )
 }
