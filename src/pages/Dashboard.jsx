@@ -13,6 +13,7 @@ import {
   LineChart, BarChart, RankedBar, Donut,
 } from '../system'
 import headMark from '../assets/logo.svg'
+import PROJECTS from '../data/workspaceProjects'
 import styles from './Dashboard.module.css'
 
 /* A brand workspace, browsed as a folder tree.
@@ -463,179 +464,6 @@ const REVIEWS = [
 ]
 
 
-/* Projects. A project is what the brand is being used for, which is why it is
-   not a folder: it has an owner, a percentage and a shape, and it opens onto
-   the work rendered rather than onto a list of filenames. */
-const PROJECTS = [
-  {
-    id: 4,
-    name: 'Challenger positioning launch',
-    owner: 'dana',
-    updated: '2h',
-    done: 68,
-    closed: false,
-    visibility: 'Private',
-    team: ['Dana Cole', 'Chris Church', 'Ravi Menon'],
-    brief: 'Six weeks, three phases. The messaging house names the challengers, the channels carry it, and the site lands the week after.',
-    canvas: {
-      label: 'launch-layouts.fig',
-      width: 1600,
-      height: 900,
-      frames: [
-        { name: 'Hero — 1440', x: 60, y: 70, w: 620, h: 350, tone: 'art' },
-        { name: 'Hero — mobile', x: 720, y: 70, w: 170, h: 350, tone: 'art' },
-        { name: 'Statement', x: 930, y: 70, w: 600, h: 170, tone: 'type' },
-        { name: 'Proof row', x: 930, y: 260, w: 600, h: 160, tone: 'plate' },
-        { name: 'Social — 1:1', x: 60, y: 490, w: 260, h: 260, tone: 'art' },
-        { name: 'Social — 9:16', x: 360, y: 490, w: 150, h: 260, tone: 'art' },
-        { name: 'Email header', x: 550, y: 490, w: 420, h: 120, tone: 'plate' },
-        { name: 'Signature', x: 550, y: 640, w: 420, h: 110, tone: 'type' },
-        { name: 'Deck cover', x: 1010, y: 490, w: 520, h: 260, tone: 'art' },
-      ],
-    },
-    deck: {
-      file: 'challenger-launch.pdf',
-      pages: [
-        { blocks: [
-          { kind: 'eyebrow', text: 'Super Conscious · Q3' },
-          { kind: 'h', text: 'The category stopped meaning anything' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'Four brands took the same three words and said them louder. This is what we say instead.' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'The problem' },
-          { kind: 'h', text: 'Everyone is a platform' },
-          { kind: 'p', text: 'Read the four homepages back to back and the only difference is the logo. The words are interchangeable because they were chosen to be safe.' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'Safe language cannot be argued with, which is the same as not being believed.' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'The move' },
-          { kind: 'h', text: 'Name the four' },
-          { kind: 'image' },
-          { kind: 'p', text: 'Naming a competitor is a claim you have to stand behind. That is the point — it is the only sentence on the page that could be wrong.' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'Proof' },
-          { kind: 'h', text: 'Three things we can show' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'Sixty-one shipped projects. Four systems still running two years after the engagement ended. One rebrand that survived a merger.' },
-          { kind: 'image' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'Rollout' },
-          { kind: 'h', text: 'Six weeks, three phases' },
-          { kind: 'p', text: 'Messaging house lands week one. Channels follow in week three, once the matrix is signed off. Site goes live week six.' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'Blocked on channel sign-off — see #40.' },
-        ] },
-      ],
-    },
-    assets: [
-      { name: 'messaging-house.md', from: 'Brand / Verbal', kind: 'Document', icon: 'file' },
-      { name: 'logo-lockup.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
-      { name: 'social-kit.fig', from: 'Brand / Channels', kind: 'Artwork', icon: 'image' },
-      { name: 'channel-matrix.md', from: 'Brand / Channels', kind: 'Document', icon: 'file' },
-      { name: 'chart-palette.json', from: 'Brand / Data', kind: 'Tokens', icon: 'file' },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Site refresh — v2.1',
-    owner: 'chris',
-    updated: '1d',
-    done: 42,
-    closed: false,
-    visibility: 'Private',
-    team: ['Chris Church', 'Dana Cole'],
-    brief: 'The identity refresh applied to the site. Mostly a token migration — the modules already have the right shapes, they just declare their own colours.',
-    canvas: {
-      label: 'site-v2.1.fig',
-      width: 1600,
-      height: 900,
-      frames: [
-        { name: 'Home', x: 60, y: 60, w: 420, h: 640, tone: 'art' },
-        { name: 'Work index', x: 520, y: 60, w: 420, h: 400, tone: 'plate' },
-        { name: 'Case study', x: 520, y: 500, w: 420, h: 200, tone: 'plate' },
-        { name: 'Capabilities', x: 980, y: 60, w: 300, h: 320, tone: 'type' },
-        { name: 'Contact', x: 980, y: 420, w: 300, h: 280, tone: 'type' },
-        { name: '404', x: 1320, y: 60, w: 220, h: 180, tone: 'plate' },
-      ],
-    },
-    deck: null,
-    assets: [
-      { name: 'colour-tokens.json', from: 'Brand / Visual', kind: 'Tokens', icon: 'file' },
-      { name: 'grid-system.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
-      { name: 'type-scale.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
-      { name: 'table-rules.md', from: 'Brand / Data', kind: 'Document', icon: 'file' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Sonic identity',
-    owner: 'ravi',
-    updated: '3d',
-    done: 25,
-    closed: false,
-    visibility: 'Private',
-    team: ['Ravi Menon'],
-    brief: 'A sting, a set of UI timings that match it, and a read guide for voiceover. Earliest stage of the five — there is one file and it is still in review.',
-    canvas: null,
-    deck: null,
-    audio: {
-      label: 'brand-sting.wav',
-      duration: 1.2,
-      peaks: [0.08, 0.14, 0.3, 0.62, 0.94, 0.86, 0.7, 0.58, 0.72, 0.88, 0.64, 0.46,
-        0.38, 0.52, 0.44, 0.3, 0.36, 0.28, 0.2, 0.26, 0.18, 0.12, 0.14, 0.08, 0.05],
-    },
-    assets: [
-      { name: 'brand-sting.wav', from: 'Brand / Audio', kind: 'Audio', icon: 'video' },
-      { name: 'motion-timings.md', from: 'Brand / Audio', kind: 'Document', icon: 'file' },
-      { name: 'voice-guide.md', from: 'Brand / Audio', kind: 'Document', icon: 'file' },
-    ],
-  },
-  {
-    id: 1,
-    name: 'Identity refresh — v2.0',
-    owner: 'dana',
-    updated: '5w',
-    done: 100,
-    closed: true,
-    visibility: 'Private',
-    team: ['Dana Cole', 'Chris Church', 'Ravi Menon', 'Super Conscious'],
-    brief: 'Shipped. The mark, the type scale, the grid and the two accents that replaced five.',
-    canvas: null,
-    deck: {
-      file: 'identity-v2.pdf',
-      pages: [
-        { blocks: [
-          { kind: 'eyebrow', text: 'Super Conscious · v2.0' },
-          { kind: 'h', text: 'Two accents, not five' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'Pink and purple carry everything. Teal and blue were declared and never used.' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'The mark' },
-          { kind: 'h', text: 'One shape, four sizes' },
-          { kind: 'image' },
-          { kind: 'p', text: 'Clear space is half the mark height on all four sides, at every size.' },
-        ] },
-        { blocks: [
-          { kind: 'eyebrow', text: 'Type' },
-          { kind: 'h', text: 'A serif and a mono, nothing else' },
-          { kind: 'p', text: 'Signifier carries anything a person reads. Roboto Mono carries anything a machine produced — timestamps, hashes, counts, labels.' },
-          { kind: 'rule' },
-          { kind: 'p', text: 'The distinction is doing real work: it means a number never has to explain where it came from.' },
-        ] },
-      ],
-    },
-    assets: [
-      { name: 'logo-lockup.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
-      { name: 'type-scale.fig', from: 'Brand / Visual', kind: 'Artwork', icon: 'image' },
-      { name: 'colour-tokens.json', from: 'Brand / Visual', kind: 'Tokens', icon: 'file' },
-    ],
-  },
-]
 
 /* Both roots in one rail: the brand's folders, and the projects using them.
    The projects are named individually rather than hidden behind one entry —
@@ -918,6 +746,7 @@ export default function Dashboard() {
               project={openProject}
               path={['Projects', openProject.name]}
               onNavigate={() => setProjectId(null)}
+              previewHref={`/dashboard/preview/${openProject.id}`}
             />
           )}
 

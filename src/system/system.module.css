@@ -3375,3 +3375,534 @@
   .projectSide { gap: var(--sc-space-3); }
   .projectTrack { width: 56px; }
 }
+
+/* ── Campaign canvas ───────────────────────────────────────────────────────
+   Ported from the Breadcrumbs canvas. The hierarchy is owned by the layout
+   rather than by whoever dragged last, so the picture cannot lie about what
+   leads to what. */
+
+.cvWrap {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.cvTools {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+.cvFlagCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: var(--sc-space-2);
+  color: var(--sc-warn);
+}
+
+.cvZoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 2px;
+}
+
+.cvZoomBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 22px;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.cvZoomBtn:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+
+.cvZoomLevel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  min-width: 34px;
+  text-align: center;
+}
+
+.cvOpen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sc-ground);
+  background: var(--sc-text-peak);
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-3);
+  transition: opacity var(--sc-fast);
+}
+
+.cvOpen:hover { opacity: 0.85; }
+
+/* The viewport scrolls; the surface inside it is the map at its true size,
+   scaled. Scaling a wrapper rather than recomputing every coordinate means
+   the layout maths stays in one unit system. */
+.cvViewport {
+  position: relative;
+  overflow: auto;
+  max-height: 560px;
+  background:
+    linear-gradient(var(--sc-line) 1px, transparent 1px) 0 0 / 100% 40px,
+    linear-gradient(90deg, var(--sc-line) 1px, transparent 1px) 0 0 / 40px 100%,
+    var(--sc-ground);
+}
+
+.cvSurface { position: relative; }
+
+.cvScale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+/* ── Stage bands ─────────────────────────────────────────────────────────
+   The ground the hierarchy is read against. A stage with nothing in it is a
+   finding — where a campaign is thin — not a gap to be tidied away. */
+
+.cvBand {
+  position: absolute;
+  left: 0;
+  border-top: 1px dashed var(--sc-line-strong);
+}
+
+.cvBand:nth-child(even) { background: var(--sc-fill-faint); }
+
+/* Lives in the left gutter the layout reserves for it, so a stage name is
+   never underneath the first card of the first lane. */
+.cvBandLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 200px;
+  padding: 10px 20px 0 16px;
+  font-family: var(--sc-font-mono);
+  font-size: 15px;
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-faint);
+}
+
+.cvBandHint {
+  font-size: 12px;
+  letter-spacing: var(--sc-track-tight);
+  text-transform: none;
+  color: var(--sc-text-meta);
+}
+
+/* ── Edges ─────────────────────────────────────────────────────────────── */
+
+.cvEdges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* The coherent thread. It is a gradient rather than a flat line because a
+   connector that carries the brand's own colour down it reads as continuity,
+   which is the whole claim the canvas is making. */
+.cvEdge {
+  stroke: url(#sc-cv-thread);
+  stroke-width: 2;
+  opacity: 0.75;
+}
+
+/* A break is dashed and neutral-red: it is the one thing on the canvas you
+   are meant to go and fix. */
+.cvEdgeBroken {
+  stroke: var(--sc-bad);
+  stroke-dasharray: 7 6;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cvEdges animateTransform { display: none; }
+}
+
+/* ── Nodes ─────────────────────────────────────────────────────────────── */
+
+.cvNode {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: 14px 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--sc-fast), background var(--sc-fast);
+}
+
+.cvNode:hover { background: var(--sc-card-hover); border-color: var(--sc-text-faint); }
+
+/* Selection is a ring, so picking a node does not move it by a pixel. */
+.cvNodeOn {
+  border-color: var(--sc-pink);
+  box-shadow: 0 0 0 1px var(--sc-pink);
+}
+
+.cvNodeFlagged { border-color: rgba(255, 80, 80, 0.5); }
+
+/* The spine reads as structure rather than content: recessed, not raised. */
+.cvNodebrand,
+.cvNodestrategy {
+  background: var(--sc-recessed);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* An audience is the anchor its whole lane hangs off, so it is the one card
+   drawn in the display face. */
+.cvNodeaudience { background: var(--sc-raised); }
+
+.cvNodeHead {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--sc-text-meta);
+}
+
+.cvNodeKind {
+  font-family: var(--sc-font-mono);
+  font-size: 12px;
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+}
+
+.cvNodeFlag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font-family: var(--sc-font-mono);
+  font-size: 12px;
+  color: var(--sc-bad);
+}
+
+.cvNodeTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 26px;
+  line-height: 1.25;
+  color: var(--sc-text-peak);
+}
+
+.cvNodeaudience .cvNodeTitle { font-size: 34px; }
+.cvNodebrand .cvNodeTitle,
+.cvNodestrategy .cvNodeTitle { font-size: 22px; }
+
+.cvNodeBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cvNodeLine {
+  font-family: var(--sc-font-mono);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--sc-text-body);
+}
+
+/* ── Full-screen canvas page ─────────────────────────────────────────────
+   The Open target. Chrome down to a single bar, because the point of opening
+   it in its own tab is that the map gets the whole window. */
+
+.cvPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--sc-ground);
+}
+
+.cvPageBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+  height: var(--sc-bar-h);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: 0 var(--sc-space-3);
+  flex-shrink: 0;
+}
+
+.cvPageName {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+}
+
+.cvPageMeta { color: var(--sc-text-meta); }
+
+.cvPageBody { flex: 1; min-height: 0; display: flex; }
+.cvPageBody > * { flex: 1; min-width: 0; border: none; border-radius: 0; }
+.cvPageBody .cvViewport { max-height: none; }
+
+/* ── Folder preview ────────────────────────────────────────────────────────
+   What is in here, rendered. Laid out as a page rather than as cards: the
+   point is that it reads like the built thing, and a grid of boxes reads like
+   a file listing with pictures in it. */
+
+.fp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-6);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  background: var(--sc-card);
+  padding: var(--sc-space-5);
+}
+
+.fpBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+}
+
+/* Every block names the file it came from, so the preview is never a picture
+   with no provenance — you can get from what you see back to what made it. */
+.fpSource {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: 0 0 2px;
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.fpSource:hover { color: var(--sc-text-peak); border-bottom-color: var(--sc-line-strong); }
+
+.fpFoot {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-faint);
+  border-top: 1px solid var(--sc-line);
+  margin: 0;
+  padding-top: var(--sc-space-3);
+}
+
+/* ── Swatches ──────────────────────────────────────────────────────────── */
+
+.fpSwatches { display: flex; flex-wrap: wrap; gap: var(--sc-space-3); }
+
+.fpSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 104px;
+}
+
+.fpChip {
+  display: block;
+  height: 56px;
+  border-radius: var(--sc-radius-sm);
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+.fpChipName {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+}
+
+.fpChipValue {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* ── The mark at size ──────────────────────────────────────────────────── */
+
+.fpMarks {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sc-space-5);
+  flex-wrap: wrap;
+}
+
+.fpMark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sc-space-2);
+}
+
+.fpMarkArt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sc-text-peak);
+}
+
+/* ── Type scale ────────────────────────────────────────────────────────── */
+
+.fpType { display: flex; flex-direction: column; gap: var(--sc-space-3); }
+
+.fpTypeRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sc-space-4);
+  border-bottom: 1px solid var(--sc-line);
+  padding-bottom: var(--sc-space-3);
+}
+
+.fpTypeRow:last-child { border-bottom: none; }
+
+.fpTypeSpec {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  min-width: 108px;
+  flex-shrink: 0;
+}
+
+.fpTypeSample {
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--sc-text-peak);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Copy ──────────────────────────────────────────────────────────────── */
+
+.fpCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  max-width: 62ch;
+}
+
+.fpCopyH {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.25;
+  color: var(--sc-text-peak);
+  margin: 0;
+}
+
+.fpCopyP {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  margin: 0;
+}
+
+/* ── Artwork ───────────────────────────────────────────────────────────── */
+
+.fpArt {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+}
+
+.fpTile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 132px;
+}
+
+.fpTileArt {
+  display: block;
+  width: 100%;
+  border-radius: var(--sc-radius-sm);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(125, 90, 224, 0.16) 0 8px,
+      transparent 8px 16px),
+    var(--sc-recessed);
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────── */
+
+.fpTableWrap { overflow-x: auto; }
+
+/* Hairlines, never zebra stripes — the rule the table-rules file states, kept
+   by the component that renders it. */
+.fpTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+}
+
+.fpTable th,
+.fpTable td {
+  text-align: left;
+  font-weight: 400;
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-2) var(--sc-space-3);
+  white-space: nowrap;
+}
+
+.fpTable thead th {
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  border-bottom-color: var(--sc-line-strong);
+}
+
+.fpTable tbody th { color: var(--sc-text-strong); }
+.fpTable tbody td { color: var(--sc-text-body); }
+.fpTableNil { color: var(--sc-text-faint); }
+
+.projectBarRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+}
+
+/* The full-window preview scrolls as a page, because that is what it is. */
+.cvPageScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sc-space-5);
+}

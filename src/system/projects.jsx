@@ -2,7 +2,7 @@ import { useState } from 'react'
 import s from './system.module.css'
 import { Icon, Avatar, Button, Segmented } from './primitives'
 import { Path } from './browser'
-import { PdfPreview, CanvasPreview, WavePreview } from './previews'
+import { FolderPreview } from './folderPreview'
 
 /* Projects — a piece of work the brand is being used for.
  *
@@ -101,13 +101,21 @@ export function ProjectList({ projects, filter, onFilter, counts, query, onQuery
   )
 }
 
-/* The project itself. Three ways of looking at the same work — laid out, sent
-   out, and listed — rather than three different pages. */
-export function ProjectView({ project, path, onNavigate, onOpenAsset }) {
-  const views = ['Canvas', 'Deck', 'Assets'].filter((v) => (
-    v === 'Assets' || (v === 'Canvas' ? project.canvas : project.deck)
-  ))
+/* The project itself: look at it, or list what is in it. Two views rather
+   than one page per format. */
+export function ProjectView({ project, path, onNavigate, onOpenAsset, previewHref }) {
+  /* Two views, not four, and the same two a website repo gives you: the built
+     thing, and the files it was built from. Preview renders what is in the
+     folder; Assets lists it. */
+  const views = project.preview?.length ? ['Preview', 'Assets'] : ['Assets']
   const [view, setView] = useState(views[0])
+
+  /* A canvas block names its source but carries no copy of the map — the
+     project's own canvas is filled in here, so there is one canvas per
+     project rather than one in the data and another in the preview. */
+  const blocks = (project.preview ?? []).map((b) => (
+    b.kind === 'canvas' ? { ...b, canvas: b.canvas ?? project.canvas } : b
+  )).filter((b) => b.kind !== 'canvas' || b.canvas)
 
   return (
     <div className={s.requestPage}>
@@ -134,22 +142,22 @@ export function ProjectView({ project, path, onNavigate, onOpenAsset }) {
             and nothing sent out shows its assets and says nothing about it. */}
         {views.length > 1 && <Segmented value={view} onChange={setView} options={views} />}
         {views.length <= 1 && <span />}
-        <span className={s.projectTeam}>
-          {project.team.map((n) => <Avatar key={n} name={n} size={22} />)}
+        <span className={s.projectBarRight}>
+          <span className={s.projectTeam}>
+            {project.team.map((n) => <Avatar key={n} name={n} size={22} />)}
+          </span>
+          {/* The deploy-preview move: the built thing, its own tab, full width.
+              A preview squeezed beside a sidebar is a thumbnail. */}
+          {previewHref && (
+            <a className={s.cvOpen} href={previewHref} target="_blank" rel="noreferrer">
+              <Icon name="external" size={13} />Open
+            </a>
+          )}
         </span>
       </div>
 
-      {view === 'Canvas' && project.canvas && (
-        <CanvasPreview
-          label={project.canvas.label}
-          frames={project.canvas.frames}
-          width={project.canvas.width}
-          height={project.canvas.height}
-        />
-      )}
-
-      {view === 'Deck' && project.deck && (
-        <PdfPreview title={project.deck.file} pages={project.deck.pages} />
+      {view === 'Preview' && (
+        <FolderPreview title={project.name} blocks={blocks} onOpenAsset={onOpenAsset} />
       )}
 
       {view === 'Assets' && (
@@ -173,9 +181,6 @@ export function ProjectView({ project, path, onNavigate, onOpenAsset }) {
         </div>
       )}
 
-      {project.audio && (
-        <WavePreview label={project.audio.label} peaks={project.audio.peaks} duration={project.audio.duration} />
-      )}
     </div>
   )
 }

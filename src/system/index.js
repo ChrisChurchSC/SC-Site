@@ -46,4 +46,8 @@ export {
 
 export { PdfPreview, CanvasPreview, WavePreview } from './previews'
 
+export { CampaignCanvas, FUNNEL_STAGES } from './campaignCanvas'
+
+export { FolderPreview } from './folderPreview'
+
 export { ProjectList, ProjectView } from './projects'
