@@ -29,7 +29,7 @@ export {
 } from './primitives'
 
 export {
-  Shell, Sidebar, NavGroup, NavItem,
+  Shell, GlobalBar, BarButton, Sidebar, NavGroup, NavItem,
   Topbar, Content, Grid, Col, useSidebar,
 } from './shell'
 

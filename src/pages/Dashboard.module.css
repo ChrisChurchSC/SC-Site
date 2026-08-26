@@ -113,3 +113,11 @@
      260px its figures start wrapping and stop being scannable. */
   .split { grid-template-columns: 1fr; gap: var(--sc-space-5); }
 }
+
+/* The account avatar sits slightly apart from the bar actions: it is who you
+   are, not a thing you do. */
+.me {
+  display: inline-flex;
+  align-items: center;
+  padding-left: var(--sc-space-2);
+}

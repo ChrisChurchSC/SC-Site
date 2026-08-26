@@ -121,6 +121,11 @@
   --sc-space-7: 48px;
   --sc-space-8: 64px;
 
+  /* Global bar height. A token because three things depend on it — the bar,
+     the sidebar's sticky offset, and its height — and they must not be able
+     to disagree. */
+  --sc-bar-h: 48px;
+
   /* ── Radius ──────────────────────────────────────────────────────────── */
   --sc-radius-sm: 2px;
   --sc-radius: 4px;

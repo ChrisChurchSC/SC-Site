@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useMeta } from '../hooks/useMeta'
 import '../system/tokens.css'
 import {
-  Shell, Sidebar, Topbar, Content, Grid, Col, useSidebar,
-  Panel, StatTile, Button, IconButton, Banner, Segmented, Tabs,
+  Shell, GlobalBar, BarButton, Sidebar, Content, Grid, Col, useSidebar,
+  Panel, StatTile, Button, IconButton, Banner, Tabs, Avatar,
   Tree, Path, FileBrowser,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, Toolbar, RefSelect, CountLink, FindField,
@@ -124,8 +124,8 @@ export default function Dashboard() {
   const { collapsed, toggle } = useSidebar()
   const [path, setPath] = useState(['brand', 'design'])
   const [tab, setTab] = useState('Files')
-  const [range, setRange] = useState('12m')
   const [version, setVersion] = useState('v2.1 — current')
+  const [search, setSearch] = useState('')
   const [find, setFind] = useState('')
   const [dismissed, setDismissed] = useState(false)
 
@@ -146,7 +146,26 @@ export default function Dashboard() {
   }
 
   return (
-    <Shell collapsed={collapsed}>
+    <Shell
+      collapsed={collapsed}
+      global={
+        <GlobalBar
+          mark={headMark}
+          owner="Super Conscious"
+          workspace="Brand"
+          onMenu={toggle}
+          search={search}
+          onSearch={setSearch}
+        >
+          <BarButton icon="plus" label="Create" />
+          <BarButton icon="route" label="Requests" />
+          <BarButton icon="mail" label="Notifications" dot />
+          <span className={styles.me}>
+            <Avatar name="Chris Church" size={24} />
+          </span>
+        </GlobalBar>
+      }
+    >
       {/* Mark only — the workspace is named in the title bar, and repeating it
           in the rail spends the widest line in the sidebar on something the
           reader already knows. */}
@@ -174,17 +193,6 @@ export default function Dashboard() {
       </Sidebar>
 
       <div className={styles.main}>
-        <Topbar title={node?.label ?? 'Workspace'}>
-          <Segmented
-            value={range}
-            onChange={setRange}
-            label="Range"
-            options={[{ value: '3m', label: '3M' }, { value: '12m', label: '12M' }, { value: 'all', label: 'All' }]}
-          />
-          <IconButton icon="search" label="Search" />
-          <Button variant="solid" size="sm" icon="plus">New asset</Button>
-        </Topbar>
-
         <Content>
           <TitleBar mark={headMark} owner="Super Conscious" title="Brand" badge="Private">
             <CountButton icon="target" label="Pin" />

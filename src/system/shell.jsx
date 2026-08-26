@@ -10,11 +10,78 @@ import { Icon, IconButton } from './primitives'
  * 56px rail on a phone costs more room than it returns.
  */
 
-export function Shell({ collapsed, children }) {
+/* The frame. A global bar, when present, spans the full width above the
+   sidebar rather than sitting inside the content column — it belongs to the
+   product, not to the page, and a bar that stops at the sidebar reads as part
+   of whatever is beside it. */
+export function Shell({ collapsed, global, children }) {
   return (
-    <div className={`sc-root ${s.shell} ${collapsed ? s.shellCollapsed : ''}`}>
-      {children}
+    <div className={`sc-root ${s.frame}`}>
+      {global}
+      <div className={`${s.shell} ${collapsed ? s.shellCollapsed : ''}`}>
+        {children}
+      </div>
     </div>
+  )
+}
+
+/* Global bar: who you are, where you are, and the few things reachable from
+   anywhere. Deliberately thin on content — everything that belongs to the
+   current page lives in the TitleBar below it, and the commonest failure here
+   is letting page-level actions creep up into a bar that is always on screen.
+ *
+ * The hamburger is first and toggles the sidebar. At this width it is the only
+ * control whose target the eye never has to search for. */
+export function GlobalBar({ mark, owner, workspace, onMenu, search, onSearch, children }) {
+  return (
+    <header className={s.globalBar}>
+      <button type="button" className={s.globalMenu} onClick={onMenu} aria-label="Toggle navigation">
+        <Icon name="menu" size={16} />
+      </button>
+
+      {mark && <img src={mark} alt="" className={s.globalMark} />}
+
+      <nav className={s.globalCrumb} aria-label="Workspace">
+        {owner && (
+          <>
+            <button type="button" className={s.globalOwner}>{owner}</button>
+            <span className={s.globalSlash}>/</span>
+          </>
+        )}
+        <button type="button" className={s.globalWorkspace}>
+          {workspace}
+          <Icon name="chevron-down" size={11} />
+        </button>
+      </nav>
+
+      <span className={s.globalSpacer} />
+
+      <span className={s.globalSearch}>
+        <Icon name="search" size={13} />
+        <input
+          className={s.globalSearchInput}
+          value={search}
+          onChange={(e) => onSearch?.(e.target.value)}
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <kbd className={s.globalKbd}>/</kbd>
+      </span>
+
+      <span className={s.globalActions}>{children}</span>
+    </header>
+  )
+}
+
+/* A bar action. The dot is a state, not a decoration — it takes a label so a
+   screen reader is told there is something waiting, which a coloured circle
+   alone never says. */
+export function BarButton({ icon, label, dot, onClick }) {
+  return (
+    <button type="button" className={s.barBtn} onClick={onClick} aria-label={label} title={label}>
+      <Icon name={icon} size={15} />
+      {dot && <span className={s.barDot} aria-label="Unread" />}
+    </button>
   )
 }
 
