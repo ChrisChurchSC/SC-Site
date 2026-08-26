@@ -42,6 +42,18 @@ export const ICONS = {
   /* Folder closed and open. The open state tilts the front face rather than
      adding an arrow — a folder that needs a glyph to say "open" is a folder
      drawn wrong. */
+  /* Request states. An open request is a ring with a dot — deliberately not a
+     tick or a cross, because "waiting" is a state of its own and borrowing
+     either of those glyphs pre-judges the outcome. */
+  request: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3',
+  merged: 'M4.5 5.5a2 2 0 100-3 2 2 0 000 3M4.5 13.5a2 2 0 100-3 2 2 0 000 3M11.5 9.5a2 2 0 100-3 2 2 0 000 3M4.5 5.5v5M6.5 8h3',
+  draft: 'M4.5 5.5a2 2 0 100-3 2 2 0 000 3M4.5 13.5a2 2 0 100-3 2 2 0 000 3M4.5 5.5v5M11.5 3.5v1M11.5 7.5v1M11.5 11.5v1',
+  commit: 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5M8 2v3.5M8 10.5V14',
+  comment: 'M2 3h12v8H8.5L5 14v-3H2z',
+  checklist: 'M2 4.5L3.5 6 6 3M2 10.5L3.5 12 6 9M8.5 4.5H14M8.5 10.5H14',
+  diff: 'M4 2h5l3 3v9H4zM9 2v3h3M8 7.5v3M6.5 9h3M6.5 12h3',
+  archive: 'M2 3h12v3H2zM3 6v8h10V6M6.5 9h3',
+  eye: 'M8 12c3.5 0 6-4 6-4s-2.5-4-6-4-6 4-6 4 2.5 4 6 4M8 9.8A1.8 1.8 0 108 6.2a1.8 1.8 0 000 3.6',
   folder: 'M2 4h4l1.5 2H14v8H2z',
   'folder-open': 'M2 4h4l1.5 2H14v2H5l-2 6H2zM3 14l2-6h9.5l-2 6z',
   calendar: 'M2 4h12v10H2zM2 7h12M5 2v3M11 2v3',

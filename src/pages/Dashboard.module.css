@@ -182,3 +182,16 @@
   padding: var(--sc-space-4);
   background: var(--sc-ground);
 }
+
+/* The one-line case for the change, above the conversation. Serif and at
+   reading size, because it is the only prose on the page a reviewer has to
+   actually take in. */
+.reviewSummary {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  max-width: 68ch;
+  margin: 0;
+}

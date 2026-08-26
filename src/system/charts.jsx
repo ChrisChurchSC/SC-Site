@@ -222,8 +222,15 @@ export function RankedBar({ data, series = 2 }) {
 
 /* Donut: four slices is the ceiling. Past that the arcs stop being comparable
    and it should be a ranked bar. The centre figure does most of the work. */
+/* A donut is a composition — degrees of one whole, not four unrelated things —
+   so it takes the sequential ramp rather than the categorical slots. The
+   categorical set stops at three, and cycling it gave a fourth slice the same
+   colour as the first: two legend dots, one colour, no way to tell them apart.
+   Ordered largest first so the ramp runs with the magnitude. */
 export function Donut({ data, centre }) {
-  const total = data.reduce((a, d) => a + d.value, 0) || 1
+  const ordered = [...data].sort((a, b) => b.value - a.value)
+  const total = ordered.reduce((a, d) => a + d.value, 0) || 1
+  const step = (i) => `var(--sc-q${Math.max(1, 5 - i)})`
   const R = 52
   const C = 2 * Math.PI * R
   let acc = 0
@@ -232,12 +239,12 @@ export function Donut({ data, centre }) {
     <figure className={s.chart} style={{ margin: 0 }}>
       <svg viewBox="0 0 340 150" className={s.svg} role="img" aria-label="Composition">
         <g transform="translate(80, 75)">
-          {data.slice(0, 4).map((d, i) => {
+          {ordered.slice(0, 5).map((d, i) => {
             const len = (d.value / total) * C
             const seg = (
               <circle
                 key={d.label}
-                r={R} fill="none" stroke={SERIES[i % 3]} strokeWidth="16"
+                r={R} fill="none" stroke={step(i)} strokeWidth="16"
                 strokeDasharray={`${Math.max(0, len - 3)} ${C - len + 3}`}
                 strokeDashoffset={-acc}
                 transform="rotate(-90)"
@@ -256,13 +263,18 @@ export function Donut({ data, centre }) {
             </text>
           )}
         </g>
-        {data.slice(0, 4).map((d, i) => (
-          <g key={d.label}>
-            <rect x="176" y={30 + i * 24} width="9" height="9" rx="2" fill={SERIES[i % 3]} />
-            <text x="192" y={39 + i * 24} className={s.axisText}>{d.label}</text>
-            <text x="332" y={39 + i * 24} className={s.valueText} textAnchor="end">{d.value}</text>
-          </g>
-        ))}
+        {/* Keyed to the ring, and vertically centred against it whether there
+            are three rows or five. */}
+        {ordered.slice(0, 5).map((d, i) => {
+          const top = (150 - Math.min(ordered.length, 5) * 24 + 6) / 2 + i * 24
+          return (
+            <g key={d.label}>
+              <rect x="176" y={top} width="9" height="9" rx="2" fill={step(i)} />
+              <text x="192" y={top + 9} className={s.axisText}>{d.label}</text>
+              <text x="332" y={top + 9} className={s.valueText} textAnchor="end">{d.value}</text>
+            </g>
+          )
+        })}
       </svg>
     </figure>
   )

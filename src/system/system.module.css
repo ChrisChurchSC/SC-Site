@@ -2059,3 +2059,807 @@
   text-transform: uppercase;
   color: var(--sc-text-meta);
 }
+
+
+/* ── Requests ──────────────────────────────────────────────────────────────
+   The list-of-open-work pattern. A request is an object in its own right, not
+   a filtered view of the things it touches — which is why it gets its own row
+   shape rather than reusing the file row. */
+
+.requestBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.requestFilters { display: inline-flex; gap: var(--sc-space-1); }
+
+.requestFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: var(--sc-radius-sm);
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.requestFilter:hover { color: var(--sc-text-peak); }
+.requestFilterOn { color: var(--sc-text-peak); background: var(--sc-fill); }
+
+.requestRow {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: start;
+  gap: var(--sc-space-3);
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sc-fast);
+}
+
+.requestRow:last-child { border-bottom: none; }
+.requestRow:hover { background: var(--sc-fill-faint); }
+
+.requestMain {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* The title is the row. It is serif and full size because it is the only part
+   anybody reads before deciding whether to open it. */
+.requestTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--sc-text-strong);
+}
+
+.requestRow:hover .requestTitle { color: var(--sc-text-peak); }
+
+.requestLabels { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.requestLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-pill);
+  padding: 2px 8px;
+}
+
+/* Draft is a state, not a topic, so it is drawn as a filled chip rather than
+   as another outlined label sitting in the same row as Design and Blocking. */
+.requestLabelDraft {
+  color: var(--sc-text-support);
+  background: var(--sc-fill);
+  border-color: transparent;
+}
+
+/* Which one, and how stale — the two questions asked of every row in a queue. */
+.requestMeta {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+}
+
+.requestSide {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+/* Overlapped, because who is on it matters more than how many. */
+.requestAvatars { display: inline-flex; }
+.requestAvatars > * + * { margin-left: -7px; box-shadow: 0 0 0 2px var(--sc-card); }
+
+.requestComments {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+}
+
+/* ── States ────────────────────────────────────────────────────────────────
+   Open is not a tick or a cross: "waiting" is a state of its own, and
+   borrowing either glyph pre-judges the outcome. */
+
+.state { display: inline-flex; align-items: center; gap: 6px; padding-top: 3px; }
+
+.stOpen { color: var(--sc-s2); }
+.stGood { color: var(--sc-good); }
+.stBad { color: var(--sc-bad); }
+.stMerged { color: var(--sc-s1); }
+.stMuted { color: var(--sc-text-meta); }
+
+.stateBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: var(--sc-radius-pill);
+  padding: 5px 11px;
+}
+
+/* ── Diff stat ─────────────────────────────────────────────────────────────
+   Five blocks rather than a proportional bar: at a glance you want "mostly
+   additions" or "mostly deletions", and five buckets carry that without
+   implying a precision the shape does not have. */
+
+.diffStat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  flex-shrink: 0;
+}
+
+.diffAdd { color: var(--sc-good); }
+.diffCut { color: var(--sc-bad); }
+
+.diffBlocks { display: inline-flex; gap: 2px; }
+
+.diffBlock {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+}
+
+.diffBlockAdd { background: var(--sc-good); }
+.diffBlockCut { background: var(--sc-bad); }
+
+/* ── Request detail ────────────────────────────────────────────────────────
+   Head, then four views of the same object, then the conversation beside a
+   rail of settable facts. */
+
+.requestPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-width: 0;
+}
+
+.requestHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+}
+
+.requestHeadTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.2;
+  color: var(--sc-text-peak);
+  margin: 0;
+}
+
+.requestHeadId { color: var(--sc-text-faint); }
+
+.requestHeadMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+.requestHeadLine {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  line-height: 1.9;
+  color: var(--sc-text-support);
+}
+
+.requestHeadLine strong { font-weight: 400; color: var(--sc-text-strong); }
+
+/* A version or a working name, set as a chip so the sentence around it stays
+   readable — "into v2.1 — current from small-size-lockup" needs the boundaries
+   drawn or it reads as one long string. */
+.ref {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-sm);
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+
+/* ── Views ─────────────────────────────────────────────────────────────────
+   Not a SectionNav: these are four ways of looking at one object, whereas the
+   section nav above moves between different objects. Same product, two levels,
+   and drawing them identically would flatten the difference. */
+
+.requestViews {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding-bottom: 1px;
+  overflow-x: auto;
+}
+
+.requestViewTabs { display: inline-flex; gap: var(--sc-space-1); }
+
+.requestView {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  letter-spacing: var(--sc-track-tight);
+  white-space: nowrap;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0 var(--sc-space-3) var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.requestView:hover { color: var(--sc-text-peak); }
+
+.requestViewOn {
+  color: var(--sc-text-peak);
+  border-bottom-color: var(--sc-pink);
+}
+
+.requestViewCount {
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-pill);
+  padding: 2px 7px;
+}
+
+.requestViewOn .requestViewCount { color: var(--sc-text-strong); }
+
+/* ── Body ──────────────────────────────────────────────────────────────────
+   The rail is fixed-width and the conversation takes the rest: the rail holds
+   short set values that never need more room, and the thread holds prose that
+   always does. */
+
+.requestBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--sc-space-6);
+  align-items: start;
+}
+
+.requestMainCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .requestBody { grid-template-columns: minmax(0, 1fr); gap: var(--sc-space-5); }
+}
+
+/* ── Timeline ──────────────────────────────────────────────────────────────
+   A rule behind the marks, so a conversation reads as one thread rather than
+   a stack of unrelated boxes. */
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  padding: var(--sc-space-2) 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: var(--sc-space-4);
+  bottom: var(--sc-space-4);
+  width: 1px;
+  background: var(--sc-line);
+}
+
+.event {
+  position: relative;
+  display: flex;
+  gap: var(--sc-space-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.eventMark { flex-shrink: 0; z-index: 1; }
+
+.eventIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--sc-text-meta);
+  background: var(--sc-card);
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+.eventText {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  padding-top: 6px;
+}
+
+.eventText strong { font-weight: 400; color: var(--sc-text-strong); }
+
+/* A comment is boxed and an event is not: one is something somebody wrote,
+   the other is something that happened. */
+.comment {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.commentHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.commentWho {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+}
+
+.commentWhen {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* Says what standing the writer has, which changes how the comment lands. */
+.commentRole {
+  margin-left: auto;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-pill);
+  padding: 2px 8px;
+}
+
+.commentBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  margin: 0;
+  padding: var(--sc-space-3);
+  white-space: pre-wrap;
+}
+
+/* ── Revisions in the thread ───────────────────────────────────────────────
+   Grouped under one line rather than one event per revision: five separate
+   "added a revision" marks bury the comment that answers them. */
+
+.pushed {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.revList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--sc-line);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.revListAlone { border-color: var(--sc-line-strong); }
+
+.revRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  color: var(--sc-text-meta);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-2) var(--sc-space-3);
+  min-width: 0;
+}
+
+.revRow:last-child { border-bottom: none; }
+
+/* The message is monospace because it names a change, not a thing — the same
+   reason a commit subject is monospace and a document title is not. */
+.revTitle {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.revRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  flex-shrink: 0;
+}
+
+.revWhen {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.revHash {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-support);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-sm);
+  padding: 2px 6px;
+}
+
+/* ── Status panel ──────────────────────────────────────────────────────────
+   Facts in the order a reviewer needs them: is it live anywhere, does it pass,
+   will it collide, is it even finished — and only then a button. */
+
+.status {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.statusDone { border-color: rgba(217, 78, 182, 0.4); }
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+}
+
+.statusMark {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.statusText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.statusTitle {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+}
+
+.statusNote {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+}
+
+.statusLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--sc-fast);
+}
+
+.statusLink:hover { color: var(--sc-text-peak); }
+
+.statusFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  padding: var(--sc-space-3) var(--sc-space-4);
+}
+
+.decisionState {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+}
+
+.decisionActions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Checks and changed assets ─────────────────────────────────────────── */
+
+.checkList,
+.fileChangeList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+}
+
+.checkRow:last-child { border-bottom: none; }
+
+.fileChangeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  color: var(--sc-text-meta);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  min-width: 0;
+}
+
+.fileChangeRow:last-child { border-bottom: none; }
+
+.fileChangeName {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-strong);
+  flex-shrink: 0;
+}
+
+.fileChangeNote {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Composer ──────────────────────────────────────────────────────────────
+   Write and Preview are the same field seen two ways, so they are tabs on the
+   box rather than two controls beside it. */
+
+.composer {
+  display: flex;
+  gap: var(--sc-space-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.composerBox {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.composerTabs {
+  display: flex;
+  gap: var(--sc-space-1);
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-2) 0;
+}
+
+.composerTab {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--sc-space-2) var(--sc-space-3);
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.composerTab:hover { color: var(--sc-text-support); }
+
+.composerTabOn {
+  color: var(--sc-text-peak);
+  border-bottom-color: var(--sc-pink);
+}
+
+.composerField {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.7;
+  color: var(--sc-text-strong);
+  background: var(--sc-card);
+  border: none;
+  padding: var(--sc-space-3);
+}
+
+.composerField::placeholder { color: var(--sc-text-faint); }
+.composerField:focus { outline: none; background: var(--sc-card-hover); }
+
+.composerEmpty { color: var(--sc-text-faint); font-style: italic; }
+
+.composerFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  border-top: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.composerHint {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.composerActions { display: flex; gap: 6px; }
+
+/* ── Rail ──────────────────────────────────────────────────────────────────
+   Every row here is a fact with an owner, separated by hairlines rather than
+   boxed: five cards down one edge is five borders competing with the thread. */
+
+.requestRail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.railBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) 0;
+}
+
+.railBlock:first-child { padding-top: 0; }
+
+.railTitle {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  font-weight: 400;
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  margin: 0;
+}
+
+.railBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.railPerson {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+}
+
+.railName {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railValue {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+}
+
+.railEmpty {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-faint);
+}
+
+.railActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  padding-top: var(--sc-space-4);
+}
+
+.railAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--sc-fast);
+}
+
+.railAction:hover { color: var(--sc-text-peak); }

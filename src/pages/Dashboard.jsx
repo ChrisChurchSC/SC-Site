@@ -6,6 +6,7 @@ import {
   Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
   SectionNav, Segmented, Field, Input, Switch,
   Tree, Path, FileBrowser, FileView, CodeLines, MediaPreview,
+  RequestList, RequestDetail,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, RefSelect, FindField,
   LineChart, BarChart, RankedBar, Donut,
@@ -27,13 +28,18 @@ import styles from './Dashboard.module.css'
  */
 
 /* One source of truth for the tree and the browser, so a folder cannot exist
-   in the sidebar and be missing from the listing. */
+   in the sidebar and be missing from the listing.
+
+   Brand is split by the material it is made of, not by the department that
+   makes it: visual, verbal, channels, data, audio. Strategy is deliberately
+   not a sibling — it is the reason the other five look the way they do, and
+   filing it beside them makes it look like one more deliverable. */
 const FS = {
   brand: {
     label: 'Brand', icon: 'brand',
     children: {
-      design: {
-        label: 'Design', icon: 'brand', message: 'Refit the logo lockup for small sizes', when: '2h',
+      visual: {
+        label: 'Visual', icon: 'brand', message: 'Refit the logo lockup for small sizes', when: '2h',
         children: {
           'logo-lockup.fig': { message: 'Refit for small sizes', when: '2h', status: 'Live', icon: 'image' },
           'colour-tokens.json': {
@@ -68,12 +74,6 @@ telling you what they found.
 - If a sentence survives being cut, cut it.`,
           },
           'messaging-house.md': { message: 'Name the challenger brands', when: '4d', status: 'Live', icon: 'file' },
-          'launch-narrative.md': { message: 'First pass, not reviewed', when: '2d', status: 'Draft', icon: 'file' },
-        },
-      },
-      strategy: {
-        label: 'Strategy', icon: 'target', message: 'Move positioning into review', when: '1d',
-        children: {
           'positioning.md': {
             message: 'Move into review', when: '1d', status: 'Review', icon: 'file',
             text: `# Positioning
@@ -81,11 +81,10 @@ telling you what they found.
 For founders and marketing teams who need brand,
 content and product to say the same thing.
 
-Not a agency of record. A studio you bring in when
+Not an agency of record. A studio you bring in when
 the system has to outlive the engagement.`,
           },
-          'audience.md': { message: 'Split founders from marketing teams', when: '2w', status: 'Live', icon: 'file' },
-          'competitive-set.md': { message: 'Add two challengers', when: '3w', status: 'Live', icon: 'file' },
+          'launch-narrative.md': { message: 'First pass, not reviewed', when: '2d', status: 'Draft', icon: 'file' },
         },
       },
       channels: {
@@ -93,15 +92,48 @@ the system has to outlive the engagement.`,
         children: {
           'channel-matrix.md': { message: 'Draft, awaiting sign-off', when: '5d', status: 'Draft', icon: 'file' },
           'social-kit.fig': { message: 'Most-used asset this quarter', when: '6h', status: 'Live', icon: 'image' },
+          'audience.md': { message: 'Split founders from marketing teams', when: '2w', status: 'Live', icon: 'file' },
+        },
+      },
+      /* Data is part of the brand, not a report about it: the chart palette,
+         the number formats and the table rules are as much identity as the
+         logo, and they drift the moment they live somewhere else. */
+      data: {
+        label: 'Data', icon: 'chart', message: 'Cap the categorical palette at three', when: '4h',
+        children: {
+          'chart-palette.json': {
+            message: 'Cap the categorical palette at three', when: '4h', status: 'Live', icon: 'file',
+            text: `{
+  "categorical": ["#d94eb6", "#7d5ae0", "#a82a7e"],
+  "sequential":  ["#231a49", "#342767", "#4a3891", "#6a51c4", "#9b86e6"],
+  "note": "Three is the ceiling for two adjacent hues.",
+  "floors": { "cvd_delta_e": 8, "contrast": 3 }
+}`,
+          },
+          'number-formats.md': { message: 'One decimal on percentages', when: '1w', status: 'Live', icon: 'file' },
+          'table-rules.md': { message: 'Hairlines, never zebra stripes', when: '2w', status: 'Live', icon: 'file' },
+          'chart-anatomy.fig': { message: 'Marks, spacers and label rules', when: '2w', status: 'Review', icon: 'image' },
+        },
+      },
+      /* Sound is the part nobody documents until somebody has already picked
+         a stock track. It is here so there is something to point at. */
+      audio: {
+        label: 'Audio', icon: 'video', message: 'Cut the sting to 1.2s', when: '3d',
+        children: {
+          'brand-sting.wav': { message: 'Cut to 1.2s', when: '3d', status: 'Review', icon: 'video' },
+          'motion-timings.md': { message: 'Match the 0.15s UI easing', when: '1w', status: 'Live', icon: 'file' },
+          'voice-guide.md': { message: 'Read pace and warmth for VO', when: '3w', status: 'Live', icon: 'file' },
         },
       },
     },
   },
-  work: {
-    label: 'Work', icon: 'layers',
+  /* Projects is not a folder of the brand — it is what the brand is being used
+     for. It hangs off the section nav rather than the tree for that reason. */
+  projects: {
+    label: 'Projects', icon: 'layers',
     children: {
       assets: {
-        label: 'Assets', icon: 'layers', message: '38 across four disciplines', when: '2h',
+        label: 'Assets', icon: 'layers', message: '38 across five disciplines', when: '2h',
         children: {
           'exports': { message: 'PNG and SVG, all sizes', when: '2h', status: 'Live', kind: 'folder' },
           'source': { message: 'Working files', when: '2h', status: 'Live', kind: 'folder' },
@@ -115,8 +147,8 @@ the system has to outlive the engagement.`,
           'dependencies.md': { message: 'Blocked on channel sign-off', when: '1w', status: 'Review', icon: 'file' },
         },
       },
-      results: {
-        label: 'Results', icon: 'chart', message: 'Usage up 9pt this quarter', when: '3h',
+      reports: {
+        label: 'Reports', icon: 'chart', message: 'Usage up 9pt this quarter', when: '3h',
         children: {
           'usage.csv': { message: 'Usage up 9pt this quarter', when: '3h', status: 'Live', icon: 'file' },
           'adoption.csv': { message: '71% of assets in use', when: '3h', status: 'Live', icon: 'file' },
@@ -126,18 +158,24 @@ the system has to outlive the engagement.`,
   },
 }
 
-/* Tree shape derived from the same object, so the two can never disagree. */
-const TREE = Object.entries(FS).map(([key, node]) => ({
-  key,
+/* The sidebar is the brand's own tree. Projects reached the section nav instead:
+   it is a different area of the workspace, not a folder inside this one, and
+   a rail that mixes the two makes "where am I" unanswerable. */
+const TREE = [FS.brand].map((node) => ({
+  key: 'brand',
   label: node.label,
   icon: node.icon,
   children: Object.entries(node.children).map(([ck, c]) => ({
-    key: `${key}/${ck}`,
+    key: `brand/${ck}`,
     label: c.label,
     icon: c.icon,
     count: c.children ? Object.keys(c.children).length : undefined,
   })),
 }))
+
+/* Where each section starts. Files and Projects are the same browser over two
+   different roots rather than two browsers. */
+const ROOTS = { Files: ['brand', 'visual'], Projects: ['projects'] }
 
 const at = (path) =>
   path.reduce((node, seg) => node?.children?.[seg], { children: FS })
@@ -145,6 +183,226 @@ const at = (path) =>
 /* Fails quietly: copying a path is a convenience, and a thrown promise in a
    webview with no clipboard permission is worse than nothing happening. */
 const writeText = (t) => { try { navigator.clipboard?.writeText?.(t) } catch {} }
+
+/* Review requests. Each is a proposed change to an asset with its own id,
+   author, conversation and outcome — it outlives the file it changes, which
+   is exactly what a status field on a file cannot do. */
+/* Review requests. Each is a proposed change to an asset with its own id,
+   author, conversation and outcome — it outlives the file it changes, which
+   is exactly what a status field on a file cannot do.
+
+   The extra fields — revisions, checks, changed assets, a preview — exist
+   because a reviewer is answering "should this go live", and that question is
+   not answerable from a title and a thread. Where a code host would say
+   commits, checks and files, a brand workspace says revisions, checks and
+   assets: the same four questions asked of different material. */
+const REVIEWS = [
+  {
+    id: 42,
+    state: 'open',
+    title: 'Refit the logo lockup for small sizes',
+    asset: 'logo-lockup.fig',
+    base: 'v2.1 — current',
+    head: 'small-size-lockup',
+    author: 'dana',
+    opened: '2d',
+    comments: 3,
+    conflicts: false,
+    labels: ['Visual', 'Blocking'],
+    campaign: 'Q3 — Challenger positioning',
+    reviewers: [
+      { name: 'Chris Church', state: 'changes' },
+      { name: 'Ravi Menon', state: 'open' },
+    ],
+    assignees: ['Dana Cole'],
+    participants: ['Dana Cole', 'Chris Church', 'Ravi Menon'],
+    summary: 'Optical sizes below 24px lost the counter in the mark. This adds a second lockup that opens it up, and brings the wordmark spacing with it.',
+    preview: { note: 'Rendered at 16, 24, 32 and 64px against both surfaces.' },
+    revisions: [
+      { hash: 'a014ddf', title: 'Open the counter below 24px', who: 'dana', when: '2d', ok: true },
+      { hash: '7c3b901', title: 'Thin the stroke to match the new counter', who: 'dana', when: '1d', ok: true },
+      { hash: 'e88f2a6', title: 'Bring wordmark spacing up with the mark', who: 'dana', when: '4h', ok: true },
+    ],
+    checks: [
+      { name: 'Contrast', state: 'pass', note: 'Mark clears 3:1 on both surfaces at every size.', took: '4s' },
+      { name: 'Clear space', state: 'pass', note: 'Half the mark height on all four sides.', took: '2s' },
+      { name: 'Small-size legibility', state: 'pass', note: 'Counter holds at 16px.', took: '9s' },
+      { name: 'Preview build', state: 'pass', note: 'Rendered four sizes on two surfaces.', took: '31s' },
+    ],
+    files: [
+      { name: 'logo-lockup.fig', icon: 'image', note: 'Second lockup added', added: 2, removed: 0 },
+      { name: 'clear-space.md', icon: 'file', note: 'Rule restated for the small variant', added: 14, removed: 6 },
+    ],
+    timeline: [
+      { kind: 'comment', who: 'dana', when: '2d', body: 'Below 24px the counter fills in and the mark reads as a blob. This adds a small-size variant with the counter opened up and the stroke thinned.' },
+      { kind: 'pushed', who: 'dana', when: '1d', revisions: [
+        { hash: 'a014ddf', title: 'Open the counter below 24px', who: 'dana', ok: true },
+        { hash: '7c3b901', title: 'Thin the stroke to match the new counter', who: 'dana', ok: true },
+      ] },
+      { kind: 'comment', who: 'ravi', when: '1d', role: 'Reviewer', body: 'Checked it at 16px in the nav and it holds. One thing — the wordmark spacing needs to come up with it or they drift apart.' },
+      { kind: 'changes', who: 'chris', when: '1d' },
+      { kind: 'pushed', who: 'dana', when: '4h', revisions: [
+        { hash: 'e88f2a6', title: 'Bring wordmark spacing up with the mark', who: 'dana', ok: true },
+      ] },
+      { kind: 'comment', who: 'dana', when: '4h', body: 'Spacing fixed. Both lockups now share the same optical gap.' },
+    ],
+  },
+  {
+    id: 41,
+    state: 'approved',
+    title: 'Retire teal and blue from the token set',
+    asset: 'colour-tokens.json',
+    base: 'v2.1 — current',
+    head: 'retire-teal-blue',
+    author: 'chris',
+    opened: '3d',
+    comments: 2,
+    conflicts: false,
+    labels: ['Visual'],
+    campaign: null,
+    reviewers: [{ name: 'Dana Cole', state: 'approved' }],
+    assignees: ['Chris Church'],
+    participants: ['Chris Church', 'Dana Cole'],
+    summary: 'Both were declared in the token file and used nowhere. Removing them rather than finding work for them.',
+    preview: { note: 'Every surface and chart re-rendered with the two values gone.' },
+    revisions: [
+      { hash: '4b2e77c', title: 'Remove --teal and --blue', who: 'chris', when: '3d', ok: true },
+      { hash: '9df01a3', title: 'Point the two orphaned aliases at pink', who: 'chris', when: '3d', ok: true },
+    ],
+    checks: [
+      { name: 'Unused tokens', state: 'pass', note: 'No references remain anywhere in the workspace.', took: '3s' },
+      { name: 'Contrast', state: 'pass', note: 'No surface pairing changed.', took: '5s' },
+      { name: 'Preview build', state: 'pass', note: '95 pages rendered.', took: '48s' },
+    ],
+    files: [
+      { name: 'colour-tokens.json', icon: 'file', note: 'Two values removed, two aliases repointed', added: 4, removed: 18 },
+    ],
+    timeline: [
+      { kind: 'comment', who: 'chris', when: '3d', body: 'Both are declared and used nowhere — zero references across the whole workspace. Removing rather than inventing a use.' },
+      { kind: 'pushed', who: 'chris', when: '3d', revisions: [
+        { hash: '4b2e77c', title: 'Remove --teal and --blue', who: 'chris', ok: true },
+        { hash: '9df01a3', title: 'Point the two orphaned aliases at pink', who: 'chris', ok: true },
+      ] },
+      { kind: 'comment', who: 'dana', when: '2d', role: 'Reviewer', body: 'Agreed. Pink and purple carry everything we actually need, and the chart palette is the same two hues.' },
+      { kind: 'approved', who: 'dana', when: '2d' },
+    ],
+  },
+  {
+    id: 40,
+    state: 'changes',
+    title: 'Draft the channel matrix',
+    asset: 'channel-matrix.md',
+    base: 'v2.1 — current',
+    head: 'channel-matrix',
+    author: 'ravi',
+    opened: '5d',
+    comments: 1,
+    draft: true,
+    conflicts: false,
+    labels: ['Channels'],
+    campaign: 'Q3 — Challenger positioning',
+    reviewers: [{ name: 'Chris Church', state: 'changes' }],
+    assignees: [],
+    participants: ['Ravi Menon', 'Chris Church'],
+    summary: 'First pass at which message runs where. Rows are channels, columns are the three messages.',
+    preview: null,
+    revisions: [
+      { hash: '1a9c04e', title: 'First pass at the matrix', who: 'ravi', when: '5d', ok: false },
+    ],
+    checks: [
+      { name: 'Tone', state: 'fail', note: 'Two cells use category language the messaging house retired.', took: '6s' },
+      { name: 'Links', state: 'pass', note: 'All nine references resolve.', took: '2s' },
+      { name: 'Preview build', state: 'running', note: 'Queued behind two other builds.', took: '—' },
+    ],
+    files: [
+      { name: 'channel-matrix.md', icon: 'file', note: 'New file', added: 62, removed: 0 },
+    ],
+    timeline: [
+      { kind: 'comment', who: 'ravi', when: '5d', body: 'First pass. Rows are channels, columns are the three messages. Left it as a draft — the paid column is guesswork until we have the spend split.' },
+      { kind: 'changes', who: 'chris', when: '4d' },
+    ],
+  },
+  {
+    id: 38,
+    state: 'merged',
+    title: 'Name the challenger brands in the messaging house',
+    asset: 'messaging-house.md',
+    base: 'v2.0',
+    head: 'name-the-challengers',
+    author: 'dana',
+    opened: '2w',
+    comments: 4,
+    conflicts: false,
+    labels: ['Verbal'],
+    campaign: 'Q3 — Challenger positioning',
+    reviewers: [
+      { name: 'Chris Church', state: 'approved' },
+      { name: 'Ravi Menon', state: 'approved' },
+    ],
+    assignees: ['Dana Cole'],
+    participants: ['Dana Cole', 'Chris Church', 'Ravi Menon'],
+    summary: 'Replaces the abstract category language with the actual names.',
+    preview: { note: 'Published to the workspace 11 days ago.' },
+    revisions: [
+      { hash: 'c71b508', title: 'Name the four challengers', who: 'dana', when: '2w', ok: true },
+      { hash: '2e6a90d', title: 'Rewrite the proof line under each', who: 'dana', when: '12d', ok: true },
+    ],
+    checks: [
+      { name: 'Tone', state: 'pass', note: 'No retired category language remains.', took: '5s' },
+      { name: 'Links', state: 'pass', note: 'Twelve references resolve.', took: '3s' },
+      { name: 'Preview build', state: 'pass', note: 'Rendered clean.', took: '26s' },
+    ],
+    files: [
+      { name: 'messaging-house.md', icon: 'file', note: 'Category language replaced with names', added: 34, removed: 29 },
+    ],
+    timeline: [
+      { kind: 'comment', who: 'dana', when: '2w', body: 'The category language was doing no work. These are the names people actually say.' },
+      { kind: 'pushed', who: 'dana', when: '12d', revisions: [
+        { hash: 'c71b508', title: 'Name the four challengers', who: 'dana', ok: true },
+        { hash: '2e6a90d', title: 'Rewrite the proof line under each', who: 'dana', ok: true },
+      ] },
+      { kind: 'approved', who: 'chris', when: '2w' },
+      { kind: 'approved', who: 'ravi', when: '11d' },
+      { kind: 'merged', who: 'chris', when: '11d' },
+    ],
+  },
+  {
+    id: 35,
+    state: 'closed',
+    title: 'Add a third accent colour',
+    asset: 'colour-tokens.json',
+    base: 'v2.0',
+    head: 'third-accent',
+    author: 'ravi',
+    opened: '3w',
+    comments: 5,
+    conflicts: true,
+    labels: ['Visual'],
+    campaign: null,
+    reviewers: [{ name: 'Chris Church', state: 'changes' }],
+    assignees: [],
+    participants: ['Ravi Menon', 'Chris Church'],
+    summary: 'Closed — a third categorical hue fails colour-vision separation against the other two.',
+    preview: null,
+    revisions: [
+      { hash: 'f30c6b1', title: 'Add --accent-3 at three candidate values', who: 'ravi', when: '3w', ok: false },
+    ],
+    checks: [
+      { name: 'Colour-vision separation', state: 'fail', note: 'ΔE 2.5 against pink under protanopia — the floor is 8.', took: '7s' },
+      { name: 'Lightness band', state: 'fail', note: 'Every separating value sits at L 0.75 or above.', took: '4s' },
+      { name: 'Contrast', state: 'pass', note: 'Clears 3:1 on the dark surface.', took: '4s' },
+    ],
+    files: [
+      { name: 'colour-tokens.json', icon: 'file', note: 'Three candidate values, none passing', added: 9, removed: 0 },
+    ],
+    timeline: [
+      { kind: 'comment', who: 'ravi', when: '3w', body: 'Three series in a chart is tight. Proposing a third accent.' },
+      { kind: 'comment', who: 'chris', when: '3w', role: 'Reviewer', body: 'Ran it through the validator. Every value that separates cleanly leaves the lightness band, and every value inside the band fails the adjacent-pair check. Three is the ceiling for two adjacent hues.' },
+      { kind: 'closed', who: 'chris', when: '3w' },
+    ],
+  },
+]
+
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -157,8 +415,11 @@ export default function Dashboard() {
   })
 
   const { collapsed, toggle } = useSidebar()
-  const [path, setPath] = useState(['brand', 'design'])
+  const [path, setPath] = useState(ROOTS.Files)
   const [tab, setTab] = useState('Files')
+  /* Files and Projects are the same browser over two roots. One flag rather than
+     two copies of every listing condition. */
+  const browsing = tab === 'Files' || tab === 'Projects'
   const [version, setVersion] = useState('v2.1 — current')
   const [search, setSearch] = useState('')
   const [find, setFind] = useState('')
@@ -168,6 +429,9 @@ export default function Dashboard() {
   const [autoReview, setAutoReview] = useState(true)
   const [file, setFile] = useState(null)
   const [fileView, setFileView] = useState('Preview')
+  const [reviews, setReviews] = useState(REVIEWS)
+  const [reviewId, setReviewId] = useState(null)
+  const [reviewFilter, setReviewFilter] = useState('open')
 
   const node = at(path)
   const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
@@ -186,6 +450,47 @@ export default function Dashboard() {
     .filter((e) => !find || e.name.toLowerCase().includes(find.toLowerCase())
       || (e.message ?? '').toLowerCase().includes(find.toLowerCase()))
     .filter((e) => tab !== 'Reviews' || (e.status && e.status !== 'Live'))
+
+  /* Open and closed are two questions, not one list with a filter chip:
+     "what needs me" and "what happened". Approved and changes-requested are
+     still open — a decision has been given but the work has not landed. */
+  const isOpen = (r) => r.state === 'open' || r.state === 'approved' || r.state === 'changes'
+  const reviewCounts = {
+    open: reviews.filter(isOpen).length,
+    closed: reviews.filter((r) => !isOpen(r)).length,
+  }
+  const visibleReviews = reviews.filter((r) => (reviewFilter === 'open' ? isOpen(r) : !isOpen(r)))
+  const openReview = reviews.find((r) => r.id === reviewId) ?? null
+
+  /* Acting on a review writes to the timeline as well as the state, so the
+     record of who decided what survives the decision itself. Marking a draft
+     ready is the one action that leaves the state alone — it only clears the
+     flag that was blocking the decision. */
+  const act = (kind) => {
+    setReviews((rs) => rs.map((r) => {
+      if (r.id !== reviewId) return r
+      const timeline = [...r.timeline, { kind, who: 'chris', when: 'just now' }]
+      if (kind === 'ready') return { ...r, draft: false, timeline }
+      if (kind === 'reopened') return { ...r, state: 'open', timeline }
+      const state = kind === 'closed' ? 'closed' : kind
+      const reviewers = ['approved', 'changes'].includes(kind)
+        ? (r.reviewers ?? []).map((p) => (p.name === 'Chris Church' ? { ...p, state: kind } : p))
+        : r.reviewers
+      return { ...r, state, reviewers, timeline }
+    }))
+  }
+
+  /* A comment does not change the outcome, only the record — and the count on
+     the row, which is the one number people scan the queue by. */
+  const comment = (body) => {
+    setReviews((rs) => rs.map((r) => (r.id === reviewId
+      ? {
+          ...r,
+          comments: (r.comments ?? 0) + 1,
+          timeline: [...r.timeline, { kind: 'comment', who: 'chris', when: 'just now', body }],
+        }
+      : r)))
+  }
 
   const label = (segs) => segs.map((seg, i) => at(segs.slice(0, i + 1))?.label ?? seg)
 
@@ -229,8 +534,8 @@ export default function Dashboard() {
           <Tree
             nodes={TREE}
             activeKey={path.join('/')}
-            defaultOpen={['brand', 'work']}
-            onSelect={(n) => { setPath(n.key.split('/')); setFile(null) }}
+            defaultOpen={['brand']}
+            onSelect={(n) => { setPath(n.key.split('/')); setFile(null); setTab('Files') }}
           />
         )}
         {collapsed && (
@@ -264,20 +569,55 @@ export default function Dashboard() {
               this is a SectionNav and the row beneath it is not. */}
           <SectionNav
             value={tab}
-            onChange={setTab}
+            onChange={(t) => {
+              setTab(t)
+              setReviewId(null)
+              setFile(null)
+              /* Files and Projects are the same browser over two roots, so moving
+                 between them moves the path rather than swapping components. */
+              if (ROOTS[t]) setPath(ROOTS[t])
+            }}
             sections={[
               { key: 'Files', label: 'Files', icon: 'folder' },
-              { key: 'Reviews', label: 'Reviews', icon: 'clock', count: 3 },
+              { key: 'Reviews', label: 'Reviews', icon: 'request', count: reviewCounts.open },
+              { key: 'Projects', label: 'Projects', icon: 'layers', count: 3 },
               { key: 'Activity', label: 'Activity', icon: 'refresh' },
               { key: 'Results', label: 'Results', icon: 'chart' },
               { key: 'Settings', label: 'Settings', icon: 'sliders' },
             ]}
           />
 
+          {tab === 'Reviews' && !openReview && (
+            <RequestList
+              requests={visibleReviews}
+              filter={reviewFilter}
+              onFilter={setReviewFilter}
+              counts={reviewCounts}
+              onOpen={(r) => setReviewId(r.id)}
+            />
+          )}
+
+          {tab === 'Reviews' && openReview && (
+            <RequestDetail
+              request={openReview}
+              path={['Reviews', `#${openReview.id}`]}
+              onNavigate={() => setReviewId(null)}
+              onApprove={() => act('approved')}
+              onRequestChanges={() => act('changes')}
+              onPublish={() => act('merged')}
+              onClose={() => act('closed')}
+              onReopen={() => act('reopened')}
+              onReady={() => act('ready')}
+              onComment={comment}
+            >
+              <p className={styles.reviewSummary}>{openReview.summary}</p>
+            </RequestDetail>
+          )}
+
           {/* Hidden while a file is open: the file view carries its own path,
               and two breadcrumbs stacked is the same location said twice. The
               version and filter belong to the listing, which isn't on screen. */}
-          {(tab === 'Files' || tab === 'Reviews') && !file && (
+          {browsing && !file && (
             <div className={styles.bar}>
               <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
               <span className={styles.barTools}>
@@ -299,7 +639,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {!dismissed && (
+          {browsing && !file && !dismissed && (
             /* Sits directly above the listing it is about, rather than in the
                middle of the chrome where it separated the controls from the
                thing they control. Neutral rather than amber: colour is the
@@ -310,7 +650,7 @@ export default function Dashboard() {
             </Banner>
           )}
 
-          {(tab === 'Files' || tab === 'Reviews') && file && (
+          {browsing && file && (
             <FileView
               path={['Workspace', ...label(path), file]}
               /* The last segment is the file, so navigating to any earlier one
@@ -357,7 +697,7 @@ export default function Dashboard() {
             </FileView>
           )}
 
-          {(tab === 'Files' || tab === 'Reviews') && !file && (
+          {browsing && !file && (
             <div className={styles.split}>
               <FileBrowser
                 onOpen={open}
@@ -378,8 +718,8 @@ export default function Dashboard() {
                   action={<IconButton icon="sliders" label="Workspace settings" size={13} />}
                 >
                   <p className={styles.asideText}>
-                    The brand system for Super Conscious — identity, voice, strategy
-                    and the channels they run on.
+                    The brand system for Super Conscious — what it looks like,
+                    sounds like, says, charts and runs on.
                   </p>
                   <div className={styles.facts}>
                     {/* Counts that used to sit in the toolbar dressed as
@@ -395,10 +735,11 @@ export default function Dashboard() {
                 <CompositionBar
                   title="Composition"
                   segments={[
-                    { label: 'Design', value: 14 },
+                    { label: 'Visual', value: 14 },
                     { label: 'Verbal', value: 9 },
-                    { label: 'Strategy', value: 6 },
-                    { label: 'Channels', value: 2 },
+                    { label: 'Data', value: 7 },
+                    { label: 'Channels', value: 5 },
+                    { label: 'Audio', value: 3 },
                   ]}
                 />
 
@@ -457,7 +798,7 @@ export default function Dashboard() {
                     <LineChart
                       labels={MONTHS} unit="uses" max={100} target={60}
                       series={[
-                        { label: 'Design', data: [12, 18, 22, 28, 31, 38, 42, 49, 54, 61, 68, 74] },
+                        { label: 'Visual', data: [12, 18, 22, 28, 31, 38, 42, 49, 54, 61, 68, 74] },
                         { label: 'Verbal', data: [6, 9, 11, 14, 18, 21, 26, 29, 33, 38, 41, 47] },
                       ]}
                     />
@@ -468,10 +809,11 @@ export default function Dashboard() {
                     <Donut
                       centre="38"
                       data={[
-                        { label: 'Design', value: 14 },
+                        { label: 'Visual', value: 14 },
                         { label: 'Verbal', value: 9 },
-                        { label: 'Strategy', value: 6 },
-                        { label: 'Channels', value: 2 },
+                        { label: 'Data', value: 7 },
+                        { label: 'Channels', value: 5 },
+                        { label: 'Audio', value: 3 },
                       ]}
                     />
                   </Panel>
