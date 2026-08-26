@@ -1261,6 +1261,7 @@ function SliderControl() {
   )
 }
 
+
 /* ── Data grid (NEW) ─────────────────────────────────────────────────────────
  *
  * A spreadsheet is not a styled table — it is a different instrument, and the
@@ -1269,126 +1270,357 @@ function SliderControl() {
  *   - Cell rules on both axes. A reading table drops vertical rules because
  *     prose has a natural left edge; a grid needs them, because a cell is
  *     addressed by column as much as by row.
- *   - A row gutter with numbers, so a row can be referred to out loud.
- *   - Numerics right-aligned in mono with tabular figures, so digits stack in
- *     columns and magnitude is visible as length.
- *   - A totals row pinned at the bottom, ruled off from the data.
- *   - A selected cell with a visible ring, because the thing you are looking
- *     at and the thing you would edit must be the same thing.
+ *   - A numbered row gutter, so a row can be named out loud.
+ *   - Numerics right-aligned in mono with tabular figures, so digits stack and
+ *     magnitude reads as length.
+ *   - Frozen header and first column, so the thing you are reading never loses
+ *     the labels that say what it is.
+ *   - A formula bar: the address and the value of the current cell, always.
+ *   - Aggregations that follow the filter, not the data — a total that ignores
+ *     the filter above it is worse than no total.
  *
- * Sorting is real. Selection is real. Nothing is wired to a backend.
+ * Everything here is operable by keyboard: arrows move, shift+arrows extend a
+ * range, Enter edits, Escape cancels, Cmd/Ctrl+C copies the selection as TSV
+ * so it pastes straight into a real spreadsheet. Nothing is wired to a backend.
  */
-const GRID_ROWS = [
-  ['Talos', 'Brand', 2026, 84000, 0.34, 'Live'],
-  ['Transcend', 'Content', 2026, 61000, 0.22, 'Live'],
-  ['Photon', 'Product', 2025, 70500, 0.28, 'Done'],
-  ['Heard', 'Brand', 2025, 42000, 0.16, 'Done'],
-  ['Hylands', 'Content', 2026, 33500, 0.12, 'Draft'],
-  ['Nimruz', 'Product', 2024, 28000, 0.09, 'Done'],
+
+const COLS = [
+  { key: 'client', label: 'Client', type: 'text', w: 128, frozen: true },
+  { key: 'lead', label: 'Lead', type: 'person', w: 116 },
+  { key: 'disc', label: 'Discipline', type: 'text', w: 104 },
+  { key: 'year', label: 'Year', type: 'num', w: 62 },
+  { key: 'fee', label: 'Fee', type: 'money', w: 106, bar: true },
+  { key: 'share', label: 'Share', type: 'pct', w: 92, scale: true },
+  { key: 'trend', label: 'Trend', type: 'spark', w: 84 },
+  { key: 'status', label: 'Status', type: 'status', w: 96 },
 ]
 
-const GRID_COLS = [
-  { key: 0, label: 'Client', type: 'text', w: '1.4fr' },
-  { key: 1, label: 'Discipline', type: 'text', w: '1.1fr' },
-  { key: 2, label: 'Year', type: 'num', w: '0.7fr' },
-  { key: 3, label: 'Fee', type: 'money', w: '1fr' },
-  { key: 4, label: 'Share', type: 'pct', w: '0.9fr' },
-  { key: 5, label: 'Status', type: 'status', w: '0.9fr' },
+const ROWS = [
+  { client: 'Talos', lead: 'Chris Church', disc: 'Brand', year: 2026, fee: 84000, share: 0.24, status: 'Live', trend: [30, 38, 41, 52, 58, 61] },
+  { client: 'Transcend', lead: 'Dana Cole', disc: 'Content', year: 2026, fee: 61000, share: 0.17, status: 'Live', trend: [22, 26, 24, 31, 36, 44] },
+  { client: 'Photon', lead: 'Ravi Menon', disc: 'Product', year: 2025, fee: 70500, share: 0.20, status: 'Done', trend: [40, 44, 41, 38, 36, 33] },
+  { client: 'Heard', lead: 'Dana Cole', disc: 'Brand', year: 2025, fee: 42000, share: 0.12, status: 'Done', trend: [18, 22, 26, 25, 27, 29] },
+  { client: 'Hylands', lead: 'Chris Church', disc: 'Content', year: 2026, fee: 33500, share: 0.09, status: 'Draft', trend: [8, 11, 14, 16, 19, 24] },
+  { client: 'Nimruz', lead: 'Ravi Menon', disc: 'Product', year: 2024, fee: 28000, share: 0.08, status: 'Done', trend: [26, 24, 21, 19, 16, 14] },
+  { client: 'Print Parlor', lead: 'Dana Cole', disc: 'Brand', year: 2024, fee: 19500, share: 0.06, status: 'Done', trend: [14, 13, 12, 12, 11, 10] },
+  { client: 'Big Buoy', lead: 'Chris Church', disc: 'Motion', year: 2026, fee: 15000, share: 0.04, status: 'Draft', trend: [4, 6, 9, 12, 15, 19] },
 ]
 
-const fmt = (v, type) => {
+const AGGS = ['sum', 'avg', 'max', 'count']
+
+function gridFmt(v, type) {
+  if (v === undefined || v === null) return ''
   if (type === 'money') return `$${v.toLocaleString()}`
   if (type === 'pct') return `${(v * 100).toFixed(1)}%`
   return String(v)
 }
 
-function DataGrid() {
-  const [sort, setSort] = useState({ col: 3, dir: 'desc' })
-  const [sel, setSel] = useState({ r: 0, c: 0 })
-  const [picked, setPicked] = useState([0])
-  const [dense, setDense] = useState(false)
+const colLetter = (i) => String.fromCharCode(65 + i)
 
-  const rows = [...GRID_ROWS].sort((a, b) => {
-    const x = a[sort.col], y = b[sort.col]
+function DataGrid() {
+  const [sort, setSort] = useState({ key: 'fee', dir: 'desc' })
+  const [sel, setSel] = useState({ r: 0, c: 0 })
+  const [anchor, setAnchor] = useState({ r: 0, c: 0 })
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState('')
+  const [data, setData] = useState(ROWS)
+  const [picked, setPicked] = useState([])
+  const [dense, setDense] = useState(false)
+  const [filters, setFilters] = useState({})
+  const [aggs, setAggs] = useState({ fee: 'sum', share: 'sum', year: 'max' })
+  const [hidden, setHidden] = useState([])
+  const [copied, setCopied] = useState(false)
+  const gridRef = useRef(null)
+
+  const cols = COLS.filter((c) => !hidden.includes(c.key))
+
+  // Filter first, then sort — the order the reader assumes, and the order the
+  // aggregations below depend on.
+  const filtered = data.filter((row) =>
+    Object.entries(filters).every(([k, q]) =>
+      !q || String(row[k]).toLowerCase().includes(q.toLowerCase())))
+
+  const rows = [...filtered].sort((a, b) => {
+    const x = a[sort.key], y = b[sort.key]
     const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
     return sort.dir === 'asc' ? cmp : -cmp
   })
 
-  const total = rows.reduce((a, r) => a + r[3], 0)
-  const template = `34px ${GRID_COLS.map((c) => c.w).join(' ')}`
+  const range = {
+    r0: Math.min(sel.r, anchor.r), r1: Math.max(sel.r, anchor.r),
+    c0: Math.min(sel.c, anchor.c), c1: Math.max(sel.c, anchor.c),
+  }
+  const inRange = (r, c) => r >= range.r0 && r <= range.r1 && c >= range.c0 && c <= range.c1
+  const multi = range.r0 !== range.r1 || range.c0 !== range.c1
 
-  const toggleRow = (i) =>
-    setPicked((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]))
+  const move = (dr, dc, extend) => {
+    const r = Math.max(0, Math.min(rows.length - 1, sel.r + dr))
+    const c = Math.max(0, Math.min(cols.length - 1, sel.c + dc))
+    setSel({ r, c })
+    if (!extend) setAnchor({ r, c })
+  }
+
+  const commit = () => {
+    const col = cols[sel.c]
+    if (['text', 'person'].includes(col.type)) {
+      const key = rows[sel.r].client
+      setData((d) => d.map((row) => (row.client === key ? { ...row, [col.key]: draft } : row)))
+    } else if (['num', 'money'].includes(col.type)) {
+      const n = Number(draft.replace(/[^0-9.-]/g, ''))
+      if (!Number.isNaN(n)) {
+        const key = rows[sel.r].client
+        setData((d) => d.map((row) => (row.client === key ? { ...row, [col.key]: n } : row)))
+      }
+    }
+    setEditing(false)
+  }
+
+  const copyRange = () => {
+    const tsv = []
+    for (let r = range.r0; r <= range.r1; r++) {
+      const line = []
+      for (let c = range.c0; c <= range.c1; c++) {
+        const col = cols[c]
+        line.push(col.type === 'spark' ? rows[r][col.key].join(' ') : gridFmt(rows[r][col.key], col.type))
+      }
+      tsv.push(line.join('\t'))
+    }
+    writeToClipboard(tsv.join('\n'))
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1400)
+  }
+
+  const onKey = (e) => {
+    if (editing) {
+      if (e.key === 'Enter') { e.preventDefault(); commit(); move(1, 0) }
+      if (e.key === 'Escape') { e.preventDefault(); setEditing(false) }
+      return
+    }
+    const k = e.key
+    if (k === 'ArrowDown') { e.preventDefault(); move(1, 0, e.shiftKey) }
+    else if (k === 'ArrowUp') { e.preventDefault(); move(-1, 0, e.shiftKey) }
+    else if (k === 'ArrowRight' || k === 'Tab') { e.preventDefault(); move(0, 1, e.shiftKey && k !== 'Tab') }
+    else if (k === 'ArrowLeft') { e.preventDefault(); move(0, -1, e.shiftKey) }
+    else if (k === 'Enter') {
+      e.preventDefault()
+      const col = cols[sel.c]
+      if (['text', 'person', 'num', 'money'].includes(col.type)) {
+        setDraft(String(rows[sel.r][col.key]))
+        setEditing(true)
+      }
+    } else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'c') { e.preventDefault(); copyRange() }
+  }
+
+  const aggValue = (col) => {
+    const mode = aggs[col.key]
+    if (!mode) return ''
+    const vals = rows.map((r) => r[col.key]).filter((v) => typeof v === 'number')
+    if (mode === 'count') return String(rows.length)
+    if (!vals.length) return ''
+    const n = mode === 'sum' ? vals.reduce((a, b) => a + b, 0)
+      : mode === 'avg' ? vals.reduce((a, b) => a + b, 0) / vals.length
+      : Math.max(...vals)
+    return gridFmt(col.type === 'pct' ? n : Math.round(n), col.type)
+  }
+
+  const cycleAgg = (key) =>
+    setAggs((a) => {
+      const i = AGGS.indexOf(a[key])
+      return { ...a, [key]: i === AGGS.length - 1 ? undefined : AGGS[i + 1] ?? AGGS[0] }
+    })
+
+  const maxFee = Math.max(...rows.map((r) => r.fee), 1)
+  const template = `30px ${cols.map((c) => `${c.w}px`).join(' ')}`
+  const curCol = cols[sel.c]
+  const curVal = rows[sel.r]
+    ? (curCol.type === 'spark' ? rows[sel.r][curCol.key].join(', ') : gridFmt(rows[sel.r][curCol.key], curCol.type))
+    : ''
 
   return (
     <div className={styles.gridWrap}>
+      {/* Toolbar */}
       <div className={styles.gridBar}>
         <span className={styles.gridCount}>
-          {rows.length} rows · {picked.length} selected
+          {rows.length} of {data.length} rows
+          {picked.length > 0 && ` · ${picked.length} selected`}
+          {multi && ` · ${(range.r1 - range.r0 + 1)}×${(range.c1 - range.c0 + 1)} range`}
         </span>
         <div className={styles.gridBarRight}>
+          <button type="button" className={styles.tableToggle} onClick={copyRange}>
+            {copied ? 'Copied TSV' : 'Copy'}
+          </button>
           <button type="button" className={styles.tableToggle} onClick={() => setDense((d) => !d)}>
             {dense ? 'Comfortable' : 'Compact'}
           </button>
         </div>
       </div>
 
+      {/* Formula bar — the address and value of the current cell, always. */}
+      <div className={styles.formulaBar}>
+        <span className={styles.formulaAddr}>{colLetter(sel.c)}{sel.r + 1}</span>
+        <span className={styles.formulaDivider} />
+        <span className={styles.formulaVal}>{curVal}</span>
+        <span className={styles.formulaType}>{curCol.type}</span>
+      </div>
+
+      {/* Column visibility */}
+      <div className={styles.colToggles}>
+        {COLS.map((c) => (
+          <button
+            key={c.key}
+            type="button"
+            aria-pressed={!hidden.includes(c.key)}
+            className={`${styles.colToggle} ${hidden.includes(c.key) ? styles.colToggleOff : ''}`}
+            onClick={() => setHidden((h) => (h.includes(c.key) ? h.filter((x) => x !== c.key) : [...h, c.key]))}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
       <div className={styles.gridScroll}>
         <div
+          ref={gridRef}
           className={`${styles.grid} ${dense ? styles.gridDense : ''}`}
           style={{ gridTemplateColumns: template }}
           role="grid"
+          tabIndex={0}
+          onKeyDown={onKey}
         >
-          {/* Header. The gutter cell stays empty — it addresses rows, not data. */}
-          <div className={`${styles.gCell} ${styles.gHead} ${styles.gGutter}`} />
-          {GRID_COLS.map((c) => (
+          {/* Header — sticky, with a select-all in the gutter. */}
+          <button
+            type="button"
+            className={`${styles.gCell} ${styles.gHead} ${styles.gGutter} ${styles.gFrozen}`}
+            onClick={() => setPicked(picked.length === rows.length ? [] : rows.map((_, i) => i))}
+            aria-label="Select all rows"
+          >
+            {picked.length === rows.length && rows.length > 0 ? '−' : '+'}
+          </button>
+          {cols.map((c, ci) => (
             <button
               key={c.key}
               type="button"
-              className={`${styles.gCell} ${styles.gHead} ${c.type !== 'text' && c.type !== 'status' ? styles.gNum : ''}`}
-              onClick={() => setSort((s) => ({ col: c.key, dir: s.col === c.key && s.dir === 'desc' ? 'asc' : 'desc' }))}
-              aria-sort={sort.col === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              className={[
+                styles.gCell, styles.gHead,
+                c.frozen ? styles.gFrozenCol : '',
+                ['num', 'money', 'pct'].includes(c.type) ? styles.gNum : '',
+              ].join(' ')}
+              style={c.frozen ? { left: 30 } : undefined}
+              onClick={() => setSort((s) => ({ key: c.key, dir: s.key === c.key && s.dir === 'desc' ? 'asc' : 'desc' }))}
+              aria-sort={sort.key === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
             >
               {c.label}
-              <span className={styles.gSort}>
-                {sort.col === c.key ? (sort.dir === 'desc' ? '↓' : '↑') : ''}
-              </span>
+              <span className={styles.gSort}>{sort.key === c.key ? (sort.dir === 'desc' ? '↓' : '↑') : ''}</span>
             </button>
           ))}
 
+          {/* Filter row */}
+          <div className={`${styles.gCell} ${styles.gFilterCell} ${styles.gGutter} ${styles.gFrozen}`}>
+            <Icon name="filter" size={11} />
+          </div>
+          {cols.map((c) => (
+            <div
+              key={c.key}
+              className={`${styles.gCell} ${styles.gFilterCell} ${c.frozen ? styles.gFrozenCol : ''}`}
+              style={c.frozen ? { left: 30 } : undefined}
+            >
+              {c.type === 'spark' ? null : (
+                <input
+                  className={styles.gFilterInput}
+                  value={filters[c.key] ?? ''}
+                  onChange={(e) => setFilters((f) => ({ ...f, [c.key]: e.target.value }))}
+                  placeholder="—"
+                  aria-label={`Filter ${c.label}`}
+                />
+              )}
+            </div>
+          ))}
+
+          {/* Body */}
           {rows.map((row, r) => (
-            <Fragment key={row[0]}>
+            <Fragment key={row.client}>
               <button
                 type="button"
-                className={`${styles.gCell} ${styles.gGutter} ${picked.includes(r) ? styles.gGutterOn : ''}`}
-                onClick={() => toggleRow(r)}
+                className={`${styles.gCell} ${styles.gGutter} ${styles.gFrozen} ${picked.includes(r) ? styles.gGutterOn : ''}`}
+                onClick={() => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]))}
                 aria-label={`Select row ${r + 1}`}
               >
                 {r + 1}
               </button>
-              {GRID_COLS.map((c) => {
-                const isSel = sel.r === r && sel.c === c.key
-                const numeric = c.type === 'money' || c.type === 'pct' || c.type === 'num'
+              {cols.map((c, ci) => {
+                const isSel = sel.r === r && sel.c === ci
+                const numeric = ['num', 'money', 'pct'].includes(c.type)
                 return (
                   <div
                     key={c.key}
                     role="gridcell"
-                    tabIndex={0}
+                    aria-selected={isSel}
                     className={[
                       styles.gCell,
                       numeric ? styles.gNum : '',
+                      c.frozen ? styles.gFrozenCol : '',
                       isSel ? styles.gSel : '',
+                      !isSel && inRange(r, ci) ? styles.gInRange : '',
                       picked.includes(r) ? styles.gRowOn : '',
                     ].join(' ')}
-                    onClick={() => setSel({ r, c: c.key })}
-                    onFocus={() => setSel({ r, c: c.key })}
+                    style={c.frozen ? { left: 30 } : undefined}
+                    onMouseDown={(e) => {
+                      setSel({ r, c: ci })
+                      if (!e.shiftKey) setAnchor({ r, c: ci })
+                      gridRef.current?.focus()
+                    }}
+                    onDoubleClick={() => {
+                      if (['text', 'person', 'num', 'money'].includes(c.type)) {
+                        setDraft(String(row[c.key])); setEditing(true)
+                      }
+                    }}
                   >
-                    {c.type === 'status' ? (
-                      <span className={`${styles.gPill} ${row[5] === 'Live' ? styles.gPillOn : row[5] === 'Draft' ? styles.gPillDraft : ''}`}>
-                        {row[5]}
+                    {isSel && editing ? (
+                      <input
+                        autoFocus
+                        className={styles.gEdit}
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        onBlur={commit}
+                        aria-label="Edit cell"
+                      />
+                    ) : c.type === 'status' ? (
+                      <span className={`${styles.gPill} ${row.status === 'Live' ? styles.gPillOn : row.status === 'Draft' ? styles.gPillDraft : ''}`}>
+                        {row.status}
+                      </span>
+                    ) : c.type === 'person' ? (
+                      <span className={styles.gPerson}>
+                        <Avatar name={row.lead} size={16} />
+                        {row.lead.split(' ')[0]}
+                      </span>
+                    ) : c.type === 'spark' ? (
+                      <svg viewBox="0 0 60 16" className={styles.gSpark} aria-hidden="true">
+                        <path
+                          d={row.trend.map((v, i) => {
+                            const mx = Math.max(...row.trend)
+                            return `${i ? 'L' : 'M'}${i * 12},${14 - (v / mx) * 12}`
+                          }).join(' ')}
+                          fill="none"
+                          stroke={row.trend[5] >= row.trend[0] ? 'var(--s1)' : 'var(--s2)'}
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    ) : c.bar ? (
+                      /* Data bar behind the figure — magnitude without a
+                         separate chart, and the number stays exact. */
+                      <>
+                        <span className={styles.gBar} style={{ width: `${(row.fee / maxFee) * 100}%` }} />
+                        <span className={styles.gBarVal}>{gridFmt(row.fee, c.type)}</span>
+                      </>
+                    ) : c.scale ? (
+                      <span
+                        className={styles.gScale}
+                        style={{ background: `var(--q${Math.min(5, Math.max(1, Math.round(row.share * 20)))})` }}
+                      >
+                        {gridFmt(row.share, c.type)}
                       </span>
                     ) : (
-                      fmt(row[c.key], c.type)
+                      gridFmt(row[c.key], c.type)
                     )}
                   </div>
                 )
@@ -1396,24 +1628,41 @@ function DataGrid() {
             </Fragment>
           ))}
 
-          {/* Totals, ruled off. A total that scrolls away with the data is a
-              total nobody reads. */}
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gGutter}`}>Σ</div>
-          <div className={`${styles.gCell} ${styles.gFoot}`}>Total</div>
-          <div className={`${styles.gCell} ${styles.gFoot}`} />
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`} />
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`}>${total.toLocaleString()}</div>
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`}>100.0%</div>
-          <div className={`${styles.gCell} ${styles.gFoot}`} />
+          {/* Aggregations — click a footer cell to cycle sum / avg / max /
+              count / none. They follow the filter, not the raw data. */}
+          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gGutter} ${styles.gFrozen}`}>Σ</div>
+          {cols.map((c) => {
+            const has = ['num', 'money', 'pct'].includes(c.type)
+            return (
+              <button
+                key={c.key}
+                type="button"
+                className={[
+                  styles.gCell, styles.gFoot,
+                  c.frozen ? styles.gFrozenCol : '',
+                  has ? styles.gNum : '',
+                  has ? '' : styles.gFootMuted,
+                ].join(' ')}
+                style={c.frozen ? { left: 30 } : undefined}
+                onClick={() => has && cycleAgg(c.key)}
+                title={has ? 'Cycle aggregation' : undefined}
+              >
+                {has ? (
+                  <>
+                    <span className={styles.gAggMode}>{aggs[c.key] ?? '—'}</span>
+                    <span>{aggValue(c)}</span>
+                  </>
+                ) : c.frozen ? 'Total' : ''}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       <div className={styles.gridFoot}>
         <span className={styles.gridCell}>
-          Cell {String.fromCharCode(65 + sel.c)}{sel.r + 1} ·{' '}
-          {GRID_COLS[sel.c].type === 'status'
-            ? rows[sel.r][5]
-            : fmt(rows[sel.r][GRID_COLS[sel.c].key], GRID_COLS[sel.c].type)}
+          Arrows move · Shift+arrows extend · Enter edits · Esc cancels ·
+          {' '}{navigator.platform?.includes('Mac') ? '⌘' : 'Ctrl+'}C copies as TSV
         </span>
       </div>
     </div>
@@ -4366,7 +4615,7 @@ export default function DesignSystem() {
           </p>
           <div className={styles.demoStack}>
             <Demo label="Spreadsheet grid" status="NEW" wide stage={false}
-              note="Rules on both axes, a numbered gutter, tabular figures, a selected cell with a ring, and a compact mode for when the row count outgrows the reading. Sorting and selection are real; nothing is wired to a backend.">
+              note="Click a cell, then use the keyboard: arrows move, shift+arrows extend a range, Enter edits, Escape cancels, Cmd/Ctrl+C copies the selection as TSV — it pastes straight into a real spreadsheet. Double-click also edits. Filter row under the header, aggregations that follow the filter rather than the raw data, frozen header and first column, and column toggles that strike out rather than remove.">
               <DataGrid />
             </Demo>
           </div>
