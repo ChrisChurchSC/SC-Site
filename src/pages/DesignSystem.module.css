@@ -3236,6 +3236,265 @@
   color: rgba(255, 80, 80, 0.8);
 }
 
+/* ── Icons ───────────────────────────────────────────────────────────────────
+   Stroke-based and inheriting currentColor, so an icon takes the colour of the
+   text beside it. 1.25px matches the hairline the rest of the system uses;
+   butt caps and miter joins keep every terminal square. */
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 8px 12px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconCell:hover {
+  background: #1c1c1c;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.iconName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  word-break: break-all;
+}
+
+.iconUses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* A 16px mark still needs a 32px target — the icon is what you see, not what
+   you have to hit. */
+.iconOnly {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconOnly:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.iconStatuses {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.iconStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.isGood { color: rgba(190, 220, 150, 0.9); }
+.isWarn { color: #bd842c; }
+.isBad  { color: rgba(255, 80, 80, 0.85); }
+
+.iconSizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.iconSizeCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.iconSizeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Composed form ── */
+
+.formDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.formLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 0;
+}
+
+/* Optional is marked; required is the default. Fewer marks, less noise. */
+.formOptional {
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Help and error share this slot, so the row cannot change height when
+   validation fires and push everything below it down. */
+.formHelp {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.3);
+  min-height: 13px;
+}
+
+.formDemo .fieldContact,
+.formDemo .fieldTextarea {
+  max-width: none;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.errSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 80, 80, 0.07);
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  border-radius: 3px;
+  padding: 14px 16px;
+}
+
+.errSummaryTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 80, 80, 0.9);
+}
+
+.errList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.errLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.errLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.formNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
 /* ── Navigation ── */
 
 .navCardDemo {
@@ -3393,6 +3652,218 @@
 .pageBtnOn:hover {
   color: #0a0a0a;
   background: #fff;
+}
+
+/* ── Composed navigation ── */
+
+.navStage {
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 14px;
+  width: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sidebarGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebarHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 5px;
+}
+
+.sidebarTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.sidebarCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebarItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: left;
+  padding: 7px 6px;
+  border-radius: 2px;
+  border-left: 1px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.sidebarItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Active carries a rule as well as brightness — aria-current announces it,
+   and the rule means it isn't colour alone. */
+.sidebarItemOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(255, 255, 255, 0.85);
+}
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.paletteBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.paletteHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+
+.paletteInput {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.paletteInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.paletteList {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  min-height: 108px;
+}
+
+.paletteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 9px;
+  border-radius: 2px;
+}
+
+.paletteRowOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.paletteEnter {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.paletteEmpty {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 12px 9px;
+}
+
+/* Off-screen until focused — the standard skip-link treatment. Not
+   display:none, which would take it out of the tab order entirely and defeat
+   the purpose. */
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.skipLink:focus {
+  position: static;
+  left: auto;
+}
+
+.footerNav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.footerHead {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footerLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s;
+}
+
+.footerLink:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ── Grids ── */
@@ -3949,6 +4420,10 @@
   .texRow {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .iconGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -4036,8 +4511,17 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .iconGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
   .stepRail {
     gap: 16px;
+  }
+
+  .formRow,
+  .footerNav {
+    grid-template-columns: 1fr;
   }
 
   .ctaBand {

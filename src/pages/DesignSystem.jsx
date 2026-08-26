@@ -508,7 +508,241 @@ function SearchField() {
   )
 }
 
+/* ── Icons (NEW) ─────────────────────────────────────────────────────────────
+ *
+ * The site ships lucide-react and uses it for almost nothing. Lucide is a good
+ * set and the wrong one here: it is drawn with round caps and 2px strokes on a
+ * 24px grid, which reads friendly. This system is 8–11px mono and hairlines,
+ * and a rounded icon beside 8px uppercase looks borrowed.
+ *
+ * So: a 16px grid, 1.25px strokes, butt caps and miter joins, every terminal
+ * landing on a whole pixel. Geometry only — no tapers, no rounded corners, no
+ * optical curves. Closer to a technical drawing than to an app icon.
+ *
+ * Everything is stroke-based and inherits currentColor, so an icon takes the
+ * colour of the text beside it and needs no per-context variant.
+ */
+const ICONS = {
+  'arrow-right': 'M2 8h12M9 3l5 5-5 5',
+  'arrow-left': 'M14 8H2M7 3L2 8l5 5',
+  'arrow-up': 'M8 14V2M3 7l5-5 5 5',
+  'arrow-down': 'M8 2v12M3 9l5 5 5-5',
+  'chevron-right': 'M6 3l5 5-5 5',
+  'chevron-left': 'M10 3L5 8l5 5',
+  'chevron-down': 'M3 6l5 5 5-5',
+  'chevron-up': 'M3 10l5-5 5 5',
+  close: 'M3 3l10 10M13 3L3 13',
+  plus: 'M8 2v12M2 8h12',
+  minus: 'M2 8h12',
+  check: 'M2 8.5l4 4L14 4',
+  menu: 'M2 4h12M2 8h12M2 12h12',
+  search: 'M7 12a5 5 0 100-10 5 5 0 000 10M10.5 10.5L14 14',
+  external: 'M9 2h5v5M14 2L7 9M12 9v5H2V4h5',
+  copy: 'M5 5h9v9H5zM11 5V2H2v9h3',
+  download: 'M8 2v9M4 7l4 4 4-4M2 14h12',
+  upload: 'M8 11V2M4 6l4-4 4 4M2 14h12',
+  link: 'M6.5 9.5l3-3M6 4l1.5-1.5a3 3 0 014 4L10 8M10 12l-1.5 1.5a3 3 0 01-4-4L6 8',
+  refresh: 'M14 3v4h-4M13.2 9A5.5 5.5 0 112.5 8',
+  filter: 'M2 3h12l-4.5 5.5V13L6.5 11V8.5z',
+  sort: 'M4 12V3M2 5l2-2 2 2M8 4h6M8 8h4M8 12h2',
+  info: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 7.5v4M8 5h.01',
+  warning: 'M8 2l6 11H2zM8 6.5v3M8 11.5h.01',
+  error: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.8 5.8l4.4 4.4M10.2 5.8l-4.4 4.4',
+  success: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.2 8l2 2 3.6-3.6',
+  clock: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 4.5V8l2.5 1.5',
+  lock: 'M4 7h8v7H4zM6 7V5a2 2 0 014 0v2',
+  play: 'M4 2l9 6-9 6z',
+  pause: 'M5 3v10M11 3v10',
+  image: 'M2 3h12v10H2zM2 10l3.5-3.5L9 10l2-2 3 3M5.5 5.5h.01',
+  video: 'M2 4h9v8H2zM11 7l3-2v6l-3-2',
+  file: 'M4 2h5l3 3v9H4zM9 2v3h3',
+  calendar: 'M2 4h12v10H2zM2 7h12M5 2v3M11 2v3',
+  mail: 'M2 4h12v8H2zM2 4l6 5 6-5',
+  user: 'M8 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5M3 14c0-2.5 2.2-4 5-4s5 1.5 5 4',
+  chart: 'M2 2v12h12M5 11V7M8 11V4M11 11V9',
+  grid: 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z',
+  list: 'M2 4h1M2 8h1M2 12h1M6 4h8M6 8h8M6 12h8',
+  sliders: 'M3 3v10M8 3v10M13 3v10M1.5 6h3M6.5 10h3M11.5 5h3',
+}
+
+function Icon({ name, size = 16 }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={size}
+      height={size}
+      className={styles.icon}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d={ICONS[name]} />
+    </svg>
+  )
+}
+
+/* ── Composed form (NEW) ─────────────────────────────────────────────────────
+ *
+ * The controls above are parts; this is the assembly, and the assembly is
+ * where forms actually go wrong. Conventions fixed here so they stop being
+ * re-decided per page:
+ *
+ *   - Optional is marked, not required. Most fields in a studio enquiry are
+ *     required, so marking the exception is less ink and less noise.
+ *   - Labels sit above their field, never beside. Beside breaks the moment a
+ *     label wraps, and every label wraps on a phone.
+ *   - Help text is present before the error is, in the same slot, so the row
+ *     doesn't change height when validation fires.
+ *   - The primary action is on the left, in reading order after the last
+ *     field. There is no cancel on a form nobody is trapped in.
+ */
+function ComposedForm() {
+  const [state, setState] = useState('idle')
+  const [showErr, setShowErr] = useState(false)
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (state === 'sending') return
+    if (!showErr) { setShowErr(true); return }
+    setState('sending')
+    setTimeout(() => setState('done'), 1100)
+  }
+
+  return (
+    <form className={styles.formDemo} onSubmit={submit}>
+      {showErr && state === 'idle' && (
+        /* Summary first, because a screen reader lands at the top of the form
+           and a field-level error alone is unreachable from there. */
+        <div className={styles.errSummary} role="alert">
+          <span className={styles.errSummaryTitle}>Two fields need attention</span>
+          <ul className={styles.errList}>
+            <li><a href="#df-email" className={styles.errLink}>Email — that address looks incomplete</a></li>
+            <li><a href="#df-scope" className={styles.errLink}>Scope — choose at least one</a></li>
+          </ul>
+        </div>
+      )}
+
+      <div className={styles.formRow}>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>Name</span>
+          <input className={styles.fieldContact} defaultValue="Chris Church" />
+          <span className={styles.formHelp}>As you'd like to be addressed.</span>
+        </label>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>
+            Company <span className={styles.formOptional}>Optional</span>
+          </span>
+          <input className={styles.fieldContact} placeholder="Studio or brand" />
+          <span className={styles.formHelp}>&nbsp;</span>
+        </label>
+      </div>
+
+      <label className={styles.formField} htmlFor="df-email">
+        <span className={styles.formLabel}>Email</span>
+        <input
+          id="df-email"
+          className={`${styles.fieldContact} ${showErr ? styles.fieldInvalid : ''}`}
+          defaultValue="chris@"
+          aria-invalid={showErr}
+        />
+        <span className={showErr ? styles.errorText : styles.formHelp}>
+          {showErr ? 'That address looks incomplete.' : "We'll only use this to reply."}
+        </span>
+      </label>
+
+      <fieldset className={styles.formGroup} id="df-scope">
+        <legend className={styles.formLabel}>Scope</legend>
+        <CheckGroup />
+        <span className={showErr ? styles.errorText : styles.formHelp}>
+          {showErr ? 'Choose at least one.' : 'Pick as many as apply.'}
+        </span>
+      </fieldset>
+
+      <label className={styles.formField}>
+        <span className={styles.formLabel}>Brief</span>
+        <textarea className={styles.fieldTextarea} rows={3} defaultValue="We need a system our team can run without us." />
+        <span className={styles.formHelp}>48 / 500</span>
+      </label>
+
+      <div className={styles.formActions}>
+        <button type="submit" className={styles.btnSolid} disabled={state !== 'idle'}>
+          {state === 'sending'
+            ? <span className={styles.btnDots}><i /><i /><i /></span>
+            : state === 'done' ? 'Sent' : 'Send enquiry'}
+        </button>
+        <span className={styles.formNote}>
+          {state === 'done' ? 'Thanks — we reply within two days.' : 'Usually a reply within two days.'}
+        </span>
+      </div>
+    </form>
+  )
+}
+
 /* ── Navigation patterns (NEW) ───────────────────────────────────────────── */
+
+/* Sidebar: sections, an active row, and a count. The site's rail is flat and
+   ungrouped, which is fine at eight links and breaks at twenty. */
+function SidebarNav() {
+  const [on, setOn] = useState('Talos')
+  const groups = [
+    ['Brand', ['Talos', 'Transcend', 'Photon']],
+    ['Content', ['Heard', 'Hylands']],
+  ]
+  return (
+    <nav className={styles.sidebar}>
+      {groups.map(([group, items]) => (
+        <div key={group} className={styles.sidebarGroup}>
+          <div className={styles.sidebarHead}>
+            <span className={styles.sidebarTitle}>{group}</span>
+            <span className={styles.sidebarCount}>{items.length}</span>
+          </div>
+          {items.map((it) => (
+            <button
+              key={it}
+              type="button"
+              aria-current={on === it ? 'page' : undefined}
+              className={`${styles.sidebarItem} ${on === it ? styles.sidebarItemOn : ''}`}
+              onClick={() => setOn(it)}
+            >
+              {it}
+            </button>
+          ))}
+        </div>
+      ))}
+    </nav>
+  )
+}
+
+/* Command palette: the fastest navigation on a site with ninety-six routes,
+   and the only pattern here that scales without a redesign. */
+function CommandPalette() {
+  const [q, setQ] = useState('')
+  const all = ['Work — Talos', 'Work — Transcend', 'Thoughts — Rethinking the workweek', 'Contact', 'Design system', 'Careers']
+  const hits = all.filter((r) => r.toLowerCase().includes(q.toLowerCase())).slice(0, 4)
+  return (
+    <div className={styles.palette}>
+      <div className={styles.paletteBar}>
+        <span className={styles.paletteHint}>⌘K</span>
+        <input
+          className={styles.paletteInput}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Jump to…"
+          aria-label="Command palette"
+        />
+      </div>
+      <div className={styles.paletteList}>
+        {hits.length ? hits.map((r, i) => (
+          <div key={r} className={`${styles.paletteRow} ${i === 0 ? styles.paletteRowOn : ''}`}>
+            <span>{r}</span>
+            {i === 0 && <span className={styles.paletteEnter}>↵</span>}
+          </div>
+        )) : (
+          <div className={styles.paletteEmpty}>No matches</div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 function Tabs() {
   const [on, setOn] = useState('Approach')
@@ -1381,6 +1615,90 @@ function Scatter() {
  * never more than three textures in one chart, because past that they moiré.
  */
 
+/* ── 90s tiles ───────────────────────────────────────────────────────────────
+ *
+ * Windows 95 and classic Mac desktop patterns were 8×8 one-bit bitmaps — 64
+ * bits, on or off, tiled forever. Writing them as literal bitmaps here rather
+ * than as paths is not nostalgia for its own sake: it is the format that
+ * produced the look. A path-drawn "weave" gets curves and half-pixels and
+ * stops reading as a tile.
+ *
+ * Same alpha as the rest of the set, so these stay material. At full strength
+ * they would be a period pastiche; at 0.07 they are grain that happens to have
+ * a memory.
+ */
+const TILES = {
+  'sc-tile-weave': [
+    '11100000',
+    '10100000',
+    '10111110',
+    '00100010',
+    '00101110',
+    '00001010',
+    '11111010',
+    '00000010',
+  ],
+  'sc-tile-brick': [
+    '11111111',
+    '00001000',
+    '00001000',
+    '00001000',
+    '11111111',
+    '10000000',
+    '10000000',
+    '10000000',
+  ],
+  'sc-tile-waffle': [
+    '11111111',
+    '10000001',
+    '10000001',
+    '10000001',
+    '10000001',
+    '10000001',
+    '10000001',
+    '11111111',
+  ],
+  'sc-tile-thatch': [
+    '10011001',
+    '01100110',
+    '01100110',
+    '10011001',
+    '10011001',
+    '01100110',
+    '01100110',
+    '10011001',
+  ],
+  'sc-tile-circuit': [
+    '11111000',
+    '00001000',
+    '00001000',
+    '11111111',
+    '00100000',
+    '00100000',
+    '11111100',
+    '00000100',
+  ],
+  'sc-tile-diamond': [
+    '00011000',
+    '00100100',
+    '01000010',
+    '10000001',
+    '01000010',
+    '00100100',
+    '00011000',
+    '00000000',
+  ],
+}
+
+const TILE_META = [
+  ['sc-tile-weave', 'Weave', 'Interlocking basket. The busiest of the six.'],
+  ['sc-tile-brick', 'Brick', 'Offset courses. Reads as a wall at any size.'],
+  ['sc-tile-waffle', 'Waffle', 'Open box grid — the most neutral here.'],
+  ['sc-tile-thatch', 'Thatch', 'Herringbone. Directional without being a diagonal.'],
+  ['sc-tile-circuit', 'Circuit', 'Traces and corners. Good under anything technical.'],
+  ['sc-tile-diamond', 'Diamond', 'Argyle lattice. The closest to a motif — use least.'],
+]
+
 const TEXTURES = [
   ['sc-tex-d25', 'Dither 25', 'The lightest. Default for a large area.'],
   ['sc-tex-d50', 'Dither 50', 'The checkerboard. Half the grid, still barely there.'],
@@ -1446,15 +1764,24 @@ function TextureDefs() {
         <pattern id="sc-tex-stipple" width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
           {px(1, 2)}{px(5, 0)}{px(3, 5)}{px(7, 6)}{px(0, 6)}{px(6, 3)}
         </pattern>
+
+        {/* 90s desktop tiles, emitted straight from their bitmaps. */}
+        {Object.entries(TILES).map(([id, rows]) => (
+          <pattern key={id} id={id} width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
+            {rows.flatMap((row, y) =>
+              row.split('').map((bit, x) => (bit === '1' ? px(x, y) : null)).filter(Boolean),
+            )}
+          </pattern>
+        ))}
       </defs>
     </svg>
   )
 }
 
-function TextureSwatches({ onCopy, copied }) {
+function TextureSwatches({ onCopy, copied, items = TEXTURES }) {
   return (
     <div className={styles.texRow}>
-      {TEXTURES.map(([id, name, note]) => (
+      {items.map(([id, name, note]) => (
         <button
           key={id}
           type="button"
@@ -1468,7 +1795,7 @@ function TextureSwatches({ onCopy, copied }) {
           </svg>
           <span className={styles.texName}>{name}</span>
           <span className={styles.texId}>
-            {copied === `url(#${id})` ? 'copied' : `#${id.replace('sc-tex-', '')}`}
+            {copied === `url(#${id})` ? 'copied' : `#${id.replace(/^sc-(tex|tile)-/, '')}`}
           </span>
           <span className={styles.texNote}>{note}</span>
         </button>
@@ -1533,8 +1860,8 @@ export default function DesignSystem() {
           <nav className={styles.toc}>
             {[
               ['Colour', 'colour'], ['Type', 'type'], ['Radius', 'radius'],
-              ['Texture', 'texture'], ['Buttons', 'buttons'],
-              ['Fields', 'fields'], ['Nav', 'nav'],
+              ['Texture', 'texture'], ['Icons', 'icons'],
+              ['Buttons', 'buttons'], ['Forms', 'fields'], ['Nav', 'nav'],
               ['Grids', 'grids'], ['Content', 'content'], ['Charts', 'charts'],
               ['Media', 'media'], ['Carousels', 'carousels'], ['Chat', 'chat'],
               ['Conversion', 'conversion'], ['Feedback', 'feedback'],
@@ -1804,6 +2131,17 @@ export default function DesignSystem() {
           </p>
           <TextureSwatches onCopy={copy} copied={copied} />
 
+          <h3 className={styles.subhead}>90s tiles</h3>
+          <p className={styles.subnote}>
+            Windows 95 and classic Mac desktop patterns were 8×8 one-bit bitmaps —
+            sixty-four pixels, on or off, tiled forever. These are written as literal
+            bitmaps for that reason rather than as nostalgia: a path-drawn weave picks
+            up curves and half-pixels and stops reading as a tile. At full strength
+            they would be pastiche; at the same 0.07 as everything above they are
+            grain that happens to have a memory.
+          </p>
+          <TextureSwatches onCopy={copy} copied={copied} items={TILE_META} />
+
           <div className={styles.demoGrid}>
             <Demo label="Placeholder" status="NEW"
               note="Media that hasn't loaded or doesn't exist yet — grain instead of a flat grey box.">
@@ -1827,10 +2165,96 @@ export default function DesignSystem() {
           </div>
         </Section>
 
-        {/* ── 05 Buttons ── */}
+        {/* ── 05 Icons ── */}
+        <Section
+          id="icons"
+          index={5}
+          title="Icons"
+          blurb="Forty marks on a 16px grid. Geometry only — butt caps, miter joins, every terminal on a whole pixel. Closer to a technical drawing than to an app icon."
+        >
+          <p className={styles.prose}>
+            The site already ships <code className={styles.code}>lucide-react</code> and
+            uses it for almost nothing. Lucide is a good set and the wrong one here:
+            it is drawn with round caps and 2px strokes on a 24px grid, which reads
+            friendly. This system is 8–11px mono and hairlines, and a rounded icon
+            beside 8px uppercase looks borrowed from somewhere else.
+          </p>
+          <p className={styles.prose}>
+            Everything below is stroke-based and inherits
+            {' '}<code className={styles.code}>currentColor</code>, so an icon takes the
+            colour of the text beside it and needs no per-context variant. At 1.25px
+            the stroke matches the hairline the rest of the system already uses, which
+            is why they sit in a row of 9px labels without shouting.
+          </p>
+          <p className={styles.subnote}>
+            Click any icon to copy its name.
+          </p>
+
+          <div className={styles.iconGrid}>
+            {Object.keys(ICONS).map((name) => (
+              <button
+                key={name}
+                type="button"
+                className={styles.iconCell}
+                onClick={() => copy(name)}
+                title={`Copy "${name}"`}
+              >
+                <Icon name={name} size={20} />
+                <span className={styles.iconName}>
+                  {copied === name ? 'copied' : name}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <h3 className={styles.subhead}>In use</h3>
+          <div className={styles.demoGrid}>
+            <Demo label="With a label" status="NEW"
+              note="6px gap, icon first. The icon is decorative here — the word carries the meaning, so it takes aria-hidden.">
+              <div className={styles.iconUses}>
+                <button type="button" className={styles.iconBtn}><Icon name="download" />Download deck</button>
+                <button type="button" className={styles.iconBtn}><Icon name="external" />View site</button>
+              </div>
+            </Demo>
+
+            <Demo label="Icon only" status="NEW"
+              note="Needs an aria-label, because nothing else names it. 32px hit target minimum, even at a 16px mark.">
+              <div className={styles.iconUses}>
+                {['search', 'filter', 'sort', 'close'].map((n) => (
+                  <button key={n} type="button" className={styles.iconOnly} aria-label={n}>
+                    <Icon name={n} />
+                  </button>
+                ))}
+              </div>
+            </Demo>
+
+            <Demo label="Status" status="NEW"
+              note="Paired with the semantic colours and a word. Never colour alone, and never the icon alone.">
+              <div className={styles.iconStatuses}>
+                <span className={`${styles.iconStatus} ${styles.isGood}`}><Icon name="success" />Live</span>
+                <span className={`${styles.iconStatus} ${styles.isWarn}`}><Icon name="warning" />Draft</span>
+                <span className={`${styles.iconStatus} ${styles.isBad}`}><Icon name="error" />Failed</span>
+              </div>
+            </Demo>
+
+            <Demo label="Optical sizes" status="NEW"
+              note="14 / 16 / 20 / 24. Below 14 the geometry collapses — use a label instead of shrinking the mark.">
+              <div className={styles.iconSizes}>
+                {[14, 16, 20, 24].map((s) => (
+                  <span key={s} className={styles.iconSizeCell}>
+                    <Icon name="chart" size={s} />
+                    <span className={styles.iconSizeLabel}>{s}</span>
+                  </span>
+                ))}
+              </div>
+            </Demo>
+          </div>
+        </Section>
+
+        {/* ── 06 Buttons ── */}
         <Section
           id="buttons"
-          index={5}
+          index={6}
           title="Buttons"
           blurb="Six variants ship today. They agree on the type and disagree on almost everything else — three different radii between them, and one with none at all."
         >
@@ -1906,9 +2330,9 @@ export default function DesignSystem() {
         {/* ── 05 Fields ── */}
         <Section
           id="fields"
-          index={6}
-          title="Fields"
-          blurb="Three different input designs ship on three different surfaces. Focus each one — they don't even agree on what focus looks like."
+          index={7}
+          title="Forms"
+          blurb="Three different input designs ship on three different surfaces — focus each one, they don't even agree on what focus looks like. Below the controls: the composition rules, which is where forms actually go wrong."
         >
           <div className={styles.demoGrid}>
             <Demo label="Contact" note={`Focus: ${FIELDS[0].focus}`}>
@@ -2011,12 +2435,43 @@ export default function DesignSystem() {
               <MultiStep />
             </Demo>
           </div>
+
+          <h3 className={styles.subhead}>Composition</h3>
+          <p className={styles.subnote}>
+            The controls above are parts. This is the assembly — and the assembly is
+            where forms actually go wrong. Four conventions fixed here so they stop
+            being re-decided per page.
+          </p>
+          <div className={styles.list}>
+            {[
+              ['Mark optional, not required', 'Most fields in an enquiry are required, so marking the exception is less ink and less noise.'],
+              ['Labels above, never beside', 'Beside breaks the moment a label wraps, and every label wraps on a phone.'],
+              ['Help occupies the error slot', 'Help text is present before the error is, in the same place, so the row cannot change height when validation fires.'],
+              ['Summary before field errors', 'A screen reader lands at the top of the form; a field-level error alone is unreachable from there.'],
+            ].map(([label, note]) => (
+              <div key={label} className={styles.row}>
+                <div className={styles.rowMain}>
+                  <div className={styles.rowText}>
+                    <span className={styles.rowLabel}>{label}</span>
+                    <span className={styles.rowNote}>{note}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.demoStack}>
+            <Demo label="Full form" status="NEW" wide stage={false}
+              note="Press Send twice: once to fail validation and once to submit. Watch the row heights — nothing moves when the errors appear, because help and error share a slot.">
+              <ComposedForm />
+            </Demo>
+          </div>
         </Section>
 
         {/* ── 06 Navigation ── */}
         <Section
           id="nav"
-          index={7}
+          index={8}
           title="Navigation"
           blurb="Four kinds, all of them lists of one sort or another. The site never uses a horizontal menu bar."
         >
@@ -2123,13 +2578,54 @@ export default function DesignSystem() {
             >
               <a href="#colour" className={styles.toTop}>↑ Top</a>
             </Demo>
+
+            <Demo label="Skip link" status="NEW"
+              note="Visually hidden until focused. Tab to it — the site has none today, so a keyboard user traverses the whole nav rail on every page.">
+              <a href="#colour" className={styles.skipLink}>Skip to content</a>
+            </Demo>
+          </div>
+
+          <h3 className={styles.subhead}>Composition</h3>
+          <p className={styles.subnote}>
+            The rail works at eight links and breaks at twenty. These are the two
+            patterns that scale past it.
+          </p>
+          <div className={styles.demoGrid}>
+            <Demo label="Sectioned sidebar" status="NEW" stage={false}
+              note="Groups, counts and one active row. Uses aria-current rather than colour alone, so the active item is announced and not merely brighter.">
+              <div className={styles.navStage}><SidebarNav /></div>
+            </Demo>
+
+            <Demo label="Command palette" status="NEW" stage={false}
+              note="The fastest navigation on a site with ninety-six routes, and the only pattern here that scales without a redesign. Type to filter.">
+              <div className={styles.navStage}><CommandPalette /></div>
+            </Demo>
+
+            <Demo label="Footer sitemap" status="NEW" wide stage={false}
+              note="Where a rail can't hold everything, the footer does. Four columns, mono headers, and every route reachable without the nav.">
+              <div className={styles.footerNav}>
+                {[
+                  ['Work', ['Case studies', 'Clients', 'Capabilities']],
+                  ['Studio', ['About', 'Careers', 'Thoughts']],
+                  ['Contact', ['Book a call', 'Email', 'Newsletter']],
+                  ['Legal', ['Privacy', 'Terms', 'Design system']],
+                ].map(([head, links]) => (
+                  <div key={head} className={styles.footerCol}>
+                    <span className={styles.footerHead}>{head}</span>
+                    {links.map((l) => (
+                      <span key={l} className={styles.footerLink}>{l}</span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </Demo>
           </div>
         </Section>
 
         {/* ── 07 Grids ── */}
         <Section
           id="grids"
-          index={8}
+          index={9}
           title="Grids"
           blurb="A 12-column grid on a 5px gutter carries the whole site — except the thoughts index, which quietly runs its own."
         >
@@ -2201,7 +2697,7 @@ export default function DesignSystem() {
         {/* ── 08 Content ── */}
         <Section
           id="content"
-          index={9}
+          index={10}
           title="Content"
           blurb="The site sets long prose beautifully and structures it barely at all. None of these exist yet — a table style in particular is missing on a site whose package data is already sitting in src/data waiting to be compared."
         >
@@ -2288,7 +2784,7 @@ export default function DesignSystem() {
         {/* ── 09 Charts ── */}
         <Section
           id="charts"
-          index={10}
+          index={11}
           title="Charts"
           blurb="Instrument colours, not brand colours. Low-chroma and cool-leaning, because a chart is read for minutes at a time and saturated hues turn a dashboard into decoration."
         >
@@ -2476,7 +2972,7 @@ export default function DesignSystem() {
         {/* ── 10 Media ── */}
         <Section
           id="media"
-          index={11}
+          index={12}
           title="Media &amp; image sizes"
           blurb="Four ratios, set with aspect-ratio rather than padding hacks. Below 768px most of them are overridden to 4:5 so the grid stays portrait on a phone."
         >
@@ -2553,7 +3049,7 @@ export default function DesignSystem() {
         {/* ── 09 Carousels ── */}
         <Section
           id="carousels"
-          index={12}
+          index={13}
           title="Carousels"
           blurb="One ships and one doesn't. The marquee is decorative and never stops; the paged carousel is for content someone has to actually get through."
         >
@@ -2585,7 +3081,7 @@ export default function DesignSystem() {
         {/* ── 10 AI chat ── */}
         <Section
           id="chat"
-          index={13}
+          index={14}
           title="AI chat"
           blurb="Nothing like this exists on the site yet. The question a chat has to answer in this system is which half is UI and which half is prose."
         >
@@ -2637,7 +3133,7 @@ export default function DesignSystem() {
         {/* ── 12 Conversion ── */}
         <Section
           id="conversion"
-          index={14}
+          index={15}
           title="Conversion"
           blurb="The pages that have to ask for something. Every one of these is currently rebuilt by hand per page."
         >
@@ -2700,7 +3196,7 @@ export default function DesignSystem() {
         {/* ── 11 Feedback ── */}
         <Section
           id="feedback"
-          index={15}
+          index={16}
           title="Feedback"
           blurb="What the site says back."
         >
@@ -2771,7 +3267,7 @@ export default function DesignSystem() {
         {/* ── 12 Motion ── */}
         <Section
           id="motion"
-          index={16}
+          index={17}
           title="Motion"
           blurb="Everything arrives the same way: up ten pixels, fading in, over half a second."
         >
@@ -2804,7 +3300,7 @@ export default function DesignSystem() {
         {/* ── 06 Layout ── */}
         <Section
           id="layout"
-          index={17}
+          index={18}
           title="Layout"
           blurb="A tight grid with a reserved rail, and measures set in characters rather than pixels."
         >
@@ -2825,7 +3321,7 @@ export default function DesignSystem() {
         {/* ── 07 Light mode ── */}
         <Section
           id="light"
-          index={18}
+          index={19}
           title="Light mode"
           blurb="Not a second palette — a filter."
         >
@@ -2861,7 +3357,7 @@ export default function DesignSystem() {
         {/* ── 15 Backlog ── */}
         <Section
           id="backlog"
-          index={19}
+          index={20}
           title="Inventory"
           blurb="Every pattern this system now holds, and how far each one has actually travelled. This started as a list of gaps; the gaps are closed, so what it tracks now is the distance from a drawing to a component."
         >
