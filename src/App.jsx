@@ -39,6 +39,8 @@ const ContentPackages = lazy(() => import('./pages/ContentPackages'))
 
 // Internal styleguide — noindex, no nav entry, reached by typing the URL
 const DesignSystem    = lazy(() => import('./pages/DesignSystem'))
+// Internal dashboard — built entirely from src/system
+const Dashboard       = lazy(() => import('./pages/Dashboard'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -46,9 +48,21 @@ function ScrollToTop() {
   return null
 }
 
+/* The custom cursor hides the native one site-wide with `cursor: none`. That
+   is a nice touch on a marketing page and wrong in an application, where the
+   I-beam over a field and the pointer over a row are doing real work. */
+function CursorGate() {
+  const { pathname } = useLocation()
+  if (pathname === '/dashboard') return null
+  return <Cursor />
+}
+
 function ChromeGate({ children }) {
   const { pathname } = useLocation()
-  const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
+  // The dashboard is an application, not a page on the marketing site — it
+  // brings its own shell, so the rail, theme toggle and back button would
+  // sit on top of it.
+  const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages' || pathname === '/dashboard'
   if (fullBleed) return null
   return children
 }
@@ -86,7 +100,7 @@ export default function App() {
         <CalDrawerProvider>
           <ScrollToTop />
           <TransitionBar />
-          <Cursor />
+          <CursorGate />
           <ChromeGate>
             <Nav />
             <ThemeToggle />
@@ -117,6 +131,7 @@ export default function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/design-system" element={<Suspense fallback={null}><DesignSystem /></Suspense>} />
+                <Route path="/dashboard" element={<Suspense fallback={null}><Dashboard /></Suspense>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

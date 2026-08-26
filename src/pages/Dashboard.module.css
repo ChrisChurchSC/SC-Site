@@ -1,0 +1,312 @@
+/* Dashboard — page layout only.
+ *
+ * Deliberately short. Everything that looks like anything comes from
+ * src/system; these rules are the arrangement of this one page, and they read
+ * system tokens rather than literals. If this file starts growing, something
+ * belongs in the system instead.
+ */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.panelMeta {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-faint);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gutter);
+}
+
+.compactCard {
+  padding: var(--sc-space-3);
+  gap: 6px;
+}
+
+.cardFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-2);
+  margin-top: 2px;
+}
+
+.owner {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}
+
+/* ── Browser bar ──────────────────────────────────────────────────────────
+   Path on the left, view switch on the right — the two things that change what
+   the listing below shows, kept on one line so neither reads as a page header. */
+
+.bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+}
+
+.railIcons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .bar { align-items: flex-start; }
+  .railIcons { flex-direction: row; }
+}
+
+/* Listing and rail. The rail is a fixed 260px rather than a fraction: it holds
+   facts of a known length, and letting it stretch on a wide screen leaves a
+   column of short lines adrift in white space. */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: var(--sc-space-6);
+  align-items: start;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Each block already carries its own bottom rule from the system; the last one
+   drops it so the rail does not end on a line pointing at nothing. */
+.rail > :last-child { border-bottom: none; }
+.rail > :first-child { padding-top: 0; }
+
+.asideText {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-body);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  margin: 0;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+@media (max-width: 1024px) {
+  /* The rail drops below the listing rather than narrowing — at less than
+     260px its figures start wrapping and stop being scannable. */
+  .split { grid-template-columns: 1fr; gap: var(--sc-space-5); }
+}
+
+/* The account avatar sits slightly apart from the bar actions: it is who you
+   are, not a thing you do. */
+.me {
+  display: inline-flex;
+  align-items: center;
+  padding-left: var(--sc-space-2);
+}
+
+/* Separates the "about this workspace" counts from the two things that act on
+   it. Without the rule the six controls read as one undifferentiated row. */
+.titleDivide {
+  width: 1px;
+  height: 20px;
+  background: var(--sc-line-strong);
+  margin: 0 var(--sc-space-2);
+}
+
+/* Location on the left, controls on the right, on one line. This row replaced
+   three stacked bands that between them pushed the first row of data 194px
+   down an 805px screen. */
+.barTools {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .barTools { width: 100%; }
+}
+
+/* Settings is a reading column, not a dashboard grid — forms are read top to
+   bottom and a 12-column layout only spreads them out. */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gutter);
+  max-width: 560px;
+}
+
+.settingNote {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+}
+
+.fileActions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.raw {
+  margin: 0;
+  padding: var(--sc-space-4);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.75;
+  color: var(--sc-text-body);
+  background: var(--sc-ground);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  padding: var(--sc-space-4);
+  background: var(--sc-ground);
+}
+
+/* The one-line case for the change, above the conversation. Serif and at
+   reading size, because it is the only prose on the page a reviewer has to
+   actually take in. */
+.reviewSummary {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.65;
+  color: var(--sc-text-body);
+  max-width: 68ch;
+  margin: 0;
+}
+
+/* ── MCP access ────────────────────────────────────────────────────────────
+   A field and its actions on one line: the endpoint and the token are both
+   things you copy rather than type, so the control that copies them belongs
+   beside the value, not under it. */
+
+.mcpRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mcpRow > :first-child { flex: 1; min-width: 200px; }
+
+.mcpTools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.mcpToolList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Every tool the model can call, listed by name. A permission screen that
+   says "read access" without naming what that means is asking for consent to
+   something nobody has been shown. */
+.mcpTool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-good);
+}
+
+.mcpTool svg { flex-shrink: 0; }
+
+.mcpToolOff { color: var(--sc-text-faint); }
+
+.mcpToolScope {
+  margin-left: auto;
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* ── Data source ───────────────────────────────────────────────────────────
+   Where the numbers came from and when, stated above them rather than in a
+   footnote. A figure with no provenance is a figure nobody can check. */
+
+.sourceBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.sourceState {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-good);
+}
+
+.sourceVia {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.sourceVia code { color: var(--sc-text-support); }
+
+/* The empty state names the missing connection and offers the way to it. An
+   empty state that only says "no data" makes the reader guess whether the
+   product is broken or simply unconfigured. */
+.noSource {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sc-space-3);
+  text-align: center;
+  color: var(--sc-text-faint);
+  border: 1px dashed var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-8) var(--sc-space-5);
+}
+
+.noSourceTitle {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-support);
+}
+
+.noSourceBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  max-width: 48ch;
+  margin: 0;
+}

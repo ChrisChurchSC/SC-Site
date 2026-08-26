@@ -6,6 +6,41 @@ import {
   BUTTONS, FIELDS, RATIOS, GRIDS, BACKLOG,
   CHART_PALETTE, CHART_SEQUENTIAL, CHART_DIVERGING, CHART_STATUS,
 } from '../data/designTokens'
+import '../system/tokens.css'
+import {
+  Icon, Avatar, Legend, ICONS, Button,
+  Modal as SysModal, ConfirmDialog as SysConfirm, Drawer as SysDrawer,
+  BottomSheet as SysSheet, DropdownMenu as SysMenu, Popover as SysPopover,
+  Tooltip as SysTooltip, Lightbox as SysLightbox, ToastStack as SysToasts,
+  useToasts, CommandPalette as SysPalette,
+  Accordion as SysAccordion, Stepper as SysStepper, MultiStep as SysMultiStep,
+  Scrollspy as SysScrollspy, SidebarNav as SysSideNav, PrevNext as SysPrevNext,
+  Select as SysSelect, Combobox as SysCombobox, CheckGroup as SysCheckGroup,
+  RadioGroup as SysRadioGroup, ValidatedField as SysValidated,
+  SearchField as SysSearch, TagInput as SysTagInput,
+  SliderControl as SysSlider, DatePicker as SysDatePicker,
+  RankedBar as SysRanked,
+  Histogram as SysHistogram, BoxPlot as SysBoxPlot, Scatter as SysScatter,
+  Bubble as SysBubble, DotPlot as SysDotPlot, Dumbbell as SysDumbbell,
+  SlopeChart as SysSlope, StepLine as SysStepLine, TimeSeries as SysTimeSeries,
+  StackedArea as SysStackedArea, StackedBar as SysStackedBar,
+  Waterfall as SysWaterfall, Funnel as SysFunnel, Pareto as SysPareto,
+  Bullet as SysBullet, ControlChart as SysControl, Treemap as SysTreemap,
+  CalendarHeat as SysCalHeat, Cohort as SysCohort, Gantt as SysGantt,
+  SmallMultiples as SysSmallMultiples,
+  StatusPill as Status, CardSurface,
+  KpiRow as SysKpiRow, PersonCard as SysPersonCard,
+  ConsentBanner as SysConsent, TextureDefs as SysTextureDefs,
+  TextureSwatches as SysTextureSwatches,
+  Carousel as SysCarousel, Gallery as SysGallery, BeforeAfter as SysBeforeAfter,
+  VideoControls as SysVideoControls, ProgressBar as SysProgress,
+  Chat as SysChat, StreamingText as SysStreamingText,
+  ResponseFeedback as SysResponseFeedback,
+  DataGrid as SysDataGrid,
+  FileUpload as SysUpload, FilterBar as SysFilterBar, SortControl as SysSort,
+  Segmented as SysSegmented, Switch as SysSwitch, Tabs as SysTabs,
+  BarChart as SysBarChart,
+} from '../system'
 import styles from './DesignSystem.module.css'
 
 /* Internal styleguide. Noindex, not in the sitemap, no nav entry — reached by
@@ -127,14 +162,6 @@ const STATUS_TONE = {
   GAP: 'statusGap',
 }
 
-function Status({ value }) {
-  const tone = STATUS_TONE[value] ?? ''
-  return (
-    <span className={`${styles.status} ${tone ? styles[tone] : ''}`}>
-      {value}
-    </span>
-  )
-}
 
 function Demo({ label, status = 'SHIPPED', note, wide, stage = true, children }) {
   return (
@@ -158,58 +185,7 @@ function Demo({ label, status = 'SHIPPED', note, wide, stage = true, children })
 const SLIDES = ['One', 'Two', 'Three', 'Four']
 
 function Carousel() {
-  const [i, setI] = useState(0)
-  const last = SLIDES.length - 1
-
-  return (
-    <div className={styles.carousel}>
-      <div className={styles.carouselWindow}>
-        <div
-          className={styles.carouselTrack}
-          style={{ transform: `translateX(-${i * 100}%)` }}
-        >
-          {SLIDES.map((s) => (
-            <div key={s} className={styles.slide}>
-              <span className={styles.slideNum}>{s}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className={styles.carouselControls}>
-        <div className={styles.dots}>
-          {SLIDES.map((s, n) => (
-            <button
-              key={s}
-              type="button"
-              className={`${styles.dot} ${n === i ? styles.dotOn : ''}`}
-              onClick={() => setI(n)}
-              aria-label={`Go to slide ${n + 1}`}
-            />
-          ))}
-        </div>
-        <div className={styles.arrows}>
-          <button
-            type="button"
-            className={styles.arrow}
-            onClick={() => setI((n) => Math.max(0, n - 1))}
-            disabled={i === 0}
-            aria-label="Previous"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            className={styles.arrow}
-            onClick={() => setI((n) => Math.min(last, n + 1))}
-            disabled={i === last}
-            aria-label="Next"
-          >
-            →
-          </button>
-        </div>
-      </div>
-    </div>
-  )
+  return <SysCarousel slides={SLIDES} />
 }
 
 
@@ -264,267 +240,12 @@ const DEFAULT_REPLY = {
 }
 
 function Chat() {
-  const [turns, setTurns] = useState([])
-  const [draft, setDraft] = useState('')
-  const [phase, setPhase] = useState('idle') // idle | thinking | tool | streaming | error
-  const [stream, setStream] = useState('')
-  const [attach, setAttach] = useState(null)
-  const [model, setModel] = useState('Studio')
-  const [failNext, setFailNext] = useState(false)
-  const timers = useRef([])
-  const logRef = useRef(null)
-
-  // Every timeout is tracked, so unmounting mid-stream cannot leave one
-  // firing into a component that no longer exists.
-  const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = [] }
-  useEffect(() => clearTimers, [])
-
-  const scrollDown = () => {
-    const el = logRef.current
-    if (el) el.scrollTop = el.scrollHeight
-  }
-  useEffect(scrollDown, [turns, stream, phase])
-
-  const answer = (question) => {
-    const reply = CHAT_REPLIES[question] ?? DEFAULT_REPLY
-    setPhase('thinking')
-    timers.current.push(setTimeout(() => {
-      if (reply.tool) setPhase('tool')
-      timers.current.push(setTimeout(() => {
-        if (failNext) { setPhase('error'); setFailNext(false); return }
-        setPhase('streaming')
-        setStream('')
-        let i = 0
-        const tick = () => {
-          i += 3
-          setStream(reply.text.slice(0, i))
-          if (i < reply.text.length) timers.current.push(setTimeout(tick, 22))
-          else {
-            setTurns((t) => [...t, { role: 'bot', ...reply }])
-            setStream('')
-            setPhase('idle')
-          }
-        }
-        tick()
-      }, reply.tool ? 700 : 0))
-    }, 500))
-  }
-
-  const send = (text) => {
-    const q = (text ?? draft).trim()
-    if (!q || phase !== 'idle') return
-    setTurns((t) => [...t, { role: 'user', text: q, attach }])
-    setDraft('')
-    setAttach(null)
-    answer(q)
-  }
-
-  const stop = () => {
-    clearTimers()
-    if (stream) setTurns((t) => [...t, { role: 'bot', text: stream, cite: [], stopped: true }])
-    setStream('')
-    setPhase('idle')
-  }
-
-  const retry = () => {
-    const lastUser = [...turns].reverse().find((t) => t.role === 'user')
-    if (lastUser) { setPhase('idle'); answer(lastUser.text) }
-  }
-
-  const regenerate = (i) => {
-    const q = [...turns.slice(0, i)].reverse().find((t) => t.role === 'user')
-    if (!q) return
-    setTurns((t) => t.filter((_, n) => n !== i))
-    answer(q.text)
-  }
-
-  const busy = phase !== 'idle' && phase !== 'error'
-
   return (
-    <div className={styles.chat}>
-      {/* Header: model, context, reset. A chat with no visible model is a
-          chat nobody can reason about when the answer is wrong. */}
-      <div className={styles.chatHead}>
-        <div className={styles.chatModel}>
-          {['Studio', 'Fast'].map((m) => (
-            <button
-              key={m}
-              type="button"
-              aria-pressed={model === m}
-              className={`${styles.segItem} ${model === m ? styles.segItemOn : ''}`}
-              onClick={() => setModel(m)}
-            >
-              {m}
-            </button>
-          ))}
-        </div>
-        <div className={styles.chatHeadRight}>
-          <span className={styles.chatCtx}>{turns.length} / 20 turns</span>
-          <button
-            type="button"
-            className={styles.tableToggle}
-            onClick={() => { clearTimers(); setTurns([]); setStream(''); setPhase('idle') }}
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.chatLog} ref={logRef}>
-        {turns.length === 0 && phase === 'idle' && (
-          /* Empty state. A blank composer is a blank page — the suggestions
-             are what make the first question possible. */
-          <div className={styles.chatEmpty}>
-            <span className={styles.cardEyebrow}>Ask the system</span>
-            <span className={styles.chatEmptyLine}>
-              It knows the tokens, not your project.
-            </span>
-            <div className={styles.promptRow}>
-              {CHAT_SUGGESTIONS.map((p) => (
-                <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {turns.map((t, i) => (
-          <div key={i} className={t.role === 'user' ? styles.turnUser : styles.turnBot}>
-            {t.role === 'user' ? (
-              <span className={styles.userBubble}>
-                {t.attach && (
-                  <span className={styles.attachChip}>
-                    <Icon name="file" size={11} />{t.attach}
-                  </span>
-                )}
-                {t.text}
-              </span>
-            ) : (
-              <div className={styles.botTurn}>
-                <p className={styles.botText}>
-                  {t.text}
-                  {t.stopped && <span className={styles.stoppedTag}>stopped</span>}
-                </p>
-                {t.code && <pre className={styles.chatCode}>{t.code}</pre>}
-                {t.cite?.length > 0 && (
-                  <span className={styles.citeRow}>
-                    {t.cite.map(([label, href]) => (
-                      <a key={label} href={href} className={styles.citation}>{label}</a>
-                    ))}
-                  </span>
-                )}
-                {/* Visible on hover, but always in the tab order — a keyboard
-                    user cannot hover. */}
-                <div className={styles.msgActions}>
-                  <button type="button" className={styles.msgAction} onClick={() => writeToClipboard(t.text)}>
-                    <Icon name="copy" size={12} />Copy
-                  </button>
-                  <button type="button" className={styles.msgAction} onClick={() => regenerate(i)}>
-                    <Icon name="refresh" size={12} />Regenerate
-                  </button>
-                  <ResponseFeedback />
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-
-        {phase === 'thinking' && (
-          <div className={styles.turnBot}>
-            <span className={styles.thinking} aria-label="Thinking"><i /><i /><i /></span>
-          </div>
-        )}
-
-        {phase === 'tool' && (
-          /* A tool call is shown, not hidden. An answer that quietly searched
-             something is an answer nobody can check. */
-          <div className={styles.turnBot}>
-            <span className={styles.toolCall}>
-              <Icon name="search" size={12} />
-              {CHAT_REPLIES[[...turns].reverse().find((t) => t.role === 'user')?.text]?.tool ?? 'Working'}
-              <span className={styles.thinking}><i /><i /><i /></span>
-            </span>
-          </div>
-        )}
-
-        {phase === 'streaming' && (
-          <div className={styles.turnBot}>
-            <p className={styles.botText}>{stream}<span className={styles.caret} /></p>
-          </div>
-        )}
-
-        {phase === 'error' && (
-          <div className={styles.turnBot}>
-            <div className={styles.chatError} role="alert">
-              <Icon name="warning" size={13} />
-              <span>That request didn't complete.</span>
-              <button type="button" className={styles.msgAction} onClick={retry}>
-                <Icon name="refresh" size={12} />Retry
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Follow-ups after an answer — the next question is usually easier to
-          recognise than to compose. */}
-      {phase === 'idle' && turns.length > 0 && (
-        <div className={styles.promptRow}>
-          {CHAT_SUGGESTIONS.filter((s) => !turns.some((t) => t.text === s)).slice(0, 2).map((p) => (
-            <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
-              {p}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <form className={styles.composer} onSubmit={(e) => { e.preventDefault(); send() }}>
-        <div className={styles.composerField}>
-          {attach && (
-            <span className={styles.attachChip}>
-              <Icon name="file" size={11} />{attach}
-              <button type="button" onClick={() => setAttach(null)} aria-label="Remove attachment">
-                <Icon name="close" size={10} />
-              </button>
-            </span>
-          )}
-          <input
-            className={styles.composerInput}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder={busy ? 'Working…' : 'Ask about a token…'}
-            aria-label="Message"
-          />
-        </div>
-        <button
-          type="button"
-          className={styles.iconOnly}
-          onClick={() => setAttach('brief.pdf')}
-          aria-label="Attach a file"
-        >
-          <Icon name="upload" size={14} />
-        </button>
-        {busy ? (
-          <button type="button" className={styles.composerSend} onClick={stop}>Stop</button>
-        ) : (
-          <button type="submit" className={styles.composerSend} disabled={!draft.trim()}>Send</button>
-        )}
-      </form>
-
-      <div className={styles.chatFoot}>
-        <span className={styles.chatHint}>
-          Canned replies · {model} · {draft.length}/500
-        </span>
-        <button
-          type="button"
-          className={`${styles.chatFail} ${failNext ? styles.chatFailOn : ''}`}
-          onClick={() => setFailNext((f) => !f)}
-        >
-          {failNext ? 'Next reply will fail' : 'Simulate failure'}
-        </button>
-      </div>
-    </div>
+    <SysChat
+      replies={CHAT_REPLIES}
+      fallback={DEFAULT_REPLY}
+      suggestions={CHAT_SUGGESTIONS}
+    />
   )
 }
 
@@ -535,39 +256,8 @@ function Chat() {
    none of it is wired to anything. */
 
 function Select({ options, label }) {
-  const [open, setOpen] = useState(false)
   const [value, setValue] = useState(options[0])
-
-  return (
-    <div className={styles.select}>
-      <button
-        type="button"
-        className={styles.selectTrigger}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label={label}
-      >
-        <span>{value}</span>
-        <span className={`${styles.selectCaret} ${open ? styles.selectCaretOpen : ''}`}>▾</span>
-      </button>
-      {open && (
-        <div className={styles.selectMenu} role="listbox">
-          {options.map((o) => (
-            <button
-              key={o}
-              type="button"
-              role="option"
-              aria-selected={o === value}
-              className={`${styles.selectOption} ${o === value ? styles.selectOptionOn : ''}`}
-              onClick={() => { setValue(o); setOpen(false) }}
-            >
-              {o}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+  return <SysSelect options={options} value={value} onChange={setValue} label={label} />
 }
 
 /* A 14px box at a 2px radius — the checkbox is small enough that 4px would
@@ -575,244 +265,57 @@ function Select({ options, label }) {
    inherits colour and needs no icon font. */
 function CheckGroup() {
   const [on, setOn] = useState(['Brand'])
-  const toggle = (v) =>
-    setOn((s) => (s.includes(v) ? s.filter((x) => x !== v) : [...s, v]))
-
-  return (
-    <div className={styles.choiceGroup}>
-      {['Brand', 'Content', 'Product'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          role="checkbox"
-          aria-checked={on.includes(v)}
-          className={styles.choiceRow}
-          onClick={() => toggle(v)}
-        >
-          <span className={`${styles.check} ${on.includes(v) ? styles.checkOn : ''}`}>
-            {on.includes(v) && <i />}
-          </span>
-          <span className={styles.choiceLabel}>{v}</span>
-        </button>
-      ))}
-    </div>
-  )
+  return <SysCheckGroup options={['Brand', 'Content', 'Product']} value={on} onChange={setOn} label="Disciplines" />
 }
 
 function RadioGroup() {
   const [on, setOn] = useState('Now')
-
-  return (
-    <div className={styles.choiceGroup}>
-      {['Now', 'This quarter', 'Exploring'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          role="radio"
-          aria-checked={on === v}
-          className={styles.choiceRow}
-          onClick={() => setOn(v)}
-        >
-          <span className={`${styles.radio} ${on === v ? styles.radioOn : ''}`}>
-            {on === v && <i />}
-          </span>
-          <span className={styles.choiceLabel}>{v}</span>
-        </button>
-      ))}
-    </div>
-  )
+  return <SysRadioGroup options={['Now', 'This quarter', 'Exploring']} value={on} onChange={setOn} label="Timing" />
 }
 
 /* Validates on blur rather than on every keystroke — telling someone their
    email is invalid while they are still typing the domain is noise. */
 function ValidatedField() {
   const [value, setValue] = useState('chris@')
-  const [touched, setTouched] = useState(false)
-  const invalid = touched && !/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(value)
-
   return (
-    <div className={styles.labelledField}>
-      <span className={styles.cardEyebrow}>Email</span>
-      <input
-        className={`${styles.fieldContact} ${invalid ? styles.fieldInvalid : ''}`}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onBlur={() => setTouched(true)}
-        aria-invalid={invalid}
-        aria-label="Email"
-      />
-      <span className={invalid ? styles.errorText : styles.hintText}>
-        {invalid ? 'That address looks incomplete.' : 'Click out of the field to validate.'}
-      </span>
-    </div>
+    <SysValidated
+      label="Email"
+      value={value}
+      onChange={setValue}
+      validate={(v) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(v)}
+      hint="Click out of the field to validate."
+      error="That address looks incomplete."
+    />
   )
 }
 
 function MultiStep() {
-  const [step, setStep] = useState(0)
-  const steps = ['Scope', 'Timing', 'Contact']
-
   return (
-    <div className={styles.multiStep}>
-      <div className={styles.stepRail}>
-        {steps.map((s, n) => (
-          <div key={s} className={styles.stepItem}>
-            <span className={`${styles.stepDot} ${n <= step ? styles.stepDotOn : ''}`} />
-            <span className={`${styles.stepLabel} ${n === step ? styles.stepLabelOn : ''}`}>{s}</span>
-          </div>
-        ))}
-      </div>
-      <div className={styles.stepBody}>
-        <span className={styles.stepBodyText}>Step {step + 1} — {steps[step]}</span>
-      </div>
-      <div className={styles.stepNav}>
-        <button
-          type="button"
-          className={styles.btnOutline}
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
-          disabled={step === 0}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className={styles.btnSolid}
-          onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}
-          disabled={step === steps.length - 1}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    <SysMultiStep steps={['Scope', 'Timing', 'Contact']}>
+      {[
+        <p key="a" className={styles.stepCopy}>What are we making? Brand, content, product, or some of each.</p>,
+        <p key="b" className={styles.stepCopy}>When does it need to be live?</p>,
+        <p key="c" className={styles.stepCopy}>Where do we send the scope?</p>,
+      ]}
+    </SysMultiStep>
   )
 }
 
 /* Dashed border is the one place the system uses a non-solid stroke — it is
    the convention for "drop here" and fighting it costs more than it gains. */
 function FileUpload() {
-  const [over, setOver] = useState(false)
-  const [file, setFile] = useState(null)
-
-  return (
-    <div
-      className={`${styles.upload} ${over ? styles.uploadOver : ''}`}
-      onDragOver={(e) => { e.preventDefault(); setOver(true) }}
-      onDragLeave={() => setOver(false)}
-      onDrop={(e) => {
-        e.preventDefault()
-        setOver(false)
-        setFile(e.dataTransfer.files?.[0]?.name ?? 'brief.pdf')
-      }}
-    >
-      {file ? (
-        <>
-          <span className={styles.uploadName}>{file}</span>
-          <button type="button" className={styles.uploadClear} onClick={() => setFile(null)}>
-            Remove
-          </button>
-        </>
-      ) : (
-        <>
-          <span className={styles.uploadLine}>Drop a file</span>
-          <span className={styles.uploadHint}>PDF, up to 20MB</span>
-        </>
-      )}
-    </div>
-  )
+  const [files, setFiles] = useState([{ name: 'logo-lockup.fig', size: 184320 }])
+  return <SysUpload files={files} onChange={setFiles} />
 }
 
 function SearchField() {
   const [q, setQ] = useState('')
-  return (
-    <div className={styles.search}>
-      <span className={styles.searchIcon} aria-hidden="true">⌕</span>
-      <input
-        className={styles.searchInput}
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search work"
-        aria-label="Search"
-      />
-      {q && (
-        <button type="button" className={styles.searchClear} onClick={() => setQ('')} aria-label="Clear">
-          ×
-        </button>
-      )}
-    </div>
-  )
+  const all = ['Arbitrum', 'Openhouse', 'Brand systems', 'Content programs']
+  const hits = all.filter((x) => x.toLowerCase().includes(q.toLowerCase()))
+  return <SysSearch value={q} onChange={setQ} placeholder="Search projects" count={hits.length} />
 }
 
-/* ── Icons (NEW) ─────────────────────────────────────────────────────────────
- *
- * The site ships lucide-react and uses it for almost nothing. Lucide is a good
- * set and the wrong one here: it is drawn with round caps and 2px strokes on a
- * 24px grid, which reads friendly. This system is 8–11px mono and hairlines,
- * and a rounded icon beside 8px uppercase looks borrowed.
- *
- * So: a 16px grid, 1.25px strokes, butt caps and miter joins, every terminal
- * landing on a whole pixel. Geometry only — no tapers, no rounded corners, no
- * optical curves. Closer to a technical drawing than to an app icon.
- *
- * Everything is stroke-based and inherits currentColor, so an icon takes the
- * colour of the text beside it and needs no per-context variant.
- */
-const ICONS = {
-  'arrow-right': 'M2 8h12M9 3l5 5-5 5',
-  'arrow-left': 'M14 8H2M7 3L2 8l5 5',
-  'arrow-up': 'M8 14V2M3 7l5-5 5 5',
-  'arrow-down': 'M8 2v12M3 9l5 5 5-5',
-  'chevron-right': 'M6 3l5 5-5 5',
-  'chevron-left': 'M10 3L5 8l5 5',
-  'chevron-down': 'M3 6l5 5 5-5',
-  'chevron-up': 'M3 10l5-5 5 5',
-  close: 'M3 3l10 10M13 3L3 13',
-  plus: 'M8 2v12M2 8h12',
-  minus: 'M2 8h12',
-  check: 'M2 8.5l4 4L14 4',
-  menu: 'M2 4h12M2 8h12M2 12h12',
-  search: 'M7 12a5 5 0 100-10 5 5 0 000 10M10.5 10.5L14 14',
-  external: 'M9 2h5v5M14 2L7 9M12 9v5H2V4h5',
-  copy: 'M5 5h9v9H5zM11 5V2H2v9h3',
-  download: 'M8 2v9M4 7l4 4 4-4M2 14h12',
-  upload: 'M8 11V2M4 6l4-4 4 4M2 14h12',
-  link: 'M6.5 9.5l3-3M6 4l1.5-1.5a3 3 0 014 4L10 8M10 12l-1.5 1.5a3 3 0 01-4-4L6 8',
-  refresh: 'M14 3v4h-4M13.2 9A5.5 5.5 0 112.5 8',
-  filter: 'M2 3h12l-4.5 5.5V13L6.5 11V8.5z',
-  sort: 'M4 12V3M2 5l2-2 2 2M8 4h6M8 8h4M8 12h2',
-  info: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 7.5v4M8 5h.01',
-  warning: 'M8 2l6 11H2zM8 6.5v3M8 11.5h.01',
-  error: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.8 5.8l4.4 4.4M10.2 5.8l-4.4 4.4',
-  success: 'M8 14A6 6 0 108 2a6 6 0 000 12M5.2 8l2 2 3.6-3.6',
-  clock: 'M8 14A6 6 0 108 2a6 6 0 000 12M8 4.5V8l2.5 1.5',
-  lock: 'M4 7h8v7H4zM6 7V5a2 2 0 014 0v2',
-  play: 'M4 2l9 6-9 6z',
-  pause: 'M5 3v10M11 3v10',
-  image: 'M2 3h12v10H2zM2 10l3.5-3.5L9 10l2-2 3 3M5.5 5.5h.01',
-  video: 'M2 4h9v8H2zM11 7l3-2v6l-3-2',
-  file: 'M4 2h5l3 3v9H4zM9 2v3h3',
-  calendar: 'M2 4h12v10H2zM2 7h12M5 2v3M11 2v3',
-  mail: 'M2 4h12v8H2zM2 4l6 5 6-5',
-  user: 'M8 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5M3 14c0-2.5 2.2-4 5-4s5 1.5 5 4',
-  chart: 'M2 2v12h12M5 11V7M8 11V4M11 11V9',
-  grid: 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z',
-  list: 'M2 4h1M2 8h1M2 12h1M6 4h8M6 8h8M6 12h8',
-  sliders: 'M3 3v10M8 3v10M13 3v10M1.5 6h3M6.5 10h3M11.5 5h3',
-}
 
-function Icon({ name, size = 16 }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      width={size}
-      height={size}
-      className={styles.icon}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d={ICONS[name]} />
-    </svg>
-  )
-}
 
 /* ── Drawer (SHIPPED, undocumented) ──────────────────────────────────────────
    Cal and contact both ship this and neither is in the system. Reproduced here
@@ -820,37 +323,13 @@ function Icon({ name, size = 16 }) {
    so the documented version is the fixed one. */
 function Drawer() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
-
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
-        Open drawer
-      </button>
-      {open && (
-        <div className={styles.drawerBackdrop} onMouseDown={close}>
-          <div
-            ref={ref}
-            className={styles.drawer}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ds-drawer-title"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHead}>
-              <span id="ds-drawer-title" className={styles.modalTitle}>Book a call</span>
-              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
-                <Icon name="close" />
-              </button>
-            </div>
-            <p className={styles.modalBody}>
-              Rises from the bottom edge, which is why its shadow casts upward.
-            </p>
-            <button type="button" className={styles.btnSolid} onClick={close}>Confirm</button>
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open drawer</Button>
+      <SysDrawer open={open} onClose={() => setOpen(false)} title="Asset details">
+        A drawer is for adjacent work — the thing you opened it from stays on
+        screen behind it, which is the whole reason it is not a page.
+      </SysDrawer>
     </div>
   )
 }
@@ -859,55 +338,24 @@ function Drawer() {
    behind it stays usable. That is the whole distinction from a modal, and
    getting it wrong is why so many filter panels feel like a trap. */
 function Popover() {
-  const [open, setOpen] = useState(false)
-  const wrap = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDoc)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
   return (
-    <div className={styles.menuWrap} ref={wrap}>
-      <button type="button" className={styles.btnDemo} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-        <Icon name="filter" size={14} />Filter
-      </button>
-      {open && (
-        <div className={styles.popover} role="group" aria-label="Filter">
-          <span className={styles.popTitle}>Discipline</span>
-          <CheckGroup />
-        </div>
-      )}
-    </div>
+    <SysPopover trigger="Why three colours?">
+      Pink and purple are adjacent hues. A fourth categorical value either
+      leaves the lightness band or fails colour-vision separation against one
+      of the other three.
+    </SysPopover>
   )
 }
 
 function BottomSheet() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>Open sheet</button>
-      {open && (
-        <div className={styles.drawerBackdrop} onMouseDown={close}>
-          <div ref={ref} className={styles.sheet} role="dialog" aria-modal="true" aria-label="Options" onMouseDown={(e) => e.stopPropagation()}>
-            {/* The grabber is the affordance that says "this drags" — without
-                it a sheet is just a modal stuck to the bottom. */}
-            <span className={styles.sheetGrab} />
-            {['Share', 'Copy link', 'Open in new tab'].map((t) => (
-              <button key={t} type="button" className={styles.sheetItem} onClick={close}>{t}</button>
-            ))}
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open sheet</Button>
+      <SysSheet open={open} onClose={() => setOpen(false)} title="Share">
+        The same dialog contract at the bottom edge, for a decision on a small
+        screen where a centred modal has nowhere to go.
+      </SysSheet>
     </div>
   )
 }
@@ -917,48 +365,14 @@ function BottomSheet() {
    Reject is a real button of equal weight, not a link buried in the text: a
    banner where refusing is harder than accepting is not consent. */
 function ConsentBanner() {
-  const [choice, setChoice] = useState(null)
-  return (
-    <div className={styles.consentStage}>
-      {choice ? (
-        <span className={styles.consentEcho}>
-          Analytics {choice === 'accept' ? 'enabled' : 'stay off'} — stored, not asked again.
-        </span>
-      ) : (
-        <div className={styles.consent} role="region" aria-label="Cookie consent">
-          <p className={styles.consentText}>
-            We use analytics to see which work gets read. Nothing is loaded until
-            you choose.
-          </p>
-          <div className={styles.consentActions}>
-            <button type="button" className={styles.btnOutline} onClick={() => setChoice('reject')}>Reject</button>
-            <button type="button" className={styles.btnSolid} onClick={() => setChoice('accept')}>Accept</button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return <SysConsent />
 }
 
 /* Segmented control: switches the view of one thing, where tabs switch between
    different things. Confusing the two is why so many toolbars have both. */
 function Segmented() {
   const [on, setOn] = useState('Grid')
-  return (
-    <div className={styles.segmented} role="group" aria-label="View">
-      {[['Grid', 'grid'], ['List', 'list'], ['Chart', 'chart']].map(([label, icon]) => (
-        <button
-          key={label}
-          type="button"
-          aria-pressed={on === label}
-          className={`${styles.segItem} ${on === label ? styles.segItemOn : ''}`}
-          onClick={() => setOn(label)}
-        >
-          <Icon name={icon} size={14} />{label}
-        </button>
-      ))}
-    </div>
-  )
+  return <SysSegmented value={on} onChange={setOn} options={['Grid', 'List', 'Map']} />
 }
 
 /* Copy button. Used about fifty times on this page and never a component
@@ -998,22 +412,16 @@ function ErrorFallback() {
 /* Toast stack. One toast exists; two at once currently overlap, because
    nothing owns the queue. Newest on top, and they push rather than cover. */
 function ToastStack() {
-  const [items, setItems] = useState([{ id: 1, text: 'Link copied' }])
-  const [n, setN] = useState(2)
-  const push = () => {
-    const id = n
-    setN((v) => v + 1)
-    setItems((t) => [{ id, text: `Saved · ${id}` }, ...t].slice(0, 3))
-    setTimeout(() => setItems((t) => t.filter((x) => x.id !== id)), 3200)
-  }
+  const { toasts, push, dismiss } = useToasts()
   return (
-    <div className={styles.toastStageBox}>
-      <button type="button" className={styles.btnDemo} onClick={push}>Add toast</button>
-      <div className={styles.toastStack} role="status" aria-live="polite">
-        {items.map((t) => (
-          <span key={t.id} className={styles.toastDemo}>{t.text}</span>
-        ))}
-      </div>
+    <div className={styles.tipRow}>
+      <Button size="sm" icon="check" onClick={() => push({ tone: 'good', message: 'Published to the workspace.' })}>
+        Publish
+      </Button>
+      <Button size="sm" icon="error" onClick={() => push({ tone: 'bad', message: 'Contrast check failed.', action: { label: 'Details', onSelect: () => {} } })}>
+        Fail a check
+      </Button>
+      <SysToasts toasts={toasts} onDismiss={dismiss} />
     </div>
   )
 }
@@ -1063,15 +471,6 @@ function CardAnatomy() {
   )
 }
 
-/* One base. Every variant below is this plus content — which is exactly what
-   the 58 blocks each re-declare from scratch. */
-function CardSurface({ children, link, className = '' }) {
-  return (
-    <div className={`${styles.cardBase} ${link ? styles.cardLink : ''} ${className}`}>
-      {children}
-    </div>
-  )
-}
 
 function CardVariants() {
   return (
@@ -1134,86 +533,26 @@ function CardVariants() {
  * fixed` and the layers scale from Depth.
  */
 
-/* Focus trap. Three obligations, all of them easy to miss:
- *   - move focus in when it opens,
- *   - cycle Tab and Shift+Tab at the two ends,
- *   - put focus back where it came from on close, or the reader is dumped at
- *     the top of the document with no idea what happened. */
-function useFocusTrap(open, onClose) {
-  const ref = useRef(null)
-  const restoreTo = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    restoreTo.current = document.activeElement
-    const node = ref.current
-    if (!node) return
-
-    const focusables = () =>
-      [...node.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
-        .filter((el) => !el.hasAttribute('disabled'))
-
-    focusables()[0]?.focus()
-
-    const onKey = (e) => {
-      if (e.key === 'Escape') { onClose(); return }
-      if (e.key !== 'Tab') return
-      const f = focusables()
-      if (!f.length) return
-      const first = f[0]
-      const last = f[f.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
-    }
-
-    node.addEventListener('keydown', onKey)
-    return () => {
-      node.removeEventListener('keydown', onKey)
-      // Restore, or the reader lands back at the top of the document.
-      if (restoreTo.current instanceof HTMLElement) restoreTo.current.focus()
-    }
-  }, [open, onClose])
-
-  return ref
-}
 
 function Modal() {
   const [open, setOpen] = useState(false)
-  const close = useCallback(() => setOpen(false), [])
-  const ref = useFocusTrap(open, close)
-
   return (
     <div className={styles.overlayStageBox}>
-      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
-        Open modal
-      </button>
-      {open && (
-        <div className={styles.modalBackdrop} onMouseDown={close}>
-          <div
-            ref={ref}
-            className={styles.modal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ds-modal-title"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHead}>
-              <span id="ds-modal-title" className={styles.modalTitle}>Send this brief?</span>
-              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
-                <Icon name="close" />
-              </button>
-            </div>
-            <p className={styles.modalBody}>
-              Tab around — focus cycles inside and cannot escape. Escape closes, and
-              focus returns to the button that opened it.
-            </p>
-            <div className={styles.confirmActions}>
-              <button type="button" className={styles.btnOutline} onClick={close}>Cancel</button>
-              <button type="button" className={styles.btnSolid} onClick={close}>Send</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Button size="sm" onClick={() => setOpen(true)}>Open modal</Button>
+      <SysModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Send this brief?"
+        actions={
+          <>
+            <Button size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button size="sm" variant="solid" onClick={() => setOpen(false)}>Send</Button>
+          </>
+        }
+      >
+        Tab around — focus cycles inside and cannot escape. Escape closes, and
+        focus returns to the button that opened it.
+      </SysModal>
     </div>
   )
 }
@@ -1222,52 +561,18 @@ function Modal() {
    Forms. A select returns a value; a menu performs a verb. They look similar
    and behave differently, so they carry different roles. */
 function DropdownMenu() {
-  const [open, setOpen] = useState(false)
   const [last, setLast] = useState(null)
-  const wrap = useRef(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDoc)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
-  const items = [['copy', 'Duplicate'], ['download', 'Export'], ['link', 'Copy link'], ['close', 'Delete']]
-
   return (
-    <div className={styles.menuWrap} ref={wrap}>
-      <button
-        type="button"
-        className={styles.btnDemo}
-        onClick={() => setOpen((o) => !o)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-      >
-        Actions <Icon name="chevron-down" size={14} />
-      </button>
-      {open && (
-        <div className={styles.menu} role="menu">
-          {items.map(([icon, label], i) => (
-            <Fragment key={label}>
-              {i === items.length - 1 && <span className={styles.menuRule} />}
-              <button
-                type="button"
-                role="menuitem"
-                className={`${styles.menuItem} ${i === items.length - 1 ? styles.menuItemBad : ''}`}
-                onClick={() => { setLast(label); setOpen(false) }}
-              >
-                <Icon name={icon} size={14} />{label}
-              </button>
-            </Fragment>
-          ))}
-        </div>
-      )}
+    <div className={styles.menuWrap}>
+      <SysMenu
+        items={[
+          { label: 'Duplicate', icon: 'copy', onSelect: () => setLast('Duplicate') },
+          { label: 'Export', icon: 'download', onSelect: () => setLast('Export') },
+          { label: 'Copy link', icon: 'link', onSelect: () => setLast('Copy link') },
+          { divider: true },
+          { label: 'Delete', icon: 'close', tone: 'bad', onSelect: () => setLast('Delete') },
+        ]}
+      />
       {last && <span className={styles.menuEcho}>{last}</span>}
     </div>
   )
@@ -1278,122 +583,22 @@ function DropdownMenu() {
    from every visitor. Weeks start Monday, and today is marked whether or not
    it is selected. */
 function DatePicker() {
-  const [sel, setSel] = useState(14)
-  const [open, setOpen] = useState(true)
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-  // Fixed month so the demo is deterministic — no Date() at render.
-  const offset = 3
-  const total = 31
-  const today = 9
-
-  return (
-    <div className={styles.dateWrap}>
-      <button
-        type="button"
-        className={styles.dateField}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-      >
-        <Icon name="calendar" size={14} />
-        <span>2026 · 03 · {String(sel).padStart(2, '0')}</span>
-      </button>
-      {open && (
-        <div className={styles.calendar} role="dialog" aria-label="Choose a date">
-          <div className={styles.calHead}>
-            <button type="button" className={styles.iconOnly} aria-label="Previous month"><Icon name="chevron-left" size={14} /></button>
-            <span className={styles.calMonth}>March 2026</span>
-            <button type="button" className={styles.iconOnly} aria-label="Next month"><Icon name="chevron-right" size={14} /></button>
-          </div>
-          <div className={styles.calGrid}>
-            {days.map((d, i) => (
-              <span key={i} className={styles.calDay}>{d}</span>
-            ))}
-            {Array.from({ length: offset }, (_, i) => <span key={`b${i}`} />)}
-            {Array.from({ length: total }, (_, i) => {
-              const n = i + 1
-              const weekend = (i + offset) % 7 >= 5
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  aria-current={n === today ? 'date' : undefined}
-                  aria-pressed={n === sel}
-                  className={[
-                    styles.calCell,
-                    n === sel ? styles.calCellOn : '',
-                    n === today ? styles.calToday : '',
-                    weekend ? styles.calWeekend : '',
-                  ].join(' ')}
-                  onClick={() => setSel(n)}
-                >
-                  {n}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  const [day, setDay] = useState(14)
+  return <SysDatePicker value={day} onChange={setDay} />
 }
 
 /* Combobox: type to filter, arrow to move, enter to choose. Distinct from the
    select — a select shows every option, a combobox exists because there are
    too many to show. */
 function Combobox() {
-  const all = ['Arbitrum', 'Banzen', 'Entropy', 'Google', 'Heard', 'Hylands', 'Nimruz', 'Photon', 'Talos', 'Transcend']
-  const [q, setQ] = useState('')
-  const [open, setOpen] = useState(false)
-  const [cursor, setCursor] = useState(0)
-  const hits = all.filter((a) => a.toLowerCase().includes(q.toLowerCase()))
-
-  const onKey = (e) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setCursor((c) => Math.min(hits.length - 1, c + 1)) }
-    if (e.key === 'ArrowUp') { e.preventDefault(); setCursor((c) => Math.max(0, c - 1)) }
-    if (e.key === 'Enter' && open && hits[cursor]) { e.preventDefault(); setQ(hits[cursor]); setOpen(false) }
-    if (e.key === 'Escape') setOpen(false)
-  }
-
+  const [value, setValue] = useState(null)
   return (
-    <div className={styles.comboWrap}>
-      <input
-        className={styles.fieldContact}
-        value={q}
-        placeholder="Type a client"
-        aria-expanded={open}
-        aria-autocomplete="list"
-        role="combobox"
-        onChange={(e) => { setQ(e.target.value); setOpen(true); setCursor(0) }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={onKey}
-      />
-      {open && (
-        <div className={styles.comboList} role="listbox">
-          {hits.length ? hits.slice(0, 5).map((h, i) => (
-            <button
-              key={h}
-              type="button"
-              role="option"
-              aria-selected={i === cursor}
-              className={`${styles.comboItem} ${i === cursor ? styles.comboItemOn : ''}`}
-              onMouseEnter={() => setCursor(i)}
-              onClick={() => { setQ(h); setOpen(false) }}
-            >
-              {/* The matched run is marked, so it is obvious why a row is here. */}
-              {q && h.toLowerCase().includes(q.toLowerCase()) ? (
-                <>
-                  {h.slice(0, h.toLowerCase().indexOf(q.toLowerCase()))}
-                  <mark className={styles.comboMark}>
-                    {h.slice(h.toLowerCase().indexOf(q.toLowerCase()), h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
-                  </mark>
-                  {h.slice(h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
-                </>
-              ) : h}
-            </button>
-          )) : <span className={styles.comboEmpty}>No matches</span>}
-        </div>
-      )}
-    </div>
+    <SysCombobox
+      label="Client"
+      value={value}
+      onChange={setValue}
+      options={['Arbitrum', 'Openhouse', 'Super Conscious', 'Offchain Labs', 'Espresso']}
+    />
   )
 }
 
@@ -1401,98 +606,25 @@ function Combobox() {
 
 function Switch() {
   const [on, setOn] = useState(true)
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={on}
-      className={styles.switchRow}
-      onClick={() => setOn((o) => !o)}
-    >
-      <span className={`${styles.switchTrack} ${on ? styles.switchOn : ''}`}>
-        <span className={styles.switchThumb} />
-      </span>
-      <span className={styles.choiceLabel}>Email me a copy</span>
-    </button>
-  )
+  return <SysSwitch checked={on} onChange={setOn} label="Auto-publish on approval" />
 }
 
 /* Steppers exist so a number can be nudged without selecting and retyping.
    The field stays editable — a stepper that forces you through the buttons is
    worse than a plain input. */
 function Stepper() {
-  const [n, setN] = useState(6)
-  return (
-    <div className={styles.stepper}>
-      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.max(1, v - 1))} aria-label="Decrease">
-        <Icon name="minus" size={14} />
-      </button>
-      <input
-        className={styles.stepInput}
-        value={n}
-        onChange={(e) => setN(Math.max(1, Math.min(52, Number(e.target.value) || 1)))}
-        aria-label="Weeks"
-      />
-      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.min(52, v + 1))} aria-label="Increase">
-        <Icon name="plus" size={14} />
-      </button>
-      <span className={styles.stepUnit}>weeks</span>
-    </div>
-  )
+  const [step, setStep] = useState(1)
+  return <SysStepper steps={['Scope', 'Timing', 'Contact']} current={step} onStep={setStep} />
 }
 
 function TagInput() {
-  const [tags, setTags] = useState(['Brand', 'Motion'])
-  const [draft, setDraft] = useState('')
-  const add = (e) => {
-    e.preventDefault()
-    const v = draft.trim()
-    if (!v || tags.includes(v)) return
-    setTags((t) => [...t, v])
-    setDraft('')
-  }
-  return (
-    <form className={styles.tagField} onSubmit={add}>
-      {tags.map((t) => (
-        <span key={t} className={styles.tag}>
-          {t}
-          <button type="button" onClick={() => setTags((x) => x.filter((y) => y !== t))} aria-label={`Remove ${t}`}>
-            <Icon name="close" size={12} />
-          </button>
-        </span>
-      ))}
-      <input
-        className={styles.tagInput}
-        value={draft}
-        onChange={(e) => setDraft(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Backspace' && !draft) setTags((t) => t.slice(0, -1)) }}
-        placeholder={tags.length ? '' : 'Add a tag'}
-        aria-label="Add tag"
-      />
-    </form>
-  )
+  const [tags, setTags] = useState(['Brand', 'Blocking'])
+  return <SysTagInput tags={tags} onChange={setTags} />
 }
 
 function SliderControl() {
-  const [v, setV] = useState(40)
-  return (
-    <div className={styles.sliderWrap}>
-      <div className={styles.sliderHead}>
-        <span className={styles.cardEyebrow}>Budget</span>
-        <span className={styles.sliderVal}>${v}k</span>
-      </div>
-      <input
-        type="range" min="10" max="120" step="5" value={v}
-        onChange={(e) => setV(Number(e.target.value))}
-        className={styles.baRange}
-        aria-label="Budget"
-      />
-      <div className={styles.sliderEnds}>
-        <span className={styles.axisMutedText}>$10k</span>
-        <span className={styles.axisMutedText}>$120k</span>
-      </div>
-    </div>
-  )
+  const [v, setV] = useState(60)
+  return <SysSlider label="Budget" value={v} min={10} max={150} step={5} onChange={setV} format={(n) => `$${n}k`} />
 }
 
 
@@ -1540,540 +672,20 @@ const ROWS = [
   { client: 'Big Buoy', lead: 'Chris Church', disc: 'Motion', year: 2026, fee: 15000, share: 0.04, status: 'Draft', trend: [4, 6, 9, 12, 15, 19] },
 ]
 
-const AGGS = ['sum', 'avg', 'max', 'count']
 
-function gridFmt(v, type) {
-  if (v === undefined || v === null) return ''
-  if (type === 'money') return `$${v.toLocaleString()}`
-  if (type === 'pct') return `${(v * 100).toFixed(1)}%`
-  return String(v)
-}
-
-const colLetter = (i) => String.fromCharCode(65 + i)
 
 function DataGrid() {
-  /* Multi-column sort as an ordered list rather than a single key: shift-click
-     appends, so "by discipline, then by fee" is expressible. The priority
-     number is shown, because a sort nobody can see the order of is a sort
-     nobody trusts. */
-  const [sorts, setSorts] = useState([{ key: 'fee', dir: 'desc' }])
-  const [sel, setSel] = useState({ r: 0, c: 0 })
-  const [anchor, setAnchor] = useState({ r: 0, c: 0 })
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState('')
-  const [data, setData] = useState(ROWS)
-  const [history, setHistory] = useState([])
-  const [future, setFuture] = useState([])
-  const [picked, setPicked] = useState([])
-  const [dense, setDense] = useState(false)
-  const [filters, setFilters] = useState({})
-  const [find, setFind] = useState('')
-  const [aggs, setAggs] = useState({ fee: 'sum', share: 'sum', year: 'max' })
-  const [hidden, setHidden] = useState([])
-  const [copied, setCopied] = useState(false)
-  const gridRef = useRef(null)
-  const editRef = useRef(null)
-
-  /* Focus and select when an edit opens, from an effect rather than
-     autoFocus: the autofocus attribute fires before React attaches onFocus,
-     so the handler never runs and typing appends to the old value instead of
-     replacing it. Every spreadsheet selects on entry; nobody notices until
-     it's missing. */
-  useEffect(() => {
-    if (!editing) return
-    const el = editRef.current
-    if (!el) return
-    el.focus()
-    el.select()
-  }, [editing])
-
-  const cols = COLS.filter((c) => !hidden.includes(c.key))
-
-  /* Every mutation goes through here, so undo is a fact of the data layer
-     rather than something each handler has to remember. */
-  const mutate = (next) => {
-    setHistory((h) => [...h.slice(-24), data])
-    setFuture([])
-    setData(next)
-  }
-
-  const undo = () => {
-    if (!history.length) return
-    setFuture((f) => [data, ...f])
-    setData(history[history.length - 1])
-    setHistory((h) => h.slice(0, -1))
-  }
-
-  const redo = () => {
-    if (!future.length) return
-    setHistory((h) => [...h, data])
-    setData(future[0])
-    setFuture((f) => f.slice(1))
-  }
-
-  // Filter first, then sort — the order the reader assumes, and the order the
-  // aggregations below depend on.
-  const filtered = data.filter((row) =>
-    Object.entries(filters).every(([k, q]) =>
-      !q || String(row[k]).toLowerCase().includes(q.toLowerCase())))
-
-  const rows = [...filtered].sort((a, b) => {
-    for (const s of sorts) {
-      const x = a[s.key], y = b[s.key]
-      const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
-      if (cmp !== 0) return s.dir === 'asc' ? cmp : -cmp
-    }
-    return 0
-  })
-
-  const toggleSort = (key, additive) =>
-    setSorts((s) => {
-      const at = s.findIndex((x) => x.key === key)
-      if (at === -1) return additive ? [...s, { key, dir: 'desc' }] : [{ key, dir: 'desc' }]
-      const flipped = { key, dir: s[at].dir === 'desc' ? 'asc' : 'desc' }
-      if (!additive) return [flipped]
-      const next = [...s]
-      next[at] = flipped
-      return next
-    })
-
-  const matchesFind = (row) =>
-    find && Object.values(row).some((v) =>
-      String(Array.isArray(v) ? '' : v).toLowerCase().includes(find.toLowerCase()))
-
-  const range = {
-    r0: Math.min(sel.r, anchor.r), r1: Math.max(sel.r, anchor.r),
-    c0: Math.min(sel.c, anchor.c), c1: Math.max(sel.c, anchor.c),
-  }
-  const inRange = (r, c) => r >= range.r0 && r <= range.r1 && c >= range.c0 && c <= range.c1
-  const multi = range.r0 !== range.r1 || range.c0 !== range.c1
-
-  const move = (dr, dc, extend) => {
-    const r = Math.max(0, Math.min(rows.length - 1, sel.r + dr))
-    const c = Math.max(0, Math.min(cols.length - 1, sel.c + dc))
-    setSel({ r, c })
-    if (!extend) setAnchor({ r, c })
-  }
-
-  const commit = () => {
-    const col = cols[sel.c]
-    const key = rows[sel.r].client
-    if (['text', 'person'].includes(col.type)) {
-      mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: draft } : row)))
-    } else if (['num', 'money'].includes(col.type)) {
-      const n = Number(draft.replace(/[^0-9.-]/g, ''))
-      // Invalid input is rejected rather than silently coerced to zero —
-      // a blank cell is a fact, and 0 would be a different one.
-      if (!Number.isNaN(n) && draft.trim() !== '') {
-        mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: n } : row)))
-      }
-    }
-    setEditing(false)
-  }
-
-  const addRow = () => mutate([...data, {
-    client: `New ${data.length + 1}`, lead: 'Chris Church', disc: 'Brand',
-    year: 2026, fee: 0, share: 0, status: 'Draft', trend: [0, 0, 0, 0, 0, 0],
-  }])
-
-  const deleteRows = () => {
-    if (!picked.length) return
-    const kill = new Set(picked.map((i) => rows[i]?.client).filter(Boolean))
-    mutate(data.filter((r) => !kill.has(r.client)))
-    setPicked([])
-  }
-
-  const exportCsv = () => {
-    const head = cols.map((c) => c.label).join(',')
-    const body = rows.map((r) => cols.map((c) =>
-      c.type === 'spark' ? `"${r[c.key].join(' ')}"` : `"${gridFmt(r[c.key], c.type)}"`).join(','))
-    writeToClipboard([head, ...body].join('\n'))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
-  }
-
-  /* Excel's most-used feature that nobody names: the sum of whatever is
-     selected, in the status bar, without touching the sheet. */
-  const rangeStats = () => {
-    const nums = []
-    for (let r = range.r0; r <= range.r1; r++) {
-      for (let c = range.c0; c <= range.c1; c++) {
-        const col = cols[c]
-        const v = rows[r]?.[col.key]
-        if (typeof v === 'number') nums.push(v)
-      }
-    }
-    const cells = (range.r1 - range.r0 + 1) * (range.c1 - range.c0 + 1)
-    if (!nums.length) return `${cells} cells`
-    const sum = nums.reduce((a, b) => a + b, 0)
-    return `${cells} cells · sum ${sum.toLocaleString()} · avg ${Math.round(sum / nums.length).toLocaleString()}`
-  }
-
-  const copyRange = () => {
-    const tsv = []
-    for (let r = range.r0; r <= range.r1; r++) {
-      const line = []
-      for (let c = range.c0; c <= range.c1; c++) {
-        const col = cols[c]
-        line.push(col.type === 'spark' ? rows[r][col.key].join(' ') : gridFmt(rows[r][col.key], col.type))
-      }
-      tsv.push(line.join('\t'))
-    }
-    writeToClipboard(tsv.join('\n'))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
-  }
-
-  const onKey = (e) => {
-    if (editing) {
-      if (e.key === 'Enter') { e.preventDefault(); commit(); move(1, 0) }
-      if (e.key === 'Escape') { e.preventDefault(); setEditing(false) }
-      return
-    }
-    const k = e.key
-    if (k === 'ArrowDown') { e.preventDefault(); move(1, 0, e.shiftKey) }
-    else if (k === 'ArrowUp') { e.preventDefault(); move(-1, 0, e.shiftKey) }
-    else if (k === 'ArrowRight' || k === 'Tab') { e.preventDefault(); move(0, 1, e.shiftKey && k !== 'Tab') }
-    else if (k === 'ArrowLeft') { e.preventDefault(); move(0, -1, e.shiftKey) }
-    else if (k === 'Enter') {
-      e.preventDefault()
-      const col = cols[sel.c]
-      if (['text', 'person', 'num', 'money'].includes(col.type)) {
-        setDraft(String(rows[sel.r][col.key]))
-        setEditing(true)
-      }
-    } else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'c') { e.preventDefault(); copyRange() }
-    else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'z') {
-      e.preventDefault()
-      e.shiftKey ? redo() : undo()
-    }
-  }
-
-  const aggValue = (col) => {
-    const mode = aggs[col.key]
-    if (!mode) return ''
-    const vals = rows.map((r) => r[col.key]).filter((v) => typeof v === 'number')
-    if (mode === 'count') return String(rows.length)
-    if (!vals.length) return ''
-    const n = mode === 'sum' ? vals.reduce((a, b) => a + b, 0)
-      : mode === 'avg' ? vals.reduce((a, b) => a + b, 0) / vals.length
-      : Math.max(...vals)
-    return gridFmt(col.type === 'pct' ? n : Math.round(n), col.type)
-  }
-
-  const cycleAgg = (key) =>
-    setAggs((a) => {
-      const i = AGGS.indexOf(a[key])
-      return { ...a, [key]: i === AGGS.length - 1 ? undefined : AGGS[i + 1] ?? AGGS[0] }
-    })
-
-  const maxFee = Math.max(...rows.map((r) => r.fee), 1)
-  const template = `30px ${cols.map((c) => `${c.w}px`).join(' ')}`
-  const curCol = cols[sel.c]
-  const curVal = rows[sel.r]
-    ? (curCol.type === 'spark' ? rows[sel.r][curCol.key].join(', ') : gridFmt(rows[sel.r][curCol.key], curCol.type))
-    : ''
-
-  return (
-    <div className={styles.gridWrap}>
-      {/* Toolbar */}
-      <div className={styles.gridBar}>
-        <span className={styles.gridCount}>
-          {rows.length} of {data.length} rows
-          {picked.length > 0 && ` · ${picked.length} selected`}
-          {multi && ` · ${(range.r1 - range.r0 + 1)}×${(range.c1 - range.c0 + 1)} range`}
-        </span>
-        <div className={styles.gridBarRight}>
-          <input
-            className={styles.gFindInput}
-            value={find}
-            onChange={(e) => setFind(e.target.value)}
-            placeholder="Find…"
-            aria-label="Find in grid"
-          />
-          <button type="button" className={styles.tableToggle} onClick={undo} disabled={!history.length}>
-            Undo
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={redo} disabled={!future.length}>
-            Redo
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={addRow}>Add row</button>
-          <button type="button" className={styles.tableToggle} onClick={deleteRows} disabled={!picked.length}>
-            Delete
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={exportCsv}>
-            {copied ? 'Copied' : 'CSV'}
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={() => setDense((d) => !d)}>
-            {dense ? 'Comfortable' : 'Compact'}
-          </button>
-        </div>
-      </div>
-
-      {/* Formula bar — the address and value of the current cell, always. */}
-      <div className={styles.formulaBar}>
-        <span className={styles.formulaAddr}>{colLetter(sel.c)}{sel.r + 1}</span>
-        <span className={styles.formulaDivider} />
-        <span className={styles.formulaVal}>{curVal}</span>
-        <span className={styles.formulaType}>{curCol.type}</span>
-      </div>
-
-      {/* Column visibility */}
-      <div className={styles.colToggles}>
-        {COLS.map((c) => (
-          <button
-            key={c.key}
-            type="button"
-            aria-pressed={!hidden.includes(c.key)}
-            className={`${styles.colToggle} ${hidden.includes(c.key) ? styles.colToggleOff : ''}`}
-            onClick={() => setHidden((h) => (h.includes(c.key) ? h.filter((x) => x !== c.key) : [...h, c.key]))}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.gridScroll}>
-        <div
-          ref={gridRef}
-          className={`${styles.grid} ${dense ? styles.gridDense : ''}`}
-          style={{ gridTemplateColumns: template }}
-          role="grid"
-          tabIndex={0}
-          onKeyDown={onKey}
-        >
-          {/* Header — sticky, with a select-all in the gutter. */}
-          <button
-            type="button"
-            className={`${styles.gCell} ${styles.gHead} ${styles.gGutter} ${styles.gFrozen}`}
-            onClick={() => setPicked(picked.length === rows.length ? [] : rows.map((_, i) => i))}
-            aria-label="Select all rows"
-          >
-            {picked.length === rows.length && rows.length > 0 ? '−' : '+'}
-          </button>
-          {cols.map((c, ci) => (
-            <button
-              key={c.key}
-              type="button"
-              className={[
-                styles.gCell, styles.gHead,
-                c.frozen ? styles.gFrozenCol : '',
-                ['num', 'money', 'pct'].includes(c.type) ? styles.gNum : '',
-              ].join(' ')}
-              style={c.frozen ? { left: 30 } : undefined}
-              onClick={(e) => toggleSort(c.key, e.shiftKey)}
-              aria-sort={(() => {
-                const s = sorts.find((x) => x.key === c.key)
-                return s ? (s.dir === 'asc' ? 'ascending' : 'descending') : 'none'
-              })()}
-              title="Click to sort · Shift-click to add"
-            >
-              {c.label}
-              {(() => {
-                const at = sorts.findIndex((x) => x.key === c.key)
-                if (at === -1) return <span className={styles.gSort} />
-                return (
-                  <span className={styles.gSort}>
-                    {/* Priority shown only when more than one column sorts —
-                        a lone "1" is noise. */}
-                    {sorts.length > 1 && <span className={styles.gSortRank}>{at + 1}</span>}
-                    {sorts[at].dir === 'desc' ? '↓' : '↑'}
-                  </span>
-                )
-              })()}
-            </button>
-          ))}
-
-          {/* Filter row */}
-          <div className={`${styles.gCell} ${styles.gFilterCell} ${styles.gGutter} ${styles.gFrozen}`}>
-            <Icon name="filter" size={11} />
-          </div>
-          {cols.map((c) => (
-            <div
-              key={c.key}
-              className={`${styles.gCell} ${styles.gFilterCell} ${c.frozen ? styles.gFrozenCol : ''}`}
-              style={c.frozen ? { left: 30 } : undefined}
-            >
-              {c.type === 'spark' ? null : (
-                <input
-                  className={styles.gFilterInput}
-                  value={filters[c.key] ?? ''}
-                  onChange={(e) => setFilters((f) => ({ ...f, [c.key]: e.target.value }))}
-                  placeholder="—"
-                  aria-label={`Filter ${c.label}`}
-                />
-              )}
-            </div>
-          ))}
-
-          {/* Body */}
-          {rows.map((row, r) => (
-            <Fragment key={row.client}>
-              <button
-                type="button"
-                className={`${styles.gCell} ${styles.gGutter} ${styles.gFrozen} ${picked.includes(r) ? styles.gGutterOn : ''}`}
-                onClick={() => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]))}
-                aria-label={`Select row ${r + 1}`}
-              >
-                {r + 1}
-              </button>
-              {cols.map((c, ci) => {
-                const isSel = sel.r === r && sel.c === ci
-                const numeric = ['num', 'money', 'pct'].includes(c.type)
-                return (
-                  <div
-                    key={c.key}
-                    role="gridcell"
-                    aria-selected={isSel}
-                    className={[
-                      styles.gCell,
-                      numeric ? styles.gNum : '',
-                      c.frozen ? styles.gFrozenCol : '',
-                      isSel ? styles.gSel : '',
-                      !isSel && inRange(r, ci) ? styles.gInRange : '',
-                      picked.includes(r) ? styles.gRowOn : '',
-                      matchesFind(row) ? styles.gFound : '',
-                    ].join(' ')}
-                    style={c.frozen ? { left: 30 } : undefined}
-                    onMouseDown={(e) => {
-                      setSel({ r, c: ci })
-                      if (!e.shiftKey) setAnchor({ r, c: ci })
-                      gridRef.current?.focus()
-                    }}
-                    onDoubleClick={() => {
-                      if (['text', 'person', 'num', 'money'].includes(c.type)) {
-                        setDraft(String(row[c.key])); setEditing(true)
-                      }
-                    }}
-                  >
-                    {isSel && editing ? (
-                      <input
-                        ref={editRef}
-                        className={styles.gEdit}
-                        value={draft}
-                        onChange={(e) => setDraft(e.target.value)}
-                        onBlur={commit}
-                        aria-label="Edit cell"
-                      />
-                    ) : c.type === 'status' ? (
-                      <span className={`${styles.gPill} ${row.status === 'Live' ? styles.gPillOn : row.status === 'Draft' ? styles.gPillDraft : ''}`}>
-                        {row.status}
-                      </span>
-                    ) : c.type === 'person' ? (
-                      <span className={styles.gPerson}>
-                        <Avatar name={row.lead} size={16} />
-                        {row.lead.split(' ')[0]}
-                      </span>
-                    ) : c.type === 'spark' ? (
-                      <svg viewBox="0 0 60 16" className={styles.gSpark} aria-hidden="true">
-                        <path
-                          d={row.trend.map((v, i) => {
-                            const mx = Math.max(...row.trend)
-                            return `${i ? 'L' : 'M'}${i * 12},${14 - (v / mx) * 12}`
-                          }).join(' ')}
-                          fill="none"
-                          stroke={row.trend[5] >= row.trend[0] ? 'var(--s1)' : 'var(--s2)'}
-                          strokeWidth="1.5"
-                        />
-                      </svg>
-                    ) : c.bar ? (
-                      /* Data bar behind the figure — magnitude without a
-                         separate chart, and the number stays exact. */
-                      <>
-                        <span className={styles.gBar} style={{ width: `${(row.fee / maxFee) * 100}%` }} />
-                        <span className={styles.gBarVal}>{gridFmt(row.fee, c.type)}</span>
-                      </>
-                    ) : c.scale ? (
-                      <span
-                        className={styles.gScale}
-                        style={{ background: `var(--q${Math.min(5, Math.max(1, Math.round(row.share * 20)))})` }}
-                      >
-                        {gridFmt(row.share, c.type)}
-                      </span>
-                    ) : (
-                      gridFmt(row[c.key], c.type)
-                    )}
-                  </div>
-                )
-              })}
-            </Fragment>
-          ))}
-
-          {/* Aggregations — click a footer cell to cycle sum / avg / max /
-              count / none. They follow the filter, not the raw data. */}
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gGutter} ${styles.gFrozen}`}>Σ</div>
-          {cols.map((c) => {
-            const has = ['num', 'money', 'pct'].includes(c.type)
-            return (
-              <button
-                key={c.key}
-                type="button"
-                className={[
-                  styles.gCell, styles.gFoot,
-                  c.frozen ? styles.gFrozenCol : '',
-                  has ? styles.gNum : '',
-                  has ? '' : styles.gFootMuted,
-                ].join(' ')}
-                style={c.frozen ? { left: 30 } : undefined}
-                onClick={() => has && cycleAgg(c.key)}
-                title={has ? 'Cycle aggregation' : undefined}
-              >
-                {has ? (
-                  <>
-                    <span className={styles.gAggMode}>{aggs[c.key] ?? '—'}</span>
-                    <span>{aggValue(c)}</span>
-                  </>
-                ) : c.frozen ? 'Total' : ''}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Status bar. The left half is what is selected right now — Excel's
-          most-used feature that nobody names. */}
-      <div className={styles.gridFoot}>
-        <span className={styles.gridStat}>{rangeStats()}</span>
-        <span className={styles.gridCell}>
-          Arrows · Shift+arrows range · Enter edit · ⌘C copy · ⌘Z undo
-        </span>
-      </div>
-    </div>
-  )
+  return <SysDataGrid columns={COLS} rows={ROWS} />
 }
 
-/* ── People (NEW) ────────────────────────────────────────────────────────────
-   No avatar exists anywhere in the codebase, and both About and Careers want
-   one. Initials rather than a photo as the default: a studio of five has no
-   headshot pipeline, and a missing image is worse than no image. */
-function Avatar({ name, size = 32 }) {
-  const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2)
-  return (
-    <span
-      className={styles.avatar}
-      style={{ width: size, height: size, fontSize: size * 0.34 }}
-      aria-hidden="true"
-    >
-      {initials}
-    </span>
-  )
-}
 
 function PersonCard() {
   return (
-    <div className={styles.people}>
-      {[['Chris Church', 'Founder, strategy'], ['Dana Cole', 'Design director'], ['Ravi Menon', 'Engineering']].map(
-        ([name, role]) => (
-          <div key={name} className={styles.person}>
-            <Avatar name={name} size={36} />
-            <span className={styles.personText}>
-              <span className={styles.personName}>{name}</span>
-              <span className={styles.personRole}>{role}</span>
-            </span>
-          </div>
-        ),
-      )}
-    </div>
+    <SysPersonCard people={[
+      ['Chris Church', 'Founder, strategy'],
+      ['Dana Cole', 'Design director'],
+      ['Ravi Menon', 'Engineering'],
+    ]} />
   )
 }
 
@@ -2083,18 +695,10 @@ function PersonCard() {
    alone, because the name is what decides whether anyone clicks. */
 function PrevNext() {
   return (
-    <nav className={styles.prevNext} aria-label="Case studies">
-      <a href="#content" className={styles.pnItem}>
-        <span className={styles.pnDir}><Icon name="arrow-left" size={14} />Previous</span>
-        <span className={styles.pnName}>Transcend</span>
-        <span className={styles.pnMeta}>Brand system</span>
-      </a>
-      <a href="#content" className={`${styles.pnItem} ${styles.pnNext}`}>
-        <span className={styles.pnDir}>Next<Icon name="arrow-right" size={14} /></span>
-        <span className={styles.pnName}>Photon</span>
-        <span className={styles.pnMeta}>Brand + Product</span>
-      </a>
-    </nav>
+    <SysPrevNext
+      prev={{ label: 'Motion & focus' }}
+      next={{ label: 'Accessibility' }}
+    />
   )
 }
 
@@ -2102,36 +706,14 @@ function PrevNext() {
    they are in it. Uses IntersectionObserver rather than a scroll handler, so
    it costs nothing per frame. */
 function Scrollspy() {
-  const ids = ['colour', 'type', 'radius', 'spacing']
-  const [active, setActive] = useState('colour')
-
-  useEffect(() => {
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean)
-    if (!els.length) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
-        if (hit) setActive(hit.target.id)
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-
   return (
-    <div className={styles.spyRow}>
-      {ids.map((id) => (
-        <a
-          key={id}
-          href={`#${id}`}
-          aria-current={active === id ? 'true' : undefined}
-          className={`${styles.spyLink} ${active === id ? styles.spyLinkOn : ''}`}
-        >
-          {id}
-        </a>
-      ))}
-    </div>
+    <SysScrollspy
+      sections={[
+        { id: 'sec-foundations', label: 'Foundations' },
+        { id: 'sec-components', label: 'Components' },
+        { id: 'sec-data', label: 'Data' },
+      ]}
+    />
   )
 }
 
@@ -2237,197 +819,102 @@ function ComposedForm() {
 /* Sidebar: sections, an active row, and a count. The site's rail is flat and
    ungrouped, which is fine at eight links and breaks at twenty. */
 function SidebarNav() {
-  const [on, setOn] = useState('Talos')
-  const groups = [
-    ['Brand', ['Talos', 'Transcend', 'Photon']],
-    ['Content', ['Heard', 'Hylands']],
-  ]
+  const [on, setOn] = useState('Workspace')
   return (
-    <nav className={styles.sidebar}>
-      {groups.map(([group, items]) => (
-        <div key={group} className={styles.sidebarGroup}>
-          <div className={styles.sidebarHead}>
-            <span className={styles.sidebarTitle}>{group}</span>
-            <span className={styles.sidebarCount}>{items.length}</span>
-          </div>
-          {items.map((it) => (
-            <button
-              key={it}
-              type="button"
-              aria-current={on === it ? 'page' : undefined}
-              className={`${styles.sidebarItem} ${on === it ? styles.sidebarItemOn : ''}`}
-              onClick={() => setOn(it)}
-            >
-              {it}
-            </button>
-          ))}
-        </div>
-      ))}
-    </nav>
+    <SysSideNav
+      title="Settings"
+      value={on}
+      onChange={setOn}
+      items={[
+        { label: 'Workspace', icon: 'sliders' },
+        { label: 'Members', icon: 'user', count: 4 },
+        { label: 'Publishing', icon: 'upload' },
+        { label: 'Danger zone', icon: 'warning' },
+      ]}
+    />
   )
 }
 
 /* Command palette: the fastest navigation on a site with ninety-six routes,
    and the only pattern here that scales without a redesign. */
 function CommandPalette() {
-  const [q, setQ] = useState('')
-  const all = ['Work — Talos', 'Work — Transcend', 'Thoughts — Rethinking the workweek', 'Contact', 'Design system', 'Careers']
-  const hits = all.filter((r) => r.toLowerCase().includes(q.toLowerCase())).slice(0, 4)
+  const [open, setOpen] = useState(false)
   return (
-    <div className={styles.palette}>
-      <div className={styles.paletteBar}>
-        <span className={styles.paletteHint}>⌘K</span>
-        <input
-          className={styles.paletteInput}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Jump to…"
-          aria-label="Command palette"
-        />
-      </div>
-      <div className={styles.paletteList}>
-        {hits.length ? hits.map((r, i) => (
-          <div key={r} className={`${styles.paletteRow} ${i === 0 ? styles.paletteRowOn : ''}`}>
-            <span>{r}</span>
-            {i === 0 && <span className={styles.paletteEnter}>↵</span>}
-          </div>
-        )) : (
-          <div className={styles.paletteEmpty}>No matches</div>
-        )}
-      </div>
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" icon="search" onClick={() => setOpen(true)}>Open palette</Button>
+      <SysPalette
+        open={open}
+        onClose={() => setOpen(false)}
+        commands={[
+          { label: 'New asset', icon: 'plus', hint: 'N' },
+          { label: 'Open reviews', icon: 'request', hint: 'R' },
+          { label: 'Search assets', icon: 'search', hint: '/' },
+          { label: 'Publish changes', icon: 'merged' },
+          { label: 'Workspace settings', icon: 'sliders' },
+        ]}
+      />
     </div>
   )
 }
 
 function Tabs() {
   const [on, setOn] = useState('Approach')
-  const tabs = ['Approach', 'Craft', 'Outcome']
-
-  return (
-    <div className={styles.tabs}>
-      <div className={styles.tabRow} role="tablist">
-        {tabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            role="tab"
-            aria-selected={on === t}
-            className={`${styles.tab} ${on === t ? styles.tabOn : ''}`}
-            onClick={() => setOn(t)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className={styles.tabPanel} role="tabpanel">
-        <span className={styles.tabPanelText}>{on}</span>
-      </div>
-    </div>
-  )
+  return <SysTabs value={on} onChange={setOn} options={['Approach', 'Craft', 'Outcome']} />
 }
 
 function FilterBar() {
-  const [on, setOn] = useState(['Brand'])
-  const toggle = (v) =>
-    setOn((s) => (s.includes(v) ? s.filter((x) => x !== v) : [...s, v]))
-
+  const [value, setValue] = useState({ discipline: 'Brand' })
   return (
-    <div className={styles.filterBar}>
-      {['Brand', 'Content', 'Product', 'Motion'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          aria-pressed={on.includes(v)}
-          className={`${styles.filterChip} ${on.includes(v) ? styles.filterChipOn : ''}`}
-          onClick={() => toggle(v)}
-        >
-          {v}
-        </button>
-      ))}
-      {on.length > 0 && (
-        <button type="button" className={styles.filterClear} onClick={() => setOn([])}>
-          Clear
-        </button>
-      )}
-    </div>
+    <SysFilterBar
+      count={12}
+      value={value}
+      onChange={setValue}
+      onClear={() => setValue({})}
+      filters={[
+        { key: 'discipline', label: 'Discipline', options: ['Brand', 'Content', 'Product'] },
+        { key: 'status', label: 'Status', options: ['Live', 'Review', 'Draft'] },
+      ]}
+    />
   )
 }
 
 /* The arrow carries the direction so the label never has to say "ascending",
    which at 9px would wrap. */
 function SortControl() {
-  const [by, setBy] = useState('Year')
-  const [desc, setDesc] = useState(true)
-
+  const [by, setBy] = useState('Recently updated')
+  const [dir, setDir] = useState('desc')
   return (
-    <div className={styles.sortRow}>
-      <span className={styles.cardEyebrow}>Sort</span>
-      {['Year', 'Client'].map((v) => (
-        <button
-          key={v}
-          type="button"
-          className={`${styles.sortBtn} ${by === v ? styles.sortBtnOn : ''}`}
-          onClick={() => (by === v ? setDesc((d) => !d) : setBy(v))}
-        >
-          {v}
-          {by === v && <span className={styles.sortArrow}>{desc ? '↓' : '↑'}</span>}
-        </button>
-      ))}
-    </div>
+    <SysSort
+      options={['Recently updated', 'Name', 'Most used']}
+      value={by}
+      direction={dir}
+      onChange={(v, d) => { setBy(v); setDir(d) }}
+    />
   )
 }
 
 /* ── Content patterns (NEW) ──────────────────────────────────────────────── */
 
 function Accordion() {
-  const [open, setOpen] = useState(0)
-  const items = [
-    ['What does a brand system include?', 'Identity, voice, and the rules that keep both intact once other people start using them.'],
-    ['How long does it take?', 'Six to ten weeks for most systems, depending on how much needs to exist at the end.'],
-    ['Do you work with in-house teams?', 'Usually. The handover matters more than the artefact.'],
-  ]
-
   return (
-    <div className={styles.accordion}>
-      {items.map(([q, a], n) => (
-        <div key={q} className={styles.accItem}>
-          <button
-            type="button"
-            className={styles.accHead}
-            onClick={() => setOpen((o) => (o === n ? -1 : n))}
-            aria-expanded={open === n}
-          >
-            <span className={styles.accQ}>{q}</span>
-            <span className={`${styles.accMark} ${open === n ? styles.accMarkOpen : ''}`}>+</span>
-          </button>
-          {open === n && <p className={styles.accA}>{a}</p>}
-        </div>
-      ))}
-    </div>
+    <SysAccordion
+      defaultOpen={['What happens after the first call?']}
+      items={[
+        { title: 'What happens after the first call?', meta: '1 min', body: 'A written scope within two working days — what we would do, in what order, and what it costs.' },
+        { title: 'Who owns the work?', meta: '1 min', body: 'You do, on delivery. Source files and all.' },
+        { title: 'What if it needs to change later?', meta: '2 min', body: 'The system is built to be changed. That is what the tokens are for.' },
+      ]}
+    />
   )
 }
 
 /* Tooltip on hover and focus both — hover alone makes it keyboard-invisible. */
 function Tooltip() {
-  const [show, setShow] = useState(false)
   return (
-    <span className={styles.tipWrap}>
-      <button
-        type="button"
-        className={styles.tipTrigger}
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-        onFocus={() => setShow(true)}
-        onBlur={() => setShow(false)}
-      >
-        brand system
-      </button>
-      {show && (
-        <span className={styles.tip} role="tooltip">
-          The rules that keep an identity intact once other people use it.
-        </span>
-      )}
-    </span>
+    <div className={styles.tipRow}>
+      <SysTooltip label="Copy path"><Button size="sm" icon="copy">Copy</Button></SysTooltip>
+      <SysTooltip label="Opens in a new tab" side="bottom"><Button size="sm" icon="external">Open</Button></SysTooltip>
+    </div>
   )
 }
 
@@ -2435,20 +922,7 @@ function Tooltip() {
 
 function ProgressBar() {
   const [pct, setPct] = useState(38)
-  return (
-    <div className={styles.progressWrap}>
-      <div className={styles.progressTrack}>
-        <div className={styles.progressFill} style={{ width: `${pct}%` }} />
-      </div>
-      <div className={styles.progressMeta}>
-        <span className={styles.progressPct}>{pct}%</span>
-        <div className={styles.arrows}>
-          <button type="button" className={styles.arrow} onClick={() => setPct((p) => Math.max(0, p - 12))}>−</button>
-          <button type="button" className={styles.arrow} onClick={() => setPct((p) => Math.min(100, p + 12))}>+</button>
-        </div>
-      </div>
-    </div>
-  )
+  return <SysProgress value={pct} onChange={setPct} />
 }
 
 /* Contained inside the demo rather than fixed to the viewport, so it can be
@@ -2457,19 +931,17 @@ function ProgressBar() {
 function ConfirmDialog() {
   const [open, setOpen] = useState(false)
   return (
-    <div className={styles.confirmStage}>
-      {open ? (
-        <div className={styles.confirm} role="dialog" aria-label="Confirm">
-          <span className={styles.confirmTitle}>Delete this case study?</span>
-          <p className={styles.confirmBody}>This cannot be undone.</p>
-          <div className={styles.confirmActions}>
-            <button type="button" className={styles.btnOutline} onClick={() => setOpen(false)}>Cancel</button>
-            <button type="button" className={styles.btnDanger} onClick={() => setOpen(false)}>Delete</button>
-          </div>
-        </div>
-      ) : (
-        <button type="button" className={styles.btnDanger} onClick={() => setOpen(true)}>Delete</button>
-      )}
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" onClick={() => setOpen(true)}>Delete asset</Button>
+      <SysConfirm
+        open={open}
+        onClose={() => setOpen(false)}
+        onConfirm={() => {}}
+        tone="bad"
+        title="Delete logo-lockup.fig?"
+        confirm="Delete"
+        body="It is used in 12 places. This cannot be undone."
+      />
     </div>
   )
 }
@@ -2478,107 +950,37 @@ function ConfirmDialog() {
 
 function Lightbox() {
   const [open, setOpen] = useState(false)
+  const [i, setI] = useState(0)
   return (
-    <div className={styles.lightStage}>
-      <button type="button" className={styles.lightThumb} onClick={() => setOpen(true)} aria-label="Open">
-        <span className={styles.lightThumbHint}>Open</span>
-      </button>
-      {open && (
-        <div className={styles.lightOverlay} role="dialog" aria-label="Lightbox">
-          <button type="button" className={styles.lightClose} onClick={() => setOpen(false)} aria-label="Close">×</button>
-          <span className={styles.lightFrame} />
-          <span className={styles.caption}>Identity system, 2026 — 1 of 6</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function Gallery() {
-  const [on, setOn] = useState(0)
-  return (
-    <div className={styles.gallery}>
-      <span className={styles.galleryMain}>
-        <span className={styles.galleryNum}>{on + 1}</span>
-      </span>
-      <div className={styles.galleryThumbs}>
-        {[0, 1, 2, 3].map((n) => (
-          <button
-            key={n}
-            type="button"
-            className={`${styles.galleryThumb} ${n === on ? styles.galleryThumbOn : ''}`}
-            onClick={() => setOn(n)}
-            aria-label={`Image ${n + 1}`}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/* Range input rather than a drag handler: it is keyboard-operable for free
-   and cannot get stuck mid-drag when the pointer leaves the element. */
-function BeforeAfter() {
-  const [pos, setPos] = useState(50)
-  return (
-    <div className={styles.baWrap}>
-      <div className={styles.ba}>
-        <span className={styles.baAfter}><span className={styles.baTag}>After</span></span>
-        <span className={styles.baBefore} style={{ width: `${pos}%` }}>
-          <span className={styles.baTag}>Before</span>
-        </span>
-        <span className={styles.baLine} style={{ left: `${pos}%` }} />
-      </div>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={pos}
-        onChange={(e) => setPos(Number(e.target.value))}
-        className={styles.baRange}
-        aria-label="Reveal"
+    <div className={styles.overlayStageBox}>
+      <Button size="sm" icon="image" onClick={() => setOpen(true)}>Open lightbox</Button>
+      <SysLightbox
+        open={open}
+        onClose={() => setOpen(false)}
+        index={i}
+        onIndex={setI}
+        items={[
+          { label: 'Identity — primary', ratio: '16 / 9' },
+          { label: 'Identity — stacked', ratio: '1 / 1' },
+          { label: 'Social kit', ratio: '4 / 5' },
+        ]}
       />
     </div>
   )
 }
 
-function VideoControls() {
-  const [playing, setPlaying] = useState(false)
-  const [muted, setMuted] = useState(true)
-  const [pos, setPos] = useState(28)
+function Gallery() {
+  return <SysGallery items={['Primary', 'Stacked', 'Mark only', 'Small size']} />
+}
 
-  return (
-    <div className={styles.videoWrap}>
-      <div className={styles.videoBar}>
-        <button
-          type="button"
-          className={styles.videoBtn}
-          onClick={() => setPlaying((p) => !p)}
-          aria-label={playing ? 'Pause' : 'Play'}
-        >
-          {playing ? '❙❙' : '▶'}
-        </button>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={pos}
-          onChange={(e) => setPos(Number(e.target.value))}
-          className={styles.videoScrub}
-          aria-label="Scrub"
-        />
-        <span className={styles.videoTime}>0:{String(Math.round(pos * 0.6)).padStart(2, '0')}</span>
-        <button
-          type="button"
-          className={styles.videoBtn}
-          onClick={() => setMuted((m) => !m)}
-          aria-label={muted ? 'Unmute' : 'Mute'}
-        >
-          {muted ? '🔇' : '🔊'}
-        </button>
-      </div>
-    </div>
-  )
+/* Range input rather than a drag handler: it is keyboard-operable for free
+   and cannot get stuck mid-drag when the pointer leaves the element. */
+function BeforeAfter() {
+  return <SysBeforeAfter />
+}
+
+function VideoControls() {
+  return <SysVideoControls title="Identity walkthrough" />
 }
 
 /* ── AI patterns (NEW) ───────────────────────────────────────────────────── */
@@ -2586,63 +988,11 @@ function VideoControls() {
 /* Reserves the full height of the finished paragraph before it starts, so the
    layout doesn't reflow line by line as tokens land. */
 function StreamingText() {
-  const full = 'The card surface is #161616 on a #0a0a0a ground, at a 4px radius — the one surface the whole site uses.'
-  const [n, setN] = useState(0)
-  const [running, setRunning] = useState(false)
-
-  const run = () => {
-    if (running) return
-    setRunning(true)
-    setN(0)
-    const id = setInterval(() => {
-      setN((v) => {
-        if (v >= full.length) {
-          clearInterval(id)
-          setRunning(false)
-          return v
-        }
-        return v + 2
-      })
-    }, 24)
-  }
-
-  return (
-    <div className={styles.stream}>
-      <p className={styles.streamText}>
-        <span className={styles.streamGhost}>{full}</span>
-        <span className={styles.streamLive}>
-          {full.slice(0, n)}
-          {running && <span className={styles.caret} />}
-        </span>
-      </p>
-      <button type="button" className={styles.btnDemo} onClick={run} disabled={running}>
-        {running ? 'Streaming' : 'Replay'}
-      </button>
-    </div>
-  )
+  return <SysStreamingText />
 }
 
 function ResponseFeedback() {
-  const [vote, setVote] = useState(null)
-  return (
-    <div className={styles.voteRow}>
-      {[['up', 'Helpful'], ['down', 'Not helpful']].map(([k, label]) => (
-        <button
-          key={k}
-          type="button"
-          aria-pressed={vote === k}
-          aria-label={label}
-          className={`${styles.voteBtn} ${vote === k ? styles.voteBtnOn : ''}`}
-          onClick={() => setVote((v) => (v === k ? null : k))}
-        >
-          {k === 'up' ? '▲' : '▼'}
-        </button>
-      ))}
-      <span className={styles.voteNote}>
-        {vote === 'up' ? 'Thanks.' : vote === 'down' ? 'Noted — what was wrong?' : 'Was this useful?'}
-      </span>
-    </div>
-  )
+  return <SysResponseFeedback />
 }
 
 /* ── Charts (NEW) ────────────────────────────────────────────────────────────
@@ -2671,77 +1021,18 @@ const REVENUE = [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96]
 const PIPELINE = [28, 33, 39, 41, 52, 49, 61, 58, 67, 72, 70, 81]
 const TARGET = 75
 
-/* Shared axis furniture. Ticks as well as gridlines: a gridline helps you read
-   across, a tick tells you exactly where the value sits. */
-function YAxis({ ticks, y, x0, x1, unit, minor = [] }) {
-  const base = ticks[0]
-  const top = ticks[ticks.length - 1]
-  return (
-    <g>
-      {ticks.map((v) => (
-        <g key={v}>
-          <line x1={x0} x2={x1} y1={y(v)} y2={y(v)} className={styles.grid} />
-          <line x1={x0 - 4} x2={x0} y1={y(v)} y2={y(v)} className={styles.tick} />
-          <text x={x0 - 7} y={y(v) + 2.5} className={styles.axisText} textAnchor="end">{v}</text>
-        </g>
-      ))}
-      {minor.map((v) => (
-        <line key={v} x1={x0 - 2} x2={x0} y1={y(v)} y2={y(v)} className={styles.tickMinor} />
-      ))}
-      {/* Drawn spines: a plot with a baseline is a measurement, not a picture. */}
-      <line x1={x0} x2={x0} y1={y(top)} y2={y(base)} className={styles.spine} />
-      <line x1={x0} x2={x1} y1={y(base)} y2={y(base)} className={styles.spine} />
-      {unit && <text x={x0 - 7} y={y(top) - 9} className={styles.unitText} textAnchor="end">{unit}</text>}
-    </g>
-  )
-}
 
-function Legend({ items }) {
-  return (
-    <div className={styles.legend2}>
-      {items.map(([label, colour, dashed]) => (
-        <span key={label} className={styles.legendKey}>
-          <span
-            className={dashed ? styles.legendDash : styles.legendSwatch}
-            style={dashed ? { borderColor: colour } : { background: colour }}
-          />
-          {label}
-        </span>
-      ))}
-    </div>
-  )
-}
 
 /* KPI row: figure, delta, and the shape behind it. A number with no trend is a
    number you can't act on, so the sparkline is part of the tile rather than a
    separate chart. */
 function KpiRow() {
-  const tiles = [
-    ['MRR', '$96k', '+4.3%', true, REVENUE, 0],
-    ['Pipeline', '$81k', '+15.7%', true, PIPELINE, 1],
-    ['Churn', '4.1%', '−0.6pt', true, [12, 11, 11, 10, 9, 9, 8, 7, 7, 5, 4, 4], 2],
-  ]
   return (
-    <div className={styles.tiles}>
-      {tiles.map(([label, fig, delta, good, d, s]) => {
-        const max = Math.max(...d) * 1.2
-        const pts = d.map((v, i) => `${i ? 'L' : 'M'}${i * 10},${26 - (v / max) * 22}`).join(' ')
-        return (
-          <div key={label} className={styles.tile}>
-            <span className={styles.tileLabel}>{label}</span>
-            <div className={styles.tileMain}>
-              <span className={styles.tileFig}>{fig}</span>
-              <svg viewBox="0 0 116 28" className={styles.tileSpark} aria-hidden="true">
-                <path d={pts} fill="none" stroke={SERIES[s]} strokeWidth="1.5" />
-              </svg>
-            </div>
-            <span className={`${styles.tileDelta} ${good ? styles.tileDeltaGood : ''}`}>
-              {delta} <span className={styles.tileVs}>vs prior period</span>
-            </span>
-          </div>
-        )
-      })}
-    </div>
+    <SysKpiRow tiles={[
+      ['MRR', '$96k', '+4.3%', true, REVENUE, 0],
+      ['Pipeline', '$81k', '+15.7%', true, PIPELINE, 1],
+      ['Churn', '4.1%', '−0.6pt', true, [12, 11, 11, 10, 9, 9, 8, 7, 7, 5, 4, 4], 2],
+    ]} />
   )
 }
 
@@ -2749,88 +1040,15 @@ function KpiRow() {
    x-position, and a table view — the numbers have to be available exactly,
    not just approximately. */
 function TimeSeries() {
-  const [hover, setHover] = useState(null)
-  const [table, setTable] = useState(false)
-  const x = (i) => 52 + i * 55
-  const y = (v) => 176 - (v / 100) * 150
-  const path = (d) => d.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')
-
-  if (table) {
-    return (
-      <figure className={styles.fig}>
-        <div className={styles.tableWrap}>
-          <table className={styles.dataTable}>
-            <thead>
-              <tr><th>Period</th><th className={styles.tNum}>Revenue</th><th className={styles.tNum}>Pipeline</th><th className={styles.tNum}>vs target</th></tr>
-            </thead>
-            <tbody>
-              {MO.map((m, i) => (
-                <tr key={i}>
-                  <td>P{i + 1}</td>
-                  <td className={styles.tNum}>{REVENUE[i]}</td>
-                  <td className={styles.tNum}>{PIPELINE[i]}</td>
-                  <td className={styles.tNum}>{REVENUE[i] - TARGET > 0 ? `+${REVENUE[i] - TARGET}` : REVENUE[i] - TARGET}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <button type="button" className={styles.tableToggle} onClick={() => setTable(false)}>Show chart</button>
-      </figure>
-    )
-  }
-
+  const data = [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96]
   return (
-    <figure className={styles.fig}>
-      <div className={styles.plotWrap}>
-        <svg
-          viewBox="0 0 720 200"
-          className={styles.svgWide}
-          role="img"
-          aria-label="Revenue and pipeline over twelve periods against target"
-          onMouseLeave={() => setHover(null)}
-        >
-          <YAxis ticks={[0, 25, 50, 75, 100]} minor={[12.5, 37.5, 62.5, 87.5]} y={y} x0={46} x1={712} unit="$k" />
-          {/* Reference line — the number these series are being judged against. */}
-          <line x1="46" x2="712" y1={y(TARGET)} y2={y(TARGET)} className={styles.refLine} />
-          <text x="712" y={y(TARGET) - 5} className={styles.refText} textAnchor="end">Target {TARGET}</text>
-
-          {hover !== null && <line x1={x(hover)} x2={x(hover)} y1="12" y2="176" className={styles.crosshair} />}
-
-          <path d={path(PIPELINE)} fill="none" stroke={SERIES[1]} strokeWidth="1.5" />
-          <path d={path(REVENUE)} fill="none" stroke={SERIES[0]} strokeWidth="1.5" />
-          {[REVENUE, PIPELINE].map((d, s) =>
-            d.map((v, i) => (
-              <circle
-                key={`${s}-${i}`}
-                cx={x(i)} cy={y(v)} r={hover === i ? 4 : 2.5}
-                fill={SERIES[s]} className={styles.dot}
-              />
-            )),
-          )}
-          {MO.map((m, i) => (
-            <rect key={i} x={x(i) - 27} y="8" width="55" height="168" fill="transparent" onMouseEnter={() => setHover(i)} />
-          ))}
-          {MO.map((m, i) => (
-            <text key={i} x={x(i)} y="192" className={styles.axisText} textAnchor="middle">{m}</text>
-          ))}
-        </svg>
-        {hover !== null && (
-          <div className={styles.tipBox} style={{ left: `${(x(hover) / 720) * 100}%` }}>
-            <span className={styles.tipMonth}>Period {hover + 1}</span>
-            <span className={styles.tipRow}><i style={{ background: 'var(--s1)' }} />Revenue<b>${REVENUE[hover]}k</b></span>
-            <span className={styles.tipRow}><i style={{ background: 'var(--s2)' }} />Pipeline<b>${PIPELINE[hover]}k</b></span>
-            <span className={styles.tipDelta}>
-              {REVENUE[hover] >= TARGET ? '+' : ''}{REVENUE[hover] - TARGET} vs target
-            </span>
-          </div>
-        )}
-      </div>
-      <div className={styles.figFoot}>
-        <Legend items={[['Revenue', 'var(--s1)'], ['Pipeline', 'var(--s2)'], ['Target', 'rgba(255,255,255,0.35)', true]]} />
-        <button type="button" className={styles.tableToggle} onClick={() => setTable(true)}>Show table</button>
-      </div>
-    </figure>
+    <SysTimeSeries
+      max={120} unit="$k"
+      data={data}
+      band={data.map((v) => [Math.max(0, v - 12), v + 12])}
+      labels={MO}
+      caption="The band is the same hue at low opacity — it is the same measure, drawn as a range."
+    />
   )
 }
 
@@ -2838,26 +1056,9 @@ function TimeSeries() {
    the chart rather than in a caption. */
 function BarChart() {
   const mean = Math.round(REVENUE.reduce((a, b) => a + b, 0) / REVENUE.length)
-  const y = (v) => 150 - (v / 100) * 124
-  const w = 22
   return (
     <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue by period against mean">
-        <YAxis ticks={[0, 50, 100]} minor={[25, 75]} y={y} x0={40} x1={396} unit="$k" />
-        {REVENUE.map((v, i) => (
-          <rect
-            key={i} x={44 + i * 29} y={y(v)} width={w} height={150 - y(v)}
-            rx="0" fill={SERIES[0]} className={styles.mark}
-          >
-            <title>P{i + 1}: ${v}k</title>
-          </rect>
-        ))}
-        <line x1="40" x2="396" y1={y(mean)} y2={y(mean)} className={styles.refLine} />
-        <text x="396" y={y(mean) - 4} className={styles.refText} textAnchor="end">Mean {mean}</text>
-        {MO.map((m, i) => (
-          <text key={i} x={55 + i * 29} y="165" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
+      <SysBarChart data={REVENUE} labels={MO} unit="k" reference={mean} referenceLabel={`Mean ${mean}`} />
       <figcaption className={styles.figCap}>Axis starts at zero — a truncated baseline exaggerates every difference.</figcaption>
     </figure>
   )
@@ -2866,290 +1067,144 @@ function BarChart() {
 /* Ranked, with the share stated. A ranking chart whose bars aren't sorted is
    making the reader do the sorting. */
 function BarH() {
-  const data = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14]]
-  const total = data.reduce((a, [, v]) => a + v, 0)
-  const max = 70
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Projects by discipline, ranked">
-        {data.map(([label, v], i) => {
-          const wpx = (v / max) * 232
-          return (
-            <g key={label}>
-              <text x="0" y={24 + i * 32} className={styles.axisText}>{label}</text>
-              <rect x="76" y={13 + i * 32} width={wpx} height="16" rx="0" fill={SERIES[1]} className={styles.mark}>
-                <title>{label}: {v} ({Math.round((v / total) * 100)}%)</title>
-              </rect>
-              <text x={76 + wpx + 8} y={25 + i * 32} className={styles.valueText}>{v}</text>
-              <text x="396" y={25 + i * 32} className={styles.axisMuted} textAnchor="end">
-                {Math.round((v / total) * 100)}%
-              </text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Sorted descending, count and share both shown.</figcaption>
-    </figure>
+    <SysRanked data={[
+      { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+      { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+      { label: 'Advisory', value: 14 },
+    ]} />
   )
 }
 
 /* 100% stacked: for composition over time, where the mix matters and the
    total doesn't. */
 function StackedBar() {
-  const mix = [[46, 30, 24], [44, 31, 25], [42, 33, 25], [40, 32, 28], [38, 34, 28], [35, 35, 30],
-    [34, 34, 32], [32, 35, 33], [31, 34, 35], [29, 35, 36], [28, 34, 38], [26, 34, 40]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue mix over time">
-        <YAxis ticks={[0, 50, 100]} y={(v) => 150 - (v / 100) * 124} x0={40} x1={396} unit="%" />
-        {mix.map((col, i) => {
-          let acc = 0
-          return (
-            <g key={i}>
-              {col.map((v, s) => {
-                const h = (v / 100) * 124
-                const yy = 150 - acc - h
-                acc += h
-                return (
-                  <rect key={s} x={44 + i * 29} y={yy + 1} width="22" height={Math.max(0, h - 2)} rx="0" fill={SERIES[s]} className={styles.mark}>
-                    <title>P{i + 1} {['Brand', 'Content', 'Product'][s]}: {v}%</title>
-                  </rect>
-                )
-              })}
-              <text x={55 + i * 29} y="165" className={styles.axisText} textAnchor="middle">{MO[i]}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[['Brand', 'var(--s1)'], ['Content', 'var(--s2)'], ['Product', 'var(--s3)']]} />
-      <figcaption className={styles.figCap}>100% stacked — mix over time, where the total isn't the question.</figcaption>
-    </figure>
+    <SysStackedBar
+      parts={['Brand', 'Content', 'Product']}
+      caption="A 2px surface gap between segments, so two adjacent parts never read as one longer one."
+      rows={[
+        { label: 'Q1', values: [24, 14, 8] },
+        { label: 'Q2', values: [31, 18, 11] },
+        { label: 'Q3', values: [38, 21, 16] },
+        { label: 'Q4', values: [42, 26, 19] },
+      ]}
+    />
   )
 }
 
 /* Waterfall: how a total got from one number to another. The single most
    useful analytical chart the site doesn't have. */
 function Waterfall() {
-  const steps = [['Open', 42, 'base'], ['New', 31, 'up'], ['Expand', 14, 'up'], ['Churn', -11, 'down'], ['Contract', -6, 'down'], ['Close', 70, 'base']]
-  const y = (v) => 150 - (v / 90) * 124
-  let run = 0
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Pipeline bridge">
-        <YAxis ticks={[0, 45, 90]} y={y} x0={40} x1={396} unit="$k" />
-        {steps.map(([label, v, kind], i) => {
-          const isBase = kind === 'base'
-          const start = isBase ? 0 : run
-          const end = isBase ? v : run + v
-          if (!isBase) run += v
-          else run = v
-          const top = Math.min(start, end)
-          const h = Math.abs(end - start)
-          const fill = isBase ? 'rgba(255,255,255,0.28)' : kind === "up" ? SERIES[1] : SERIES[0]
-          return (
-            <g key={label}>
-              <rect x={48 + i * 58} y={y(top + h)} width="40" height={Math.max(1, (h / 90) * 124)} rx="0" fill={fill} className={styles.mark}>
-                <title>{label}: {v > 0 && !isBase ? '+' : ''}{v}</title>
-              </rect>
-              {/* Connector to the next step, so the running total is legible. */}
-              {i < steps.length - 1 && (
-                <line x1={48 + i * 58 + 40} x2={48 + (i + 1) * 58} y1={y(end)} y2={y(end)} className={styles.connector} />
-              )}
-              <text x={68 + i * 58} y={y(top + h) - 5} className={styles.valueText} textAnchor="middle">
-                {!isBase && v > 0 ? '+' : ''}{v}
-              </text>
-              <text x={68 + i * 58} y="165" className={styles.axisMuted} textAnchor="middle">{label}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Bridge — how the opening number became the closing one.</figcaption>
-    </figure>
+    <SysWaterfall
+      max={90} unit="n"
+      caption="Colour carries direction and the sign is on the label too — never colour alone."
+      steps={[
+        { label: 'Open', value: 42, kind: 'base' },
+        { label: 'New', value: 31 },
+        { label: 'Expand', value: 14 },
+        { label: 'Churn', value: -11 },
+        { label: 'Contract', value: -6 },
+        { label: 'Close', value: 70, kind: 'base' },
+      ]}
+    />
   )
 }
 
 /* Bullet: actual against target and a qualitative range, in the space a
    gauge would waste. */
 function Bullet() {
-  const rows = [['Revenue', 96, 90, 100], ['Pipeline', 81, 95, 120], ['Retention', 88, 85, 100], ['Utilisation', 67, 80, 100]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Metrics against target">
-        {rows.map(([label, actual, target, max], i) => {
-          const sc = (v) => (v / max) * 232
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 38} className={styles.axisText}>{label}</text>
-              {/* Qualitative bands, deliberately low-contrast greys. */}
-              <rect x="86" y={14 + i * 38} width={sc(max)} height="16" rx="0" fill="rgba(255,255,255,0.04)" />
-              <rect x="86" y={14 + i * 38} width={sc(max * 0.75)} height="16" rx="0" fill="rgba(255,255,255,0.07)" />
-              <rect x="86" y={18 + i * 38} width={sc(actual)} height="8" rx="0" fill={actual >= target ? SERIES[1] : SERIES[0]} className={styles.mark}>
-                <title>{label}: {actual} of target {target}</title>
-              </rect>
-              {/* Target as a tick across the measure — the reference, not a bar. */}
-              <line x1={86 + sc(target)} x2={86 + sc(target)} y1={12 + i * 38} y2={32 + i * 38} className={styles.targetTick} />
-              <text x="396" y={26 + i * 38} className={styles.valueText} textAnchor="end">{actual}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[['At or above target', 'var(--s2)'], ['Below target', 'var(--s1)']]} />
-      <figcaption className={styles.figCap}>Bullet — actual, target tick, and qualitative bands.</figcaption>
-    </figure>
+    <SysBullet
+      caption="Bar is actual, tick is target. Four gauges take four times the room and say less."
+      rows={[
+        { label: 'Revenue', value: 96, target: 90, max: 100 },
+        { label: 'Pipeline', value: 81, target: 95, max: 120 },
+        { label: 'Retention', value: 88, target: 85, max: 100 },
+        { label: 'Utilisation', value: 67, target: 80, max: 100 },
+      ]}
+    />
   )
 }
 
 /* Distribution, not average. A mean hides the shape; a histogram is how you
    find out the average is lying to you. */
 function Histogram() {
-  const bins = [2, 5, 9, 14, 19, 22, 17, 11, 6, 3]
-  const labels = ['0', '', '20', '', '40', '', '60', '', '80', '']
-  const max = 24
-  const y = (v) => 150 - (v / max) * 124
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project value distribution">
-        <YAxis ticks={[0, 12, 24]} y={y} x0={40} x1={396} unit="n" />
-        {bins.map((v, i) => (
-          <rect key={i} x={45 + i * 35.4} y={y(v)} width="34" height={150 - y(v)} fill={SERIES[2]} className={styles.mark}>
-            <title>Bin {i + 1}: {v} projects</title>
-          </rect>
-        ))}
-        {/* Median marker — the number a skewed distribution should be read by. */}
-        <line x1={45 + 5.2 * 35.4} x2={45 + 5.2 * 35.4} y1="20" y2="150" className={styles.refLine} />
-        <text x={45 + 5.2 * 35.4 + 6} y="28" className={styles.refText}>Median</text>
-        {labels.map((l, i) => l && (
-          <text key={i} x={62 + i * 35.4} y="165" className={styles.axisText} textAnchor="middle">{l}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Histogram — bars touch, because the x-axis is continuous.</figcaption>
-    </figure>
+    <SysHistogram
+      unit="n"
+      caption="Bars touch: the axis is continuous, and gaps would make it a bar chart of unrelated categories."
+      bins={[
+        { label: '0', value: 2 }, { label: '5', value: 6 }, { label: '10', value: 14 },
+        { label: '15', value: 23 }, { label: '20', value: 31 }, { label: '25', value: 27 },
+        { label: '30', value: 18 }, { label: '35', value: 9 }, { label: '40', value: 4 },
+      ]}
+    />
   )
 }
 
 /* Box plot: five numbers per category, for comparing spread rather than
    centre. */
 function BoxPlot() {
-  const groups = [['Brand', 18, 34, 47, 61, 88], ['Content', 8, 16, 24, 33, 52], ['Product', 26, 44, 62, 78, 96], ['Motion', 6, 12, 19, 28, 41]]
-  const y = (v) => 148 - (v / 100) * 120
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project value spread by discipline">
-        <YAxis ticks={[0, 50, 100]} minor={[25, 75]} y={y} x0={40} x1={396} unit="$k" />
-        {groups.map(([label, lo, q1, med, q3, hi], i) => {
-          const cx = 84 + i * 82
-          return (
-            <g key={label}>
-              <line x1={cx} x2={cx} y1={y(hi)} y2={y(lo)} className={styles.whisker} />
-              <line x1={cx - 10} x2={cx + 10} y1={y(hi)} y2={y(hi)} className={styles.whisker} />
-              <line x1={cx - 10} x2={cx + 10} y1={y(lo)} y2={y(lo)} className={styles.whisker} />
-              <rect x={cx - 20} y={y(q3)} width="40" height={y(q1) - y(q3)} rx="0" fill={SERIES[2]} fillOpacity="0.45" stroke={SERIES[2]} strokeWidth="1" className={styles.mark}>
-                <title>{label}: median {med}, IQR {q1}–{q3}</title>
-              </rect>
-              <line x1={cx - 20} x2={cx + 20} y1={y(med)} y2={y(med)} className={styles.medianLine} />
-              <text x={cx} y="165" className={styles.axisMuted} textAnchor="middle">{label}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Box — min, quartiles, median, max. Spread, not just centre.</figcaption>
-    </figure>
+    <SysBoxPlot
+      max={100}
+      caption="Five numbers a bar chart of averages would have thrown away."
+      groups={[
+        { label: 'Brand', min: 18, q1: 34, median: 47, q3: 61, max: 88 },
+        { label: 'Content', min: 8, q1: 16, median: 24, q3: 33, max: 52 },
+        { label: 'Product', min: 26, q1: 44, median: 62, q3: 78, max: 96 },
+        { label: 'Motion', min: 6, q1: 12, median: 19, q3: 28, max: 41 },
+      ]}
+    />
   )
 }
 
 /* Funnel with the step conversion stated. A funnel that only shows volumes
    makes you do the division. */
 function Funnel() {
-  const steps = [['Visits', 4820], ['Enquiries', 412], ['Calls', 168], ['Proposals', 74], ['Won', 31]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Conversion funnel">
-        {steps.map(([label, v], i) => {
-          const wpx = (v / steps[0][1]) ** 0.42 * 300
-          const prev = i ? steps[i - 1][1] : null
-          return (
-            <g key={label}>
-              <rect x={50} y={8 + i * 32} width={wpx} height="22" rx="0" fill={SERIES[0]} fillOpacity={1 - i * 0.14} className={styles.mark}>
-                <title>{label}: {v.toLocaleString()}</title>
-              </rect>
-              <text x={56} y={23 + i * 32} className={styles.funnelLabel}>{label}</text>
-              <text x={50 + wpx + 8} y={23 + i * 32} className={styles.valueText}>{v.toLocaleString()}</text>
-              {prev && (
-                <text x="396" y={23 + i * 32} className={styles.axisMuted} textAnchor="end">
-                  {((v / prev) * 100).toFixed(1)}%
-                </text>
-              )}
-            </g>
-          )
-        })}
-      </svg>
-      <figcaption className={styles.figCap}>Step conversion on the right — the number people actually want.</figcaption>
-    </figure>
+    <SysFunnel
+      caption="Each stage as a share of the one above it — the number somebody can act on."
+      steps={[
+        { label: 'Visits', value: 4820 }, { label: 'Enquiries', value: 412 },
+        { label: 'Calls', value: 168 }, { label: 'Proposals', value: 74 },
+        { label: 'Won', value: 31 },
+      ]}
+    />
   )
 }
 
 /* Cohort retention: the grid that answers "is the product getting stickier".
    Sequential ramp, because every cell is the same measure. */
 function Cohort() {
-  const rows = [
-    ['P1', [100, 82, 71, 64, 58, 55]],
-    ['P2', [100, 85, 74, 68, 63, null]],
-    ['P3', [100, 88, 79, 72, null, null]],
-    ['P4', [100, 86, 80, null, null, null]],
-    ['P5', [100, 91, null, null, null, null]],
-  ]
-  const q = (v) => (v === null ? 0 : v >= 90 ? 5 : v >= 80 ? 4 : v >= 70 ? 3 : v >= 60 ? 2 : 1)
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Cohort retention">
-        {['M0', 'M1', 'M2', 'M3', 'M4', 'M5'].map((m, ci) => (
-          <text key={m} x={62 + ci * 56} y="14" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-        {rows.map(([label, vals], ri) => (
-          <g key={label}>
-            <text x="0" y={38 + ri * 29} className={styles.axisText}>{label}</text>
-            {vals.map((v, ci) => (
-              <g key={ci}>
-                <rect x={36 + ci * 56} y={22 + ri * 29} width="52" height="24" rx="0" fill={`var(--q${q(v)})`} className={styles.mark}>
-                  {v !== null && <title>{label} · M{ci}: {v}%</title>}
-                </rect>
-                {v !== null && (
-                  <text x={62 + ci * 56} y={38 + ri * 29} className={styles.cellText} textAnchor="middle">{v}</text>
-                )}
-              </g>
-            ))}
-          </g>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Retention by cohort — the diagonal is incomplete, not zero.</figcaption>
-    </figure>
+    <SysCohort
+      caption="Reads down for 'does this get better', across for 'how long do they stay'."
+      rows={[
+        { label: 'Jan', cells: [100, 82, 71, 64, 58] },
+        { label: 'Feb', cells: [100, 85, 74, 66, null] },
+        { label: 'Mar', cells: [100, 88, 79, null, null] },
+        { label: 'Apr', cells: [100, 91, null, null, null] },
+      ]}
+    />
   )
 }
 
 /* Scatter with a fitted line and the correlation stated, so the relationship
    is quantified rather than implied by the eye. */
 function Scatter() {
-  const pts = [[22, 31], [38, 44], [45, 39], [52, 58], [61, 55], [68, 71], [74, 66], [81, 84], [33, 28], [57, 52], [88, 79], [29, 36], [64, 61], [47, 50]]
-  const sx = (v) => 46 + (v / 100) * 340
-  const sy = (v) => 148 - (v / 100) * 122
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Spend against return">
-        <YAxis ticks={[0, 50, 100]} y={sy} x0={40} x1={396} unit="$k" />
-        {/* Fit line, dashed so it never reads as data. */}
-        <line x1={sx(18)} y1={sy(22)} x2={sx(90)} y2={sy(84)} className={styles.fitLine} />
-        <text x={sx(90)} y={sy(84) - 6} className={styles.refText} textAnchor="end">r = 0.91</text>
-        {pts.map(([a, b], i) => (
-          <circle key={i} cx={sx(a)} cy={sy(b)} r="4" fill={SERIES[1]} className={styles.dot}>
-            <title>Spend ${a}k · Return ${b}k</title>
-          </circle>
-        ))}
-        {[0, 50, 100].map((v) => (
-          <text key={v} x={sx(v)} y="165" className={styles.axisText} textAnchor="middle">{v}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Scatter with fit — spend, $k, against return.</figcaption>
-    </figure>
+    <SysScatter
+      xLabel="Spend" yLabel="Reach" xMax={100} yMax={100}
+      points={[
+        { label: 'Meta', x: 38, y: 62 }, { label: 'LinkedIn', x: 27, y: 44 },
+        { label: 'Search', x: 12, y: 21 }, { label: 'Newsletter', x: 7, y: 33 },
+        { label: 'Outreach', x: 18, y: 29 }, { label: 'Events', x: 61, y: 74 },
+        { label: 'Podcast', x: 44, y: 39 },
+      ]}
+    />
   )
 }
 
@@ -3157,88 +1212,43 @@ function Scatter() {
    change legible at a glance — and it refuses to be read as a trend, because
    there is nothing between the ends to misread. */
 function SlopeChart() {
-  const rows = [['Brand', 61, 84], ['Content', 44, 61], ['Product', 38, 70], ['Motion', 22, 19]]
-  const y = (v) => 150 - (v / 100) * 124
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Change by discipline">
-        <line x1="120" x2="120" y1="20" y2="150" className={styles.spine} />
-        <line x1="280" x2="280" y1="20" y2="150" className={styles.spine} />
-        <text x="120" y="165" className={styles.axisMuted} textAnchor="middle">2025</text>
-        <text x="280" y="165" className={styles.axisMuted} textAnchor="middle">2026</text>
-        {rows.map(([label, a, b], i) => (
-          <g key={label} className={styles.mark}>
-            <line x1="120" y1={y(a)} x2="280" y2={y(b)} stroke={SERIES[i]} strokeWidth="1.5" />
-            <circle cx="120" cy={y(a)} r="3" fill={SERIES[i]} className={styles.dot} />
-            <circle cx="280" cy={y(b)} r="3" fill={SERIES[i]} className={styles.dot} />
-            <text x="112" y={y(a) + 3} className={styles.axisText} textAnchor="end">{a}</text>
-            <text x="288" y={y(b) + 3} className={styles.valueText}>{b}</text>
-            <text x="396" y={y(b) + 3} className={styles.axisMuted} textAnchor="end">{label}</text>
-          </g>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Slope — start, end, and nothing invented in between.</figcaption>
-    </figure>
+    <SysSlope
+      left="Q1" right="Q4" max={100}
+      rows={[
+        { label: 'Brand', from: 42, to: 84 },
+        { label: 'Content', from: 61, to: 44 },
+        { label: 'Product', from: 26, to: 70 },
+      ]}
+    />
   )
 }
 
 /* Lollipop: a bar's information with a fraction of its ink. Better than a bar
    whenever the categories are sparse and the baseline is not in question. */
 function DotPlot() {
-  const rows = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Projects by discipline">
-        {rows.map(([label, v], i) => {
-          const x = 86 + (v / 70) * 250
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
-              <line x1="86" y1={22 + i * 30} x2={x} y2={22 + i * 30} className={styles.stem} />
-              <circle cx={x} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}>
-                <title>{label}: {v}</title>
-              </circle>
-              <text x={x + 10} y={26 + i * 30} className={styles.valueText}>{v}</text>
-            </g>
-          )
-        })}
-        <line x1="86" x2="86" y1="12" y2="158" className={styles.spine} />
-      </svg>
-      <figcaption className={styles.figCap}>Lollipop — a bar's information at a fraction of the ink.</figcaption>
-    </figure>
+    <SysDotPlot
+      max={100}
+      rows={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+      ]}
+    />
   )
 }
 
 /* Dumbbell: two states per category and the distance between them. The gap is
    the measure, so the connector is the mark, not decoration. */
 function Dumbbell() {
-  const rows = [['Brand', 42, 84], ['Content', 31, 61], ['Product', 26, 70], ['Motion', 18, 34]]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Before and after by discipline">
-        {[0, 50, 100].map((v) => (
-          <g key={v}>
-            <line x1={86 + (v / 100) * 260} x2={86 + (v / 100) * 260} y1="10" y2="140" className={styles.grid} />
-            <text x={86 + (v / 100) * 260} y="155" className={styles.axisText} textAnchor="middle">{v}</text>
-          </g>
-        ))}
-        {rows.map(([label, a, b], i) => {
-          const xa = 86 + (a / 100) * 260
-          const xb = 86 + (b / 100) * 260
-          return (
-            <g key={label}>
-              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
-              <line x1={xa} y1={22 + i * 30} x2={xb} y2={22 + i * 30} className={styles.dumbbellBar} />
-              <circle cx={xa} cy={22 + i * 30} r="4" fill={SERIES[2]} className={styles.dot}><title>{label} before: {a}</title></circle>
-              <circle cx={xb} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}><title>{label} after: {b}</title></circle>
-              <text x="396" y={26 + i * 30} className={styles.axisMuted} textAnchor="end">+{b - a}</text>
-            </g>
-          )
-        })}
-      </svg>
-      <Legend items={[['Before', 'var(--s3)'], ['After', 'var(--s1)']]} />
-      <figcaption className={styles.figCap}>Dumbbell — the gap is the measure.</figcaption>
-    </figure>
+    <SysDumbbell
+      max={100} labels={['Before', 'After']}
+      rows={[
+        { label: 'Brand', from: 42, to: 84 }, { label: 'Content', from: 31, to: 61 },
+        { label: 'Product', from: 26, to: 70 }, { label: 'Motion', from: 18, to: 34 },
+      ]}
+    />
   )
 }
 
@@ -3246,35 +1256,19 @@ function Dumbbell() {
    with today marked — a schedule nobody can locate themselves on is a
    decoration. */
 function Gantt() {
-  const rows = [
-    ['Discovery', 0, 2, 0], ['Identity', 1.5, 4, 1], ['System', 3.5, 3.5, 2],
-    ['Build', 6, 4, 3], ['Handover', 9.5, 1.5, 4],
-  ]
-  const W = 11
-  const x = (w) => 86 + (w / W) * 270
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project schedule">
-        {[0, 2, 4, 6, 8, 10].map((w) => (
-          <g key={w}>
-            <line x1={x(w)} x2={x(w)} y1="8" y2="140" className={styles.grid} />
-            <text x={x(w)} y="155" className={styles.axisText} textAnchor="middle">W{w}</text>
-          </g>
-        ))}
-        {rows.map(([label, start, len, s], i) => (
-          <g key={label}>
-            <text x="0" y={26 + i * 26} className={styles.axisText}>{label}</text>
-            <rect x={x(start)} y={16 + i * 26} width={(len / W) * 270} height="13" fill={SERIES[s]} className={styles.mark}>
-              <title>{label}: week {start} to {start + len}</title>
-            </rect>
-          </g>
-        ))}
-        {/* Today. Without it a schedule can't be read against the present. */}
-        <line x1={x(5.2)} x2={x(5.2)} y1="8" y2="140" className={styles.todayLine} />
-        <text x={x(5.2) + 5} y="16" className={styles.refText}>Today</text>
-      </svg>
-      <figcaption className={styles.figCap}>Gantt — phases against weeks, with today marked.</figcaption>
-    </figure>
+    <SysGantt
+      span={12}
+      labels={['W1', 'W3', 'W5', 'W7', 'W9', 'W11']}
+      caption="Done is filled, in flight is outlined — progress without spending a second colour."
+      tasks={[
+        { label: 'Messaging', start: 0, span: 3, done: true },
+        { label: 'Identity', start: 2, span: 4, done: true },
+        { label: 'Channels', start: 5, span: 3 },
+        { label: 'Site', start: 7, span: 4 },
+        { label: 'Launch', start: 10, span: 2 },
+      ]}
+    />
   )
 }
 
@@ -3282,101 +1276,44 @@ function Gantt() {
    is defensible, because the line is a percentage of the bars themselves and
    not an unrelated measure. */
 function Pareto() {
-  const data = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14], ['Other', 8]]
-  const total = data.reduce((a, [, v]) => a + v, 0)
-  const y = (v) => 148 - (v / 70) * 122
-  const yc = (p) => 148 - (p / 100) * 122
-  let acc = 0
-  const pts = data.map(([, v], i) => {
-    acc += v
-    return `${i ? 'L' : 'M'}${58 + i * 55},${yc((acc / total) * 100)}`
-  }).join(' ')
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Pareto of projects by discipline">
-        <YAxis ticks={[0, 35, 70]} y={y} x0={40} x1={392} unit="n" />
-        {data.map(([label, v], i) => (
-          <rect key={label} x={40 + i * 55} y={y(v)} width="36" height={148 - y(v)} fill={SERIES[0]} className={styles.mark}>
-            <title>{label}: {v}</title>
-          </rect>
-        ))}
-        <line x1="392" x2="392" y1={yc(100)} y2={yc(0)} className={styles.spine} />
-        <text x="392" y={yc(100) - 6} className={styles.unitText} textAnchor="end">cum %</text>
-        <path d={pts} fill="none" stroke={SERIES[1]} strokeWidth="1.5" />
-        {data.map(([label], i) => {
-          let a = 0
-          data.slice(0, i + 1).forEach(([, v]) => { a += v })
-          return <circle key={label} cx={58 + i * 55} cy={yc((a / total) * 100)} r="2.5" fill={SERIES[1]} className={styles.dot} />
-        })}
-        <line x1="40" x2="392" y1={yc(80)} y2={yc(80)} className={styles.refLine} />
-        <text x="392" y={yc(80) - 4} className={styles.refText} textAnchor="end">80%</text>
-        {data.map(([label], i) => (
-          <text key={label} x={58 + i * 55} y="163" className={styles.axisMuted} textAnchor="middle">{label.slice(0, 4)}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Pareto — the only defensible second axis: it's a share of the bars.</figcaption>
-    </figure>
+    <SysPareto
+      caption="The 80% rule is only visible with the cumulative curve on it."
+      data={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+        { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+      ]}
+    />
   )
 }
 
 /* Stacked area: composition over time. Only legitimate when the total means
    something; otherwise it's a 100% stack or three lines. */
 function StackedArea() {
-  const series = [
-    [30, 34, 36, 41, 44, 48, 52, 56, 58, 62, 66, 70],
-    [22, 24, 26, 27, 30, 32, 33, 36, 38, 39, 42, 44],
-    [12, 14, 17, 19, 20, 23, 26, 28, 30, 33, 35, 38],
-  ]
-  const x = (i) => 44 + i * 31
-  const yv = (v) => 148 - (v / 160) * 122
-  const bands = []
-  const running = new Array(12).fill(0)
-  series.forEach((s) => {
-    const lower = [...running]
-    s.forEach((v, i) => { running[i] += v })
-    const top = running.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${yv(v)}`).join(' ')
-    const bottom = lower.map((v, i) => `L${x(11 - i)},${yv(lower[11 - i])}`).join(' ')
-    bands.push(`${top} ${bottom} Z`)
-  })
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Composition over time">
-        <YAxis ticks={[0, 80, 160]} y={yv} x0={40} x1={392} unit="$k" />
-        {bands.map((d, s) => (
-          <path key={s} d={d} fill={SERIES[s]} fillOpacity="0.75" className={styles.mark} />
-        ))}
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <Legend items={[['Brand', 'var(--s1)'], ['Content', 'var(--s2)'], ['Product', 'var(--s3)']]} />
-      <figcaption className={styles.figCap}>Stacked area — only when the total itself means something.</figcaption>
-    </figure>
+    <SysStackedArea
+      max={120} unit="n" labels={MO}
+      caption="Composition, so the sequential ramp — the bands are parts of one total, not rival series."
+      series={[
+        { label: 'Brand', data: [12, 14, 16, 19, 21, 24, 26, 29, 31, 34, 36, 39] },
+        { label: 'Content', data: [8, 9, 11, 12, 14, 15, 17, 18, 20, 21, 23, 24] },
+        { label: 'Product', data: [4, 5, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18] },
+      ]}
+    />
   )
 }
 
 /* Step: a value that holds until it changes. Interpolating between price
    changes or headcount would be a lie, and a straight line tells it. */
 function StepLine() {
-  const d = [12, 12, 14, 14, 14, 18, 18, 18, 22, 22, 26, 26]
-  const x = (i) => 46 + i * 30
-  const y = (v) => 148 - (v / 30) * 122
-  let path = `M${x(0)},${y(d[0])}`
-  d.forEach((v, i) => {
-    if (i === 0) return
-    path += ` L${x(i)},${y(d[i - 1])} L${x(i)},${y(v)}`
-  })
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Headcount over time">
-        <YAxis ticks={[0, 15, 30]} y={y} x0={40} x1={392} unit="ppl" />
-        <path d={path} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Step — the value holds until it changes. No invented slope.</figcaption>
-    </figure>
+    <SysStepLine
+      max={100} unit="$k"
+      caption="A value that holds until it changes did not drift between readings, and a diagonal says it did."
+      data={[20, 20, 35, 35, 35, 50, 50, 65, 65, 65, 80, 80]}
+      labels={MO}
+    />
   )
 }
 
@@ -3389,101 +1326,44 @@ function StepLine() {
  * the point a treemap encodes one measure: the cells are degrees of the same
  * thing, which is what a sequential ramp is for. */
 function Treemap() {
-  const cells = [
-    ['Brand', 61, 5, 0, 0, 58, 90], ['Content', 44, 4, 58, 0, 42, 62],
-    ['Product', 38, 3, 58, 62, 42, 28], ['Motion', 22, 2, 0, 90, 34, 55],
-    ['Advisory', 14, 1, 34, 90, 24, 55],
-  ]
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue share by discipline">
-        <g transform="translate(100, 8)">
-          {cells.map(([label, v, s, x, y, w, h]) => (
-            <g key={label}>
-              <rect x={x * 2} y={y * 1.6} width={w * 2 - 2} height={h * 1.6 - 2} fill={`var(--q${s})`} className={styles.mark}>
-                <title>{label}: {v}</title>
-              </rect>
-              {w * 2 > 60 && (
-                <>
-                  <text
-                    x={x * 2 + 8} y={y * 1.6 + 16}
-                    /* Label ink flips on the two lightest steps — a dark label
-                       on a dark cell is the classic treemap failure. */
-                    className={s >= 4 ? styles.treeLabel : styles.treeLabelLight}
-                  >
-                    {label}
-                  </text>
-                  <text
-                    x={x * 2 + 8} y={y * 1.6 + 30}
-                    className={s >= 4 ? styles.treeVal : styles.treeValLight}
-                  >
-                    {v}
-                  </text>
-                </>
-              )}
-            </g>
-          ))}
-        </g>
-      </svg>
-      <figcaption className={styles.figCap}>Treemap — area is the measure; labels only where they fit.</figcaption>
-    </figure>
+    <SysTreemap
+      caption="For 'which of these is big'. Comparing two areas precisely is what a bar is for."
+      data={[
+        { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+        { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+        { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+      ]}
+    />
   )
 }
 
 /* Calendar heatmap: one cell per day. Density over a year, where a line chart
    would smooth away exactly the pattern you're looking for. */
 function CalendarHeat() {
-  const vals = Array.from({ length: 7 * 26 }, (_, i) =>
-    (i % 7 === 5 || i % 7 === 6) ? (i % 11 === 0 ? 1 : 0) : (i * 7 % 5) + (i % 3))
+  const weeks = Array.from({ length: 20 }, (_, w) =>
+    Array.from({ length: 7 }, (_, d) => ((w * 7 + d * 3) % 11 === 0 ? 0 : (w + d * 2) % 10)))
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 130" className={styles.svg} role="img" aria-label="Activity by day">
-        {['M', 'W', 'F'].map((d, i) => (
-          <text key={d} x="0" y={24 + i * 22} className={styles.axisText}>{d}</text>
-        ))}
-        {vals.map((v, i) => {
-          const col = Math.floor(i / 7)
-          const row = i % 7
-          return (
-            <rect
-              key={i}
-              x={20 + col * 14.5} y={12 + row * 11} width="12" height="9"
-              fill={`var(--q${Math.min(5, v)})`} className={styles.mark}
-            >
-              <title>Day {i + 1}: {v}</title>
-            </rect>
-          )
-        })}
-        {['Jan', 'Apr', 'Jul', 'Oct'].map((m, i) => (
-          <text key={m} x={22 + i * 94} y="106" className={styles.axisMuted}>{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Calendar — one cell a day. The weekend gaps are the finding.</figcaption>
-    </figure>
+    <SysCalHeat
+      weeks={weeks} max={10}
+      caption="One hue, five steps. A heatmap on a categorical palette asks the reader to learn an order the colours do not have."
+    />
   )
 }
 
 /* Bubble: a third measure as area, never as radius — area is what the eye
    compares, and sizing by radius overstates big values fourfold. */
 function Bubble() {
-  const pts = [[22, 31, 8], [38, 44, 22], [52, 58, 14], [61, 55, 34], [74, 66, 18], [81, 84, 42], [33, 28, 11], [64, 41, 26]]
-  const sx = (v) => 50 + (v / 100) * 330
-  const sy = (v) => 146 - (v / 100) * 120
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Spend, return and team size">
-        <YAxis ticks={[0, 50, 100]} y={sy} x0={44} x1={392} unit="$k" />
-        {pts.map(([a, b, r], i) => (
-          <circle key={i} cx={sx(a)} cy={sy(b)} r={Math.sqrt(r) * 2.1} fill={SERIES[1]} fillOpacity="0.45" stroke={SERIES[1]} strokeWidth="1" className={styles.mark}>
-            <title>Spend {a} · Return {b} · Team {r}</title>
-          </circle>
-        ))}
-        {[0, 50, 100].map((v) => (
-          <text key={v} x={sx(v)} y="163" className={styles.axisText} textAnchor="middle">{v}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Bubble — team size as area, never as radius.</figcaption>
-    </figure>
+    <SysBubble
+      xLabel="Spend" yLabel="Reach" rMax={200}
+      caption="Area carries the third measure, not radius — doubling a radius quadruples the ink."
+      points={[
+        { label: 'Meta', x: 38, y: 62, r: 140 }, { label: 'LinkedIn', x: 27, y: 44, r: 88 },
+        { label: 'Search', x: 12, y: 21, r: 34 }, { label: 'Events', x: 61, y: 74, r: 190 },
+        { label: 'Podcast', x: 44, y: 39, r: 62 },
+      ]}
+    />
   )
 }
 
@@ -3491,36 +1371,13 @@ function Bubble() {
    fluctuation from a real signal. The point outside the band is the whole
    reason the chart exists. */
 function ControlChart() {
-  const d = [52, 48, 55, 51, 49, 58, 53, 47, 68, 50, 54, 51]
-  const mean = 53
-  const sd = 6
-  const x = (i) => 48 + i * 30
-  const y = (v) => 148 - (v / 90) * 122
   return (
-    <figure className={styles.fig}>
-      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Process control">
-        <YAxis ticks={[0, 45, 90]} y={y} x0={42} x1={392} unit="hrs" />
-        <rect x="42" y={y(mean + 2 * sd)} width="350" height={y(mean - 2 * sd) - y(mean + 2 * sd)} fill="rgba(255,255,255,0.03)" />
-        <line x1="42" x2="392" y1={y(mean)} y2={y(mean)} className={styles.refLine} />
-        <text x="392" y={y(mean) - 4} className={styles.refText} textAnchor="end">Mean {mean}</text>
-        <line x1="42" x2="392" y1={y(mean + 2 * sd)} y2={y(mean + 2 * sd)} className={styles.sigmaLine} />
-        <line x1="42" x2="392" y1={y(mean - 2 * sd)} y2={y(mean - 2 * sd)} className={styles.sigmaLine} />
-        <text x="392" y={y(mean + 2 * sd) - 4} className={styles.refText} textAnchor="end">+2σ</text>
-        <path d={d.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
-        {d.map((v, i) => {
-          const out = v > mean + 2 * sd || v < mean - 2 * sd
-          return (
-            <circle key={i} cx={x(i)} cy={y(v)} r={out ? 4 : 2.5} fill={out ? 'rgba(255, 80, 80, 0.9)' : SERIES[2]} className={styles.dot}>
-              <title>P{i + 1}: {v}{out ? ' — outside control limits' : ''}</title>
-            </circle>
-          )
-        })}
-        {MO.map((m, i) => (
-          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
-        ))}
-      </svg>
-      <figcaption className={styles.figCap}>Control — the point outside ±2σ is why the chart exists.</figcaption>
-    </figure>
+    <SysControl
+      max={100} mean={52} sigma={9}
+      labels={MO}
+      caption="A point outside the limits is the only thing on this chart worth acting on."
+      data={[48, 55, 51, 58, 47, 53, 49, 82, 54, 50, 56, 52]}
+    />
   )
 }
 
@@ -3645,113 +1502,25 @@ const TEXTURES = [
  * texture is the whole point of the encoding.
  */
 function TextureDefs() {
-  /* Faint and fine. At 1px cells on a 4px grid the pattern is below the
-     threshold where the eye resolves individual marks — it reads as a
-     property of the surface rather than something drawn on it, which is the
-     entire brief. Push the alpha past about 0.09 and it becomes a graphic
-     again. */
-  const ink = 'rgba(255, 255, 255, 0.07)'
-  const px = (x, y, w = 1, h = 1) => <rect key={`${x}-${y}`} x={x} y={y} width={w} height={h} fill={ink} />
-  return (
-    <svg width="0" height="0" className={styles.defsOnly} aria-hidden="true" focusable="false">
-      <defs>
-        {/* Ordered dither on one 2px cell grid — one, two and three cells of
-            four, so the three read as a genuine 25 / 50 / 75 progression.
-            Keeping the grid identical across the three is what lets them be
-            compared; different grids would read as different textures rather
-            than different densities. */}
-        <pattern id="sc-tex-d25" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}
-        </pattern>
-        <pattern id="sc-tex-d50" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}{px(2, 2, 2, 2)}
-        </pattern>
-        <pattern id="sc-tex-d75" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}{px(2, 2, 2, 2)}{px(2, 0, 2, 2)}
-        </pattern>
-        {/* Halftone: a square dot on an offset grid, no circles — circles
-            antialias and the screen stops reading as a screen. */}
-        <pattern id="sc-tex-halftone" width="6" height="6" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(1, 1, 2, 2)}{px(4, 4, 2, 2)}
-        </pattern>
-        {/* Stepped diagonals — a staircase of single pixels rather than a
-            rotated line, so the diagonal keeps hard edges at every zoom. */}
-        <pattern id="sc-tex-45" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 3)}{px(1, 2)}{px(2, 1)}{px(3, 0)}
-        </pattern>
-        <pattern id="sc-tex-135" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0)}{px(1, 1)}{px(2, 2)}{px(3, 3)}
-        </pattern>
-        <pattern id="sc-tex-scan" width="3" height="3" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 3, 1)}
-        </pattern>
-        {/* Fixed offsets, not random — a texture that changes between renders
-            can't be matched on a second surface. */}
-        <pattern id="sc-tex-stipple" width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(1, 2)}{px(5, 0)}{px(3, 5)}{px(7, 6)}{px(0, 6)}{px(6, 3)}
-        </pattern>
-
-        {/* 90s desktop tiles, emitted straight from their bitmaps. */}
-        {Object.entries(TILES).map(([id, rows]) => (
-          <pattern key={id} id={id} width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-            {rows.flatMap((row, y) =>
-              row.split('').map((bit, x) => (bit === '1' ? px(x, y) : null)).filter(Boolean),
-            )}
-          </pattern>
-        ))}
-      </defs>
-    </svg>
-  )
+  return <SysTextureDefs tiles={TILES} />
 }
 
-function TextureSwatches({ onCopy, copied, items = TEXTURES }) {
-  return (
-    <div className={styles.texRow}>
-      {items.map(([id, name, note]) => (
-        <button
-          key={id}
-          type="button"
-          className={styles.texChip}
-          onClick={() => onCopy(`url(#${id})`)}
-          title={`Copy url(#${id})`}
-        >
-          <svg viewBox="0 0 100 52" className={styles.texSwatch} aria-hidden="true">
-            <rect width="100" height="52" fill="rgba(255,255,255,0.05)" />
-            <rect width="100" height="52" fill={`url(#${id})`} />
-          </svg>
-          <span className={styles.texName}>{name}</span>
-          <span className={styles.texId}>
-            {copied === `url(#${id})` ? 'copied' : `#${id.replace(/^sc-(tex|tile)-/, '')}`}
-          </span>
-          <span className={styles.texNote}>{note}</span>
-        </button>
-      ))}
-    </div>
-  )
+function TextureSwatches() {
+  return <SysTextureSwatches />
 }
 
 function SmallMultiples() {
-  const sets = [['Brand', [30, 38, 41, 52, 58, 61, 64, 69, 71, 76, 80, 84], 0],
-    ['Content', [22, 26, 24, 31, 36, 44, 41, 48, 52, 55, 58, 61], 1],
-    ['Product', [12, 18, 26, 29, 33, 38, 44, 47, 52, 58, 63, 70], 2]]
   return (
-    <div className={styles.multiples}>
-      {sets.map(([label, d, s]) => {
-        const pts = d.map((v, i) => `${i ? 'L' : 'M'}${i * 20},${52 - (v / 90) * 46}`).join(' ')
-        return (
-          <div key={label} className={styles.multiple}>
-            <div className={styles.multipleHead}>
-              <span className={styles.sparkLabel}>{label}</span>
-              <span className={styles.sparkVal}>{d[d.length - 1]}</span>
-            </div>
-            <svg viewBox="0 0 232 60" className={styles.multipleSvg} role="img" aria-label={`${label} trend`}>
-              <line x1="0" x2="232" y1="53" y2="53" className={styles.grid} />
-              <path d={pts} fill="none" stroke={SERIES[s]} strokeWidth="1.5" />
-            </svg>
-          </div>
-        )
-      })}
-    </div>
+    <SysSmallMultiples
+      max={100}
+      caption="One scale shared across panels. A panel with its own axis makes every comparison a lie."
+      panels={[
+        { label: 'Brand', data: [12, 24, 31, 44, 52, 61] },
+        { label: 'Content', data: [8, 14, 19, 26, 34, 44] },
+        { label: 'Product', data: [26, 30, 33, 35, 37, 38] },
+        { label: 'Motion', data: [6, 9, 12, 16, 19, 22] },
+      ]}
+    />
   )
 }
 
