@@ -46,10 +46,57 @@ export const HAIRLINES = [
   { alpha: 0.04, uses: 17, role: 'Barely-there separators inside a card.' },
 ]
 
+/* Two accents, not three. --teal and --blue are declared in :root and used
+   nowhere, and the system now says they should stay that way — retired rather
+   than found a use for. Pink and purple are the whole accent range, and they
+   are also the entire chart palette, so a chart and a highlight cannot drift
+   apart into different families. */
 export const ACCENTS = [
-  { name: 'Pink', value: '#df4ed6', cssVar: '--pink' },
-  { name: 'Teal', value: '#4ecfb3', cssVar: '--teal' },
-  { name: 'Blue', value: '#5a76e5', cssVar: '--blue' },
+  { name: 'Pink', value: '#df4ed6', cssVar: '--pink', state: 'keep' },
+  { name: 'Purple', value: '#7d5ae0', cssVar: '--purple', state: 'new' },
+  { name: 'Teal', value: '#4ecfb3', cssVar: '--teal', state: 'retire' },
+  { name: 'Blue', value: '#5a76e5', cssVar: '--blue', state: 'retire' },
+]
+
+/* Gradients. Two decorative, four functional — and the functional ones do far
+   more work, which is the point of listing them together.
+ *
+ * A gradient on this site is nearly always solving a legibility problem
+ * (text over unknown media, a marquee that would otherwise clip) rather than
+ * adding colour. The two accent gradients are the exception and are capped at
+ * the two accent hues: a gradient that passes through a third hue is a third
+ * hue, and the palette does not have one. */
+export const GRADIENTS = [
+  {
+    name: 'Accent',
+    css: 'linear-gradient(135deg, #df4ed6 0%, #7d5ae0 100%)',
+    role: 'Pink to purple, the only two-hue sweep in the system.',
+  },
+  {
+    name: 'Accent soft',
+    css: 'linear-gradient(135deg, rgba(223, 78, 214, 0.16) 0%, rgba(125, 90, 224, 0.16) 100%)',
+    role: 'The same sweep at fill strength, for a large ground.',
+  },
+  {
+    name: 'Scrim',
+    css: 'linear-gradient(to top, rgba(10, 10, 10, 0.92) 0%, rgba(10, 10, 10, 0) 65%)',
+    role: 'Under text on unknown media. The most useful gradient here.',
+  },
+  {
+    name: 'Edge fade',
+    css: 'linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%)',
+    role: 'Mask for the marquee, so names fade rather than clip.',
+  },
+  {
+    name: 'Surface lift',
+    css: 'linear-gradient(180deg, #1c1c1c 0%, #161616 100%)',
+    role: 'A card with a top edge, where a flat fill reads dead.',
+  },
+  {
+    name: 'Glow',
+    css: 'radial-gradient(60% 60% at 50% 0%, rgba(125, 90, 224, 0.22) 0%, rgba(125, 90, 224, 0) 100%)',
+    role: 'A light source above a section. Use once per page at most.',
+  },
 ]
 
 export const FAMILIES = [
@@ -211,22 +258,30 @@ export const GRIDS = [
  * Do not hand-edit a value here without re-running the validator.
  */
 
+/* Pink and purple only, by direction. Three slots is not a stylistic choice —
+   it is the measured ceiling. Pink and purple are adjacent hues, so the only
+   separation available beyond the first pair is lightness, and the band a dark
+   chart surface allows (OKLCH L 0.48–0.67) is roughly two steps wide. A fourth
+   slot was tested: any value that separates from the other three lands at
+   L 0.746, outside the band; any value inside the band fails the adjacent-pair
+   check. So the system stops at three and says why.
+ *
+ * Past three series, the answer is small multiples, an "Other" bucket, or a
+ * different chart — never a fourth hue. */
 export const CHART_PALETTE = [
-  { slot: 1, hue: 'Teal',   dark: '#1d9077', light: '#007a5e', note: 'Primary series' },
-  { slot: 2, hue: 'Rust',   dark: '#b35f3c', light: '#8f4526', note: 'Second series' },
-  { slot: 3, hue: 'Steel',  dark: '#4a7fb5', light: '#1e5f9c', note: 'Third series' },
-  { slot: 4, hue: 'Ochre',  dark: '#9c8320', light: '#7a6300', note: 'Fourth series' },
-  { slot: 5, hue: 'Slate',  dark: '#7b6bb0', light: '#5b4c8c', note: 'Fifth series' },
-  { slot: 6, hue: 'Moss',   dark: '#5b8f3a', light: '#416b25', note: 'Sixth — then stop' },
+  { slot: 1, hue: 'Pink',   dark: '#d94eb6', light: '#a82489', note: 'Primary series' },
+  { slot: 2, hue: 'Purple', dark: '#7d5ae0', light: '#5b3cb8', note: 'Second series' },
+  { slot: 3, hue: 'Rose',   dark: '#a82a7e', light: '#8f2168', note: 'Third — then stop' },
 ]
 
-/* Sequential is one hue, light to dark — never a rainbow. Stepped from the
-   steel so magnitude reads as "more of the same thing". */
-export const CHART_SEQUENTIAL = ['#0d1b26', '#16303f', '#21485d', '#2e6285', '#4a7fb5', '#7aa3ce']
+/* Sequential is one hue, light to dark. Stepped from the purple so magnitude
+   reads as "more of the same thing" rather than as three categories. */
+export const CHART_SEQUENTIAL = ['#160f2b', '#231a49', '#342767', '#4a3891', '#6a51c4', '#9b86e6']
 
-/* Diverging is two poles and a neutral grey midpoint — never a hue in the
-   middle. Rust and steel are the furthest-apart pair in the set. */
-export const CHART_DIVERGING = ['#b35f3c', '#8a6a5a', '#6b6b6b', '#486a86', '#4a7fb5']
+/* Diverging is two poles around a neutral grey midpoint. Pink and purple are
+   the only poles available, which is exactly what a diverging scale wants —
+   two hues, no third. */
+export const CHART_DIVERGING = ['#d94eb6', '#a8629f', '#6b6b6b', '#6b5aa8', '#7d5ae0']
 
 /* Status is reserved and never reused as "series 7". These are the values the
    site already uses for state, not new ones. */

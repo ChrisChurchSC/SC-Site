@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Fragment } from 'react'
 import { useMeta } from '../hooks/useMeta'
 import {
-  SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, FAMILIES,
+  SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, GRADIENTS, FAMILIES,
   MONO_SCALE, DISPLAY_SCALE, RADII, MOTION, LAYOUT,
   BUTTONS, FIELDS, RATIOS, GRIDS, BACKLOG,
   CHART_PALETTE, CHART_SEQUENTIAL, CHART_DIVERGING, CHART_STATUS,
@@ -577,6 +577,165 @@ function Icon({ name, size = 16 }) {
     >
       <path d={ICONS[name]} />
     </svg>
+  )
+}
+
+/* ── Data grid (NEW) ─────────────────────────────────────────────────────────
+ *
+ * A spreadsheet is not a styled table — it is a different instrument, and the
+ * differences are load-bearing:
+ *
+ *   - Cell rules on both axes. A reading table drops vertical rules because
+ *     prose has a natural left edge; a grid needs them, because a cell is
+ *     addressed by column as much as by row.
+ *   - A row gutter with numbers, so a row can be referred to out loud.
+ *   - Numerics right-aligned in mono with tabular figures, so digits stack in
+ *     columns and magnitude is visible as length.
+ *   - A totals row pinned at the bottom, ruled off from the data.
+ *   - A selected cell with a visible ring, because the thing you are looking
+ *     at and the thing you would edit must be the same thing.
+ *
+ * Sorting is real. Selection is real. Nothing is wired to a backend.
+ */
+const GRID_ROWS = [
+  ['Talos', 'Brand', 2026, 84000, 0.34, 'Live'],
+  ['Transcend', 'Content', 2026, 61000, 0.22, 'Live'],
+  ['Photon', 'Product', 2025, 70500, 0.28, 'Done'],
+  ['Heard', 'Brand', 2025, 42000, 0.16, 'Done'],
+  ['Hylands', 'Content', 2026, 33500, 0.12, 'Draft'],
+  ['Nimruz', 'Product', 2024, 28000, 0.09, 'Done'],
+]
+
+const GRID_COLS = [
+  { key: 0, label: 'Client', type: 'text', w: '1.4fr' },
+  { key: 1, label: 'Discipline', type: 'text', w: '1.1fr' },
+  { key: 2, label: 'Year', type: 'num', w: '0.7fr' },
+  { key: 3, label: 'Fee', type: 'money', w: '1fr' },
+  { key: 4, label: 'Share', type: 'pct', w: '0.9fr' },
+  { key: 5, label: 'Status', type: 'status', w: '0.9fr' },
+]
+
+const fmt = (v, type) => {
+  if (type === 'money') return `$${v.toLocaleString()}`
+  if (type === 'pct') return `${(v * 100).toFixed(1)}%`
+  return String(v)
+}
+
+function DataGrid() {
+  const [sort, setSort] = useState({ col: 3, dir: 'desc' })
+  const [sel, setSel] = useState({ r: 0, c: 0 })
+  const [picked, setPicked] = useState([0])
+  const [dense, setDense] = useState(false)
+
+  const rows = [...GRID_ROWS].sort((a, b) => {
+    const x = a[sort.col], y = b[sort.col]
+    const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
+    return sort.dir === 'asc' ? cmp : -cmp
+  })
+
+  const total = rows.reduce((a, r) => a + r[3], 0)
+  const template = `34px ${GRID_COLS.map((c) => c.w).join(' ')}`
+
+  const toggleRow = (i) =>
+    setPicked((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]))
+
+  return (
+    <div className={styles.gridWrap}>
+      <div className={styles.gridBar}>
+        <span className={styles.gridCount}>
+          {rows.length} rows · {picked.length} selected
+        </span>
+        <div className={styles.gridBarRight}>
+          <button type="button" className={styles.tableToggle} onClick={() => setDense((d) => !d)}>
+            {dense ? 'Comfortable' : 'Compact'}
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.gridScroll}>
+        <div
+          className={`${styles.grid} ${dense ? styles.gridDense : ''}`}
+          style={{ gridTemplateColumns: template }}
+          role="grid"
+        >
+          {/* Header. The gutter cell stays empty — it addresses rows, not data. */}
+          <div className={`${styles.gCell} ${styles.gHead} ${styles.gGutter}`} />
+          {GRID_COLS.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              className={`${styles.gCell} ${styles.gHead} ${c.type !== 'text' && c.type !== 'status' ? styles.gNum : ''}`}
+              onClick={() => setSort((s) => ({ col: c.key, dir: s.col === c.key && s.dir === 'desc' ? 'asc' : 'desc' }))}
+              aria-sort={sort.col === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+            >
+              {c.label}
+              <span className={styles.gSort}>
+                {sort.col === c.key ? (sort.dir === 'desc' ? '↓' : '↑') : ''}
+              </span>
+            </button>
+          ))}
+
+          {rows.map((row, r) => (
+            <Fragment key={row[0]}>
+              <button
+                type="button"
+                className={`${styles.gCell} ${styles.gGutter} ${picked.includes(r) ? styles.gGutterOn : ''}`}
+                onClick={() => toggleRow(r)}
+                aria-label={`Select row ${r + 1}`}
+              >
+                {r + 1}
+              </button>
+              {GRID_COLS.map((c) => {
+                const isSel = sel.r === r && sel.c === c.key
+                const numeric = c.type === 'money' || c.type === 'pct' || c.type === 'num'
+                return (
+                  <div
+                    key={c.key}
+                    role="gridcell"
+                    tabIndex={0}
+                    className={[
+                      styles.gCell,
+                      numeric ? styles.gNum : '',
+                      isSel ? styles.gSel : '',
+                      picked.includes(r) ? styles.gRowOn : '',
+                    ].join(' ')}
+                    onClick={() => setSel({ r, c: c.key })}
+                    onFocus={() => setSel({ r, c: c.key })}
+                  >
+                    {c.type === 'status' ? (
+                      <span className={`${styles.gPill} ${row[5] === 'Live' ? styles.gPillOn : row[5] === 'Draft' ? styles.gPillDraft : ''}`}>
+                        {row[5]}
+                      </span>
+                    ) : (
+                      fmt(row[c.key], c.type)
+                    )}
+                  </div>
+                )
+              })}
+            </Fragment>
+          ))}
+
+          {/* Totals, ruled off. A total that scrolls away with the data is a
+              total nobody reads. */}
+          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gGutter}`}>Σ</div>
+          <div className={`${styles.gCell} ${styles.gFoot}`}>Total</div>
+          <div className={`${styles.gCell} ${styles.gFoot}`} />
+          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`} />
+          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`}>${total.toLocaleString()}</div>
+          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gNum}`}>100.0%</div>
+          <div className={`${styles.gCell} ${styles.gFoot}`} />
+        </div>
+      </div>
+
+      <div className={styles.gridFoot}>
+        <span className={styles.gridCell}>
+          Cell {String.fromCharCode(65 + sel.c)}{sel.r + 1} ·{' '}
+          {GRID_COLS[sel.c].type === 'status'
+            ? rows[sel.r][5]
+            : fmt(rows[sel.r][GRID_COLS[sel.c].key], GRID_COLS[sel.c].type)}
+        </span>
+      </div>
+    </div>
   )
 }
 
@@ -1390,7 +1549,7 @@ function Waterfall() {
           else run = v
           const top = Math.min(start, end)
           const h = Math.abs(end - start)
-          const fill = isBase ? 'rgba(255,255,255,0.28)' : kind === 'up' ? SERIES[5] : 'rgba(255, 80, 80, 0.75)'
+          const fill = isBase ? 'rgba(255,255,255,0.28)' : kind === "up" ? SERIES[1] : SERIES[0]
           return (
             <g key={label}>
               <rect x={48 + i * 58} y={y(top + h)} width="40" height={Math.max(1, (h / 90) * 124)} rx="0" fill={fill} className={styles.mark}>
@@ -1428,7 +1587,7 @@ function Bullet() {
               {/* Qualitative bands, deliberately low-contrast greys. */}
               <rect x="86" y={14 + i * 38} width={sc(max)} height="16" rx="0" fill="rgba(255,255,255,0.04)" />
               <rect x="86" y={14 + i * 38} width={sc(max * 0.75)} height="16" rx="0" fill="rgba(255,255,255,0.07)" />
-              <rect x="86" y={18 + i * 38} width={sc(actual)} height="8" rx="0" fill={actual >= target ? SERIES[1] : SERIES[3]} className={styles.mark}>
+              <rect x="86" y={18 + i * 38} width={sc(actual)} height="8" rx="0" fill={actual >= target ? SERIES[1] : SERIES[0]} className={styles.mark}>
                 <title>{label}: {actual} of target {target}</title>
               </rect>
               {/* Target as a tick across the measure — the reference, not a bar. */}
@@ -1438,7 +1597,7 @@ function Bullet() {
           )
         })}
       </svg>
-      <Legend items={[['At or above target', 'var(--s2)'], ['Below target', 'var(--s4)']]} />
+      <Legend items={[['At or above target', 'var(--s2)'], ['Below target', 'var(--s1)']]} />
       <figcaption className={styles.figCap}>Bullet — actual, target tick, and qualitative bands.</figcaption>
     </figure>
   )
@@ -1488,7 +1647,7 @@ function BoxPlot() {
               <line x1={cx} x2={cx} y1={y(hi)} y2={y(lo)} className={styles.whisker} />
               <line x1={cx - 10} x2={cx + 10} y1={y(hi)} y2={y(hi)} className={styles.whisker} />
               <line x1={cx - 10} x2={cx + 10} y1={y(lo)} y2={y(lo)} className={styles.whisker} />
-              <rect x={cx - 20} y={y(q3)} width="40" height={y(q1) - y(q3)} rx="0" fill={SERIES[4]} fillOpacity="0.45" stroke={SERIES[4]} strokeWidth="1" className={styles.mark}>
+              <rect x={cx - 20} y={y(q3)} width="40" height={y(q1) - y(q3)} rx="0" fill={SERIES[2]} fillOpacity="0.45" stroke={SERIES[2]} strokeWidth="1" className={styles.mark}>
                 <title>{label}: median {med}, IQR {q1}–{q3}</title>
               </rect>
               <line x1={cx - 20} x2={cx + 20} y1={y(med)} y2={y(med)} className={styles.medianLine} />
@@ -1585,7 +1744,7 @@ function Scatter() {
         <line x1={sx(18)} y1={sy(22)} x2={sx(90)} y2={sy(84)} className={styles.fitLine} />
         <text x={sx(90)} y={sy(84) - 6} className={styles.refText} textAnchor="end">r = 0.91</text>
         {pts.map(([a, b], i) => (
-          <circle key={i} cx={sx(a)} cy={sy(b)} r="4" fill={SERIES[4]} className={styles.dot}>
+          <circle key={i} cx={sx(a)} cy={sy(b)} r="4" fill={SERIES[1]} className={styles.dot}>
             <title>Spend ${a}k · Return ${b}k</title>
           </circle>
         ))}
@@ -1594,6 +1753,377 @@ function Scatter() {
         ))}
       </svg>
       <figcaption className={styles.figCap}>Scatter with fit — spend, $k, against return.</figcaption>
+    </figure>
+  )
+}
+
+/* Slope: two points and the line between them. The only chart that makes rank
+   change legible at a glance — and it refuses to be read as a trend, because
+   there is nothing between the ends to misread. */
+function SlopeChart() {
+  const rows = [['Brand', 61, 84], ['Content', 44, 61], ['Product', 38, 70], ['Motion', 22, 19]]
+  const y = (v) => 150 - (v / 100) * 124
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Change by discipline">
+        <line x1="120" x2="120" y1="20" y2="150" className={styles.spine} />
+        <line x1="280" x2="280" y1="20" y2="150" className={styles.spine} />
+        <text x="120" y="165" className={styles.axisMuted} textAnchor="middle">2025</text>
+        <text x="280" y="165" className={styles.axisMuted} textAnchor="middle">2026</text>
+        {rows.map(([label, a, b], i) => (
+          <g key={label} className={styles.mark}>
+            <line x1="120" y1={y(a)} x2="280" y2={y(b)} stroke={SERIES[i]} strokeWidth="1.5" />
+            <circle cx="120" cy={y(a)} r="3" fill={SERIES[i]} className={styles.dot} />
+            <circle cx="280" cy={y(b)} r="3" fill={SERIES[i]} className={styles.dot} />
+            <text x="112" y={y(a) + 3} className={styles.axisText} textAnchor="end">{a}</text>
+            <text x="288" y={y(b) + 3} className={styles.valueText}>{b}</text>
+            <text x="396" y={y(b) + 3} className={styles.axisMuted} textAnchor="end">{label}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Slope — start, end, and nothing invented in between.</figcaption>
+    </figure>
+  )
+}
+
+/* Lollipop: a bar's information with a fraction of its ink. Better than a bar
+   whenever the categories are sparse and the baseline is not in question. */
+function DotPlot() {
+  const rows = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14]]
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Projects by discipline">
+        {rows.map(([label, v], i) => {
+          const x = 86 + (v / 70) * 250
+          return (
+            <g key={label}>
+              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
+              <line x1="86" y1={22 + i * 30} x2={x} y2={22 + i * 30} className={styles.stem} />
+              <circle cx={x} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}>
+                <title>{label}: {v}</title>
+              </circle>
+              <text x={x + 10} y={26 + i * 30} className={styles.valueText}>{v}</text>
+            </g>
+          )
+        })}
+        <line x1="86" x2="86" y1="12" y2="158" className={styles.spine} />
+      </svg>
+      <figcaption className={styles.figCap}>Lollipop — a bar's information at a fraction of the ink.</figcaption>
+    </figure>
+  )
+}
+
+/* Dumbbell: two states per category and the distance between them. The gap is
+   the measure, so the connector is the mark, not decoration. */
+function Dumbbell() {
+  const rows = [['Brand', 42, 84], ['Content', 31, 61], ['Product', 26, 70], ['Motion', 18, 34]]
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Before and after by discipline">
+        {[0, 50, 100].map((v) => (
+          <g key={v}>
+            <line x1={86 + (v / 100) * 260} x2={86 + (v / 100) * 260} y1="10" y2="140" className={styles.grid} />
+            <text x={86 + (v / 100) * 260} y="155" className={styles.axisText} textAnchor="middle">{v}</text>
+          </g>
+        ))}
+        {rows.map(([label, a, b], i) => {
+          const xa = 86 + (a / 100) * 260
+          const xb = 86 + (b / 100) * 260
+          return (
+            <g key={label}>
+              <text x="0" y={26 + i * 30} className={styles.axisText}>{label}</text>
+              <line x1={xa} y1={22 + i * 30} x2={xb} y2={22 + i * 30} className={styles.dumbbellBar} />
+              <circle cx={xa} cy={22 + i * 30} r="4" fill={SERIES[2]} className={styles.dot}><title>{label} before: {a}</title></circle>
+              <circle cx={xb} cy={22 + i * 30} r="4" fill={SERIES[0]} className={styles.dot}><title>{label} after: {b}</title></circle>
+              <text x="396" y={26 + i * 30} className={styles.axisMuted} textAnchor="end">+{b - a}</text>
+            </g>
+          )
+        })}
+      </svg>
+      <Legend items={[['Before', 'var(--s3)'], ['After', 'var(--s1)']]} />
+      <figcaption className={styles.figCap}>Dumbbell — the gap is the measure.</figcaption>
+    </figure>
+  )
+}
+
+/* Gantt: the most obviously missing chart for a studio. Bars on a time axis,
+   with today marked — a schedule nobody can locate themselves on is a
+   decoration. */
+function Gantt() {
+  const rows = [
+    ['Discovery', 0, 2, 0], ['Identity', 1.5, 4, 1], ['System', 3.5, 3.5, 2],
+    ['Build', 6, 4, 3], ['Handover', 9.5, 1.5, 4],
+  ]
+  const W = 11
+  const x = (w) => 86 + (w / W) * 270
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Project schedule">
+        {[0, 2, 4, 6, 8, 10].map((w) => (
+          <g key={w}>
+            <line x1={x(w)} x2={x(w)} y1="8" y2="140" className={styles.grid} />
+            <text x={x(w)} y="155" className={styles.axisText} textAnchor="middle">W{w}</text>
+          </g>
+        ))}
+        {rows.map(([label, start, len, s], i) => (
+          <g key={label}>
+            <text x="0" y={26 + i * 26} className={styles.axisText}>{label}</text>
+            <rect x={x(start)} y={16 + i * 26} width={(len / W) * 270} height="13" fill={SERIES[s]} className={styles.mark}>
+              <title>{label}: week {start} to {start + len}</title>
+            </rect>
+          </g>
+        ))}
+        {/* Today. Without it a schedule can't be read against the present. */}
+        <line x1={x(5.2)} x2={x(5.2)} y1="8" y2="140" className={styles.todayLine} />
+        <text x={x(5.2) + 5} y="16" className={styles.refText}>Today</text>
+      </svg>
+      <figcaption className={styles.figCap}>Gantt — phases against weeks, with today marked.</figcaption>
+    </figure>
+  )
+}
+
+/* Pareto: bars descending with a cumulative line. The one place a second axis
+   is defensible, because the line is a percentage of the bars themselves and
+   not an unrelated measure. */
+function Pareto() {
+  const data = [['Brand', 61], ['Content', 44], ['Product', 38], ['Motion', 22], ['Advisory', 14], ['Other', 8]]
+  const total = data.reduce((a, [, v]) => a + v, 0)
+  const y = (v) => 148 - (v / 70) * 122
+  const yc = (p) => 148 - (p / 100) * 122
+  let acc = 0
+  const pts = data.map(([, v], i) => {
+    acc += v
+    return `${i ? 'L' : 'M'}${58 + i * 55},${yc((acc / total) * 100)}`
+  }).join(' ')
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Pareto of projects by discipline">
+        <YAxis ticks={[0, 35, 70]} y={y} x0={40} x1={392} unit="n" />
+        {data.map(([label, v], i) => (
+          <rect key={label} x={40 + i * 55} y={y(v)} width="36" height={148 - y(v)} fill={SERIES[0]} className={styles.mark}>
+            <title>{label}: {v}</title>
+          </rect>
+        ))}
+        <line x1="392" x2="392" y1={yc(100)} y2={yc(0)} className={styles.spine} />
+        <text x="392" y={yc(100) - 6} className={styles.unitText} textAnchor="end">cum %</text>
+        <path d={pts} fill="none" stroke={SERIES[1]} strokeWidth="1.5" />
+        {data.map(([label], i) => {
+          let a = 0
+          data.slice(0, i + 1).forEach(([, v]) => { a += v })
+          return <circle key={label} cx={58 + i * 55} cy={yc((a / total) * 100)} r="2.5" fill={SERIES[1]} className={styles.dot} />
+        })}
+        <line x1="40" x2="392" y1={yc(80)} y2={yc(80)} className={styles.refLine} />
+        <text x="392" y={yc(80) - 4} className={styles.refText} textAnchor="end">80%</text>
+        {data.map(([label], i) => (
+          <text key={label} x={58 + i * 55} y="163" className={styles.axisMuted} textAnchor="middle">{label.slice(0, 4)}</text>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Pareto — the only defensible second axis: it's a share of the bars.</figcaption>
+    </figure>
+  )
+}
+
+/* Stacked area: composition over time. Only legitimate when the total means
+   something; otherwise it's a 100% stack or three lines. */
+function StackedArea() {
+  const series = [
+    [30, 34, 36, 41, 44, 48, 52, 56, 58, 62, 66, 70],
+    [22, 24, 26, 27, 30, 32, 33, 36, 38, 39, 42, 44],
+    [12, 14, 17, 19, 20, 23, 26, 28, 30, 33, 35, 38],
+  ]
+  const x = (i) => 44 + i * 31
+  const yv = (v) => 148 - (v / 160) * 122
+  const bands = []
+  const running = new Array(12).fill(0)
+  series.forEach((s) => {
+    const lower = [...running]
+    s.forEach((v, i) => { running[i] += v })
+    const top = running.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${yv(v)}`).join(' ')
+    const bottom = lower.map((v, i) => `L${x(11 - i)},${yv(lower[11 - i])}`).join(' ')
+    bands.push(`${top} ${bottom} Z`)
+  })
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Composition over time">
+        <YAxis ticks={[0, 80, 160]} y={yv} x0={40} x1={392} unit="$k" />
+        {bands.map((d, s) => (
+          <path key={s} d={d} fill={SERIES[s]} fillOpacity="0.75" className={styles.mark} />
+        ))}
+        {MO.map((m, i) => (
+          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
+        ))}
+      </svg>
+      <Legend items={[['Brand', 'var(--s1)'], ['Content', 'var(--s2)'], ['Product', 'var(--s3)']]} />
+      <figcaption className={styles.figCap}>Stacked area — only when the total itself means something.</figcaption>
+    </figure>
+  )
+}
+
+/* Step: a value that holds until it changes. Interpolating between price
+   changes or headcount would be a lie, and a straight line tells it. */
+function StepLine() {
+  const d = [12, 12, 14, 14, 14, 18, 18, 18, 22, 22, 26, 26]
+  const x = (i) => 46 + i * 30
+  const y = (v) => 148 - (v / 30) * 122
+  let path = `M${x(0)},${y(d[0])}`
+  d.forEach((v, i) => {
+    if (i === 0) return
+    path += ` L${x(i)},${y(d[i - 1])} L${x(i)},${y(v)}`
+  })
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Headcount over time">
+        <YAxis ticks={[0, 15, 30]} y={y} x0={40} x1={392} unit="ppl" />
+        <path d={path} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
+        {MO.map((m, i) => (
+          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Step — the value holds until it changes. No invented slope.</figcaption>
+    </figure>
+  )
+}
+
+/* Treemap: part-to-whole with more parts than a donut can carry. Area is the
+   measure, so labels only go where they fit — a truncated label in a tiny
+   rectangle is worse than none.
+ *
+ * Coloured from the sequential ramp by rank, not from the categorical slots.
+ * Five parts against a three-slot palette would force a repeat, and more to
+ * the point a treemap encodes one measure: the cells are degrees of the same
+ * thing, which is what a sequential ramp is for. */
+function Treemap() {
+  const cells = [
+    ['Brand', 61, 5, 0, 0, 58, 90], ['Content', 44, 4, 58, 0, 42, 62],
+    ['Product', 38, 3, 58, 62, 42, 28], ['Motion', 22, 2, 0, 90, 34, 55],
+    ['Advisory', 14, 1, 34, 90, 24, 55],
+  ]
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Revenue share by discipline">
+        <g transform="translate(100, 8)">
+          {cells.map(([label, v, s, x, y, w, h]) => (
+            <g key={label}>
+              <rect x={x * 2} y={y * 1.6} width={w * 2 - 2} height={h * 1.6 - 2} fill={`var(--q${s})`} className={styles.mark}>
+                <title>{label}: {v}</title>
+              </rect>
+              {w * 2 > 60 && (
+                <>
+                  <text
+                    x={x * 2 + 8} y={y * 1.6 + 16}
+                    /* Label ink flips on the two lightest steps — a dark label
+                       on a dark cell is the classic treemap failure. */
+                    className={s >= 4 ? styles.treeLabel : styles.treeLabelLight}
+                  >
+                    {label}
+                  </text>
+                  <text
+                    x={x * 2 + 8} y={y * 1.6 + 30}
+                    className={s >= 4 ? styles.treeVal : styles.treeValLight}
+                  >
+                    {v}
+                  </text>
+                </>
+              )}
+            </g>
+          ))}
+        </g>
+      </svg>
+      <figcaption className={styles.figCap}>Treemap — area is the measure; labels only where they fit.</figcaption>
+    </figure>
+  )
+}
+
+/* Calendar heatmap: one cell per day. Density over a year, where a line chart
+   would smooth away exactly the pattern you're looking for. */
+function CalendarHeat() {
+  const vals = Array.from({ length: 7 * 26 }, (_, i) =>
+    (i % 7 === 5 || i % 7 === 6) ? (i % 11 === 0 ? 1 : 0) : (i * 7 % 5) + (i % 3))
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 130" className={styles.svg} role="img" aria-label="Activity by day">
+        {['M', 'W', 'F'].map((d, i) => (
+          <text key={d} x="0" y={24 + i * 22} className={styles.axisText}>{d}</text>
+        ))}
+        {vals.map((v, i) => {
+          const col = Math.floor(i / 7)
+          const row = i % 7
+          return (
+            <rect
+              key={i}
+              x={20 + col * 14.5} y={12 + row * 11} width="12" height="9"
+              fill={`var(--q${Math.min(5, v)})`} className={styles.mark}
+            >
+              <title>Day {i + 1}: {v}</title>
+            </rect>
+          )
+        })}
+        {['Jan', 'Apr', 'Jul', 'Oct'].map((m, i) => (
+          <text key={m} x={22 + i * 94} y="106" className={styles.axisMuted}>{m}</text>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Calendar — one cell a day. The weekend gaps are the finding.</figcaption>
+    </figure>
+  )
+}
+
+/* Bubble: a third measure as area, never as radius — area is what the eye
+   compares, and sizing by radius overstates big values fourfold. */
+function Bubble() {
+  const pts = [[22, 31, 8], [38, 44, 22], [52, 58, 14], [61, 55, 34], [74, 66, 18], [81, 84, 42], [33, 28, 11], [64, 41, 26]]
+  const sx = (v) => 50 + (v / 100) * 330
+  const sy = (v) => 146 - (v / 100) * 120
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Spend, return and team size">
+        <YAxis ticks={[0, 50, 100]} y={sy} x0={44} x1={392} unit="$k" />
+        {pts.map(([a, b, r], i) => (
+          <circle key={i} cx={sx(a)} cy={sy(b)} r={Math.sqrt(r) * 2.1} fill={SERIES[1]} fillOpacity="0.45" stroke={SERIES[1]} strokeWidth="1" className={styles.mark}>
+            <title>Spend {a} · Return {b} · Team {r}</title>
+          </circle>
+        ))}
+        {[0, 50, 100].map((v) => (
+          <text key={v} x={sx(v)} y="163" className={styles.axisText} textAnchor="middle">{v}</text>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Bubble — team size as area, never as radius.</figcaption>
+    </figure>
+  )
+}
+
+/* Control chart: a mean and its bands, so a reader can tell an ordinary
+   fluctuation from a real signal. The point outside the band is the whole
+   reason the chart exists. */
+function ControlChart() {
+  const d = [52, 48, 55, 51, 49, 58, 53, 47, 68, 50, 54, 51]
+  const mean = 53
+  const sd = 6
+  const x = (i) => 48 + i * 30
+  const y = (v) => 148 - (v / 90) * 122
+  return (
+    <figure className={styles.fig}>
+      <svg viewBox="0 0 400 175" className={styles.svg} role="img" aria-label="Process control">
+        <YAxis ticks={[0, 45, 90]} y={y} x0={42} x1={392} unit="hrs" />
+        <rect x="42" y={y(mean + 2 * sd)} width="350" height={y(mean - 2 * sd) - y(mean + 2 * sd)} fill="rgba(255,255,255,0.03)" />
+        <line x1="42" x2="392" y1={y(mean)} y2={y(mean)} className={styles.refLine} />
+        <text x="392" y={y(mean) - 4} className={styles.refText} textAnchor="end">Mean {mean}</text>
+        <line x1="42" x2="392" y1={y(mean + 2 * sd)} y2={y(mean + 2 * sd)} className={styles.sigmaLine} />
+        <line x1="42" x2="392" y1={y(mean - 2 * sd)} y2={y(mean - 2 * sd)} className={styles.sigmaLine} />
+        <text x="392" y={y(mean + 2 * sd) - 4} className={styles.refText} textAnchor="end">+2σ</text>
+        <path d={d.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')} fill="none" stroke={SERIES[2]} strokeWidth="1.5" />
+        {d.map((v, i) => {
+          const out = v > mean + 2 * sd || v < mean - 2 * sd
+          return (
+            <circle key={i} cx={x(i)} cy={y(v)} r={out ? 4 : 2.5} fill={out ? 'rgba(255, 80, 80, 0.9)' : SERIES[2]} className={styles.dot}>
+              <title>P{i + 1}: {v}{out ? ' — outside control limits' : ''}</title>
+            </circle>
+          )
+        })}
+        {MO.map((m, i) => (
+          <text key={i} x={x(i)} y="163" className={styles.axisText} textAnchor="middle">{m}</text>
+        ))}
+      </svg>
+      <figcaption className={styles.figCap}>Control — the point outside ±2σ is why the chart exists.</figcaption>
     </figure>
   )
 }
@@ -1951,12 +2481,14 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Accents</h3>
           <p className={styles.subnote}>
-            Declared in <code className={styles.code}>:root</code> — and used nowhere.
-            Each appears exactly once in the codebase: its own definition. The
-            colour the site does use is semantic rather than brand — the error red
-            in <a href="#fields" className={styles.inlineLink}>fields</a>.
+            Two, not three. All three declared accents are used nowhere — each appears
+            exactly once in the codebase, as its own definition — and rather than find
+            work for them, the system keeps pink, adds purple, and retires teal and
+            blue. Pink and purple are also the entire
+            {' '}<a href="#charts" className={styles.inlineLink}>chart palette</a>, so
+            a highlight and a chart series cannot drift into different families.
           </p>
-          <div className={styles.accentRow}>
+          <div className={styles.accentRow} data-accents>
             {ACCENTS.map((a) => (
               <button
                 key={a.value}
@@ -1971,7 +2503,43 @@ export default function DesignSystem() {
                   {copied === a.value ? 'copied' : a.value}
                 </span>
                 <span className={styles.accentVar}>{a.cssVar}</span>
-                <span className={styles.accentUnused}>unused</span>
+                <span
+                  className={`${styles.accentUnused} ${a.state === 'retire' ? styles.accentRetire : ''}`}
+                >
+                  {a.state === 'keep' ? 'keep' : a.state === 'new' ? 'add' : 'retire'}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <h3 className={styles.subhead}>Gradients</h3>
+          <p className={styles.subnote}>
+            Two decorative, four functional — and the functional ones do far more
+            work, which is why they're listed together. A gradient here is nearly
+            always solving a legibility problem rather than adding colour. The two
+            accent sweeps run pink to purple and stop there: a gradient that passes
+            through a third hue <em className={styles.em}>is</em> a third hue, and the
+            palette doesn't have one.
+          </p>
+          <div className={styles.gradRow}>
+            {GRADIENTS.map((g) => (
+              <button
+                key={g.name}
+                type="button"
+                className={styles.gradChip}
+                onClick={() => copy(g.css)}
+                title={`Copy ${g.name}`}
+              >
+                {/* Scrim and edge fade are transparency, so they sit on a
+                    checker plate — on a flat ground they'd look like nothing. */}
+                <span className={styles.gradPlate}>
+                  <span className={styles.gradSwatch} style={{ background: g.css }} />
+                </span>
+                <span className={styles.paletteName}>{g.name}</span>
+                <span className={styles.paletteVal}>
+                  {copied === g.css ? 'copied' : g.css.split('(')[0]}
+                </span>
+                <span className={styles.texNote}>{g.role}</span>
               </button>
             ))}
           </div>
@@ -2779,6 +3347,28 @@ export default function DesignSystem() {
               </div>
             </Demo>
           </div>
+
+          <h3 className={styles.subhead}>Data grid</h3>
+          <p className={styles.prose}>
+            A spreadsheet is not a styled table — it is a different instrument, and
+            the differences are load-bearing. The reading table above drops vertical
+            rules because prose has a natural left edge. A grid needs them, because a
+            cell is addressed by column as much as by row, and the moment someone has
+            to say "the fee on Talos" out loud, the row gutter and the column rule are
+            what make that sentence possible.
+          </p>
+          <p className={styles.subnote}>
+            Sort any column, click the gutter to select rows, click a cell to address
+            it. Figures are mono and right-aligned so digits stack and magnitude reads
+            as length. Totals are pinned and ruled off — a total that scrolls away
+            with the data is a total nobody reads.
+          </p>
+          <div className={styles.demoStack}>
+            <Demo label="Spreadsheet grid" status="NEW" wide stage={false}
+              note="Rules on both axes, a numbered gutter, tabular figures, a selected cell with a ring, and a compact mode for when the row count outgrows the reading. Sorting and selection are real; nothing is wired to a backend.">
+              <DataGrid />
+            </Demo>
+          </div>
         </Section>
 
         {/* ── 09 Charts ── */}
@@ -2786,34 +3376,32 @@ export default function DesignSystem() {
           id="charts"
           index={11}
           title="Charts"
-          blurb="Instrument colours, not brand colours. Low-chroma and cool-leaning, because a chart is read for minutes at a time and saturated hues turn a dashboard into decoration."
+          blurb="Pink and purple, and nothing else. Three categorical slots — which is not a stylistic choice but a measured ceiling, and the most useful thing this section has to say."
         >
           <p className={styles.prose}>
-            The obvious starting point was the three accents the site declares and
-            never uses. They were wrong twice over. Measurably:
-            {' '}<code className={styles.code}>--teal</code> sits at OKLCH lightness
-            0.776, outside the 0.48–0.67 band a dark chart surface needs, and
-            {' '}<code className={styles.code}>--blue</code> and
-            {' '}<code className={styles.code}>--pink</code> are 2.5 ΔE apart under
-            protanopia — side by side in a legend, a red-blind reader cannot tell
-            them apart at all. And editorially: they are pitched to catch the eye
-            once, which is the opposite of what a chart needs.
+            Pink and purple are adjacent hues. Once the first pair is placed, the only
+            separation left is lightness, and the band a dark chart surface allows —
+            OKLCH lightness 0.48 to 0.67 — is about two steps wide. So the palette
+            stops at three, and it stops for a reason that can be checked rather than
+            argued about.
           </p>
           <p className={styles.prose}>
-            It cannot go all the way to grey either. The first attempt at a properly
-            severe palette failed the chroma floor and, more tellingly, the
-            normal-vision floor — adjacent series became hard to separate even with
-            full colour vision. The values below sit just above both floors on
-            purpose: enough colour to carry identity, not enough to decorate.
+            A fourth slot was tested properly, not assumed away. Every value that
+            separates cleanly from the other three lands at roughly lightness 0.75,
+            outside the band; every value inside the band fails the adjacent-pair
+            check. There is no fourth colour here that is both visible on the surface
+            and distinguishable from its neighbours. Past three series the answer is
+            small multiples, an "Other" bucket, or a different chart —
+            {' '}<strong className={styles.strong}>never a fourth hue</strong>.
           </p>
           <p className={styles.prose}>
-            Both columns pass all six checks against their own surface — lightness
+            Both columns pass all six checks against their own surface: lightness
             band, chroma floor, colour-vision separation, normal-vision floor, and
-            contrast. The light column's closest pair sits in the 6–8 CVD band, which
-            is legal only alongside a second encoding; every chart here carries a
-            legend, direct labels, or gaps. That is a measured result rather than a
-            judgement, and it is why no value should be hand-edited without re-running
-            the validator.
+            contrast. The closest adjacent pair sits in the 6–8 CVD band, which is
+            legal only alongside a second encoding — every chart here carries a
+            legend, direct labels, or gaps. Slots 4 to 6 in the CSS are deliberately
+            aliases of 1 to 3, so a chart that reaches for a fourth series gets a
+            repeat it can see rather than a colour that quietly fails.
           </p>
 
           <h3 className={styles.subhead}>Categorical</h3>
@@ -2949,6 +3537,61 @@ export default function DesignSystem() {
             <Demo label="Scatter + fit" status="NEW" stage={false}
               note="The fit line is dashed so it never reads as data, and the correlation is stated — a relationship quantified rather than implied by the eye.">
               <div className={styles.viz}><Scatter /></div>
+            </Demo>
+
+            <Demo label="Slope" status="NEW" stage={false}
+              note="Two points and the line between them. It refuses to be read as a trend, because there is nothing in the middle to misread.">
+              <div className={styles.viz}><SlopeChart /></div>
+            </Demo>
+
+            <Demo label="Lollipop" status="NEW" stage={false}
+              note="A bar's information at a fraction of the ink. Use it whenever the categories are sparse and the baseline isn't in question.">
+              <div className={styles.viz}><DotPlot /></div>
+            </Demo>
+
+            <Demo label="Dumbbell" status="NEW" stage={false}
+              note="Two states per row, where the gap between them is the measure — so the connector is the mark, not decoration.">
+              <div className={styles.viz}><Dumbbell /></div>
+            </Demo>
+
+            <Demo label="Gantt" status="NEW" stage={false}
+              note="The most obviously missing chart for a studio. Today is marked — a schedule nobody can locate themselves on is a decoration.">
+              <div className={styles.viz}><Gantt /></div>
+            </Demo>
+
+            <Demo label="Pareto" status="NEW" stage={false}
+              note="Bars descending with a cumulative line, and the only defensible second axis on this page: the line is a share of the bars themselves, not an unrelated measure.">
+              <div className={styles.viz}><Pareto /></div>
+            </Demo>
+
+            <Demo label="Stacked area" status="NEW" stage={false}
+              note="Legitimate only when the total itself means something. If it doesn't, this should be a 100% stack or three separate lines.">
+              <div className={styles.viz}><StackedArea /></div>
+            </Demo>
+
+            <Demo label="Step" status="NEW" stage={false}
+              note="A value that holds until it changes — headcount, pricing, rates. Interpolating between the steps would invent numbers that never existed.">
+              <div className={styles.viz}><StepLine /></div>
+            </Demo>
+
+            <Demo label="Treemap" status="NEW" stage={false}
+              note="Part-to-whole with more parts than a donut can carry. Labels only go where they fit; a truncated label in a small rectangle is worse than none.">
+              <div className={styles.viz}><Treemap /></div>
+            </Demo>
+
+            <Demo label="Calendar" status="NEW" stage={false}
+              note="One cell per day. A line chart would smooth away the weekend gaps, which are the actual finding.">
+              <div className={styles.viz}><CalendarHeat /></div>
+            </Demo>
+
+            <Demo label="Bubble" status="NEW" stage={false}
+              note="A third measure as area, never as radius — area is what the eye compares, and radius overstates the big values fourfold.">
+              <div className={styles.viz}><Bubble /></div>
+            </Demo>
+
+            <Demo label="Control" status="NEW" stage={false}
+              note="A mean and its ±2σ bands, so an ordinary fluctuation can be told from a signal. The point outside the band is the whole reason to draw it.">
+              <div className={styles.viz}><ControlChart /></div>
             </Demo>
 
             <Demo label="Small multiples" status="NEW" wide stage={false}

@@ -300,8 +300,15 @@
 
 .accentRow {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 5px;
+}
+
+/* A retiring accent is shown struck through rather than removed — the value
+   is still in :root, and the page has to stay true about that. */
+.accentRetire {
+  color: rgba(255, 80, 80, 0.8);
+  background: rgba(255, 80, 80, 0.1);
 }
 
 .accentChip {
@@ -357,6 +364,52 @@
   background: rgba(255, 255, 255, 0.06);
   border-radius: 2px;
   padding: 3px 6px;
+}
+
+/* ── Gradients ── */
+
+.gradRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.gradChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.gradChip:hover {
+  background: #1c1c1c;
+}
+
+/* Half the set is transparency. On a flat ground a scrim looks like nothing,
+   so the plate underneath makes the alpha visible. */
+.gradPlate {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #6a6a6a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' shape-rendering='crispEdges'%3E%3Crect width='6' height='6' fill='%23555'/%3E%3Crect x='6' y='6' width='6' height='6' fill='%23555'/%3E%3C/svg%3E");
+}
+
+.gradSwatch {
+  display: block;
+  width: 100%;
+  height: 56px;
+}
+
+.em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ── Families ── */
@@ -1353,6 +1406,185 @@
   white-space: nowrap;
 }
 
+/* ── Data grid ───────────────────────────────────────────────────────────────
+   Rules on both axes, unlike the reading table above: a cell here is addressed
+   by column as much as by row, so the column edge has to be visible. */
+
+.gridWrap {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gridBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.gridBarRight {
+  display: flex;
+  gap: 5px;
+}
+
+.gridScroll {
+  overflow-x: auto;
+}
+
+.grid {
+  display: grid;
+  min-width: 560px;
+}
+
+.gCell {
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 9px 10px;
+  min-height: 34px;
+  text-align: left;
+  /* Rules drawn as insets so neighbouring cells share one hairline rather
+     than doubling it. */
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: background 0.1s;
+}
+
+.gridDense .gCell {
+  font-size: 10px;
+  padding: 5px 8px;
+  min-height: 24px;
+}
+
+.gHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #131313;
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.gridDense .gHead {
+  font-size: 7px;
+}
+
+.gHead:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.gSort {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The gutter addresses rows; it holds no data, so it is dimmer than any
+   cell and never picks up the numeric treatment. */
+.gGutter {
+  justify-content: center;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+  background: #131313;
+  cursor: pointer;
+}
+
+.gGutter:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gGutterOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Tabular figures so digits stack in a column and magnitude reads as
+   length — the reason a spreadsheet is monospaced at all. */
+.gNum {
+  justify-content: flex-end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gRowOn {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* The cell you're looking at and the cell you would edit have to be the same
+   cell. A ring rather than a fill, so the value stays readable. */
+.gSel {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85),
+              inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.98);
+  outline: none;
+}
+
+.gFoot {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  background: #131313;
+  box-shadow: inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.gPill {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.gPillOn {
+  color: rgba(190, 220, 150, 0.9);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.gPillDraft {
+  color: #bd842c;
+  background: rgba(189, 132, 44, 0.12);
+}
+
+/* Address bar. A grid without one leaves "which cell am I in?" unanswered
+   the moment the row count passes a screen. */
+.gridFoot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCell {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 /* ── Quotes ── */
 
 .pullQuote {
@@ -2137,23 +2369,27 @@
    place and every chart follows. The values are the validated dark column from
    designTokens.js — do not edit one here without re-running the validator. */
 
+/* Three categorical slots, and that is the measured ceiling for two adjacent
+   hues — see designTokens.js. s4–s6 are deliberately aliases rather than new
+   hues: a chart that reaches for a fourth gets a repeat it can see, not a
+   colour that quietly fails separation. */
 .viz {
-  --s1: #1d9077;
-  --s2: #b35f3c;
-  --s3: #4a7fb5;
-  --s4: #9c8320;
-  --s5: #7b6bb0;
-  --s6: #5b8f3a;
+  --s1: #d94eb6;
+  --s2: #7d5ae0;
+  --s3: #a82a7e;
+  --s4: #d94eb6;
+  --s5: #7d5ae0;
+  --s6: #a82a7e;
 
   /* Sequential ramp, addressed by quantile. q0 is "no data" and is
      deliberately not a step on the ramp — an empty cell must not read as a
      low value. */
   --q0: rgba(255, 255, 255, 0.03);
-  --q1: #16303f;
-  --q2: #21485d;
-  --q3: #2e6285;
-  --q4: #4a7fb5;
-  --q5: #7aa3ce;
+  --q1: #231a49;
+  --q2: #342767;
+  --q3: #4a3891;
+  --q4: #6a51c4;
+  --q5: #9b86e6;
 
   /* Neutral marks. Colour is not the default here — it is reserved for
      charts that actually have something to tell apart. A single-series chart
@@ -2286,6 +2522,58 @@
 .whisker {
   stroke: rgba(255, 255, 255, 0.35);
   stroke-width: 1;
+}
+
+.stem {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+}
+
+/* The connector is the measure on a dumbbell, so it gets real weight rather
+   than the hairline a stem gets. */
+.dumbbellBar {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 3;
+}
+
+.todayLine {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.sigmaLine {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.treeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(10, 10, 10, 0.8);
+}
+
+.treeVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  fill: rgba(10, 10, 10, 0.65);
+}
+
+.treeLabelLight {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.treeValLight {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  fill: rgba(255, 255, 255, 0.6);
 }
 
 .medianLine {
