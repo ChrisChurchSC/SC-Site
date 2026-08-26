@@ -121,3 +121,26 @@
   align-items: center;
   padding-left: var(--sc-space-2);
 }
+
+/* Separates the "about this workspace" counts from the two things that act on
+   it. Without the rule the six controls read as one undifferentiated row. */
+.titleDivide {
+  width: 1px;
+  height: 20px;
+  background: var(--sc-line-strong);
+  margin: 0 var(--sc-space-2);
+}
+
+/* Location on the left, controls on the right, on one line. This row replaced
+   three stacked bands that between them pushed the first row of data 194px
+   down an 805px screen. */
+.barTools {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .barTools { width: 100%; }
+}

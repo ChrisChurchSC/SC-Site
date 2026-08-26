@@ -48,6 +48,15 @@ function ScrollToTop() {
   return null
 }
 
+/* The custom cursor hides the native one site-wide with `cursor: none`. That
+   is a nice touch on a marketing page and wrong in an application, where the
+   I-beam over a field and the pointer over a row are doing real work. */
+function CursorGate() {
+  const { pathname } = useLocation()
+  if (pathname === '/dashboard') return null
+  return <Cursor />
+}
+
 function ChromeGate({ children }) {
   const { pathname } = useLocation()
   // The dashboard is an application, not a page on the marketing site — it
@@ -91,7 +100,7 @@ export default function App() {
         <CalDrawerProvider>
           <ScrollToTop />
           <TransitionBar />
-          <Cursor />
+          <CursorGate />
           <ChromeGate>
             <Nav />
             <ThemeToggle />

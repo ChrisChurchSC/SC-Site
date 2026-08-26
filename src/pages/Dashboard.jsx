@@ -6,7 +6,7 @@ import {
   Panel, StatTile, Button, IconButton, Banner, Tabs, Avatar,
   Tree, Path, FileBrowser,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
-  TitleBar, CountButton, Toolbar, RefSelect, CountLink, FindField,
+  TitleBar, CountButton, RefSelect, FindField,
   LineChart, BarChart, RankedBar, Donut,
 } from '../system'
 import headMark from '../assets/logo.svg'
@@ -166,9 +166,11 @@ export default function Dashboard() {
         </GlobalBar>
       }
     >
-      {/* No mark here. The logo belongs in the global bar and nowhere else —
-          repeating it down the page turns identity into wallpaper. */}
-      <Sidebar collapsed={collapsed} onToggle={toggle}>
+      {/* No mark and no toggle. The logo belongs in the global bar and nowhere
+          else, and the hamburger up there already collapses this rail — a
+          second control for the same thing only bought an empty band above the
+          navigation. */}
+      <Sidebar collapsed={collapsed}>
         {!collapsed && (
           <Tree
             nodes={TREE}
@@ -193,39 +195,52 @@ export default function Dashboard() {
 
       <div className={styles.main}>
         <Content>
-          <TitleBar owner="Super Conscious" title="Brand" badge="Private">
+          {/* The workspace is already named in the global bar; repeating the
+              owner here said the same thing twice on one screen. */}
+          <TitleBar title="Brand" badge="Private">
             <CountButton icon="target" label="Pin" />
             <CountButton icon="user" label="Watch" count={4} pressed />
             <CountButton icon="copy" label="Duplicate" count={2} />
-            <CountButton icon="success" label="Approved" count={31} />
-          </TitleBar>
-
-          <Toolbar>
-            <RefSelect
-              value={version}
-              onChange={setVersion}
-              options={['v2.1 — current', 'v2.0', 'v1.4 — archived']}
-            />
-            <CountLink icon="layers" count="4" label="Disciplines" />
-            <CountLink icon="clock" count="12" label="Versions" />
-            <FindField value={find} onChange={setFind} />
+            <span className={styles.titleDivide} />
             <Button size="sm" icon="plus">Add asset</Button>
             <Button size="sm" variant="solid" icon="external">Share</Button>
-          </Toolbar>
+          </TitleBar>
+
+          {/* One working row: where you are, which version, how to narrow it,
+              and which view. Previously this was three separate bands that
+              between them pushed the first row of data a quarter of the way
+              down the screen. */}
+          <div className={styles.bar}>
+            <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
+            <span className={styles.barTools}>
+              <RefSelect
+                value={version}
+                onChange={setVersion}
+                options={['v2.1 — current', 'v2.0', 'v1.4 — archived']}
+              />
+              {/* "Filter this folder", not "search" — the global bar searches
+                  the workspace, and two fields both called search on one
+                  screen is a question nobody should have to answer. */}
+              <FindField
+                value={find}
+                onChange={setFind}
+                placeholder="Filter this folder"
+                shortcut="F"
+              />
+              <Tabs value={tab} onChange={setTab} options={['Files', 'Overview']} />
+            </span>
+          </div>
 
           {!dismissed && (
-            /* Neutral rather than amber. Colour is the loudest thing in a
-               monochrome interface, and an advisory that spends it leaves
-               nothing for a real failure — the glyph carries the meaning. */
+            /* Sits directly above the listing it is about, rather than in the
+               middle of the chrome where it separated the controls from the
+               thing they control. Neutral rather than amber: colour is the
+               loudest thing in a monochrome interface, and an advisory that
+               spends it leaves nothing for a real failure. */
             <Banner tone="info" icon="warning" onDismiss={() => setDismissed(true)}>
               6 assets haven't been reviewed in over 90 days.
             </Banner>
           )}
-
-          <div className={styles.bar}>
-            <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
-            <Tabs value={tab} onChange={setTab} options={['Files', 'Overview']} />
-          </div>
 
           {tab === 'Files' && (
             <div className={styles.split}>
@@ -252,10 +267,13 @@ export default function Dashboard() {
                     and the channels they run on.
                   </p>
                   <div className={styles.facts}>
+                    {/* Counts that used to sit in the toolbar dressed as
+                        links. They are facts about the workspace, not things
+                        you can do to it, so they belong with the other facts. */}
                     <FactRow icon="layers" value="38" label="assets" />
                     <FactRow icon="user" value="4" label="editors" />
-                    <FactRow icon="clock" value="6" label="awaiting review" />
-                    <FactRow icon="channel" value="2" label="channels live" />
+                    <FactRow icon="clock" value="12" label="versions" />
+                    <FactRow icon="warning" value="6" label="awaiting review" />
                   </div>
                 </AsideBlock>
 

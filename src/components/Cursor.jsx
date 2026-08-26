@@ -16,6 +16,9 @@ export default function Cursor() {
     // Force cursor:none on html/body for Safari compatibility
     document.documentElement.style.cursor = 'none'
     document.body.style.cursor = 'none'
+    // Gates the global rule in Cursor.module.css, which would otherwise apply
+    // on every route simply because this file is imported.
+    document.documentElement.classList.add('sc-hide-cursor')
 
     const onMove = (e) => {
       el.style.left = `${e.clientX}px`
@@ -41,6 +44,7 @@ export default function Cursor() {
       document.removeEventListener('mouseenter', onEnter)
       document.documentElement.style.cursor = ''
       document.body.style.cursor = ''
+      document.documentElement.classList.remove('sc-hide-cursor')
     }
   }, [])
 

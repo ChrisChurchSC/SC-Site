@@ -120,7 +120,15 @@ export function Tree({ nodes, activeKey, onSelect, defaultOpen = [] }) {
       const isOpen = open.has(n.key)
       const hasKids = n.children?.length > 0
       return (
-        <div key={n.key}>
+        /* role=treeitem on the row, and the children in their own group.
+           A role=tree with no treeitems inside announces as an empty tree,
+           which is worse than no role at all. */
+        <div
+          key={n.key}
+          role="treeitem"
+          aria-expanded={hasKids ? isOpen : undefined}
+          aria-selected={activeKey === n.key}
+        >
           <div
             className={`${s.treeRow} ${activeKey === n.key ? s.treeRowOn : ''}`}
             style={{ paddingLeft: 6 + depth * 14 }}
@@ -149,7 +157,9 @@ export function Tree({ nodes, activeKey, onSelect, defaultOpen = [] }) {
               {n.count !== undefined && <span className={s.treeCount}>{n.count}</span>}
             </button>
           </div>
-          {hasKids && isOpen && render(n.children, depth + 1)}
+          {hasKids && isOpen && (
+            <div role="group">{render(n.children, depth + 1)}</div>
+          )}
         </div>
       )
     })

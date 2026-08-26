@@ -175,6 +175,8 @@ export function Segmented({ value, onChange, options, label = 'View' }) {
    looking at, the toolbar says what you can do to it. Merging them is why so
    many app headers become a shelf of unrelated buttons. */
 
+/* The page's h1. Every screen needs exactly one, and a span styled to look
+   like a heading gives a screen-reader user no way to jump to it. */
 export function TitleBar({ mark, owner, title, badge, children }) {
   return (
     <div className={s.titleBar}>
@@ -186,7 +188,10 @@ export function TitleBar({ mark, owner, title, badge, children }) {
             <span className={s.titleSlash}>/</span>
           </>
         )}
-        <span className={s.titleName}>{title}</span>
+        {/* The heading is the name alone. Wrapping the badge inside it makes
+            the accessible name "BrandPrivate", which is what a screen reader
+            then announces and what a heading list shows. */}
+        <h1 className={s.titleName}>{title}</h1>
         {badge && <span className={s.titleBadge}>{badge}</span>}
       </div>
       <div className={s.titleActions}>{children}</div>

@@ -85,24 +85,30 @@ export function BarButton({ icon, label, dot, onClick }) {
   )
 }
 
+/* The head renders only when it has something in it. With no mark, no brand
+   and no toggle it was an empty 84px band above the navigation — and its
+   collapse caret duplicated the hamburger in the global bar, which is a
+   better place for it: one control, one job, always in the same spot. */
 export function Sidebar({ brand, mark, collapsed, onToggle, children }) {
+  const hasHead = mark || (brand && !collapsed) || onToggle
   return (
     <nav className={s.sidebar} aria-label="Main">
-      <div className={s.sidebarHead}>
-        {/* The mark stays when the rail collapses — it is the one thing that
-            says which product you are in, and an icon rail with no identity is
-            a rail nobody recognises. */}
-        <span className={s.brandRow}>
-          {mark && <img src={mark} alt="" className={s.brandMark} />}
-          {!collapsed && <span className={s.brand}>{brand}</span>}
-        </span>
-        <IconButton
-          icon={collapsed ? 'chevron-right' : 'chevron-left'}
-          label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
-          size={14}
-          onClick={onToggle}
-        />
-      </div>
+      {hasHead && (
+        <div className={s.sidebarHead}>
+          <span className={s.brandRow}>
+            {mark && <img src={mark} alt="" className={s.brandMark} />}
+            {!collapsed && brand && <span className={s.brand}>{brand}</span>}
+          </span>
+          {onToggle && (
+            <IconButton
+              icon={collapsed ? 'chevron-right' : 'chevron-left'}
+              label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+              size={14}
+              onClick={onToggle}
+            />
+          )}
+        </div>
+      )}
       {children}
     </nav>
   )

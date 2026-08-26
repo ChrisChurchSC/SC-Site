@@ -605,7 +605,13 @@
   border-bottom: 1px solid var(--sc-line);
 }
 
+/* The primary view switch, so it gets a real target: 32px tall and padded
+   wide enough to hit without aiming. It was 23×32 and the hardest thing on
+   the page to click. */
 .tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   font-family: var(--sc-font-mono);
   font-size: var(--sc-size-label);
   letter-spacing: var(--sc-track-wide);
@@ -615,7 +621,7 @@
   border: none;
   border-bottom: 1px solid transparent;
   margin-bottom: -1px;
-  padding: 0 0 10px;
+  padding: 0 var(--sc-space-2) 8px;
   cursor: pointer;
   transition: color var(--sc-fast), border-color var(--sc-fast);
 }
@@ -892,6 +898,9 @@
 }
 
 .pathLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
   color: var(--sc-text-label);
   background: none;
   border: none;
@@ -1093,7 +1102,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
+  /* 24px square. It was 16 wide, which is under any reasonable minimum and
+     sits right beside a different target. */
+  width: 24px;
   height: 24px;
   color: var(--sc-text-meta);
   background: none;
@@ -1105,7 +1116,7 @@
 
 .treeCaret:hover { color: var(--sc-text-peak); }
 
-.treeCaretSpacer { width: 16px; flex-shrink: 0; }
+.treeCaretSpacer { width: 24px; flex-shrink: 0; }
 
 .treeLabel {
   display: flex;
@@ -1404,6 +1415,8 @@
   align-items: center;
   gap: var(--sc-space-2);
   min-width: 0;
+  margin: 0;
+  font-weight: 300;
 }
 
 .titleMark { width: 20px; height: 24px; flex-shrink: 0; }

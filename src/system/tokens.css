@@ -183,6 +183,45 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Take the cursor back.
+ *
+ * A host app may hide the native cursor globally — this site does, with
+ * `cursor: none !important` on `*` from the custom-cursor component, and that
+ * rule applies as soon as the module is imported whether or not the component
+ * renders. An application cannot run without a cursor: the I-beam over a field
+ * and the pointer over a row are doing real work, and a resize handle you
+ * cannot see is a resize handle you cannot use.
+ *
+ * `!important` is load-bearing here rather than lazy — it is the only thing
+ * that beats an `!important` already set on the universal selector. */
+.sc-root,
+.sc-root * {
+  cursor: auto !important;
+}
+
+.sc-root a,
+.sc-root button,
+.sc-root summary,
+.sc-root [role="button"],
+.sc-root [role="treeitem"] > * {
+  cursor: pointer !important;
+}
+
+.sc-root input,
+.sc-root textarea,
+.sc-root [contenteditable="true"] {
+  cursor: text !important;
+}
+
+.sc-root :disabled,
+.sc-root [aria-disabled="true"] {
+  cursor: default !important;
+}
+
+.sc-root [type="range"] {
+  cursor: ew-resize !important;
+}
+
 /* focus-visible rather than focus, so a mouse click leaves nothing behind but
    a Tab key does. Scoped to the system root so it cannot fight a host app. */
 .sc-root :focus-visible {

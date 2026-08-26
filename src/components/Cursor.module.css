@@ -1,8 +1,14 @@
-:global(html),
-:global(body),
-:global(*),
-:global(*::before),
-:global(*::after) {
+/* Scoped to a class this component toggles, not applied on import.
+ *
+ * A CSS module's :global rules land in the bundle as soon as the file is
+ * imported — whether or not the component ever renders. So an unmounted Cursor
+ * was still hiding the pointer everywhere, which is invisible while a
+ * replacement dot is being drawn and very visible on a route that skips it. */
+:global(html.sc-hide-cursor),
+:global(html.sc-hide-cursor body),
+:global(html.sc-hide-cursor *),
+:global(html.sc-hide-cursor *::before),
+:global(html.sc-hide-cursor *::after) {
   cursor: none !important;
 }
 
