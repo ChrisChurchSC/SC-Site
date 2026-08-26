@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react'
+import { useState, useCallback, useRef, useEffect, Fragment } from 'react'
 import { useMeta } from '../hooks/useMeta'
 import {
   SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, GRADIENTS, FAMILIES, SPACING, ELEVATION, LAYERS,
@@ -580,6 +580,379 @@ function Icon({ name, size = 16 }) {
   )
 }
 
+/* ── Overlays (NEW) ──────────────────────────────────────────────────────────
+ *
+ * The primitive the site is missing. Cal and contact drawers both ship, both
+ * handle Escape, and neither declares role="dialog", aria-modal, or traps
+ * focus — so a keyboard user tabs straight out of an open drawer and into the
+ * page behind it, with no way to tell they've left.
+ *
+ * Everything below is contained in its demo rather than fixed to the viewport,
+ * so the page stays usable; in production the same markup takes `position:
+ * fixed` and the layers scale from Depth.
+ */
+
+/* Focus trap. Three obligations, all of them easy to miss:
+ *   - move focus in when it opens,
+ *   - cycle Tab and Shift+Tab at the two ends,
+ *   - put focus back where it came from on close, or the reader is dumped at
+ *     the top of the document with no idea what happened. */
+function useFocusTrap(open, onClose) {
+  const ref = useRef(null)
+  const restoreTo = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    restoreTo.current = document.activeElement
+    const node = ref.current
+    if (!node) return
+
+    const focusables = () =>
+      [...node.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .filter((el) => !el.hasAttribute('disabled'))
+
+    focusables()[0]?.focus()
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key !== 'Tab') return
+      const f = focusables()
+      if (!f.length) return
+      const first = f[0]
+      const last = f[f.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+
+    node.addEventListener('keydown', onKey)
+    return () => {
+      node.removeEventListener('keydown', onKey)
+      // Restore, or the reader lands back at the top of the document.
+      if (restoreTo.current instanceof HTMLElement) restoreTo.current.focus()
+    }
+  }, [open, onClose])
+
+  return ref
+}
+
+function Modal() {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+  const ref = useFocusTrap(open, close)
+
+  return (
+    <div className={styles.overlayStageBox}>
+      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
+        Open modal
+      </button>
+      {open && (
+        <div className={styles.modalBackdrop} onMouseDown={close}>
+          <div
+            ref={ref}
+            className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ds-modal-title"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHead}>
+              <span id="ds-modal-title" className={styles.modalTitle}>Send this brief?</span>
+              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
+                <Icon name="close" />
+              </button>
+            </div>
+            <p className={styles.modalBody}>
+              Tab around — focus cycles inside and cannot escape. Escape closes, and
+              focus returns to the button that opened it.
+            </p>
+            <div className={styles.confirmActions}>
+              <button type="button" className={styles.btnOutline} onClick={close}>Cancel</button>
+              <button type="button" className={styles.btnSolid} onClick={close}>Send</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Dropdown: an action menu, which is a different control from the select in
+   Forms. A select returns a value; a menu performs a verb. They look similar
+   and behave differently, so they carry different roles. */
+function DropdownMenu() {
+  const [open, setOpen] = useState(false)
+  const [last, setLast] = useState(null)
+  const wrap = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDoc)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDoc)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const items = [['copy', 'Duplicate'], ['download', 'Export'], ['link', 'Copy link'], ['close', 'Delete']]
+
+  return (
+    <div className={styles.menuWrap} ref={wrap}>
+      <button
+        type="button"
+        className={styles.btnDemo}
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        Actions <Icon name="chevron-down" size={14} />
+      </button>
+      {open && (
+        <div className={styles.menu} role="menu">
+          {items.map(([icon, label], i) => (
+            <Fragment key={label}>
+              {i === items.length - 1 && <span className={styles.menuRule} />}
+              <button
+                type="button"
+                role="menuitem"
+                className={`${styles.menuItem} ${i === items.length - 1 ? styles.menuItemBad : ''}`}
+                onClick={() => { setLast(label); setOpen(false) }}
+              >
+                <Icon name={icon} size={14} />{label}
+              </button>
+            </Fragment>
+          ))}
+        </div>
+      )}
+      {last && <span className={styles.menuEcho}>{last}</span>}
+    </div>
+  )
+}
+
+/* ── Date picker (NEW) ───────────────────────────────────────────────────────
+   A month grid, because a text field asking for a date gets a different format
+   from every visitor. Weeks start Monday, and today is marked whether or not
+   it is selected. */
+function DatePicker() {
+  const [sel, setSel] = useState(14)
+  const [open, setOpen] = useState(true)
+  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+  // Fixed month so the demo is deterministic — no Date() at render.
+  const offset = 3
+  const total = 31
+  const today = 9
+
+  return (
+    <div className={styles.dateWrap}>
+      <button
+        type="button"
+        className={styles.dateField}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <Icon name="calendar" size={14} />
+        <span>2026 · 03 · {String(sel).padStart(2, '0')}</span>
+      </button>
+      {open && (
+        <div className={styles.calendar} role="dialog" aria-label="Choose a date">
+          <div className={styles.calHead}>
+            <button type="button" className={styles.iconOnly} aria-label="Previous month"><Icon name="chevron-left" size={14} /></button>
+            <span className={styles.calMonth}>March 2026</span>
+            <button type="button" className={styles.iconOnly} aria-label="Next month"><Icon name="chevron-right" size={14} /></button>
+          </div>
+          <div className={styles.calGrid}>
+            {days.map((d, i) => (
+              <span key={i} className={styles.calDay}>{d}</span>
+            ))}
+            {Array.from({ length: offset }, (_, i) => <span key={`b${i}`} />)}
+            {Array.from({ length: total }, (_, i) => {
+              const n = i + 1
+              const weekend = (i + offset) % 7 >= 5
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  aria-current={n === today ? 'date' : undefined}
+                  aria-pressed={n === sel}
+                  className={[
+                    styles.calCell,
+                    n === sel ? styles.calCellOn : '',
+                    n === today ? styles.calToday : '',
+                    weekend ? styles.calWeekend : '',
+                  ].join(' ')}
+                  onClick={() => setSel(n)}
+                >
+                  {n}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Combobox: type to filter, arrow to move, enter to choose. Distinct from the
+   select — a select shows every option, a combobox exists because there are
+   too many to show. */
+function Combobox() {
+  const all = ['Arbitrum', 'Banzen', 'Entropy', 'Google', 'Heard', 'Hylands', 'Nimruz', 'Photon', 'Talos', 'Transcend']
+  const [q, setQ] = useState('')
+  const [open, setOpen] = useState(false)
+  const [cursor, setCursor] = useState(0)
+  const hits = all.filter((a) => a.toLowerCase().includes(q.toLowerCase()))
+
+  const onKey = (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setCursor((c) => Math.min(hits.length - 1, c + 1)) }
+    if (e.key === 'ArrowUp') { e.preventDefault(); setCursor((c) => Math.max(0, c - 1)) }
+    if (e.key === 'Enter' && open && hits[cursor]) { e.preventDefault(); setQ(hits[cursor]); setOpen(false) }
+    if (e.key === 'Escape') setOpen(false)
+  }
+
+  return (
+    <div className={styles.comboWrap}>
+      <input
+        className={styles.fieldContact}
+        value={q}
+        placeholder="Type a client"
+        aria-expanded={open}
+        aria-autocomplete="list"
+        role="combobox"
+        onChange={(e) => { setQ(e.target.value); setOpen(true); setCursor(0) }}
+        onFocus={() => setOpen(true)}
+        onKeyDown={onKey}
+      />
+      {open && (
+        <div className={styles.comboList} role="listbox">
+          {hits.length ? hits.slice(0, 5).map((h, i) => (
+            <button
+              key={h}
+              type="button"
+              role="option"
+              aria-selected={i === cursor}
+              className={`${styles.comboItem} ${i === cursor ? styles.comboItemOn : ''}`}
+              onMouseEnter={() => setCursor(i)}
+              onClick={() => { setQ(h); setOpen(false) }}
+            >
+              {/* The matched run is marked, so it is obvious why a row is here. */}
+              {q && h.toLowerCase().includes(q.toLowerCase()) ? (
+                <>
+                  {h.slice(0, h.toLowerCase().indexOf(q.toLowerCase()))}
+                  <mark className={styles.comboMark}>
+                    {h.slice(h.toLowerCase().indexOf(q.toLowerCase()), h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
+                  </mark>
+                  {h.slice(h.toLowerCase().indexOf(q.toLowerCase()) + q.length)}
+                </>
+              ) : h}
+            </button>
+          )) : <span className={styles.comboEmpty}>No matches</span>}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Small controls (NEW) ────────────────────────────────────────────────── */
+
+function Switch() {
+  const [on, setOn] = useState(true)
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      className={styles.switchRow}
+      onClick={() => setOn((o) => !o)}
+    >
+      <span className={`${styles.switchTrack} ${on ? styles.switchOn : ''}`}>
+        <span className={styles.switchThumb} />
+      </span>
+      <span className={styles.choiceLabel}>Email me a copy</span>
+    </button>
+  )
+}
+
+/* Steppers exist so a number can be nudged without selecting and retyping.
+   The field stays editable — a stepper that forces you through the buttons is
+   worse than a plain input. */
+function Stepper() {
+  const [n, setN] = useState(6)
+  return (
+    <div className={styles.stepper}>
+      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.max(1, v - 1))} aria-label="Decrease">
+        <Icon name="minus" size={14} />
+      </button>
+      <input
+        className={styles.stepInput}
+        value={n}
+        onChange={(e) => setN(Math.max(1, Math.min(52, Number(e.target.value) || 1)))}
+        aria-label="Weeks"
+      />
+      <button type="button" className={styles.stepBtn} onClick={() => setN((v) => Math.min(52, v + 1))} aria-label="Increase">
+        <Icon name="plus" size={14} />
+      </button>
+      <span className={styles.stepUnit}>weeks</span>
+    </div>
+  )
+}
+
+function TagInput() {
+  const [tags, setTags] = useState(['Brand', 'Motion'])
+  const [draft, setDraft] = useState('')
+  const add = (e) => {
+    e.preventDefault()
+    const v = draft.trim()
+    if (!v || tags.includes(v)) return
+    setTags((t) => [...t, v])
+    setDraft('')
+  }
+  return (
+    <form className={styles.tagField} onSubmit={add}>
+      {tags.map((t) => (
+        <span key={t} className={styles.tag}>
+          {t}
+          <button type="button" onClick={() => setTags((x) => x.filter((y) => y !== t))} aria-label={`Remove ${t}`}>
+            <Icon name="close" size={12} />
+          </button>
+        </span>
+      ))}
+      <input
+        className={styles.tagInput}
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Backspace' && !draft) setTags((t) => t.slice(0, -1)) }}
+        placeholder={tags.length ? '' : 'Add a tag'}
+        aria-label="Add tag"
+      />
+    </form>
+  )
+}
+
+function SliderControl() {
+  const [v, setV] = useState(40)
+  return (
+    <div className={styles.sliderWrap}>
+      <div className={styles.sliderHead}>
+        <span className={styles.cardEyebrow}>Budget</span>
+        <span className={styles.sliderVal}>${v}k</span>
+      </div>
+      <input
+        type="range" min="10" max="120" step="5" value={v}
+        onChange={(e) => setV(Number(e.target.value))}
+        className={styles.baRange}
+        aria-label="Budget"
+      />
+      <div className={styles.sliderEnds}>
+        <span className={styles.axisMutedText}>$10k</span>
+        <span className={styles.axisMutedText}>$120k</span>
+      </div>
+    </div>
+  )
+}
+
 /* ── Data grid (NEW) ─────────────────────────────────────────────────────────
  *
  * A spreadsheet is not a styled table — it is a different instrument, and the
@@ -735,6 +1108,99 @@ function DataGrid() {
             : fmt(rows[sel.r][GRID_COLS[sel.c].key], GRID_COLS[sel.c].type)}
         </span>
       </div>
+    </div>
+  )
+}
+
+/* ── People (NEW) ────────────────────────────────────────────────────────────
+   No avatar exists anywhere in the codebase, and both About and Careers want
+   one. Initials rather than a photo as the default: a studio of five has no
+   headshot pipeline, and a missing image is worse than no image. */
+function Avatar({ name, size = 32 }) {
+  const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2)
+  return (
+    <span
+      className={styles.avatar}
+      style={{ width: size, height: size, fontSize: size * 0.34 }}
+      aria-hidden="true"
+    >
+      {initials}
+    </span>
+  )
+}
+
+function PersonCard() {
+  return (
+    <div className={styles.people}>
+      {[['Chris Church', 'Founder, strategy'], ['Dana Cole', 'Design director'], ['Ravi Menon', 'Engineering']].map(
+        ([name, role]) => (
+          <div key={name} className={styles.person}>
+            <Avatar name={name} size={36} />
+            <span className={styles.personText}>
+              <span className={styles.personName}>{name}</span>
+              <span className={styles.personRole}>{role}</span>
+            </span>
+          </div>
+        ),
+      )}
+    </div>
+  )
+}
+
+/* ── Prev / next (NEW) ───────────────────────────────────────────────────────
+   A case study is currently a dead end — nothing in the codebase links one to
+   the next. Both ends are named rather than labelled "previous" and "next"
+   alone, because the name is what decides whether anyone clicks. */
+function PrevNext() {
+  return (
+    <nav className={styles.prevNext} aria-label="Case studies">
+      <a href="#content" className={styles.pnItem}>
+        <span className={styles.pnDir}><Icon name="arrow-left" size={14} />Previous</span>
+        <span className={styles.pnName}>Transcend</span>
+        <span className={styles.pnMeta}>Brand system</span>
+      </a>
+      <a href="#content" className={`${styles.pnItem} ${styles.pnNext}`}>
+        <span className={styles.pnDir}>Next<Icon name="arrow-right" size={14} /></span>
+        <span className={styles.pnName}>Photon</span>
+        <span className={styles.pnMeta}>Brand + Product</span>
+      </a>
+    </nav>
+  )
+}
+
+/* Scrollspy: the chip nav already exists, but nothing tells the reader where
+   they are in it. Uses IntersectionObserver rather than a scroll handler, so
+   it costs nothing per frame. */
+function Scrollspy() {
+  const ids = ['colour', 'type', 'radius', 'spacing']
+  const [active, setActive] = useState('colour')
+
+  useEffect(() => {
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean)
+    if (!els.length) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+        if (hit) setActive(hit.target.id)
+      },
+      { rootMargin: '-20% 0px -70% 0px' },
+    )
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div className={styles.spyRow}>
+      {ids.map((id) => (
+        <a
+          key={id}
+          href={`#${id}`}
+          aria-current={active === id ? 'true' : undefined}
+          className={`${styles.spyLink} ${active === id ? styles.spyLinkOn : ''}`}
+        >
+          {id}
+        </a>
+      ))}
     </div>
   )
 }
@@ -2393,7 +2859,8 @@ export default function DesignSystem() {
               ['Nav', 'nav'], ['Grids', 'grids'], ['Content', 'content'],
               ['Charts', 'charts'], ['Media', 'media'], ['Carousels', 'carousels'],
               ['Chat', 'chat'], ['Conversion', 'conversion'], ['Feedback', 'feedback'],
-              ['Motion', 'motion'], ['Layout', 'layout'], ['Light', 'light'],
+              ['Overlays', 'overlays'], ['Motion', 'motion'], ['Layout', 'layout'],
+              ['Light', 'light'],
               ['Access', 'a11y'], ['Inventory', 'backlog'],
             ].map(([label, id]) => (
               <a key={id} href={`#${id}`} className={styles.tocLink}>{label}</a>
@@ -3069,6 +3536,36 @@ export default function DesignSystem() {
             >
               <MultiStep />
             </Demo>
+
+            <Demo label="Date picker" status="NEW" wide stage={false}
+              note="A month grid, because a text field asking for a date gets a different format from every visitor. Weeks start Monday; today is marked whether or not it's selected.">
+              <div className={styles.formStage}><DatePicker /></div>
+            </Demo>
+
+            <Demo label="Combobox" status="NEW"
+              note="Type to filter, arrow to move, enter to choose. A select shows every option; a combobox exists because there are too many to show. The matched run is marked, so it's obvious why a row is there.">
+              <Combobox />
+            </Demo>
+
+            <Demo label="Switch" status="NEW"
+              note="role=switch, not a checkbox. A switch takes effect immediately; a checkbox waits for submit. Using the wrong one is a promise you don't keep.">
+              <Switch />
+            </Demo>
+
+            <Demo label="Stepper" status="NEW"
+              note="So a number can be nudged without selecting and retyping. The field stays editable — a stepper that forces you through the buttons is worse than a plain input.">
+              <Stepper />
+            </Demo>
+
+            <Demo label="Tag input" status="NEW"
+              note="Backspace on an empty field removes the last tag, which is the one interaction people expect and most implementations miss.">
+              <TagInput />
+            </Demo>
+
+            <Demo label="Slider" status="NEW"
+              note="Already used inside before/after and the video scrub; documented here as a control. The value is always shown — a slider without a readout is a guess.">
+              <SliderControl />
+            </Demo>
           </div>
 
           <h3 className={styles.subhead}>Composition</h3>
@@ -3216,6 +3713,16 @@ export default function DesignSystem() {
             <Demo label="Skip link" status="NEW"
               note="Visually hidden until focused. Tab to it — the site has none today, so a keyboard user traverses the whole nav rail on every page.">
               <a href="#colour" className={styles.skipLink}>Skip to content</a>
+            </Demo>
+
+            <Demo label="Prev / next" status="NEW" wide stage={false}
+              note="A case study is currently a dead end — nothing in the codebase links one to the next. Both ends are named, because the name is what decides whether anyone clicks, not the word 'next'.">
+              <PrevNext />
+            </Demo>
+
+            <Demo label="Scrollspy" status="NEW" wide stage={false}
+              note="The chip nav exists but never says where you are. IntersectionObserver rather than a scroll handler, so it costs nothing per frame. Scroll the page — this tracks the first four sections live.">
+              <div className={styles.formStage}><Scrollspy /></div>
             </Demo>
           </div>
 
@@ -3411,6 +3918,53 @@ export default function DesignSystem() {
                   </div>
                 ))}
               </div>
+            </Demo>
+
+            <Demo label="Callout" status="NEW" wide stage={false}
+              note="A note inside prose that isn't a quote. Rule on the left rather than a filled box — a fill would break the column and read as a different page.">
+              <aside className={styles.callout}>
+                <span className={styles.calloutLabel}>Note</span>
+                <p className={styles.calloutText}>
+                  Package prices are indicative. Anything with a discovery phase is
+                  quoted after it, not before.
+                </p>
+              </aside>
+            </Demo>
+
+            <Demo label="Definition list" status="NEW" stage={false}
+              note="Term and definition, for a glossary or a spec. Mono term, serif definition — the same split the whole site uses between label and prose.">
+              <dl className={styles.defList}>
+                {[['Brand system', 'Identity, voice, and the rules that keep both intact.'],
+                  ['Design system', 'Components and tokens for engineering teams.'],
+                  ['Content program', 'Strategy and production on a recurring cadence.']].map(([t, d]) => (
+                  <Fragment key={t}>
+                    <dt className={styles.defTerm}>{t}</dt>
+                    <dd className={styles.defDesc}>{d}</dd>
+                  </Fragment>
+                ))}
+              </dl>
+            </Demo>
+
+            <Demo label="Timeline" status="NEW" stage={false}
+              note="Editorial, not a Gantt: undated steps in order, for a process or a studio history. The rule runs behind the markers so it reads as one thread.">
+              <ol className={styles.timeline}>
+                {[['Discovery', 'Interviews, audit, and the brief we actually agree on.'],
+                  ['Direction', 'Two routes, one chosen, in front of the whole team.'],
+                  ['System', 'The parts, the rules, and the handover.']].map(([t, d], i) => (
+                  <li key={t} className={styles.tlItem}>
+                    <span className={styles.tlMark}>{i + 1}</span>
+                    <span className={styles.tlBody}>
+                      <span className={styles.tlTitle}>{t}</span>
+                      <span className={styles.tlText}>{d}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </Demo>
+
+            <Demo label="People" status="NEW" stage={false}
+              note="No avatar exists in the codebase, and About and Careers both want one. Initials rather than a photo by default — a studio of five has no headshot pipeline, and a broken image is worse than none.">
+              <PersonCard />
             </Demo>
           </div>
 
@@ -3942,16 +4496,90 @@ export default function DesignSystem() {
             </Demo>
 
             <Demo label="Confirm dialog" status="NEW"
-              note="Any irreversible action. Contained in the demo; in use it takes a backdrop and traps focus. Destructive action on the right, never pre-focused.">
+              note="Any irreversible action. Destructive action on the right, never pre-focused. See Overlays for the modal primitive underneath it.">
               <ConfirmDialog />
             </Demo>
+
+            <Demo label="Inline banner" status="NEW" wide stage={false}
+              note="No .alert, .banner or .notice class exists anywhere in the codebase — there's a toast and a form error summary and nothing for a page-level notice. Three tones, each with an icon and a word, never colour alone.">
+              <div className={styles.banners}>
+                {[
+                  ['info', 'info', 'This deck is a draft. Numbers are indicative.'],
+                  ['good', 'success', 'Brief received. We reply within two days.'],
+                  ['warn', 'warning', 'Your session expires in five minutes.'],
+                  ['bad', 'error', "That file didn't upload. Try again, or email it."],
+                ].map(([tone, icon, text]) => (
+                  <div key={tone} className={`${styles.banner} ${styles[`banner${tone[0].toUpperCase()}${tone.slice(1)}`]}`} role="status">
+                    <Icon name={icon} size={14} />
+                    <span className={styles.bannerText}>{text}</span>
+                    <button type="button" className={styles.bannerClose} aria-label="Dismiss">
+                      <Icon name="close" size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </Demo>
+
+            <Demo label="Spinner" status="NEW"
+              note="For a wait with no known duration — where the progress bar would have to lie. A ring rather than dots, so it isn't confused with the chat's thinking state.">
+              <span className={styles.spinner} role="status" aria-label="Loading" />
+            </Demo>
+          </div>
+        </Section>
+
+        {/* ── Overlays ── */}
+        <Section
+          id="overlays"
+          index={19}
+          title="Overlays"
+          blurb="The primitive the site is missing. Both drawers ship without role=dialog, aria-modal, or a focus trap."
+        >
+          <p className={styles.prose}>
+            Cal and contact both handle Escape and label their close button, and
+            neither declares itself a dialog or traps focus — so a keyboard user tabs
+            straight out of an open drawer into the page behind it, with no way to
+            tell they have left. Everything here is contained in its demo rather than
+            fixed to the viewport; in production the same markup takes
+            {' '}<code className={styles.code}>position: fixed</code> and a layer from
+            {' '}<a href="#depth" className={styles.inlineLink}>Depth</a>.
+          </p>
+          <div className={styles.demoGrid}>
+            <Demo label="Modal" status="NEW" stage={false}
+              note="Open it and press Tab repeatedly — focus cycles inside and cannot escape. Escape closes it, and focus returns to the button that opened it, which is the half most implementations skip.">
+              <div className={styles.formStage}><Modal /></div>
+            </Demo>
+
+            <Demo label="Dropdown menu" status="NEW" stage={false}
+              note="An action menu, not a select: a select returns a value, a menu performs a verb. They look alike and behave differently, so they carry different roles. Click outside or press Escape to close.">
+              <div className={styles.formStage}><DropdownMenu /></div>
+            </Demo>
+          </div>
+
+          <h3 className={styles.subhead}>Rules</h3>
+          <div className={styles.list}>
+            {[
+              ['role="dialog" + aria-modal', 'Without both, a screen reader keeps reading the page behind it.'],
+              ['Trap focus, then restore it', 'Restore is the forgotten half — otherwise the reader lands back at the top of the document.'],
+              ['Escape always closes', 'The one shortcut every overlay owes. Both drawers already do this.'],
+              ['Backdrop click closes', 'But only on mousedown outside — a drag that ends outside must not close it.'],
+              ['Never nest overlays', 'A modal opening a modal has no back button. Replace the content instead.'],
+            ].map(([label, note]) => (
+              <div key={label} className={styles.row}>
+                <div className={styles.rowMain}>
+                  <div className={styles.rowText}>
+                    <span className={styles.rowLabel}>{label}</span>
+                    <span className={styles.rowNote}>{note}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </Section>
 
         {/* ── 12 Motion ── */}
         <Section
           id="motion"
-          index={19}
+          index={20}
           title="Motion"
           blurb="Everything arrives the same way: up ten pixels, fading in, over half a second."
         >
@@ -3984,7 +4612,7 @@ export default function DesignSystem() {
         {/* ── 06 Layout ── */}
         <Section
           id="layout"
-          index={20}
+          index={21}
           title="Layout"
           blurb="A tight grid with a reserved rail, and measures set in characters rather than pixels."
         >
@@ -4005,7 +4633,7 @@ export default function DesignSystem() {
         {/* ── 07 Light mode ── */}
         <Section
           id="light"
-          index={21}
+          index={22}
           title="Light mode"
           blurb="Not a second palette — a filter."
         >
@@ -4036,7 +4664,7 @@ export default function DesignSystem() {
         {/* ── Accessibility ── */}
         <Section
           id="a11y"
-          index={22}
+          index={23}
           title="Accessibility"
           blurb="Two live defects, not omissions. Both are cheap to fix and neither is fixed."
         >
@@ -4138,7 +4766,7 @@ export default function DesignSystem() {
         {/* ── 15 Backlog ── */}
         <Section
           id="backlog"
-          index={23}
+          index={24}
           title="Inventory"
           blurb="Every pattern the system holds, and how far each has travelled from a drawing to a component."
         >
