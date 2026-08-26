@@ -1,0 +1,200 @@
+/* Super Conscious design system — tokens.
+ *
+ * The layer that was missing. Everything in /design-system was a description
+ * until these existed; from here a component reads a token and changing the
+ * token changes the component.
+ *
+ * Two rules for anyone adding to this file:
+ *
+ *   1. A value belongs here only if more than one component needs it. A token
+ *      used once is a hardcoded value with extra steps.
+ *   2. Names describe the JOB, not the appearance. --sc-card, not --sc-grey-2.
+ *      An appearance name is a promise you break the first time the appearance
+ *      changes.
+ *
+ * The --sc- prefix is deliberate: these are global, and a second design system
+ * in the same document must not collide with them.
+ *
+ * To retarget for another brand, replace the SURFACES, TEXT, ACCENT and CHART
+ * blocks and leave everything below them alone — spacing, radius, layers,
+ * elevation and motion are structural rather than brand.
+ */
+
+:root {
+  /* ── Surfaces ────────────────────────────────────────────────────────────
+     One ground, one card, and small steps either side of it. */
+  --sc-ground: #0a0a0a;
+  --sc-card: #161616;
+  --sc-card-hover: #1c1c1c;
+  --sc-raised: #1e1e1e;
+  --sc-recessed: #0e0e0e;
+
+  /* ── Text ────────────────────────────────────────────────────────────────
+     White at descending alpha. There is no second text colour — the whole
+     hierarchy is built from opacity, which is why light mode can be a filter. */
+  --sc-text-peak: rgba(255, 255, 255, 0.95);
+  --sc-text-display: rgba(255, 255, 255, 0.92);
+  --sc-text-strong: rgba(255, 255, 255, 0.85);
+  --sc-text-title: rgba(255, 255, 255, 0.75);
+  --sc-text-body: rgba(255, 255, 255, 0.55);
+  --sc-text-support: rgba(255, 255, 255, 0.45);
+  --sc-text-label: rgba(255, 255, 255, 0.4);
+  --sc-text-meta: rgba(255, 255, 255, 0.3);
+  --sc-text-faint: rgba(255, 255, 255, 0.22);
+
+  /* ── Hairlines & fills ─────────────────────────────────────────────────── */
+  --sc-line-strong: rgba(255, 255, 255, 0.12);
+  --sc-line: rgba(255, 255, 255, 0.06);
+  --sc-fill: rgba(255, 255, 255, 0.06);
+  --sc-fill-hover: rgba(255, 255, 255, 0.12);
+  --sc-fill-faint: rgba(255, 255, 255, 0.03);
+
+  /* ── Accent ──────────────────────────────────────────────────────────────
+     Two hues, and only two. --teal and --blue were declared for years and used
+     nowhere; they are not carried forward. */
+  --sc-pink: #df4ed6;
+  --sc-purple: #7d5ae0;
+
+  /* ── Status ──────────────────────────────────────────────────────────────
+     Reserved. Never reused as a chart series or an accent. */
+  --sc-good: rgba(190, 220, 150, 0.9);
+  --sc-good-fill: rgba(190, 220, 150, 0.1);
+  --sc-warn: #bd842c;
+  --sc-warn-fill: rgba(189, 132, 44, 0.12);
+  --sc-bad: rgba(255, 80, 80, 0.85);
+  --sc-bad-fill: rgba(255, 80, 80, 0.1);
+  --sc-bad-line: rgba(255, 80, 80, 0.6);
+
+  /* ── Chart ───────────────────────────────────────────────────────────────
+     Three categorical slots, and that is a measured ceiling rather than a
+     preference: pink and purple are adjacent hues, so past three a fourth
+     either leaves the OKLCH lightness band (0.48–0.67) or fails adjacent-pair
+     colour-vision separation. Past three series, use small multiples or an
+     "Other" bucket — never a fourth hue.
+
+     s4–s6 alias s1–s3 on purpose, so a chart reaching for a fourth series
+     gets a visible repeat instead of a colour that quietly fails. */
+  --sc-s1: #d94eb6;
+  --sc-s2: #7d5ae0;
+  --sc-s3: #a82a7e;
+  --sc-s4: var(--sc-s1);
+  --sc-s5: var(--sc-s2);
+  --sc-s6: var(--sc-s3);
+
+  /* Sequential ramp — one hue, light to dark. Magnitude, not identity. */
+  --sc-q0: rgba(255, 255, 255, 0.03);
+  --sc-q1: #231a49;
+  --sc-q2: #342767;
+  --sc-q3: #4a3891;
+  --sc-q4: #6a51c4;
+  --sc-q5: #9b86e6;
+
+  /* ── Type ────────────────────────────────────────────────────────────────
+     Two families held far apart: a serif for anything read for meaning, a mono
+     for anything that labels or counts. */
+  --sc-font-display: 'Signifier', Georgia, serif;
+  --sc-font-mono: 'Roboto Mono', ui-monospace, monospace;
+
+  --sc-size-eyebrow: 8px;
+  --sc-size-label: 9px;
+  --sc-size-meta: 10px;
+  --sc-size-ui: 11px;
+  --sc-size-body: 14px;
+  --sc-size-lede: 15px;
+
+  --sc-track-tight: 0.04em;
+  --sc-track: 0.1em;
+  --sc-track-wide: 0.12em;
+  --sc-track-widest: 0.14em;
+
+  /* ── Spacing ─────────────────────────────────────────────────────────────
+     The site had no scale — its top eight padding values were eight separate
+     decisions. This is the scale; 5px stays as a named exception because it is
+     the homepage gutter and rounding it would change the page. */
+  --sc-space-1: 4px;
+  --sc-gutter: 5px;
+  --sc-space-2: 8px;
+  --sc-space-3: 12px;
+  --sc-space-4: 16px;
+  --sc-space-5: 24px;
+  --sc-space-6: 32px;
+  --sc-space-7: 48px;
+  --sc-space-8: 64px;
+
+  /* ── Radius ──────────────────────────────────────────────────────────── */
+  --sc-radius-sm: 2px;
+  --sc-radius: 4px;
+  --sc-radius-lg: 16px;
+  --sc-radius-pill: 999px;
+
+  /* ── Elevation ───────────────────────────────────────────────────────────
+     Four shadows, each with a job. The drawer casts upward because it rises
+     from the edge of the screen. */
+  --sc-elev-menu: 0 12px 28px rgba(0, 0, 0, 0.5);
+  --sc-elev-dialog: 0 18px 40px rgba(0, 0, 0, 0.6);
+  --sc-elev-drawer: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  --sc-ring: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 16px 36px rgba(0, 0, 0, 0.6);
+
+  /* ── Layers ──────────────────────────────────────────────────────────────
+     Named steps 100 apart, so there is room to insert without renumbering.
+     Replaces eleven ad-hoc z-index values including 9500 and 9999. */
+  --sc-layer-base: 0;
+  --sc-layer-raised: 10;
+  --sc-layer-sticky: 100;
+  --sc-layer-nav: 200;
+  --sc-layer-drawer: 300;
+  --sc-layer-overlay: 400;
+  --sc-layer-toast: 500;
+  --sc-layer-cursor: 600;
+
+  /* ── Motion ────────────────────────────────────────────────────────────── */
+  --sc-ease: cubic-bezier(0.25, 1, 0.4, 1);
+  --sc-fast: 0.15s;
+  --sc-medium: 0.3s;
+  --sc-slow: 0.5s;
+
+  /* ── Focus ───────────────────────────────────────────────────────────────
+     One ring for every control. The 2px offset matters: flush to the edge it
+     reads as a border and disappears on anything that already has one. */
+  --sc-focus: 2px solid rgba(255, 255, 255, 0.9);
+  --sc-focus-offset: 2px;
+}
+
+/* Light mode is a filter on this site rather than a second palette, so there
+   is no light token block. A product that needs a real light theme should
+   redefine the SURFACES and TEXT blocks under its own scope — and re-run the
+   palette validator against the new surface, because the chart slots above are
+   validated against #0a0a0a and nothing else. */
+
+/* ── Base ──────────────────────────────────────────────────────────────────
+   Applied by any product consuming the system. Deliberately minimal: it sets
+   the ground and the focus ring, and nothing else. */
+
+.sc-root {
+  background: var(--sc-ground);
+  color: var(--sc-text-body);
+  font-family: var(--sc-font-mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* focus-visible rather than focus, so a mouse click leaves nothing behind but
+   a Tab key does. Scoped to the system root so it cannot fight a host app. */
+.sc-root :focus-visible {
+  outline: var(--sc-focus);
+  outline-offset: var(--sc-focus-offset);
+  border-radius: var(--sc-radius-sm);
+}
+
+/* Not "no motion" — motion that moves nothing through space. Fades survive
+   because opacity carries no vestibular cost; travel, scale and looping stop. */
+@media (prefers-reduced-motion: reduce) {
+  .sc-root *,
+  .sc-root *::before,
+  .sc-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

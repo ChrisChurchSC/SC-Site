@@ -1,0 +1,136 @@
+/* Dashboard — page layout only.
+ *
+ * Deliberately short. Everything that looks like anything comes from
+ * src/system; these rules are the arrangement of this one page, and they read
+ * system tokens rather than literals. If this file starts growing, something
+ * belongs in the system instead.
+ */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.panelMeta {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-faint);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gutter);
+}
+
+.compactCard {
+  padding: var(--sc-space-3);
+  gap: 6px;
+}
+
+.cardFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-2);
+  margin-top: 2px;
+}
+
+.owner {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}
+
+/* ── Asset table ──────────────────────────────────────────────────────────
+   A reading table, not a grid: no vertical rules, because the columns are
+   prose-like and the type separates them. The spreadsheet grid in the design
+   system is the other instrument, for when a cell needs addressing. */
+
+.table {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.tRow {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.2fr 0.9fr 0.6fr 0.8fr;
+  align-items: center;
+  gap: var(--sc-space-3);
+  padding: var(--sc-space-3) 0;
+  border-bottom: 1px solid var(--sc-line);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-body);
+  min-width: 620px;
+}
+
+.tRow:last-child { border-bottom: none; }
+
+.tHead {
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+  padding-top: 0;
+  border-bottom-color: var(--sc-line-strong);
+}
+
+.tName { color: var(--sc-text-strong); }
+
+/* Figures right-aligned with tabular digits, so magnitude reads as length. */
+.tNum {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tSpark { display: flex; justify-content: flex-end; }
+
+/* ── Activity feed ────────────────────────────────────────────────────── */
+
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.feedRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  padding: var(--sc-space-3) 0;
+  border-bottom: 1px solid var(--sc-line);
+  color: var(--sc-text-meta);
+}
+
+.feedRow:last-child { border-bottom: none; }
+
+.feedText {
+  flex: 1;
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-body);
+  color: var(--sc-text-body);
+}
+
+.feedText strong {
+  font-weight: 300;
+  color: var(--sc-text-strong);
+}
+
+.feedWhen {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-faint);
+}
+
+@media (max-width: 768px) {
+  .tRow { min-width: 560px; }
+}

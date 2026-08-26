@@ -1,0 +1,871 @@
+/* Super Conscious design system — component styles.
+ *
+ * One stylesheet rather than one per component, deliberately. The whole point
+ * of this package is that it can be lifted into another product, and two files
+ * (tokens.css + this) is a boundary someone will actually carry across. Fifteen
+ * co-located modules is a boundary they will copy wrong.
+ *
+ * Every value here reads a token. If a rule below needs a literal, that is a
+ * finding about tokens.css, not a licence to hardcode.
+ */
+
+/* ── Shell ─────────────────────────────────────────────────────────────────
+   The dashboard frame: a fixed sidebar, a sticky topbar, and a scrolling
+   content well. The sidebar is a grid column rather than position:fixed, so
+   the content never needs a magic margin to clear it. */
+
+.shell {
+  display: grid;
+  grid-template-columns: 216px 1fr;
+  min-height: 100vh;
+  background: var(--sc-ground);
+}
+
+.shellCollapsed {
+  grid-template-columns: 56px 1fr;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-5);
+  padding: var(--sc-space-4) var(--sc-space-3);
+  border-right: 1px solid var(--sc-line);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebarHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-2);
+  min-height: 28px;
+}
+
+.brand {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--sc-text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.navLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+  padding: 0 var(--sc-space-2) var(--sc-space-2);
+}
+
+/* Active carries a rule as well as brightness, so identity is never colour
+   alone — and aria-current announces it. */
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-body);
+  background: none;
+  border: none;
+  border-left: 1px solid transparent;
+  border-radius: var(--sc-radius-sm);
+  padding: var(--sc-space-2) var(--sc-space-2);
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: color var(--sc-fast), background var(--sc-fast), border-color var(--sc-fast);
+}
+
+.navItem:hover {
+  color: var(--sc-text-strong);
+  background: var(--sc-fill-faint);
+}
+
+.navItemOn {
+  color: var(--sc-text-peak);
+  background: var(--sc-fill);
+  border-left-color: var(--sc-text-strong);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  padding: var(--sc-space-3) var(--sc-space-5);
+  border-bottom: 1px solid var(--sc-line);
+  background: var(--sc-ground);
+  position: sticky;
+  top: 0;
+  z-index: var(--sc-layer-sticky);
+}
+
+.topbarTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--sc-text-strong);
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+}
+
+.content {
+  padding: var(--sc-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gutter);
+  min-width: 0;
+}
+
+/* Dashboard grid. 12 columns on the site's hairline gutter — the same grid the
+   homepage uses, so a dashboard and a marketing page are visibly one system. */
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sc-gutter);
+}
+
+.span3 { grid-column: span 3; }
+.span4 { grid-column: span 4; }
+.span6 { grid-column: span 6; }
+.span8 { grid-column: span 8; }
+.span12 { grid-column: span 12; }
+
+/* ── Panel ─────────────────────────────────────────────────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  background: var(--sc-card);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-4);
+  min-width: 0;
+}
+
+.panelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+}
+
+.panelTitle {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}
+
+/* ── Card ──────────────────────────────────────────────────────────────────
+   One base; the variants differ in what they hold and whether they are
+   clickable, never in what they are made of. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  background: var(--sc-card);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-5) var(--sc-space-4);
+  min-width: 0;
+  transition: background var(--sc-medium) ease,
+              transform var(--sc-medium) var(--sc-ease),
+              box-shadow var(--sc-medium) ease;
+}
+
+/* The only card that moves. If it does not navigate, it does not lift. */
+.cardLink {
+  cursor: pointer;
+  text-align: left;
+  border: none;
+}
+
+.cardLink:hover {
+  background: var(--sc-card-hover);
+  transform: translateY(-6px);
+  box-shadow: var(--sc-ring);
+}
+
+.cardMuted { opacity: 0.5; }
+
+.eyebrow {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-faint);
+}
+
+.cardTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--sc-text-strong);
+}
+
+.cardBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-body);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+}
+
+/* ── Stat tile ─────────────────────────────────────────────────────────────
+   A figure with no trend behind it cannot be acted on, so the shape is part of
+   the tile rather than a separate chart. */
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  background: var(--sc-card);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-4);
+  min-width: 0;
+}
+
+.statMain {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+}
+
+.statFigure {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--sc-text-display);
+}
+
+.statSpark { width: 84px; height: 24px; flex-shrink: 0; }
+
+.statDelta {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: 0.06em;
+  color: var(--sc-text-label);
+}
+
+.statUp { color: var(--sc-good); }
+.statDown { color: var(--sc-bad); }
+
+/* A delta with no stated comparison is a number pretending to be a fact. */
+.statVs { color: var(--sc-text-faint); }
+
+/* ── Button ────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  border-radius: var(--sc-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--sc-fast), color var(--sc-fast),
+              border-color var(--sc-fast), opacity var(--sc-fast);
+}
+
+.btnMd { font-size: var(--sc-size-label); padding: 11px 20px; }
+.btnSm { font-size: var(--sc-size-eyebrow); padding: 8px 12px; }
+
+.btnSolid {
+  color: var(--sc-ground);
+  background: #fff;
+  border-color: #fff;
+}
+
+.btnSolid:hover:not(:disabled) { opacity: 0.82; }
+
+.btnOutline {
+  color: var(--sc-text-body);
+  background: none;
+  border-color: var(--sc-line-strong);
+}
+
+.btnOutline:hover:not(:disabled) {
+  color: var(--sc-text-peak);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btnGhost {
+  color: var(--sc-text-label);
+  background: var(--sc-fill);
+  border-color: var(--sc-line-strong);
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--sc-fill-hover);
+  color: var(--sc-text-strong);
+}
+
+.btnQuiet {
+  color: var(--sc-text-label);
+  background: none;
+}
+
+.btnQuiet:hover:not(:disabled) {
+  color: var(--sc-text-strong);
+  background: var(--sc-fill);
+}
+
+.btnDanger {
+  color: var(--sc-bad);
+  background: var(--sc-bad-fill);
+  border-color: rgba(255, 80, 80, 0.35);
+}
+
+.btnDanger:hover:not(:disabled) { background: rgba(255, 80, 80, 0.16); }
+
+.btn:disabled { opacity: 0.4; cursor: default; }
+
+/* Icon-only still needs a 32px target — the icon is what you see, not what you
+   have to hit. */
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--sc-radius);
+  color: var(--sc-text-label);
+  background: none;
+  cursor: pointer;
+  transition: background var(--sc-fast), color var(--sc-fast);
+}
+
+.iconBtn:hover {
+  color: var(--sc-text-peak);
+  background: var(--sc-fill);
+}
+
+/* ── Icon ──────────────────────────────────────────────────────────────── */
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+/* ── Fields ────────────────────────────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-support);
+}
+
+/* Optional is marked; required is the default. Fewer marks, less noise. */
+.optional {
+  font-size: 7px;
+  letter-spacing: var(--sc-track-wide);
+  color: var(--sc-text-faint);
+  text-transform: uppercase;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  letter-spacing: var(--sc-track-tight);
+  color: #fff;
+  background: var(--sc-fill-faint);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color var(--sc-fast), background var(--sc-fast);
+}
+
+.input::placeholder,
+.textarea::placeholder { color: var(--sc-text-faint); }
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.textarea { resize: vertical; line-height: 1.6; }
+
+.invalid { border-color: var(--sc-bad-line); }
+
+/* Help and error share this slot, so the row cannot change height when
+   validation fires and shove everything below it down. */
+.help {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  line-height: 1.4;
+  color: var(--sc-text-meta);
+  min-height: 13px;
+}
+
+.helpError { color: var(--sc-bad); }
+
+.switchRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.switchTrack {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 18px;
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-fill-hover);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+  transition: background var(--sc-medium), border-color var(--sc-medium);
+}
+
+.switchOn {
+  background: var(--sc-text-strong);
+  border-color: var(--sc-text-strong);
+}
+
+.switchThumb {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sc-text-title);
+  transform: translateY(-50%);
+  transition: transform var(--sc-medium) var(--sc-ease), background var(--sc-medium);
+}
+
+.switchOn .switchThumb {
+  background: var(--sc-ground);
+  transform: translate(14px, -50%);
+}
+
+.switchLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-title);
+}
+
+/* ── Badge & banner ────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-sm);
+  padding: 4px 7px;
+}
+
+.badgeGood { color: var(--sc-good); background: var(--sc-good-fill); }
+.badgeWarn { color: var(--sc-warn); background: var(--sc-warn-fill); }
+.badgeBad { color: var(--sc-bad); background: var(--sc-bad-fill); }
+
+/* Rule on the left rather than a full border — a bordered box in a column of
+   content reads as a different page. */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  line-height: 1.5;
+  border-radius: 3px;
+  border-left: 2px solid;
+  padding: 11px 12px;
+}
+
+.bannerText { flex: 1; }
+
+.bannerInfo {
+  color: var(--sc-text-title);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--sc-text-label);
+}
+
+.bannerGood { color: var(--sc-good); background: var(--sc-good-fill); border-left-color: var(--sc-good); }
+.bannerWarn { color: var(--sc-warn); background: var(--sc-warn-fill); border-left-color: var(--sc-warn); }
+.bannerBad { color: var(--sc-bad); background: var(--sc-bad-fill); border-left-color: var(--sc-bad-line); }
+
+/* A ring, not dots — dots mean "composing" in a chat, and a wait of unknown
+   length is a different statement. */
+.spinner {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--sc-line-strong);
+  border-top-color: var(--sc-text-strong);
+  animation: scSpin 0.7s linear infinite;
+}
+
+@keyframes scSpin { to { transform: rotate(360deg); } }
+
+/* ── Segmented & tabs ──────────────────────────────────────────────────── */
+
+.segmented {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--sc-radius);
+  padding: 3px;
+  gap: 2px;
+}
+
+.segItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track);
+  text-transform: uppercase;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: var(--sc-radius-sm);
+  padding: 7px 11px;
+  cursor: pointer;
+  transition: background var(--sc-fast), color var(--sc-fast);
+}
+
+.segItem:hover { color: var(--sc-text-strong); }
+
+.segItemOn { color: var(--sc-ground); background: var(--sc-text-strong); }
+
+/* Underline rather than a filled pill — the system has no filled nav state,
+   and inventing one here would make tabs louder than the sidebar. */
+.tabRow {
+  display: flex;
+  gap: var(--sc-space-5);
+  border-bottom: 1px solid var(--sc-line);
+}
+
+.tab {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  padding: 0 0 10px;
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.tab:hover { color: var(--sc-text-body); }
+
+.tabOn {
+  color: var(--sc-text-peak);
+  border-bottom-color: var(--sc-text-peak);
+}
+
+/* ── Overlays ──────────────────────────────────────────────────────────── */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--sc-layer-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sc-space-4);
+  background: rgba(10, 10, 10, 0.82);
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  width: 100%;
+  max-width: 420px;
+  background: var(--sc-card-hover);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-4);
+  box-shadow: var(--sc-elev-dialog);
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+}
+
+.modalTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: 18px;
+  color: var(--sc-text-strong);
+}
+
+.modalBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-body);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  margin: 0;
+}
+
+/* Destructive on the right, and never the pre-focused control. */
+.modalActions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* Rises from the bottom edge, which is why its shadow casts upward. */
+.drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--sc-layer-drawer);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  max-height: 80vh;
+  overflow-y: auto;
+  background: var(--sc-card);
+  border-top: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius) var(--sc-radius) 0 0;
+  padding: var(--sc-space-4);
+  box-shadow: var(--sc-elev-drawer);
+}
+
+/* ── Charts ────────────────────────────────────────────────────────────────
+   Built as instruments: drawn spines, ticks, units, and a reference line
+   wherever a number is judged against something. Text never wears the series
+   colour — the mark beside it carries identity. */
+
+.chart { width: 100%; }
+
+.svg { width: 100%; height: auto; overflow: visible; }
+
+.grid { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; }
+.spine { stroke: rgba(255, 255, 255, 0.28); stroke-width: 1; }
+.tick { stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; }
+
+/* Reference lines are dashed and neutral: context, never a series. A solid
+   coloured line here would read as another measure. */
+.refLine {
+  stroke: var(--sc-text-label);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.axisText {
+  font-family: var(--sc-font-mono);
+  font-size: 7px;
+  letter-spacing: var(--sc-track);
+  fill: var(--sc-text-support);
+}
+
+.valueText {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  fill: var(--sc-text-title);
+}
+
+.unitText {
+  font-family: var(--sc-font-mono);
+  font-size: 7px;
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  fill: var(--sc-text-faint);
+}
+
+.refText {
+  font-family: var(--sc-font-mono);
+  font-size: 7px;
+  letter-spacing: var(--sc-track);
+  text-transform: uppercase;
+  fill: var(--sc-text-label);
+}
+
+.mark { transition: opacity var(--sc-fast); }
+.mark:hover { opacity: 0.75; }
+
+/* A 2px surface ring keeps overlapping dots readable where series cross. */
+.dot { stroke: var(--sc-ground); stroke-width: 2; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-3);
+}
+
+.legendKey {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: 0.06em;
+  color: var(--sc-text-body);
+}
+
+.legendSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--sc-radius-sm);
+  flex-shrink: 0;
+}
+
+.plotWrap { position: relative; }
+
+.tip {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  z-index: var(--sc-layer-raised);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: var(--sc-card-hover);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: 9px 11px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: var(--sc-elev-menu);
+}
+
+.tipLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: var(--sc-track-widest);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+}
+
+.tipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-body);
+}
+
+.tipRow i { width: 8px; height: 8px; border-radius: var(--sc-radius-sm); }
+.tipRow b { font-weight: 400; color: var(--sc-text-peak); margin-left: 4px; }
+
+.crosshair {
+  stroke: var(--sc-text-meta);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .span3 { grid-column: span 6; }
+  .span4 { grid-column: span 6; }
+}
+
+@media (max-width: 768px) {
+  /* The sidebar becomes a top strip rather than collapsing to icons — a
+     56px rail on a phone costs more than it returns. */
+  .shell,
+  .shellCollapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--sc-line);
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sc-space-3);
+    overflow-x: auto;
+  }
+
+  .navGroup { flex-direction: row; }
+  .navLabel { display: none; }
+
+  .content { padding: var(--sc-space-3); }
+
+  .span3, .span4, .span6, .span8 { grid-column: span 12; }
+}
+
+/* Nav count. Right-aligned and dim: it is a fact about the row, not a second
+   label competing with it. */
+.navCount {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-eyebrow);
+  letter-spacing: 0.06em;
+  color: var(--sc-text-meta);
+  flex-shrink: 0;
+}
+
+.navItemOn .navCount { color: var(--sc-text-title); }
