@@ -166,10 +166,9 @@ export default function Dashboard() {
         </GlobalBar>
       }
     >
-      {/* Mark only — the workspace is named in the title bar, and repeating it
-          in the rail spends the widest line in the sidebar on something the
-          reader already knows. */}
-      <Sidebar mark={headMark} collapsed={collapsed} onToggle={toggle}>
+      {/* No mark here. The logo belongs in the global bar and nowhere else —
+          repeating it down the page turns identity into wallpaper. */}
+      <Sidebar collapsed={collapsed} onToggle={toggle}>
         {!collapsed && (
           <Tree
             nodes={TREE}
@@ -194,7 +193,7 @@ export default function Dashboard() {
 
       <div className={styles.main}>
         <Content>
-          <TitleBar mark={headMark} owner="Super Conscious" title="Brand" badge="Private">
+          <TitleBar owner="Super Conscious" title="Brand" badge="Private">
             <CountButton icon="target" label="Pin" />
             <CountButton icon="user" label="Watch" count={4} pressed />
             <CountButton icon="copy" label="Duplicate" count={2} />
