@@ -4686,6 +4686,222 @@
   50%      { background: rgba(255, 255, 255, 0.12); }
 }
 
+/* ── Finding rows ─────────────────────────────────────────────────────────────
+   A large figure against its explanation. Used where a measured count is the
+   argument and the prose is only the footnote. */
+
+.driftList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.drift {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px;
+}
+
+.driftStat {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.85);
+  width: 76px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.driftBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.driftTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.driftNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 68ch;
+  margin: 0;
+}
+
+/* ── Spacing ── */
+
+.spaceList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spaceRow {
+  display: grid;
+  grid-template-columns: 132px 54px 46px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 10px 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.spaceRow:hover {
+  background: #1c1c1c;
+}
+
+/* A drift step is dimmed rather than hidden — it is still in the codebase,
+   and the page has to stay true about that. */
+.spaceDrift {
+  opacity: 0.55;
+}
+
+.spaceBar {
+  display: block;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1px;
+}
+
+.spaceVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.spaceRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Elevation ── */
+
+.elevRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.elevChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #0e0e0e;
+  border-radius: 4px;
+  padding: 20px 14px 14px;
+  text-align: left;
+}
+
+.elevBox {
+  display: block;
+  width: 100%;
+  height: 44px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+
+/* ── Focus ── */
+
+.focusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* One ring for every control on the page, not just the demos — this page has
+   to obey the rule it documents, and the default blue UA ring is exactly what
+   the rule exists to replace.
+ *
+ * focus-visible rather than focus, so a mouse click leaves nothing behind but
+   a Tab key does. The 2px offset matters: flush to the edge it reads as a
+   border and vanishes on anything that already has one. */
+.main :focus-visible,
+.focusable:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.focusLight {
+  background: #e9e9e9;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+/* On a light ground the ring flips, or it disappears into the surface. */
+.focusLight .focusable:focus-visible {
+  outline-color: rgba(10, 10, 10, 0.9);
+}
+
+.focusHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────
+   Not "no motion" — motion that doesn't move anything through space. Fades are
+   kept, because opacity carries no vestibular cost; travel, scale, parallax
+   and anything looping stops. */
+@media (prefers-reduced-motion: reduce) {
+  .staggerBlock,
+  .skeleton i,
+  .btnDots i,
+  .thinking i,
+  .loaderDemo i,
+  .toggleDemo i,
+  .caret {
+    animation: none !important;
+  }
+
+  .marqueeTrack {
+    animation: none !important;
+  }
+
+  .cardDemo:hover,
+  .cardDemoLink:hover {
+    transform: none !important;
+  }
+
+  .carouselTrack,
+  .progressFill,
+  .accMark,
+  .selectCaret {
+    transition: none !important;
+  }
+
+  .fieldError {
+    animation: none !important;
+  }
+
+  /* Opacity-only transitions survive deliberately — they orient without
+     moving anything. */
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 1024px) {
@@ -4801,6 +5017,33 @@
 
   .iconGrid {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .elevRow {
+    grid-template-columns: 1fr;
+  }
+
+  /* The bar and the role drop away; the value and its verdict are what
+     matter at this width. */
+  .spaceRow {
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+  }
+
+  .spaceBar,
+  .spaceRole {
+    display: none;
+  }
+
+  .drift {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .driftStat {
+    width: auto;
+    text-align: left;
+    font-size: 34px;
   }
 
   .stepRail {

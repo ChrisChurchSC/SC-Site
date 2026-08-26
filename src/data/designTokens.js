@@ -148,6 +148,57 @@ export const RADII = [
   { value: 999, uses: 5, role: 'Pills and dots.' },
 ]
 
+/* Spacing. The site has no scale — the most-used values are 12, 8, 24, 10, 28,
+   16, 20 and 14, which is eight independent decisions rather than a system.
+   This is the proposed scale, chosen to keep the values that already carry the
+   most weight and drop the ones sitting between steps. `uses` is the real
+   count; `keep` marks a step of the scale. */
+export const SPACING = [
+  { px: 4,  uses: 18, keep: true,  role: 'Hairline gaps, chip padding.' },
+  { px: 5,  uses: 50, keep: true,  role: 'The grid gutter. A deliberate exception to the 4s.' },
+  { px: 6,  uses: 39, keep: false, role: 'Drift — rounds to 5 or 8.' },
+  { px: 8,  uses: 55, keep: true,  role: 'The default gap.' },
+  { px: 10, uses: 42, keep: false, role: 'Drift — the most-used off-scale value.' },
+  { px: 12, uses: 40, keep: true,  role: 'Card padding, row gaps.' },
+  { px: 14, uses: 19, keep: false, role: 'Drift — rounds to 12 or 16.' },
+  { px: 16, uses: 31, keep: true,  role: 'Comfortable padding.' },
+  { px: 20, uses: 25, keep: false, role: 'Drift — rounds to 16 or 24.' },
+  { px: 24, uses: 27, keep: true,  role: 'Section padding inside a card.' },
+  { px: 28, uses: 25, keep: false, role: 'Drift — rounds to 24 or 32.' },
+  { px: 32, uses: 9,  keep: true,  role: 'Block separation.' },
+  { px: 48, uses: 15, keep: true,  role: 'Section rhythm.' },
+  { px: 64, uses: 8,  keep: true,  role: 'Major section break.' },
+]
+
+/* Elevation. Unusually, this one is already coherent — four shadows do all the
+   work, and each has a clear job. Named here rather than invented. */
+export const ELEVATION = [
+  { name: 'Flat', value: 'none', uses: 7,
+    role: 'The default. Almost everything on the site sits at this level.' },
+  { name: 'Menu', value: '0 12px 28px rgba(0, 0, 0, 0.5)', uses: 2,
+    role: 'Select menus and tooltips — the shallowest real shadow.' },
+  { name: 'Dialog', value: '0 18px 40px rgba(0, 0, 0, 0.6)', uses: 2,
+    role: 'Confirm dialogs and the command palette.' },
+  { name: 'Drawer', value: '0 -12px 60px rgba(0, 0, 0, 0.7)', uses: 7,
+    role: 'Cal and contact drawers. Cast upward, because they rise from the edge.' },
+  { name: 'Focus ring', value: '0 0 0 3px rgba(255, 255, 255, 0.9), 0 16px 36px rgba(0, 0, 0, 0.6)', uses: 4,
+    role: 'Linked cards on hover. A ring plus a lift, not a shadow alone.' },
+]
+
+/* Layers. Eleven distinct z-index values ship today — 1, 2, 50, 99, 100, 200,
+   201, 300, 500, 9500, 9999 — and the 9500 and 9999 are the tell: someone
+   needed to beat something and guessed. A scale removes the guess. */
+export const LAYERS = [
+  { name: 'Base',    value: 0,   role: 'Document flow. Most things never leave it.' },
+  { name: 'Raised',  value: 10,  role: 'A card lifting on hover, a tag over media.' },
+  { name: 'Sticky',  value: 100, role: 'Anything that pins while the page scrolls.' },
+  { name: 'Nav',     value: 200, role: 'The rail and the mobile menu.' },
+  { name: 'Drawer',  value: 300, role: 'Cal, contact, and the work drawer.' },
+  { name: 'Overlay', value: 400, role: 'Backdrops, lightbox, deck gate.' },
+  { name: 'Toast',   value: 500, role: 'Messages. Above the thing that caused them.' },
+  { name: 'Cursor',  value: 600, role: 'The custom cursor. Always last.' },
+]
+
 export const MOTION = [
   { name: 'blockIn', value: '0.5s ease both',
     detail: 'opacity 0 → 1, translate 0 10px → 0. Every card enters this way.' },

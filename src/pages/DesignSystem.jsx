@@ -1,7 +1,7 @@
 import { useState, useCallback, Fragment } from 'react'
 import { useMeta } from '../hooks/useMeta'
 import {
-  SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, GRADIENTS, FAMILIES,
+  SURFACES, TEXT_RAMP, HAIRLINES, ACCENTS, GRADIENTS, FAMILIES, SPACING, ELEVATION, LAYERS,
   MONO_SCALE, DISPLAY_SCALE, RADII, MOTION, LAYOUT,
   BUTTONS, FIELDS, RATIOS, GRIDS, BACKLOG,
   CHART_PALETTE, CHART_SEQUENTIAL, CHART_DIVERGING, CHART_STATUS,
@@ -2382,21 +2382,19 @@ export default function DesignSystem() {
           <p className={styles.eyebrow}>Internal · Not indexed</p>
           <h1 className={styles.headline}>Design System</h1>
           <p className={styles.lede}>
-            Read back out of the shipped CSS, not written ahead of it. Every swatch below
-            is the real colour, every specimen is set in the real font at the real size,
-            and every component demo carries the real hover. The counts are how many times
-            each value actually appears across the stylesheets.
+            Read back out of the shipped CSS, not written ahead of it. Every swatch, specimen
+            and demo is live, and the counts are real.
           </p>
           <nav className={styles.toc}>
             {[
               ['Colour', 'colour'], ['Type', 'type'], ['Radius', 'radius'],
-              ['Texture', 'texture'], ['Icons', 'icons'],
-              ['Buttons', 'buttons'], ['Forms', 'fields'], ['Nav', 'nav'],
-              ['Grids', 'grids'], ['Content', 'content'], ['Charts', 'charts'],
-              ['Media', 'media'], ['Carousels', 'carousels'], ['Chat', 'chat'],
-              ['Conversion', 'conversion'], ['Feedback', 'feedback'],
+              ['Spacing', 'spacing'], ['Depth', 'depth'], ['Texture', 'texture'],
+              ['Icons', 'icons'], ['Buttons', 'buttons'], ['Forms', 'fields'],
+              ['Nav', 'nav'], ['Grids', 'grids'], ['Content', 'content'],
+              ['Charts', 'charts'], ['Media', 'media'], ['Carousels', 'carousels'],
+              ['Chat', 'chat'], ['Conversion', 'conversion'], ['Feedback', 'feedback'],
               ['Motion', 'motion'], ['Layout', 'layout'], ['Light', 'light'],
-              ['Inventory', 'backlog'],
+              ['Access', 'a11y'], ['Inventory', 'backlog'],
             ].map(([label, id]) => (
               <a key={id} href={`#${id}`} className={styles.tocLink}>{label}</a>
             ))}
@@ -2408,7 +2406,7 @@ export default function DesignSystem() {
           id="colour"
           index={1}
           title="Colour"
-          blurb="A near-black ground, one card surface, and white at ten opacities. That is the whole palette in practice."
+          blurb="A near-black ground, one card surface, and white at ten opacities."
         >
           <h3 className={styles.subhead}>Surfaces</h3>
           <div className={styles.list}>
@@ -2481,12 +2479,9 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Accents</h3>
           <p className={styles.subnote}>
-            Two, not three. All three declared accents are used nowhere — each appears
-            exactly once in the codebase, as its own definition — and rather than find
-            work for them, the system keeps pink, adds purple, and retires teal and
-            blue. Pink and purple are also the entire
-            {' '}<a href="#charts" className={styles.inlineLink}>chart palette</a>, so
-            a highlight and a chart series cannot drift into different families.
+            All three declared accents are used nowhere. Rather than find work for them:
+            keep pink, add purple, retire teal and blue — the same two hues as the
+            {' '}<a href="#charts" className={styles.inlineLink}>chart palette</a>.
           </p>
           <div className={styles.accentRow} data-accents>
             {ACCENTS.map((a) => (
@@ -2514,12 +2509,9 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Gradients</h3>
           <p className={styles.subnote}>
-            Two decorative, four functional — and the functional ones do far more
-            work, which is why they're listed together. A gradient here is nearly
-            always solving a legibility problem rather than adding colour. The two
-            accent sweeps run pink to purple and stop there: a gradient that passes
-            through a third hue <em className={styles.em}>is</em> a third hue, and the
-            palette doesn't have one.
+            Two decorative, four functional — and the functional ones do more work. A
+            sweep through a third hue <em className={styles.em}>is</em> a third hue, so
+            both accent gradients stop at pink and purple.
           </p>
           <div className={styles.gradRow}>
             {GRADIENTS.map((g) => (
@@ -2550,7 +2542,7 @@ export default function DesignSystem() {
           id="type"
           index={2}
           title="Type"
-          blurb="Two families, held far apart. A light serif carries everything anyone reads for meaning; a mono carries everything that labels, counts or points."
+          blurb="Two families held far apart: a serif for reading, a mono for everything that labels or counts."
         >
           <div className={styles.families}>
             {FAMILIES.map((f) => (
@@ -2671,19 +2663,99 @@ export default function DesignSystem() {
           </div>
         </Section>
 
-        {/* ── 04 Texture ── */}
+        {/* ── 04 Spacing ── */}
         <Section
-          id="texture"
+          id="spacing"
           index={4}
-          title="Texture"
-          blurb="Depth on a site that has almost none. Everything here is flat by design — one surface, one radius, no shadows — and texture is the cheapest way to give a plane some grain without breaking that."
+          title="Spacing"
+          blurb="No scale exists. Eight values carry the layout, and each was a separate decision."
         >
           <p className={styles.prose}>
-            Kept deliberately faint. At full strength a pattern becomes a graphic and
-            starts competing with whatever sits on it; at this weight it reads as
-            material rather than decoration — closer to paper stock than to a motif.
-            The rule is that you should notice it only after you have finished reading
-            the thing in front of it.
+            The 5px gutter stays as a named exception — rounding it would change the
+            homepage.
+          </p>
+          <div className={styles.spaceList}>
+            {SPACING.map((s) => (
+              <button
+                key={s.px}
+                type="button"
+                className={`${styles.spaceRow} ${s.keep ? '' : styles.spaceDrift}`}
+                onClick={() => copy(`${s.px}px`)}
+                title={`Copy ${s.px}px`}
+              >
+                <span className={styles.spaceBar} style={{ width: `${s.px * 2}px` }} />
+                <span className={styles.spaceVal}>
+                  {copied === `${s.px}px` ? 'copied' : `${s.px}px`}
+                </span>
+                <Status value={s.keep ? 'KEEP' : 'DRIFT'} />
+                <span className={styles.spaceRole}>{s.role}</span>
+                <span className={styles.count}>{s.uses}×</span>
+              </button>
+            ))}
+          </div>
+        </Section>
+
+        {/* ── 05 Depth ── */}
+        <Section
+          id="depth"
+          index={5}
+          title="Depth"
+          blurb="What sits on top of what — as shadow, and as stacking order."
+        >
+          <h3 className={styles.subhead}>Elevation</h3>
+          <p className={styles.subnote}>
+            Already coherent, unusually: four shadows, each with a clear job. Named
+            here rather than invented. The drawer casts upward because it rises from
+            the edge of the screen.
+          </p>
+          <div className={styles.elevRow}>
+            {ELEVATION.map((e) => (
+              <button
+                key={e.name}
+                type="button"
+                className={styles.elevChip}
+                onClick={() => copy(e.value)}
+                title={`Copy ${e.name}`}
+              >
+                <span className={styles.elevBox} style={{ boxShadow: e.value === 'none' ? undefined : e.value }} />
+                <span className={styles.paletteName}>{e.name}</span>
+                <span className={styles.texNote}>{e.role}</span>
+                <span className={styles.count}>{e.uses}×</span>
+              </button>
+            ))}
+          </div>
+
+          <h3 className={styles.subhead}>Layers</h3>
+          <p className={styles.subnote}>
+            Eleven z-index values ship today; 9500 and 9999 are the tell. Eight named steps,
+            100 apart, leave room to insert.
+          </p>
+          <div className={styles.list}>
+            {LAYERS.map((l) => (
+              <Row
+                key={l.name}
+                label={l.name}
+                note={l.role}
+                value={String(l.value)}
+                onCopy={copy}
+                copied={copied}
+              />
+            ))}
+          </div>
+        </Section>
+
+        {/* ── 06 Texture ── */}
+        <Section
+          id="texture"
+          index={6}
+          title="Texture"
+          blurb="Grain for a site that is otherwise entirely flat. Faint enough to read as material, not decoration."
+        >
+          <p className={styles.prose}>
+            Square pixels on an integer grid, rendered with
+            {' '}<code className={styles.code}>shape-rendering: crispEdges</code> so nothing
+            antialiases into a gradient. Kept faint: at full strength a pattern becomes a
+            graphic and competes with whatever sits on it.
           </p>
           <p className={styles.prose}>
             Lo-fi on purpose: square pixels on an integer grid, rendered with
@@ -2693,20 +2765,15 @@ export default function DesignSystem() {
             matched on a second surface.
           </p>
           <p className={styles.subnote}>
-            For empty states, placeholder media, section grounds and hover fills.
-            Explicitly not for charts: a pattern behind data fights the data. Click any
-            swatch to copy its fill.
+            For empty states, placeholders, section grounds. Not for charts — a pattern
+            behind data fights the data. Click to copy.
           </p>
           <TextureSwatches onCopy={copy} copied={copied} />
 
           <h3 className={styles.subhead}>90s tiles</h3>
           <p className={styles.subnote}>
-            Windows 95 and classic Mac desktop patterns were 8×8 one-bit bitmaps —
-            sixty-four pixels, on or off, tiled forever. These are written as literal
-            bitmaps for that reason rather than as nostalgia: a path-drawn weave picks
-            up curves and half-pixels and stops reading as a tile. At full strength
-            they would be pastiche; at the same 0.07 as everything above they are
-            grain that happens to have a memory.
+            Win95 and classic Mac patterns were 8×8 one-bit bitmaps, and these are written
+            the same way — a path-drawn weave picks up curves and stops reading as a tile.
           </p>
           <TextureSwatches onCopy={copy} copied={copied} items={TILE_META} />
 
@@ -2736,16 +2803,16 @@ export default function DesignSystem() {
         {/* ── 05 Icons ── */}
         <Section
           id="icons"
-          index={5}
+          index={7}
           title="Icons"
-          blurb="Forty marks on a 16px grid. Geometry only — butt caps, miter joins, every terminal on a whole pixel. Closer to a technical drawing than to an app icon."
+          blurb="Forty marks on a 16px grid. Butt caps, miter joins, no optical curves."
         >
           <p className={styles.prose}>
-            The site already ships <code className={styles.code}>lucide-react</code> and
-            uses it for almost nothing. Lucide is a good set and the wrong one here:
-            it is drawn with round caps and 2px strokes on a 24px grid, which reads
-            friendly. This system is 8–11px mono and hairlines, and a rounded icon
-            beside 8px uppercase looks borrowed from somewhere else.
+            The site ships <code className={styles.code}>lucide-react</code> and barely uses
+            it — round caps on a 24px grid read friendly, which is wrong beside 8px
+            uppercase mono. These inherit
+            {' '}<code className={styles.code}>currentColor</code>, so an icon takes the
+            colour of the text next to it.
           </p>
           <p className={styles.prose}>
             Everything below is stroke-based and inherits
@@ -2822,9 +2889,9 @@ export default function DesignSystem() {
         {/* ── 06 Buttons ── */}
         <Section
           id="buttons"
-          index={6}
+          index={8}
           title="Buttons"
-          blurb="Six variants ship today. They agree on the type and disagree on almost everything else — three different radii between them, and one with none at all."
+          blurb="Six ship today. They agree on the type and on almost nothing else — three radii between them."
         >
           <div className={styles.demoGrid}>
             <Demo label="Solid" note={BUTTONS[0].note}>
@@ -2898,9 +2965,9 @@ export default function DesignSystem() {
         {/* ── 05 Fields ── */}
         <Section
           id="fields"
-          index={7}
+          index={9}
           title="Forms"
-          blurb="Three different input designs ship on three different surfaces — focus each one, they don't even agree on what focus looks like. Below the controls: the composition rules, which is where forms actually go wrong."
+          blurb="Three input designs on three surfaces, disagreeing even about focus. Then the composition rules."
         >
           <div className={styles.demoGrid}>
             <Demo label="Contact" note={`Focus: ${FIELDS[0].focus}`}>
@@ -3006,9 +3073,8 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Composition</h3>
           <p className={styles.subnote}>
-            The controls above are parts. This is the assembly — and the assembly is
-            where forms actually go wrong. Four conventions fixed here so they stop
-            being re-decided per page.
+            The controls are parts; the assembly is where forms go wrong. Four conventions,
+            fixed once.
           </p>
           <div className={styles.list}>
             {[
@@ -3039,9 +3105,9 @@ export default function DesignSystem() {
         {/* ── 06 Navigation ── */}
         <Section
           id="nav"
-          index={8}
+          index={10}
           title="Navigation"
-          blurb="Four kinds, all of them lists of one sort or another. The site never uses a horizontal menu bar."
+          blurb="Four kinds, all of them lists. The site never uses a horizontal menu bar."
         >
           <div className={styles.demoGrid}>
             <Demo label="Rail card" note="The 312px right rail. #161616, 4px, hover to #1c1c1c.">
@@ -3193,9 +3259,9 @@ export default function DesignSystem() {
         {/* ── 07 Grids ── */}
         <Section
           id="grids"
-          index={9}
+          index={11}
           title="Grids"
-          blurb="A 12-column grid on a 5px gutter carries the whole site — except the thoughts index, which quietly runs its own."
+          blurb="12 columns on a 5px gutter carry the site — except Thoughts, which runs its own."
         >
           <div className={styles.gridDemos}>
             <div className={styles.gridDemo}>
@@ -3265,9 +3331,9 @@ export default function DesignSystem() {
         {/* ── 08 Content ── */}
         <Section
           id="content"
-          index={10}
+          index={12}
           title="Content"
-          blurb="The site sets long prose beautifully and structures it barely at all. None of these exist yet — a table style in particular is missing on a site whose package data is already sitting in src/data waiting to be compared."
+          blurb="The site sets prose beautifully and structures it barely at all. None of this exists yet."
         >
           <div className={styles.demoGrid}>
             <Demo label="Accordion" status="NEW" wide
@@ -3350,18 +3416,13 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Data grid</h3>
           <p className={styles.prose}>
-            A spreadsheet is not a styled table — it is a different instrument, and
-            the differences are load-bearing. The reading table above drops vertical
-            rules because prose has a natural left edge. A grid needs them, because a
-            cell is addressed by column as much as by row, and the moment someone has
-            to say "the fee on Talos" out loud, the row gutter and the column rule are
-            what make that sentence possible.
+            A spreadsheet is not a styled table. The reading table above drops vertical
+            rules because prose has a left edge; a grid needs them, because a cell is
+            addressed by column as much as by row.
           </p>
           <p className={styles.subnote}>
-            Sort any column, click the gutter to select rows, click a cell to address
-            it. Figures are mono and right-aligned so digits stack and magnitude reads
-            as length. Totals are pinned and ruled off — a total that scrolls away
-            with the data is a total nobody reads.
+            Sort a column, click the gutter to select, click a cell to address it. Figures
+            are mono and right-aligned so magnitude reads as length.
           </p>
           <div className={styles.demoStack}>
             <Demo label="Spreadsheet grid" status="NEW" wide stage={false}
@@ -3374,34 +3435,25 @@ export default function DesignSystem() {
         {/* ── 09 Charts ── */}
         <Section
           id="charts"
-          index={11}
+          index={13}
           title="Charts"
-          blurb="Pink and purple, and nothing else. Three categorical slots — which is not a stylistic choice but a measured ceiling, and the most useful thing this section has to say."
+          blurb="Pink and purple only. Three categorical slots — a measured ceiling, not a preference."
         >
           <p className={styles.prose}>
-            Pink and purple are adjacent hues. Once the first pair is placed, the only
-            separation left is lightness, and the band a dark chart surface allows —
-            OKLCH lightness 0.48 to 0.67 — is about two steps wide. So the palette
-            stops at three, and it stops for a reason that can be checked rather than
-            argued about.
+            Pink and purple are adjacent hues. Once the first pair is placed the only
+            separation left is lightness, and the band a dark surface allows — OKLCH 0.48
+            to 0.67 — is about two steps wide.
           </p>
           <p className={styles.prose}>
-            A fourth slot was tested properly, not assumed away. Every value that
-            separates cleanly from the other three lands at roughly lightness 0.75,
-            outside the band; every value inside the band fails the adjacent-pair
-            check. There is no fourth colour here that is both visible on the surface
-            and distinguishable from its neighbours. Past three series the answer is
-            small multiples, an "Other" bucket, or a different chart —
-            {' '}<strong className={styles.strong}>never a fourth hue</strong>.
+            A fourth slot was tested, not assumed away: every value that separates cleanly
+            lands near lightness 0.75, outside the band; every value inside the band fails
+            the adjacent-pair check. Past three series the answer is small multiples or an
+            "Other" bucket — <strong className={styles.strong}>never a fourth hue</strong>.
           </p>
           <p className={styles.prose}>
-            Both columns pass all six checks against their own surface: lightness
-            band, chroma floor, colour-vision separation, normal-vision floor, and
-            contrast. The closest adjacent pair sits in the 6–8 CVD band, which is
-            legal only alongside a second encoding — every chart here carries a
-            legend, direct labels, or gaps. Slots 4 to 6 in the CSS are deliberately
-            aliases of 1 to 3, so a chart that reaches for a fourth series gets a
-            repeat it can see rather than a colour that quietly fails.
+            Both columns pass all six checks. Slots 4–6 in the CSS are aliases of 1–3, so a
+            chart reaching for a fourth series gets a visible repeat rather than a colour
+            that quietly fails.
           </p>
 
           <h3 className={styles.subhead}>Categorical</h3>
@@ -3466,16 +3518,12 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Types</h3>
           <p className={styles.subnote}>
-            All inline SVG — no library, nothing to load, and the marks inherit the
-            page's own tokens. Square corners, drawn spines, minor ticks between the
-            labelled ones: a plot with a baseline is a measurement, a plot without one
-            is a picture of data.
+            All inline SVG, no library. Square corners, drawn spines, minor ticks — a plot
+            with a baseline is a measurement.
           </p>
           <p className={styles.subnote}>
-            Text never wears the series colour: values and labels stay in the white
-            ramp, and the mark beside them carries the identity. No chart here uses
-            texture — pattern fills fight the data at this density, and the palette
-            already separates cleanly enough not to need them.
+            Text never wears the series colour — the mark beside it carries identity. No
+            chart uses texture; pattern fills fight data at this density.
           </p>
 
           <div className={styles.chartGrid}>
@@ -3602,22 +3650,18 @@ export default function DesignSystem() {
 
           <h3 className={styles.subhead}>Charts in light mode</h3>
           <p className={styles.prose}>
-            Charts are the first component the site's invert trick cannot swallow.
-            Inverting a validated palette produces its complement — the teal becomes
-            pink, and every check above is void. So charts join the short list of
-            things inverted a second time, alongside images and video: they keep
-            their own surface and their true hues in both themes. That is already
-            the site's rule for anything whose colour carries meaning rather than
-            decoration, and a chart is squarely that.
+            Charts are the first thing the invert trick cannot swallow — inverting a
+            validated palette produces its complement. So they take the second invert that
+            images and video already get, and keep their true hues in both themes.
           </p>
         </Section>
 
         {/* ── 10 Media ── */}
         <Section
           id="media"
-          index={12}
+          index={14}
           title="Media &amp; image sizes"
-          blurb="Four ratios, set with aspect-ratio rather than padding hacks. Below 768px most of them are overridden to 4:5 so the grid stays portrait on a phone."
+          blurb="Four ratios, most overridden to 4:5 below 768px so the grid stays portrait."
         >
           <div className={styles.ratioRow}>
             {RATIOS.map((r) => (
@@ -3692,9 +3736,9 @@ export default function DesignSystem() {
         {/* ── 09 Carousels ── */}
         <Section
           id="carousels"
-          index={13}
+          index={15}
           title="Carousels"
-          blurb="One ships and one doesn't. The marquee is decorative and never stops; the paged carousel is for content someone has to actually get through."
+          blurb="One ships, one doesn't. The marquee decorates; the paged one is for content to get through."
         >
           <div className={styles.demoStack}>
             <Demo label="Marquee" wide stage={false}
@@ -3724,17 +3768,14 @@ export default function DesignSystem() {
         {/* ── 10 AI chat ── */}
         <Section
           id="chat"
-          index={14}
+          index={16}
           title="AI chat"
-          blurb="Nothing like this exists on the site yet. The question a chat has to answer in this system is which half is UI and which half is prose."
+          blurb="Doesn't exist yet. The question it has to answer: which half is UI and which half is prose."
         >
           <p className={styles.prose}>
-            The answer here: the reader's turn is a chip, because it is UI — mono,
-            small, on a faint fill. The reply is set in Signifier at reading size,
-            because it is prose, and the whole site already says that anything meant
-            to be read rather than scanned is a serif. That split is the only reason
-            this looks like the rest of the site rather than a chat widget dropped
-            onto it.
+            The reader's turn is a chip because it is UI; the reply is Signifier at reading
+            size because it is prose. That split is the only reason this looks like the
+            rest of the site rather than a widget dropped onto it.
           </p>
           <div className={styles.demoStack}>
             <Demo label="Conversation" status="NEW" wide stage={false}
@@ -3776,9 +3817,9 @@ export default function DesignSystem() {
         {/* ── 12 Conversion ── */}
         <Section
           id="conversion"
-          index={15}
+          index={17}
           title="Conversion"
-          blurb="The pages that have to ask for something. Every one of these is currently rebuilt by hand per page."
+          blurb="The pages that have to ask for something. All rebuilt by hand today."
         >
           <div className={styles.demoGrid}>
             <Demo label="Pricing table" status="NEW" wide stage={false}
@@ -3839,7 +3880,7 @@ export default function DesignSystem() {
         {/* ── 11 Feedback ── */}
         <Section
           id="feedback"
-          index={16}
+          index={18}
           title="Feedback"
           blurb="What the site says back."
         >
@@ -3910,7 +3951,7 @@ export default function DesignSystem() {
         {/* ── 12 Motion ── */}
         <Section
           id="motion"
-          index={17}
+          index={19}
           title="Motion"
           blurb="Everything arrives the same way: up ten pixels, fading in, over half a second."
         >
@@ -3943,7 +3984,7 @@ export default function DesignSystem() {
         {/* ── 06 Layout ── */}
         <Section
           id="layout"
-          index={18}
+          index={20}
           title="Layout"
           blurb="A tight grid with a reserved rail, and measures set in characters rather than pixels."
         >
@@ -3964,26 +4005,21 @@ export default function DesignSystem() {
         {/* ── 07 Light mode ── */}
         <Section
           id="light"
-          index={19}
+          index={21}
           title="Light mode"
           blurb="Not a second palette — a filter."
         >
           <p className={styles.prose}>
-            Light mode is one CSS rule: <code className={styles.code}>[data-theme="light"] .theme-layer {'{'} filter: invert(1) {'}'}</code>.
-            The whole page is inverted, then images and video are inverted a second
-            time so photography survives. It is why there is no light-mode token set
-            to document here, and why the ten-step white ramp above is the only ramp
-            the site needs — inverted, it becomes the black ramp.
+            One rule: <code className={styles.code}>[data-theme="light"] .theme-layer {'{'} filter: invert(1) {'}'}</code>.
+            The page inverts, then images and video invert again so photography survives.
+            It is why there is no light-mode token set to document.
           </p>
           <p className={styles.prose}>
-            Two consequences worth knowing before you add a component. Anything
-            <code className={styles.code}>position: fixed</code> must sit outside
-            <code className={styles.code}>.theme-layer</code>, because a filter on an
-            ancestor creates a containing block and pins the element to the layer
-            instead of the viewport — that is the entire reason the back button is
-            declared in <code className={styles.code}>index.css</code> rather than in a
-            module. And any colour you intend to survive inversion literally — a brand
-            logo, a chart — needs the second invert applied by hand.
+            One consequence to know before adding a component: anything
+            {' '}<code className={styles.code}>position: fixed</code> must sit outside
+            {' '}<code className={styles.code}>.theme-layer</code>, because a filter on an
+            ancestor pins it to the layer instead of the viewport. That is why the back
+            button lives in <code className={styles.code}>index.css</code>.
           </p>
           <div className={styles.lightPair}>
             <div className={styles.lightSwatch}>
@@ -3997,25 +4033,124 @@ export default function DesignSystem() {
           </div>
         </Section>
 
+        {/* ── Accessibility ── */}
+        <Section
+          id="a11y"
+          index={22}
+          title="Accessibility"
+          blurb="Two live defects, not omissions. Both are cheap to fix and neither is fixed."
+        >
+          <div className={styles.driftList}>
+            <div className={styles.drift}>
+              <span className={styles.driftStat}>23</span>
+              <div className={styles.driftBody}>
+                <span className={styles.driftTitle}>
+                  <code className={styles.code}>outline: none</code> across the stylesheets
+                </span>
+                <p className={styles.driftNote}>
+                  Against exactly one <code className={styles.code}>:focus-visible</code>.
+                  Focus is removed almost everywhere and restored almost nowhere, so a
+                  keyboard user has close to no idea where they are. One token fixes
+                  every control at once.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.drift}>
+              <span className={styles.driftStat}>0</span>
+              <div className={styles.driftBody}>
+                <span className={styles.driftTitle}>
+                  Files honouring <code className={styles.code}>prefers-reduced-motion</code>
+                </span>
+                <p className={styles.driftNote}>
+                  Every card animates in, the client strip scrolls without stopping, the
+                  cursor tracks the pointer, and view transitions fire on navigation.
+                  For a vestibular-sensitive visitor there is currently no way out.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className={styles.subhead}>Focus</h3>
+          <p className={styles.subnote}>
+            One ring, everywhere. <code className={styles.code}>:focus-visible</code>, so a
+            click leaves nothing behind but Tab does. This page applies it to itself —
+            though only to itself: Tab into the nav rail and the browser's blue default
+            comes back, because the rail is outside this page. That is the argument for
+            the ring being a token in <code className={styles.code}>index.css</code>
+            rather than a rule per page.
+          </p>
+          <div className={styles.demoGrid}>
+            <Demo label="Focus ring" status="NEW"
+              note="2px white at 0.9, offset 2px. Offset matters: a ring flush to the edge reads as a border and disappears on anything that already has one.">
+              <div className={styles.focusRow}>
+                <button type="button" className={`${styles.btnSolid} ${styles.focusable}`}>Solid</button>
+                <button type="button" className={`${styles.btnOutline} ${styles.focusable}`}>Outline</button>
+                <input className={`${styles.fieldContact} ${styles.focusable}`} placeholder="Field" aria-label="Focus demo" />
+              </div>
+            </Demo>
+
+            <Demo label="On a light surface" status="NEW"
+              note="The same ring inverts with the page. A single white ring would vanish the moment light mode inverts the ground beneath it.">
+              <div className={`${styles.focusRow} ${styles.focusLight}`}>
+                <button type="button" className={`${styles.btnGate} ${styles.focusable}`}>Gate</button>
+                <span className={styles.focusHint}>Tab to see it</span>
+              </div>
+            </Demo>
+
+            <Demo label="Skip link" status="NEW"
+              note="Off-screen until focused — not display:none, which would drop it from the tab order and defeat the purpose entirely.">
+              <a href="#colour" className={styles.skipLink}>Skip to content</a>
+            </Demo>
+          </div>
+
+          <h3 className={styles.subhead}>Reduced motion</h3>
+          <p className={styles.subnote}>
+            Not "no motion" — motion that moves nothing through space. Fades stay; travel,
+            scale and looping stop.
+          </p>
+          <div className={styles.list}>
+            {[
+              ['Card entrance', 'translate 10px + fade', 'Fade only — the 10px travel is dropped.'],
+              ['Hover lift', 'translateY(-2px / -6px)', 'No lift. Background and ring still change.'],
+              ['Client strip', '48s infinite marquee', 'Stops. Becomes a static, wrapped list.'],
+              ['Media scale', 'scale(1.06) on hover', 'No scale.'],
+              ['Route loader', '0.9s sweep', 'Kept — it reports progress, and it is 2px tall.'],
+              ['Custom cursor', 'follows the pointer', 'Disabled; the native cursor returns.'],
+            ].map(([label, from, to]) => (
+              <div key={label} className={styles.row}>
+                <div className={styles.rowMain}>
+                  <div className={styles.rowText}>
+                    <span className={styles.rowLabel}>{label}</span>
+                    <span className={styles.rowNote}>{to}</span>
+                  </div>
+                </div>
+                <span className={styles.value}>{from}</span>
+              </div>
+            ))}
+          </div>
+          <p className={styles.subnote}>
+            This page honours it already — set reduce at the OS level and every
+            animation above stops.
+          </p>
+        </Section>
+
         {/* ── 15 Backlog ── */}
         <Section
           id="backlog"
-          index={20}
+          index={23}
           title="Inventory"
-          blurb="Every pattern this system now holds, and how far each one has actually travelled. This started as a list of gaps; the gaps are closed, so what it tracks now is the distance from a drawing to a component."
+          blurb="Every pattern the system holds, and how far each has travelled from a drawing to a component."
         >
           <p className={styles.prose}>
             The reason to keep it is the three input designs in
-            {' '}<a href="#fields" className={styles.inlineLink}>fields</a>. None of
-            them was a decision — each was the fastest thing to write on the day that
-            page needed a field, and now there are three. Everything below has been
-            decided once instead, which is the whole return on a styleguide.
+            {' '}<a href="#fields" className={styles.inlineLink}>forms</a>. None was a
+            decision — each was the fastest thing to write that day. Everything below was
+            decided once instead.
           </p>
           <p className={styles.prose}>
-            <strong className={styles.strong}>PROTO is not a lesser state.</strong> A
-            drawn pattern costs nothing to keep; a premature component costs
-            maintenance forever. The trigger listed against each one is what would
-            justify promoting it — until that happens, it is doing its job here.
+            <strong className={styles.strong}>PROTO is not a lesser state.</strong> A drawing
+            costs nothing to keep; a premature component costs maintenance forever.
           </p>
 
           <div className={styles.legend}>
