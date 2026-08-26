@@ -2,57 +2,116 @@ import { useState } from 'react'
 import { useMeta } from '../hooks/useMeta'
 import '../system/tokens.css'
 import {
-  Shell, Sidebar, NavGroup, NavItem, Topbar, Content, Grid, Col, useSidebar,
-  Panel, StatTile, Card, Eyebrow, CardTitle, CardBody,
-  Button, IconButton, Badge, Banner, Segmented, Tabs, Icon,
-  LineChart, BarChart, RankedBar, Donut, Sparkline,
+  Shell, Sidebar, Topbar, Content, Grid, Col, useSidebar,
+  Panel, StatTile, Button, IconButton, Banner, Segmented, Tabs,
+  Tree, Path, FileBrowser,
+  Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
+  TitleBar, CountButton, Toolbar, RefSelect, CountLink, FindField,
+  LineChart, BarChart, RankedBar, Donut,
 } from '../system'
+import headMark from '../assets/logo.svg'
 import styles from './Dashboard.module.css'
 
-/* A brand workspace dashboard, built entirely from src/system.
+/* A brand workspace, browsed as a folder tree.
  *
- * This page writes almost no CSS of its own — everything below comes from the
- * package, which is the point: it is the proof that the system is importable
- * rather than a drawing of itself. The handful of rules in
- * Dashboard.module.css are layout for this page only.
+ * Built entirely from src/system — this page writes almost no CSS of its own,
+ * which is the proof that the package is importable rather than a drawing of
+ * itself.
+ *
+ * The repo-listing pattern earns its place here rather than being borrowed for
+ * the look: brand assets genuinely are a tree, and the pattern answers what is
+ * in here, what moved most recently and who moved it, all without a click.
  *
  * Internal, noindex, not in the sitemap.
  */
 
-const NAV = [
-  {
-    group: 'Brand',
-    items: [
-      { key: 'design', label: 'Design', count: 14, icon: 'brand' },
-      { key: 'verbal', label: 'Verbal', count: 9, icon: 'type' },
-      { key: 'strategy', label: 'Strategy', count: 6, icon: 'target' },
-      { key: 'channels', label: 'Channels', count: 2, icon: 'channel' },
-    ],
+/* One source of truth for the tree and the browser, so a folder cannot exist
+   in the sidebar and be missing from the listing. */
+const FS = {
+  brand: {
+    label: 'Brand', icon: 'brand',
+    children: {
+      design: {
+        label: 'Design', icon: 'brand', message: 'Refit the logo lockup for small sizes', when: '2h',
+        children: {
+          'logo-lockup.fig': { message: 'Refit for small sizes', when: '2h', status: 'Live', icon: 'image' },
+          'colour-tokens.json': { message: 'Retire teal and blue', when: '1d', status: 'Live', icon: 'file' },
+          'type-scale.fig': { message: 'Drop the 3px radius step', when: '3d', status: 'Live', icon: 'image' },
+          'grid-system.fig': { message: 'Document the 5px gutter', when: '1w', status: 'Live', icon: 'image' },
+          'iconography.svg': { message: 'Forty marks on a 16px grid', when: '1w', status: 'Review', icon: 'image' },
+        },
+      },
+      verbal: {
+        label: 'Verbal', icon: 'type', message: 'Tighten the positioning clause', when: '1d',
+        children: {
+          'tone-of-voice.md': { message: 'Tighten the positioning clause', when: '1d', status: 'Live', icon: 'file' },
+          'messaging-house.md': { message: 'Name the challenger brands', when: '4d', status: 'Live', icon: 'file' },
+          'launch-narrative.md': { message: 'First pass, not reviewed', when: '2d', status: 'Draft', icon: 'file' },
+        },
+      },
+      strategy: {
+        label: 'Strategy', icon: 'target', message: 'Move positioning into review', when: '1d',
+        children: {
+          'positioning.md': { message: 'Move into review', when: '1d', status: 'Review', icon: 'file' },
+          'audience.md': { message: 'Split founders from marketing teams', when: '2w', status: 'Live', icon: 'file' },
+          'competitive-set.md': { message: 'Add two challengers', when: '3w', status: 'Live', icon: 'file' },
+        },
+      },
+      channels: {
+        label: 'Channels', icon: 'channel', message: 'Draft the channel matrix', when: '5d',
+        children: {
+          'channel-matrix.md': { message: 'Draft, awaiting sign-off', when: '5d', status: 'Draft', icon: 'file' },
+          'social-kit.fig': { message: 'Most-used asset this quarter', when: '6h', status: 'Live', icon: 'image' },
+        },
+      },
+    },
   },
-  {
-    group: 'Work',
-    items: [
-      { key: 'assets', label: 'Assets', count: 38, icon: 'layers' },
-      { key: 'plan', label: 'Plan', icon: 'route' },
-      { key: 'results', label: 'Results', icon: 'chart' },
-    ],
+  work: {
+    label: 'Work', icon: 'layers',
+    children: {
+      assets: {
+        label: 'Assets', icon: 'layers', message: '38 across four disciplines', when: '2h',
+        children: {
+          'exports': { message: 'PNG and SVG, all sizes', when: '2h', status: 'Live', kind: 'folder' },
+          'source': { message: 'Working files', when: '2h', status: 'Live', kind: 'folder' },
+          'manifest.json': { message: 'Regenerated on publish', when: '2h', status: 'Live', icon: 'file' },
+        },
+      },
+      plan: {
+        label: 'Plan', icon: 'route', message: 'Q3 rollout', when: '1w',
+        children: {
+          'q3-rollout.md': { message: 'Six weeks, three phases', when: '1w', status: 'Live', icon: 'file' },
+          'dependencies.md': { message: 'Blocked on channel sign-off', when: '1w', status: 'Review', icon: 'file' },
+        },
+      },
+      results: {
+        label: 'Results', icon: 'chart', message: 'Usage up 9pt this quarter', when: '3h',
+        children: {
+          'usage.csv': { message: 'Usage up 9pt this quarter', when: '3h', status: 'Live', icon: 'file' },
+          'adoption.csv': { message: '71% of assets in use', when: '3h', status: 'Live', icon: 'file' },
+        },
+      },
+    },
   },
-  {
-    group: null,
-    items: [{ key: 'dashboard', label: 'Dashboard', icon: 'grid' }],
-  },
-]
+}
+
+/* Tree shape derived from the same object, so the two can never disagree. */
+const TREE = Object.entries(FS).map(([key, node]) => ({
+  key,
+  label: node.label,
+  icon: node.icon,
+  children: Object.entries(node.children).map(([ck, c]) => ({
+    key: `${key}/${ck}`,
+    label: c.label,
+    icon: c.icon,
+    count: c.children ? Object.keys(c.children).length : undefined,
+  })),
+}))
+
+const at = (path) =>
+  path.reduce((node, seg) => node?.children?.[seg], { children: FS })
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-const ASSETS = [
-  { name: 'Identity system', kind: 'Design', owner: 'Dana Cole', status: 'Live', used: 24, trend: [4, 6, 9, 12, 18, 24] },
-  { name: 'Tone of voice', kind: 'Verbal', owner: 'Chris Church', status: 'Live', used: 19, trend: [2, 5, 8, 11, 15, 19] },
-  { name: 'Positioning', kind: 'Strategy', owner: 'Chris Church', status: 'Review', used: 11, trend: [1, 3, 5, 7, 9, 11] },
-  { name: 'Social kit', kind: 'Design', owner: 'Ravi Menon', status: 'Live', used: 31, trend: [8, 12, 17, 22, 27, 31] },
-  { name: 'Launch narrative', kind: 'Verbal', owner: 'Dana Cole', status: 'Draft', used: 4, trend: [0, 0, 1, 2, 3, 4] },
-  { name: 'Channel matrix', kind: 'Channels', owner: 'Ravi Menon', status: 'Draft', used: 2, trend: [0, 0, 0, 1, 1, 2] },
-]
 
 export default function Dashboard() {
   useMeta({
@@ -63,35 +122,59 @@ export default function Dashboard() {
   })
 
   const { collapsed, toggle } = useSidebar()
-  const [active, setActive] = useState('dashboard')
+  const [path, setPath] = useState(['brand', 'design'])
+  const [tab, setTab] = useState('Files')
   const [range, setRange] = useState('12m')
-  const [tab, setTab] = useState('Overview')
+  const [version, setVersion] = useState('v2.1 — current')
+  const [find, setFind] = useState('')
   const [dismissed, setDismissed] = useState(false)
 
-  const section = NAV.flatMap((g) => g.items).find((i) => i.key === active)
+  const node = at(path)
+  const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
+    name,
+    kind: e.kind === 'folder' || e.children ? 'folder' : 'file',
+    icon: e.icon,
+    message: e.message,
+    when: e.when,
+    status: e.status,
+  }))
+
+  const label = (segs) => segs.map((seg, i) => at(segs.slice(0, i + 1))?.label ?? seg)
+
+  const open = (entry) => {
+    if (entry.kind === 'folder') setPath((p) => [...p, entry.name])
+  }
 
   return (
     <Shell collapsed={collapsed}>
-      <Sidebar brand="Super Conscious" collapsed={collapsed} onToggle={toggle}>
-        {NAV.map((g, i) => (
-          <NavGroup key={g.group ?? `g${i}`} label={g.group} collapsed={collapsed}>
-            {g.items.map((it) => (
-              <NavItem
-                key={it.key}
-                icon={it.icon}
-                label={it.label}
-                count={it.count}
-                active={active === it.key}
-                collapsed={collapsed}
-                onClick={() => setActive(it.key)}
+      {/* Mark only — the workspace is named in the title bar, and repeating it
+          in the rail spends the widest line in the sidebar on something the
+          reader already knows. */}
+      <Sidebar mark={headMark} collapsed={collapsed} onToggle={toggle}>
+        {!collapsed && (
+          <Tree
+            nodes={TREE}
+            activeKey={path.join('/')}
+            defaultOpen={['brand', 'work']}
+            onSelect={(n) => setPath(n.key.split('/'))}
+          />
+        )}
+        {collapsed && (
+          <div className={styles.railIcons}>
+            {TREE.flatMap((g) => g.children).map((c) => (
+              <IconButton
+                key={c.key}
+                icon={c.icon}
+                label={c.label}
+                onClick={() => setPath(c.key.split('/'))}
               />
             ))}
-          </NavGroup>
-        ))}
+          </div>
+        )}
       </Sidebar>
 
       <div className={styles.main}>
-        <Topbar title={section?.label ?? 'Dashboard'}>
+        <Topbar title={node?.label ?? 'Workspace'}>
           <Segmented
             value={range}
             onChange={setRange}
@@ -99,18 +182,113 @@ export default function Dashboard() {
             options={[{ value: '3m', label: '3M' }, { value: '12m', label: '12M' }, { value: 'all', label: 'All' }]}
           />
           <IconButton icon="search" label="Search" />
-          <IconButton icon="sliders" label="Settings" />
           <Button variant="solid" size="sm" icon="plus">New asset</Button>
         </Topbar>
 
         <Content>
+          <TitleBar mark={headMark} owner="Super Conscious" title="Brand" badge="Private">
+            <CountButton icon="target" label="Pin" />
+            <CountButton icon="user" label="Watch" count={4} pressed />
+            <CountButton icon="copy" label="Duplicate" count={2} />
+            <CountButton icon="success" label="Approved" count={31} />
+          </TitleBar>
+
+          <Toolbar>
+            <RefSelect
+              value={version}
+              onChange={setVersion}
+              options={['v2.1 — current', 'v2.0', 'v1.4 — archived']}
+            />
+            <CountLink icon="layers" count="4" label="Disciplines" />
+            <CountLink icon="clock" count="12" label="Versions" />
+            <FindField value={find} onChange={setFind} />
+            <Button size="sm" icon="plus">Add asset</Button>
+            <Button size="sm" variant="solid" icon="external">Share</Button>
+          </Toolbar>
+
           {!dismissed && (
-            <Banner tone="warn" onDismiss={() => setDismissed(true)}>
+            /* Neutral rather than amber. Colour is the loudest thing in a
+               monochrome interface, and an advisory that spends it leaves
+               nothing for a real failure — the glyph carries the meaning. */
+            <Banner tone="info" icon="warning" onDismiss={() => setDismissed(true)}>
               6 assets haven't been reviewed in over 90 days.
             </Banner>
           )}
 
-          <Tabs value={tab} onChange={setTab} options={['Overview', 'Assets', 'Activity']} />
+          <div className={styles.bar}>
+            <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
+            <Tabs value={tab} onChange={setTab} options={['Files', 'Overview']} />
+          </div>
+
+          {tab === 'Files' && (
+            <div className={styles.split}>
+              <FileBrowser
+                onOpen={open}
+                entries={entries}
+                head={{
+                  initials: 'DC',
+                  who: 'Dana Cole',
+                  message: node?.message ?? 'Published the identity system',
+                  ref: 'a014ddf',
+                  when: node?.when ?? '2h ago',
+                  count: '492 changes',
+                }}
+              />
+
+              <aside className={styles.rail}>
+                <AsideBlock
+                  title="About"
+                  action={<IconButton icon="sliders" label="Workspace settings" size={13} />}
+                >
+                  <p className={styles.asideText}>
+                    The brand system for Super Conscious — identity, voice, strategy
+                    and the channels they run on.
+                  </p>
+                  <div className={styles.facts}>
+                    <FactRow icon="layers" value="38" label="assets" />
+                    <FactRow icon="user" value="4" label="editors" />
+                    <FactRow icon="clock" value="6" label="awaiting review" />
+                    <FactRow icon="channel" value="2" label="channels live" />
+                  </div>
+                </AsideBlock>
+
+                <CompositionBar
+                  title="Composition"
+                  segments={[
+                    { label: 'Design', value: 14 },
+                    { label: 'Verbal', value: 9 },
+                    { label: 'Strategy', value: 6 },
+                    { label: 'Channels', value: 2 },
+                  ]}
+                />
+
+                <Contributors
+                  people={[
+                    { handle: 'ChrisChurchSC', name: 'Chris Church' },
+                    { handle: 'dana', name: 'Dana Cole' },
+                    { handle: 'ravi', name: 'Ravi Menon' },
+                    { handle: 'Super-Conscious', name: 'Super Conscious' },
+                  ]}
+                />
+
+                <AsideBlock title="Publishing" count="500+">
+                  <StatusList
+                    items={[
+                      { label: 'Preview — brand', when: '20 min ago' },
+                      { label: 'Preview — assets', when: '20 min ago' },
+                      { label: 'Live — super-conscious.studio', when: 'last week' },
+                      { label: 'Channel matrix', when: 'blocked', tone: 'warn' },
+                    ]}
+                  />
+                </AsideBlock>
+
+                <AsideBlock title="Releases">
+                  <p className={styles.asideText}>v2.1 — Identity refresh, shipped last week.</p>
+                  <Button size="sm" icon="plus">New release</Button>
+                </AsideBlock>
+              </aside>
+            </div>
+          )}
 
           {tab === 'Overview' && (
             <>
@@ -135,15 +313,9 @@ export default function Dashboard() {
 
               <Grid>
                 <Col span={8}>
-                  <Panel
-                    title="Asset usage"
-                    actions={<span className={styles.panelMeta}>Target 60</span>}
-                  >
+                  <Panel title="Asset usage" actions={<span className={styles.panelMeta}>Target 60</span>}>
                     <LineChart
-                      labels={MONTHS}
-                      unit="uses"
-                      max={100}
-                      target={60}
+                      labels={MONTHS} unit="uses" max={100} target={60}
                       series={[
                         { label: 'Design', data: [12, 18, 22, 28, 31, 38, 42, 49, 54, 61, 68, 74] },
                         { label: 'Verbal', data: [6, 9, 11, 14, 18, 21, 26, 29, 33, 38, 41, 47] },
@@ -167,93 +339,27 @@ export default function Dashboard() {
               </Grid>
 
               <Grid>
-                <Col span={4}>
+                <Col span={6}>
                   <Panel title="Most used">
-                    <RankedBar
-                      data={[
-                        { label: 'Social kit', value: 31 },
-                        { label: 'Identity', value: 24 },
-                        { label: 'Voice', value: 19 },
-                        { label: 'Positioning', value: 11 },
-                      ]}
-                    />
+                    <RankedBar data={[
+                      { label: 'Social kit', value: 31 },
+                      { label: 'Identity', value: 24 },
+                      { label: 'Voice', value: 19 },
+                      { label: 'Positioning', value: 11 },
+                    ]} />
                   </Panel>
                 </Col>
-                <Col span={4}>
+                <Col span={6}>
                   <Panel title="Added per month">
                     <BarChart
                       data={[2, 3, 1, 4, 2, 5, 3, 4, 6, 3, 2, 3]}
                       labels={MONTHS.map((m) => m[0])}
-                      unit="n"
-                      reference={3}
-                      referenceLabel="Mean 3"
+                      unit="n" reference={3} referenceLabel="Mean 3"
                     />
-                  </Panel>
-                </Col>
-                <Col span={4}>
-                  <Panel title="Needs attention">
-                    <div className={styles.stack}>
-                      {ASSETS.filter((a) => a.status !== 'Live').map((a) => (
-                        <Card key={a.name} link className={styles.compactCard}>
-                          <Eyebrow>{a.kind}</Eyebrow>
-                          <CardTitle>{a.name}</CardTitle>
-                          <div className={styles.cardFoot}>
-                            <Badge tone={a.status === 'Draft' ? 'warn' : 'neutral'}>{a.status}</Badge>
-                            <span className={styles.owner}>{a.owner}</span>
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
                   </Panel>
                 </Col>
               </Grid>
             </>
-          )}
-
-          {tab === 'Assets' && (
-            <Panel title={`${ASSETS.length} assets`} actions={<Button size="sm" icon="download">Export</Button>}>
-              <div className={styles.table}>
-                <div className={`${styles.tRow} ${styles.tHead}`}>
-                  <span>Asset</span><span>Discipline</span><span>Owner</span>
-                  <span>Status</span><span className={styles.tNum}>Uses</span><span>Trend</span>
-                </div>
-                {ASSETS.map((a) => (
-                  <div key={a.name} className={styles.tRow}>
-                    <span className={styles.tName}>{a.name}</span>
-                    <span>{a.kind}</span>
-                    <span>{a.owner}</span>
-                    <span>
-                      <Badge tone={a.status === 'Live' ? 'good' : a.status === 'Draft' ? 'warn' : 'neutral'}>
-                        {a.status}
-                      </Badge>
-                    </span>
-                    <span className={styles.tNum}>{a.used}</span>
-                    <span className={styles.tSpark}><Sparkline data={a.trend} width={72} height={18} /></span>
-                  </div>
-                ))}
-              </div>
-            </Panel>
-          )}
-
-          {tab === 'Activity' && (
-            <Panel title="Recent">
-              <div className={styles.feed}>
-                {[
-                  ['Dana Cole', 'published', 'Identity system', '2h', 'success'],
-                  ['Ravi Menon', 'updated', 'Social kit', '5h', 'refresh'],
-                  ['Chris Church', 'moved to review', 'Positioning', '1d', 'clock'],
-                  ['Dana Cole', 'created', 'Launch narrative', '2d', 'plus'],
-                ].map(([who, verb, what, when, icon], i) => (
-                  <div key={i} className={styles.feedRow}>
-                    <Icon name={icon} size={13} />
-                    <span className={styles.feedText}>
-                      <strong>{who}</strong> {verb} <strong>{what}</strong>
-                    </span>
-                    <span className={styles.feedWhen}>{when}</span>
-                  </div>
-                ))}
-              </div>
-            </Panel>
           )}
         </Content>
       </div>

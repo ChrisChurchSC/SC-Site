@@ -18,11 +18,17 @@ export function Shell({ collapsed, children }) {
   )
 }
 
-export function Sidebar({ brand, collapsed, onToggle, children }) {
+export function Sidebar({ brand, mark, collapsed, onToggle, children }) {
   return (
     <nav className={s.sidebar} aria-label="Main">
       <div className={s.sidebarHead}>
-        {!collapsed && <span className={s.brand}>{brand}</span>}
+        {/* The mark stays when the rail collapses — it is the one thing that
+            says which product you are in, and an icon rail with no identity is
+            a rail nobody recognises. */}
+        <span className={s.brandRow}>
+          {mark && <img src={mark} alt="" className={s.brandMark} />}
+          {!collapsed && <span className={s.brand}>{brand}</span>}
+        </span>
         <IconButton
           icon={collapsed ? 'chevron-right' : 'chevron-left'}
           label={collapsed ? 'Expand navigation' : 'Collapse navigation'}

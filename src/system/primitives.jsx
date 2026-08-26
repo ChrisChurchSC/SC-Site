@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import s from './system.module.css'
 import { ICONS } from './icons'
 
@@ -126,12 +127,16 @@ export function Badge({ tone = 'neutral', icon, children }) {
   )
 }
 
-export function Banner({ tone = 'info', children, onDismiss }) {
+/* Tone and glyph are separate arguments on purpose. A notice can be worth
+   noticing without being an alarm — colour is the loudest thing in a monochrome
+   interface, and spending it on every advisory leaves nothing for a real
+   failure. Passing an explicit `icon` keeps the meaning while staying neutral. */
+export function Banner({ tone = 'info', icon, children, onDismiss }) {
   const cls = { good: s.bannerGood, warn: s.bannerWarn, bad: s.bannerBad }[tone] ?? s.bannerInfo
-  const icon = { good: 'success', warn: 'warning', bad: 'error' }[tone] ?? 'info'
+  const glyph = icon ?? ({ good: 'success', warn: 'warning', bad: 'error' }[tone] ?? 'info')
   return (
     <div className={`${s.banner} ${cls}`} role="status">
-      <Icon name={icon} size={14} />
+      <Icon name={glyph} size={14} />
       <span className={s.bannerText}>{children}</span>
       {onDismiss && <IconButton icon="close" label="Dismiss" size={12} onClick={onDismiss} />}
     </div>
@@ -160,6 +165,254 @@ export function Segmented({ value, onChange, options, label = 'View' }) {
           </button>
         )
       })}
+    </div>
+  )
+}
+
+/* ── Title bar ─────────────────────────────────────────────────────────────
+   Identity on the left, actions on the right, ruled off from the toolbar
+   beneath it. The two rows do different jobs: this one says what you are
+   looking at, the toolbar says what you can do to it. Merging them is why so
+   many app headers become a shelf of unrelated buttons. */
+
+export function TitleBar({ mark, owner, title, badge, children }) {
+  return (
+    <div className={s.titleBar}>
+      <div className={s.titleLeft}>
+        {mark && <img src={mark} alt="" className={s.titleMark} />}
+        {owner && (
+          <>
+            <span className={s.titleOwner}>{owner}</span>
+            <span className={s.titleSlash}>/</span>
+          </>
+        )}
+        <span className={s.titleName}>{title}</span>
+        {badge && <span className={s.titleBadge}>{badge}</span>}
+      </div>
+      <div className={s.titleActions}>{children}</div>
+    </div>
+  )
+}
+
+/* A button whose count is part of the control rather than beside it. The count
+   sits in its own cell with a rule between, so it stays readable when the
+   number grows and never shifts the label. */
+export function CountButton({ icon, label, count, onClick, pressed }) {
+  return (
+    <span className={s.countBtn}>
+      <button
+        type="button"
+        className={`${s.countMain} ${pressed ? s.countMainOn : ''}`}
+        onClick={onClick}
+        aria-pressed={pressed}
+      >
+        <Icon name={icon} size={13} />
+        {label}
+      </button>
+      {count !== undefined && <span className={s.countValue}>{count}</span>}
+    </span>
+  )
+}
+
+/* ── Toolbar ───────────────────────────────────────────────────────────────
+   The row that changes what the listing shows: which version, how to find a
+   thing in it, and what to add. */
+
+export function Toolbar({ children }) {
+  return <div className={s.toolbar}>{children}</div>
+}
+
+export function RefSelect({ value, options = [], onChange, icon = 'route' }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <span className={s.refWrap}>
+      <button
+        type="button"
+        className={s.refBtn}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <Icon name={icon} size={13} />
+        <span className={s.refValue}>{value}</span>
+        <Icon name="chevron-down" size={11} />
+      </button>
+      {open && (
+        <div className={s.refMenu} role="listbox">
+          {options.map((o) => (
+            <button
+              key={o}
+              type="button"
+              role="option"
+              aria-selected={o === value}
+              className={`${s.refItem} ${o === value ? s.refItemOn : ''}`}
+              onClick={() => { onChange?.(o); setOpen(false) }}
+            >
+              {o === value && <Icon name="check" size={11} />}
+              <span>{o}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </span>
+  )
+}
+
+export function CountLink({ icon, count, label, onClick }) {
+  return (
+    <button type="button" className={s.countLink} onClick={onClick}>
+      <Icon name={icon} size={13} />
+      <b>{count}</b>
+      {label}
+    </button>
+  )
+}
+
+/* The shortcut hint is inside the field rather than beside it — a key badge
+   floating next to an input reads as a separate control. */
+export function FindField({ value, onChange, placeholder = 'Go to asset', shortcut = 'T' }) {
+  return (
+    <span className={s.findField}>
+      <Icon name="search" size={13} />
+      <input
+        className={s.findInput}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        aria-label={placeholder}
+      />
+      {shortcut && <kbd className={s.findKbd}>{shortcut}</kbd>}
+    </span>
+  )
+}
+
+/* ── People ────────────────────────────────────────────────────────────────
+   Initials rather than photographs by default. A team of five has no headshot
+   pipeline, and a broken image is worse than none — so the fallback is the
+   primary and a photo is the enhancement. */
+
+export function Avatar({ name, src, size = 24 }) {
+  const initials = name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
+  return (
+    <span
+      className={s.avatar}
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.34) }}
+      title={name}
+    >
+      {src ? <img src={src} alt="" className={s.avatarImg} /> : <span aria-hidden="true">{initials}</span>}
+    </span>
+  )
+}
+
+/* Handle and real name both: in a workspace people are known by one or the
+   other, and rarely by the same one. */
+export function Contributors({ people, title = 'Contributors' }) {
+  return (
+    <AsideBlock title={title} count={people.length}>
+      <div className={s.people}>
+        {people.map((p) => (
+          <button key={p.handle ?? p.name} type="button" className={s.person}>
+            <Avatar name={p.name} src={p.src} size={26} />
+            <span className={s.personHandle}>{p.handle ?? p.name}</span>
+            {p.handle && p.name !== p.handle && <span className={s.personName}>{p.name}</span>}
+          </button>
+        ))}
+      </div>
+    </AsideBlock>
+  )
+}
+
+/* Composition bar: shares of a whole as one rule, legend beneath.
+ *
+ * The bar is 8px and carries no labels by design — it is a shape, not a chart.
+ * The numbers live in the legend where they can be read exactly, which is what
+ * lets this work at a size no chart would survive.
+ *
+ * Coloured from the SEQUENTIAL ramp, not the categorical slots, and ordered by
+ * share. A composition bar is degrees of one thing rather than a set of
+ * identities — and the categorical palette only has three slots, so a fourth
+ * segment would alias back to the first and put two identical dots in the
+ * legend. The ramp gives five distinguishable steps and says "shares" rather
+ * than "categories", which is what this actually is.
+ *
+ * A segment under 2% still renders at 2% so it stays visible; the legend keeps
+ * the true figure, so nothing is misreported. */
+export function CompositionBar({ segments, title }) {
+  const total = segments.reduce((a, x) => a + x.value, 0) || 1
+  const ordered = [...segments].sort((a, b) => b.value - a.value)
+  const step = (i) => `var(--sc-q${Math.max(1, 5 - i)})`
+
+  return (
+    <AsideBlock title={title}>
+      <div className={s.compBar}>
+        {ordered.map((seg, i) => (
+          <span
+            key={seg.label}
+            className={s.compSeg}
+            style={{
+              width: `${Math.max(2, (seg.value / total) * 100)}%`,
+              background: seg.colour ?? step(i),
+            }}
+            title={`${seg.label}: ${seg.value}`}
+          />
+        ))}
+      </div>
+      <div className={s.compLegend}>
+        {ordered.map((seg, i) => (
+          <span key={seg.label} className={s.compKey}>
+            <span className={s.compDot} style={{ background: seg.colour ?? step(i) }} />
+            {seg.label}
+            <span className={s.compPct}>{((seg.value / total) * 100).toFixed(1)}%</span>
+          </span>
+        ))}
+      </div>
+    </AsideBlock>
+  )
+}
+
+/* A block in the right rail. Deliberately plain — the rail is read once and
+   then ignored, so it must not compete with the listing beside it. */
+export function AsideBlock({ title, count, action, children }) {
+  return (
+    <section className={s.aside}>
+      {title && (
+        <header className={s.asideHead}>
+          <span className={s.asideTitle}>{title}</span>
+          {count !== undefined && <span className={s.asideCount}>{count}</span>}
+          {action}
+        </header>
+      )}
+      {children}
+    </section>
+  )
+}
+
+/* Icon, figure, label. The figure is emphasised and the label is not, because
+   the number is what is scanned and the word only says what it counts. */
+export function FactRow({ icon, value, label }) {
+  return (
+    <span className={s.fact}>
+      <Icon name={icon} size={13} />
+      {value !== undefined && <b className={s.factValue}>{value}</b>}
+      <span className={s.factLabel}>{label}</span>
+    </span>
+  )
+}
+
+/* Status list: a dot, a name, a time. The dot is paired with a word rather
+   than carrying the meaning alone. */
+export function StatusList({ items }) {
+  return (
+    <div className={s.statusList}>
+      {items.map((it) => (
+        <span key={it.label} className={s.statusRow}>
+          <span
+            className={`${s.statusDot} ${it.tone === 'bad' ? s.statusDotBad : it.tone === 'warn' ? s.statusDotWarn : ''}`}
+            aria-hidden="true"
+          />
+          <span className={s.statusLabel}>{it.label}</span>
+          <span className={s.statusWhen}>{it.when}</span>
+        </span>
+      ))}
     </div>
   )
 }

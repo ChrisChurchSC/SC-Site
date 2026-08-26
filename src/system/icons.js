@@ -39,6 +39,11 @@ export const ICONS = {
   image: 'M2 3h12v10H2zM2 10l3.5-3.5L9 10l2-2 3 3M5.5 5.5h.01',
   video: 'M2 4h9v8H2zM11 7l3-2v6l-3-2',
   file: 'M4 2h5l3 3v9H4zM9 2v3h3',
+  /* Folder closed and open. The open state tilts the front face rather than
+     adding an arrow — a folder that needs a glyph to say "open" is a folder
+     drawn wrong. */
+  folder: 'M2 4h4l1.5 2H14v8H2z',
+  'folder-open': 'M2 4h4l1.5 2H14v2H5l-2 6H2zM3 14l2-6h9.5l-2 6z',
   calendar: 'M2 4h12v10H2zM2 7h12M5 2v3M11 2v3',
   mail: 'M2 4h12v8H2zM2 4l6 5 6-5',
   user: 'M8 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5M3 14c0-2.5 2.2-4 5-4s5 1.5 5 4',

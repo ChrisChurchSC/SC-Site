@@ -24,6 +24,8 @@ export {
   Panel, StatTile,
   Badge, Banner, Spinner,
   Segmented, Tabs,
+  Avatar, Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
+  TitleBar, CountButton, Toolbar, RefSelect, CountLink, FindField,
 } from './primitives'
 
 export {
@@ -34,3 +36,5 @@ export {
 export {
   Legend, Sparkline, LineChart, BarChart, RankedBar, Donut,
 } from './charts'
+
+export { Path, FileBrowser, Tree } from './browser'
