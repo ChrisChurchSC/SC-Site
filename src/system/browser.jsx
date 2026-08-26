@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
 import s from './system.module.css'
 import { Icon } from './primitives'
 
@@ -98,6 +98,114 @@ export function FileBrowser({ entries, head, onOpen }) {
           </button>
         ))}
       </div>
+    </div>
+  )
+}
+
+/* ── File view ─────────────────────────────────────────────────────────────
+ *
+ * What opening a row leads to. The same three bands as the listing — path,
+ * last change, then content — so moving from folder to file feels like going
+ * deeper rather than arriving somewhere unrelated.
+ *
+ * The toolbar carries facts on the left and actions on the right, with the
+ * view switch first: what you are looking at, then what it is, then what you
+ * can do to it.
+ */
+export function FileView({
+  path, onNavigate, head, meta, views, view, onView, actions, children,
+}) {
+  return (
+    <div className={s.fileView}>
+      <div className={s.fileTop}>
+        <Path segments={path} onNavigate={onNavigate} />
+        {actions}
+      </div>
+
+      {head && (
+        <div className={s.browserHead}>
+          <span className={s.headWho}>
+            <span className={s.headAvatar}>{head.initials}</span>
+            {head.who}
+          </span>
+          <span className={s.headMsg}>{head.message}</span>
+          <span className={s.headMeta}>
+            <span className={s.headRef}>{head.ref}</span>
+            <span className={s.headDot}>·</span>
+            {head.when}
+          </span>
+          {head.onHistory && (
+            <button type="button" className={s.headHistory} onClick={head.onHistory}>
+              <Icon name="clock" size={12} />History
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className={s.fileBody}>
+        <div className={s.fileBar}>
+          {views?.length > 1 && (
+            <span className={s.fileViews} role="group" aria-label="View">
+              {views.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  aria-pressed={view === v}
+                  className={`${s.fileViewBtn} ${view === v ? s.fileViewBtnOn : ''}`}
+                  onClick={() => onView?.(v)}
+                >
+                  {v}
+                </button>
+              ))}
+            </span>
+          )}
+          {/* Facts, not controls — the separators keep them from reading as a
+              row of links. */}
+          {meta?.length > 0 && (
+            <span className={s.fileMeta}>
+              {meta.map((m, i) => (
+                <Fragment key={m}>
+                  {i > 0 && <span className={s.headDot}>·</span>}
+                  <span>{m}</span>
+                </Fragment>
+              ))}
+            </span>
+          )}
+        </div>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/* Numbered lines. The gutter is not selectable, so copying the content does
+   not drag the numbers along with it — the commonest complaint about every
+   code viewer that renders them as text. */
+export function CodeLines({ text }) {
+  const lines = text.replace(/\n$/, '').split('\n')
+  return (
+    <pre className={s.code}>
+      <code>
+        {lines.map((line, i) => (
+          <span key={i} className={s.codeLine}>
+            <span className={s.codeNum} aria-hidden="true">{i + 1}</span>
+            <span className={s.codeText}>{line || ' '}</span>
+          </span>
+        ))}
+      </code>
+    </pre>
+  )
+}
+
+/* Media preview. A checkerboard behind it, because half of what a brand
+   workspace holds is transparent and a flat ground silently lies about it. */
+export function MediaPreview({ label }) {
+  return (
+    <div className={s.preview}>
+      <div className={s.previewPlate}>
+        <span className={s.previewArt} />
+      </div>
+      {label && <span className={s.previewLabel}>{label}</span>}
     </div>
   )
 }

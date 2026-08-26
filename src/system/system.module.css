@@ -1888,3 +1888,174 @@
     padding: 0 var(--sc-space-3);
   }
 }
+
+
+/* ── File view ─────────────────────────────────────────────────────────────
+   The same three bands as the listing — path, last change, content — so
+   opening a file feels like going deeper rather than arriving somewhere
+   unrelated. */
+
+.fileView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  min-width: 0;
+}
+
+.fileTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-4);
+  flex-wrap: wrap;
+}
+
+.fileView .browserHead {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+}
+
+.headHistory {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-label);
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  border-radius: var(--sc-radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--sc-fast), background var(--sc-fast);
+}
+
+.headHistory:hover { color: var(--sc-text-peak); background: var(--sc-fill); }
+
+.fileBody {
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+}
+
+.fileBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+/* A segmented pair rather than tabs: these are two renderings of the same
+   thing, not two places. */
+.fileViews {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--sc-radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+
+.fileViewBtn {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-radius: 2px;
+  padding: 6px 12px;
+  min-height: 28px;
+  cursor: pointer;
+  transition: background var(--sc-fast), color var(--sc-fast);
+}
+
+.fileViewBtn:hover { color: var(--sc-text-strong); }
+.fileViewBtnOn { color: var(--sc-ground); background: var(--sc-text-strong); }
+
+/* Facts, not controls. The separators stop them reading as a row of links. */
+.fileMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+}
+
+/* ── Code ──────────────────────────────────────────────────────────────── */
+
+.code {
+  margin: 0;
+  padding: var(--sc-space-3) 0;
+  overflow-x: auto;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.75;
+  color: var(--sc-text-body);
+  background: var(--sc-ground);
+}
+
+.codeLine { display: flex; }
+
+.codeLine:hover { background: var(--sc-fill-faint); }
+
+/* Not selectable, so copying the content does not drag the numbers with it —
+   the commonest complaint about every viewer that renders them as text. */
+.codeNum {
+  flex-shrink: 0;
+  width: 52px;
+  padding-right: var(--sc-space-3);
+  text-align: right;
+  color: var(--sc-text-faint);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.codeText {
+  white-space: pre;
+  padding-right: var(--sc-space-4);
+}
+
+/* ── Media preview ─────────────────────────────────────────────────────── */
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sc-space-3);
+  padding: var(--sc-space-6) var(--sc-space-4);
+  background: var(--sc-ground);
+}
+
+/* Checkerboard, because half of what a brand workspace holds is transparent
+   and a flat ground silently lies about it. */
+.previewPlate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sc-space-5);
+  border-radius: var(--sc-radius);
+  background-color: #6a6a6a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23555'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23555'/%3E%3C/svg%3E");
+}
+
+.previewArt {
+  display: block;
+  width: 240px;
+  height: 150px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(45deg, #2f2f2f 0 12px, #3a3a3a 12px 24px);
+}
+
+.previewLabel {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-meta);
+}

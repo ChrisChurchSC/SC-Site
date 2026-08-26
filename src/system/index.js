@@ -38,4 +38,4 @@ export {
   Legend, Sparkline, LineChart, BarChart, RankedBar, Donut,
 } from './charts'
 
-export { Path, FileBrowser, Tree } from './browser'
+export { Path, FileBrowser, FileView, CodeLines, MediaPreview, Tree } from './browser'

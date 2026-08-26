@@ -5,7 +5,7 @@ import {
   Shell, GlobalBar, BarButton, Sidebar, Content, Grid, Col, useSidebar,
   Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
   SectionNav, Segmented, Field, Input, Switch,
-  Tree, Path, FileBrowser,
+  Tree, Path, FileBrowser, FileView, CodeLines, MediaPreview,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, RefSelect, FindField,
   LineChart, BarChart, RankedBar, Donut,
@@ -36,7 +36,18 @@ const FS = {
         label: 'Design', icon: 'brand', message: 'Refit the logo lockup for small sizes', when: '2h',
         children: {
           'logo-lockup.fig': { message: 'Refit for small sizes', when: '2h', status: 'Live', icon: 'image' },
-          'colour-tokens.json': { message: 'Retire teal and blue', when: '1d', status: 'Live', icon: 'file' },
+          'colour-tokens.json': {
+            message: 'Retire teal and blue', when: '1d', status: 'Live', icon: 'file',
+            text: `{
+  "ground":  "#0a0a0a",
+  "card":    "#161616",
+  "accent": {
+    "pink":   "#df4ed6",
+    "purple": "#7d5ae0"
+  },
+  "retired": ["teal", "blue"]
+}`,
+          },
           'type-scale.fig': { message: 'Drop the 3px radius step', when: '3d', status: 'Live', icon: 'image' },
           'grid-system.fig': { message: 'Document the 5px gutter', when: '1w', status: 'Live', icon: 'image' },
           'iconography.svg': { message: 'Forty marks on a 16px grid', when: '1w', status: 'Review', icon: 'image' },
@@ -45,7 +56,17 @@ const FS = {
       verbal: {
         label: 'Verbal', icon: 'type', message: 'Tighten the positioning clause', when: '1d',
         children: {
-          'tone-of-voice.md': { message: 'Tighten the positioning clause', when: '1d', status: 'Live', icon: 'file' },
+          'tone-of-voice.md': {
+            message: 'Tighten the positioning clause', when: '1d', status: 'Live', icon: 'file',
+            text: `# Tone of voice
+
+We write like someone who has done the work and is
+telling you what they found.
+
+- Say the finding, then the evidence.
+- No adjective doing a verb's job.
+- If a sentence survives being cut, cut it.`,
+          },
           'messaging-house.md': { message: 'Name the challenger brands', when: '4d', status: 'Live', icon: 'file' },
           'launch-narrative.md': { message: 'First pass, not reviewed', when: '2d', status: 'Draft', icon: 'file' },
         },
@@ -53,7 +74,16 @@ const FS = {
       strategy: {
         label: 'Strategy', icon: 'target', message: 'Move positioning into review', when: '1d',
         children: {
-          'positioning.md': { message: 'Move into review', when: '1d', status: 'Review', icon: 'file' },
+          'positioning.md': {
+            message: 'Move into review', when: '1d', status: 'Review', icon: 'file',
+            text: `# Positioning
+
+For founders and marketing teams who need brand,
+content and product to say the same thing.
+
+Not a agency of record. A studio you bring in when
+the system has to outlive the engagement.`,
+          },
           'audience.md': { message: 'Split founders from marketing teams', when: '2w', status: 'Live', icon: 'file' },
           'competitive-set.md': { message: 'Add two challengers', when: '3w', status: 'Live', icon: 'file' },
         },
@@ -112,6 +142,10 @@ const TREE = Object.entries(FS).map(([key, node]) => ({
 const at = (path) =>
   path.reduce((node, seg) => node?.children?.[seg], { children: FS })
 
+/* Fails quietly: copying a path is a convenience, and a thrown promise in a
+   webview with no clipboard permission is worse than nothing happening. */
+const writeText = (t) => { try { navigator.clipboard?.writeText?.(t) } catch {} }
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export default function Dashboard() {
@@ -132,6 +166,8 @@ export default function Dashboard() {
   const [wsName, setWsName] = useState('Brand')
   const [visibility, setVisibility] = useState('Private')
   const [autoReview, setAutoReview] = useState(true)
+  const [file, setFile] = useState(null)
+  const [fileView, setFileView] = useState('Preview')
 
   const node = at(path)
   const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
@@ -153,9 +189,15 @@ export default function Dashboard() {
 
   const label = (segs) => segs.map((seg, i) => at(segs.slice(0, i + 1))?.label ?? seg)
 
+  /* A folder goes deeper; a file opens. Clicking a row used to do nothing
+     for files, which made half the listing look broken. */
   const open = (entry) => {
-    if (entry.kind === 'folder') setPath((p) => [...p, entry.name])
+    if (entry.kind === 'folder') { setPath((p) => [...p, entry.name]); setFile(null) }
+    else setFile(entry.name)
   }
+
+  const openNode = file ? node?.children?.[file] : null
+  const isText = Boolean(openNode?.text)
 
   return (
     <Shell
@@ -188,7 +230,7 @@ export default function Dashboard() {
             nodes={TREE}
             activeKey={path.join('/')}
             defaultOpen={['brand', 'work']}
-            onSelect={(n) => setPath(n.key.split('/'))}
+            onSelect={(n) => { setPath(n.key.split('/')); setFile(null) }}
           />
         )}
         {collapsed && (
@@ -232,7 +274,10 @@ export default function Dashboard() {
             ]}
           />
 
-          {(tab === 'Files' || tab === 'Reviews') && (
+          {/* Hidden while a file is open: the file view carries its own path,
+              and two breadcrumbs stacked is the same location said twice. The
+              version and filter belong to the listing, which isn't on screen. */}
+          {(tab === 'Files' || tab === 'Reviews') && !file && (
             <div className={styles.bar}>
               <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
               <span className={styles.barTools}>
@@ -265,7 +310,54 @@ export default function Dashboard() {
             </Banner>
           )}
 
-          {(tab === 'Files' || tab === 'Reviews') && (
+          {(tab === 'Files' || tab === 'Reviews') && file && (
+            <FileView
+              path={['Workspace', ...label(path), file]}
+              /* The last segment is the file, so navigating to any earlier one
+                 means leaving it — index 0 is Workspace, hence the offset. */
+              onNavigate={(i) => { setPath(path.slice(0, i)); setFile(null) }}
+              head={{
+                initials: 'DC',
+                who: 'Dana Cole',
+                message: openNode?.message ?? '',
+                ref: 'a014ddf',
+                when: openNode?.when ?? '',
+                onHistory: () => setTab('Activity'),
+              }}
+              views={isText ? ['Preview', 'Raw'] : ['Preview', 'Details']}
+              view={fileView}
+              onView={setFileView}
+              meta={isText
+                ? [`${openNode.text.split('\n').length} lines`, `${openNode.text.length} bytes`, openNode?.status]
+                : ['1600 × 1000', 'SVG', openNode?.status]}
+              actions={
+                <span className={styles.fileActions}>
+                  <Button size="sm" icon="copy"
+                    onClick={() => writeText(['Workspace', ...label(path), file].join('/'))}>
+                    Copy path
+                  </Button>
+                  <Button size="sm" icon="download">Download</Button>
+                  <Button size="sm" variant="solid" icon="external">Open</Button>
+                </span>
+              }
+            >
+              {fileView === 'Preview' && isText && <CodeLines text={openNode.text} />}
+              {fileView === 'Raw' && (
+                <pre className={styles.raw}>{openNode.text}</pre>
+              )}
+              {fileView === 'Preview' && !isText && <MediaPreview label={file} />}
+              {fileView === 'Details' && (
+                <div className={styles.details}>
+                  <FactRow icon="user" label={`Owned by ${openNode?.owner ?? 'Dana Cole'}`} />
+                  <FactRow icon="clock" label={`Updated ${openNode?.when ?? '—'} ago`} />
+                  <FactRow icon="layers" label={`Used in ${openNode?.used ?? 12} places`} />
+                  <FactRow icon="lock" label="Licensed for all channels" />
+                </div>
+              )}
+            </FileView>
+          )}
+
+          {(tab === 'Files' || tab === 'Reviews') && !file && (
             <div className={styles.split}>
               <FileBrowser
                 onOpen={open}

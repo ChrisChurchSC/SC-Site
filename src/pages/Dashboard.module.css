@@ -160,3 +160,25 @@
   letter-spacing: var(--sc-track-tight);
   color: var(--sc-text-meta);
 }
+
+.fileActions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.raw {
+  margin: 0;
+  padding: var(--sc-space-4);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.75;
+  color: var(--sc-text-body);
+  background: var(--sc-ground);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  padding: var(--sc-space-4);
+  background: var(--sc-ground);
+}
