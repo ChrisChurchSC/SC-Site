@@ -5794,3 +5794,34 @@
   color: var(--sc-text-meta);
   margin-top: var(--sc-space-2);
 }
+
+/* ── Wiki demo layout ────────────────────────────────────────────────────
+   Two columns where specimens are small and independent, one where they are
+   not. A form control beside another form control is a comparison; a chart
+   beside a chart at half width is two charts you cannot read. */
+
+.wdGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sc-space-5);
+}
+
+.wdCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  min-width: 0;
+}
+
+.wdColBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  background: var(--sc-fill-faint);
+  border: 1px solid var(--sc-line);
+  border-radius: var(--sc-radius-sm);
+}

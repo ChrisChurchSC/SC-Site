@@ -13,12 +13,12 @@ const WIKI = [
     slug: 'home', title: 'Home', by: 'Chris Church', when: '2h',
     related: ['tokens', 'contributing'],
     body: [
-      { p: 'This is the Super Conscious design system: 84 tokens, 62 components across 11 modules, 57 icons, and one stylesheet of 474 rules. Everything a product built on it draws comes from here.' },
+      { p: 'This is the Super Conscious design system: 84 tokens, 116 components across 16 modules, 57 icons, and one stylesheet. Everything a product built on it draws comes from here.' },
       { h: 'The shape of it' },
       { list: [
         'tokens.css — the :root layer. Surfaces, text, accent, status, chart, type, space, radius, elevation, layers, motion, focus.',
         'system.module.css — every component style, each value reading a token.',
-        'primitives, shell, charts, browser, requests, previews, activity, wiki — the components.',
+        'primitives, shell, overlays, navigation, forms, charts, plots, browser, requests, previews, activity, wiki — the components.',
         'icons.js — 57 paths on a 16px grid, geometry only.',
       ] },
       { h: 'Consuming it' },
@@ -203,25 +203,127 @@ drawer 300 · overlay 400 · toast 500 · cursor 600` },
     slug: 'components', title: 'Components', by: 'Dana Cole', when: '2d',
     related: ['home', 'contributing'],
     body: [
-      { p: '62 components across 11 modules. Every one reads tokens; almost none writes a raw value.' },
+      { p: '116 components across 16 modules. Every one reads tokens; almost none writes a raw value.' },
       { show: 'stats', caption: 'StatTile and Sparkline' },
       { show: 'people', caption: 'Avatar — initials derived from the name, one colour, no cartoon' },
       { code: `primitives      26   Button, Panel, Field, Avatar, StatTile…
+plots           21   Histogram, BoxPlot, Scatter, Funnel, Gantt…
+forms           12   Select, Combobox, DatePicker, FileUpload…
 shell           11   Shell, GlobalBar, Sidebar, Grid, Col…
-charts           6   Line, Bar, RankedBar, Donut, Sparkline
+overlays        10   Modal, Drawer, Popover, Toasts, Palette…
+charts           8   Line, Bar, RankedBar, Donut, Axis, Legend…
+navigation       6   Accordion, Stepper, Scrollspy, PrevNext…
 browser          6   Tree, FileBrowser, FileView, CodeLines…
 requests         4   RequestList, RequestDetail, DiffStat…
 previews         3   PdfPreview, CanvasPreview, WavePreview
 projects         2   ProjectList, ProjectView
-folderPreview    1   FolderPreview
-campaignCanvas   1   CampaignCanvas
-activity         1   ActivityFeed
-wiki             1   Wiki` },
++ folderPreview, campaignCanvas, activity, wiki` },
       { h: 'What belongs in the package' },
       { p: 'A component belongs here when a second product would want it unchanged. Anything that only makes sense for one page stays on that page — the package is not a place to put things you are unsure about.' },
       { h: 'Naming' },
       { p: 'The stylesheet is one shared namespace. A class named for a general idea will be taken by something general: .frame was already the app shell, and a canvas frame that reused the name inherited min-height 100vh and rendered 805px tall. Prefix by component when the word is common.' },
       { rule: 'Two components must never define the same class name in system.module.css. The last one loaded wins, and it will not be the one you are looking at.' },
+    ],
+  },
+
+{
+    slug: 'buttons', title: 'Buttons & controls', by: 'Dana Cole', when: '1d',
+    related: ['forms', 'components'],
+    body: [
+      { p: 'One button, four ways to say how much it matters. Solid is the thing you came to do; the default is everything else; small is for a row or a toolbar; disabled always says why.' },
+      { show: 'buttons' },
+      { rule: 'A disabled control carries the reason it is disabled, in a title. A dead button that says nothing is a bug report waiting to be filed.' },
+      { h: 'State, never colour alone' },
+      { p: 'Badges and banners ship with an icon and a label. Colour is the fastest signal and the one a third of readers cannot rely on, so it is never the only one.' },
+      { show: 'statuses' },
+      { h: 'Switches and segments' },
+      { p: 'A switch takes effect immediately; a checkbox waits for a submit. Using the wrong one is a promise you do not keep. Segmented is for views of one thing where all the options fit — past four, it is a select.' },
+      { show: 'controls' },
+    ],
+  },
+
+  {
+    slug: 'forms', title: 'Forms', by: 'Chris Church', when: '2d',
+    related: ['buttons', 'accessibility'],
+    body: [
+      { p: 'Two rules run through every control here.' },
+      { list: [
+        'Validate on blur, never on keystroke. Telling somebody their email is invalid while they are still typing the domain is noise, and noise trains people to ignore the one message that mattered.',
+        'The role comes before the appearance. A checkbox that is a button still announces as a checkbox, so assistive tech is told what the eye is told.',
+      ] },
+      { show: 'forms' },
+      { rule: 'The error replaces the hint rather than joining it, so the field never grows and shoves the rest of the form down while somebody is typing in it.' },
+      { h: 'Pickers' },
+      { p: 'A date field asking for text gets a different format from every visitor, so it gets a grid. Weeks start Monday, and today is marked whether or not it is selected — the two states are drawn differently so they can sit on the same cell.' },
+      { show: 'date' },
+      { h: 'Files' },
+      { p: 'A drop target and a button. Drag-and-drop alone is unusable by keyboard and invisible on touch.' },
+      { show: 'upload' },
+      { h: 'Filtering' },
+      { p: 'A filter states what it is doing and offers one way out. A filter you cannot see is a product that looks broken.' },
+      { show: 'filters' },
+    ],
+  },
+
+  {
+    slug: 'overlays', title: 'Overlays', by: 'Chris Church', when: '2d',
+    related: ['motion', 'accessibility'],
+    body: [
+      { p: 'Everything that appears on top of the page, and one decision applied consistently rather than re-made per component.' },
+      { code: `modal, sheet, lightbox, drawer   Escape, backdrop, close. Trapped.
+menu, popover                    Escape, outside click. Not trapped.
+tooltip                          Hover and focus. Never blocks.` },
+      { p: 'The split is whether the thing is modal. A dialog covers the page and takes the keyboard with it; a menu hangs off a trigger and leaves the page usable, so trapping focus in one would be a bug.' },
+      { show: 'overlays' },
+      { rule: 'useFocusTrap restores focus to the trigger on close. That matters more than the trapping — without it a screen reader lands back at the top of the document every time a dialog closes.' },
+      { h: 'Toasts' },
+      { p: 'A toast reports something that already happened. It never asks a question: anything needing an answer is a dialog, because a toast that times out before you read it has asked nothing.' },
+      { p: 'They stack upward from the bottom right, so a new one never moves the one you are reading.' },
+    ],
+  },
+
+  {
+    slug: 'nav', title: 'Navigation', by: 'Dana Cole', when: '3d',
+    related: ['components', 'overlays'],
+    body: [
+      { p: 'Three jobs that look alike and are not. The section nav moves between areas of a product. Tabs move between views of one thing. The sidebar tree moves through a hierarchy. Drawing them the same way flattens a distinction the reader needs.' },
+      { show: 'nav' },
+      { rule: 'Scrollspy uses IntersectionObserver, not a scroll handler. A scroll listener fires on every pixel and still gets the answer wrong at the bottom of the page, where the last section can never reach the top of the viewport.' },
+      { h: 'Accordions open many by default' },
+      { p: 'Single-open is a choice you make when the panels are alternatives. Making it the default means opening one silently closes the thing somebody was reading.' },
+    ],
+  },
+
+  {
+    slug: 'plots', title: 'Plots', by: 'Chris Church', when: '1d',
+    related: ['charts', 'colour'],
+    body: [
+      { p: 'The analytical half of the chart set. The six on the Charts page cover reporting — a line, a bar, a ranking, a donut. These cover the questions those cannot answer, and they are grouped by the question rather than by how they look, because picking a chart by its appearance is how you end up with the wrong one.' },
+      { h: 'How is it spread?' },
+      { show: 'plots-distribution' },
+      { h: 'Do these two things move together?' },
+      { show: 'plots-correlation' },
+      { h: 'What changed between two points?' },
+      { show: 'plots-change' },
+      { h: 'What happened over time?' },
+      { show: 'plots-time' },
+      { h: 'What shape is it?' },
+      { show: 'plots-shape' },
+      { h: 'What does it look like over a grid?' },
+      { show: 'plots-grids' },
+      { rule: 'Composition charts — stacked area, stacked bar, treemap, funnel — take the sequential ramp. They show degrees of one whole, and handing them the categorical slots is how a fourth part ends up the same colour as the first.' },
+    ],
+  },
+
+  {
+    slug: 'layout', title: 'Layout', by: 'Dana Cole', when: '1w',
+    related: ['space', 'components'],
+    body: [
+      { p: 'Twelve columns. Col takes a span and nothing else — a component that sets its own width in pixels has left the grid, and everything beside it now has to agree with a number nobody wrote down.' },
+      { show: 'grid' },
+      { h: 'The shell' },
+      { p: 'Shell, GlobalBar, Sidebar and Content are one arrangement, not four independent pieces. The bar spans the full width above the sidebar because it belongs to the product rather than to the page — a bar that stops at the sidebar reads as part of whatever is beside it.' },
+      { rule: 'The global bar is deliberately thin on content. Page-level actions creeping up into a bar that is always on screen is the commonest way one of these gets ruined.' },
     ],
   },
 

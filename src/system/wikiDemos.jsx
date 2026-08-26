@@ -5,6 +5,22 @@ import {
   Icon, Button, IconButton, Badge, Banner, Field, Input, Switch, Segmented, Avatar, StatTile,
 } from './primitives'
 import { LineChart, BarChart, RankedBar, Donut, Sparkline } from './charts'
+import {
+  Modal, ConfirmDialog, Drawer, BottomSheet, DropdownMenu, Popover, Tooltip,
+  Lightbox, ToastStack, useToasts, CommandPalette,
+} from './overlays'
+import { Accordion, Stepper, Scrollspy, SidebarNav, PrevNext } from './navigation'
+import {
+  Select, Combobox, CheckGroup, RadioGroup, ValidatedField, SearchField,
+  TagInput, SliderControl, DatePicker, FileUpload, FilterBar, SortControl,
+} from './forms'
+import {
+  Histogram, BoxPlot, Scatter, Bubble, DotPlot, Dumbbell, SlopeChart,
+  StepLine, TimeSeries, StackedArea, StackedBar, Waterfall, Funnel, Pareto,
+  Bullet, ControlChart, Treemap, CalendarHeat, Cohort, Gantt, SmallMultiples,
+} from './plots'
+import { Tabs, SectionNav } from './primitives'
+import { Grid, Col } from './shell'
 
 /* Live demos for the wiki.
  *
@@ -370,6 +386,459 @@ function FocusDemo() {
   )
 }
 
+
+/* ── Forms ─────────────────────────────────────────────────────────────── */
+
+function FormsDemo() {
+  const [sel, setSel] = useState('Brand')
+  const [combo, setCombo] = useState(null)
+  const [checks, setChecks] = useState(['Brand'])
+  const [radio, setRadio] = useState('Now')
+  const [email, setEmail] = useState('chris@')
+  const [q, setQ] = useState('')
+  const [tags, setTags] = useState(['Design', 'Blocking'])
+  const [budget, setBudget] = useState(60)
+
+  return (
+    <div className={s.wdGrid}>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Select — returns a value</span>
+        <Select options={['Brand', 'Content', 'Product']} value={sel} onChange={setSel} label="Discipline" />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Combobox — type to narrow</span>
+        <Combobox options={['Arbitrum', 'Openhouse', 'Espresso', 'Offchain Labs']} value={combo} onChange={setCombo} label="Client" />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Checkbox — role, not appearance</span>
+        <CheckGroup options={['Brand', 'Content', 'Product']} value={checks} onChange={setChecks} label="Disciplines" />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Radio — one of several</span>
+        <RadioGroup options={['Now', 'This quarter', 'Exploring']} value={radio} onChange={setRadio} label="Timing" />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Validates on blur, never on keystroke</span>
+        <ValidatedField
+          label="Email" value={email} onChange={setEmail}
+          validate={(v) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(v)}
+          hint="Click out of the field to validate."
+          error="That address looks incomplete."
+        />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Search — clears itself</span>
+        <SearchField value={q} onChange={setQ} placeholder="Search assets" count={q ? 3 : undefined} />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Tags — Enter adds, Backspace removes</span>
+        <TagInput tags={tags} onChange={setTags} />
+      </span>
+      <span className={s.wdCell}>
+        <span className={s.wdCount}>Slider — a native range, restyled</span>
+        <SliderControl label="Budget" value={budget} min={10} max={150} step={5} onChange={setBudget} format={(n) => `${n}k`} />
+      </span>
+    </div>
+  )
+}
+
+function DateDemo() {
+  const [day, setDay] = useState(14)
+  return <DatePicker value={day} onChange={setDay} />
+}
+
+function UploadDemo() {
+  const [files, setFiles] = useState([{ name: 'logo-lockup.fig', size: 184320 }])
+  return <FileUpload files={files} onChange={setFiles} />
+}
+
+function FilterDemo() {
+  const [value, setValue] = useState({ discipline: 'Brand' })
+  const [by, setBy] = useState('Recently updated')
+  const [dir, setDir] = useState('desc')
+  return (
+    <div className={s.wdStack}>
+      <FilterBar
+        count={12} value={value} onChange={setValue} onClear={() => setValue({})}
+        filters={[
+          { key: 'discipline', label: 'Discipline', options: ['Brand', 'Content', 'Product'] },
+          { key: 'status', label: 'Status', options: ['Live', 'Review', 'Draft'] },
+        ]}
+      />
+      <SortControl
+        options={['Recently updated', 'Name', 'Most used']}
+        value={by} direction={dir}
+        onChange={(v, d) => { setBy(v); setDir(d) }}
+      />
+    </div>
+  )
+}
+
+/* ── Overlays ──────────────────────────────────────────────────────────────
+   Every one is opened for real. A screenshot of a modal cannot show you that
+   Tab wraps inside it. */
+
+function OverlayDemo() {
+  const [modal, setModal] = useState(false)
+  const [confirm, setConfirm] = useState(false)
+  const [drawer, setDrawer] = useState(false)
+  const [sheet, setSheet] = useState(false)
+  const [light, setLight] = useState(false)
+  const [i, setI] = useState(0)
+  const [palette, setPalette] = useState(false)
+  const { toasts, push, dismiss } = useToasts()
+
+  return (
+    <div className={s.wdStack}>
+      <span className={s.wdCount}>Trapped: Escape, backdrop and close all dismiss, and focus returns to the trigger</span>
+      <div className={s.wdRow}>
+        <Button size="sm" onClick={() => setModal(true)}>Modal</Button>
+        <Button size="sm" onClick={() => setConfirm(true)}>Confirm</Button>
+        <Button size="sm" onClick={() => setDrawer(true)}>Drawer</Button>
+        <Button size="sm" onClick={() => setSheet(true)}>Sheet</Button>
+        <Button size="sm" onClick={() => setLight(true)}>Lightbox</Button>
+        <Button size="sm" onClick={() => setPalette(true)}>Palette</Button>
+      </div>
+
+      <span className={s.wdCount}>Not trapped: attached to a trigger, so the page behind stays usable</span>
+      <div className={s.wdRow}>
+        <DropdownMenu
+          items={[
+            { label: 'Duplicate', icon: 'copy' },
+            { label: 'Export', icon: 'download' },
+            { divider: true },
+            { label: 'Delete', icon: 'close', tone: 'bad' },
+          ]}
+        />
+        <Popover trigger="Why three colours?">
+          Pink and purple are adjacent hues. A fourth categorical value either leaves
+          the lightness band or fails colour-vision separation against one of the other three.
+        </Popover>
+        <Tooltip label="Copy path"><Button size="sm" icon="copy">Hover me</Button></Tooltip>
+        <Button size="sm" icon="check" onClick={() => push({ tone: 'good', message: 'Published to the workspace.' })}>
+          Toast
+        </Button>
+      </div>
+
+      <Modal
+        open={modal} onClose={() => setModal(false)} title="Send this brief?"
+        actions={<><Button size="sm" onClick={() => setModal(false)}>Cancel</Button><Button size="sm" variant="solid" onClick={() => setModal(false)}>Send</Button></>}
+      >
+        Tab around — focus cycles inside and cannot escape. Escape closes, and focus
+        returns to the button that opened it.
+      </Modal>
+      <ConfirmDialog
+        open={confirm} onClose={() => setConfirm(false)} onConfirm={() => {}}
+        tone="bad" title="Delete logo-lockup.fig?" confirm="Delete"
+        body="It is used in 12 places. This cannot be undone."
+      />
+      <Drawer open={drawer} onClose={() => setDrawer(false)} title="Asset details">
+        A drawer is for adjacent work — what you opened it from stays on screen behind it.
+      </Drawer>
+      <BottomSheet open={sheet} onClose={() => setSheet(false)} title="Share">
+        The same contract at the bottom edge, for a small screen where a centred modal
+        has nowhere to go.
+      </BottomSheet>
+      <Lightbox
+        open={light} onClose={() => setLight(false)} index={i} onIndex={setI}
+        items={[
+          { label: 'Identity — primary', ratio: '16 / 9' },
+          { label: 'Identity — stacked', ratio: '1 / 1' },
+          { label: 'Social kit', ratio: '4 / 5' },
+        ]}
+      />
+      <CommandPalette
+        open={palette} onClose={() => setPalette(false)}
+        commands={[
+          { label: 'New asset', icon: 'plus', hint: 'N' },
+          { label: 'Open reviews', icon: 'request', hint: 'R' },
+          { label: 'Publish changes', icon: 'merged' },
+          { label: 'Workspace settings', icon: 'sliders' },
+        ]}
+      />
+      <ToastStack toasts={toasts} onDismiss={dismiss} />
+    </div>
+  )
+}
+
+/* ── Navigation ────────────────────────────────────────────────────────── */
+
+function NavDemo() {
+  const [step, setStep] = useState(1)
+  const [side, setSide] = useState('Workspace')
+  const [tab, setTab] = useState('Approach')
+  const [sec, setSec] = useState('Files')
+
+  return (
+    <div className={s.wdStack}>
+      <span className={s.wdCount}>Stepper — done is filled, current is ringed, ahead is outlined</span>
+      <Stepper steps={['Scope', 'Timing', 'Contact']} current={step} onStep={setStep} />
+
+      <span className={s.wdCount}>Tabs — views of one thing</span>
+      <Tabs value={tab} onChange={setTab} options={['Approach', 'Craft', 'Outcome']} />
+
+      <span className={s.wdCount}>SectionNav — areas of a product, which is a different job</span>
+      <SectionNav
+        value={sec} onChange={setSec}
+        sections={[
+          { key: 'Files', label: 'Files', icon: 'folder' },
+          { key: 'Reviews', label: 'Reviews', icon: 'request', count: 3 },
+          { key: 'Usage', label: 'Usage', icon: 'chart' },
+        ]}
+      />
+
+      <div className={s.wdGrid}>
+        <span className={s.wdCell}>
+          <span className={s.wdCount}>Accordion — many-open by default</span>
+          <Accordion
+            defaultOpen={['Who owns the work?']}
+            items={[
+              { title: 'Who owns the work?', meta: '1 min', body: 'You do, on delivery. Source files and all.' },
+              { title: 'What if it changes later?', meta: '2 min', body: 'The system is built to be changed. That is what the tokens are for.' },
+            ]}
+          />
+        </span>
+        <span className={s.wdCell}>
+          <span className={s.wdCount}>SidebarNav — every destination a sibling</span>
+          <SidebarNav
+            title="Settings" value={side} onChange={setSide}
+            items={[
+              { label: 'Workspace', icon: 'sliders' },
+              { label: 'Members', icon: 'user', count: 4 },
+              { label: 'Publishing', icon: 'upload' },
+            ]}
+          />
+        </span>
+      </div>
+
+      <span className={s.wdCount}>PrevNext — each direction names where it goes</span>
+      <PrevNext prev={{ label: 'Motion & focus' }} next={{ label: 'Accessibility' }} />
+    </div>
+  )
+}
+
+/* ── Plots ─────────────────────────────────────────────────────────────────
+   The analytical half. Grouped by the question each answers, because picking
+   a chart by how it looks is how you end up with the wrong one. */
+
+const MO = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+
+function PlotsDistribution() {
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Histogram — bars touch, the axis is continuous</span>
+        <Histogram unit="n" bins={[
+          { label: '0', value: 2 }, { label: '5', value: 6 }, { label: '10', value: 14 },
+          { label: '15', value: 23 }, { label: '20', value: 31 }, { label: '25', value: 27 },
+          { label: '30', value: 18 }, { label: '35', value: 9 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Box plot — five numbers an average throws away</span>
+        <BoxPlot groups={[
+          { label: 'Brand', min: 18, q1: 34, median: 47, q3: 61, max: 88 },
+          { label: 'Content', min: 8, q1: 16, median: 24, q3: 33, max: 52 },
+          { label: 'Product', min: 26, q1: 44, median: 62, q3: 78, max: 96 },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+function PlotsCorrelation() {
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Scatter</span>
+        <Scatter xLabel="Spend" yLabel="Reach" points={[
+          { label: 'Meta', x: 38, y: 62 }, { label: 'LinkedIn', x: 27, y: 44 },
+          { label: 'Search', x: 12, y: 21 }, { label: 'Events', x: 61, y: 74 },
+          { label: 'Podcast', x: 44, y: 39 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Bubble — area, not radius</span>
+        <Bubble xLabel="Spend" yLabel="Reach" rMax={200} points={[
+          { label: 'Meta', x: 38, y: 62, r: 140 }, { label: 'LinkedIn', x: 27, y: 44, r: 88 },
+          { label: 'Search', x: 12, y: 21, r: 34 }, { label: 'Events', x: 61, y: 74, r: 190 },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+function PlotsChange() {
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Dot plot — ink where the value is</span>
+        <DotPlot rows={[
+          { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+          { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Dumbbell — the gap is the finding</span>
+        <Dumbbell rows={[
+          { label: 'Brand', from: 42, to: 84 }, { label: 'Content', from: 31, to: 61 },
+          { label: 'Product', from: 26, to: 70 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Slope — the crossing is the point</span>
+        <SlopeChart left="Q1" right="Q4" rows={[
+          { label: 'Brand', from: 42, to: 84 },
+          { label: 'Content', from: 61, to: 44 },
+          { label: 'Product', from: 26, to: 70 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Waterfall — sign on the label as well as the colour</span>
+        <Waterfall max={90} unit="n" steps={[
+          { label: 'Open', value: 42, kind: 'base' }, { label: 'New', value: 31 },
+          { label: 'Expand', value: 14 }, { label: 'Churn', value: -11 },
+          { label: 'Contract', value: -6 }, { label: 'Close', value: 70, kind: 'base' },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+function PlotsTime() {
+  const data = [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96]
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Time series with a band — same hue, low opacity</span>
+        <TimeSeries max={120} unit="$k" data={data} band={data.map((v) => [Math.max(0, v - 12), v + 12])} labels={MO} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Step line — a value that holds did not drift</span>
+        <StepLine max={100} unit="$k" data={[20, 20, 35, 35, 35, 50, 50, 65, 65, 65, 80, 80]} labels={MO} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Stacked area — composition, so sequential</span>
+        <StackedArea max={120} unit="n" labels={MO} series={[
+          { label: 'Brand', data: [12, 14, 16, 19, 21, 24, 26, 29, 31, 34, 36, 39] },
+          { label: 'Content', data: [8, 9, 11, 12, 14, 15, 17, 18, 20, 21, 23, 24] },
+          { label: 'Product', data: [4, 5, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18] },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Control chart — the outlier is the finding</span>
+        <ControlChart max={100} mean={52} sigma={9} labels={MO} data={[48, 55, 51, 58, 47, 53, 49, 82, 54, 50, 56, 52]} />
+      </div>
+    </div>
+  )
+}
+
+function PlotsShape() {
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Funnel — each stage a share of the one above</span>
+        <Funnel steps={[
+          { label: 'Visits', value: 4820 }, { label: 'Enquiries', value: 412 },
+          { label: 'Calls', value: 168 }, { label: 'Proposals', value: 74 }, { label: 'Won', value: 31 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Pareto — the 80% rule needs the curve</span>
+        <Pareto data={[
+          { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+          { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+          { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Bullet — bar is actual, tick is target</span>
+        <Bullet rows={[
+          { label: 'Revenue', value: 96, target: 90, max: 100 },
+          { label: 'Pipeline', value: 81, target: 95, max: 120 },
+          { label: 'Retention', value: 88, target: 85, max: 100 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Stacked bar — 2px gaps between parts</span>
+        <StackedBar parts={['Brand', 'Content', 'Product']} rows={[
+          { label: 'Q1', values: [24, 14, 8] }, { label: 'Q2', values: [31, 18, 11] },
+          { label: 'Q3', values: [38, 21, 16] }, { label: 'Q4', values: [42, 26, 19] },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Treemap — for "which is big", not precise comparison</span>
+        <Treemap data={[
+          { label: 'Brand', value: 61 }, { label: 'Content', value: 44 },
+          { label: 'Product', value: 38 }, { label: 'Motion', value: 22 },
+          { label: 'Advisory', value: 14 }, { label: 'Other', value: 8 },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Small multiples — one scale, shared</span>
+        <SmallMultiples panels={[
+          { label: 'Brand', data: [12, 24, 31, 44, 52, 61] },
+          { label: 'Content', data: [8, 14, 19, 26, 34, 44] },
+          { label: 'Product', data: [26, 30, 33, 35, 37, 38] },
+          { label: 'Motion', data: [6, 9, 12, 16, 19, 22] },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+function PlotsGrids() {
+  const weeks = Array.from({ length: 20 }, (_, w) =>
+    Array.from({ length: 7 }, (_, d) => ((w * 7 + d * 3) % 11 === 0 ? 0 : (w + d * 2) % 10)))
+  return (
+    <div className={s.wdCharts}>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Calendar heat — one hue, five steps</span>
+        <CalendarHeat weeks={weeks} max={10} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Cohort — down for better, across for longer</span>
+        <Cohort rows={[
+          { label: 'Jan', cells: [100, 82, 71, 64, 58] },
+          { label: 'Feb', cells: [100, 85, 74, 66, null] },
+          { label: 'Mar', cells: [100, 88, 79, null, null] },
+          { label: 'Apr', cells: [100, 91, null, null, null] },
+        ]} />
+      </div>
+      <div className={s.wdChart}>
+        <span className={s.wdCount}>Gantt — done filled, in flight outlined</span>
+        <Gantt span={12} labels={['W1', 'W3', 'W5', 'W7', 'W9', 'W11']} tasks={[
+          { label: 'Messaging', start: 0, span: 3, done: true },
+          { label: 'Identity', start: 2, span: 4, done: true },
+          { label: 'Channels', start: 5, span: 3 },
+          { label: 'Site', start: 7, span: 4 },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+
+function GridDemo() {
+  return (
+    <div className={s.wdStack}>
+      <span className={s.wdCount}>12 columns. Col takes a span; anything else is a raw width.</span>
+      <Grid>
+        {[3, 3, 3, 3].map((n, i) => <Col key={i} span={n}><span className={s.wdColBox}>span {n}</span></Col>)}
+      </Grid>
+      <Grid>
+        <Col span={8}><span className={s.wdColBox}>span 8</span></Col>
+        <Col span={4}><span className={s.wdColBox}>span 4</span></Col>
+      </Grid>
+      <Grid>
+        <Col span={6}><span className={s.wdColBox}>span 6</span></Col>
+        <Col span={6}><span className={s.wdColBox}>span 6</span></Col>
+      </Grid>
+    </div>
+  )
+}
+
 export const WIKI_DEMOS = {
   'surfaces': () => (
     <Swatches tall tokens={[
@@ -426,6 +895,19 @@ export const WIKI_DEMOS = {
   'stats': Stats,
   'motion': Motion,
   'focus': FocusDemo,
+  'forms': FormsDemo,
+  'date': DateDemo,
+  'upload': UploadDemo,
+  'filters': FilterDemo,
+  'overlays': OverlayDemo,
+  'nav': NavDemo,
+  'plots-distribution': PlotsDistribution,
+  'plots-correlation': PlotsCorrelation,
+  'plots-change': PlotsChange,
+  'plots-time': PlotsTime,
+  'plots-shape': PlotsShape,
+  'plots-grids': PlotsGrids,
+  'grid': GridDemo,
 }
 
 export function WikiDemo({ id }) {
