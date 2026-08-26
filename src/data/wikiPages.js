@@ -13,12 +13,12 @@ const WIKI = [
     slug: 'home', title: 'Home', by: 'Chris Church', when: '2h',
     related: ['tokens', 'contributing'],
     body: [
-      { p: 'This is the Super Conscious design system: 84 tokens, 116 components across 16 modules, 57 icons, and one stylesheet. Everything a product built on it draws comes from here.' },
+      { p: 'This is the Super Conscious design system: 84 tokens, 132 components across 20 modules, 57 icons, and one stylesheet. Everything a product built on it draws comes from here.' },
       { h: 'The shape of it' },
       { list: [
         'tokens.css — the :root layer. Surfaces, text, accent, status, chart, type, space, radius, elevation, layers, motion, focus.',
         'system.module.css — every component style, each value reading a token.',
-        'primitives, shell, overlays, navigation, forms, charts, plots, browser, requests, previews, activity, wiki — the components.',
+        'primitives, shell, overlays, navigation, forms, charts, plots, dataGrid, media, chat, content, browser, requests, previews, activity, wiki — the components.',
         'icons.js — 57 paths on a 16px grid, geometry only.',
       ] },
       { h: 'Consuming it' },
@@ -68,6 +68,7 @@ import { Shell, Panel, Button } from '../system'
       { p: 'White at descending alpha — nine steps, from peak at 0.95 down to faint at 0.22. There is no second text colour anywhere in the system. The entire hierarchy is opacity, which is what lets light mode be a filter rather than a second palette.' },
       { show: 'text-ramp', caption: 'Nine chips would tell you nothing. Nine lines of the same sentence show where it stops being readable' },
       { rule: 'Text wears text tokens, never a series or accent colour. A coloured mark beside a label carries the identity; the label itself stays ink.' },
+      { show: 'legend', caption: 'Legend — present for two or more series, always' },
       { h: 'Accent' },
       { p: 'Two hues, and only two: pink #df4ed6 and purple #7d5ae0. Teal and blue were declared for two years and used nowhere, so they were removed rather than found work for.' },
       { show: 'accents' },
@@ -203,7 +204,7 @@ drawer 300 · overlay 400 · toast 500 · cursor 600` },
     slug: 'components', title: 'Components', by: 'Dana Cole', when: '2d',
     related: ['home', 'contributing'],
     body: [
-      { p: '116 components across 16 modules. Every one reads tokens; almost none writes a raw value.' },
+      { p: '132 components across 20 modules. Every one reads tokens; almost none writes a raw value.' },
       { show: 'stats', caption: 'StatTile and Sparkline' },
       { show: 'people', caption: 'Avatar — initials derived from the name, one colour, no cartoon' },
       { code: `primitives      26   Button, Panel, Field, Avatar, StatTile…
@@ -217,6 +218,10 @@ browser          6   Tree, FileBrowser, FileView, CodeLines…
 requests         4   RequestList, RequestDetail, DiffStat…
 previews         3   PdfPreview, CanvasPreview, WavePreview
 projects         2   ProjectList, ProjectView
+content          7   StatusPill, CardSurface, KpiRow, PersonCard…
+media            5   Carousel, Gallery, BeforeAfter, VideoControls…
+chat             3   Chat, StreamingText, ResponseFeedback
+dataGrid         1   DataGrid
 + folderPreview, campaignCanvas, activity, wiki` },
       { h: 'What belongs in the package' },
       { p: 'A component belongs here when a second product would want it unchanged. Anything that only makes sense for one page stays on that page — the package is not a place to put things you are unsure about.' },
@@ -324,6 +329,78 @@ tooltip                          Hover and focus. Never blocks.` },
       { h: 'The shell' },
       { p: 'Shell, GlobalBar, Sidebar and Content are one arrangement, not four independent pieces. The bar spans the full width above the sidebar because it belongs to the product rather than to the page — a bar that stops at the sidebar reads as part of whatever is beside it.' },
       { rule: 'The global bar is deliberately thin on content. Page-level actions creeping up into a bar that is always on screen is the commonest way one of these gets ruined.' },
+    ],
+  },
+
+{
+    slug: 'cards', title: 'Cards & content', by: 'Dana Cole', when: '4d',
+    related: ['layout', 'components'],
+    body: [
+      { p: 'One card surface, two behaviours. A plain card holds something; a link card goes somewhere, and lifts on hover to say so. There is no third.' },
+      { show: 'cards' },
+      { rule: 'A card that lifts but does not navigate is a lie the reader only finds out by clicking. Lift is reserved for the link variant.' },
+      { h: 'Status' },
+      { p: 'Four states, and the pill is the same shape for all of them — the word does the work, and colour only reinforces it.' },
+      { show: 'status-pills' },
+      { h: 'Headline numbers' },
+      { p: 'A number with no trend behind it is a number you cannot act on, so the sparkline is part of the tile rather than a separate chart beside it.' },
+      { show: 'kpi' },
+      { h: 'People' },
+      { p: 'Name and role, nothing else. A person card that carries a bio is a bio with a photo on it.' },
+      { show: 'people-cards' },
+      { h: 'Consent' },
+      { p: 'Two equal choices. A banner where accepting is a button and declining is a link has already made the choice for you, and that is the pattern regulators are now writing rules about.' },
+      { show: 'consent' },
+    ],
+  },
+
+  {
+    slug: 'media', title: 'Media', by: 'Ravi Menon', when: '5d',
+    related: ['cards', 'overlays'],
+    body: [
+      { p: 'Each of these exists because the naive version is worse in a specific, nameable way.' },
+      { h: 'Carousel' },
+      { p: 'With the position stated. A carousel that does not say where you are makes people click through twice to find out they have seen it all.' },
+      { show: 'carousel' },
+      { h: 'Gallery' },
+      { p: 'Thumbnails, so choosing is one click rather than a walk. The main image keeps its aspect so the layout does not jump between shapes.' },
+      { show: 'gallery' },
+      { show: 'media-misc' },
+      { h: 'Progress' },
+      { p: 'A determinate bar states the percentage. If you do not know the percentage, that is a spinner — using a bar and guessing is worse than admitting it.' },
+      { show: 'progress' },
+      { rule: 'Nothing here autoplays, and nothing loops. Motion that starts on its own takes the reader\u2019s attention without asking.' },
+    ],
+  },
+
+  {
+    slug: 'chat', title: 'Conversation', by: 'Ravi Menon', when: '1w',
+    related: ['media', 'accessibility'],
+    body: [
+      { p: 'The parts that matter are the ones a chat interface usually skips: a visible thinking state, a visible tool step, a stream you can watch arrive, and an error you can retry.' },
+      { p: 'A chat that shows nothing between the question and the answer looks broken every time the answer takes more than a second — and the answer usually takes more than a second.' },
+      { show: 'chat' },
+      { rule: 'Every timer is tracked and cleared on unmount. Leaving mid-stream must not leave one firing into a component that no longer exists.' },
+      { h: 'The pieces' },
+      { p: 'Streaming text reserves the full height of the finished paragraph before it starts, so the layout does not reflow line by line as tokens land. Feedback is two buttons and one line — anything longer is a survey.' },
+      { show: 'stream' },
+    ],
+  },
+
+  {
+    slug: 'grid', title: 'Data grid', by: 'Chris Church', when: '2d',
+    related: ['plots', 'forms'],
+    body: [
+      { p: 'The most behaviour-dense component in the system, and the one where every shortcut shows. Sort on several columns, select a range, edit in place, undo, filter, aggregate, hide a column, copy the selection out.' },
+      { show: 'datagrid' },
+      { h: 'Multi-column sort is a list, not a key' },
+      { p: 'Shift-click appends, so "by discipline, then by fee" is expressible. The priority number is shown, because a sort nobody can see the order of is a sort nobody trusts.' },
+      { h: 'Two of these were bugs first' },
+      { list: [
+        'Editing focuses and selects from an effect, not the autoFocus attribute. autoFocus fires before React attaches onFocus, so select-on-entry never ran and typing appended to the old value instead of replacing it.',
+        'Every mutation goes through one function, so undo is a fact of the data layer rather than something each handler has to remember to do.',
+      ] },
+      { rule: 'Every spreadsheet selects on entry. Nobody notices until it is missing, and then they notice every single time.' },
     ],
   },
 

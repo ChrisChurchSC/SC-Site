@@ -77,3 +77,14 @@ export {
 export { Wiki } from './wiki'
 
 export { ProjectList, ProjectView } from './projects'
+
+export { DataGrid } from './dataGrid'
+
+export { Carousel, Gallery, BeforeAfter, VideoControls, ProgressBar } from './media'
+
+export { Chat, StreamingText, ResponseFeedback } from './chat'
+
+export {
+  StatusPill, CardSurface, KpiRow, PersonCard, ConsentBanner,
+  TextureDefs, TextureSwatches,
+} from './content'

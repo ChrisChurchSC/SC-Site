@@ -28,6 +28,15 @@ import {
   Bullet as SysBullet, ControlChart as SysControl, Treemap as SysTreemap,
   CalendarHeat as SysCalHeat, Cohort as SysCohort, Gantt as SysGantt,
   SmallMultiples as SysSmallMultiples,
+  StatusPill as Status, CardSurface,
+  KpiRow as SysKpiRow, PersonCard as SysPersonCard,
+  ConsentBanner as SysConsent, TextureDefs as SysTextureDefs,
+  TextureSwatches as SysTextureSwatches,
+  Carousel as SysCarousel, Gallery as SysGallery, BeforeAfter as SysBeforeAfter,
+  VideoControls as SysVideoControls, ProgressBar as SysProgress,
+  Chat as SysChat, StreamingText as SysStreamingText,
+  ResponseFeedback as SysResponseFeedback,
+  DataGrid as SysDataGrid,
   FileUpload as SysUpload, FilterBar as SysFilterBar, SortControl as SysSort,
   Segmented as SysSegmented, Switch as SysSwitch, Tabs as SysTabs,
   BarChart as SysBarChart,
@@ -153,14 +162,6 @@ const STATUS_TONE = {
   GAP: 'statusGap',
 }
 
-function Status({ value }) {
-  const tone = STATUS_TONE[value] ?? ''
-  return (
-    <span className={`${styles.status} ${tone ? styles[tone] : ''}`}>
-      {value}
-    </span>
-  )
-}
 
 function Demo({ label, status = 'SHIPPED', note, wide, stage = true, children }) {
   return (
@@ -184,58 +185,7 @@ function Demo({ label, status = 'SHIPPED', note, wide, stage = true, children })
 const SLIDES = ['One', 'Two', 'Three', 'Four']
 
 function Carousel() {
-  const [i, setI] = useState(0)
-  const last = SLIDES.length - 1
-
-  return (
-    <div className={styles.carousel}>
-      <div className={styles.carouselWindow}>
-        <div
-          className={styles.carouselTrack}
-          style={{ transform: `translateX(-${i * 100}%)` }}
-        >
-          {SLIDES.map((s) => (
-            <div key={s} className={styles.slide}>
-              <span className={styles.slideNum}>{s}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className={styles.carouselControls}>
-        <div className={styles.dots}>
-          {SLIDES.map((s, n) => (
-            <button
-              key={s}
-              type="button"
-              className={`${styles.dot} ${n === i ? styles.dotOn : ''}`}
-              onClick={() => setI(n)}
-              aria-label={`Go to slide ${n + 1}`}
-            />
-          ))}
-        </div>
-        <div className={styles.arrows}>
-          <button
-            type="button"
-            className={styles.arrow}
-            onClick={() => setI((n) => Math.max(0, n - 1))}
-            disabled={i === 0}
-            aria-label="Previous"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            className={styles.arrow}
-            onClick={() => setI((n) => Math.min(last, n + 1))}
-            disabled={i === last}
-            aria-label="Next"
-          >
-            →
-          </button>
-        </div>
-      </div>
-    </div>
-  )
+  return <SysCarousel slides={SLIDES} />
 }
 
 
@@ -290,267 +240,12 @@ const DEFAULT_REPLY = {
 }
 
 function Chat() {
-  const [turns, setTurns] = useState([])
-  const [draft, setDraft] = useState('')
-  const [phase, setPhase] = useState('idle') // idle | thinking | tool | streaming | error
-  const [stream, setStream] = useState('')
-  const [attach, setAttach] = useState(null)
-  const [model, setModel] = useState('Studio')
-  const [failNext, setFailNext] = useState(false)
-  const timers = useRef([])
-  const logRef = useRef(null)
-
-  // Every timeout is tracked, so unmounting mid-stream cannot leave one
-  // firing into a component that no longer exists.
-  const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = [] }
-  useEffect(() => clearTimers, [])
-
-  const scrollDown = () => {
-    const el = logRef.current
-    if (el) el.scrollTop = el.scrollHeight
-  }
-  useEffect(scrollDown, [turns, stream, phase])
-
-  const answer = (question) => {
-    const reply = CHAT_REPLIES[question] ?? DEFAULT_REPLY
-    setPhase('thinking')
-    timers.current.push(setTimeout(() => {
-      if (reply.tool) setPhase('tool')
-      timers.current.push(setTimeout(() => {
-        if (failNext) { setPhase('error'); setFailNext(false); return }
-        setPhase('streaming')
-        setStream('')
-        let i = 0
-        const tick = () => {
-          i += 3
-          setStream(reply.text.slice(0, i))
-          if (i < reply.text.length) timers.current.push(setTimeout(tick, 22))
-          else {
-            setTurns((t) => [...t, { role: 'bot', ...reply }])
-            setStream('')
-            setPhase('idle')
-          }
-        }
-        tick()
-      }, reply.tool ? 700 : 0))
-    }, 500))
-  }
-
-  const send = (text) => {
-    const q = (text ?? draft).trim()
-    if (!q || phase !== 'idle') return
-    setTurns((t) => [...t, { role: 'user', text: q, attach }])
-    setDraft('')
-    setAttach(null)
-    answer(q)
-  }
-
-  const stop = () => {
-    clearTimers()
-    if (stream) setTurns((t) => [...t, { role: 'bot', text: stream, cite: [], stopped: true }])
-    setStream('')
-    setPhase('idle')
-  }
-
-  const retry = () => {
-    const lastUser = [...turns].reverse().find((t) => t.role === 'user')
-    if (lastUser) { setPhase('idle'); answer(lastUser.text) }
-  }
-
-  const regenerate = (i) => {
-    const q = [...turns.slice(0, i)].reverse().find((t) => t.role === 'user')
-    if (!q) return
-    setTurns((t) => t.filter((_, n) => n !== i))
-    answer(q.text)
-  }
-
-  const busy = phase !== 'idle' && phase !== 'error'
-
   return (
-    <div className={styles.chat}>
-      {/* Header: model, context, reset. A chat with no visible model is a
-          chat nobody can reason about when the answer is wrong. */}
-      <div className={styles.chatHead}>
-        <div className={styles.chatModel}>
-          {['Studio', 'Fast'].map((m) => (
-            <button
-              key={m}
-              type="button"
-              aria-pressed={model === m}
-              className={`${styles.segItem} ${model === m ? styles.segItemOn : ''}`}
-              onClick={() => setModel(m)}
-            >
-              {m}
-            </button>
-          ))}
-        </div>
-        <div className={styles.chatHeadRight}>
-          <span className={styles.chatCtx}>{turns.length} / 20 turns</span>
-          <button
-            type="button"
-            className={styles.tableToggle}
-            onClick={() => { clearTimers(); setTurns([]); setStream(''); setPhase('idle') }}
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.chatLog} ref={logRef}>
-        {turns.length === 0 && phase === 'idle' && (
-          /* Empty state. A blank composer is a blank page — the suggestions
-             are what make the first question possible. */
-          <div className={styles.chatEmpty}>
-            <span className={styles.cardEyebrow}>Ask the system</span>
-            <span className={styles.chatEmptyLine}>
-              It knows the tokens, not your project.
-            </span>
-            <div className={styles.promptRow}>
-              {CHAT_SUGGESTIONS.map((p) => (
-                <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {turns.map((t, i) => (
-          <div key={i} className={t.role === 'user' ? styles.turnUser : styles.turnBot}>
-            {t.role === 'user' ? (
-              <span className={styles.userBubble}>
-                {t.attach && (
-                  <span className={styles.attachChip}>
-                    <Icon name="file" size={11} />{t.attach}
-                  </span>
-                )}
-                {t.text}
-              </span>
-            ) : (
-              <div className={styles.botTurn}>
-                <p className={styles.botText}>
-                  {t.text}
-                  {t.stopped && <span className={styles.stoppedTag}>stopped</span>}
-                </p>
-                {t.code && <pre className={styles.chatCode}>{t.code}</pre>}
-                {t.cite?.length > 0 && (
-                  <span className={styles.citeRow}>
-                    {t.cite.map(([label, href]) => (
-                      <a key={label} href={href} className={styles.citation}>{label}</a>
-                    ))}
-                  </span>
-                )}
-                {/* Visible on hover, but always in the tab order — a keyboard
-                    user cannot hover. */}
-                <div className={styles.msgActions}>
-                  <button type="button" className={styles.msgAction} onClick={() => writeToClipboard(t.text)}>
-                    <Icon name="copy" size={12} />Copy
-                  </button>
-                  <button type="button" className={styles.msgAction} onClick={() => regenerate(i)}>
-                    <Icon name="refresh" size={12} />Regenerate
-                  </button>
-                  <ResponseFeedback />
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-
-        {phase === 'thinking' && (
-          <div className={styles.turnBot}>
-            <span className={styles.thinking} aria-label="Thinking"><i /><i /><i /></span>
-          </div>
-        )}
-
-        {phase === 'tool' && (
-          /* A tool call is shown, not hidden. An answer that quietly searched
-             something is an answer nobody can check. */
-          <div className={styles.turnBot}>
-            <span className={styles.toolCall}>
-              <Icon name="search" size={12} />
-              {CHAT_REPLIES[[...turns].reverse().find((t) => t.role === 'user')?.text]?.tool ?? 'Working'}
-              <span className={styles.thinking}><i /><i /><i /></span>
-            </span>
-          </div>
-        )}
-
-        {phase === 'streaming' && (
-          <div className={styles.turnBot}>
-            <p className={styles.botText}>{stream}<span className={styles.caret} /></p>
-          </div>
-        )}
-
-        {phase === 'error' && (
-          <div className={styles.turnBot}>
-            <div className={styles.chatError} role="alert">
-              <Icon name="warning" size={13} />
-              <span>That request didn't complete.</span>
-              <button type="button" className={styles.msgAction} onClick={retry}>
-                <Icon name="refresh" size={12} />Retry
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Follow-ups after an answer — the next question is usually easier to
-          recognise than to compose. */}
-      {phase === 'idle' && turns.length > 0 && (
-        <div className={styles.promptRow}>
-          {CHAT_SUGGESTIONS.filter((s) => !turns.some((t) => t.text === s)).slice(0, 2).map((p) => (
-            <button key={p} type="button" className={styles.prompt} onClick={() => send(p)}>
-              {p}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <form className={styles.composer} onSubmit={(e) => { e.preventDefault(); send() }}>
-        <div className={styles.composerField}>
-          {attach && (
-            <span className={styles.attachChip}>
-              <Icon name="file" size={11} />{attach}
-              <button type="button" onClick={() => setAttach(null)} aria-label="Remove attachment">
-                <Icon name="close" size={10} />
-              </button>
-            </span>
-          )}
-          <input
-            className={styles.composerInput}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder={busy ? 'Working…' : 'Ask about a token…'}
-            aria-label="Message"
-          />
-        </div>
-        <button
-          type="button"
-          className={styles.iconOnly}
-          onClick={() => setAttach('brief.pdf')}
-          aria-label="Attach a file"
-        >
-          <Icon name="upload" size={14} />
-        </button>
-        {busy ? (
-          <button type="button" className={styles.composerSend} onClick={stop}>Stop</button>
-        ) : (
-          <button type="submit" className={styles.composerSend} disabled={!draft.trim()}>Send</button>
-        )}
-      </form>
-
-      <div className={styles.chatFoot}>
-        <span className={styles.chatHint}>
-          Canned replies · {model} · {draft.length}/500
-        </span>
-        <button
-          type="button"
-          className={`${styles.chatFail} ${failNext ? styles.chatFailOn : ''}`}
-          onClick={() => setFailNext((f) => !f)}
-        >
-          {failNext ? 'Next reply will fail' : 'Simulate failure'}
-        </button>
-      </div>
-    </div>
+    <SysChat
+      replies={CHAT_REPLIES}
+      fallback={DEFAULT_REPLY}
+      suggestions={CHAT_SUGGESTIONS}
+    />
   )
 }
 
@@ -670,27 +365,7 @@ function BottomSheet() {
    Reject is a real button of equal weight, not a link buried in the text: a
    banner where refusing is harder than accepting is not consent. */
 function ConsentBanner() {
-  const [choice, setChoice] = useState(null)
-  return (
-    <div className={styles.consentStage}>
-      {choice ? (
-        <span className={styles.consentEcho}>
-          Analytics {choice === 'accept' ? 'enabled' : 'stay off'} — stored, not asked again.
-        </span>
-      ) : (
-        <div className={styles.consent} role="region" aria-label="Cookie consent">
-          <p className={styles.consentText}>
-            We use analytics to see which work gets read. Nothing is loaded until
-            you choose.
-          </p>
-          <div className={styles.consentActions}>
-            <button type="button" className={styles.btnOutline} onClick={() => setChoice('reject')}>Reject</button>
-            <button type="button" className={styles.btnSolid} onClick={() => setChoice('accept')}>Accept</button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return <SysConsent />
 }
 
 /* Segmented control: switches the view of one thing, where tabs switch between
@@ -796,15 +471,6 @@ function CardAnatomy() {
   )
 }
 
-/* One base. Every variant below is this plus content — which is exactly what
-   the 58 blocks each re-declare from scratch. */
-function CardSurface({ children, link, className = '' }) {
-  return (
-    <div className={`${styles.cardBase} ${link ? styles.cardLink : ''} ${className}`}>
-      {children}
-    </div>
-  )
-}
 
 function CardVariants() {
   return (
@@ -1006,524 +672,20 @@ const ROWS = [
   { client: 'Big Buoy', lead: 'Chris Church', disc: 'Motion', year: 2026, fee: 15000, share: 0.04, status: 'Draft', trend: [4, 6, 9, 12, 15, 19] },
 ]
 
-const AGGS = ['sum', 'avg', 'max', 'count']
 
-function gridFmt(v, type) {
-  if (v === undefined || v === null) return ''
-  if (type === 'money') return `$${v.toLocaleString()}`
-  if (type === 'pct') return `${(v * 100).toFixed(1)}%`
-  return String(v)
-}
-
-const colLetter = (i) => String.fromCharCode(65 + i)
 
 function DataGrid() {
-  /* Multi-column sort as an ordered list rather than a single key: shift-click
-     appends, so "by discipline, then by fee" is expressible. The priority
-     number is shown, because a sort nobody can see the order of is a sort
-     nobody trusts. */
-  const [sorts, setSorts] = useState([{ key: 'fee', dir: 'desc' }])
-  const [sel, setSel] = useState({ r: 0, c: 0 })
-  const [anchor, setAnchor] = useState({ r: 0, c: 0 })
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState('')
-  const [data, setData] = useState(ROWS)
-  const [history, setHistory] = useState([])
-  const [future, setFuture] = useState([])
-  const [picked, setPicked] = useState([])
-  const [dense, setDense] = useState(false)
-  const [filters, setFilters] = useState({})
-  const [find, setFind] = useState('')
-  const [aggs, setAggs] = useState({ fee: 'sum', share: 'sum', year: 'max' })
-  const [hidden, setHidden] = useState([])
-  const [copied, setCopied] = useState(false)
-  const gridRef = useRef(null)
-  const editRef = useRef(null)
-
-  /* Focus and select when an edit opens, from an effect rather than
-     autoFocus: the autofocus attribute fires before React attaches onFocus,
-     so the handler never runs and typing appends to the old value instead of
-     replacing it. Every spreadsheet selects on entry; nobody notices until
-     it's missing. */
-  useEffect(() => {
-    if (!editing) return
-    const el = editRef.current
-    if (!el) return
-    el.focus()
-    el.select()
-  }, [editing])
-
-  const cols = COLS.filter((c) => !hidden.includes(c.key))
-
-  /* Every mutation goes through here, so undo is a fact of the data layer
-     rather than something each handler has to remember. */
-  const mutate = (next) => {
-    setHistory((h) => [...h.slice(-24), data])
-    setFuture([])
-    setData(next)
-  }
-
-  const undo = () => {
-    if (!history.length) return
-    setFuture((f) => [data, ...f])
-    setData(history[history.length - 1])
-    setHistory((h) => h.slice(0, -1))
-  }
-
-  const redo = () => {
-    if (!future.length) return
-    setHistory((h) => [...h, data])
-    setData(future[0])
-    setFuture((f) => f.slice(1))
-  }
-
-  // Filter first, then sort — the order the reader assumes, and the order the
-  // aggregations below depend on.
-  const filtered = data.filter((row) =>
-    Object.entries(filters).every(([k, q]) =>
-      !q || String(row[k]).toLowerCase().includes(q.toLowerCase())))
-
-  const rows = [...filtered].sort((a, b) => {
-    for (const s of sorts) {
-      const x = a[s.key], y = b[s.key]
-      const cmp = typeof x === 'number' ? x - y : String(x).localeCompare(String(y))
-      if (cmp !== 0) return s.dir === 'asc' ? cmp : -cmp
-    }
-    return 0
-  })
-
-  const toggleSort = (key, additive) =>
-    setSorts((s) => {
-      const at = s.findIndex((x) => x.key === key)
-      if (at === -1) return additive ? [...s, { key, dir: 'desc' }] : [{ key, dir: 'desc' }]
-      const flipped = { key, dir: s[at].dir === 'desc' ? 'asc' : 'desc' }
-      if (!additive) return [flipped]
-      const next = [...s]
-      next[at] = flipped
-      return next
-    })
-
-  const matchesFind = (row) =>
-    find && Object.values(row).some((v) =>
-      String(Array.isArray(v) ? '' : v).toLowerCase().includes(find.toLowerCase()))
-
-  const range = {
-    r0: Math.min(sel.r, anchor.r), r1: Math.max(sel.r, anchor.r),
-    c0: Math.min(sel.c, anchor.c), c1: Math.max(sel.c, anchor.c),
-  }
-  const inRange = (r, c) => r >= range.r0 && r <= range.r1 && c >= range.c0 && c <= range.c1
-  const multi = range.r0 !== range.r1 || range.c0 !== range.c1
-
-  const move = (dr, dc, extend) => {
-    const r = Math.max(0, Math.min(rows.length - 1, sel.r + dr))
-    const c = Math.max(0, Math.min(cols.length - 1, sel.c + dc))
-    setSel({ r, c })
-    if (!extend) setAnchor({ r, c })
-  }
-
-  const commit = () => {
-    const col = cols[sel.c]
-    const key = rows[sel.r].client
-    if (['text', 'person'].includes(col.type)) {
-      mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: draft } : row)))
-    } else if (['num', 'money'].includes(col.type)) {
-      const n = Number(draft.replace(/[^0-9.-]/g, ''))
-      // Invalid input is rejected rather than silently coerced to zero —
-      // a blank cell is a fact, and 0 would be a different one.
-      if (!Number.isNaN(n) && draft.trim() !== '') {
-        mutate(data.map((row) => (row.client === key ? { ...row, [col.key]: n } : row)))
-      }
-    }
-    setEditing(false)
-  }
-
-  const addRow = () => mutate([...data, {
-    client: `New ${data.length + 1}`, lead: 'Chris Church', disc: 'Brand',
-    year: 2026, fee: 0, share: 0, status: 'Draft', trend: [0, 0, 0, 0, 0, 0],
-  }])
-
-  const deleteRows = () => {
-    if (!picked.length) return
-    const kill = new Set(picked.map((i) => rows[i]?.client).filter(Boolean))
-    mutate(data.filter((r) => !kill.has(r.client)))
-    setPicked([])
-  }
-
-  const exportCsv = () => {
-    const head = cols.map((c) => c.label).join(',')
-    const body = rows.map((r) => cols.map((c) =>
-      c.type === 'spark' ? `"${r[c.key].join(' ')}"` : `"${gridFmt(r[c.key], c.type)}"`).join(','))
-    writeToClipboard([head, ...body].join('\n'))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
-  }
-
-  /* Excel's most-used feature that nobody names: the sum of whatever is
-     selected, in the status bar, without touching the sheet. */
-  const rangeStats = () => {
-    const nums = []
-    for (let r = range.r0; r <= range.r1; r++) {
-      for (let c = range.c0; c <= range.c1; c++) {
-        const col = cols[c]
-        const v = rows[r]?.[col.key]
-        if (typeof v === 'number') nums.push(v)
-      }
-    }
-    const cells = (range.r1 - range.r0 + 1) * (range.c1 - range.c0 + 1)
-    if (!nums.length) return `${cells} cells`
-    const sum = nums.reduce((a, b) => a + b, 0)
-    return `${cells} cells · sum ${sum.toLocaleString()} · avg ${Math.round(sum / nums.length).toLocaleString()}`
-  }
-
-  const copyRange = () => {
-    const tsv = []
-    for (let r = range.r0; r <= range.r1; r++) {
-      const line = []
-      for (let c = range.c0; c <= range.c1; c++) {
-        const col = cols[c]
-        line.push(col.type === 'spark' ? rows[r][col.key].join(' ') : gridFmt(rows[r][col.key], col.type))
-      }
-      tsv.push(line.join('\t'))
-    }
-    writeToClipboard(tsv.join('\n'))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
-  }
-
-  const onKey = (e) => {
-    if (editing) {
-      if (e.key === 'Enter') { e.preventDefault(); commit(); move(1, 0) }
-      if (e.key === 'Escape') { e.preventDefault(); setEditing(false) }
-      return
-    }
-    const k = e.key
-    if (k === 'ArrowDown') { e.preventDefault(); move(1, 0, e.shiftKey) }
-    else if (k === 'ArrowUp') { e.preventDefault(); move(-1, 0, e.shiftKey) }
-    else if (k === 'ArrowRight' || k === 'Tab') { e.preventDefault(); move(0, 1, e.shiftKey && k !== 'Tab') }
-    else if (k === 'ArrowLeft') { e.preventDefault(); move(0, -1, e.shiftKey) }
-    else if (k === 'Enter') {
-      e.preventDefault()
-      const col = cols[sel.c]
-      if (['text', 'person', 'num', 'money'].includes(col.type)) {
-        setDraft(String(rows[sel.r][col.key]))
-        setEditing(true)
-      }
-    } else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'c') { e.preventDefault(); copyRange() }
-    else if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === 'z') {
-      e.preventDefault()
-      e.shiftKey ? redo() : undo()
-    }
-  }
-
-  const aggValue = (col) => {
-    const mode = aggs[col.key]
-    if (!mode) return ''
-    const vals = rows.map((r) => r[col.key]).filter((v) => typeof v === 'number')
-    if (mode === 'count') return String(rows.length)
-    if (!vals.length) return ''
-    const n = mode === 'sum' ? vals.reduce((a, b) => a + b, 0)
-      : mode === 'avg' ? vals.reduce((a, b) => a + b, 0) / vals.length
-      : Math.max(...vals)
-    return gridFmt(col.type === 'pct' ? n : Math.round(n), col.type)
-  }
-
-  const cycleAgg = (key) =>
-    setAggs((a) => {
-      const i = AGGS.indexOf(a[key])
-      return { ...a, [key]: i === AGGS.length - 1 ? undefined : AGGS[i + 1] ?? AGGS[0] }
-    })
-
-  const maxFee = Math.max(...rows.map((r) => r.fee), 1)
-  const template = `30px ${cols.map((c) => `${c.w}px`).join(' ')}`
-  const curCol = cols[sel.c]
-  const curVal = rows[sel.r]
-    ? (curCol.type === 'spark' ? rows[sel.r][curCol.key].join(', ') : gridFmt(rows[sel.r][curCol.key], curCol.type))
-    : ''
-
-  return (
-    <div className={styles.gridWrap}>
-      {/* Toolbar */}
-      <div className={styles.gridBar}>
-        <span className={styles.gridCount}>
-          {rows.length} of {data.length} rows
-          {picked.length > 0 && ` · ${picked.length} selected`}
-          {multi && ` · ${(range.r1 - range.r0 + 1)}×${(range.c1 - range.c0 + 1)} range`}
-        </span>
-        <div className={styles.gridBarRight}>
-          <input
-            className={styles.gFindInput}
-            value={find}
-            onChange={(e) => setFind(e.target.value)}
-            placeholder="Find…"
-            aria-label="Find in grid"
-          />
-          <button type="button" className={styles.tableToggle} onClick={undo} disabled={!history.length}>
-            Undo
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={redo} disabled={!future.length}>
-            Redo
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={addRow}>Add row</button>
-          <button type="button" className={styles.tableToggle} onClick={deleteRows} disabled={!picked.length}>
-            Delete
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={exportCsv}>
-            {copied ? 'Copied' : 'CSV'}
-          </button>
-          <button type="button" className={styles.tableToggle} onClick={() => setDense((d) => !d)}>
-            {dense ? 'Comfortable' : 'Compact'}
-          </button>
-        </div>
-      </div>
-
-      {/* Formula bar — the address and value of the current cell, always. */}
-      <div className={styles.formulaBar}>
-        <span className={styles.formulaAddr}>{colLetter(sel.c)}{sel.r + 1}</span>
-        <span className={styles.formulaDivider} />
-        <span className={styles.formulaVal}>{curVal}</span>
-        <span className={styles.formulaType}>{curCol.type}</span>
-      </div>
-
-      {/* Column visibility */}
-      <div className={styles.colToggles}>
-        {COLS.map((c) => (
-          <button
-            key={c.key}
-            type="button"
-            aria-pressed={!hidden.includes(c.key)}
-            className={`${styles.colToggle} ${hidden.includes(c.key) ? styles.colToggleOff : ''}`}
-            onClick={() => setHidden((h) => (h.includes(c.key) ? h.filter((x) => x !== c.key) : [...h, c.key]))}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.gridScroll}>
-        <div
-          ref={gridRef}
-          className={`${styles.grid} ${dense ? styles.gridDense : ''}`}
-          style={{ gridTemplateColumns: template }}
-          role="grid"
-          tabIndex={0}
-          onKeyDown={onKey}
-        >
-          {/* Header — sticky, with a select-all in the gutter. */}
-          <button
-            type="button"
-            className={`${styles.gCell} ${styles.gHead} ${styles.gGutter} ${styles.gFrozen}`}
-            onClick={() => setPicked(picked.length === rows.length ? [] : rows.map((_, i) => i))}
-            aria-label="Select all rows"
-          >
-            {picked.length === rows.length && rows.length > 0 ? '−' : '+'}
-          </button>
-          {cols.map((c, ci) => (
-            <button
-              key={c.key}
-              type="button"
-              className={[
-                styles.gCell, styles.gHead,
-                c.frozen ? styles.gFrozenCol : '',
-                ['num', 'money', 'pct'].includes(c.type) ? styles.gNum : '',
-              ].join(' ')}
-              style={c.frozen ? { left: 30 } : undefined}
-              onClick={(e) => toggleSort(c.key, e.shiftKey)}
-              aria-sort={(() => {
-                const s = sorts.find((x) => x.key === c.key)
-                return s ? (s.dir === 'asc' ? 'ascending' : 'descending') : 'none'
-              })()}
-              title="Click to sort · Shift-click to add"
-            >
-              {c.label}
-              {(() => {
-                const at = sorts.findIndex((x) => x.key === c.key)
-                if (at === -1) return <span className={styles.gSort} />
-                return (
-                  <span className={styles.gSort}>
-                    {/* Priority shown only when more than one column sorts —
-                        a lone "1" is noise. */}
-                    {sorts.length > 1 && <span className={styles.gSortRank}>{at + 1}</span>}
-                    {sorts[at].dir === 'desc' ? '↓' : '↑'}
-                  </span>
-                )
-              })()}
-            </button>
-          ))}
-
-          {/* Filter row */}
-          <div className={`${styles.gCell} ${styles.gFilterCell} ${styles.gGutter} ${styles.gFrozen}`}>
-            <Icon name="filter" size={11} />
-          </div>
-          {cols.map((c) => (
-            <div
-              key={c.key}
-              className={`${styles.gCell} ${styles.gFilterCell} ${c.frozen ? styles.gFrozenCol : ''}`}
-              style={c.frozen ? { left: 30 } : undefined}
-            >
-              {c.type === 'spark' ? null : (
-                <input
-                  className={styles.gFilterInput}
-                  value={filters[c.key] ?? ''}
-                  onChange={(e) => setFilters((f) => ({ ...f, [c.key]: e.target.value }))}
-                  placeholder="—"
-                  aria-label={`Filter ${c.label}`}
-                />
-              )}
-            </div>
-          ))}
-
-          {/* Body */}
-          {rows.map((row, r) => (
-            <Fragment key={row.client}>
-              <button
-                type="button"
-                className={`${styles.gCell} ${styles.gGutter} ${styles.gFrozen} ${picked.includes(r) ? styles.gGutterOn : ''}`}
-                onClick={() => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]))}
-                aria-label={`Select row ${r + 1}`}
-              >
-                {r + 1}
-              </button>
-              {cols.map((c, ci) => {
-                const isSel = sel.r === r && sel.c === ci
-                const numeric = ['num', 'money', 'pct'].includes(c.type)
-                return (
-                  <div
-                    key={c.key}
-                    role="gridcell"
-                    aria-selected={isSel}
-                    className={[
-                      styles.gCell,
-                      numeric ? styles.gNum : '',
-                      c.frozen ? styles.gFrozenCol : '',
-                      isSel ? styles.gSel : '',
-                      !isSel && inRange(r, ci) ? styles.gInRange : '',
-                      picked.includes(r) ? styles.gRowOn : '',
-                      matchesFind(row) ? styles.gFound : '',
-                    ].join(' ')}
-                    style={c.frozen ? { left: 30 } : undefined}
-                    onMouseDown={(e) => {
-                      setSel({ r, c: ci })
-                      if (!e.shiftKey) setAnchor({ r, c: ci })
-                      gridRef.current?.focus()
-                    }}
-                    onDoubleClick={() => {
-                      if (['text', 'person', 'num', 'money'].includes(c.type)) {
-                        setDraft(String(row[c.key])); setEditing(true)
-                      }
-                    }}
-                  >
-                    {isSel && editing ? (
-                      <input
-                        ref={editRef}
-                        className={styles.gEdit}
-                        value={draft}
-                        onChange={(e) => setDraft(e.target.value)}
-                        onBlur={commit}
-                        aria-label="Edit cell"
-                      />
-                    ) : c.type === 'status' ? (
-                      <span className={`${styles.gPill} ${row.status === 'Live' ? styles.gPillOn : row.status === 'Draft' ? styles.gPillDraft : ''}`}>
-                        {row.status}
-                      </span>
-                    ) : c.type === 'person' ? (
-                      <span className={styles.gPerson}>
-                        <Avatar name={row.lead} size={16} />
-                        {row.lead.split(' ')[0]}
-                      </span>
-                    ) : c.type === 'spark' ? (
-                      <svg viewBox="0 0 60 16" className={styles.gSpark} aria-hidden="true">
-                        <path
-                          d={row.trend.map((v, i) => {
-                            const mx = Math.max(...row.trend)
-                            return `${i ? 'L' : 'M'}${i * 12},${14 - (v / mx) * 12}`
-                          }).join(' ')}
-                          fill="none"
-                          stroke={row.trend[5] >= row.trend[0] ? 'var(--s1)' : 'var(--s2)'}
-                          strokeWidth="1.5"
-                        />
-                      </svg>
-                    ) : c.bar ? (
-                      /* Data bar behind the figure — magnitude without a
-                         separate chart, and the number stays exact. */
-                      <>
-                        <span className={styles.gBar} style={{ width: `${(row.fee / maxFee) * 100}%` }} />
-                        <span className={styles.gBarVal}>{gridFmt(row.fee, c.type)}</span>
-                      </>
-                    ) : c.scale ? (
-                      <span
-                        className={styles.gScale}
-                        style={{ background: `var(--q${Math.min(5, Math.max(1, Math.round(row.share * 20)))})` }}
-                      >
-                        {gridFmt(row.share, c.type)}
-                      </span>
-                    ) : (
-                      gridFmt(row[c.key], c.type)
-                    )}
-                  </div>
-                )
-              })}
-            </Fragment>
-          ))}
-
-          {/* Aggregations — click a footer cell to cycle sum / avg / max /
-              count / none. They follow the filter, not the raw data. */}
-          <div className={`${styles.gCell} ${styles.gFoot} ${styles.gGutter} ${styles.gFrozen}`}>Σ</div>
-          {cols.map((c) => {
-            const has = ['num', 'money', 'pct'].includes(c.type)
-            return (
-              <button
-                key={c.key}
-                type="button"
-                className={[
-                  styles.gCell, styles.gFoot,
-                  c.frozen ? styles.gFrozenCol : '',
-                  has ? styles.gNum : '',
-                  has ? '' : styles.gFootMuted,
-                ].join(' ')}
-                style={c.frozen ? { left: 30 } : undefined}
-                onClick={() => has && cycleAgg(c.key)}
-                title={has ? 'Cycle aggregation' : undefined}
-              >
-                {has ? (
-                  <>
-                    <span className={styles.gAggMode}>{aggs[c.key] ?? '—'}</span>
-                    <span>{aggValue(c)}</span>
-                  </>
-                ) : c.frozen ? 'Total' : ''}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Status bar. The left half is what is selected right now — Excel's
-          most-used feature that nobody names. */}
-      <div className={styles.gridFoot}>
-        <span className={styles.gridStat}>{rangeStats()}</span>
-        <span className={styles.gridCell}>
-          Arrows · Shift+arrows range · Enter edit · ⌘C copy · ⌘Z undo
-        </span>
-      </div>
-    </div>
-  )
+  return <SysDataGrid columns={COLS} rows={ROWS} />
 }
 
 
 function PersonCard() {
   return (
-    <div className={styles.people}>
-      {[['Chris Church', 'Founder, strategy'], ['Dana Cole', 'Design director'], ['Ravi Menon', 'Engineering']].map(
-        ([name, role]) => (
-          <div key={name} className={styles.person}>
-            <Avatar name={name} size={36} />
-            <span className={styles.personText}>
-              <span className={styles.personName}>{name}</span>
-              <span className={styles.personRole}>{role}</span>
-            </span>
-          </div>
-        ),
-      )}
-    </div>
+    <SysPersonCard people={[
+      ['Chris Church', 'Founder, strategy'],
+      ['Dana Cole', 'Design director'],
+      ['Ravi Menon', 'Engineering'],
+    ]} />
   )
 }
 
@@ -1760,20 +922,7 @@ function Tooltip() {
 
 function ProgressBar() {
   const [pct, setPct] = useState(38)
-  return (
-    <div className={styles.progressWrap}>
-      <div className={styles.progressTrack}>
-        <div className={styles.progressFill} style={{ width: `${pct}%` }} />
-      </div>
-      <div className={styles.progressMeta}>
-        <span className={styles.progressPct}>{pct}%</span>
-        <div className={styles.arrows}>
-          <button type="button" className={styles.arrow} onClick={() => setPct((p) => Math.max(0, p - 12))}>−</button>
-          <button type="button" className={styles.arrow} onClick={() => setPct((p) => Math.min(100, p + 12))}>+</button>
-        </div>
-      </div>
-    </div>
-  )
+  return <SysProgress value={pct} onChange={setPct} />
 }
 
 /* Contained inside the demo rather than fixed to the viewport, so it can be
@@ -1821,90 +970,17 @@ function Lightbox() {
 }
 
 function Gallery() {
-  const [on, setOn] = useState(0)
-  return (
-    <div className={styles.gallery}>
-      <span className={styles.galleryMain}>
-        <span className={styles.galleryNum}>{on + 1}</span>
-      </span>
-      <div className={styles.galleryThumbs}>
-        {[0, 1, 2, 3].map((n) => (
-          <button
-            key={n}
-            type="button"
-            className={`${styles.galleryThumb} ${n === on ? styles.galleryThumbOn : ''}`}
-            onClick={() => setOn(n)}
-            aria-label={`Image ${n + 1}`}
-          />
-        ))}
-      </div>
-    </div>
-  )
+  return <SysGallery items={['Primary', 'Stacked', 'Mark only', 'Small size']} />
 }
 
 /* Range input rather than a drag handler: it is keyboard-operable for free
    and cannot get stuck mid-drag when the pointer leaves the element. */
 function BeforeAfter() {
-  const [pos, setPos] = useState(50)
-  return (
-    <div className={styles.baWrap}>
-      <div className={styles.ba}>
-        <span className={styles.baAfter}><span className={styles.baTag}>After</span></span>
-        <span className={styles.baBefore} style={{ width: `${pos}%` }}>
-          <span className={styles.baTag}>Before</span>
-        </span>
-        <span className={styles.baLine} style={{ left: `${pos}%` }} />
-      </div>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={pos}
-        onChange={(e) => setPos(Number(e.target.value))}
-        className={styles.baRange}
-        aria-label="Reveal"
-      />
-    </div>
-  )
+  return <SysBeforeAfter />
 }
 
 function VideoControls() {
-  const [playing, setPlaying] = useState(false)
-  const [muted, setMuted] = useState(true)
-  const [pos, setPos] = useState(28)
-
-  return (
-    <div className={styles.videoWrap}>
-      <div className={styles.videoBar}>
-        <button
-          type="button"
-          className={styles.videoBtn}
-          onClick={() => setPlaying((p) => !p)}
-          aria-label={playing ? 'Pause' : 'Play'}
-        >
-          {playing ? '❙❙' : '▶'}
-        </button>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={pos}
-          onChange={(e) => setPos(Number(e.target.value))}
-          className={styles.videoScrub}
-          aria-label="Scrub"
-        />
-        <span className={styles.videoTime}>0:{String(Math.round(pos * 0.6)).padStart(2, '0')}</span>
-        <button
-          type="button"
-          className={styles.videoBtn}
-          onClick={() => setMuted((m) => !m)}
-          aria-label={muted ? 'Unmute' : 'Mute'}
-        >
-          {muted ? '🔇' : '🔊'}
-        </button>
-      </div>
-    </div>
-  )
+  return <SysVideoControls title="Identity walkthrough" />
 }
 
 /* ── AI patterns (NEW) ───────────────────────────────────────────────────── */
@@ -1912,63 +988,11 @@ function VideoControls() {
 /* Reserves the full height of the finished paragraph before it starts, so the
    layout doesn't reflow line by line as tokens land. */
 function StreamingText() {
-  const full = 'The card surface is #161616 on a #0a0a0a ground, at a 4px radius — the one surface the whole site uses.'
-  const [n, setN] = useState(0)
-  const [running, setRunning] = useState(false)
-
-  const run = () => {
-    if (running) return
-    setRunning(true)
-    setN(0)
-    const id = setInterval(() => {
-      setN((v) => {
-        if (v >= full.length) {
-          clearInterval(id)
-          setRunning(false)
-          return v
-        }
-        return v + 2
-      })
-    }, 24)
-  }
-
-  return (
-    <div className={styles.stream}>
-      <p className={styles.streamText}>
-        <span className={styles.streamGhost}>{full}</span>
-        <span className={styles.streamLive}>
-          {full.slice(0, n)}
-          {running && <span className={styles.caret} />}
-        </span>
-      </p>
-      <button type="button" className={styles.btnDemo} onClick={run} disabled={running}>
-        {running ? 'Streaming' : 'Replay'}
-      </button>
-    </div>
-  )
+  return <SysStreamingText />
 }
 
 function ResponseFeedback() {
-  const [vote, setVote] = useState(null)
-  return (
-    <div className={styles.voteRow}>
-      {[['up', 'Helpful'], ['down', 'Not helpful']].map(([k, label]) => (
-        <button
-          key={k}
-          type="button"
-          aria-pressed={vote === k}
-          aria-label={label}
-          className={`${styles.voteBtn} ${vote === k ? styles.voteBtnOn : ''}`}
-          onClick={() => setVote((v) => (v === k ? null : k))}
-        >
-          {k === 'up' ? '▲' : '▼'}
-        </button>
-      ))}
-      <span className={styles.voteNote}>
-        {vote === 'up' ? 'Thanks.' : vote === 'down' ? 'Noted — what was wrong?' : 'Was this useful?'}
-      </span>
-    </div>
-  )
+  return <SysResponseFeedback />
 }
 
 /* ── Charts (NEW) ────────────────────────────────────────────────────────────
@@ -2003,32 +1027,12 @@ const TARGET = 75
    number you can't act on, so the sparkline is part of the tile rather than a
    separate chart. */
 function KpiRow() {
-  const tiles = [
-    ['MRR', '$96k', '+4.3%', true, REVENUE, 0],
-    ['Pipeline', '$81k', '+15.7%', true, PIPELINE, 1],
-    ['Churn', '4.1%', '−0.6pt', true, [12, 11, 11, 10, 9, 9, 8, 7, 7, 5, 4, 4], 2],
-  ]
   return (
-    <div className={styles.tiles}>
-      {tiles.map(([label, fig, delta, good, d, s]) => {
-        const max = Math.max(...d) * 1.2
-        const pts = d.map((v, i) => `${i ? 'L' : 'M'}${i * 10},${26 - (v / max) * 22}`).join(' ')
-        return (
-          <div key={label} className={styles.tile}>
-            <span className={styles.tileLabel}>{label}</span>
-            <div className={styles.tileMain}>
-              <span className={styles.tileFig}>{fig}</span>
-              <svg viewBox="0 0 116 28" className={styles.tileSpark} aria-hidden="true">
-                <path d={pts} fill="none" stroke={SERIES[s]} strokeWidth="1.5" />
-              </svg>
-            </div>
-            <span className={`${styles.tileDelta} ${good ? styles.tileDeltaGood : ''}`}>
-              {delta} <span className={styles.tileVs}>vs prior period</span>
-            </span>
-          </div>
-        )
-      })}
-    </div>
+    <SysKpiRow tiles={[
+      ['MRR', '$96k', '+4.3%', true, REVENUE, 0],
+      ['Pipeline', '$81k', '+15.7%', true, PIPELINE, 1],
+      ['Churn', '4.1%', '−0.6pt', true, [12, 11, 11, 10, 9, 9, 8, 7, 7, 5, 4, 4], 2],
+    ]} />
   )
 }
 
@@ -2498,89 +1502,11 @@ const TEXTURES = [
  * texture is the whole point of the encoding.
  */
 function TextureDefs() {
-  /* Faint and fine. At 1px cells on a 4px grid the pattern is below the
-     threshold where the eye resolves individual marks — it reads as a
-     property of the surface rather than something drawn on it, which is the
-     entire brief. Push the alpha past about 0.09 and it becomes a graphic
-     again. */
-  const ink = 'rgba(255, 255, 255, 0.07)'
-  const px = (x, y, w = 1, h = 1) => <rect key={`${x}-${y}`} x={x} y={y} width={w} height={h} fill={ink} />
-  return (
-    <svg width="0" height="0" className={styles.defsOnly} aria-hidden="true" focusable="false">
-      <defs>
-        {/* Ordered dither on one 2px cell grid — one, two and three cells of
-            four, so the three read as a genuine 25 / 50 / 75 progression.
-            Keeping the grid identical across the three is what lets them be
-            compared; different grids would read as different textures rather
-            than different densities. */}
-        <pattern id="sc-tex-d25" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}
-        </pattern>
-        <pattern id="sc-tex-d50" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}{px(2, 2, 2, 2)}
-        </pattern>
-        <pattern id="sc-tex-d75" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 2, 2)}{px(2, 2, 2, 2)}{px(2, 0, 2, 2)}
-        </pattern>
-        {/* Halftone: a square dot on an offset grid, no circles — circles
-            antialias and the screen stops reading as a screen. */}
-        <pattern id="sc-tex-halftone" width="6" height="6" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(1, 1, 2, 2)}{px(4, 4, 2, 2)}
-        </pattern>
-        {/* Stepped diagonals — a staircase of single pixels rather than a
-            rotated line, so the diagonal keeps hard edges at every zoom. */}
-        <pattern id="sc-tex-45" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 3)}{px(1, 2)}{px(2, 1)}{px(3, 0)}
-        </pattern>
-        <pattern id="sc-tex-135" width="4" height="4" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0)}{px(1, 1)}{px(2, 2)}{px(3, 3)}
-        </pattern>
-        <pattern id="sc-tex-scan" width="3" height="3" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(0, 0, 3, 1)}
-        </pattern>
-        {/* Fixed offsets, not random — a texture that changes between renders
-            can't be matched on a second surface. */}
-        <pattern id="sc-tex-stipple" width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-          {px(1, 2)}{px(5, 0)}{px(3, 5)}{px(7, 6)}{px(0, 6)}{px(6, 3)}
-        </pattern>
-
-        {/* 90s desktop tiles, emitted straight from their bitmaps. */}
-        {Object.entries(TILES).map(([id, rows]) => (
-          <pattern key={id} id={id} width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
-            {rows.flatMap((row, y) =>
-              row.split('').map((bit, x) => (bit === '1' ? px(x, y) : null)).filter(Boolean),
-            )}
-          </pattern>
-        ))}
-      </defs>
-    </svg>
-  )
+  return <SysTextureDefs tiles={TILES} />
 }
 
-function TextureSwatches({ onCopy, copied, items = TEXTURES }) {
-  return (
-    <div className={styles.texRow}>
-      {items.map(([id, name, note]) => (
-        <button
-          key={id}
-          type="button"
-          className={styles.texChip}
-          onClick={() => onCopy(`url(#${id})`)}
-          title={`Copy url(#${id})`}
-        >
-          <svg viewBox="0 0 100 52" className={styles.texSwatch} aria-hidden="true">
-            <rect width="100" height="52" fill="rgba(255,255,255,0.05)" />
-            <rect width="100" height="52" fill={`url(#${id})`} />
-          </svg>
-          <span className={styles.texName}>{name}</span>
-          <span className={styles.texId}>
-            {copied === `url(#${id})` ? 'copied' : `#${id.replace(/^sc-(tex|tile)-/, '')}`}
-          </span>
-          <span className={styles.texNote}>{note}</span>
-        </button>
-      ))}
-    </div>
-  )
+function TextureSwatches() {
+  return <SysTextureSwatches />
 }
 
 function SmallMultiples() {

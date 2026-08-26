@@ -21,6 +21,11 @@ import {
 } from './plots'
 import { Tabs, SectionNav } from './primitives'
 import { Grid, Col } from './shell'
+import { DataGrid } from './dataGrid'
+import { Carousel, Gallery, BeforeAfter, VideoControls, ProgressBar } from './media'
+import { Chat, StreamingText, ResponseFeedback } from './chat'
+import { StatusPill, CardSurface, KpiRow, PersonCard, ConsentBanner } from './content'
+import { Legend } from './charts'
 
 /* Live demos for the wiki.
  *
@@ -839,6 +844,165 @@ function GridDemo() {
   )
 }
 
+
+/* ── Media ─────────────────────────────────────────────────────────────── */
+
+function CarouselDemo() {
+  return (
+    <Carousel slides={[
+      ['Identity', 'The mark, the lockups and the clear-space rule.'],
+      ['Voice', 'How it sounds when somebody writes as us.'],
+      ['Channels', 'Where the message runs, and in what order.'],
+    ]} />
+  )
+}
+
+function GalleryDemo() {
+  return <Gallery items={['Primary', 'Stacked', 'Mark only', 'Small size']} />
+}
+
+function ProgressDemo() {
+  const [pct, setPct] = useState(38)
+  return <ProgressBar value={pct} onChange={setPct} label="Upload" />
+}
+
+function MediaMisc() {
+  return (
+    <div className={s.wdStack}>
+      <span className={s.wdCount}>Before / after — draggable, because a fixed split is a picture of a comparison rather than one</span>
+      <BeforeAfter />
+      <span className={s.wdCount}>Video controls — the scrub bar is the control, not a decoration under it</span>
+      <VideoControls title="Identity walkthrough" />
+    </div>
+  )
+}
+
+/* ── Content ───────────────────────────────────────────────────────────── */
+
+function CardsDemo() {
+  return (
+    <div className={s.wdGrid}>
+      <CardSurface>
+        <span className={s.wdCount}>Surface</span>
+        <span className={s.wdName}>The one card the whole system uses</span>
+      </CardSurface>
+      <CardSurface link>
+        <span className={s.wdCount}>Link</span>
+        <span className={s.wdName}>Lifts on hover, because it goes somewhere</span>
+      </CardSurface>
+    </div>
+  )
+}
+
+function StatusDemo() {
+  return (
+    <div className={s.wdRow}>
+      {['Live', 'Review', 'Draft', 'Archived'].map((v) => <StatusPill key={v} value={v} />)}
+    </div>
+  )
+}
+
+function KpiDemo() {
+  return (
+    <KpiRow tiles={[
+      ['MRR', '$96k', '+4.3%', true, [42, 51, 47, 63, 58, 71, 68, 79, 74, 88, 92, 96], 0],
+      ['Pipeline', '$81k', '+15.7%', true, [30, 34, 41, 39, 48, 52, 57, 61, 66, 70, 76, 81], 1],
+      ['Churn', '4.1%', '−0.6pt', true, [12, 11, 11, 10, 9, 9, 8, 7, 7, 5, 4, 4], 2],
+    ]} />
+  )
+}
+
+function PeopleDemo() {
+  return (
+    <PersonCard people={[
+      ['Chris Church', 'Founder, strategy'],
+      ['Dana Cole', 'Design director'],
+      ['Ravi Menon', 'Engineering'],
+    ]} />
+  )
+}
+
+function ConsentDemo() {
+  return <ConsentBanner />
+}
+
+function LegendDemo() {
+  return (
+    <div className={s.wdStack}>
+      <Legend items={[
+        { label: 'LinkedIn', colour: 'var(--sc-s1)' },
+        { label: 'Paid social', colour: 'var(--sc-s2)' },
+        { label: 'Target', colour: 'rgba(255,255,255,0.35)', dashed: true },
+      ]} />
+      <span className={s.wdCount}>A reference key is drawn as the line it is on the chart, not as a filled swatch</span>
+    </div>
+  )
+}
+
+/* ── Chat ──────────────────────────────────────────────────────────────── */
+
+const CHAT_REPLIES = {
+  'What surface do cards use?': {
+    text: 'The card surface is #161616 on a #0a0a0a ground, at a 4px radius — the one surface the whole system uses.',
+    cite: ['tokens.css'],
+    tool: null,
+  },
+  'How many chart colours are there?': {
+    text: 'Three categorical slots. Slots four to six alias one to three on purpose, so a chart reaching for a fourth series gets a visible repeat rather than a colour that quietly fails a check.',
+    cite: ['tokens.css', 'wiki/charts'],
+    tool: 'Searched the token file',
+  },
+}
+
+function ChatDemo() {
+  return (
+    <Chat
+      replies={CHAT_REPLIES}
+      suggestions={Object.keys(CHAT_REPLIES)}
+      fallback={{
+        text: 'That is outside what this demo knows — the replies here are canned strings, not a model. Try one of the suggested questions.',
+        cite: [],
+        tool: null,
+      }}
+    />
+  )
+}
+
+function StreamDemo() {
+  return (
+    <div className={s.wdStack}>
+      <StreamingText />
+      <ResponseFeedback />
+    </div>
+  )
+}
+
+/* ── Data grid ─────────────────────────────────────────────────────────── */
+
+const GRID_COLS = [
+  { key: 'client', label: 'Client', type: 'text', w: 128, frozen: true },
+  { key: 'lead', label: 'Lead', type: 'person', w: 116 },
+  { key: 'disc', label: 'Discipline', type: 'text', w: 104 },
+  { key: 'year', label: 'Year', type: 'num', w: 62 },
+  { key: 'fee', label: 'Fee', type: 'money', w: 106, bar: true },
+  { key: 'share', label: 'Share', type: 'pct', w: 92, scale: true },
+  { key: 'trend', label: 'Trend', type: 'spark', w: 84 },
+  { key: 'status', label: 'Status', type: 'status', w: 96 },
+]
+
+const GRID_ROWS = [
+  { client: 'Talos', lead: 'Chris Church', disc: 'Brand', year: 2026, fee: 84000, share: 0.24, status: 'Live', trend: [30, 38, 41, 52, 58, 61] },
+  { client: 'Transcend', lead: 'Dana Cole', disc: 'Content', year: 2026, fee: 61000, share: 0.17, status: 'Live', trend: [22, 26, 24, 31, 36, 44] },
+  { client: 'Openhouse', lead: 'Ravi Menon', disc: 'Product', year: 2025, fee: 52000, share: 0.15, status: 'Review', trend: [18, 21, 26, 28, 33, 38] },
+  { client: 'Espresso', lead: 'Dana Cole', disc: 'Brand', year: 2025, fee: 38000, share: 0.11, status: 'Live', trend: [12, 15, 18, 22, 25, 29] },
+  { client: 'Print Parlor', lead: 'Dana Cole', disc: 'Brand', year: 2024, fee: 19500, share: 0.06, status: 'Done', trend: [14, 13, 12, 12, 11, 10] },
+  { client: 'Big Buoy', lead: 'Chris Church', disc: 'Motion', year: 2026, fee: 15000, share: 0.04, status: 'Draft', trend: [4, 6, 9, 12, 15, 19] },
+]
+
+function GridDemoFull() {
+  return <DataGrid columns={GRID_COLS} rows={GRID_ROWS} />
+}
+
 export const WIKI_DEMOS = {
   'surfaces': () => (
     <Swatches tall tokens={[
@@ -908,6 +1072,19 @@ export const WIKI_DEMOS = {
   'plots-shape': PlotsShape,
   'plots-grids': PlotsGrids,
   'grid': GridDemo,
+  'carousel': CarouselDemo,
+  'gallery': GalleryDemo,
+  'progress': ProgressDemo,
+  'media-misc': MediaMisc,
+  'cards': CardsDemo,
+  'status-pills': StatusDemo,
+  'kpi': KpiDemo,
+  'people-cards': PeopleDemo,
+  'consent': ConsentDemo,
+  'legend': LegendDemo,
+  'chat': ChatDemo,
+  'stream': StreamDemo,
+  'datagrid': GridDemoFull,
 }
 
 export function WikiDemo({ id }) {

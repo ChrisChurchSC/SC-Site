@@ -5825,3 +5825,1885 @@
   border: 1px solid var(--sc-line);
   border-radius: var(--sc-radius-sm);
 }
+
+
+/* ── Data grid ───────────────────────────────────────────────────────────
+   Copied with the component rather than rewritten: these rules encode column
+   alignment, edit affordances and selection states that took a while to get
+   right, and a fresh pass would have quietly lost some of them. */
+
+/* ── Data grid ───────────────────────────────────────────────────────────────
+   Rules on both axes, unlike the reading table above: a cell here is addressed
+   by column as much as by row, so the column edge has to be visible. */
+
+.gridWrap {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gridBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.gridBarRight {
+  display: flex;
+  gap: 5px;
+}
+
+/* Formula bar. A grid without one leaves "which cell am I in?" unanswered the
+   moment the row count passes a screen. */
+.formulaBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0e0e0e;
+}
+
+.formulaAddr {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 30px;
+}
+
+.formulaDivider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.formulaVal {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.formulaType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.colToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.colToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: color 0.12s, background 0.12s, opacity 0.12s;
+}
+
+/* Hidden is dimmed and struck, not removed — you have to be able to find a
+   column you turned off. */
+.colToggleOff {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.gridScroll {
+  overflow: auto;
+  max-height: 420px;
+}
+
+.dgGrid {
+  display: grid;
+  min-width: 700px;
+  position: relative;
+}
+
+/* Frozen panes. The header and the first column carry the labels that say
+   what a cell is; losing either to a scroll makes the rest unreadable. */
+.gFrozen {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
+.gFrozenCol {
+  position: sticky;
+  z-index: 2;
+  background: #0a0a0a;
+}
+
+.gHead {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.gHead.gFrozen {
+  z-index: 5;
+}
+
+.gCell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 9px 10px;
+  min-height: 34px;
+  text-align: left;
+  /* Rules drawn as insets so neighbouring cells share one hairline rather
+     than doubling it. */
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: background 0.1s;
+}
+
+.gridDense .gCell {
+  font-size: 10px;
+  padding: 5px 8px;
+  min-height: 24px;
+}
+
+.gHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #131313;
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.gridDense .gHead {
+  font-size: 7px;
+}
+
+.gHead:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.gSort {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The gutter addresses rows; it holds no data, so it is dimmer than any
+   cell and never picks up the numeric treatment. */
+.gGutter {
+  justify-content: center;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+  background: #131313;
+  cursor: pointer;
+}
+
+.gGutter:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gGutterOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Tabular figures so digits stack in a column and magnitude reads as
+   length — the reason a spreadsheet is monospaced at all. */
+.gNum {
+  justify-content: flex-end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gRowOn {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* The cell you're looking at and the cell you would edit have to be the same
+   cell. A ring rather than a fill, so the value stays readable. */
+.gSel {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85),
+              inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.98);
+  outline: none;
+}
+
+.gFoot {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  background: #131313;
+  box-shadow: inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.gPill {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.gPillOn {
+  color: rgba(190, 220, 150, 0.9);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.gPillDraft {
+  color: #bd842c;
+  background: rgba(189, 132, 44, 0.12);
+}
+
+/* ── Grid cell types ── */
+
+.gPerson {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.gSpark {
+  width: 100%;
+  height: 16px;
+}
+
+/* Data bar behind the figure: magnitude without a separate chart, and the
+   number stays exact rather than becoming a bar you have to estimate. */
+.gBar {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  background: rgba(217, 78, 182, 0.22);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.gBarVal {
+  position: relative;
+  z-index: 1;
+}
+
+.gScale {
+  display: inline-block;
+  border-radius: 2px;
+  padding: 3px 6px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.gEdit {
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: #fff;
+  background: #0a0a0a;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+/* Filter row sits under the header and above the data, so it reads as a
+   property of the column rather than a row of values. */
+.gFilterCell {
+  min-height: 26px;
+  padding: 3px 6px;
+  background: #0e0e0e;
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.gFilterInput {
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: none;
+  border: none;
+  outline: none;
+  padding: 2px 0;
+}
+
+.gFilterInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.gFilterInput:focus {
+  color: #fff;
+}
+
+/* A range is a fill; the active cell inside it keeps the ring. Two different
+   states, so they get two different treatments. */
+.gInRange {
+  background: rgba(217, 78, 182, 0.1);
+}
+
+.gFindInput {
+  width: 86px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 2px;
+  padding: 5px 7px;
+  outline: none;
+}
+
+.gFindInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* A find hit tints the whole row rather than the matched cell — you are
+   looking for the record, not the string. */
+.gFound {
+  background: rgba(125, 90, 224, 0.16);
+}
+
+.gSortRank {
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 2px;
+}
+
+.gridStat {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gridFoot {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.tableToggle:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.gAggMode {
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-right: auto;
+}
+
+.gFoot {
+  cursor: pointer;
+  gap: 8px;
+}
+
+.gFootMuted {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Address bar. A grid without one leaves "which cell am I in?" unanswered
+   the moment the row count passes a screen. */
+.gridFoot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCell {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Grid and axes stay recessive — they orient, they don't compete. */
+.dgGrid {
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 1;
+}
+
+.tableToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 6px 10px;
+  align-self: flex-start;
+  transition: color 0.15s, background 0.15s;
+}
+
+.tableToggle:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* ── media ──────────────────────────────────────────── */
+
+/* ── Lightbox / gallery ── */
+
+.lightStage {
+  position: relative;
+  width: 100%;
+  min-height: 108px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightThumb {
+  width: 132px;
+  height: 76px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+  transition: opacity 0.15s;
+}
+
+.lightThumb:hover {
+  opacity: 0.8;
+}
+
+.lightThumbHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  padding: 4px 7px;
+}
+
+.lightOverlay {
+  position: absolute;
+  inset: -18px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(10, 10, 10, 0.97);
+  border-radius: 4px;
+}
+
+.lightFrame {
+  width: 76%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+.lightClose {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 18px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s;
+}
+
+.lightClose:hover {
+  color: #fff;
+}
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.galleryMain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+.galleryNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.galleryThumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.galleryThumb {
+  aspect-ratio: 16 / 9;
+  border-radius: 2px;
+  background: #262626;
+  opacity: 0.45;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.galleryThumb:hover {
+  opacity: 0.75;
+}
+
+.galleryThumbOn {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* ── Before / after ── */
+
+.baWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.ba {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.baAfter,
+.baBefore {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+
+.baAfter {
+  background: repeating-linear-gradient(45deg, #2a2a2a 0 12px, #343434 12px 24px);
+}
+
+/* Clipped by width rather than a mask so the divider position and the fill
+   can never disagree. */
+.baBefore {
+  overflow: hidden;
+  background: repeating-linear-gradient(45deg, #4e4e4e 0 12px, #5a5a5a 12px 24px);
+}
+
+.baTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  padding: 4px 7px;
+  white-space: nowrap;
+}
+
+.baLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+.videoScrub {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.videoScrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.videoScrub::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* A 2px surface ring keeps overlapping dots readable where series cross. */
+.xDot {
+  stroke: #0a0a0a;
+  stroke-width: 2;
+  transition: r 0.15s;
+}
+
+
+/* ── chat ──────────────────────────────────────────── */
+
+.cardEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.btnDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDemo:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.xTableToggle:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Video controls ── */
+
+.videoWrap {
+  width: 100%;
+}
+
+.videoBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 10, 10, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.videoBtn {
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.videoBtn:hover {
+  color: #fff;
+}
+
+.videoTime {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* ── AI extras ── */
+
+.stream {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+}
+
+/* The ghost copy holds the finished paragraph's height while the live copy
+   is drawn over it, so nothing below reflows as tokens arrive. */
+.streamText {
+  position: relative;
+  margin: 0;
+  max-width: 62ch;
+}
+
+.streamLive {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.streamGhost {
+  visibility: hidden;
+}
+
+.streamLive {
+  position: absolute;
+  inset: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.caret {
+  display: inline-block;
+  width: 6px;
+  height: 1em;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  background: rgba(255, 255, 255, 0.75);
+  animation: caretBlink 0.9s steps(2) infinite;
+}
+
+.promptRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.prompt {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 12px;
+  text-align: left;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.prompt:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Superscript-sized chip riding in the line, so the citation is clickable
+   exactly where the claim is read. */
+.citation {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  padding: 2px 5px;
+  margin: 0 2px;
+  vertical-align: super;
+  transition: color 0.15s, background 0.15s;
+}
+
+.citation:hover {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.voteRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voteBtn {
+  font-size: 9px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 8px 10px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.voteBtn:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.voteBtnOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.voteNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.xTableToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 6px 10px;
+  align-self: flex-start;
+  transition: color 0.15s, background 0.15s;
+}
+
+.xTableToggle:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Shared three-dot pulse — the loading button and the chat use the same one
+   so the two patterns agree about what "working" looks like. */
+.btnDots,
+.thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btnDots i,
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+.btnDots i:nth-child(2),
+.thinking i:nth-child(2) { animation-delay: 0.15s; }
+.btnDots i:nth-child(3),
+.thinking i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50%      { opacity: 1;    transform: translateY(-2px); }
+}
+
+.thinking {
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 0;
+}
+
+/* ── Field variants ── */
+
+.fieldContact {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldContact:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldContact::placeholder,
+.fieldTextarea::placeholder,
+.fieldGate::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldGate {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fieldGate:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldTextarea {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldTextarea:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldErrorWrap,
+.labelledField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.labelledField {
+  gap: 6px;
+}
+
+.fieldError {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 80, 80, 0.6);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.errorText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 80, 80, 0.8);
+}
+
+/* ── Icons ───────────────────────────────────────────────────────────────────
+   Stroke-based and inheriting currentColor, so an icon takes the colour of the
+   text beside it. 1.25px matches the hairline the rest of the system uses;
+   butt caps and miter joins keep every terminal square. */
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 8px 12px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconCell:hover {
+  background: #1c1c1c;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.iconName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  word-break: break-all;
+}
+
+.iconUses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* A 16px mark still needs a 32px target — the icon is what you see, not what
+   you have to hit. */
+.iconOnly {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconOnly:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ── Media ── */
+
+.mediaTag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.captionDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.mediaDemoSmall {
+  display: block;
+  width: 168px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px
+  );
+}
+
+.caption {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Marquee ── */
+
+.marquee {
+  display: flex;
+  align-items: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  height: 52px;
+  overflow: hidden;
+}
+
+.marqueeWindow {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 48s linear infinite;
+}
+
+.marqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marqueePass {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 22px;
+  white-space: nowrap;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.18s;
+}
+
+.marqueeItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Paged carousel ── */
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.carouselWindow {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.slide {
+  flex: 0 0 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 132px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+
+.slideNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.carouselControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.dotOn {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.15);
+}
+
+.arrows {
+  display: flex;
+  gap: 4px;
+}
+
+.arrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: color 0.15s, background 0.15s, opacity 0.15s;
+}
+
+.arrow:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* ── Chat ── */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Fixed height with its own scroll, so the composer below it never moves as
+   the conversation grows. */
+.chatLog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.turnUser {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.turnBot {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* The reader's turn is UI, so it is mono in a chip. */
+.userBubble {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 10px 12px;
+  max-width: 68%;
+}
+
+/* The reply is prose, so it is Signifier at reading size and takes no chip —
+   the same rule the rest of the site follows. */
+.botText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 62ch;
+  margin: 0;
+}
+
+/* ── Chat chrome ── */
+
+.chatHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chatModel {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.chatHeadRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatCtx {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chatEmpty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.chatEmptyLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.botTurn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* A tool call is shown, never hidden — an answer that quietly searched
+   something is an answer nobody can check. */
+.toolCall {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  padding: 8px 10px;
+}
+
+.chatCode {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.citeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Revealed on hover but never removed from the tab order — a keyboard user
+   cannot hover, and hiding actions from them is the commonest chat failure. */
+.msgActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.msgActions:focus-within {
+  opacity: 1;
+}
+
+.msgAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  padding: 5px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.msgAction:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stoppedTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.chatError {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.08);
+  border-left: 2px solid rgba(255, 80, 80, 0.7);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+
+.attachChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+  padding: 4px 6px;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+
+.chatFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chatHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.chatFail {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.chatFail:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chatFailOn {
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.xComposerField {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: border-color 0.15s;
+}
+
+.xComposerField:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* The composer never moves. A control that jumps as the log grows is
+   unusable while something is streaming into it. */
+.xComposer {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.composerInput {
+  width: 100%;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: none;
+  border: none;
+  padding: 6px 0;
+  outline: none;
+}
+
+.composerInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.composerInput:focus {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #111;
+}
+
+.composerSend {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.composerSend:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.composerSend:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+  .userBubble {
+    max-width: 85%;
+  }
+
+
+/* ── content ──────────────────────────────────────────── */
+
+/* ── Cards ───────────────────────────────────────────────────────────────────
+   One base. Every variant is this plus content — which is precisely what the
+   58 blocks across the site each re-declare from scratch. */
+
+.cardBase {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px 24px;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+/* The only card that moves. If it doesn't navigate, it doesn't lift. */
+.xCardLink {
+  cursor: pointer;
+}
+
+.xCardLink:hover {
+  background: #1c1c1c;
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.consentStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 96px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.consent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 16px 18px;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+}
+
+.consentText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* Equal weight, deliberately. A banner where refusing is harder than
+   accepting is not consent. */
+.consentActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.consentEcho {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Stat tiles ── */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  padding: 18px 16px;
+}
+
+.tileLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.tileFig {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.tileMain {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tileSpark {
+  width: 96px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.tileDelta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* A delta with no stated comparison is a number pretending to be a fact. */
+.tileVs {
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.08em;
+}
+
+/* Direction is carried by the sign as well as the colour, so the delta is not
+   colour-alone. */
+.tileDeltaGood {
+  color: rgba(190, 220, 150, 0.9);
+}
+
+/* ── Sparklines & multiples ── */
+
+.sparks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spark {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.sparkLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sparkSvg {
+  width: 100%;
+  height: 34px;
+}
+
+.sparkVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.multiples {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.multiple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.multipleSvg {
+  width: 100%;
+  height: auto;
+}
+
+/* ── Texture ── */
+
+/* Defs carrier: present in the DOM, absent from the layout. */
+.defsOnly {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.texRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.texChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.texChip:hover {
+  background: #1c1c1c;
+}
+
+/* crispEdges on the swatch too — a scaled-down preview that antialiases
+   misrepresents the fill it is advertising. The swatch sits on the ground
+   colour rather than the card so the fill is shown at the contrast it will
+   actually have in use. */
+.texSwatch {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  background: #0a0a0a;
+  shape-rendering: crispEdges;
+}
+
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .texRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .consent {
+    flex-direction: column;
+    align-items: stretch;
+  }
