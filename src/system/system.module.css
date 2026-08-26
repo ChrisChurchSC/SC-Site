@@ -4142,13 +4142,31 @@
   color: var(--sc-text-meta);
 }
 
-/* Prose measure, not panel width. A wiki page read at 1400px is a wiki page
-   nobody finishes. */
+/* The measure belongs to the prose, not to the page. Capping the whole body
+   squashed every specimen down to text width — an icon grid and a chart need
+   the room, and a paragraph needs not to have it. */
 .wikiBody {
   display: flex;
   flex-direction: column;
   gap: var(--sc-space-4);
-  max-width: 68ch;
+}
+
+.wikiBody > .wikiP,
+.wikiBody > .wikiH,
+.wikiBody > .wikiList,
+.wikiBody > .wikiRule { max-width: 68ch; }
+
+.wikiFigure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.wikiCaption {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
 }
 
 .wikiH {
@@ -4242,3 +4260,338 @@
 
 .wikiRelated { display: flex; flex-wrap: wrap; gap: var(--sc-space-3); }
 .wikiRelated .wikiLink { width: auto; border-left: none; padding: 0; }
+
+/* ── Wiki demos ────────────────────────────────────────────────────────────
+   Live specimens, not pictures of specimens. Every block here renders the real
+   component or reads the real token, so it cannot describe a system that has
+   moved on without it. */
+
+.wdBlock {
+  background: var(--sc-recessed);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-4);
+  overflow: hidden;
+}
+
+.wdRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+.wdStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+}
+
+.wdCount {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+}
+
+.wdName {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-strong);
+}
+
+.wdToken {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* The shipped value, read back from the cascade — so if it is wrong here, it
+   is wrong in the product too. */
+.wdValue {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-faint);
+}
+
+/* ── Swatches ──────────────────────────────────────────────────────────── */
+
+.wdSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-3);
+}
+
+.wdSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 116px;
+}
+
+.wdChip {
+  display: block;
+  height: 44px;
+  border-radius: var(--sc-radius-sm);
+  /* An inset hairline, because #0a0a0a on #0e0e0e is invisible without one and
+     the darkest surfaces are exactly the ones worth showing. */
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+  margin-bottom: 2px;
+}
+
+.wdChipTall { height: 64px; }
+
+/* ── Text ramp ─────────────────────────────────────────────────────────── */
+
+.wdRamp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.wdRampRow {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) 44px;
+  align-items: baseline;
+  gap: var(--sc-space-3);
+}
+
+.wdRampText {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Type ──────────────────────────────────────────────────────────────── */
+
+.wdType {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+}
+
+.wdTypeRow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--sc-space-4);
+  border-bottom: 1px solid var(--sc-line);
+  padding-bottom: var(--sc-space-3);
+}
+
+.wdTypeRow:last-child { border-bottom: none; padding-bottom: 0; }
+
+.wdTypeSpec {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.wdTypeSample {
+  font-weight: 300;
+  line-height: 1.35;
+  color: var(--sc-text-peak);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wdFamilies {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sc-space-4);
+}
+
+.wdFamily {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 1px solid var(--sc-line-strong);
+  padding-left: var(--sc-space-3);
+}
+
+.wdFamilySample {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.3;
+  color: var(--sc-text-peak);
+  margin-top: 4px;
+}
+
+/* ── Space ─────────────────────────────────────────────────────────────── */
+
+.wdSpace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.wdSpaceRow {
+  display: grid;
+  grid-template-columns: 84px 1fr 44px;
+  align-items: center;
+  gap: var(--sc-space-3);
+}
+
+/* Drawn at its own size, so the scale is a thing you see rather than arithmetic
+   you do. */
+.wdSpaceBar {
+  display: block;
+  height: 12px;
+  background: var(--sc-purple);
+  border-radius: 1px;
+}
+
+/* ── Tiles: radius and elevation ───────────────────────────────────────── */
+
+.wdTiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-4);
+}
+
+.wdTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.wdTileArt {
+  display: block;
+  width: 64px;
+  height: 64px;
+  background: var(--sc-fill);
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+/* ── Layers ────────────────────────────────────────────────────────────── */
+
+.wdLayers {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wdLayer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  width: 180px;
+  background: var(--sc-card);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  padding: 6px var(--sc-space-2);
+}
+
+/* ── Icons ─────────────────────────────────────────────────────────────── */
+
+.wdIconWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+}
+
+.wdIcons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: var(--sc-space-2);
+}
+
+.wdIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--sc-text-support);
+  border: 1px solid transparent;
+  border-radius: var(--sc-radius-sm);
+  padding: var(--sc-space-2) 4px;
+  transition: color var(--sc-fast), border-color var(--sc-fast);
+}
+
+.wdIcon:hover { color: var(--sc-text-peak); border-color: var(--sc-line-strong); }
+
+.wdIconName {
+  font-family: var(--sc-font-mono);
+  font-size: 8px;
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-faint);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* ── Charts ────────────────────────────────────────────────────────────── */
+
+.wdCharts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sc-space-5);
+}
+
+.wdChart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  min-width: 0;
+}
+
+.wdStat { display: block; min-width: 180px; }
+.wdSpark { display: inline-flex; color: var(--sc-s1); }
+
+.wdPerson {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+}
+
+/* ── Motion ────────────────────────────────────────────────────────────────
+   The puck moves on hover of its own row, so each duration is felt against the
+   others rather than read as three numbers. */
+
+.wdMotionRow {
+  display: grid;
+  grid-template-columns: 68px 200px 48px 1fr;
+  align-items: center;
+  gap: var(--sc-space-3);
+}
+
+.wdTrack {
+  display: block;
+  height: 20px;
+  background: var(--sc-fill-faint);
+  border-radius: var(--sc-radius-pill);
+  padding: 3px;
+}
+
+.wdPuck {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: var(--sc-pink);
+  border-radius: 50%;
+  transform: translateX(0);
+  transition-property: transform;
+  transition-timing-function: var(--sc-ease);
+}
+
+.wdMotionRow:hover .wdPuck { transform: translateX(180px); }
+
+@media (max-width: 700px) {
+  .wdMotionRow { grid-template-columns: 60px 1fr 44px; }
+  .wdMotionRow > :last-child { display: none; }
+  .wdRampRow { grid-template-columns: 56px minmax(0, 1fr); }
+  .wdRampRow > :last-child { display: none; }
+}

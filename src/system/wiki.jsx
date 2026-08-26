@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react'
 import s from './system.module.css'
 import { Icon, Button, Avatar } from './primitives'
+import { WikiDemo } from './wikiDemos'
 
 /* Wiki — the part of a brand system that is prose rather than an asset.
  *
@@ -15,6 +17,20 @@ import { Icon, Button, Avatar } from './primitives'
  */
 export function Wiki({ pages, current, onSelect, onEdit }) {
   const page = pages.find((p) => p.slug === current) ?? pages[0]
+  const first = useRef(true)
+
+  /* Land at the top of the page you asked for. Following a Related link from
+     the foot of a long page and arriving halfway down the next one reads as
+     the link having failed.
+
+     The window rather than the element: scrolling the wiki's own top into view
+     put it flush against the viewport and hid the page title behind the
+     workspace chrome above it. Not on first render, so arriving at the section
+     does not yank a page that is already where it should be. */
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [page.slug])
 
   return (
     <div className={s.wiki}>
@@ -67,6 +83,17 @@ export function Wiki({ pages, current, onSelect, onEdit }) {
               )
             }
             if (b.code) return <pre key={i} className={s.wikiCode}><code>{b.code}</code></pre>
+            /* A live specimen, rendered from the real component or the real
+               token. A page about a design system that shows no part of it is
+               a page you have to take on trust. */
+            if (b.show) {
+              return (
+                <figure key={i} className={s.wikiFigure}>
+                  <WikiDemo id={b.show} />
+                  {b.caption && <figcaption className={s.wikiCaption}>{b.caption}</figcaption>}
+                </figure>
+              )
+            }
             return <p key={i} className={s.wikiP}>{b.p}</p>
           })}
         </div>

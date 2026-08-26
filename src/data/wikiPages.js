@@ -27,6 +27,9 @@ const WIKI = [
 import { Shell, Panel, Button } from '../system'
 
 <div className="sc-root">…</div>` },
+      { show: 'buttons', caption: 'Button, IconButton — solid, default, small, disabled with its reason' },
+      { show: 'statuses', caption: 'Badge and Banner. Status ships with an icon and a label, never colour alone' },
+      { show: 'controls', caption: 'Segmented, Switch, Field, Input — the real controls, live' },
       { rule: 'If this wiki and the token file disagree, the token file is right and this page is stale. Fix the page.' },
     ],
   },
@@ -55,6 +58,7 @@ import { Shell, Panel, Button } from '../system'
     body: [
       { h: 'Surfaces' },
       { p: 'One ground, one card, and small steps either side of it. Five values, and depth comes from the step between them rather than from shadow.' },
+      { show: 'surfaces', caption: 'Read back from the cascade — if a value is wrong here it is wrong in the product' },
       { code: `--sc-ground      #0a0a0a   the page
 --sc-recessed    #0e0e0e   inset: bars, table heads, code
 --sc-card        #161616   the default surface
@@ -62,11 +66,14 @@ import { Shell, Panel, Button } from '../system'
 --sc-raised      #1e1e1e   sits on top of a card` },
       { h: 'Text' },
       { p: 'White at descending alpha — nine steps, from peak at 0.95 down to faint at 0.22. There is no second text colour anywhere in the system. The entire hierarchy is opacity, which is what lets light mode be a filter rather than a second palette.' },
+      { show: 'text-ramp', caption: 'Nine chips would tell you nothing. Nine lines of the same sentence show where it stops being readable' },
       { rule: 'Text wears text tokens, never a series or accent colour. A coloured mark beside a label carries the identity; the label itself stays ink.' },
       { h: 'Accent' },
       { p: 'Two hues, and only two: pink #df4ed6 and purple #7d5ae0. Teal and blue were declared for two years and used nowhere, so they were removed rather than found work for.' },
+      { show: 'accents' },
       { h: 'Status' },
       { p: 'Good, warn and bad are reserved. They are never reused as a chart series or as a fourth accent, and they always ship with an icon and a label — colour alone is not a state.' },
+      { show: 'status' },
     ],
   },
 
@@ -84,9 +91,12 @@ import { Shell, Panel, Button } from '../system'
 --sc-s5  →  s2
 --sc-s6  →  s3` },
       { p: 'The aliases are deliberate. A chart reaching for a fourth series gets a visible repeat rather than a colour that quietly fails a check nobody ran.' },
+      { show: 'chart-slots', caption: 'Slots 4 to 6 are the same three colours again — the repeat is the warning' },
       { rule: 'Past three series: small multiples, or an "Other" bucket. Never a fourth hue.' },
       { h: 'A composition is not four things' },
       { p: 'A donut or a stacked bar shows degrees of one whole, so it takes the sequential ramp — q1 through q5, one hue light to dark. Handing it the categorical slots is exactly how a fourth slice ends up the same colour as the first, which is a bug this system has already shipped twice.' },
+      { show: 'sequential' },
+      { show: 'charts', caption: 'Every chart in the system, live. The donut takes the sequential ramp for exactly this reason' },
       { h: 'The rest of it' },
       { list: [
         'Never a dual-axis chart. Two measures of different scale get two charts, small multiples, or an index to a common base.',
@@ -103,6 +113,7 @@ import { Shell, Panel, Button } from '../system'
     body: [
       { p: 'Two families, held far apart on purpose. Signifier carries anything a person wrote and is read for meaning. Roboto Mono carries anything a machine produced — timestamps, hashes, counts, file names, labels.' },
       { p: 'The distinction does real work: it means a number never has to explain where it came from. You can tell at a glance whether you are reading someone or reading the system.' },
+      { show: 'type-families', caption: 'Same size, same weight, different job' },
       { h: 'The scale' },
       { code: `--sc-size-eyebrow   8px    uppercase, tracked
 --sc-size-label     9px
@@ -111,6 +122,7 @@ import { Shell, Panel, Button } from '../system'
 --sc-size-body     14px
 --sc-size-lede     15px    prose set in the serif` },
       { p: 'Anything larger is a clamp() in the component, because display sizes should respond to the viewport and a fixed token cannot.' },
+      { show: 'type-scale', caption: 'Set at the real token, in the face that token is used with' },
       { h: 'Tracking' },
       { p: 'Four steps, from 0.04em to 0.14em. Small uppercase mono needs the widest; nothing set in the serif is tracked at all.' },
       { rule: 'Never letterspace the serif. It is drawn with its spacing already in it.' },
@@ -132,10 +144,14 @@ import { Shell, Panel, Button } from '../system'
 --sc-space-7    48px
 --sc-space-8    64px` },
       { p: '5px stays as a named exception because it is the homepage gutter, and rounding it to 4 or 8 would change a page that is already right.' },
+      { show: 'space-scale', caption: 'Each bar drawn at its own value' },
       { h: 'Radius' },
       { p: 'Four values: 2px, 4px, 16px, and a pill. A 3px step existed and was dropped — it was doing nothing 2px and 4px were not already doing.' },
+      { show: 'radius' },
+      { show: 'elevation', caption: 'Three shadows, each with a job. The drawer casts upward because it rises from the edge of the screen' },
       { h: 'Layers' },
       { p: 'Eight named steps, 100 apart, so there is room to insert without renumbering. They replaced eleven ad-hoc z-index values including 9500 and 9999.' },
+      { show: 'layers' },
       { code: `base 0 · raised 10 · sticky 100 · nav 200
 drawer 300 · overlay 400 · toast 500 · cursor 600` },
       { rule: 'A raw z-index in a component is a bug. If none of the eight fits, the layer model is wrong and needs a step added here.' },
@@ -149,6 +165,7 @@ drawer 300 · overlay 400 · toast 500 · cursor 600` },
     related: ['components'],
     body: [
       { p: '57 paths on a 16px grid: 1.25px strokes, butt caps, miter joins, every terminal on a whole pixel. Closer to a technical drawing than to an app icon.' },
+      { show: 'icons', caption: 'Rendered from the same export the components use — add one and this grid grows on its own' },
       { h: 'The constraints' },
       { list: [
         'Geometry only — no tapers, no rounded corners, no optical curves.',
@@ -171,9 +188,11 @@ drawer 300 · overlay 400 · toast 500 · cursor 600` },
 --sc-medium  0.3s    panels, disclosure
 --sc-slow    0.5s    page-level` },
       { p: 'One easing curve for everything. A product with three easings has three motion languages and no one chose any of them.' },
+      { show: 'motion' },
       { h: 'Focus' },
       { p: 'One ring for every control: a 2px outline at 2px offset, applied once at .sc-root rather than per component, so a new component gets it by existing.' },
       { p: 'The offset matters. Flush to the edge the ring reads as a border and disappears on anything that already has one.' },
+      { show: 'focus' },
       { rule: ':focus-visible, never :focus. The ring answers "where is the keyboard", and flashing it on every mouse click teaches people to ignore it.' },
       { h: 'Reduced motion' },
       { p: 'Not "no motion" — motion that moves nothing through space. Fades survive because opacity carries no vestibular cost; travel, scale and looping stop.' },
@@ -185,6 +204,8 @@ drawer 300 · overlay 400 · toast 500 · cursor 600` },
     related: ['home', 'contributing'],
     body: [
       { p: '62 components across 11 modules. Every one reads tokens; almost none writes a raw value.' },
+      { show: 'stats', caption: 'StatTile and Sparkline' },
+      { show: 'people', caption: 'Avatar — initials derived from the name, one colour, no cartoon' },
       { code: `primitives      26   Button, Panel, Field, Avatar, StatTile…
 shell           11   Shell, GlobalBar, Sidebar, Grid, Col…
 charts           6   Line, Bar, RankedBar, Donut, Sparkline
