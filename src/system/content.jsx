@@ -3,6 +3,14 @@ import s from './system.module.css'
 import { Icon, Button, Avatar } from './primitives'
 import { SERIES } from './charts'
 
+/* Content — the blocks a page is assembled from once the controls are decided.
+ *
+ * Cards, people, headline numbers, the consent banner, and the texture fills.
+ * Small pieces, but they are the ones every page reaches for, and having them
+ * anywhere other than the package is how two pages end up with two cards.
+ */
+
+
 /* Status tones. Kept as a map rather than a prop so a caller cannot invent a
    sixth state that nothing else in the system knows how to draw. */
 const STATUS_TONE = {
@@ -30,13 +38,6 @@ const TEXTURES = [
   ['sc-tex-scan', 'Scanline', 'Horizontal only. Reads as a screen.'],
   ['sc-tex-stipple', 'Stipple', 'Irregular grain. Placeholders and empty states.'],
 ]
-
-/* Content — the blocks a page is assembled from once the controls are decided.
- *
- * Cards, people, headline numbers, the consent banner, and the texture fills.
- * Small pieces, but they are the ones every page reaches for, and having them
- * anywhere other than the package is how two pages end up with two cards.
- */
 
 export function StatusPill({ value }) {
   const tone = STATUS_TONE[value] ?? ''

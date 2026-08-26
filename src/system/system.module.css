@@ -7707,3 +7707,39 @@
     flex-direction: column;
     align-items: stretch;
   }
+
+/* ── Row thumbnails ────────────────────────────────────────────────────────
+   Same footprint as the icon they replace, so a folder of mixed types keeps
+   one column edge rather than two. */
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--sc-recessed);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--sc-line-strong);
+}
+
+.thumbArt { display: block; width: 100%; height: 100%; }
+
+.thumbGround { fill: var(--sc-recessed); }
+.thumbFrame { fill: rgba(125, 90, 224, 0.5); }
+.thumbPage { fill: var(--sc-card); }
+.thumbInk { fill: var(--sc-text-faint); }
+.thumbWave { fill: var(--sc-s1); }
+
+/* Colour chips fill the plate edge to edge — a token file is its colours, and
+   framing them in a box would make them look like content in a document. */
+.thumbChips {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+}
+
+.thumbChips > span { display: block; height: 100%; }

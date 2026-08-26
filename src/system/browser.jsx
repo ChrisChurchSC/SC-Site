@@ -43,6 +43,99 @@ export function Path({ segments, onNavigate }) {
   )
 }
 
+/* The mark at the head of a row.
+ *
+ * A file icon tells you the extension, which the filename already told you.
+ * Where a file has something to show — an artboard, pages, a waveform, a set
+ * of colours — the row shows a small true rendering of it instead, drawn from
+ * the same data the full preview uses. Scanning a folder should not require
+ * opening everything in it.
+ *
+ * Falls back to the icon when there is genuinely nothing to draw. A thumbnail
+ * that invents a picture is worse than a glyph that admits there isn't one.
+ */
+export function FileThumb({ entry: e }) {
+  if (e.kind === 'folder') {
+    return (
+      <span className={`${s.rowIcon} ${s.rowIconFolder}`}>
+        <Icon name="folder" size={15} />
+      </span>
+    )
+  }
+
+  /* An artboard: its frames at their real proportions, at 26px wide. */
+  if (e.render === 'canvas' && e.canvas) {
+    const { width, height, frames } = e.canvas
+    return (
+      <span className={s.thumb}>
+        <svg viewBox={`0 0 ${width} ${height}`} className={s.thumbArt} aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+          <rect width={width} height={height} className={s.thumbGround} />
+          {frames.slice(0, 12).map((f) => (
+            <rect key={f.name} x={f.x} y={f.y} width={f.w} height={f.h} className={s.thumbFrame} />
+          ))}
+        </svg>
+      </span>
+    )
+  }
+
+  /* A deck: the first page's block structure, which is enough to tell a title
+     slide from a body one at this size. */
+  if (e.render === 'pdf' && e.pdf) {
+    const blocks = e.pdf.pages[0]?.blocks ?? []
+    return (
+      <span className={s.thumb}>
+        <svg viewBox="0 0 40 30" className={s.thumbArt} aria-hidden="true">
+          <rect width="40" height="30" className={s.thumbPage} />
+          {blocks.slice(0, 4).map((b, i) => (
+            <rect
+              key={i}
+              x="6" y={6 + i * 6}
+              width={b.kind === 'h' ? 26 : b.kind === 'rule' ? 28 : 20}
+              height={b.kind === 'h' ? 3.5 : 1.5}
+              className={s.thumbInk}
+            />
+          ))}
+        </svg>
+      </span>
+    )
+  }
+
+  if (e.render === 'wave' && e.wave) {
+    const peaks = e.wave.peaks.slice(0, 14)
+    return (
+      <span className={s.thumb}>
+        <svg viewBox="0 0 40 30" className={s.thumbArt} aria-hidden="true">
+          {peaks.map((p, i) => (
+            <rect
+              key={i}
+              x={2 + i * 2.7} y={15 - (p * 13)}
+              width="1.6" height={Math.max(1.5, p * 26)}
+              className={s.thumbWave}
+            />
+          ))}
+        </svg>
+      </span>
+    )
+  }
+
+  /* Any file whose text holds hex colours shows them. A token file is a set of
+     colours, and a row that renders it as a page icon is throwing that away. */
+  const hexes = e.text ? [...new Set(e.text.match(/#[0-9a-f]{6}\b/gi) ?? [])].slice(0, 4) : []
+  if (hexes.length >= 2) {
+    return (
+      <span className={`${s.thumb} ${s.thumbChips}`}>
+        {hexes.map((h) => <span key={h} style={{ background: h }} />)}
+      </span>
+    )
+  }
+
+  return (
+    <span className={s.rowIcon}>
+      <Icon name={e.icon ?? 'file'} size={15} />
+    </span>
+  )
+}
+
 export function FileBrowser({ entries, head, onOpen }) {
   /* Folders first. The sort is here rather than at the call site so every
      consumer gets it — this is the kind of rule that rots when it is a
@@ -88,9 +181,7 @@ export function FileBrowser({ entries, head, onOpen }) {
             className={s.row}
             onClick={() => onOpen?.(e)}
           >
-            <span className={`${s.rowIcon} ${e.kind === 'folder' ? s.rowIconFolder : ''}`}>
-              <Icon name={e.kind === 'folder' ? 'folder' : e.icon ?? 'file'} size={15} />
-            </span>
+            <FileThumb entry={e} />
             <span className={s.rowName}>{e.name}</span>
             <span className={s.rowMsg}>{e.message}</span>
             {e.status && <span className={s.rowStatus}>{e.status}</span>}

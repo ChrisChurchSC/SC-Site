@@ -38,7 +38,7 @@ export {
   Axis, SERIES, Legend, Sparkline, LineChart, BarChart, RankedBar, Donut,
 } from './charts'
 
-export { Path, FileBrowser, FileView, CodeLines, MediaPreview, Tree } from './browser'
+export { Path, FileBrowser, FileThumb, FileView, CodeLines, MediaPreview, Tree } from './browser'
 
 export {
   REQUEST_STATES, RequestState, DiffStat, RequestList, RequestDetail,

@@ -195,3 +195,118 @@
   max-width: 68ch;
   margin: 0;
 }
+
+/* ── MCP access ────────────────────────────────────────────────────────────
+   A field and its actions on one line: the endpoint and the token are both
+   things you copy rather than type, so the control that copies them belongs
+   beside the value, not under it. */
+
+.mcpRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mcpRow > :first-child { flex: 1; min-width: 200px; }
+
+.mcpTools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+}
+
+.mcpToolList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Every tool the model can call, listed by name. A permission screen that
+   says "read access" without naming what that means is asking for consent to
+   something nobody has been shown. */
+.mcpTool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-good);
+}
+
+.mcpTool svg { flex-shrink: 0; }
+
+.mcpToolOff { color: var(--sc-text-faint); }
+
+.mcpToolScope {
+  margin-left: auto;
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+/* ── Data source ───────────────────────────────────────────────────────────
+   Where the numbers came from and when, stated above them rather than in a
+   footnote. A figure with no provenance is a figure nobody can check. */
+
+.sourceBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+  background: var(--sc-recessed);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-2) var(--sc-space-3);
+}
+
+.sourceState {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-good);
+}
+
+.sourceVia {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+}
+
+.sourceVia code { color: var(--sc-text-support); }
+
+/* The empty state names the missing connection and offers the way to it. An
+   empty state that only says "no data" makes the reader guess whether the
+   product is broken or simply unconfigured. */
+.noSource {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sc-space-3);
+  text-align: center;
+  color: var(--sc-text-faint);
+  border: 1px dashed var(--sc-line-strong);
+  border-radius: var(--sc-radius);
+  padding: var(--sc-space-8) var(--sc-space-5);
+}
+
+.noSourceTitle {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-support);
+}
+
+.noSourceBody {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  max-width: 48ch;
+  margin: 0;
+}
