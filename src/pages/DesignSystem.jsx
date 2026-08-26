@@ -580,6 +580,314 @@ function Icon({ name, size = 16 }) {
   )
 }
 
+/* ── Drawer (SHIPPED, undocumented) ──────────────────────────────────────────
+   Cal and contact both ship this and neither is in the system. Reproduced here
+   with the two things they are missing — dialog semantics and a focus trap —
+   so the documented version is the fixed one. */
+function Drawer() {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+  const ref = useFocusTrap(open, close)
+
+  return (
+    <div className={styles.overlayStageBox}>
+      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>
+        Open drawer
+      </button>
+      {open && (
+        <div className={styles.drawerBackdrop} onMouseDown={close}>
+          <div
+            ref={ref}
+            className={styles.drawer}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ds-drawer-title"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHead}>
+              <span id="ds-drawer-title" className={styles.modalTitle}>Book a call</span>
+              <button type="button" className={styles.iconOnly} onClick={close} aria-label="Close">
+                <Icon name="close" />
+              </button>
+            </div>
+            <p className={styles.modalBody}>
+              Rises from the bottom edge, which is why its shadow casts upward.
+            </p>
+            <button type="button" className={styles.btnSolid} onClick={close}>Confirm</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Popover: anchored and non-modal — it does not trap focus, because the page
+   behind it stays usable. That is the whole distinction from a modal, and
+   getting it wrong is why so many filter panels feel like a trap. */
+function Popover() {
+  const [open, setOpen] = useState(false)
+  const wrap = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDoc = (e) => { if (!wrap.current?.contains(e.target)) setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDoc)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDoc)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div className={styles.menuWrap} ref={wrap}>
+      <button type="button" className={styles.btnDemo} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+        <Icon name="filter" size={14} />Filter
+      </button>
+      {open && (
+        <div className={styles.popover} role="group" aria-label="Filter">
+          <span className={styles.popTitle}>Discipline</span>
+          <CheckGroup />
+        </div>
+      )}
+    </div>
+  )
+}
+
+function BottomSheet() {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+  const ref = useFocusTrap(open, close)
+  return (
+    <div className={styles.overlayStageBox}>
+      <button type="button" className={styles.btnOutline} onClick={() => setOpen(true)}>Open sheet</button>
+      {open && (
+        <div className={styles.drawerBackdrop} onMouseDown={close}>
+          <div ref={ref} className={styles.sheet} role="dialog" aria-modal="true" aria-label="Options" onMouseDown={(e) => e.stopPropagation()}>
+            {/* The grabber is the affordance that says "this drags" — without
+                it a sheet is just a modal stuck to the bottom. */}
+            <span className={styles.sheetGrab} />
+            {['Share', 'Copy link', 'Open in new tab'].map((t) => (
+              <button key={t} type="button" className={styles.sheetItem} onClick={close}>{t}</button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Consent. The site loads GTM and GA4 and has no consent UI anywhere — this is
+   the only component here with a compliance edge rather than a design one.
+   Reject is a real button of equal weight, not a link buried in the text: a
+   banner where refusing is harder than accepting is not consent. */
+function ConsentBanner() {
+  const [choice, setChoice] = useState(null)
+  return (
+    <div className={styles.consentStage}>
+      {choice ? (
+        <span className={styles.consentEcho}>
+          Analytics {choice === 'accept' ? 'enabled' : 'stay off'} — stored, not asked again.
+        </span>
+      ) : (
+        <div className={styles.consent} role="region" aria-label="Cookie consent">
+          <p className={styles.consentText}>
+            We use analytics to see which work gets read. Nothing is loaded until
+            you choose.
+          </p>
+          <div className={styles.consentActions}>
+            <button type="button" className={styles.btnOutline} onClick={() => setChoice('reject')}>Reject</button>
+            <button type="button" className={styles.btnSolid} onClick={() => setChoice('accept')}>Accept</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Segmented control: switches the view of one thing, where tabs switch between
+   different things. Confusing the two is why so many toolbars have both. */
+function Segmented() {
+  const [on, setOn] = useState('Grid')
+  return (
+    <div className={styles.segmented} role="group" aria-label="View">
+      {[['Grid', 'grid'], ['List', 'list'], ['Chart', 'chart']].map(([label, icon]) => (
+        <button
+          key={label}
+          type="button"
+          aria-pressed={on === label}
+          className={`${styles.segItem} ${on === label ? styles.segItemOn : ''}`}
+          onClick={() => setOn(label)}
+        >
+          <Icon name={icon} size={14} />{label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/* Copy button. Used about fifty times on this page and never a component
+   until now — the exact failure this page is about. */
+function CopyButton({ value, label = 'Copy', onCopy, copied }) {
+  const done = copied === value
+  return (
+    <button
+      type="button"
+      className={`${styles.copyBtn} ${done ? styles.copyBtnOn : ''}`}
+      onClick={() => onCopy(value)}
+    >
+      <Icon name={done ? 'check' : 'copy'} size={13} />
+      {done ? 'Copied' : label}
+    </button>
+  )
+}
+
+/* Error boundary fallback. Nothing in the codebase catches a render error, so
+   one today blanks the page. The fallback names what broke and offers the one
+   action that ever helps. */
+function ErrorFallback() {
+  return (
+    <div className={styles.errBoundary} role="alert">
+      <Icon name="warning" size={20} />
+      <span className={styles.errTitle}>This section didn't load</span>
+      <p className={styles.errText}>
+        The rest of the page is fine. Reloading usually fixes it.
+      </p>
+      <button type="button" className={styles.btnOutline}>
+        <Icon name="refresh" size={13} />Reload
+      </button>
+    </div>
+  )
+}
+
+/* Toast stack. One toast exists; two at once currently overlap, because
+   nothing owns the queue. Newest on top, and they push rather than cover. */
+function ToastStack() {
+  const [items, setItems] = useState([{ id: 1, text: 'Link copied' }])
+  const [n, setN] = useState(2)
+  const push = () => {
+    const id = n
+    setN((v) => v + 1)
+    setItems((t) => [{ id, text: `Saved · ${id}` }, ...t].slice(0, 3))
+    setTimeout(() => setItems((t) => t.filter((x) => x.id !== id)), 3200)
+  }
+  return (
+    <div className={styles.toastStageBox}>
+      <button type="button" className={styles.btnDemo} onClick={push}>Add toast</button>
+      <div className={styles.toastStack} role="status" aria-live="polite">
+        {items.map((t) => (
+          <span key={t.id} className={styles.toastDemo}>{t.text}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── Cards (NEW) ─────────────────────────────────────────────────────────────
+ *
+ * The largest drift in the system by a distance: 58 distinct card class blocks
+ * across 11 stylesheets. .numberedCard and .traitCard live in different files
+ * under different names and are the same card — #161616, 4px, flex column,
+ * padding differing by two pixels. Most of the 58 are that.
+ *
+ * Six variants cover all of them. Everything is the Surface plus content; the
+ * variants differ in what they hold and whether they are clickable, never in
+ * what they are made of.
+ */
+
+const CARD_SLOTS = [
+  ['Eyebrow', '8px mono, 0.14em, alpha 0.22', 'Optional. Category, number or date.'],
+  ['Title', 'Signifier 300 or 10px mono', 'The only required slot.'],
+  ['Body', 'Signifier 300, 14px, alpha 0.5', 'Optional. Two lines is the practical limit.'],
+  ['Meta', '8px mono, 0.12em, alpha 0.3', 'Optional. Year, type, duration.'],
+  ['Media', 'aspect-ratio, radius 4px', 'Optional. Always first or full-bleed.'],
+]
+
+function CardAnatomy() {
+  return (
+    <div className={styles.anatomy}>
+      <div className={styles.anatomyCard}>
+        <span className={`${styles.anaSlot} ${styles.anaMedia}`}>Media</span>
+        <span className={styles.anaSlot}>Eyebrow</span>
+        <span className={`${styles.anaSlot} ${styles.anaTitle}`}>Title</span>
+        <span className={styles.anaSlot}>Body</span>
+        <span className={styles.anaSlot}>Meta</span>
+      </div>
+      <dl className={styles.anaList}>
+        {CARD_SLOTS.map(([name, spec, note]) => (
+          <Fragment key={name}>
+            <dt className={styles.anaTerm}>{name}</dt>
+            <dd className={styles.anaDesc}>
+              <span className={styles.anaSpec}>{spec}</span>
+              <span className={styles.anaNote}>{note}</span>
+            </dd>
+          </Fragment>
+        ))}
+      </dl>
+    </div>
+  )
+}
+
+/* One base. Every variant below is this plus content — which is exactly what
+   the 58 blocks each re-declare from scratch. */
+function CardSurface({ children, link, className = '' }) {
+  return (
+    <div className={`${styles.cardBase} ${link ? styles.cardLink : ''} ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+function CardVariants() {
+  return (
+    <div className={styles.cardGrid}>
+      <CardSurface>
+        <span className={styles.cardEyebrow}>Surface</span>
+        <span className={styles.cardHeading}>The base</span>
+        <span className={styles.cardBodyText}>
+          #161616, 4px, flex column. Nothing else.
+        </span>
+      </CardSurface>
+
+      <CardSurface>
+        <span className={styles.cardIndex}>03</span>
+        <span className={styles.cardHeading}>Numbered</span>
+        <span className={styles.cardBodyText}>
+          Replaces numberedCard, pillarCard, traitCard, doorCard.
+        </span>
+      </CardSurface>
+
+      <CardSurface link>
+        <span className={styles.cardEyebrow}>Link</span>
+        <span className={styles.cardHeading}>Clickable</span>
+        <span className={styles.cardBodyText}>
+          Lifts 6px, takes a ring. The only card that moves.
+        </span>
+      </CardSurface>
+
+      <CardSurface className={styles.cardMediaVariant}>
+        <span className={styles.cardThumbDemo} />
+        <span className={styles.cardEyebrow}>Brand</span>
+        <span className={styles.cardHeading}>Media</span>
+      </CardSurface>
+
+      <CardSurface>
+        <span className={styles.cardFigure}>3.4×</span>
+        <span className={styles.cardEyebrow}>Pipeline growth</span>
+      </CardSurface>
+
+      <CardSurface className={styles.cardMuted}>
+        <span className={styles.cardEyebrow}>Coming soon</span>
+        <span className={styles.cardHeading}>Muted</span>
+        <span className={styles.cardBodyText}>
+          Not a link. Dimmed rather than hidden, so the shape of the grid holds.
+        </span>
+      </CardSurface>
+    </div>
+  )
+}
+
 /* ── Overlays (NEW) ──────────────────────────────────────────────────────────
  *
  * The primitive the site is missing. Cal and contact drawers both ship, both
@@ -2856,7 +3164,7 @@ export default function DesignSystem() {
               ['Colour', 'colour'], ['Type', 'type'], ['Radius', 'radius'],
               ['Spacing', 'spacing'], ['Depth', 'depth'], ['Texture', 'texture'],
               ['Icons', 'icons'], ['Buttons', 'buttons'], ['Forms', 'fields'],
-              ['Nav', 'nav'], ['Grids', 'grids'], ['Content', 'content'],
+              ['Nav', 'nav'], ['Grids', 'grids'], ['Cards', 'cards'], ['Content', 'content'],
               ['Charts', 'charts'], ['Media', 'media'], ['Carousels', 'carousels'],
               ['Chat', 'chat'], ['Conversion', 'conversion'], ['Feedback', 'feedback'],
               ['Overlays', 'overlays'], ['Motion', 'motion'], ['Layout', 'layout'],
@@ -3412,6 +3720,23 @@ export default function DesignSystem() {
             >
               <button type="button" className={styles.btnDanger}>Delete</button>
             </Demo>
+
+            <Demo label="Copy" status="NEW"
+              note="Used about fifty times on this page and never a component until now — the exact failure this page is about. The icon swaps to a tick, so the confirmation needs no toast.">
+              <CopyButton value="#161616" onCopy={copy} copied={copied} />
+            </Demo>
+
+            <Demo label="Segmented" status="NEW"
+              note="Switches the view of one thing, where tabs switch between different things. Confusing the two is why so many toolbars end up carrying both.">
+              <Segmented />
+            </Demo>
+
+            <Demo label="Shortcut hint" status="NEW"
+              note="The command palette shows ⌘K and there is no kbd treatment anywhere. Raised rather than inset, so it reads as a physical key.">
+              <span className={styles.kbdRow}>
+                Press <kbd className={styles.kbd}>⌘</kbd><kbd className={styles.kbd}>K</kbd> to search
+              </span>
+            </Demo>
           </div>
 
           <h3 className={styles.subhead}>Specs</h3>
@@ -3835,10 +4160,71 @@ export default function DesignSystem() {
           </div>
         </Section>
 
-        {/* ── 08 Content ── */}
+        {/* ── Cards ── */}
+        <Section
+          id="cards"
+          index={12}
+          title="Cards"
+          blurb="The largest drift in the system: 58 distinct card class blocks across 11 stylesheets, and six variants cover all of them."
+        >
+          <p className={styles.prose}>
+            The site is made of cards, and there are fifty-eight independent
+            implementations of one idea.
+            {' '}<code className={styles.code}>.numberedCard</code> and
+            {' '}<code className={styles.code}>.traitCard</code> live in different files
+            under different names and are the same card — #161616, 4px, flex column,
+            padding differing by two pixels. Most of the fifty-eight are that.
+          </p>
+          <p className={styles.prose}>
+            The surface is at least consistent, so this is consolidation rather than
+            redesign. But fifty-eight blocks means nobody can change a card safely, and
+            every new page adds a fifty-ninth.
+          </p>
+
+          <h3 className={styles.subhead}>Anatomy</h3>
+          <p className={styles.subnote}>
+            Five slots. Only the title is required — a card is the surface plus
+            whichever of these it needs.
+          </p>
+          <CardAnatomy />
+
+          <h3 className={styles.subhead}>Variants</h3>
+          <p className={styles.subnote}>
+            Six, differing in what they hold and whether they are clickable — never in
+            what they are made of. Only the link variant moves.
+          </p>
+          <CardVariants />
+
+          <h3 className={styles.subhead}>Consolidation</h3>
+          <p className={styles.subnote}>
+            What each variant replaces, by class name, so the migration is a lookup
+            rather than a judgement call.
+          </p>
+          <div className={styles.list}>
+            {[
+              ['Surface', 'card, bsDetailCard, offeringCard, pkgInfoCard, menuCard, whoWeAreCard'],
+              ['Numbered', 'numberedCard, numberedCardCompact, pillarCard, traitCard, doorCard, disciplineCard'],
+              ['Link', 'workCard, wwCard, thoughtCard, roleCard'],
+              ['Media', 'cardThumb, cardOverlay, cardBody + block'],
+              ['Figure', 'outcomeCard, bsOutcomeCard, rateCard, compareCard'],
+              ['Muted', 'cardComingSoon, cardComingSoonBadge'],
+            ].map(([variant, replaces]) => (
+              <div key={variant} className={styles.row}>
+                <div className={styles.rowMain}>
+                  <div className={styles.rowText}>
+                    <span className={styles.rowLabel}>{variant}</span>
+                    <span className={styles.rowNote}>replaces {replaces}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ── Content ── */}
         <Section
           id="content"
-          index={12}
+          index={13}
           title="Content"
           blurb="The site sets prose beautifully and structures it barely at all. None of this exists yet."
         >
@@ -3989,7 +4375,7 @@ export default function DesignSystem() {
         {/* ── 09 Charts ── */}
         <Section
           id="charts"
-          index={13}
+          index={14}
           title="Charts"
           blurb="Pink and purple only. Three categorical slots — a measured ceiling, not a preference."
         >
@@ -4213,7 +4599,7 @@ export default function DesignSystem() {
         {/* ── 10 Media ── */}
         <Section
           id="media"
-          index={14}
+          index={15}
           title="Media &amp; image sizes"
           blurb="Four ratios, most overridden to 4:5 below 768px so the grid stays portrait."
         >
@@ -4290,7 +4676,7 @@ export default function DesignSystem() {
         {/* ── 09 Carousels ── */}
         <Section
           id="carousels"
-          index={15}
+          index={16}
           title="Carousels"
           blurb="One ships, one doesn't. The marquee decorates; the paged one is for content to get through."
         >
@@ -4322,7 +4708,7 @@ export default function DesignSystem() {
         {/* ── 10 AI chat ── */}
         <Section
           id="chat"
-          index={16}
+          index={17}
           title="AI chat"
           blurb="Doesn't exist yet. The question it has to answer: which half is UI and which half is prose."
         >
@@ -4371,7 +4757,7 @@ export default function DesignSystem() {
         {/* ── 12 Conversion ── */}
         <Section
           id="conversion"
-          index={17}
+          index={18}
           title="Conversion"
           blurb="The pages that have to ask for something. All rebuilt by hand today."
         >
@@ -4434,7 +4820,7 @@ export default function DesignSystem() {
         {/* ── 11 Feedback ── */}
         <Section
           id="feedback"
-          index={18}
+          index={19}
           title="Feedback"
           blurb="What the site says back."
         >
@@ -4524,13 +4910,23 @@ export default function DesignSystem() {
               note="For a wait with no known duration — where the progress bar would have to lie. A ring rather than dots, so it isn't confused with the chat's thinking state.">
               <span className={styles.spinner} role="status" aria-label="Loading" />
             </Demo>
+
+            <Demo label="Toast stack" status="NEW" stage={false}
+              note="One toast ships; two at once currently overlap, because nothing owns the queue. Newest on top, capped at three, and they push rather than cover.">
+              <div className={styles.formStage}><ToastStack /></div>
+            </Demo>
+
+            <Demo label="Error boundary" status="NEW" stage={false}
+              note="Nothing in the codebase catches a render error, so one today blanks the page. The fallback names what broke, says the rest is fine, and offers the one action that ever helps.">
+              <div className={styles.formStage}><ErrorFallback /></div>
+            </Demo>
           </div>
         </Section>
 
         {/* ── Overlays ── */}
         <Section
           id="overlays"
-          index={19}
+          index={20}
           title="Overlays"
           blurb="The primitive the site is missing. Both drawers ship without role=dialog, aria-modal, or a focus trap."
         >
@@ -4552,6 +4948,26 @@ export default function DesignSystem() {
             <Demo label="Dropdown menu" status="NEW" stage={false}
               note="An action menu, not a select: a select returns a value, a menu performs a verb. They look alike and behave differently, so they carry different roles. Click outside or press Escape to close.">
               <div className={styles.formStage}><DropdownMenu /></div>
+            </Demo>
+
+            <Demo label="Drawer" status="SHIPPED" stage={false}
+              note="Cal and contact both ship this and neither is in the system. Reproduced here with the two things they're missing — dialog semantics and a focus trap — so the documented version is the fixed one. Its shadow casts upward because it rises from the edge.">
+              <div className={styles.formStage}><Drawer /></div>
+            </Demo>
+
+            <Demo label="Popover" status="NEW" stage={false}
+              note="Anchored and non-modal: it does not trap focus, because the page behind it stays usable. That's the whole distinction from a modal, and getting it wrong is why so many filter panels feel like a trap.">
+              <div className={styles.formStage}><Popover /></div>
+            </Demo>
+
+            <Demo label="Bottom sheet" status="NEW" stage={false}
+              note="The drawer's mobile form. The grabber is the affordance that says 'this drags' — without it a sheet is just a modal stuck to the bottom.">
+              <div className={styles.formStage}><BottomSheet /></div>
+            </Demo>
+
+            <Demo label="Consent" status="NEW" wide stage={false}
+              note="The site loads GTM and GA4 with no consent UI anywhere — the only component here with a compliance edge rather than a design one. Reject is a real button of equal weight, not a link buried in the text: a banner where refusing is harder than accepting isn't consent.">
+              <ConsentBanner />
             </Demo>
           </div>
 
@@ -4579,7 +4995,7 @@ export default function DesignSystem() {
         {/* ── 12 Motion ── */}
         <Section
           id="motion"
-          index={20}
+          index={21}
           title="Motion"
           blurb="Everything arrives the same way: up ten pixels, fading in, over half a second."
         >
@@ -4612,7 +5028,7 @@ export default function DesignSystem() {
         {/* ── 06 Layout ── */}
         <Section
           id="layout"
-          index={21}
+          index={22}
           title="Layout"
           blurb="A tight grid with a reserved rail, and measures set in characters rather than pixels."
         >
@@ -4633,7 +5049,7 @@ export default function DesignSystem() {
         {/* ── 07 Light mode ── */}
         <Section
           id="light"
-          index={22}
+          index={23}
           title="Light mode"
           blurb="Not a second palette — a filter."
         >
@@ -4664,7 +5080,7 @@ export default function DesignSystem() {
         {/* ── Accessibility ── */}
         <Section
           id="a11y"
-          index={23}
+          index={24}
           title="Accessibility"
           blurb="Two live defects, not omissions. Both are cheap to fix and neither is fixed."
         >
@@ -4766,7 +5182,7 @@ export default function DesignSystem() {
         {/* ── 15 Backlog ── */}
         <Section
           id="backlog"
-          index={24}
+          index={25}
           title="Inventory"
           blurb="Every pattern the system holds, and how far each has travelled from a drawing to a component."
         >

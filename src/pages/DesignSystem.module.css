@@ -1406,6 +1406,435 @@
   white-space: nowrap;
 }
 
+/* ── Cards ───────────────────────────────────────────────────────────────────
+   One base. Every variant is this plus content — which is precisely what the
+   58 blocks across the site each re-declare from scratch. */
+
+.cardBase {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px 24px;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+/* The only card that moves. If it doesn't navigate, it doesn't lift. */
+.cardLink {
+  cursor: pointer;
+}
+
+.cardLink:hover {
+  background: #1c1c1c;
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cardMuted {
+  opacity: 0.5;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.cardHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cardBodyText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cardIndex {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.cardFigure {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.cardMediaVariant {
+  padding: 12px 12px 16px;
+}
+
+.cardThumbDemo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+/* ── Card anatomy ── */
+
+.anatomy {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.anatomyCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+}
+
+/* Dashed so a slot reads as a place a thing goes, not a thing. */
+.anaSlot {
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+  padding: 7px 9px;
+}
+
+.anaMedia {
+  justify-content: center;
+  height: 56px;
+}
+
+.anaTitle {
+  color: rgba(255, 255, 255, 0.8);
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.anaList {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 18px;
+  margin: 0;
+}
+
+.anaTerm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  padding-top: 2px;
+}
+
+.anaDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+}
+
+.anaSpec {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.anaNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* ── Drawer, popover, sheet, consent ── */
+
+.drawerBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(10, 10, 10, 0.82);
+  border-radius: 4px;
+}
+
+/* Casts upward, because it rises from the bottom edge. */
+.drawer,
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  background: #161616;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px 4px 0 0;
+  padding: 16px;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+}
+
+.sheet {
+  align-items: stretch;
+  gap: 2px;
+  padding: 10px 8px 8px;
+}
+
+.sheetGrab {
+  align-self: center;
+  width: 34px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-bottom: 8px;
+}
+
+.sheetItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 11px 10px;
+  border-radius: 3px;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.sheetItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Non-modal: no backdrop, no trap. The page behind stays usable, which is the
+   entire distinction from a modal. */
+.popover {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 168px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.popTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.consentStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 96px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.consent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 16px 18px;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+}
+
+.consentText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* Equal weight, deliberately. A banner where refusing is harder than
+   accepting is not consent. */
+.consentActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.consentEcho {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Segmented, copy, kbd ── */
+
+.segmented {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.segItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  padding: 8px 12px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.segItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.segItemOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.copyBtn:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* The tick is the confirmation, so it needs no toast. */
+.copyBtnOn {
+  color: rgba(190, 220, 150, 0.95);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.kbdRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Raised, not inset — a key sticks up. */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+  border-radius: 3px;
+  padding: 4px 6px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+              0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Error boundary & toast stack ── */
+
+.errBoundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  color: rgba(255, 80, 80, 0.85);
+  background: rgba(255, 80, 80, 0.05);
+  border: 1px dashed rgba(255, 80, 80, 0.3);
+  border-radius: 4px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.errTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.errText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 4px;
+}
+
+.toastStageBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Newest first, and they push rather than cover — the whole reason a stack
+   exists instead of a single slot. */
+.toastStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+}
+
 /* ── Overlays ── */
 
 .formStage,
@@ -5807,6 +6236,10 @@
     grid-template-columns: 1fr;
   }
 
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   /* The bar and the role drop away; the value and its verdict are what
      matter at this width. */
   .spaceRow {
@@ -5835,8 +6268,15 @@
   }
 
   .formRow,
-  .footerNav {
+  .footerNav,
+  .cardGrid,
+  .anatomy {
     grid-template-columns: 1fr;
+  }
+
+  .consent {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .ctaBand {
