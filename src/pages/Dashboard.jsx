@@ -6,14 +6,13 @@ import {
   Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
   SectionNav, Segmented, Field, Input, Switch,
   Tree, Path, FileBrowser, FileView, CodeLines, MediaPreview,
-  RequestList, RequestDetail, ProjectList, ProjectView,
+  RequestList, RequestDetail, ActivityFeed, Wiki,
   PdfPreview, CanvasPreview, WavePreview,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, RefSelect, FindField,
   LineChart, BarChart, RankedBar, Donut,
 } from '../system'
 import headMark from '../assets/logo.svg'
-import PROJECTS from '../data/workspaceProjects'
 import styles from './Dashboard.module.css'
 
 /* A brand workspace, browsed as a folder tree.
@@ -211,19 +210,24 @@ the system has to outlive the engagement.`,
   },
 }
 
-/* The brand's own folders. The projects group is built further down, once the
-   projects it lists exist. */
-const BRAND_TREE = {
+/* The sidebar is the brand's own tree, derived from the same object as the
+   listing so a folder cannot exist in one and be missing from the other. */
+const TREE = [{
   key: 'brand',
   label: FS.brand.label,
   icon: FS.brand.icon,
+  /* Folders, drawn as folders. They were carrying a discipline mark each — a
+     hexagon, a T, a waveform — which made a rail of folders look like a rail
+     of five unrelated tools. The discipline mark survives on the collapsed
+     rail, where five identical folder glyphs would be five identical buttons. */
   children: Object.entries(FS.brand.children).map(([ck, c]) => ({
     key: `brand/${ck}`,
     label: c.label,
-    icon: c.icon,
+    icon: 'folder',
+    railIcon: c.icon,
     count: c.children ? Object.keys(c.children).length : undefined,
   })),
-}
+}]
 
 const ROOT = ['brand', 'visual']
 
@@ -465,22 +469,97 @@ const REVIEWS = [
 
 
 
-/* Both roots in one rail: the brand's folders, and the projects using them.
-   The projects are named individually rather than hidden behind one entry —
-   a rail that says "Projects" and nothing else makes you click to find out
-   whether there are three of them or thirty. */
-const TREE = [
-  BRAND_TREE,
+
+/* Activity. Grouped by the day it happened rather than sorted into a map, so
+   the feed keeps the order it was given. */
+const ACTIVITY = [
+  { who: 'Dana Cole', kind: 'published', what: 'logo-lockup.fig', where: 'Brand / Visual', when: '2h', day: 'Today', note: 'small-size variant' },
+  { who: 'Ravi Menon', kind: 'commented', what: 'review #42', where: 'Reviews', when: '4h', day: 'Today' },
+  { who: 'Chris Church', kind: 'published', what: 'chart-palette.json', where: 'Brand / Data', when: '4h', day: 'Today', note: 'capped at three' },
+  { who: 'Ravi Menon', kind: 'updated', what: 'social-kit.fig', where: 'Brand / Channels', when: '6h', day: 'Today' },
+  { who: 'Chris Church', kind: 'review', what: 'positioning.md', where: 'Brand / Verbal', when: '1d', day: 'Yesterday' },
+  { who: 'Dana Cole', kind: 'updated', what: 'brand-guidelines.pdf', where: 'Brand / Visual', when: '1d', day: 'Yesterday', note: 'regenerated from tokens' },
+  { who: 'Dana Cole', kind: 'created', what: 'launch-narrative.md', where: 'Brand / Verbal', when: '2d', day: 'Earlier this week' },
+  { who: 'Ravi Menon', kind: 'updated', what: 'brand-sting.wav', where: 'Brand / Audio', when: '3d', day: 'Earlier this week', note: 'cut to 1.2s' },
+  { who: 'Ravi Menon', kind: 'drafted', what: 'channel-matrix.md', where: 'Brand / Channels', when: '5d', day: 'Earlier this week' },
+  { who: 'Chris Church', kind: 'published', what: 'messaging-house.md', where: 'Brand / Verbal', when: '1w', day: 'Last week' },
+  { who: 'Dana Cole', kind: 'created', what: 'table-rules.md', where: 'Brand / Data', when: '2w', day: 'Last week' },
+]
+
+/* The wiki. The part of a brand system that is prose rather than an asset —
+   why the palette stops where it does, what to do when a channel wants
+   something the system has no answer for, who decides. */
+const WIKI = [
   {
-    key: 'projects',
-    label: 'Projects',
-    icon: 'layers',
-    children: PROJECTS.filter((p) => !p.closed).map((p) => ({
-      key: `project/${p.id}`,
-      label: p.name,
-      icon: 'layers',
-      count: p.assets.length,
-    })),
+    slug: 'home', title: 'Home', by: 'Chris Church', when: '2d',
+    related: ['colour', 'contributing'],
+    body: [
+      { p: 'This workspace holds the brand: what it looks like, sounds like, says, charts and runs on. Five folders, one per material.' },
+      { h: 'How to use it' },
+      { list: [
+        'Take assets from Brand. Never from a deck, a Slack thread, or a previous project.',
+        'If an asset is marked Review or Draft, it is not approved. Live means approved.',
+        'Changing anything in Brand goes through a review. There is no direct publish.',
+      ] },
+      { rule: 'If this wiki and the token file disagree, the token file is right and this page is stale. Fix the page.' },
+      { h: 'Who to ask' },
+      { p: 'Visual and Data — Dana. Verbal and Channels — Chris. Audio — Ravi. Anything that crosses two of those is a conversation, not a request.' },
+    ],
+  },
+  {
+    slug: 'colour', title: 'Colour', by: 'Chris Church', when: '4h',
+    related: ['charts', 'home'],
+    body: [
+      { p: 'Two accents: pink and purple. Teal and blue were declared for two years and used nowhere, so they were removed rather than found work for.' },
+      { h: 'Why there is no third accent' },
+      { p: 'It was proposed and rejected — see review #35. Every value that separates cleanly from the other two under colour-vision simulation leaves the lightness band, and every value inside the band fails the adjacent-pair check.' },
+      { rule: 'Three is the ceiling for two adjacent hues. A fourth series folds into Other, or the chart becomes small multiples.' },
+      { h: 'The floors' },
+      { code: 'cvd_delta_e  >= 8    adjacent pairs, protan + deutan\ncontrast     >= 3:1  against the surface it sits on\nchroma       >= 0.1  or it reads as grey' },
+      { p: 'These are checked, not judged. Run the validator before proposing a value.' },
+    ],
+  },
+  {
+    slug: 'charts', title: 'Charts', by: 'Dana Cole', when: '1w',
+    related: ['colour'],
+    body: [
+      { p: 'Colour does a job in a chart, and the job picks the ramp. Identity gets the categorical slots, magnitude gets the sequential ramp, polarity gets the diverging pair, state gets the status palette.' },
+      { rule: 'Never a dual-axis chart. Two measures of different scale get two charts, small multiples, or an index to a common base.' },
+      { h: 'A composition is not four things' },
+      { p: 'A donut or a stacked bar is degrees of one whole, so it takes the sequential ramp. Handing it the categorical slots is how a fourth slice ends up the same colour as the first.' },
+      { list: [
+        'Two or more series always get a legend.',
+        'Four or fewer also get direct labels — identity is never colour alone.',
+        'Values, labels and legends wear text tokens, never the series colour.',
+      ] },
+    ],
+  },
+  {
+    slug: 'naming', title: 'Naming', by: 'Dana Cole', when: '2w',
+    related: ['contributing'],
+    body: [
+      { p: 'Lowercase, hyphens, no dates, no version numbers, no initials. The workspace tracks versions and authorship; a filename that repeats them goes stale the moment either changes.' },
+      { code: 'logo-lockup.fig          not  Logo_Lockup_v3_FINAL_DC.fig\nchannel-matrix.md        not  Channel Matrix (2026).md\nbrand-sting.wav          not  sting_1.2s_approved.wav' },
+      { h: 'Extensions mean something' },
+      { p: 'A .fig opens onto its artboard, a .pdf onto its pages, a .wav onto its waveform. Name a file for what it is and the workspace can render it.' },
+    ],
+  },
+  {
+    slug: 'contributing', title: 'Contributing', by: 'Chris Church', when: '3d',
+    related: ['home', 'naming'],
+    body: [
+      { p: 'Every change to Brand goes through a review. A review is an object with its own id, conversation and outcome — it outlives the file it changes.' },
+      { h: 'What a review needs before it can publish' },
+      { list: [
+        'At least one approval from a reviewer who is not you.',
+        'All checks passing — contrast, tone, links, preview build.',
+        'No conflict with the current version.',
+        'Not still marked a draft.',
+      ] },
+      { rule: 'Publish is disabled until all four are true, and it says which one is missing. Do not go around it.' },
+      { h: 'Reviewing someone else\u2019s work' },
+      { p: 'Request changes when something is wrong, not when something is different from how you would have done it. The second one is a comment.' },
+    ],
   },
 ]
 
@@ -497,10 +576,7 @@ export default function Dashboard() {
   const { collapsed, toggle } = useSidebar()
   const [path, setPath] = useState(ROOT)
   const [tab, setTab] = useState('Files')
-  /* Which of the two rail roots is selected. The section nav sits on top of
-     whichever one it is, so a project needs no section of its own. */
-  const [scope, setScope] = useState('brand')
-  const browsing = tab === 'Files' && scope === 'brand'
+  const browsing = tab === 'Files'
   const [version, setVersion] = useState('v2.1 — current')
   const [search, setSearch] = useState('')
   const [find, setFind] = useState('')
@@ -513,9 +589,8 @@ export default function Dashboard() {
   const [reviews, setReviews] = useState(REVIEWS)
   const [reviewId, setReviewId] = useState(null)
   const [reviewFilter, setReviewFilter] = useState('open')
-  const [projectId, setProjectId] = useState(null)
-  const [projectFilter, setProjectFilter] = useState('open')
-  const [projectQuery, setProjectQuery] = useState('')
+  const [actFilter, setActFilter] = useState('all')
+  const [wikiPage, setWikiPage] = useState('home')
 
   const node = at(path)
   const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
@@ -546,31 +621,12 @@ export default function Dashboard() {
   const visibleReviews = reviews.filter((r) => (reviewFilter === 'open' ? isOpen(r) : !isOpen(r)))
   const openReview = reviews.find((r) => r.id === reviewId) ?? null
 
-  const projectCounts = {
-    open: PROJECTS.filter((p) => !p.closed).length,
-    closed: PROJECTS.filter((p) => p.closed).length,
-  }
-  const openProject = PROJECTS.find((p) => p.id === projectId) ?? null
-
-  /* One rail over two kinds of thing, and the section nav on top of whichever
-     one is selected. The rail picks the thing; the sections pick the view of
-     it. Keeping those two jobs separate is why selecting a project does not
-     have to invent a sixth section. */
-  const activeKey = scope === 'projects'
-    ? (projectId ? `project/${projectId}` : 'projects')
-    : path.join('/')
+  const activeKey = path.join('/')
 
   const selectNode = (n) => {
     setFile(null)
     setReviewId(null)
     setTab('Files')
-    if (n.key === 'projects') { setScope('projects'); setProjectId(null); return }
-    if (n.key.startsWith('project/')) {
-      setScope('projects')
-      setProjectId(Number(n.key.slice('project/'.length)))
-      return
-    }
-    setScope('brand')
     setPath(n.key.split('/'))
   }
 
@@ -646,7 +702,7 @@ export default function Dashboard() {
           <Tree
             nodes={TREE}
             activeKey={activeKey}
-            defaultOpen={['brand', 'projects']}
+            defaultOpen={['brand']}
             onSelect={selectNode}
           />
         )}
@@ -655,7 +711,7 @@ export default function Dashboard() {
             {TREE.flatMap((g) => g.children).map((c) => (
               <IconButton
                 key={c.key}
-                icon={c.icon}
+                icon={c.railIcon ?? c.icon}
                 label={c.label}
                 onClick={() => selectNode(c)}
               />
@@ -685,15 +741,17 @@ export default function Dashboard() {
               setTab(t)
               setReviewId(null)
               setFile(null)
-              /* Files and Projects are the same browser over two roots, so moving
-                 between them moves the path rather than swapping components. */
+              /* Coming back to Files lands at the top of the tree rather than
+                 wherever you were three sections ago. */
               if (t === 'Files') setPath(ROOT)
             }}
             sections={[
               { key: 'Files', label: 'Files', icon: 'folder' },
               { key: 'Reviews', label: 'Reviews', icon: 'request', count: reviewCounts.open },
+              { key: 'Wiki', label: 'Wiki', icon: 'file' },
               { key: 'Activity', label: 'Activity', icon: 'refresh' },
               { key: 'Usage', label: 'Usage', icon: 'chart' },
+              { key: 'Performance', label: 'Performance', icon: 'target' },
               { key: 'Settings', label: 'Settings', icon: 'sliders' },
             ]}
           />
@@ -723,31 +781,6 @@ export default function Dashboard() {
             >
               <p className={styles.reviewSummary}>{openReview.summary}</p>
             </RequestDetail>
-          )}
-
-          {/* Projects is deliberately not a second folder listing. A folder
-              answers "what is in here"; a project answers "what is this for
-              and what does it look like" — so it opens onto the work rendered:
-              the canvas it is laid out on, the deck it goes out as. */}
-          {tab === 'Files' && scope === 'projects' && !openProject && (
-            <ProjectList
-              projects={PROJECTS}
-              filter={projectFilter}
-              onFilter={setProjectFilter}
-              counts={projectCounts}
-              query={projectQuery}
-              onQuery={setProjectQuery}
-              onOpen={(p) => setProjectId(p.id)}
-            />
-          )}
-
-          {tab === 'Files' && scope === 'projects' && openProject && (
-            <ProjectView
-              project={openProject}
-              path={['Projects', openProject.name]}
-              onNavigate={() => setProjectId(null)}
-              previewHref={`/dashboard/preview/${openProject.id}`}
-            />
           )}
 
           {/* Hidden while a file is open: the file view carries its own path,
@@ -992,27 +1025,110 @@ export default function Dashboard() {
             </>
           )}
 
+          {/* Usage is how much of the system gets used; Performance is how the
+              work did once it left. Two different questions, which is why they
+              are two sections rather than one page with eight charts on it. */}
+          {tab === 'Performance' && (
+            <>
+              <Grid>
+                <Col span={3}>
+                  <StatTile label="Reach" value="1.4M" delta="+18%" direction="up" vs="vs last quarter"
+                    trend={[720, 810, 940, 1020, 1180, 1400]} series={1} />
+                </Col>
+                <Col span={3}>
+                  <StatTile label="Engagement" value="3.8%" delta="+0.6pt" direction="up" vs="vs last quarter"
+                    trend={[2.4, 2.7, 2.9, 3.1, 3.2, 3.8]} series={2} />
+                </Col>
+                <Col span={3}>
+                  <StatTile label="Conversions" value="612" delta="+94" direction="up" vs="vs last quarter"
+                    trend={[318, 372, 405, 461, 518, 612]} series={3} />
+                </Col>
+                <Col span={3}>
+                  {/* No direction on this one. The tile colours up green and
+                      down red, and a falling cost per conversion is the good
+                      outcome — so an arrow here would say the opposite of
+                      what happened. The number carries it instead. */}
+                  <StatTile label="Cost per conversion" value="$41" delta="−$7" vs="vs last quarter"
+                    trend={[62, 58, 54, 49, 48, 41]} series={1} />
+                </Col>
+              </Grid>
+
+              <Grid>
+                <Col span={8}>
+                  <Panel title="Reach by channel" actions={<span className={styles.panelMeta}>Target 40k/mo</span>}>
+                    {/* One measure, one axis. Reach and conversions are three
+                        orders of magnitude apart, and putting them on one chart
+                        with two scales is the commonest way to lie with one. */}
+                    <LineChart
+                      labels={MONTHS} unit="k" max={80} target={40}
+                      series={[
+                        { label: 'LinkedIn', data: [8, 11, 14, 18, 21, 26, 31, 36, 42, 51, 63, 74] },
+                        { label: 'Paid social', data: [14, 16, 15, 19, 22, 24, 27, 25, 29, 34, 38, 44] },
+                      ]}
+                    />
+                  </Panel>
+                </Col>
+                <Col span={4}>
+                  <Panel title="Spend by channel">
+                    <Donut
+                      centre="$84k"
+                      data={[
+                        { label: 'Paid social', value: 38 },
+                        { label: 'LinkedIn', value: 27 },
+                        { label: 'Search', value: 12 },
+                        { label: 'Newsletter', value: 7 },
+                      ]}
+                    />
+                  </Panel>
+                </Col>
+              </Grid>
+
+              <Grid>
+                <Col span={6}>
+                  <Panel title="Converting assets" actions={<span className={styles.panelMeta}>Conversions</span>}>
+                    <RankedBar data={[
+                      { label: 'Merger case study', value: 184 },
+                      { label: 'Landing page', value: 141 },
+                      { label: 'Social kit — 1:1', value: 96 },
+                      { label: 'Outreach email', value: 71 },
+                    ]} />
+                  </Panel>
+                </Col>
+                <Col span={6}>
+                  <Panel title="Conversions per month">
+                    <BarChart
+                      data={[28, 34, 31, 42, 39, 47, 51, 44, 58, 63, 87, 88]}
+                      labels={MONTHS.map((m) => m[0])}
+                      unit="n" reference={51} referenceLabel="Mean 51"
+                    />
+                  </Panel>
+                </Col>
+              </Grid>
+            </>
+          )}
+
+          {/* The feed used to be five divs wearing class names that were never
+              defined in the stylesheet — avatar, icon and text stacked, and the
+              timestamp ran into the filename. It is a component now. */}
           {tab === 'Activity' && (
-            <Panel title="Recent">
-              <div className={styles.feed}>
-                {[
-                  ['Dana Cole', 'published', 'logo-lockup.fig', '2h', 'success'],
-                  ['Ravi Menon', 'updated', 'social-kit.fig', '6h', 'refresh'],
-                  ['Chris Church', 'moved to review', 'positioning.md', '1d', 'clock'],
-                  ['Dana Cole', 'created', 'launch-narrative.md', '2d', 'plus'],
-                  ['Ravi Menon', 'drafted', 'channel-matrix.md', '5d', 'file'],
-                ].map(([who, verb, what, when, icon], i) => (
-                  <div key={i} className={styles.feedRow}>
-                    <Avatar name={who} size={22} />
-                    <Icon name={icon} size={13} />
-                    <span className={styles.feedText}>
-                      <strong>{who}</strong> {verb} <strong>{what}</strong>
-                    </span>
-                    <span className={styles.feedWhen}>{when}</span>
-                  </div>
-                ))}
-              </div>
-            </Panel>
+            <ActivityFeed
+              entries={ACTIVITY}
+              filter={actFilter}
+              onFilter={setActFilter}
+              onOpen={(e) => {
+                /* Activity is a way into the workspace, not a read-only log:
+                   a row about a file takes you to the folder holding it. */
+                const seg = e.where.split(' / ')[1]?.toLowerCase()
+                if (!seg) return
+                setTab('Files')
+                setPath(['brand', seg])
+                setFile(null)
+              }}
+            />
+          )}
+
+          {tab === 'Wiki' && (
+            <Wiki pages={WIKI} current={wikiPage} onSelect={setWikiPage} />
           )}
 
           {tab === 'Settings' && (

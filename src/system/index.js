@@ -50,4 +50,8 @@ export { CampaignCanvas, FUNNEL_STAGES } from './campaignCanvas'
 
 export { FolderPreview } from './folderPreview'
 
+export { ActivityFeed, ACTIVITY_FILTERS } from './activity'
+
+export { Wiki } from './wiki'
+
 export { ProjectList, ProjectView } from './projects'

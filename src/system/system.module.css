@@ -3906,3 +3906,339 @@
   overflow-y: auto;
   padding: var(--sc-space-5);
 }
+
+/* ── Activity ──────────────────────────────────────────────────────────────
+   Grouped by day, because "2h" and "5d" in one flat column make you work out
+   the boundary between this morning and last week yourself. */
+
+.actGroup {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--sc-line-strong);
+}
+
+.actGroup:last-child { border-bottom: none; }
+
+.actDay {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  font-weight: 400;
+  letter-spacing: var(--sc-track-wide);
+  text-transform: uppercase;
+  color: var(--sc-text-label);
+  background: var(--sc-recessed);
+  margin: 0;
+  padding: var(--sc-space-2) var(--sc-space-4);
+}
+
+.actDayCount {
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  background: var(--sc-fill);
+  border-radius: var(--sc-radius-pill);
+  padding: 1px 7px;
+}
+
+/* The rule runs behind the avatars so a day reads as one run of events. It
+   stops short at both ends rather than running into the day headers. */
+.actRows {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.actRows::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 22px;
+  bottom: 22px;
+  width: 1px;
+  background: var(--sc-line);
+}
+
+.actRow {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sc-space-3);
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--sc-line);
+  padding: var(--sc-space-3) var(--sc-space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sc-fast);
+}
+
+.actRow:last-child { border-bottom: none; }
+.actRow:hover { background: var(--sc-fill-faint); }
+
+/* Avatar with the action badged onto it: who and what in one mark, rather
+   than two glyphs side by side competing to be read first. */
+.actMark {
+  position: relative;
+  display: inline-flex;
+  z-index: 1;
+}
+
+.actKind {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--sc-card);
+  box-shadow: 0 0 0 2px var(--sc-ground);
+}
+
+.actText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.actLine {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  color: var(--sc-text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actLine strong { font-weight: 400; color: var(--sc-text-strong); }
+
+/* The file is the object of the sentence, so it gets the emphasis — set in
+   the mono face at full strength, not italicised prose. */
+.actLine em {
+  font-style: normal;
+  color: var(--sc-text-peak);
+}
+
+.actRow:hover .actLine em { text-decoration: underline; }
+
+/* Where it happened. A feed that says "published logo-lockup.fig" and not
+   which folder is half a sentence when five folders could hold that name. */
+.actWhere {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  color: var(--sc-text-meta);
+  min-width: 0;
+}
+
+.actNote { color: var(--sc-text-faint); }
+
+.actWhen {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+  flex-shrink: 0;
+}
+
+/* ── Wiki ──────────────────────────────────────────────────────────────────
+   The page list sits beside the page, not above it: you arrive looking for
+   one page whose name you half-remember, and scanning for it without leaving
+   what you are reading is the whole trick. */
+
+.wiki {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--sc-space-6);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .wiki { grid-template-columns: minmax(0, 1fr); gap: var(--sc-space-4); }
+}
+
+.wikiRail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  position: sticky;
+  top: var(--sc-space-4);
+}
+
+.wikiNav { display: flex; flex-direction: column; }
+
+.wikiLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  width: 100%;
+  min-height: 30px;
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  letter-spacing: var(--sc-track-tight);
+  text-align: left;
+  color: var(--sc-text-support);
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 0 var(--sc-space-2);
+  cursor: pointer;
+  transition: color var(--sc-fast), border-color var(--sc-fast), background var(--sc-fast);
+}
+
+.wikiLink:hover { color: var(--sc-text-peak); background: var(--sc-fill-faint); }
+
+.wikiLinkOn {
+  color: var(--sc-text-peak);
+  border-left-color: var(--sc-pink);
+  background: var(--sc-fill-faint);
+}
+
+.wikiPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-width: 0;
+}
+
+.wikiHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-3);
+  border-bottom: 1px solid var(--sc-line-strong);
+  padding-bottom: var(--sc-space-3);
+}
+
+.wikiTitle {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 32px);
+  line-height: 1.15;
+  color: var(--sc-text-peak);
+  margin: 0;
+}
+
+.wikiMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-3);
+  flex-wrap: wrap;
+}
+
+.wikiBy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-meta);
+  color: var(--sc-text-meta);
+}
+
+/* Prose measure, not panel width. A wiki page read at 1400px is a wiki page
+   nobody finishes. */
+.wikiBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  max-width: 68ch;
+}
+
+.wikiH {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: clamp(18px, 1.9vw, 22px);
+  line-height: 1.3;
+  color: var(--sc-text-peak);
+  margin: var(--sc-space-2) 0 0;
+}
+
+.wikiP {
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.7;
+  color: var(--sc-text-body);
+  margin: 0;
+}
+
+.wikiList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* A dash rather than a bullet: the mono face has no round dot that sits right
+   beside a serif line, and a hairline dash reads as a list without adding a
+   second shape to the page. */
+.wikiItem {
+  position: relative;
+  font-family: var(--sc-font-display);
+  font-weight: 300;
+  font-size: var(--sc-size-lede);
+  line-height: 1.6;
+  color: var(--sc-text-body);
+  padding-left: var(--sc-space-4);
+}
+
+.wikiItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 8px;
+  height: 1px;
+  background: var(--sc-text-faint);
+}
+
+/* A rule you must not break, set apart from the prose explaining it. */
+.wikiRule {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-2);
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.6;
+  color: var(--sc-text-strong);
+  background: var(--sc-fill-faint);
+  border-left: 2px solid var(--sc-warn);
+  border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0;
+  margin: 0;
+  padding: var(--sc-space-3);
+}
+
+.wikiRule svg { flex-shrink: 0; margin-top: 2px; color: var(--sc-warn); }
+
+.wikiCode {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-ui);
+  line-height: 1.7;
+  color: var(--sc-text-strong);
+  background: var(--sc-recessed);
+  border: 1px solid var(--sc-line-strong);
+  border-radius: var(--sc-radius-sm);
+  margin: 0;
+  padding: var(--sc-space-3);
+  overflow-x: auto;
+}
+
+.wikiFoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  border-top: 1px solid var(--sc-line);
+  padding-top: var(--sc-space-3);
+}
+
+.wikiRelated { display: flex; flex-wrap: wrap; gap: var(--sc-space-3); }
+.wikiRelated .wikiLink { width: auto; border-left: none; padding: 0; }
