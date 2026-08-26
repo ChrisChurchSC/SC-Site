@@ -3,7 +3,8 @@ import { useMeta } from '../hooks/useMeta'
 import '../system/tokens.css'
 import {
   Shell, GlobalBar, BarButton, Sidebar, Content, Grid, Col, useSidebar,
-  Panel, StatTile, Button, IconButton, Banner, Tabs, Avatar,
+  Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
+  SectionNav, Segmented, Field, Input, Switch,
   Tree, Path, FileBrowser,
   Contributors, CompositionBar, AsideBlock, FactRow, StatusList,
   TitleBar, CountButton, RefSelect, FindField,
@@ -128,6 +129,9 @@ export default function Dashboard() {
   const [search, setSearch] = useState('')
   const [find, setFind] = useState('')
   const [dismissed, setDismissed] = useState(false)
+  const [wsName, setWsName] = useState('Brand')
+  const [visibility, setVisibility] = useState('Private')
+  const [autoReview, setAutoReview] = useState(true)
 
   const node = at(path)
   const entries = Object.entries(node?.children ?? {}).map(([name, e]) => ({
@@ -138,6 +142,14 @@ export default function Dashboard() {
     when: e.when,
     status: e.status,
   }))
+
+  /* What the listing actually shows: the folder's contents, narrowed by the
+     filter field, and narrowed again to unfinished work in Reviews. Both
+     controls act on the same list rather than each owning their own copy. */
+  const shown = entries
+    .filter((e) => !find || e.name.toLowerCase().includes(find.toLowerCase())
+      || (e.message ?? '').toLowerCase().includes(find.toLowerCase()))
+    .filter((e) => tab !== 'Reviews' || (e.status && e.status !== 'Live'))
 
   const label = (segs) => segs.map((seg, i) => at(segs.slice(0, i + 1))?.label ?? seg)
 
@@ -206,30 +218,41 @@ export default function Dashboard() {
             <Button size="sm" variant="solid" icon="external">Share</Button>
           </TitleBar>
 
-          {/* One working row: where you are, which version, how to narrow it,
-              and which view. Previously this was three separate bands that
-              between them pushed the first row of data a quarter of the way
-              down the screen. */}
-          <div className={styles.bar}>
-            <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
-            <span className={styles.barTools}>
-              <RefSelect
-                value={version}
-                onChange={setVersion}
-                options={['v2.1 — current', 'v2.0', 'v1.4 — archived']}
-              />
-              {/* "Filter this folder", not "search" — the global bar searches
-                  the workspace, and two fields both called search on one
-                  screen is a question nobody should have to answer. */}
-              <FindField
-                value={find}
-                onChange={setFind}
-                placeholder="Filter this folder"
-                shortcut="F"
-              />
-              <Tabs value={tab} onChange={setTab} options={['Files', 'Overview']} />
-            </span>
-          </div>
+          {/* Areas of the workspace, not views of one thing — which is why
+              this is a SectionNav and the row beneath it is not. */}
+          <SectionNav
+            value={tab}
+            onChange={setTab}
+            sections={[
+              { key: 'Files', label: 'Files', icon: 'folder' },
+              { key: 'Reviews', label: 'Reviews', icon: 'clock', count: 3 },
+              { key: 'Activity', label: 'Activity', icon: 'refresh' },
+              { key: 'Results', label: 'Results', icon: 'chart' },
+              { key: 'Settings', label: 'Settings', icon: 'sliders' },
+            ]}
+          />
+
+          {(tab === 'Files' || tab === 'Reviews') && (
+            <div className={styles.bar}>
+              <Path segments={['Workspace', ...label(path)]} onNavigate={(i) => setPath(path.slice(0, i))} />
+              <span className={styles.barTools}>
+                <RefSelect
+                  value={version}
+                  onChange={setVersion}
+                  options={['v2.1 — current', 'v2.0', 'v1.4 — archived']}
+                />
+                {/* "Filter this folder", not "search" — the global bar searches
+                    the workspace, and two fields both called search on one
+                    screen is a question nobody should have to answer. */}
+                <FindField
+                  value={find}
+                  onChange={setFind}
+                  placeholder="Filter this folder"
+                  shortcut="F"
+                />
+              </span>
+            </div>
+          )}
 
           {!dismissed && (
             /* Sits directly above the listing it is about, rather than in the
@@ -242,11 +265,11 @@ export default function Dashboard() {
             </Banner>
           )}
 
-          {tab === 'Files' && (
+          {(tab === 'Files' || tab === 'Reviews') && (
             <div className={styles.split}>
               <FileBrowser
                 onOpen={open}
-                entries={entries}
+                entries={shown}
                 head={{
                   initials: 'DC',
                   who: 'Dana Cole',
@@ -315,7 +338,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {tab === 'Overview' && (
+          {tab === 'Results' && (
             <>
               <Grid>
                 <Col span={3}>
@@ -385,6 +408,58 @@ export default function Dashboard() {
                 </Col>
               </Grid>
             </>
+          )}
+
+          {tab === 'Activity' && (
+            <Panel title="Recent">
+              <div className={styles.feed}>
+                {[
+                  ['Dana Cole', 'published', 'logo-lockup.fig', '2h', 'success'],
+                  ['Ravi Menon', 'updated', 'social-kit.fig', '6h', 'refresh'],
+                  ['Chris Church', 'moved to review', 'positioning.md', '1d', 'clock'],
+                  ['Dana Cole', 'created', 'launch-narrative.md', '2d', 'plus'],
+                  ['Ravi Menon', 'drafted', 'channel-matrix.md', '5d', 'file'],
+                ].map(([who, verb, what, when, icon], i) => (
+                  <div key={i} className={styles.feedRow}>
+                    <Avatar name={who} size={22} />
+                    <Icon name={icon} size={13} />
+                    <span className={styles.feedText}>
+                      <strong>{who}</strong> {verb} <strong>{what}</strong>
+                    </span>
+                    <span className={styles.feedWhen}>{when}</span>
+                  </div>
+                ))}
+              </div>
+            </Panel>
+          )}
+
+          {tab === 'Settings' && (
+            <div className={styles.settings}>
+              <Panel title="Workspace">
+                <Field label="Name" help="Shown in the global bar and on every export.">
+                  <Input value={wsName} onChange={setWsName} />
+                </Field>
+                <Field label="Visibility" help="Private workspaces are invisible to anyone not invited.">
+                  <Segmented
+                    value={visibility}
+                    onChange={setVisibility}
+                    label="Visibility"
+                    options={['Private', 'Team', 'Public']}
+                  />
+                </Field>
+              </Panel>
+
+              <Panel title="Review">
+                <Switch
+                  checked={autoReview}
+                  onChange={setAutoReview}
+                  label="Flag assets untouched for 90 days"
+                />
+                <span className={styles.settingNote}>
+                  This is what produces the notice above the listing.
+                </span>
+              </Panel>
+            </div>
           )}
         </Content>
       </div>

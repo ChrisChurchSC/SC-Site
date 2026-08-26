@@ -422,6 +422,98 @@ export function StatusList({ items }) {
   )
 }
 
+/* ── Fields ────────────────────────────────────────────────────────────────
+   Label above, control, then a slot that holds help or an error. They share
+   the slot so the row cannot change height when validation fires and shove
+   everything below it down the page. */
+
+export function Field({ label, optional, help, error, children }) {
+  return (
+    <label className={s.field}>
+      <span className={s.label}>
+        {label}
+        {/* Optional is marked; required is the default. Fewer marks, less
+            noise, and the exception is the thing worth pointing at. */}
+        {optional && <span className={s.optional}>Optional</span>}
+      </span>
+      {children}
+      <span className={`${s.help} ${error ? s.helpError : ''}`}>{error || help || ' '}</span>
+    </label>
+  )
+}
+
+export function Input({ value, onChange, invalid, ...rest }) {
+  return (
+    <input
+      className={`${s.input} ${invalid ? s.invalid : ''}`}
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
+      aria-invalid={invalid || undefined}
+      {...rest}
+    />
+  )
+}
+
+/* role="switch", not a checkbox. A switch takes effect immediately; a checkbox
+   waits for a submit. Using the wrong one is a promise you do not keep. */
+export function Switch({ checked, onChange, label }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      className={s.switchRow}
+      onClick={() => onChange?.(!checked)}
+    >
+      <span className={`${s.switchTrack} ${checked ? s.switchOn : ''}`}>
+        <span className={s.switchThumb} />
+      </span>
+      <span className={s.switchLabel}>{label}</span>
+    </button>
+  )
+}
+
+/* ── Section nav ───────────────────────────────────────────────────────────
+ *
+ * The horizontal bar under the title: the top-level areas of one workspace.
+ * Distinct from Tabs, which switch views of a single thing — these are
+ * different places, each with its own content and its own URL.
+ *
+ * The active item carries three signals: brighter ink, an accent underline,
+ * and aria-current. Colour is never doing the work alone, which matters more
+ * here than anywhere else because this is how someone knows where they are.
+ *
+ * This is the one place an accent earns its keep in the UI. A single 2px rule,
+ * once per screen — everything else on the page stays monochrome, and that is
+ * exactly why this reads instantly.
+ */
+export function SectionNav({ value, onChange, sections }) {
+  return (
+    <nav className={s.sectionNav} aria-label="Sections">
+      <div className={s.sectionScroll}>
+        {sections.map((sec) => {
+          const active = value === sec.key
+          return (
+            <button
+              key={sec.key}
+              type="button"
+              aria-current={active ? 'page' : undefined}
+              className={`${s.section} ${active ? s.sectionOn : ''}`}
+              onClick={() => onChange(sec.key)}
+            >
+              <Icon name={sec.icon} size={15} />
+              <span className={s.sectionLabel}>{sec.label}</span>
+              {sec.count !== undefined && (
+                <span className={s.sectionCount}>{sec.count}</span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </nav>
+  )
+}
+
 export function Tabs({ value, onChange, options }) {
   return (
     <div className={s.tabRow} role="tablist">

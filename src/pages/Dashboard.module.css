@@ -144,3 +144,19 @@
 @media (max-width: 1024px) {
   .barTools { width: 100%; }
 }
+
+/* Settings is a reading column, not a dashboard grid — forms are read top to
+   bottom and a 12-column layout only spreads them out. */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-gutter);
+  max-width: 560px;
+}
+
+.settingNote {
+  font-family: var(--sc-font-mono);
+  font-size: var(--sc-size-label);
+  letter-spacing: var(--sc-track-tight);
+  color: var(--sc-text-meta);
+}
