@@ -21,3 +21,8 @@ public/grid/*.jpg
 # Allow named compressed grid images
 !public/grid/*-compressed.jpg
 .vercel
+
+# Real workspace metrics. The repo is public; traffic, leads and search
+# figures are not. src/data/metrics.js globs for this and finds nothing on a
+# clone, which is the case the dashboard's empty state is for.
+src/data/metrics.local.js

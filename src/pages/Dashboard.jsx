@@ -4,7 +4,7 @@ import '../system/tokens.css'
 import {
   Shell, GlobalBar, BarButton, Sidebar, Content, Grid, Col, useSidebar,
   Panel, StatTile, Button, IconButton, Banner, Avatar, Icon,
-  SectionNav, Segmented, Field, Input, Switch, Badge, CheckGroup,
+  SectionNav, Segmented, Field, Input, Switch, Badge, CheckGroup, DataGrid,
   Tree, Path, FileBrowser, FileView, CodeLines, MediaPreview,
   RequestList, RequestDetail, ActivityFeed, Wiki,
   PdfPreview, CanvasPreview, WavePreview,
@@ -14,6 +14,7 @@ import {
 } from '../system'
 import headMark from '../assets/logo.svg'
 import WIKI from '../data/wikiPages'
+import { METRICS, HAS_METRICS, metricsSummary } from '../data/metrics'
 import styles from './Dashboard.module.css'
 
 /* A brand workspace, browsed as a folder tree.
@@ -2692,6 +2693,16 @@ the system has to outlive the engagement.`,
           'number-formats.md': { message: 'One decimal on percentages', when: '1w', status: 'Live', icon: 'file' },
           'table-rules.md': { message: 'Hairlines, never zebra stripes', when: '2w', status: 'Live', icon: 'file' },
           'chart-anatomy.fig': { message: 'Marks, spacers and label rules', when: '2w', status: 'Review', icon: 'image' },
+          /* Only present when this checkout has the real export. A clone gets
+             no row rather than a row that opens onto nothing. */
+          ...(HAS_METRICS ? {
+            'metrics.csv': {
+              message: `${METRICS.rows.length} days · ${METRICS.columns.length} columns`,
+              when: '12m', status: 'Live', icon: 'chart',
+              render: 'grid',
+              grid: METRICS,
+            },
+          } : {}),
         },
       },
       /* Sound is the part nobody documents until somebody has already picked
@@ -2783,6 +2794,9 @@ const fileMeta = (node, isText) => {
   }
   if (node.render === 'canvas') {
     return [`${node.canvas.width} × ${node.canvas.height}`, `${node.canvas.frames.length} frames`, node.status]
+  }
+  if (node.render === 'grid') {
+    return [`${node.grid.rows.length} rows`, `${node.grid.columns.length} columns`, node.status]
   }
   if (node.render === 'pdf') return [`${node.pdf.pages.length} pages`, 'PDF', node.status]
   if (node.render === 'wave') return [`${node.wave.duration}s`, '48 kHz · WAV', node.status]
@@ -3075,6 +3089,7 @@ export default function Dashboard() {
     canvas: e.canvas,
     pdf: e.pdf,
     wave: e.wave,
+    grid: e.grid,
     text: e.text,
   }))
 
@@ -3339,6 +3354,9 @@ export default function Dashboard() {
               {fileView === 'Preview' && !isText && openNode?.render === 'pdf' && (
                 <PdfPreview title={openNode.pdf.file} pages={openNode.pdf.pages} />
               )}
+              {fileView === 'Preview' && !isText && openNode?.render === 'grid' && (
+                <DataGrid columns={openNode.grid.columns} rows={openNode.grid.rows} />
+              )}
               {fileView === 'Preview' && !isText && openNode?.render === 'wave' && (
                 <WavePreview {...openNode.wave} />
               )}
@@ -3531,101 +3549,114 @@ export default function Dashboard() {
             </div>
           )}
 
-          {tab === 'Performance' && mcpOn && (
-            <>
-              <div className={styles.sourceBar}>
-                <span className={styles.sourceState}>
-                  <Icon name="success" size={13} />
-                  Live over MCP · synced 12 min ago
-                </span>
-                <span className={styles.sourceVia}>
-                  via <code>list_assets</code>, <code>get_asset</code>
-                </span>
-                <Button size="sm" icon="refresh" onClick={() => setTab('Settings')}>
-                  Connection
-                </Button>
-              </div>
-
-              <Grid>
-                <Col span={3}>
-                  <StatTile label="Reach" value="1.4M" delta="+18%" direction="up" vs="vs last quarter"
-                    trend={[720, 810, 940, 1020, 1180, 1400]} series={1} />
-                </Col>
-                <Col span={3}>
-                  <StatTile label="Engagement" value="3.8%" delta="+0.6pt" direction="up" vs="vs last quarter"
-                    trend={[2.4, 2.7, 2.9, 3.1, 3.2, 3.8]} series={2} />
-                </Col>
-                <Col span={3}>
-                  <StatTile label="Conversions" value="612" delta="+94" direction="up" vs="vs last quarter"
-                    trend={[318, 372, 405, 461, 518, 612]} series={3} />
-                </Col>
-                <Col span={3}>
-                  {/* No direction on this one. The tile colours up green and
-                      down red, and a falling cost per conversion is the good
-                      outcome — so an arrow here would say the opposite of
-                      what happened. The number carries it instead. */}
-                  <StatTile label="Cost per conversion" value="$41" delta="−$7" vs="vs last quarter"
-                    trend={[62, 58, 54, 49, 48, 41]} series={1} />
-                </Col>
-              </Grid>
-
-              <Grid>
-                <Col span={8}>
-                  <Panel title="Reach by channel" actions={<span className={styles.panelMeta}>Target 40k/mo</span>}>
-                    {/* One measure, one axis. Reach and conversions are three
-                        orders of magnitude apart, and putting them on one chart
-                        with two scales is the commonest way to lie with one. */}
-                    <LineChart
-                      labels={MONTHS} unit="k" max={80} target={40}
-                      series={[
-                        { label: 'LinkedIn', data: [8, 11, 14, 18, 21, 26, 31, 36, 42, 51, 63, 74] },
-                        { label: 'Paid social', data: [14, 16, 15, 19, 22, 24, 27, 25, 29, 34, 38, 44] },
-                      ]}
-                    />
-                  </Panel>
-                </Col>
-                <Col span={4}>
-                  <Panel title="Spend by channel">
-                    <Donut
-                      centre="$84k"
-                      data={[
-                        { label: 'Paid social', value: 38 },
-                        { label: 'LinkedIn', value: 27 },
-                        { label: 'Search', value: 12 },
-                        { label: 'Newsletter', value: 7 },
-                      ]}
-                    />
-                  </Panel>
-                </Col>
-              </Grid>
-
-              <Grid>
-                <Col span={6}>
-                  <Panel title="Converting assets" actions={<span className={styles.panelMeta}>Conversions</span>}>
-                    <RankedBar data={[
-                      { label: 'Merger case study', value: 184 },
-                      { label: 'Landing page', value: 141 },
-                      { label: 'Social kit — 1:1', value: 96 },
-                      { label: 'Outreach email', value: 71 },
-                    ]} />
-                  </Panel>
-                </Col>
-                <Col span={6}>
-                  <Panel title="Conversions per month">
-                    <BarChart
-                      data={[28, 34, 31, 42, 39, 47, 51, 44, 58, 63, 87, 88]}
-                      labels={MONTHS.map((m) => m[0])}
-                      unit="n" reference={51} referenceLabel="Mean 51"
-                    />
-                  </Panel>
-                </Col>
-              </Grid>
-            </>
+          {/* Real figures or none. The numbers below are summed from the
+              metrics table in Brand / Data, which arrives over the MCP
+              connection — nothing here is written by hand, so nothing here
+              can quietly stop being true. */}
+          {tab === 'Performance' && mcpOn && !HAS_METRICS && (
+            <div className={styles.noSource}>
+              <Icon name="warning" size={20} />
+              <span className={styles.noSourceTitle}>Connected, no data</span>
+              <p className={styles.noSourceBody}>
+                The connection is on but this checkout has no metrics export. Drop a
+                metrics.local.js beside src/data/metrics.js and it populates from there.
+              </p>
+            </div>
           )}
 
-          {/* The feed used to be five divs wearing class names that were never
-              defined in the stylesheet — avatar, icon and text stacked, and the
-              timestamp ran into the filename. It is a component now. */}
+          {tab === 'Performance' && mcpOn && HAS_METRICS && (() => {
+            const m = metricsSummary()
+            return (
+              <>
+                <div className={styles.sourceBar}>
+                  <span className={styles.sourceState}>
+                    <Icon name="success" size={13} />
+                    Live over MCP · {m.days} days to {m.to}
+                  </span>
+                  <span className={styles.sourceVia}>
+                    from <code>metrics.csv</code> · Brand / Data
+                  </span>
+                  <Button size="sm" icon="sliders" onClick={() => setTab('Settings')}>
+                    Connection
+                  </Button>
+                </div>
+
+                <Grid>
+                  <Col span={3}>
+                    <StatTile label="Active users" value={String(m.activeUsers)}
+                      vs={`over ${m.days} days`} trend={m.desktop} series={1} />
+                  </Col>
+                  <Col span={3}>
+                    <StatTile label="New users" value={String(m.newUsers)}
+                      vs={`over ${m.days} days`} trend={m.mobile} series={2} />
+                  </Col>
+                  <Col span={3}>
+                    <StatTile label="Events" value={m.events.toLocaleString()}
+                      vs={`over ${m.days} days`} trend={m.impressionsSeries} series={3} />
+                  </Col>
+                  <Col span={3}>
+                    {/* Indexed pages is a state, not a total — it is the last
+                        reading, not the sum of nine of them. */}
+                    <StatTile label="Pages indexed" value={String(m.indexed)}
+                      vs={`as of ${m.to}`} />
+                  </Col>
+                </Grid>
+
+                <Grid>
+                  <Col span={8}>
+                    <Panel title="Active users by device">
+                      {/* Two series, one axis. Desktop and mobile are the same
+                          measure, which is the only reason they belong on one
+                          chart together.
+
+                          The max is rounded up to a multiple of five: the axis
+                          prints its tick values, and 27.599999999999998 is what
+                          a raw float looks like on a chart. */}
+                      <LineChart
+                        labels={m.dates}
+                        unit="users"
+                        max={Math.ceil(Math.max(...m.desktop, ...m.mobile) * 1.2 / 5) * 5}
+                        series={[
+                          { label: 'Desktop', data: m.desktop },
+                          { label: 'Mobile', data: m.mobile },
+                        ]}
+                      />
+                    </Panel>
+                  </Col>
+                  <Col span={4}>
+                    <Panel title="New users by channel">
+                      <Donut centre={String(m.channels.reduce((a, c) => a + c.value, 0))} data={m.channels} />
+                    </Panel>
+                  </Col>
+                </Grid>
+
+                <Grid>
+                  <Col span={6}>
+                    <Panel title="Search impressions" actions={<span className={styles.panelMeta}>{m.clicks} clicks</span>}>
+                      <BarChart
+                        data={m.impressionsSeries}
+                        labels={m.dates}
+                        unit="n"
+                        reference={Math.round(m.impressions / m.days)}
+                        referenceLabel={`Mean ${Math.round(m.impressions / m.days)}`}
+                      />
+                    </Panel>
+                  </Col>
+                  <Col span={6}>
+                    <Panel title="Events per day" actions={<span className={styles.panelMeta}>Desktop + mobile</span>}>
+                      <BarChart
+                        data={m.eventsSeries}
+                        labels={m.dates}
+                        unit="n"
+                        series={2}
+                      />
+                    </Panel>
+                  </Col>
+                </Grid>
+              </>
+            )
+          })()}
+
           {tab === 'Activity' && (
             <ActivityFeed
               entries={ACTIVITY}

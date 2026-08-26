@@ -100,6 +100,31 @@ export function FileThumb({ entry: e }) {
     )
   }
 
+  /* A table: its real shape, capped at what fits. Rows and columns at 26px
+     is not readable data, but it is honestly a table and not a page. */
+  if (e.render === 'grid' && e.grid) {
+    const cols = Math.min(6, e.grid.columns.length)
+    const rows = Math.min(5, e.grid.rows.length)
+    return (
+      <span className={s.thumb}>
+        <svg viewBox="0 0 40 30" className={s.thumbArt} aria-hidden="true">
+          <rect width="40" height="30" className={s.thumbPage} />
+          <rect x="2" y="2" width="36" height="4" className={s.thumbHeadRow} />
+          {Array.from({ length: rows }).map((_, r) =>
+            Array.from({ length: cols }).map((_, c) => (
+              <rect
+                key={`${r}-${c}`}
+                x={2 + c * 6} y={8 + r * 4.4}
+                width="4.5" height="2.2"
+                className={s.thumbInk}
+              />
+            )),
+          )}
+        </svg>
+      </span>
+    )
+  }
+
   if (e.render === 'wave' && e.wave) {
     const peaks = e.wave.peaks.slice(0, 14)
     return (

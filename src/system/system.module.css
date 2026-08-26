@@ -7743,3 +7743,5 @@
 }
 
 .thumbChips > span { display: block; height: 100%; }
+
+.thumbHeadRow { fill: var(--sc-line-strong); }
