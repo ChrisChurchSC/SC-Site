@@ -205,7 +205,7 @@ export default function Home() {
           <video
             className={styles.heroReel}
             src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
-            poster={assetUrl('/reel-preview.gif')}
+            poster={assetUrl('/reel-preview.jpg')}
             autoPlay
             muted
             loop
