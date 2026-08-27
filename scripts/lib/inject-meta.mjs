@@ -38,16 +38,29 @@ export function esc(str) {
  * A function replacer receives the groups as arguments and performs no
  * substitution on what it returns, which removes the whole class.
  *
+ * `twitter:image` had no replacer at all, so it stayed pinned to the default
+ * while og:image was rewritten — invisible until per-page images shipped,
+ * because both happened to hold the same GIF.
+ *
  * @param {string} html
- * @param {{title: string, description: string, url: string, image: string}} meta
+ * @param {object} meta
+ * @param {string} meta.title
+ * @param {string} meta.description
+ * @param {string} meta.url
+ * @param {string} meta.image
+ * @param {string} [meta.imageAlt]      alt for the social card image
+ * @param {'website'|'article'} [meta.type]
+ * @param {string} [meta.publishedTime] ISO date; emits article:published_time
+ * @param {string} [meta.modifiedTime]  ISO date; emits article:modified_time
  */
-export function injectMeta(html, { title, description, url, image }) {
+export function injectMeta(html, { title, description, url, image, imageAlt, type, publishedTime, modifiedTime }) {
   const t = esc(title)
   const d = esc(description)
   const u = esc(url)
   const img = esc(image)
+  const alt = imageAlt ? esc(imageAlt) : t
 
-  return html
+  let out = html
     .replace(/(<title>)[^<]*(<\/title>)/, (_m, open, close) => open + t + close)
     .replace(/(<meta name="description" content=")[^"]*"/, (_m, p) => p + d + '"')
     .replace(/(<link rel="canonical" href=")[^"]*"/, (_m, p) => p + u + '"')
@@ -55,6 +68,27 @@ export function injectMeta(html, { title, description, url, image }) {
     .replace(/(<meta property="og:title" content=")[^"]*"/, (_m, p) => p + t + '"')
     .replace(/(<meta property="og:description" content=")[^"]*"/, (_m, p) => p + d + '"')
     .replace(/(<meta property="og:image" content=")[^"]*"/, (_m, p) => p + img + '"')
+    .replace(/(<meta property="og:image:alt" content=")[^"]*"/, (_m, p) => p + alt + '"')
     .replace(/(<meta name="twitter:title" content=")[^"]*"/, (_m, p) => p + t + '"')
     .replace(/(<meta name="twitter:description" content=")[^"]*"/, (_m, p) => p + d + '"')
+    .replace(/(<meta name="twitter:image" content=")[^"]*"/, (_m, p) => p + img + '"')
+
+  if (type) {
+    // Consume the WHOLE tag, not just its content attribute. Appending the
+    // article:* tags inside the value — or before the closing `/>` — produces
+    // `content="article" <meta property="article:published_time" …/> />`,
+    // which the tokenizer reads as attributes, pops </head>, and relocates the
+    // rest of the document into <body>.
+    const extra = [
+      publishedTime && `<meta property="article:published_time" content="${esc(publishedTime)}" />`,
+      modifiedTime && `<meta property="article:modified_time" content="${esc(modifiedTime)}" />`,
+    ].filter(Boolean)
+
+    out = out.replace(
+      /<meta property="og:type" content="[^"]*"\s*\/?>/,
+      () => [`<meta property="og:type" content="${esc(type)}" />`, ...extra].join('\n    '),
+    )
+  }
+
+  return out
 }
