@@ -30,20 +30,10 @@ const FALLBACK = {
 export default function About() {
   const { data } = useSanity(ABOUT_PAGE_QUERY)
   const cfg = data ?? FALLBACK
-  const faqSchema = cfg.faqs?.length ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: cfg.faqs.map(({ question, answer }) => ({
-      '@type': 'Question',
-      name: question,
-      acceptedAnswer: { '@type': 'Answer', text: answer },
-    })),
-  } : null
   useMeta({
     title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
     description: 'A creative production & engineering studio for brands, content, and digital products. Embedded with founders and marketing teams, month to month, no long contracts.',
     path: '/about',
-    schema: faqSchema,
   })
 
   return (

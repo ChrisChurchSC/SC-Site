@@ -2,6 +2,169 @@
   "_comment": "Intentional deltas from the hardening pass. Adding a property here means 'this route's property is EXPECTED to differ from the baseline'. Keep it small and prune it once a baseline is re-captured.",
   "_about_us": "/about-us was the careers page and is now a 301 to /careers. capture.mjs fetches with redirect:'manual' and only reads a body below 400, so the old URL now captures as a 301 with an empty document: status moves 200->301 and every content-derived property goes null. That is the change, not a regression. The 301 itself is pinned by tests/seo/redirects.test.mjs, which asserts the status AND that the target returns 200 - so accepting status here loses no coverage. Prune this entry when the baseline is re-captured against /careers.",
   "routes": {
-    "/about-us": ["status", "title", "canonical", "rootContentBucket", "jsonLdTypes"]
-  }
+    "/": [
+      "jsonLdTypes"
+    ],
+    "/about": [
+      "jsonLdTypes"
+    ],
+    "/about-us": [
+      "status",
+      "title",
+      "canonical",
+      "rootContentBucket",
+      "jsonLdTypes"
+    ],
+    "/contact": [
+      "jsonLdTypes"
+    ],
+    "/thoughts": [
+      "jsonLdTypes"
+    ],
+    "/work": [
+      "jsonLdTypes"
+    ],
+    "/work/arbitrum-interview-series": [
+      "jsonLdTypes"
+    ],
+    "/work/arbitrum-marketing-dept-videos": [
+      "jsonLdTypes"
+    ],
+    "/work/arbitrum-openhouse": [
+      "jsonLdTypes"
+    ],
+    "/work/arbitrum-product-videos": [
+      "jsonLdTypes"
+    ],
+    "/work/arbitrum-rebrand": [
+      "jsonLdTypes"
+    ],
+    "/work/banzen": [
+      "jsonLdTypes"
+    ],
+    "/work/carbonite": [
+      "jsonLdTypes"
+    ],
+    "/work/coldwater-club": [
+      "jsonLdTypes"
+    ],
+    "/work/dimly-lit-chophouse": [
+      "jsonLdTypes"
+    ],
+    "/work/drip": [
+      "jsonLdTypes"
+    ],
+    "/work/entropy": [
+      "jsonLdTypes"
+    ],
+    "/work/fieldston": [
+      "jsonLdTypes"
+    ],
+    "/work/golden-ventures": [
+      "jsonLdTypes"
+    ],
+    "/work/google-ads": [
+      "jsonLdTypes"
+    ],
+    "/work/google-champions-place": [
+      "jsonLdTypes"
+    ],
+    "/work/google-language-ai": [
+      "jsonLdTypes"
+    ],
+    "/work/google-maps": [
+      "jsonLdTypes"
+    ],
+    "/work/google-small-business": [
+      "jsonLdTypes"
+    ],
+    "/work/google-think-with-google": [
+      "jsonLdTypes"
+    ],
+    "/work/heard": [
+      "jsonLdTypes"
+    ],
+    "/work/helen-maroulis": [
+      "jsonLdTypes"
+    ],
+    "/work/hylands": [
+      "jsonLdTypes"
+    ],
+    "/work/industry-standard": [
+      "jsonLdTypes"
+    ],
+    "/work/infura": [
+      "jsonLdTypes"
+    ],
+    "/work/kindling": [
+      "jsonLdTypes"
+    ],
+    "/work/local-hoops": [
+      "jsonLdTypes"
+    ],
+    "/work/novi": [
+      "jsonLdTypes"
+    ],
+    "/work/offchain": [
+      "jsonLdTypes"
+    ],
+    "/work/oxyle": [
+      "jsonLdTypes"
+    ],
+    "/work/path-projects": [
+      "jsonLdTypes"
+    ],
+    "/work/perm-agriculture": [
+      "jsonLdTypes"
+    ],
+    "/work/photon": [
+      "jsonLdTypes"
+    ],
+    "/work/print-parlor": [
+      "jsonLdTypes"
+    ],
+    "/work/pubkey": [
+      "jsonLdTypes"
+    ],
+    "/work/smallhold-content": [
+      "jsonLdTypes"
+    ],
+    "/work/soft-science": [
+      "jsonLdTypes"
+    ],
+    "/work/spot-and-tango": [
+      "jsonLdTypes"
+    ],
+    "/work/sublime": [
+      "jsonLdTypes"
+    ],
+    "/work/survivornet": [
+      "jsonLdTypes"
+    ],
+    "/work/talos": [
+      "jsonLdTypes"
+    ],
+    "/work/tbt": [
+      "jsonLdTypes"
+    ],
+    "/work/transcend": [
+      "jsonLdTypes"
+    ],
+    "/work/webroot": [
+      "jsonLdTypes"
+    ],
+    "/work/yellow-dog": [
+      "jsonLdTypes"
+    ],
+    "/work/youtube": [
+      "jsonLdTypes"
+    ],
+    "/work/yura": [
+      "jsonLdTypes"
+    ],
+    "/work/zbiotics": [
+      "jsonLdTypes"
+    ]
+  },
+  "_jsonld": "Page-level JSON-LD moved from useMeta (a useEffect, so client-only and invisible to any crawler that does not run JS) into the prerender, and /work, /thoughts, /contact and / gained schema they never had. jsonLdTypes is an invariant, so every route whose set changed is listed below: the five static pages, plus the 47 case studies that gain CreativeWork. The 14 client hubs are absent on purpose - they render ClientOverview, so they keep the breadcrumb alone. /careers also gains a BreadcrumbList but is not in prod-baseline.json at all, which predates the /about-us -> /careers move. Prune this whole block when the baseline is re-captured."
 }

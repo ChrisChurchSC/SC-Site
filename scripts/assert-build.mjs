@@ -156,6 +156,59 @@ if (!fs.existsSync(sitemapPath)) {
   }
 }
 
+// ── structured data is actually present ──────────────────────────────────────
+// The page schema is built from the Sanity data the SSR render fetched, and
+// entry-server.jsx swallows a failed fetch with `.catch(() => null)`. Without
+// this, a transient Sanity outage during a Vercel build ships /about with no
+// FAQPage and every other gate stays green — the page still has its title, its
+// canonical, its <h1> and a full #root, because those come from elsewhere.
+//
+// Asserted per route rather than in aggregate so the failure names the page.
+
+const REQUIRED_SCHEMA = [
+  ['index.html', ['Organization', 'WebSite']],
+  ['about/index.html', ['Organization', 'BreadcrumbList', 'FAQPage']],
+  ['careers/index.html', ['Organization', 'BreadcrumbList']],
+  ['work/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
+  ['thoughts/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
+  ['contact/index.html', ['Organization', 'BreadcrumbList', 'ContactPage']],
+]
+
+/** Top-level @type of every JSON-LD block, the way capture.mjs reads them. */
+function schemaTypes(html) {
+  const types = []
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let parsed
+    try { parsed = JSON.parse(m[1]) } catch { problems.push('unparseable JSON-LD block'); continue }
+    for (const node of Array.isArray(parsed) ? parsed : [parsed]) {
+      if (node && node['@type']) types.push(node['@type'])
+    }
+  }
+  return types
+}
+
+for (const [rel, required] of REQUIRED_SCHEMA) {
+  const file = path.join(dir, rel)
+  if (!fs.existsSync(file)) { problems.push(`${rel}: expected page not built`); continue }
+  const types = schemaTypes(fs.readFileSync(file, 'utf8'))
+  for (const t of required) {
+    if (!types.includes(t)) problems.push(`${rel}: missing ${t} JSON-LD (found: ${types.join(', ') || 'none'})`)
+  }
+}
+
+// Every /work/<slug> page carries a breadcrumb. CreativeWork is NOT asserted
+// here: the client hubs (subCount > 1) render ClientOverview and legitimately
+// have only the breadcrumb, and which slugs those are is Sanity's answer, not
+// something this script can see from the built file.
+for (const file of htmlFiles) {
+  const rel = path.relative(dir, file)
+  if (!/^work[/\\][^/\\]+[/\\]index\.html$/.test(rel)) continue
+  const types = schemaTypes(fs.readFileSync(file, 'utf8'))
+  if (!types.includes('BreadcrumbList')) {
+    problems.push(`${rel}: missing BreadcrumbList JSON-LD`)
+  }
+}
+
 if (problems.length) {
   console.error(`\n\u2717 Prerender output failed ${problems.length} assertion(s):`)
   for (const p of problems) console.error(`    ${p}`)
