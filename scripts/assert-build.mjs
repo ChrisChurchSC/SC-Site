@@ -97,18 +97,19 @@ for (const file of htmlFiles) {
 
   // Exactly one <h1> in the rendered body.
   //
-  // Checked against #root, not the whole file: the prerender also injects a
-  // crawler-only <h1> into the hidden #seo-static div on /lp pages, and that
-  // one is invisible to users. Counting it would let a page pass this check
-  // while showing a reader no heading at all.
+  // Checked against #root, not the whole file. This used to stop at the hidden
+  // #seo-static div, which carried a crawler-only duplicate <h1> on every /lp
+  // page; that div is gone. What remains to exclude is the serialized Sanity
+  // payload in the trailing <script>, where an <h1> can appear inside a string
+  // — so scripts are stripped rather than the document being sliced at a
+  // marker that may not exist.
   //
   // The homepage, /about and /work all shipped with zero. /about's was worse
   // than absent — the markup was there, guarded on a Sanity field that is
   // null, so it silently rendered nothing.
   const rootStart = html.indexOf('<div id="root">')
   if (rootStart !== -1) {
-    const seoStart = html.indexOf('<div id="seo-static"', rootStart)
-    const body = html.slice(rootStart, seoStart === -1 ? undefined : seoStart)
+    const body = html.slice(rootStart).replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '')
     const h1s = (body.match(/<h1[\s>]/g) || []).length
     if (h1s !== 1 && !SKIP_H1.has(rel)) {
       problems.push(`${rel}: expected exactly 1 <h1> in #root, found ${h1s}`)
