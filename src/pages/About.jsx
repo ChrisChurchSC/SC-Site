@@ -1,8 +1,11 @@
+import { NavLink } from 'react-router-dom'
 import styles from './About.module.css'
 import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
 import { ABOUT_PAGE_QUERY } from '../lib/queries'
+import { LP_CATEGORIES } from '../lib/lpCategories'
+import { MOCK_PAGES } from '../lib/mockLandingPages'
 
 const FALLBACK = {
   headerLabel: '[ Capabilities ]',
@@ -114,6 +117,33 @@ export default function About() {
           </div>
         </section>
       )}
+
+      {/* The 22 /lp pages had no visible inbound link from anywhere on the
+          site — every link into them came from another /lp page, and the only
+          bridge from the main site was a display:none div the prerender
+          injected into the homepage. That is hidden text and links, and it
+          was only ever a stopgap for an empty #root, which the SSG work fixed.
+          This section replaces it: real links, on the page whose subject they
+          actually extend. */}
+      <section className={styles.textSection}>
+        <p className={styles.sectionLabel}>Answers</p>
+        <div className={styles.lpGrid}>
+          {LP_CATEGORIES.map(({ label, slugs }) => (
+            <div key={label} className={styles.lpCol}>
+              <p className={styles.lpCatLabel}>{label}</p>
+              <ul className={styles.lpList}>
+                {slugs.map(slug => MOCK_PAGES[slug] && (
+                  <li key={slug}>
+                    <NavLink to={`/lp/${slug}`} className={styles.lpLink}>
+                      {MOCK_PAGES[slug].heroHeadline}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {cfg.faqs?.length > 0 && (
         <section className={styles.textSection}>
