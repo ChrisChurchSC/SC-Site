@@ -74,24 +74,6 @@ export default function ThoughtPost() {
     title: `${post.title} | Super Conscious`,
     description: (post.excerpt || firstParagraph(post)).slice(0, 155),
     path: `/thoughts/${slug}`,
-    schema: {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: post.title,
-      datePublished: post.publishedAt,
-      author: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        url: 'https://super-conscious.studio',
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        logo: { '@type': 'ImageObject', url: 'https://super-conscious.studio/logo.svg' },
-      },
-      url: `https://super-conscious.studio/thoughts/${slug}`,
-      mainEntityOfPage: `https://super-conscious.studio/thoughts/${slug}`,
-    },
   } : {})
 
   if (!post) return (

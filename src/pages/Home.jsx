@@ -15,40 +15,11 @@ let didLoad = false
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
 
-const HOME_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': 'https://super-conscious.studio/#organization',
-      name: 'Super Conscious',
-      url: 'https://super-conscious.studio',
-      logo: 'https://super-conscious.studio/favicon-dark.png',
-      sameAs: [
-        'https://www.instagram.com/_super_conscious/',
-        'https://www.linkedin.com/company/super-conscious/',
-      ],
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Philadelphia',
-        addressRegion: 'PA',
-        addressCountry: 'US',
-      },
-    },
-    {
-      '@type': 'WebSite',
-      '@id': 'https://super-conscious.studio/#website',
-      url: 'https://super-conscious.studio',
-      name: 'Super Conscious',
-      publisher: { '@id': 'https://super-conscious.studio/#organization' },
-    },
-  ],
-}
 
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
-  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/', schema: HOME_SCHEMA })
+  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/' })
 
   // Prefix local paths with Vite base URL (needed for GitHub Pages /SC-Site/ subpath)
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
