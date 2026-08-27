@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 const DEFAULT_TITLE = 'Super Conscious | Creative Studio'
 const DEFAULT_DESC = 'Super Conscious is a creative strategy and production studio building brands, content, and digital products for founders and marketing teams. Philadelphia, PA.'
 const DEFAULT_OG_DESC = 'Your fractional marketing and creative department'
-const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.gif'
+const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.jpg'
 const SITE_BASE = 'https://super-conscious.studio'
 
 function setMeta(selector, attr, value) {
@@ -37,7 +37,7 @@ export function useMeta({ title, description, image, path, schema, noindex } = {
     // Only when the caller actually has an image. This used to fall back to
     // DEFAULT_IMAGE and write it unconditionally, so any page whose useMeta
     // call omits `image` — every thought post — overwrote the per-page og:image
-    // the prerender had just put in the document, back to reel-preview.gif.
+    // the prerender had just put in the document, back to the default still.
     // setMeta already no-ops on a null value; the fallback was the whole bug.
     if (image) {
       setMeta('meta[property="og:image"]',  'content', image)

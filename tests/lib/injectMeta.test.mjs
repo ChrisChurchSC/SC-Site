@@ -23,7 +23,7 @@ const render = (over = {}) =>
     title: 'T',
     description: 'D',
     url: 'https://super-conscious.studio/x',
-    image: 'https://super-conscious.studio/reel-preview.gif',
+    image: 'https://super-conscious.studio/reel-preview.jpg',
     ...over,
   })
 
