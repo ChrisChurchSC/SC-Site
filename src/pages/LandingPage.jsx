@@ -20,32 +20,6 @@ export default function LandingPage() {
 
   const p = page || mockPage
 
-  const faqSchema = p?.faqs?.length ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: p.faqs.map(f => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: { '@type': 'Answer', text: f.answer },
-    })),
-  } : null
-
-  const howToSchema = p?.processSteps?.length ? {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: p.heroHeadline,
-    step: p.processSteps.map((step, i) => ({
-      '@type': 'HowToStep',
-      position: i + 1,
-      name: step.label,
-      text: step.description || step.label,
-    })),
-  } : null
-
-  const schemas = [faqSchema, howToSchema].filter(Boolean)
-  const combinedSchema = schemas.length === 0 ? null
-    : schemas.length === 1 ? schemas[0]
-    : { '@context': 'https://schema.org', '@graph': schemas.map(({ '@context': _c, ...rest }) => rest) }
 
   const relatedPages = (p?.relatedSlugs || RELATED_SLUGS[slug] || [])
     .map(s => ({ slug: s, headline: MOCK_PAGES[s]?.heroHeadline }))
@@ -55,7 +29,6 @@ export default function LandingPage() {
     title: p.seoTitle || `${p.heroHeadline} | Super Conscious`,
     description: p.seoDescription || p.heroAnswer?.slice(0, 155) || '',
     path: `/lp/${slug}`,
-    schema: combinedSchema,
   } : {})
 
   if (loading && !p) return null
