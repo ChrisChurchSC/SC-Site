@@ -30,26 +30,19 @@ if (!fs.existsSync(indexPath)) {
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
 const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
 const indexHtml = fs.readFileSync(indexPath, 'utf8')
 
-// Inject JSON-LD schema scripts before </head>
-function injectSchemas(html, schemas) {
-  if (!schemas.length) return html
-  const scripts = schemas
-    .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
-    .join('\n    ')
-  return html.replace('</head>', `    ${scripts}\n  </head>`)
-}
-
-// Inject crawler-only content as a hidden div after #root (React never touches it)
+// Inject crawler-only content as a hidden div after #root (React never touches it).
+// Function replacer, per the note in scripts/lib/inject-schemas.mjs.
 function injectSeoContent(html, content) {
   return html.replace(
     '<div id="root"></div>',
-    `<div id="root"></div>\n<div id="seo-static" style="display:none" aria-hidden="true">${content}</div>`,
+    () => `<div id="root"></div>\n<div id="seo-static" style="display:none" aria-hidden="true">${content}</div>`,
   )
 }
 
@@ -101,9 +94,12 @@ async function injectRoot(html, routePath) {
   try {
     const { html: body, data } = await renderRoute(routePath)
     const dataScript = `<script>window.__SANITY_DATA__=${serializeData(data)}</script>`
+    // Function replacers: the SSR body and the serialized Sanity data are
+    // arbitrary content, and a `$&` or `$'` in either would be substituted.
+    // See scripts/lib/inject-schemas.mjs.
     return html
-      .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
-      .replace('</body>', `${dataScript}\n</body>`)
+      .replace('<div id="root"></div>', () => `<div id="root">${body}</div>`)
+      .replace('</body>', () => `${dataScript}\n</body>`)
   } catch (e) {
     console.warn(`  SSR render failed for ${routePath}: ${e.message}`)
     return html
