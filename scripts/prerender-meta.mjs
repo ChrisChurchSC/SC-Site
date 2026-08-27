@@ -3,11 +3,11 @@
  * see the correct title, description, and canonical for every sitemap page.
  *
  * Covers:
- *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
+ *  - /lp/[slug]  — AEO landing pages (canonical, FAQ+HowTo+Breadcrumb JSON-LD)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
  *  - static pages: /about, /careers, /work, /thoughts, /contact
- *  - / — homepage (LP links injected for crawler discoverability)
+ *  - / — homepage
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
@@ -29,22 +29,15 @@ if (!fs.existsSync(indexPath)) {
 
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
-const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
 const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
+const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
 const indexHtml = fs.readFileSync(indexPath, 'utf8')
 
-// Inject crawler-only content as a hidden div after #root (React never touches it).
-// Function replacer, per the note in scripts/lib/inject-schemas.mjs.
-function injectSeoContent(html, content) {
-  return html.replace(
-    '<div id="root"></div>',
-    () => `<div id="root"></div>\n<div id="seo-static" style="display:none" aria-hidden="true">${content}</div>`,
-  )
-}
 
 function writeHtml(segments, html) {
   const dir = path.join(distDir, ...segments)
@@ -318,34 +311,7 @@ for (const t of thoughts) {
 
 // ── AEO landing pages (canonical, H1, FAQ + HowTo + Breadcrumb JSON-LD, outgoing links) ──
 
-const LP_CATEGORY = {
-  'what-does-a-brand-system-include': 'Brand Systems',
-  'how-long-does-a-brand-system-take': 'Brand Systems',
-  'brand-system-cost': 'Brand Systems',
-  'brand-guidelines-vs-brand-system': 'Brand Systems',
-  'when-to-invest-in-a-brand-system': 'Brand Systems',
-  'what-is-a-verbal-identity': 'Brand Systems',
-  'brand-consistency-across-a-team': 'Brand Systems',
-  'what-is-a-content-program': 'Content Programs',
-  'how-to-build-a-b2b-content-program': 'Content Programs',
-  'content-program-cost': 'Content Programs',
-  'how-long-until-content-marketing-works': 'Content Programs',
-  'what-is-a-thought-leadership-program': 'Content Programs',
-  'how-to-measure-a-content-program': 'Content Programs',
-  'what-does-a-digital-product-design-engagement-include': 'Digital Products',
-  'how-much-does-product-design-cost': 'Digital Products',
-  'how-long-to-design-a-web-app': 'Digital Products',
-  'design-system-vs-brand-system': 'Digital Products',
-  'what-to-look-for-in-a-product-design-studio': 'Digital Products',
-  'brand-or-content-first': 'Hiring a Studio',
-  'do-i-need-a-brand-system-before-content': 'Hiring a Studio',
-  'creative-studio-vs-freelancer': 'Hiring a Studio',
-  'what-to-ask-a-creative-agency': 'Hiring a Studio',
-}
 
-const lpLinks = Object.entries(MOCK_PAGES)
-  .map(([slug, p]) => `<a href="/lp/${slug}">${esc(p.heroHeadline)}</a>`)
-  .join('\n')
 
 for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   const title = page.seoTitle || `${page.heroHeadline} | Super Conscious`
@@ -391,27 +357,17 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   })
   html = injectSchemas(html, schemas)
 
-  // H1 + description + nav links in hidden div for non-JS crawlers
-  html = injectSeoContent(html, [
-    `<h1>${esc(page.heroHeadline)}</h1>`,
-    `<p>${esc(description)}</p>`,
-    `<nav><a href="/">Super Conscious</a> · <a href="/contact">Start a project</a></nav>`,
-  ].join(''))
 
   html = await injectRoot(html, `/lp/${slug}`)
   writeHtml(['lp', slug], html)
   count++
 }
 
-// ── Homepage: inject LP links so crawlers can discover /lp/* pages ───────────
+// ── Homepage ─────────────────────────────────────────────────────────────────
+// The /lp links used to be injected here, into a display:none div. They live
+// on /about now, visible. See src/pages/About.jsx.
 
-const homepageHtml = fs.readFileSync(indexPath, 'utf8')
-let homepageWithLinks = injectSeoContent(
-  homepageHtml,
-  `<nav aria-label="Resources">\n${lpLinks}\n</nav>`,
-)
-homepageWithLinks = await injectRoot(homepageWithLinks, '/')
-fs.writeFileSync(indexPath, homepageWithLinks)
+fs.writeFileSync(indexPath, await injectRoot(fs.readFileSync(indexPath, 'utf8'), '/'))
 
 // ── Routing shells ───────────────────────────────────────────────────────────
 // Prerendered routes serve their own (SSR'd) file. Client-only routes (gated
@@ -488,6 +444,7 @@ function gitDay(relPath) {
 // The sources that actually produce those pages.
 const STATIC_CONTENT_SOURCES = [
   'src/lib/mockLandingPages.js',
+  'src/lib/lpCategories.js',
   'src/pages/Home.jsx',
   'src/pages/About.jsx',
   'src/pages/Careers.jsx',
@@ -550,42 +507,10 @@ if (fs.existsSync(distSitemapPath)) {
 
 const baseLlms = fs.readFileSync(path.join(ROOT, 'public/llms.txt'), 'utf8').trimEnd()
 
-const lpByCategory = {
-  'Brand Systems': [
-    'what-does-a-brand-system-include',
-    'how-long-does-a-brand-system-take',
-    'brand-system-cost',
-    'brand-guidelines-vs-brand-system',
-    'when-to-invest-in-a-brand-system',
-    'what-is-a-verbal-identity',
-    'brand-consistency-across-a-team',
-  ],
-  'Content Programs': [
-    'what-is-a-content-program',
-    'how-to-build-a-b2b-content-program',
-    'content-program-cost',
-    'how-long-until-content-marketing-works',
-    'what-is-a-thought-leadership-program',
-    'how-to-measure-a-content-program',
-  ],
-  'Digital Products': [
-    'what-does-a-digital-product-design-engagement-include',
-    'how-much-does-product-design-cost',
-    'how-long-to-design-a-web-app',
-    'design-system-vs-brand-system',
-    'what-to-look-for-in-a-product-design-studio',
-  ],
-  'Hiring a Studio': [
-    'brand-or-content-first',
-    'do-i-need-a-brand-system-before-content',
-    'creative-studio-vs-freelancer',
-    'what-to-ask-a-creative-agency',
-  ],
-}
 
 let aeoSection = '\n\n## Common Questions\n\nDetailed answers to questions about brand systems, content programs, and digital products:\n'
 
-for (const [category, slugs] of Object.entries(lpByCategory)) {
+for (const { label: category, slugs } of LP_CATEGORIES) {
   aeoSection += `\n### ${category}\n\n`
   for (const slug of slugs) {
     const p = MOCK_PAGES[slug]

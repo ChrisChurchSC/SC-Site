@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { thoughts as staticThoughts } from '../data/thoughts'
 import styles from './ThoughtPost.module.css'
@@ -59,7 +59,16 @@ export default function ThoughtPost() {
   const { open: openCalDrawer } = useCalDrawer()
   const { data: sanityPost } = useSanity(THOUGHT_QUERY, { slug })
   const staticPost = staticThoughts.find(t => t.slug === slug)
-  const post = sanityPost ?? (staticPost ? fromStaticThought(staticPost) : null)
+  // Field-level fallback, not object-level. `sanityPost ?? static` let the
+  // Sanity document win wholesale, and THOUGHT_QUERY does not project
+  // relatedLinks — the field is not in the thought schema at all. So the
+  // eight /lp links authored in src/data/thoughts.js were dead on every post:
+  // the guard below them was always false. Same shape as the headline defect
+  // on /about, and the same fix.
+  const fallback = staticPost ? fromStaticThought(staticPost) : null
+  const post = sanityPost
+    ? { ...sanityPost, relatedLinks: sanityPost.relatedLinks?.length ? sanityPost.relatedLinks : (fallback?.relatedLinks ?? []) }
+    : fallback
 
   useMeta(post ? {
     title: `${post.title} | Super Conscious`,
@@ -145,7 +154,7 @@ export default function ThoughtPost() {
             <ul className={styles.relatedList}>
               {post.relatedLinks.map(link => (
                 <li key={link.href}>
-                  <a href={link.href} className={styles.relatedLink}>{link.text} →</a>
+                  <Link to={link.href} className={styles.relatedLink}>{link.text} →</Link>
                 </li>
               ))}
             </ul>
