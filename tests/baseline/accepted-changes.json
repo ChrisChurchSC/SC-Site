@@ -24,6 +24,9 @@
     "/work": [
       "jsonLdTypes"
     ],
+    "/work/arbitrum": [
+      "title"
+    ],
     "/work/arbitrum-interview-series": [
       "jsonLdTypes"
     ],
@@ -31,7 +34,8 @@
       "jsonLdTypes"
     ],
     "/work/arbitrum-openhouse": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/arbitrum-product-videos": [
       "jsonLdTypes"
@@ -39,132 +43,210 @@
     "/work/arbitrum-rebrand": [
       "jsonLdTypes"
     ],
+    "/work/aris": [
+      "title"
+    ],
     "/work/banzen": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
+    ],
+    "/work/big-buoy": [
+      "title"
     ],
     "/work/carbonite": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/coldwater-club": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
+    ],
+    "/work/concis-labs": [
+      "title"
+    ],
+    "/work/deep-dive-films": [
+      "title"
     ],
     "/work/dimly-lit-chophouse": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/drip": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/entropy": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/fieldston": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
+    ],
+    "/work/gigs": [
+      "title"
+    ],
+    "/work/girlfight": [
+      "title"
     ],
     "/work/golden-ventures": [
       "jsonLdTypes"
     ],
+    "/work/google": [
+      "title"
+    ],
     "/work/google-ads": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/google-champions-place": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/google-language-ai": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/google-maps": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/google-small-business": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/google-think-with-google": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/heard": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/helen-maroulis": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/hylands": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/industry-standard": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/infura": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/kindling": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/local-hoops": [
       "jsonLdTypes"
     ],
+    "/work/nimruz": [
+      "title"
+    ],
     "/work/novi": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/offchain": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/oxyle": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/path-projects": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/perm-agriculture": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/photon": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/print-parlor": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/pubkey": [
       "jsonLdTypes"
     ],
+    "/work/smallhold": [
+      "title"
+    ],
     "/work/smallhold-content": [
       "jsonLdTypes"
     ],
+    "/work/smashburger": [
+      "title"
+    ],
     "/work/soft-science": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/spot-and-tango": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
+    ],
+    "/work/starchase": [
+      "title"
     ],
     "/work/sublime": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/survivornet": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/talos": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/tbt": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/transcend": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/webroot": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
+    ],
+    "/work/wonderwerk": [
+      "title"
+    ],
+    "/work/world-within": [
+      "title"
     ],
     "/work/yellow-dog": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/youtube": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/yura": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ],
     "/work/zbiotics": [
-      "jsonLdTypes"
+      "jsonLdTypes",
+      "title"
     ]
   },
-  "_jsonld": "Page-level JSON-LD moved from useMeta (a useEffect, so client-only and invisible to any crawler that does not run JS) into the prerender, and /work, /thoughts, /contact and / gained schema they never had. jsonLdTypes is an invariant, so every route whose set changed is listed below: the five static pages, plus the 47 case studies that gain CreativeWork. The 14 client hubs are absent on purpose - they render ClientOverview, so they keep the breadcrumb alone. /careers also gains a BreadcrumbList but is not in prod-baseline.json at all, which predates the /about-us -> /careers move. Prune this whole block when the baseline is re-captured."
+  "_jsonld": "Page-level JSON-LD moved from useMeta (a useEffect, so client-only and invisible to any crawler that does not run JS) into the prerender, and /work, /thoughts, /contact and / gained schema they never had. jsonLdTypes is an invariant, so every route whose set changed is listed below: the five static pages, plus the 47 case studies that gain CreativeWork. The 14 client hubs are absent on purpose - they render ClientOverview, so they keep the breadcrumb alone. /careers also gains a BreadcrumbList but is not in prod-baseline.json at all, which predates the /about-us -> /careers move. Prune this whole block when the baseline is re-captured.",
+  "_work_titles": "Case-study titles and descriptions are now built from the type/services/summary fields Sanity already holds, instead of `{Name} | Super Conscious` (21-24 chars, competing only for the client's brand name) and a description that was under 70 characters on 31 of them and the literal placeholder `Work by Super Conscious for X.` on six. title is an invariant, so every /work route in the baseline is listed. description is captured but not an invariant, so it needs no acceptance. Prune with the rest when the baseline is re-captured."
 }
