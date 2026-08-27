@@ -1,4 +1,4 @@
-import styles from './AboutUs.module.css'
+import styles from './Careers.module.css'
 import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
@@ -39,7 +39,7 @@ const FALLBACK = {
 // from Sanity (openRole docs); the empty state below covers the rest.
 const fallbackOpenRoles = []
 
-export default function AboutUs() {
+export default function Careers() {
   const { data: sanityRoles } = useSanity(OPEN_ROLES_QUERY)
   const { data: pageData } = useSanity(CAREERS_PAGE_QUERY)
   const cfg = pageData ?? FALLBACK
@@ -48,7 +48,7 @@ export default function AboutUs() {
   useMeta({
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
-    path: '/about-us',
+    path: '/careers',
   })
   return (
     <main className={styles.main}>

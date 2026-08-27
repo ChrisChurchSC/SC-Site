@@ -6,7 +6,7 @@
  *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
- *  - static pages: /about, /about-us, /work, /thoughts, /contact
+ *  - static pages: /about, /careers, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
@@ -77,7 +77,7 @@ try {
 //
 // Keys are sorted so the same content always serializes to the same bytes.
 // They are GROQ query strings, inserted in whatever order the queries resolved
-// during the two-pass render, which is a race — so /about and /about-us came
+// during the two-pass render, which is a race — so /about and /careers came
 // out byte-different on every build despite identical data. Two consecutive
 // builds of the same commit differed by 31,698 characters at an identical
 // length of 70,800.
@@ -156,7 +156,7 @@ const STATIC_PAGES = [
     description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
   },
   {
-    segments: ['about-us'],
+    segments: ['careers'],
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
   },
@@ -453,7 +453,7 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-// The floor for pages with no better date: /, /about, /about-us and /lp/*.
+// The floor for pages with no better date: /, /about, /careers and /lp/*.
 //
 // This was a hand-bumped constant, and the instruction to bump it was missed.
 // On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
@@ -489,7 +489,7 @@ const STATIC_CONTENT_SOURCES = [
   'src/lib/mockLandingPages.js',
   'src/pages/Home.jsx',
   'src/pages/About.jsx',
-  'src/pages/AboutUs.jsx',
+  'src/pages/Careers.jsx',
   'src/pages/LandingPage.jsx',
   'src/pages/Work.jsx',
 ]
@@ -524,7 +524,7 @@ function lastmodFor(loc) {
   if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-  return staticContentDay // /, /about, /about-us, /lp/*
+  return staticContentDay // /, /about, /careers, /lp/*
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')
