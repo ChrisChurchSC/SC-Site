@@ -120,7 +120,7 @@ export default function Nav() {
           </NavLink>
 
           <div className="nav-card-pair">
-            <NavLink to="/about-us" className="nav-card">
+            <NavLink to="/careers" className="nav-card">
               <div className="nav-card-text">
                 <p className="nav-card-title">Careers</p>
                 <p className="nav-card-sub">Join the team.</p>
@@ -204,7 +204,7 @@ export default function Nav() {
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
           <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink
             to="/work"
             className="nav-mobile-link"

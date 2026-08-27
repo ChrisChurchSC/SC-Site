@@ -39,4 +39,19 @@ export const LEGACY_REDIRECTS = {
 
   // Thought post, moved under /thoughts/.
   '/rethinking-the-workweek': '/thoughts/rethinking-the-workweek',
+
+  // The careers page shipped on /about-us, a slug inherited from the
+  // pre-rebuild site and never revisited. It sat next to /about — the
+  // capabilities page — as an indexable, sitemapped sibling, so the two most
+  // about-shaped URLs on the domain pointed at unrelated content and neither
+  // said what it was. Every other reference already called it Careers: the nav
+  // label, llms.txt, the Sanity type (`careersPage`), and every commit that
+  // ever touched the file.
+  //
+  // Not a pre-rebuild URL like the rest of this map, but the same contract
+  // applies — it was indexed, it had impressions, and redirects.test.mjs
+  // treats every literal entry here identically, so it belongs in the one
+  // place that is checked against vercel.json rather than in a second list
+  // nothing verifies.
+  '/about-us': '/careers',
 }
