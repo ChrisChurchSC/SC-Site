@@ -35,6 +35,7 @@ const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js
 const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
 const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
 const { sanityKey } = await import(path.join(ROOT, 'src/lib/sanityCache.js'))
+const { workTitle, workDescription } = await import(path.join(ROOT, 'src/lib/workMeta.js'))
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
@@ -136,7 +137,7 @@ async function injectRoot(html, routePath) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, _updatedAt}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, descriptor, type, category, services, summary, comingSoon, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
@@ -144,6 +145,11 @@ try {
       if (p.slug) projectMeta[p.slug] = {
         name: p.name,
         tagline: p.tagline,
+        descriptor: p.descriptor,
+        type: p.type,
+        category: p.category,
+        services: p.services,
+        summary: p.summary,
         updatedAt: p._updatedAt,
         comingSoon: p.comingSoon === true,
       }
@@ -349,8 +355,8 @@ for (const slug of workSlugs) {
   const meta = projectMeta[slug]
   const name = meta?.name || slugToName(slug)
   const tagline = meta?.tagline || ''
-  const title = `${name} | Super Conscious`
-  const description = (tagline || `Work by Super Conscious for ${name}.`).slice(0, 155)
+  const title = workTitle(meta, name)
+  const description = workDescription(meta, name)
   const url = `${BASE_URL}/work/${slug}`
   let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
   if (isPlaceholder(slug)) {
