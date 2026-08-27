@@ -9,7 +9,7 @@ import { MOCK_PAGES } from '../lib/mockLandingPages'
 
 const FALLBACK = {
   headerLabel: '[ Capabilities ]',
-  headline: 'Creative Strategy & Production Partner',
+  headline: 'Brand Systems, Content Programs & Digital Products',
   intro: 'We help founders and marketing teams decide what to make, why it matters, and bring it to life.',
   embeddedPoints: [
     { heading: 'No long contracts.', body: 'Month to month, rate card that works for both sides. No surprises.' },
