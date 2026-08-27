@@ -1,4 +1,7 @@
 {
   "_comment": "Intentional deltas from the hardening pass. Adding a property here means 'this route's property is EXPECTED to differ from the baseline'. Keep it small and prune it once a baseline is re-captured.",
-  "routes": {}
+  "_about_us": "/about-us was the careers page and is now a 301 to /careers. capture.mjs fetches with redirect:'manual' and only reads a body below 400, so the old URL now captures as a 301 with an empty document: status moves 200->301 and every content-derived property goes null. That is the change, not a regression. The 301 itself is pinned by tests/seo/redirects.test.mjs, which asserts the status AND that the target returns 200 - so accepting status here loses no coverage. Prune this entry when the baseline is re-captured against /careers.",
+  "routes": {
+    "/about-us": ["status", "title", "canonical", "rootContentBucket", "jsonLdTypes"]
+  }
 }

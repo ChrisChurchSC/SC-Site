@@ -15,7 +15,7 @@ import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import About from './pages/About'
-import AboutUs from './pages/AboutUs'
+import Careers from './pages/Careers'
 import AboutStudio from './pages/AboutStudio'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
@@ -99,7 +99,7 @@ export default function App() {
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/careers" element={<Careers />} />
                 <Route path="/who-we-are" element={<AboutStudio />} />
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
