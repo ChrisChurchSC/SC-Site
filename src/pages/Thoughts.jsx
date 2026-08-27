@@ -4,7 +4,7 @@ import { thoughts as staticThoughts } from '../data/thoughts'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { THOUGHTS_INDEX_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImgProps } from '../lib/sanityImg'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
@@ -49,7 +49,7 @@ export default function Thoughts() {
           return (
             <NavLink key={_id} to={`/thoughts/${slug}`} className={styles.card}>
               <div className={styles.cardThumb}>
-                {heroUrl && <img src={sanityImg(heroUrl, { w: 900 })} alt="" loading="lazy" />}
+                {heroUrl && <img {...sanityImgProps(heroUrl, { w: 900 })} alt="" />}
               </div>
               <div className={styles.cardMeta}>
                 <span className={styles.cardNum}>{n}</span>

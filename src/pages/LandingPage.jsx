@@ -5,7 +5,7 @@ import styles from './LandingPage.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { LANDING_PAGE_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImg, sanityImgProps } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { MOCK_PAGES, RELATED_SLUGS } from '../lib/mockLandingPages'
 import LogoWordmark from '../components/LogoWordmark'
@@ -68,7 +68,7 @@ export default function LandingPage() {
             )
             if (block._type === 'imageBlock') return (
               <figure key={block._key || i} className={styles.figure}>
-                <img src={sanityImg(block.imageUrl, { w: 1400 })} alt={block.alt || ''} loading="lazy" />
+                <img {...sanityImgProps(block.imageUrl, { w: 1400 })} alt={block.alt || ''} />
               </figure>
             )
             return null

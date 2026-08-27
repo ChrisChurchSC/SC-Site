@@ -3,7 +3,7 @@ import { useMeta } from '../hooks/useMeta'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import { useSanity } from '../hooks/useSanity'
 import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImgProps } from '../lib/sanityImg'
 
 const FALLBACK = {
   headerLabel: '[ Working Here ]',
@@ -66,7 +66,7 @@ export default function Careers() {
               {videoUrl ? (
                 <video src={videoUrl} autoPlay muted loop playsInline className={styles.photoMedia} />
               ) : imageUrl ? (
-                <img src={sanityImg(imageUrl, { w: 1200 })} alt={caption} loading="lazy" className={styles.photoMedia} />
+                <img {...sanityImgProps(imageUrl, { w: 1200 })} alt={caption} className={styles.photoMedia} />
               ) : (
                 <div className={styles.photoPlaceholder} />
               )}
