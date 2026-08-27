@@ -5,7 +5,7 @@ import styles from './ThoughtPost.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { THOUGHT_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImgProps } from '../lib/sanityImg'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
@@ -54,6 +54,33 @@ function fromStaticThought(t) {
   }
 }
 
+/**
+ * Restore image alt text from src/data/thoughts.js onto the Sanity body.
+ *
+ * Every imageBlock in Sanity has alt: "" — an empty string, not null, so no
+ * `??` fallback anywhere reaches it — while the static file carries a written
+ * description for each. The two cannot be matched by src (local path vs CDN
+ * URL), so this pairs them by position.
+ *
+ * Guarded on the counts being equal, because they are not always: three posts
+ * line up, and rethinking-the-workweek has two static images against four in
+ * Sanity. Pairing those by index would attach the wrong description to the
+ * wrong picture, which is worse than none, so that post keeps its empty alts.
+ */
+function mergeBodyAlts(sanityBody, staticBody) {
+  if (!Array.isArray(sanityBody) || !Array.isArray(staticBody)) return sanityBody
+  const fromStatic = staticBody.filter((b) => b._type === 'imageBlock')
+  const inSanity = sanityBody.filter((b) => b._type === 'imageBlock')
+  if (!fromStatic.length || fromStatic.length !== inSanity.length) return sanityBody
+
+  let i = -1
+  return sanityBody.map((b) => {
+    if (b._type !== 'imageBlock') return b
+    i += 1
+    return b.alt ? b : { ...b, alt: fromStatic[i]?.alt || '' }
+  })
+}
+
 export default function ThoughtPost() {
   const { slug } = useParams()
   const { open: openCalDrawer } = useCalDrawer()
@@ -67,7 +94,15 @@ export default function ThoughtPost() {
   // on /about, and the same fix.
   const fallback = staticPost ? fromStaticThought(staticPost) : null
   const post = sanityPost
-    ? { ...sanityPost, relatedLinks: sanityPost.relatedLinks?.length ? sanityPost.relatedLinks : (fallback?.relatedLinks ?? []) }
+    ? {
+        ...sanityPost,
+        relatedLinks: sanityPost.relatedLinks?.length ? sanityPost.relatedLinks : (fallback?.relatedLinks ?? []),
+        // heroAlt is null on all four Sanity documents while src/data/thoughts.js
+        // carries a properly written description for each, so the hero shipped
+        // alt="" on every post. Same defect as relatedLinks above.
+        heroAlt: sanityPost.heroAlt || fallback?.heroAlt || '',
+        body: mergeBodyAlts(sanityPost.body, fallback?.body),
+      }
     : fallback
 
   useMeta(post ? {
@@ -114,7 +149,7 @@ export default function ThoughtPost() {
 
       {post.heroUrl && (
         <figure className={styles.hero}>
-          <img src={sanityImg(post.heroUrl, { w: 1800 })} alt={post.heroAlt || ''} />
+          <img {...sanityImgProps(post.heroUrl, { w: 1800, priority: true })} alt={post.heroAlt || ''} />
         </figure>
       )}
 
@@ -124,7 +159,7 @@ export default function ThoughtPost() {
           if (item._type === 'headingBlock') return <h2 key={i} className={styles.h2}>{item.text}</h2>
           if (item._type === 'imageBlock') return (
             <figure key={i} className={imgClass ? `${styles.figure} ${imgClass}` : styles.figure}>
-              <img src={sanityImg(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} loading="lazy" />
+              <img {...sanityImgProps(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} />
             </figure>
           )
           return null

@@ -6,7 +6,7 @@ import styles from './CaseStudy.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImg, sanityImgProps } from '../lib/sanityImg'
 import { workTitle, workDescription } from '../lib/workMeta'
 import CaseStudyVideo from '../components/CaseStudyVideo'
 
@@ -24,7 +24,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile
 }
 
-function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false, sound = false }) {
+function MediaItem({ src, mobileSrc, alt = '', priority = false, hasWebsite = false, sound = false }) {
   const isMobile = useIsMobile()
   const chosen = isMobile && mobileSrc ? mobileSrc : src
   if (!chosen) return null
@@ -36,8 +36,8 @@ function MediaItem({ src, mobileSrc, alt = '', hasWebsite = false, sound = false
     // video's own mute/play controls to the bottom-left to avoid overlap.
     <CaseStudyVideo key={chosen} src={chosen} onError={onError} controlsAlign={hasWebsite ? 'left' : 'right'} sound={sound} />
   )
-  const optimized = sanityImg(chosen, { w: isMobile ? 900 : 1800 })
-  return <img key={optimized} src={optimized} alt={alt} loading="lazy" onLoad={onLoad} onError={onError} />
+  const img = sanityImgProps(chosen, { w: isMobile ? 900 : 1800, priority })
+  return <img key={img.src} {...img} alt={alt} onLoad={onLoad} onError={onError} />
 }
 
 function WebsiteButton({ href }) {
@@ -170,6 +170,13 @@ export default function CaseStudy() {
     .flatMap(s => s._type === 'imageGridSection' ? (s.images ?? []) : [s])
     .map(s => s.src)
     .find(src => src && src.includes('/images/'))
+
+  // Derived per render, never module-scoped: entry-server renders every route
+  // in one process (twice each), so a shared Set would carry one case study's
+  // images into the next.
+  const isHero = (src) => !!src && src === heroImage
+  const altFor = (src) =>
+    isHero(src) ? `${cs.name}${cs.type ? ` — ${cs.type}` : ''} by Super Conscious` : ''
   useMeta({
     // Same helpers the prerender uses, so the rendered-DOM title cannot drift
     // from the one a non-JS crawler reads.
@@ -263,12 +270,24 @@ export default function CaseStudy() {
       <div className={styles.sections}>
         {cs.sections.map((section, i) => {
 
+          // Alt text for a wall of portfolio images with no per-image data.
+          //
+          // Every image carried `${cs.name} — case study image`: 29 identical
+          // strings on /work/photon, 28 on /work/banzen. Repeated verbatim that
+          // is noise to a screen reader and worth nothing in image search, and
+          // the Sanity sections hold no alt, label, caption or title to do
+          // better with — only `heading` on the text sections.
+          //
+          // So the first image, which is also the one used as og:image, gets a
+          // real description, and the rest are marked decorative. An empty alt
+          // on an image there is no honest text for is the correct answer, not
+          // a fallback.
           if (section.type === 'image-full') {
             const useMobile = isMobile && section.mobileSrc
             const ar = useMobile ? (section.mobileRatio ?? '4/5') : (section.ratio ?? '16/9')
             return (
               <div key={i} className={styles.mediaFull} style={{ aspectRatio: ar }}>
-                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!section.website} sound={section.sound} />
+                <MediaItem src={section.src} mobileSrc={section.mobileSrc} alt={altFor(section.src)} priority={isHero(section.src)} hasWebsite={!!section.website} sound={section.sound} />
                 {section.website && <WebsiteButton href={section.website} />}
               </div>
             )
@@ -294,7 +313,7 @@ export default function CaseStudy() {
                       className={styles.mediaGridItem}
                       style={{ gridColumn: `span ${item.cols}`, aspectRatio: ar }}
                     >
-                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={`${cs.name} — case study image`} hasWebsite={!!item.website} sound={item.sound} />
+                      <MediaItem src={item.src} mobileSrc={item.mobileSrc} alt={altFor(item.src)} priority={isHero(item.src)} hasWebsite={!!item.website} sound={item.sound} />
                       {item.tag && <span className={styles.mediaTag}>{item.tag}</span>}
                       {item.website && <WebsiteButton href={item.website} />}
                     </div>

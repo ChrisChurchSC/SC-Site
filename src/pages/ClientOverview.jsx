@@ -3,7 +3,7 @@ import { useProjects } from '../context/ProjectsContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CLIENT_OVERVIEW_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImgProps } from '../lib/sanityImg'
 import LazyVideo from '../components/LazyVideo'
 import { useToast, Toast } from '../components/Toast'
 import styles from './ClientOverview.module.css'
@@ -71,7 +71,7 @@ export default function ClientOverview() {
               {item.thumbnailVideo ? (
                 <LazyVideo src={item.thumbnailVideo} className={styles.cardThumb} />
               ) : item.thumbnail ? (
-                <img src={sanityImg(item.thumbnail, { w: 900 })} alt={`${item.name} thumbnail`} loading="lazy" className={styles.cardThumb} />
+                <img {...sanityImgProps(item.thumbnail, { w: 900 })} alt={`${item.name} thumbnail`} className={styles.cardThumb} />
               ) : null}
               <span className={styles.cardNum}>{item.n}</span>
               <p className={styles.cardName}>{item.name}</p>
