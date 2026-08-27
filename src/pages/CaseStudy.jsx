@@ -7,6 +7,7 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { CASE_STUDY_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
+import { workTitle, workDescription } from '../lib/workMeta'
 import CaseStudyVideo from '../components/CaseStudyVideo'
 
 function useIsMobile(breakpoint = 768) {
@@ -170,8 +171,10 @@ export default function CaseStudy() {
     .map(s => s.src)
     .find(src => src && src.includes('/images/'))
   useMeta({
-    title: cs ? `${cs.name} | Super Conscious` : 'Work | Super Conscious',
-    description: cs?.tagline ?? cs?.summary?.slice(0, 155) ?? 'Case study from Super Conscious.',
+    // Same helpers the prerender uses, so the rendered-DOM title cannot drift
+    // from the one a non-JS crawler reads.
+    title: cs ? workTitle(cs, cs.name) : 'Work | Super Conscious',
+    description: cs ? workDescription(cs, cs.name) : 'Case study from Super Conscious.',
     image: heroImage,
     path: `/work/${slug}`,
   })

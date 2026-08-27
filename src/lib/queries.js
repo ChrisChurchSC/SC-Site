@@ -97,6 +97,8 @@ export const CASE_STUDY_QUERY = `*[_type == "project" && slug.current == $slug &
   name,
   "slug": slug.current,
   type,
+  category,
+  descriptor,
   year,
   tagline,
   summary,
