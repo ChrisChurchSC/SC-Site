@@ -53,7 +53,7 @@ function caseStudyHero(data, slug) {
 }
 
 const BASE_URL = 'https://super-conscious.studio'
-const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
+const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.jpg`
 
 // The Organization node lives in index.html so every page carries it. Everything
 // else refers to it by @id rather than restating it.
