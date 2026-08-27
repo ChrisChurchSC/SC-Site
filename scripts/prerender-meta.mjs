@@ -33,9 +33,24 @@ const { injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs
 const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
-const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
+const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY, CASE_STUDY_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
+const { sanityImg } = await import(path.join(ROOT, 'src/lib/sanityImg.js'))
 const { sanityKey } = await import(path.join(ROOT, 'src/lib/sanityCache.js'))
 const { workTitle, workDescription } = await import(path.join(ROOT, 'src/lib/workMeta.js'))
+
+// The og:image for a case study, matching what CaseStudy.jsx picks so the two
+// cannot disagree.
+//
+// It reads TOP-LEVEL `src` only. The component looks like it also descends into
+// imageGridSection.images, but normalizeSections rewrites that type and drops
+// `_type`, so that branch never runs and only top-level src has ever shipped.
+// Reading the grid here would change og:image on the affected pages, which is a
+// content decision, not this change.
+function caseStudyHero(data, slug) {
+  const cs = data[sanityKey(CASE_STUDY_QUERY, { slug })]
+  const src = (cs?.sections ?? []).map((sec) => sec?.src).find((u) => u && u.includes('/images/'))
+  return src ? sanityImg(src, { w: 1200 }) : null
+}
 
 const BASE_URL = 'https://super-conscious.studio'
 const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
@@ -183,7 +198,7 @@ let count = 0
 const STATIC_PAGES = [
   {
     segments: ['about'],
-    title: 'Capabilities | Super Conscious',
+    title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
     description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
     schemas: (data, url) => {
       // Guarded on the FAQ array itself, never on `data ?? FALLBACK`. About.jsx's
@@ -191,7 +206,7 @@ const STATIC_PAGES = [
       // at all — the same field-level trap that once shipped /about with no <h1>.
       const faqs = data[sanityKey(ABOUT_PAGE_QUERY, {})]?.faqs
       return [
-        crumbs({ name: 'Capabilities', item: url }),
+        crumbs({ name: 'What we do', item: url }),
         faqs?.length && {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
@@ -358,20 +373,25 @@ for (const slug of workSlugs) {
   const title = workTitle(meta, name)
   const description = workDescription(meta, name)
   const url = `${BASE_URL}/work/${slug}`
-  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
+
+  // Render first: the og:image comes from the sections this route resolved.
+  // injectRoot touches #root and </body>, injectMeta touches <head>, so the
+  // order between them is free.
+  const rendered = await injectRoot(indexHtml, `/work/${slug}`)
+  let html = injectMeta(rendered.html, {
+    title,
+    description,
+    url,
+    image: caseStudyHero(rendered.data, slug) || DEFAULT_IMAGE,
+    imageAlt: `${name} — case study by Super Conscious`,
+  })
   if (isPlaceholder(slug)) {
     // follow, not none: the links out of the page still carry equity, and the
     // page becomes indexable again as soon as someone writes the case study.
-    //
-    // Applied before injectRoot, which is what rewrites <div id="root">; the
-    // marker this matches is <meta name="viewport">, so order is not load
-    // bearing here, but keeping every head edit ahead of the render keeps it
-    // obvious that it cannot be lost.
     html = html.replace('<meta name="viewport"', () => '<meta name="robots" content="noindex, follow" />\n    <meta name="viewport"')
   }
 
-  const rendered = await injectRoot(html, `/work/${slug}`)
-  html = injectSchemas(rendered.html, [
+  html = injectSchemas(html, [
     crumbs({ name: 'Work', item: `${BASE_URL}/work` }, { name, item: url }),
     // CreativeWork describes ONE piece of work, so it is wrong on the client
     // hubs — /work/google is an index of six projects, not a project.
@@ -411,7 +431,16 @@ for (const t of thoughts) {
   const description = (t.excerpt || '').slice(0, 155)
   const url = `${BASE_URL}/thoughts/${t.slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
+  const image = t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE
+  let html = injectMeta(indexHtml, {
+    title,
+    description,
+    url,
+    image,
+    imageAlt: t.heroAlt || t.title,
+    type: 'article',
+    publishedTime: t.isoDate || undefined,
+  })
 
   html = injectSchemas(html, [
     {
@@ -425,7 +454,7 @@ for (const t of thoughts) {
       author: ORG_REF,
       publisher: ORG_REF,
       url,
-      image: t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE,
+      image,
     },
     {
       '@context': 'https://schema.org',

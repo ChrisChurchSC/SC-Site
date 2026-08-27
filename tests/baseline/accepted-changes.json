@@ -1,5 +1,9 @@
 {
-  "_comment": "Intentional deltas from the committed baseline. Adding a property here means 'this route's property is EXPECTED to differ from the baseline', which switches that invariant OFF for that route. Keep it small, and prune it whenever the baseline is re-captured — an entry that outlives the change it describes is a disabled check nobody remembers disabling.",
-  "_pruned_2026_08_27": "Emptied after re-capturing against prod at 609d8de. It had reached 67 of 96 routes: title accepted on 54 and jsonLdTypes on 53, from the SEO pass (hidden-div removal, prerendered JSON-LD, case-study titles) plus the older /about-us -> /careers move. Every entry was correct when written and every one of those changes is now in prod-baseline.json, so the invariants guard the new values instead of being switched off.",
-  "routes": {}
+  "_comment": "Intentional deltas from the committed baseline. Adding a property here means 'this route's property is EXPECTED to differ from the baseline', which switches that invariant OFF for that route. Keep it small, and prune it whenever the baseline is re-captured \u2014 an entry that outlives the change it describes is a disabled check nobody remembers disabling.",
+  "routes": {
+    "/about": [
+      "title"
+    ]
+  },
+  "_about_title": "/about gave itself four different names: the URL, 'Capabilities | Super Conscious' in the prerendered <title>, 'Brand Systems, Content Programs & Digital Products | Super Conscious' after hydration, and an <h1> of 'Creative Strategy & Production Partner'. Non-JS crawlers got the first, rendered Google the second. Charlie chose the keyword-led one; title, h1 and llms.txt now all say it. Renaming the ROUTE to /capabilities was not available - that path is the gated deck. Prune on the next re-capture."
 }
