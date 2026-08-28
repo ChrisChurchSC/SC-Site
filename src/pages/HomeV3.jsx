@@ -118,6 +118,31 @@ const OFFER = [
   },
 ]
 
+/* THE FOUR SERVICES, for the nav panel.
+ *
+ * Build and Grow take their line from OFFER above — the same copy the cards
+ * on this page carry — cut at the colon, which is where each sentence stops
+ * being the definition and starts being the list. Derived rather than
+ * retyped, so the panel cannot drift from the cards.
+ *
+ * SUPPORT AND CONSULT HAVE NO COPY AND NO PAGE. They are not on /services,
+ * not in buildPackages or growPackages, not in Sanity. What they cover is a
+ * positioning decision, not a line to be written to fill a menu, so nothing
+ * is invented here: they render as a name with no description, unlinked, and
+ * the marker below shows on the dev server only so the gap is visible while
+ * the page is being worked on. import.meta.env.DEV is false in every build.
+ *
+ * Give either one a `note` and an `href` and it behaves like the other two. */
+const SERVICE_ROWS = [
+  ...OFFER.map(({ name, body, href }) => ({
+    name,
+    note: body.split(':')[0].trim() + '.',
+    href,
+  })),
+  { name: 'Support', note: null, href: null },
+  { name: 'Consult', note: null, href: null },
+]
+
 const OFFER_FOOTNOTE = 'Most clients do both — but you can start wherever you are.'
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
@@ -240,6 +265,21 @@ export default function HomeV3() {
             </nav>
 
             <div className={v3.navActions}>
+              {/* Log in, as in the reference: a quiet text link beside the
+                  filled CTA.
+
+                  IT DOES NOT GO ANYWHERE, because there is nowhere for it to
+                  go. This site has no accounts and no auth route — the only
+                  credential-protected thing on it is DeckGate, a single
+                  shared password ('sc-preview') in front of the deck pages,
+                  which is a preview gate rather than a login. Pointing this
+                  at that would hand a visitor a password prompt for something
+                  they did not ask for.
+
+                  So it renders unlinked and dim, the same treatment Platform
+                  and Pricing get. Give it an href when there is a client area
+                  to log in to. */}
+              <span className={`${v3.navLink} ${v3.navLinkFlat}`} onMouseEnter={() => setOpenMenu(null)}>Log in</span>
               <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => setOpenMenu(null)}>Book a Discovery Call</button>
             </div>
           </div>
@@ -259,20 +299,25 @@ export default function HomeV3() {
               </div>
 
               <div className={v3.svcGrid}>
-                {[...buildDisciplines, ...growDisciplines].map(({ tag, name }, i) => (
-                  /* Every row lands on /services — there are no per-discipline
-                     pages and the page has no anchors. Six rows to one
-                     destination is repetitive; thirty would have been a lie
-                     about depth, which is why the sub-items are gone. */
-                  <NavLink key={name} to="/services" className={v3.svcRow}>
-                    <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
-                    <span className={v3.svcBody}>
-                      <span className={v3.svcName}>{name}</span>
-                      {/* The discipline's own one-liner, off the Services page. */}
-                      <span className={v3.svcNote}>{tag}</span>
-                    </span>
-                  </NavLink>
-                ))}
+                {SERVICE_ROWS.map(({ name, note, href }, i) => {
+                  const inner = (
+                    <>
+                      <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                      <span className={v3.svcBody}>
+                        <span className={v3.svcName}>{name}</span>
+                        {note
+                          ? <span className={v3.svcNote}>{note}</span>
+                          /* Dev only — a gap to be filled, never shipped. */
+                          : import.meta.env.DEV && <span className={v3.svcNoteMissing}>[ line needed ]</span>}
+                      </span>
+                    </>
+                  )
+                  return href
+                    ? <NavLink key={name} to={href} className={v3.svcRow}>{inner}</NavLink>
+                    /* No page yet, so no link and no hover — the treatment
+                       the client strip and the featured set already use. */
+                    : <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>{inner}</span>
+                })}
               </div>
             </div>
           )}

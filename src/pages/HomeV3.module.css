@@ -537,3 +537,18 @@
 @media (prefers-reduced-motion: reduce) {
   .svcRow, .svcIntroCta { transition: none; }
 }
+
+/* A service with no page yet: legible, but it does not offer a destination. */
+.svcRowFlat { cursor: default; }
+.svcGrid:hover .svcRowFlat { opacity: 0.5; }
+.svcGrid .svcRowFlat:hover { opacity: 0.5; }
+.svcRowFlat .svcName { color: rgba(255, 255, 255, 0.55); }
+
+/* Dev-only marker for a description that has not been written. Deliberately
+   ugly enough that it cannot be mistaken for copy. */
+.svcNoteMissing {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.22);
+}
