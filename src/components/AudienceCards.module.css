@@ -30,7 +30,12 @@
   background: #161616;
   border-radius: 4px;
   padding: 40px 34px;
-  min-height: 230px;
+  /* Portrait 9:16. The cards were sized by their contents with a 230px floor;
+     they are now sized by the ratio, and the copy sits at the top of it with
+     the CTA pushed to the bottom by margin-top:auto. Three of these are tall
+     — at a third of the grid each, roughly 700px — which is the shape asked
+     for, not an accident of the copy length. */
+  aspect-ratio: 9 / 16;
   transition: background 0.2s;
 }
 
@@ -64,5 +69,10 @@
 .card:hover .cta { color: #fff; }
 
 @media (max-width: 768px) {
-  .card { padding: 30px 22px; min-height: 0; }
+  /* One per row at this width, so the ratio would make each card most of a
+     screen on its own. Height goes back to the content. */
+  .card {
+    padding: 30px 22px;
+    aspect-ratio: auto;
+  }
 }
