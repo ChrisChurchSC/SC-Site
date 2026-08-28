@@ -1,91 +1,165 @@
+import { Layers, Palette, TrendingUp, Building2, Briefcase, Users, User, Bot, Repeat } from 'lucide-react'
+
 import styles from './ComparisonTable.module.css'
 
 /**
- * Competitive alternatives — what you get, and what you don't.
+ * Competitive alternatives — the options, scored.
  *
  * ─────────────────────────────────────────────────────────────────────────
- * PROVENANCE. The first six rows and the headline are Chris's own copy from
- * the strategy doc's "3. Competitive Alternatives", reproduced verbatim,
- * including the curly apostrophes and the sentence fragments. Do not tidy
- * them here — if the wording needs work it is comms-writer's call, made in
- * Verbal/, not a silent edit in a component.
+ * NOTHING IN THIS TABLE IS SIGNED OFF. Every row name and descriptor, every
+ * pricing value and every mark in the grid is mine. Seven of the nine rows
+ * are claims about third parties made on our own site — the sort of thing
+ * brand-strategist exists to approve or refuse. Read the notes below before
+ * shipping this to a real audience.
  *
- * Two rows are NOT his: FREELANCE and AI TOOLS, marked below. They were
- * added on request, written in the same shape and voice, and they are claims
- * about third parties made on our own site — brand-strategist signs those
- * off or strikes them. Everything in the first six is already approved copy.
+ * WHAT USED TO BE HERE. The rows came from Chris's strategy doc, "3.
+ * Competitive Alternatives", which scored each option in prose: "what you
+ * get" and "what you don't get", verbatim and approved. Those two columns
+ * were removed on request. THE APPROVED COPY NOW LIVES NOWHERE ON THE SITE.
+ * It is the most defensible material this section ever had — the doc's
+ * "A reasonable fee and a team you'll know by name (and talk to all the
+ * time)" argues harder than any pip can — so it is worth finding it a home,
+ * in Verbal/ or as an expanded row, rather than losing it to a git history.
  *
- * WHY THIS SHAPE BEAT THE LAST ONE. The previous table was five boolean
- * columns and a tick grid. Every column asked something of a *team*, so any
- * row that was not a team scored zero before anyone looked at it — the
- * AI-tools row in particular was five crosses by construction, which is
- * rhetorically loud and analytically empty. This structure cannot do that:
- * every alternative is credited with the thing it genuinely gives you before
- * it is marked down, so the argument is a trade-off rather than a verdict.
- * "Keep On Keeping On" is the strongest row for exactly that reason.
+ * WHAT A GRID CANNOT DO. With the prose gone, the whole argument rests on
+ * marks we assigned ourselves. That is fine as a scan and weak as evidence:
+ * a reader who disagrees with one square has no sentence to argue with. The
+ * scores below are pitched to be defensible rather than flattering, and two
+ * in particular are load-bearing:
  *
- * WE ARE NOT A ROW, deliberately. The headline asks why you would spend on
- * us; the table answers by exhausting the alternatives. Adding an
- * all-green Super~Conscious row would turn an honest comparison back into a
- * scorecard.
+ *   WE DO NOT SWEEP THE ROW. Scalability is a partial, because we stay small
+ *   on purpose and turn work away. A row that takes every mark in a table we
+ *   wrote ourselves is a scorecard, not a comparison.
+ *
+ *   FULL-SERVICE KEEPS QUALITY AND SCALE. The argument against it is fee and
+ *   lock-in, not competence. Marking down the one alternative a reader has
+ *   most likely used, to flatter our own strip, would be the tell.
+ *
+ * BRAND PLATFORM IS THE COLUMN THAT ONLY WE HOLD, and it is the honest one
+ * to lead on: it describes a thing that exists rather than a virtue anyone
+ * can claim. Note it is not a clean sweep either — a branding studio ships
+ * guidelines, an in-house team has a drive somewhere, a full-service agency
+ * runs a portal. Those are partials, not zeroes. The distance between a PDF
+ * of guidelines and a live platform is the actual claim, and pretending
+ * everyone else has nothing would make it easier to disbelieve, not harder.
+ *
+ * "AI & STRATEGY" BUNDLES A TOOL AND A DISCIPLINE, which is the weakest of
+ * the seven axes: a fractional CMO is all strategy and no AI, AI tools are
+ * the reverse, and both land on the same middle mark for opposite reasons.
+ * Scored as asked. If it stays, splitting it in two would say more.
+ *
+ * THE PRICING COLUMN CARRIES NO RATES, ON PURPOSE. It names how you pay, not
+ * what you pay. The only dollar figures available were the ones in the
+ * competitive research, lifted from Designity's and Primary's own marketing,
+ * and that research says of itself: "not verified — useful as a bar to know
+ * about, not a standard to cite." A competitor's self-reported number about
+ * a third party is two removes from a fact. Our own retainer figure nobody
+ * has given me. Real ranges come from Chris, or they do not go in.
  */
+
+/* One column each. Order is Chris's, with Brand platform added last because
+   it is the one that ends the row on the thing only we have. */
+const ATTRIBUTES = [
+  { key: 'speed',    label: 'Speed' },
+  { key: 'flex',     label: 'Flexibility' },
+  { key: 'quality',  label: 'Quality' },
+  { key: 'scale',    label: 'Scale' },
+  { key: 'eff',      label: 'Efficiency' },
+  { key: 'ai',       label: 'AI & Strategy' },
+  { key: 'platform', label: 'Brand Platform' },
+]
+
+/* 2 = holds it, 1 = partly or depends who you get, 0 = does not. The middle
+   state is not a hedge — for a freelance bench or an in-house hire the true
+   answer really is "whoever you happened to hire", and flattening that to a
+   yes or a no would be the invented part. */
+const FULL = 2
+const SOME = 1
+const NONE = 0
 
 const ROWS = [
   {
+    id: 'super-conscious',
+    us: true,
+    Icon: Layers,
+    name: 'Super~Conscious',
+    note: 'One embedded team, brand through growth',
+    /* Scale is deliberately a partial — see the note above. */
+    attrs: [FULL, FULL, FULL, SOME, FULL, FULL, FULL],
+    cost: 'Monthly retainer',
+  },
+  {
     id: 'branding-studio',
+    Icon: Palette,
     name: 'A Branding Studio',
-    get: 'Top-notch identity and website',
-    lack: 'Anything beyond that. You’ll have to wait and see how customers react.',
+    note: 'Identity specialists, project by project',
+    /* Platform is a partial, not a zero: guidelines are a document, which is
+       the same job done once and then frozen. */
+    attrs: [SOME, NONE, FULL, NONE, SOME, NONE, SOME],
+    cost: 'Project fee',
   },
   {
     id: 'performance-agency',
+    Icon: TrendingUp,
     name: 'A Performance Marketing Agency',
-    get: 'Data-driven campaigns and brand-flavored messaging that convert',
-    lack: 'Help with the upfront. If the ICP hasn’t been clearly defined or the web experience is subpar, all that engagement may go nowhere.',
+    note: 'Media buyers with a creative team attached',
+    attrs: [FULL, SOME, SOME, FULL, SOME, SOME, NONE],
+    cost: 'Retainer + % of spend',
   },
   {
     id: 'full-service',
+    Icon: Building2,
     name: 'A Full-Service Agency',
-    get: 'Strategy, branding, and creative all under one roof',
-    lack: 'A reasonable fee and a team you’ll know by name (and talk to all the time).',
+    note: 'Everything under one roof, at one roof’s price',
+    attrs: [NONE, NONE, FULL, FULL, NONE, SOME, SOME],
+    cost: 'Retainer, high minimum',
   },
   {
     id: 'fractional-cmo',
+    Icon: Briefcase,
     name: 'A Fractional CMO',
-    get: 'Senior strategic leadership',
-    lack: 'Senior creative and production leadership to bring all of that good strategy to life.',
+    note: 'Senior leadership, part time',
+    attrs: [SOME, SOME, FULL, NONE, SOME, SOME, NONE],
+    cost: 'Day rate',
   },
   {
     id: 'in-house',
+    Icon: Users,
     name: 'An In-House Hire or Team',
-    get: 'Total control, full-time attention',
-    lack: 'The flexibility and long-term cost savings that overhead can never compete with.',
+    note: 'Your own people, on your payroll',
+    attrs: [SOME, NONE, SOME, NONE, NONE, SOME, SOME],
+    cost: 'Salaries + overhead',
   },
   {
-    /* NOT SIGNED OFF — written to request, in the doc's voice. */
     id: 'freelance',
+    Icon: User,
     name: 'A Freelance Bench',
-    get: 'A specific skill, on demand, at a rate you set',
-    lack: 'Anyone holding the whole. You are the strategy, the brief and the quality bar — every time, for every one of them.',
+    note: 'A roster you brief and manage yourself',
+    attrs: [FULL, FULL, SOME, SOME, FULL, NONE, NONE],
+    cost: 'Hourly, or per project',
   },
   {
-    /* NOT SIGNED OFF — written to request, in the doc's voice. Credits the
-       thing AI genuinely gives you, because a row of pure downside next to
-       tools the reader uses daily reads as a lie about the reader, not about
-       the tools. The downside is the site's existing position: "while AI
-       helps us move faster, it doesn't do the thinking." */
     id: 'ai-tools',
+    Icon: Bot,
     name: 'AI Tools',
-    get: 'Volume, speed, and a first draft at almost no cost',
-    lack: 'The judgment to know which draft was worth having. It will make you a hundred versions of the wrong thing, confidently.',
+    note: 'Software you drive yourself',
+    /* Credits what AI genuinely gives you. A row of pure downside, next to
+       tools the reader uses daily, reads as a lie about the reader rather
+       than about the tools. */
+    attrs: [FULL, FULL, NONE, FULL, FULL, SOME, NONE],
+    cost: 'Per seat',
   },
   {
     id: 'status-quo',
+    Icon: Repeat,
     name: 'Keep On Keeping On',
-    get: 'Nothing new, you’re just doing what you’ve been doing',
-    lack: 'New leads, new wins, and new money flowing into your coffers.',
+    note: 'Doing exactly what you’re doing now',
+    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, NONE],
+    cost: 'Nothing new',
   },
 ]
+
+const STATE_WORD = ['No', 'Partly', 'Strong']
 
 export default function ComparisonTable({ eyebrow = '[ Competitive Alternatives ]' }) {
   return (
@@ -93,29 +167,61 @@ export default function ComparisonTable({ eyebrow = '[ Competitive Alternatives 
       <p className={styles.eyebrow}>{eyebrow}</p>
       <h2 className={styles.headline}>You have a finite budget. Why would you spend it on us?</h2>
 
-      {/* Scrolls rather than squashing: three prose columns do not fit a
-          phone, and a table that shrinks its own type to fit is unreadable
-          before it is complete. */}
+      {/* Scrolls rather than squashing: nine columns do not fit a phone, and
+          a table that shrinks its own type to fit is unreadable before it is
+          complete. */}
       <div className={styles.scroller}>
         <table className={styles.table}>
           <thead>
             <tr>
-              <th className={styles.corner} scope="col">Alternative</th>
-              <th className={styles.colHead} scope="col">What you get</th>
-              <th className={styles.colHead} scope="col">What you don’t get</th>
+              <th className={styles.corner} scope="col">Option</th>
+              {ATTRIBUTES.map(a => (
+                <th key={a.key} className={styles.attrHead} scope="col">{a.label}</th>
+              ))}
+              <th className={styles.colHead} scope="col">Pricing</th>
             </tr>
           </thead>
           <tbody>
-            {ROWS.map(({ id, name, get, lack }) => (
-              <tr key={id} className={styles.row}>
-                <th className={styles.rowHead} scope="row">{name}</th>
-                <td className={styles.cellGet}>{get}</td>
-                <td className={styles.cellLack}>{lack}</td>
+            {ROWS.map(({ id, name, note, Icon, attrs, cost, us }) => (
+              <tr key={id} className={us ? `${styles.row} ${styles.rowUs}` : styles.row}>
+                <th className={styles.rowHead} scope="row">
+                  {/* The flex lives on the wrapper, not the cell: a display
+                      other than table-cell takes the <th> out of the row's
+                      height and its border stops short of the gridline. */}
+                  <span className={styles.rowLabel}>
+                    <Icon className={styles.rowIcon} size={15} strokeWidth={1.5} aria-hidden="true" />
+                    <span>
+                      <span className={styles.rowName}>{name}</span>
+                      <span className={styles.rowNote}>{note}</span>
+                    </span>
+                  </span>
+                </th>
+
+                {ATTRIBUTES.map((a, i) => (
+                  <td key={a.key} className={styles.cellAttr}>
+                    {/* The mark is decorative; the word is what a screen
+                        reader gets, so the table still reads as a table
+                        rather than as a grid of unlabelled squares. */}
+                    <span
+                      aria-hidden="true"
+                      className={[styles.pip, styles.pipSome, styles.pipFull][attrs[i]] ?? styles.pip}
+                    />
+                    <span className={styles.sr}>{STATE_WORD[attrs[i]] ?? 'No'}</span>
+                  </td>
+                ))}
+
+                <td className={styles.cellCost}>{cost}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <p className={styles.legend}>
+        <span className={styles.legendState}><span className={styles.pipFull} />Strong</span>
+        <span className={styles.legendState}><span className={styles.pipSome} />Partly</span>
+        <span className={styles.legendState}><span className={styles.pip} />No</span>
+      </p>
     </section>
   )
 }
