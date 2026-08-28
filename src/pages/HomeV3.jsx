@@ -133,10 +133,16 @@ const WORK_BY_SIZE = [
  * So these are built on what the studio has actually already built, which is
  * a brand held as a system rather than as a deck:
  *
- *   Brand Repository — the SC-Brand repo is exactly this: positioning,
- *                     audience,
- *                proof points and tone as files, synced, with the rule that
- *                Strategy holds what is true and Verbal holds how it sounds.
+ *   Brand Repository
+ *              — THE STRUCTURE, NOT ITS CONTENTS. This is the correction
+ *                worth keeping: the repository is not the strategy, the
+ *                verbal, the visual and the agents. Those are what goes in
+ *                it. The repository is what holds them so they can be found,
+ *                versioned and actually used — which is the part nobody else
+ *                sells, because everyone else hands over the contents and
+ *                calls it done. Describing it by listing its folders sells a
+ *                filing cabinet by naming the paper.
+ *                SC-Brand is the working instance of it.
  *   Agents     — six brand-trained subagents exist today, and their defining
  *                property is the one worth selling: each refuses to invent
  *                the thing it would be most tempting to invent, and marks
@@ -151,9 +157,9 @@ const WORK_BY_SIZE = [
  * two least differentiated of the six and the first to cut if this shortens.
  */
 const PLATFORM_PAGES = [
-  { name: 'Brand Repository', note: 'Strategy, verbal, visual, agents and data — versioned, and every change reviewed.' },
+  { name: 'Brand Repository', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
   { name: 'Agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
-  { name: 'Guardrails', note: 'Nothing ships with an unsourced number or an unapproved claim.' },
+  { name: 'Memory', note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', note: 'Every change is proposed, and a person approves it.' },
   { name: 'Library', note: 'Every asset we have made, in use and findable.' },
   { name: 'Measurement', note: 'What shipped, and what it moved.' },
@@ -331,6 +337,33 @@ const OFFER = [
  * point at SERVICES. Derived rather than retyped, which is also why it is
  * cheap to restore correctly. */
 const SERVICE_ROWS = OFFER.map(({ name, body, href }) => ({ name, note: body, href }))
+
+/* The footer's columns, built from the same constants the nav bar renders
+   from, so the two cannot disagree. Anything without an href renders as
+   text rather than as a link to the nearest page that happens to exist —
+   the nav panels already behave this way. */
+const FOOTER_COLS = [
+  { tag: 'Platform', links: PLATFORM_PAGES.map(({ name }) => ({ label: name })) },
+  {
+    tag: 'Services',
+    links: [
+      ...SERVICE_ROWS.map(({ name, href }) => ({ label: name, href })),
+      // The nav's own Pricing item, and its destination, unchanged.
+      { label: 'Pricing', href: '/services' },
+    ],
+  },
+  {
+    tag: 'Case studies',
+    links: [
+      { label: 'All case studies', href: '/work' },
+      ...WORK_BY_INDUSTRY.map(label => ({ label })),
+    ],
+  },
+  ...COMPANY_COLS.map(({ tag, links }) => ({
+    tag,
+    links: links.map(({ label, href, external }) => ({ label, href, external })),
+  })),
+]
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
@@ -656,7 +689,7 @@ export default function HomeV3() {
           goes after the CTA because the CTA is the one thing this page wants;
           a wall of links above it would give a reader somewhere else to go
           at the exact moment they were being asked to book. */}
-      <FooterCard />
+      <FooterCard columns={FOOTER_COLS} />
 
       {/* The wordmark, at the size the page ends on. Not a link and not a
           logo lockup — it is the last thing on the page and its job is to be
