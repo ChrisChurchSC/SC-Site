@@ -26,7 +26,9 @@ import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
  *
  *   1. The order. The canvas leads on words instead of the reel, and the reel
  *      moves down to sit after the offer — so the page says what it is before
- *      it shows what it made.
+ *      it shows what it made. Build and Grow then moved above Who we are, so
+ *      the offer lands straight after the clients and the longer read sits
+ *      behind it rather than in front of it.
  *   2. The words. The statement, the two card bodies, and the closing line
  *      are the canvas's. They are passed in as props; the components keep the
  *      live homepage's copy as their defaults, so / is untouched.
@@ -169,7 +171,10 @@ export default function HomeV2() {
       {/* 2 — Who we have done it for */}
       <ClientStrip />
 
-      {/* 3 — Who we are, in full */}
+      {/* 3 — The offer, in two halves, with the price lines */}
+      <BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} />
+
+      {/* 4 — Who we are, in full, behind the offer it explains */}
       <StatementCard
         eyebrow="[ Who We Are ]"
         statement={WHO_WE_ARE}
@@ -177,9 +182,6 @@ export default function HomeV2() {
         as="h2"
         serif
       />
-
-      {/* 4 — The offer, in two halves, now with the price lines */}
-      <BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} />
 
       {/* 5 — Who it is for. The one section the live page has no version of */}
       <AudienceCards />
