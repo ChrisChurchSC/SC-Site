@@ -70,10 +70,10 @@
    vh so it scales with the window, and floored in px so it does not collapse
    on a short laptop screen. Unused by the live homepage. */
 .tall {
-  /* Pure black rather than the card grey. Note the page ground is #0a0a0a, so
-     this reads a shade DARKER than the page, not lighter — the card recedes
-     instead of sitting on top. Asked for explicitly. */
-  background: #000000;
+  /* No ground of its own: transparent, so the page's #0a0a0a shows through
+     and the hero is not a card at all. Transparent rather than #0a0a0a
+     spelled out again, so it stays right if the page ground ever changes. */
+  background: none;
   min-height: min(84vh, 780px);
   justify-content: center;
   padding-top: clamp(72px, 9vh, 120px);
