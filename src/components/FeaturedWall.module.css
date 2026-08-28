@@ -12,6 +12,9 @@
 }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  width: fit-content;
   font-family: 'Roboto Mono', monospace;
   font-size: var(--label-size, 9px);
   letter-spacing: var(--label-tracking, 0.14em);
@@ -203,4 +206,16 @@
   align-items: flex-start;
   flex: none;
   gap: 14px;
+}
+
+/* Says the figures on these cards are not real. It sits beside the section
+   label rather than on each card, because it is true of all six, and it is
+   legible rather than decorative — its whole job is to reach someone who is
+   about to believe a number attached to a named client. */
+.provisional {
+  margin-left: 10px;
+  padding: 1px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--r-control, 4px);
+  color: rgba(255, 255, 255, 0.45);
 }

@@ -71,12 +71,20 @@ import styles from './ComparisonTable.module.css'
  * can name without trusting us, which is the only kind of comparison worth
  * putting on your own site.
  *
- * WE LOSE THE LAST COLUMN, ON PURPOSE AND VISIBLY. Cheapest option goes to
- * AI tools, a freelance bench and doing nothing. It is true, our positioning
- * has never claimed otherwise, and the research says cost is the one bucket
- * every competitor leads with — so a table of ours that quietly omitted it
- * would be conspicuous. It is also what makes the other six readable as
- * findings rather than as boasts.
+ * THERE WAS A SEVENTH COLUMN AND IT IS GONE: "Cheapest option", which went
+ * to AI tools, a freelance bench and doing nothing, and which we lost
+ * visibly. Cut on request.
+ *
+ * WHICH MEANS OUR ROW NOW TAKES EVERY MARK. That is worth knowing rather
+ * than worrying about: it was fatal when the axes were Speed, Quality and
+ * Efficiency, because those are unfalsifiable and a clean sweep of them is
+ * just a boast. These six are structural and a reader can check each one
+ * against what they already believe about a branding studio or an agency
+ * bench, so a sweep reads as a definition rather than a claim.
+ *
+ * It does still mean nothing on this table costs us anything, and cost is
+ * the bucket the competitive research found every rival leading with. If it
+ * ever reads as too tidy, that column is the fix, and it is honest.
  *
  * IN-HOUSE IS THE CLOSEST ROW AND SHOULD STAY THAT WAY. It holds the same
  * people, embedded, and owning the outcome, because a team you employ
@@ -135,7 +143,6 @@ const ATTRIBUTES = [
   { key: 'straight', label: 'Strategy to execution' },
   { key: 'platform', label: 'Brand platform' },
   { key: 'outcome',  label: 'Owns the outcome' },
-  { key: 'cheapest', label: 'Cheapest option' },
 ]
 
 /* 2 = holds it, 1 = partly or depends who you get, 0 = does not. The middle
@@ -153,7 +160,7 @@ const ROWS = [
     Icon: ScMark,
     name: 'Super~Conscious',
     note: 'One embedded team, brand through growth',
-    attrs: [FULL, FULL, FULL, FULL, FULL, FULL, NONE],
+    attrs: [FULL, FULL, FULL, FULL, FULL, FULL],
     cost: 'Project or subscription',
   },
   {
@@ -161,7 +168,7 @@ const ROWS = [
     Icon: Palette,
     name: 'A Branding Studio',
     note: 'Identity specialists, project by project',
-    attrs: [NONE, SOME, NONE, NONE, SOME, NONE, NONE],
+    attrs: [NONE, SOME, NONE, NONE, SOME, NONE],
     cost: 'Project fee',
   },
   {
@@ -169,7 +176,7 @@ const ROWS = [
     Icon: TrendingUp,
     name: 'A Performance Marketing Agency',
     note: 'Media buyers with a creative team attached',
-    attrs: [NONE, NONE, NONE, SOME, NONE, SOME, NONE],
+    attrs: [NONE, NONE, NONE, SOME, NONE, SOME],
     cost: 'Retainer + % of spend',
   },
   {
@@ -177,7 +184,7 @@ const ROWS = [
     Icon: Building2,
     name: 'A Full-Service Agency',
     note: 'Everything under one roof, at one roof’s price',
-    attrs: [FULL, NONE, NONE, FULL, SOME, SOME, NONE],
+    attrs: [FULL, NONE, NONE, FULL, SOME, SOME],
     cost: 'Retainer, high minimum',
   },
   {
@@ -185,7 +192,7 @@ const ROWS = [
     Icon: Briefcase,
     name: 'A Fractional CMO',
     note: 'Senior leadership, part time',
-    attrs: [NONE, FULL, SOME, NONE, NONE, NONE, NONE],
+    attrs: [NONE, FULL, SOME, NONE, NONE, NONE],
     cost: 'Day rate',
   },
   {
@@ -193,7 +200,7 @@ const ROWS = [
     Icon: Users,
     name: 'An In-House Hire or Team',
     note: 'Your own people, on your payroll',
-    attrs: [SOME, FULL, FULL, SOME, SOME, FULL, NONE],
+    attrs: [SOME, FULL, FULL, SOME, SOME, FULL],
     cost: 'Salaries + overhead',
   },
   {
@@ -201,7 +208,7 @@ const ROWS = [
     Icon: User,
     name: 'A Freelance Bench',
     note: 'A roster you brief and manage yourself',
-    attrs: [NONE, SOME, NONE, NONE, NONE, NONE, FULL],
+    attrs: [NONE, SOME, NONE, NONE, NONE, NONE],
     cost: 'Hourly, or per project',
   },
   {
@@ -212,7 +219,7 @@ const ROWS = [
     /* Credits what AI genuinely gives you. A row of pure downside, next to
        tools the reader uses daily, reads as a lie about the reader rather
        than about the tools. */
-    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, FULL],
+    attrs: [NONE, NONE, NONE, NONE, NONE, NONE],
     cost: 'Per seat',
   },
   {
@@ -220,7 +227,7 @@ const ROWS = [
     Icon: Repeat,
     name: 'Keep On Keeping On',
     note: 'Doing exactly what you’re doing now',
-    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, FULL],
+    attrs: [NONE, NONE, NONE, NONE, NONE, NONE],
     cost: 'Nothing new',
   },
 ]

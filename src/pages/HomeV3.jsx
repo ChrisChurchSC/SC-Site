@@ -20,6 +20,7 @@ import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
+import EmailCaptureForm from '../components/EmailCaptureForm'
 import FooterCard from '../components/FooterCard'
 import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
@@ -609,8 +610,34 @@ export default function HomeV3() {
         display
       >
         <div className={v3.heroActions}>
-          <button className={v3.heroCta} onClick={cal.open}>Book a demo</button>
-          <NavLink to="/work" className={v3.heroGhost}>See our work</NavLink>
+          {/* AN EMAIL FIELD, NOT TWO BUTTONS. "Book a demo" and "See our
+              work" asked a first-time visitor to pick, and the second option
+              is the one that does not generate a lead. One field asks for
+              one thing.
+
+              It reuses EmailCaptureForm rather than posting on its own: there
+              is a single submission path through submitLead.js, and a test
+              holds every host to defining the six classes the compact variant
+              renders — a page that defines only some of them ships a bare
+              white box on a dark background, which is exactly what happened
+              on /about-us once.
+
+              NO INCENTIVE. The reference for this pattern offers $150 for
+              taking a demo; we are not paying that, so the button asks for
+              the demo on its own terms. */}
+          <EmailCaptureForm
+            styles={v3}
+            variant="compact"
+            placeholder="What's your work email?"
+            submitLabel="Book a demo"
+            subject="Homepage v3 — demo request"
+            requestType="v3-hero-demo"
+            confirmMessage="Thanks — we will send over a couple of times to talk."
+          />
+          {/* Operational promise, deliberately minimal: it says what the form
+              does and nothing about how fast anyone replies. Anything about
+              response time is comms-writer's to write and Chris's to keep. */}
+          <p className={v3.heroFormNote}>We'll follow up by email.</p>
         </div>
       </StatementCard>
 
@@ -653,6 +680,16 @@ export default function HomeV3() {
           kind of brand they are; this one answers the question they are
           actually asking at this point on the page, which is why you rather
           than the two alternatives. AudienceCards still runs on /v2. */}
+      {/* The work, directly under the platform that made it: the platform
+          section is the only part of this page selling something unbuilt, and
+          following it with six real clients is what keeps it from reading as
+          a pitch deck slide. */}
+      <hr className={v3.divider} />
+
+      <FeaturedWall />
+
+      <hr className={v3.divider} />
+
       <ComparisonTable />
 
       {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
@@ -660,12 +697,6 @@ export default function HomeV3() {
           that now opens on a client wall and carries film nowhere else — the
           one moving thing on a still page, taking every eye on the way past.
           It still plays on / and /v2. */}
-
-      {/* 7 — Proof, then 8 — the work it is about */}
-      <hr className={v3.divider} />
-
-      {/* Carries its own label and headline, so it is not wrapped. */}
-      <FeaturedWall />
 
       {/* 9 — The ask */}
       <hr className={v3.divider} />

@@ -800,9 +800,11 @@
    is 4px and a pair of pills would be the only round things on the page. */
 .heroActions {
   display: flex;
+  /* A column now: it holds one form and the line under it, not two buttons
+     side by side. */
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 0;
   justify-content: center;
   margin-top: 26px;
 }
@@ -894,4 +896,101 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* ── THE HERO EMAIL CAPTURE ────────────────────────────────────────────────
+   One field and one button in a single pill, as in the reference. These six
+   class names are EmailCaptureForm's contract, not this page's invention: it
+   takes a host's CSS module as a prop, so a name this file does not define
+   renders as class="undefined" and the control comes out with browser
+   defaults — a white box on a black page. A test holds every host to all
+   six for that reason. */
+.emailForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* Explicit width and max-width rather than min(520px, 100%): the hero
+     actions are a centred flex column, so the form is shrink-to-fit and the
+     percentage resolved against a box narrower than the field needed. The
+     placeholder came out clipped mid-word. */
+  width: 520px;
+  max-width: 100%;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control, 4px);
+}
+
+.emailInput {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+}
+
+.emailInput::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+/* Focus lands on the pill, not the bare input: the input has no border of
+   its own, so a ring on it would draw a rectangle inside a rectangle. */
+.emailForm:focus-within { border-color: rgba(255, 255, 255, 0.4); }
+
+.emailSubmit {
+  flex: none;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--r-control, 4px);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.emailSubmit:hover { filter: brightness(1.08); }
+.emailSubmit:disabled { opacity: 0.6; cursor: default; }
+
+/* Replaces the form on success, so it needs the form's height rather than a
+   line of text's — otherwise the hero jumps when it submits. */
+.emailConfirm {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: var(--teal, #4ecfb3);
+}
+
+.emailError {
+  margin: 8px 0 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Visually hidden, still read aloud — the field's label. */
+.emailSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.heroFormNote {
+  margin: 12px 0 0;
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
 }

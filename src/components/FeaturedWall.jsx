@@ -1,6 +1,29 @@
 import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from './FeaturedWall.module.css'
+
+/* The card's eyebrow, as services rather than disciplines.
+
+   DERIVED FROM THE EXISTING type, not newly asserted. Each entry already
+   carries a discipline pair the studio set — "Brand + Content", "Brand +
+   Campaign" — and this maps the halves onto the four services the page
+   sells: brand is what Build makes, content and campaigns are what Grow
+   runs. It restates a claim rather than inventing one, which matters when
+   the claim is about a named client's engagement.
+
+   THEY ALL COME OUT "BUILD + GROW", and that is the point rather than a
+   flaw. Every featured engagement is both halves, which is the exact thing
+   the comparison table two sections down says nobody else does. Six cards
+   agreeing is the argument. */
+const SERVICE_OF = { Brand: 'Build', Content: 'Grow', Campaign: 'Grow', Support: 'Support' }
+
+function servicesFor(type) {
+  const parts = String(type).split('+').map(p => p.trim())
+  const mapped = [...new Set(parts.map(p => SERVICE_OF[p]).filter(Boolean))]
+  /* Falls back to whatever the entry said if a discipline appears that this
+     map has not seen — better a stale label than a blank one. */
+  return mapped.length ? mapped.join(' + ') : type
+}
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 
 /**
@@ -54,7 +77,7 @@ import { featuredCaseStudies } from '../data/featuredCaseStudies'
  */
 /* Pixels per second. Slow enough that a card can be read as it goes by; the
    rail is proof, not a screensaver. */
-const SPEED = 16
+const SPEED = 30
 
 function useRotatingRail() {
   const ref = useRef(null)
@@ -155,7 +178,7 @@ export default function FeaturedWall({ eyebrow = '[ Featured Work ]' }) {
   const cards = featuredCaseStudies.map(({ slug, name, type, href, stats }) => {
     const inner = (
       <>
-        <span className={styles.type}>{type}</span>
+        <span className={styles.type}>{servicesFor(type)}</span>
         <span className={styles.name}>{name}</span>
         <span className={styles.measures}>
           {stats.map(({ value, label }) => (
@@ -174,7 +197,14 @@ export default function FeaturedWall({ eyebrow = '[ Featured Work ]' }) {
 
   return (
     <section className={styles.section}>
-      <p className={styles.eyebrow}>{eyebrow}</p>
+      <p className={styles.eyebrow}>
+        {eyebrow}
+        {/* Every figure on these cards is invented — see the header of
+            featuredCaseStudies.js. This tag is what stops six named clients
+            appearing to have published results. Delete it in the same change
+            that puts real, sourced numbers in, and not before. */}
+        <span className={styles.provisional}>Placeholder figures</span>
+      </p>
       <h2 className={styles.headline}>Work that had to earn its place.</h2>
       <NavLink to="/work" className={styles.explore}>Explore</NavLink>
 

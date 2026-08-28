@@ -66,8 +66,18 @@ for (const { dir, file, id } of consumers) {
     const jsx = readFileSync(path.join(ROOT, dir, file), 'utf8')
 
     // The component takes styles={...}; resolve which module that is.
-    const importMatch = jsx.match(/import\s+styles\s+from\s+'\.\/([\w.]+\.css)'/)
-    assert.ok(importMatch, `${id} imports a CSS module as \`styles\``)
+    //
+    // Read the identifier off the call site rather than assuming it is
+    // named `styles`. A page can import more than one module — HomeV3 has
+    // its own copy alongside the live homepage's — and it is the one
+    // actually passed that owes the classes. Assuming the import named
+    // `styles` meant this checked a stylesheet the form never receives,
+    // which passes when the real one is empty and fails when it is not.
+    const passed = jsx.match(/<EmailCaptureForm[\s\S]*?styles=\{(\w+)\}/)
+    const ident = passed ? passed[1] : 'styles'
+
+    const importMatch = jsx.match(new RegExp(`import\\s+${ident}\\s+from\\s+'\\./([\\w.]+\\.css)'`))
+    assert.ok(importMatch, `${id} imports a CSS module as \`${ident}\`, the module it passes to the form`)
 
     const css = readFileSync(path.join(ROOT, dir, importMatch[1]), 'utf8')
     // Requires the BASE rule. `.emailInput:focus { }` alone must not count as
