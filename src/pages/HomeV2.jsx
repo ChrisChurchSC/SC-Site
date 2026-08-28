@@ -163,7 +163,7 @@ export default function HomeV2() {
     <main className={`${styles.main} ${v2.stack}`}>
 
       {/* Intro card — unchanged from the live homepage */}
-      <section className={`${styles.row12} ${styles.introRow}`}>
+      <section className={`${styles.row12} ${styles.introRow} ${v2.topBar}`}>
         <div className={styles.cornerNote} style={{ gridColumn: '1 / span 12' }}>
           <div className={styles.cornerWordmark}>
             <LogoWordmark fill="rgba(255,255,255,0.55)" />

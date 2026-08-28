@@ -71,3 +71,20 @@
   color: rgba(255, 255, 255, 0.3);
   margin: 0;
 }
+
+/* The top bar is chrome, not a passage of the page.
+
+   It was inheriting the reading margin — the same clamp(20px, 3.4vw, 60px)
+   that insets the copy — and then the stack's section gap beneath it, so the
+   wordmark floated in the middle of a lot of nothing before the page began.
+   Chrome wants to sit near the edge it belongs to.
+
+   The left margin comes back to the 12px the homepage grid uses. The right
+   is left alone: beyond it is the fixed nav column, and pulling the bar into
+   that would run it under the nav cards. The gap below is clawed back to the
+   grid's own 5px rhythm, so the bar reads as attached to the top of the page
+   rather than as the first of the sections. */
+.topBar {
+  margin-left: calc(12px - var(--page-pad-left));
+  margin-bottom: calc(5px - clamp(28px, 4vw, 64px));
+}
