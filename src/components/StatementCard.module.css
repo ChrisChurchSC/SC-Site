@@ -102,3 +102,36 @@
     max-width: none;
   }
 }
+
+/* Support copy as prose, not as a caption.
+
+   The default .support is 11px Roboto Mono at 62ch — a metadata treatment,
+   right for one line of qualifier under a display statement and wrong for
+   three paragraphs somebody is meant to actually read. This sets the whole
+   card in Signifier and gives the statement a lift to stay ahead of it.
+
+   The measure drops from 62ch to 46ch with the face change: 62ch of mono at
+   11px and 62ch of serif at 22px are not the same line, and the longer one
+   is past the point where the eye reliably finds the next line. */
+.serif .statement {
+  font-size: clamp(32px, 4.6vw, 66px);
+  max-width: 26ch;
+}
+
+.serif .support {
+  font-family: Signifier, Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(17px, 1.55vw, 25px);
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 46ch;
+}
+
+@media (max-width: 768px) {
+  .serif .statement { max-width: none; }
+  .serif .support {
+    font-size: clamp(16px, 4.4vw, 20px);
+    max-width: none;
+  }
+}

@@ -31,6 +31,10 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * is the fault assert-build.mjs fails the build on, in the other direction.
  * `support` accepts a string or an array of paragraphs.
  *
+ * `serif` sets the support paragraphs in Signifier at reading size instead of
+ * the 11px mono, and lifts the statement to match. For a card carrying real
+ * prose rather than one line of qualifier. Off by default.
+ *
  * `tall` gives the card a viewport-relative minimum height with its contents
  * centred in it — for a card used as a hero, where the copy is short and the
  * room is the point. Off by default, so the live homepage is unaffected.
@@ -41,10 +45,11 @@ export default function StatementCard({
   support = SUPPORT,
   as: Heading = 'h1',
   tall = false,
+  serif = false,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}

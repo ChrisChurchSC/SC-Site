@@ -175,6 +175,7 @@ export default function HomeV2() {
         statement={WHO_WE_ARE}
         support={WHO_WE_ARE_SUPPORT}
         as="h2"
+        serif
       />
 
       {/* 4 — The offer, in two halves, now with the price lines */}
