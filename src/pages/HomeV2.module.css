@@ -32,3 +32,28 @@
     padding-right: clamp(20px, 3.4vw, 60px);
   }
 }
+
+/* A section label and the section it names, held together.
+
+   Both would otherwise be children of the page's flex column and the stack's
+   gap — up to 64px — would open between the label and the thing it labels,
+   which is the same fault the Build/Grow footnote had. This keeps them at
+   their own spacing.
+
+   The label matches StatementCard's eyebrow exactly rather than approximately:
+   the two sit in the same left column down the page, and a label that is a
+   pixel or a shade off reads as a mistake precisely because the rest line up. */
+.labelled {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}

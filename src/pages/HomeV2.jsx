@@ -87,6 +87,22 @@ const OFFER_FOOTNOTE = 'Most clients do both — but you can start wherever you 
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
+/**
+ * A section and the label that names it. Every passage on this page carries
+ * one, so the page can be read by its labels alone.
+ *
+ * StatementCard and AudienceCards render their own eyebrow — they already
+ * had one — so they are NOT wrapped in this; wrapping them would print two.
+ */
+function Labelled({ label, children }) {
+  return (
+    <div className={v2.labelled}>
+      <p className={v2.eyebrow}>{label}</p>
+      {children}
+    </div>
+  )
+}
+
 export default function HomeV2() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
@@ -170,10 +186,10 @@ export default function HomeV2() {
       <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" tall center />
 
       {/* 2 — Who we have done it for */}
-      <ClientStrip />
+      <Labelled label="[ Select Clients ]"><ClientStrip /></Labelled>
 
       {/* 3 — The offer, in two halves, with the price lines */}
-      <BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} />
+      <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>
 
       {/* 4 — Who we are, in full, behind the offer it explains */}
       <StatementCard
@@ -189,6 +205,7 @@ export default function HomeV2() {
       <AudienceCards />
 
       {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
+      <Labelled label="[ Reel ]">
       <section className={styles.row12}>
         <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 12', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
           <video
@@ -200,7 +217,11 @@ export default function HomeV2() {
             loop
             playsInline
           />
-          <span className={styles.label}>Showreel</span>
+          {/* The block's own "Showreel" caption is dropped here: the section
+              carries a [ Reel ] label now, and naming it twice — once in the
+              page's label column and once inside the frame — reads as an
+              oversight. The live homepage keeps its caption, because there
+              the reel is the hero and has no label above it. */}
           <button className={styles.playBtn} aria-label="Play showreel with sound">
             <svg width="8" height="9" viewBox="0 0 10 12" fill="none">
               <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
@@ -209,13 +230,14 @@ export default function HomeV2() {
           </button>
         </div>
       </section>
+      </Labelled>
 
       {/* 7 — Proof, then 8 — the work it is about */}
-      <TestimonialStrip />
-      <FeaturedCaseStudies />
+      <Labelled label="[ Proof ]"><TestimonialStrip /></Labelled>
+      <Labelled label="[ Featured Work ]"><FeaturedCaseStudies /></Labelled>
 
       {/* 9 — The ask */}
-      <ContactCTA sub={CLOSING} />
+      <Labelled label="[ Get In Touch ]"><ContactCTA sub={CLOSING} /></Labelled>
 
       {reelOpen && (
         <div className={styles.reelOverlay} onClick={closeReel}>
