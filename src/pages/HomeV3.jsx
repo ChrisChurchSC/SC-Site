@@ -175,7 +175,7 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
    ignore" is not a flourish either; it is the underdog case this page
    already makes further down, in the brand "in a crowded category that needs
    to stand out". */
-const HERO = "We build brands people believe in, and grow them until they're impossible to ignore."
+const HERO = "We build brands people believe in, and grow them."
 
 const WHO_WE_ARE = 'We are creatives who also do marketing.'
 const WHO_WE_ARE_SUPPORT = [
