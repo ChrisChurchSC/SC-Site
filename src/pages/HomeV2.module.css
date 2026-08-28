@@ -1,0 +1,15 @@
+/* The only thing /v2 styles for itself. Everything else it renders comes
+   from Home.module.css and the components' own modules — see HomeV2.jsx. */
+
+/* The homepage stacks its sections on a 5px gap: cards butted together into
+   one grid, which is the site's rhythm and is deliberate. This opens that up
+   so the sections read as separate passages rather than one continuous wall.
+   Scoped here rather than changed in Home.module.css, which / also uses.
+
+   The class is doubled to raise specificity above .main's own gap. Both are
+   single classes otherwise, and which of two equal-specificity rules wins
+   would then depend on the order the modules happen to be injected in —
+   which is not something to leave to chance. */
+.stack.stack {
+  gap: clamp(28px, 4vw, 64px);
+}

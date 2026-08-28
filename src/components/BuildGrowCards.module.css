@@ -195,11 +195,18 @@
 
 .cardMedia .price { color: rgba(255, 255, 255, 0.55); }
 
+/* Holds the cards and their footnote together as one unit against a page
+   whose section gap may be much larger than the footnote's own. */
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
 .footnote {
   font-family: 'Signifier', Georgia, serif;
   font-style: italic;
   font-size: 15px;
-  padding: 2px 0 18px;
+  padding: 2px 0 0;
   color: rgba(255, 255, 255, 0.42);
   margin: 14px 0 0;
 }

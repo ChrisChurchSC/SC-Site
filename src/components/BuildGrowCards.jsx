@@ -63,8 +63,15 @@ const CARDS = [
  * optional `price` line, and the section an optional `footnote`.
  */
 export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
-  return (
-    <>
+  /* The section and its footnote are wrapped together ONLY when there is a
+     footnote. They are both children of the page's flex column, so a page
+     that opens its section gap up — /v2 does, at up to 64px — would push the
+     footnote away from the cards it belongs to and leave it reading as an
+     orphan line. The wrapper holds them at their own tight gap instead.
+
+     Without a footnote the section is returned bare, exactly as before, so
+     the live homepage's DOM is unchanged rather than merely equivalent. */
+  const cardsRow = (
     <section className={styles.row}>
       {cards.map(({ id, name, body, price, cta, href, media }) => (
         <NavLink
@@ -95,7 +102,14 @@ export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
         </NavLink>
       ))}
     </section>
-    {footnote && <p className={styles.footnote}>{footnote}</p>}
-    </>
+  )
+
+  if (!footnote) return cardsRow
+
+  return (
+    <div className={styles.group}>
+      {cardsRow}
+      <p className={styles.footnote}>{footnote}</p>
+    </div>
   )
 }

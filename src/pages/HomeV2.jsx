@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import styles from './Home.module.css'
+import v2 from './HomeV2.module.css'
 import LogoWordmark from '../components/LogoWordmark'
 import { useNav } from '../context/NavContext'
 import { useMeta } from '../hooks/useMeta'
@@ -143,7 +144,7 @@ export default function HomeV2() {
   }, [reelOpen])
 
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main} ${v2.stack}`}>
 
       {/* Intro card — unchanged from the live homepage */}
       <section className={`${styles.row12} ${styles.introRow}`}>
@@ -181,6 +182,7 @@ export default function HomeV2() {
         support={WHO_WE_ARE_SUPPORT}
         as="h2"
         serif
+        bare
       />
 
       {/* 5 — Who it is for. The one section the live page has no version of */}

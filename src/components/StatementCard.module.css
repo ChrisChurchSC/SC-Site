@@ -149,3 +149,24 @@
     --serif-measure: none;
   }
 }
+
+/* Not a card. The ground and the box come off, the type sits on the page, and
+   a hairline above does what the card's edge was doing — a rule between
+   passages instead of a container around each one.
+
+   Horizontal padding goes to zero so the copy starts on the page's own left
+   edge, in line with the section labels above and below it, rather than
+   inset by the card's 56px. Vertical padding stays and grows: with no edge
+   to separate it from what follows, the space has to. */
+.bare {
+  background: none;
+  border-radius: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: clamp(52px, 7vw, 104px) 0 clamp(52px, 7vw, 104px);
+}
+
+@media (max-width: 768px) {
+  .bare {
+    padding: 40px 0;
+  }
+}

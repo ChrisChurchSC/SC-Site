@@ -31,6 +31,10 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * is the fault assert-build.mjs fails the build on, in the other direction.
  * `support` accepts a string or an array of paragraphs.
  *
+ * `bare` drops the card entirely — no ground, no box — so the type sits on
+ * the page and a hairline rule does the work the card's edge was doing. For a
+ * page that does not want every passage in a container.
+ *
  * `serif` sets the support paragraphs in Signifier at reading size instead of
  * the 11px mono, and lifts the statement to match. For a card carrying real
  * prose rather than one line of qualifier. Off by default.
@@ -46,10 +50,11 @@ export default function StatementCard({
   as: Heading = 'h1',
   tall = false,
   serif = false,
+  bare = false,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}
