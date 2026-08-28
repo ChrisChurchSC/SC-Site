@@ -100,3 +100,11 @@
   .item { padding: 0 16px; }
   .name { font-size: 15px; }
 }
+
+/* Outlined rather than filled — see the `outlined` prop. Black against the
+   page's #0a0a0a so the strip still has a body, with the hairline carrying
+   the edge. Unused by the live homepage and /v2, which keep the panel. */
+.outlined {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}

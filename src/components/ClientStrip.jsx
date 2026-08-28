@@ -31,7 +31,12 @@ function Entry({ name, logo, slug, comingSoon }) {
   return <NavLink to={`/work/${slug}`} className={`${styles.item} ${styles.itemLink}`}>{inner}</NavLink>
 }
 
-export default function ClientStrip() {
+/**
+ * `outlined` swaps the filled card for black with a hairline around it, for a
+ * page that draws its bars with a stroke instead of a fill. Off by default,
+ * so the live homepage and /v2 keep the panel.
+ */
+export default function ClientStrip({ outlined = false }) {
   const comingSoon = useComingSoon()
   const pass = (hidden) => (
     <div className={styles.pass} aria-hidden={hidden || undefined}>
@@ -42,7 +47,7 @@ export default function ClientStrip() {
   )
 
   return (
-    <div className={styles.strip}>
+    <div className={`${styles.strip}${outlined ? ' ' + styles.outlined : ''}`}>
       <div className={styles.window}>
         <div className={styles.track}>
           {pass(false)}

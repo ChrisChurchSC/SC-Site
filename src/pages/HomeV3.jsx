@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
+import { NavLink } from 'react-router-dom'
 import styles from './Home.module.css'
 import v3 from './HomeV3.module.css'
 import LogoWordmark from '../components/LogoWordmark'
+import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
@@ -32,6 +34,17 @@ import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
  */
 
 let didLoad = false
+
+/* The bar is the only navigation on this page, so it carries the site's
+   actual routes rather than a shortened set. Every one of these resolves —
+   see App.jsx. Careers is not a route of its own on this branch (the About
+   page carries it), so it is not listed as though it were. */
+const NAV_LINKS = [
+  { label: 'Services', href: '/services' },
+  { label: 'Work', href: '/work' },
+  { label: 'Thoughts', href: '/thoughts' },
+  { label: 'About', href: '/about-us' },
+]
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
 
@@ -96,6 +109,7 @@ function Labelled({ label, children }) {
 }
 
 export default function HomeV3() {
+  const cal = useCalDrawer()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   // noindex: a messaging variant to look at, not a page to be found.
   useMeta({ title: 'Super Conscious — homepage v3', path: '/v3', noindex: true })
@@ -153,14 +167,23 @@ export default function HomeV3() {
   return (
     <main className={`${styles.main} ${v3.stack}`}>
 
-      {/* Intro card — unchanged from the live homepage */}
+      {/* The nav. It is the only navigation on the page — the side nav is
+          gone — so it carries the routes and the booking CTA. */}
       <section className={`${styles.row12} ${styles.introRow} ${v3.topBar}`}>
-        <div className={styles.cornerNote} style={{ gridColumn: '1 / span 12' }}>
-          <div className={styles.cornerWordmark}>
-            <LogoWordmark fill="rgba(255,255,255,0.55)" />
-          </div>
-          <div className={styles.cornerTextStack}>
-            {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
+        <div className={`${styles.cornerNote} ${v3.barCard}`} style={{ gridColumn: '1 / span 12' }}>
+          <NavLink to="/" className={styles.cornerWordmark} aria-label="Super Conscious, home">
+            <LogoWordmark fill="rgba(255,255,255,0.7)" />
+          </NavLink>
+
+          <nav className={v3.navLinks} aria-label="Main">
+            {NAV_LINKS.map(({ label, href }) => (
+              <NavLink key={label} to={href} className={v3.navLink}>{label}</NavLink>
+            ))}
+          </nav>
+
+          <div className={v3.navActions}>
+            <NavLink to="/contact" className={v3.navLink}>Contact</NavLink>
+            <button className={v3.navCta} onClick={cal.open}>Book a Discovery Call</button>
           </div>
         </div>
         {/* No menu button: it toggled the side nav, which this page does not
@@ -174,7 +197,7 @@ export default function HomeV3() {
       {/* A card bar, like the wordmark at the top of the page: same ground,
           same radius, same inset — see .barInset. No label; a row of client
           names does not need to be told what it is. */}
-      <div className={v3.barInset}><ClientStrip /></div>
+      <div className={v3.barInset}><ClientStrip outlined /></div>
 
       {/* 3 — The offer, in two halves, with the price lines */}
       <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>

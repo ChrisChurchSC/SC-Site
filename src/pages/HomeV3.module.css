@@ -137,3 +137,79 @@
 .topBar {
   margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
 }
+
+/* Outlined, not filled.
+
+   The bars were #161616 panels — objects sitting ON the page. These are black
+   with a hairline around them: the same ground as the page, defined by an
+   edge rather than by a fill. The stroke does all the work, which is why it
+   is the only thing that changes.
+
+   Black rather than transparent, deliberately. The page ground is #0a0a0a,
+   so #000 reads a touch deeper than what surrounds it — barely, but enough
+   that the bar has a body inside its outline instead of being a rectangle
+   drawn on nothing. The stroke is what makes it legible; the fill is what
+   keeps it from feeling hollow.
+
+   Same value as every other rule on the page, so the bars belong to the same
+   drawn system as the section dividers rather than introducing a second. */
+.barCard {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* ── The nav bar's contents ──────────────────────────────────────────────
+   Links sit against the wordmark and push the actions to the far end:
+   margin-right:auto on the group rather than a third flex child, so the
+   actions stay hard right however many links there are. */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 34px);
+  margin-left: clamp(16px, 3vw, 44px);
+  margin-right: auto;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 22px);
+}
+
+.navLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.navLink:hover { color: #fff; }
+
+/* Light on a black bar, the inverse of the reference's dark button on white:
+   the primary action should be the one thing in the bar that is filled. */
+.navCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #0a0a0a;
+  background: #f2f0ea;
+  border-radius: 4px;
+  padding: 10px 16px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.navCta:hover { background: #fff; }
+
+@media (max-width: 860px) {
+  /* The links go before the CTA does: losing the way to book is worse than
+     losing the way to browse. */
+  .navLinks { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink, .navCta { transition: none; }
+}
