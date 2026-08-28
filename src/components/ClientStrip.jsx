@@ -31,7 +31,7 @@ function Entry({ name, logo, slug, comingSoon }) {
   return <NavLink to={`/work/${slug}`} className={`${styles.item} ${styles.itemLink}`}>{inner}</NavLink>
 }
 
-export default function ClientStrip() {
+export default function ClientStrip({ bleed = false }) {
   const comingSoon = useComingSoon()
   const pass = (hidden) => (
     <div className={styles.pass} aria-hidden={hidden || undefined}>
@@ -42,7 +42,7 @@ export default function ClientStrip() {
   )
 
   return (
-    <div className={styles.strip}>
+    <div className={`${styles.strip}${bleed ? ' ' + styles.bleed : ''}`}>
       <div className={styles.window}>
         <div className={styles.track}>
           {pass(false)}

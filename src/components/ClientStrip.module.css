@@ -100,3 +100,26 @@
   .item { padding: 0 16px; }
   .name { font-size: 15px; }
 }
+
+/* Full-bleed and black, for a page that runs it as a band across the page
+   rather than as one more card in the grid.
+
+   The grey and the 4px radius are what make it read as a card; both come off.
+   The width breaks out of the page's side padding by subtracting exactly it —
+   see --page-pad-left / --page-pad-right on the page's stack. Falls back to
+   0px, which leaves the strip where it was, so this class is inert on a page
+   that does not set them. */
+.bleed {
+  background: #000000;
+  border-radius: 0;
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+  margin-right: calc(-1 * var(--page-pad-right, 0px));
+  /* Black is only four percent off the page's own #0a0a0a, so on its own the
+     band is invisible — the fill cannot define an edge here. The hairlines
+     do it instead, at the same weight and value as the section rules, so the
+     strip reads as a band ruled off from the page rather than as a darker
+     rectangle nobody can see. */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: 54px;
+}

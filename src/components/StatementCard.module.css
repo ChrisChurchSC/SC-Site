@@ -167,18 +167,21 @@
 
 /* The rule runs the full width of the page, not the width of the column it
    sits in. A border-top would stop at the section's own edges — inset by the
-   page's left margin and cut short by the nav column on the right — which
-   reads as a rule that ran out rather than a division of the page.
+   page's left margin and cut short by the nav column on the right — and read
+   as a rule that ran out rather than a division of the page.
 
-   Centred on the section and pulled out to 100vw to escape every ancestor's
-   padding, so it does not have to know what that padding currently is. */
+   It subtracts the page's padding exactly rather than centring 100vw on the
+   column. Centring only lands on the page edges when the column is itself
+   centred in the viewport, and this one is not: the nav occupies 312px on
+   the right, so a centred 100vw rule sat at -141 to 1368 in a 1509 viewport
+   — overhanging the left and stopping short of the right by the same amount.
+   Measured, not assumed. */
 .bare::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  left: calc(-1 * var(--page-pad-left, 0px));
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
   pointer-events: none;

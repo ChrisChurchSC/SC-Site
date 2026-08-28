@@ -186,7 +186,10 @@ export default function HomeV2() {
       <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" tall center />
 
       {/* 2 — Who we have done it for */}
-      <Labelled label="[ Select Clients ]"><ClientStrip /></Labelled>
+      {/* No label. The strip runs black and full-bleed across the page now,
+          and a row of client names does not need to be told it is one — the
+          label was working against the band reading as a band. */}
+      <ClientStrip bleed />
 
       {/* 3 — The offer, in two halves, with the price lines */}
       <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>

@@ -21,13 +21,18 @@
      labels and the bare copy all share one left edge rather than each
      arriving at its own. The right side keeps the 312px the fixed nav column
      occupies, plus the same increase, so the inset reads as even. */
-  padding-left: clamp(20px, 3.4vw, 60px);
-  padding-right: calc(312px + clamp(8px, 1.4vw, 28px));
-  /* The full-width rules in StatementCard's .bare are 100vw wide to escape
-     this padding. On a platform with overlay scrollbars — macOS, where this
-     was built — 100vw equals the client width and nothing overhangs. With
-     classic scrollbars it is WIDER by the scrollbar, and each rule would put
-     a horizontal scrollbar on the page.
+  /* Published as custom properties so anything that needs to break OUT of
+     this padding can subtract exactly it, rather than guessing with 100vw.
+     Custom property names are not hashed by CSS modules, so other modules
+     can read these — see ClientStrip's .bleed and StatementCard's rule. */
+  --page-pad-left: clamp(20px, 3.4vw, 60px);
+  --page-pad-right: calc(312px + clamp(8px, 1.4vw, 28px));
+  padding-left: var(--page-pad-left);
+  padding-right: var(--page-pad-right);
+  /* Full-bleed children subtract the padding above exactly, so nothing should
+     overhang. Kept as a backstop for sub-pixel rounding on the clamps, and
+     because a future full-bleed element that gets the maths wrong should look
+     wrong rather than put a horizontal scrollbar on the page.
 
      clip rather than hidden: hidden would make this a scroll container and
      break position:sticky for anything inside it later. */
