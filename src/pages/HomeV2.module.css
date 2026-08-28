@@ -26,6 +26,12 @@
      Custom property names are not hashed by CSS modules, so other modules
      can read these — see ClientStrip's .bleed and StatementCard's rule. */
   --page-pad-left: clamp(20px, 3.4vw, 60px);
+  /* The top bar's inset, declared here rather than on the bar because the
+     page's own top padding is what sets the space ABOVE the bar — the bar
+     cannot set it from the inside. One value, three edges. */
+  --bar-inset: calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px);
+  --nav-width: 300px;
+  padding-top: var(--bar-inset);
   /* Exactly the nav column, and nothing on top of it.
 
      The left margin is a reading margin and was widened on purpose. This one
@@ -111,12 +117,12 @@
                same inset. What padding-right already leaves before the nav
                is --page-pad-right minus the nav's 300px (measured), and the
                margin makes up only the difference.
+       top   — the page's own padding-top, set to the inset on the stack. A
+               margin here would collapse or fight the padding; the padding
+               is the thing that actually holds that space.
 
      Expressed over the padding rather than as fixed pixels so both hold
      their proportion as the margin scales with the viewport. */
-  --bar-inset: calc(var(--page-pad-left) * 0.25 + 9px);
-  --nav-width: 300px;
-
   margin-left: calc(var(--bar-inset) - var(--page-pad-left));
   margin-right: calc(var(--bar-inset) - (var(--page-pad-right) - var(--nav-width)));
   margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
