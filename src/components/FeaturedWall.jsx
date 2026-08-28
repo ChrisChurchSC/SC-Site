@@ -52,12 +52,9 @@ import { featuredCaseStudies } from '../data/featuredCaseStudies'
  * pages, the other four do not, and those render unlinked rather than being
  * dropped — they are the featured set whether or not the write-up exists.
  */
-/* Pixels per second. Slow enough to read a card as it goes by; the rail is
-   proof, not a screensaver. */
-const SPEED = 26
-
-/* requestAnimationFrame's argument and performance.now() share a time
-   origin, which is what lets the frame compare t against quietUntil. */
+/* How long a card sits still before the rail moves on. It rests far longer
+   than it moves, because the reading happens at rest. */
+const DWELL_MS = 3800
 
 function useRotatingRail() {
   const ref = useRef(null)
@@ -67,74 +64,74 @@ function useRotatingRail() {
     if (!el) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    let raf = 0
-    let last = 0
-    let pos = 0
+    /* IT STEPS, IT DOES NOT DRIFT — and the reason is the left edge.
 
-    /* PAUSING IS RE-DERIVED EVERY FRAME, never stored as a latch.
+       A continuous drift is never anywhere in particular: whenever you look
+       at it, the leftmost card is sliced by the rail's edge, which sits on
+       the page margin. On the right that reads as "there is more"; on the
+       left it just reads as broken. Stepping by exactly one card and resting
+       means scrollLeft is always a whole number of cards, so the card at the
+       left edge is always a whole card.
 
-       Two earlier versions latched. The first counted holds and releases, and
-       a single wheel gesture fires enough events to run the count up beyond
-       what the release could bring back down. The second used the pointer's
-       enter and leave events, which is worse and less obvious: this rail
-       scrolls the page under a stationary cursor, so entering fires when the
-       rail arrives beneath the pointer and leaving never fires when it moves
-       away again. The rail stopped for good, four pixels in.
-
-       So the pointer's position is the only thing tracked, and whether it is
-       over the rail is a hit test against a rect read fresh each frame. It
-       cannot go stale, because there is no state left to go stale. */
+       This also drops the per-frame loop. A carousel that moves every four
+       seconds has no business running code sixty times a second. */
     let px = -1
     let py = -1
     let touching = false
-    let quietUntil = 0
-
-    const QUIET_MS = 900
+    let timer = 0
 
     const onMove = e => { px = e.clientX; py = e.clientY }
     /* relatedTarget is null only when the pointer has left the document. */
     const onOut = e => { if (!e.relatedTarget) { px = -1; py = -1 } }
-    const nudge = () => { quietUntil = performance.now() + QUIET_MS }
     const touchOn = () => { touching = true }
-    const touchOff = () => { touching = false; quietUntil = performance.now() + QUIET_MS }
+    const touchOff = () => { touching = false }
 
-    const step = t => {
-      const dt = last ? Math.min((t - last) / 1000, 0.1) : 0
-      last = t
-
-      const first = el.children[0]
-      const second = el.children[1]
-      const period = second ? second.offsetLeft - first.offsetLeft : 0
-
+    const held = () => {
+      if (touching) return true
       const r = el.getBoundingClientRect()
-      const over = px >= r.left && px <= r.right && py >= r.top && py <= r.bottom
-      const paused = over || touching || t < quietUntil
-
-      if (paused || !period) {
-        /* Resync to wherever the reader left it, so resuming does not yank
-           the rail back to where the loop had got to. */
-        pos = el.scrollLeft
-      } else {
-        pos += SPEED * dt
-        if (pos >= period) pos -= period
-        el.scrollLeft = pos
-      }
-
-      raf = requestAnimationFrame(step)
+      return px >= r.left && px <= r.right && py >= r.top && py <= r.bottom
     }
 
-    raf = requestAnimationFrame(step)
+    const tick = () => {
+      timer = setTimeout(tick, DWELL_MS)
+      if (held()) return
+
+      const pass = el.children[0]
+      if (!pass || pass.children.length < 2) return
+
+      /* One card plus one gap, measured rather than assumed — the card width
+         is a clamp() and the gap is a token, so neither is a number this
+         file can know. */
+      const stride = pass.children[1].offsetLeft - pass.children[0].offsetLeft
+      const period = el.children[1] ? el.children[1].offsetLeft - pass.offsetLeft : 0
+      if (!stride || !period) return
+
+      /* Round before adding, so a hand-scroll that stopped between two cards
+         is corrected on the next step rather than carried forever. */
+      let next = Math.round(el.scrollLeft / stride) * stride + stride
+
+      if (next >= period) {
+        /* Jump back exactly one period first, with no animation. The content
+           a period back is identical, so nothing is seen to move — and the
+           scroll that follows is a normal one-card step rather than a long
+           rewind past every card. */
+        el.scrollTo({ left: el.scrollLeft - period, behavior: 'auto' })
+        next -= period
+      }
+
+      el.scrollTo({ left: next, behavior: 'smooth' })
+    }
+
+    timer = setTimeout(tick, DWELL_MS)
     document.addEventListener('pointermove', onMove, { passive: true })
     document.addEventListener('pointerout', onOut, { passive: true })
-    el.addEventListener('wheel', nudge, { passive: true })
     el.addEventListener('touchstart', touchOn, { passive: true })
     el.addEventListener('touchend', touchOff, { passive: true })
 
     return () => {
-      cancelAnimationFrame(raf)
+      clearTimeout(timer)
       document.removeEventListener('pointermove', onMove)
       document.removeEventListener('pointerout', onOut)
-      el.removeEventListener('wheel', nudge)
       el.removeEventListener('touchstart', touchOn)
       el.removeEventListener('touchend', touchOff)
     }
