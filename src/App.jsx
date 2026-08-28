@@ -14,6 +14,7 @@ import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import HomeV2 from './pages/HomeV2'
+import HomeV3 from './pages/HomeV3'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -55,7 +56,7 @@ function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
   // /v2 is a homepage, so it gets the homepage treatment: no back button.
-  if (location.pathname === '/' || location.pathname === '/v2' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
+  if (location.pathname === '/' || location.pathname === '/v2' || location.pathname === '/v3' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
@@ -100,6 +101,7 @@ export default function App() {
                     two can be compared. Promoting it is a one-line change:
                     point path="/" at HomeV2 and drop this route. */}
                 <Route path="/v2" element={<HomeV2 />} />
+                <Route path="/v3" element={<HomeV3 />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
