@@ -26,7 +26,14 @@
      Custom property names are not hashed by CSS modules, so other modules
      can read these — see ClientStrip's .bleed and StatementCard's rule. */
   --page-pad-left: clamp(20px, 3.4vw, 60px);
-  --page-pad-right: calc(312px + clamp(8px, 1.4vw, 28px));
+  /* Exactly the nav column, and nothing on top of it.
+
+     The left margin is a reading margin and was widened on purpose. This one
+     is not a margin at all — it is the space the fixed nav occupies, and the
+     content clears it. Adding a reading margin here as well pushed the copy
+     33px short of the nav instead of the grid's 12px, which read as a gap
+     hanging off the right of the page rather than as an even inset. */
+  --page-pad-right: 312px;
   padding-left: var(--page-pad-left);
   padding-right: var(--page-pad-right);
   /* Full-bleed children subtract the padding above exactly, so nothing should
@@ -43,7 +50,7 @@
   /* The nav column is not beside the content at this width, so the right
      padding is a margin like any other. */
   .stack.stack {
-    padding-right: clamp(20px, 3.4vw, 60px);
+    --page-pad-right: clamp(20px, 3.4vw, 60px);
   }
 }
 
