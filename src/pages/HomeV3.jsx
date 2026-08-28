@@ -19,7 +19,7 @@ import { buildDisciplines } from '../data/buildPackages'
 import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import ClientStrip from '../components/ClientStrip'
-import TestimonialStrip from '../components/TestimonialStrip'
+import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
@@ -37,7 +37,7 @@ import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
  * It has its OWN stylesheet — HomeV3.module.css, also a copy — so the two can
  * diverge without either one moving the other. The shared components they
  * both render (StatementCard, ClientStrip, BuildGrowCards, AudienceCards,
- * TestimonialStrip, FeaturedCaseStudies, ContactCTA) take their copy and
+ * FeaturedCaseStudies, ContactCTA) take their copy and
  * their variants as props, so v3 changes what it passes rather than what
  * they contain — which is what keeps / and /v2 untouched as this moves.
  *
@@ -601,7 +601,12 @@ export default function HomeV3() {
       </Labelled>
 
       {/* 7 — Proof, then 8 — the work it is about */}
-      <Labelled label="[ Proof ]"><TestimonialStrip /></Labelled>
+      {/* The mosaic carries its own label and headline, so it is not wrapped
+          in Labelled — that would print the eyebrow twice. It replaces the
+          testimonial marquee here: the marquee showed quotes alone, and this
+          puts them beside the clients and the numbers, which is what makes a
+          wall of proof read as proof rather than as three separate lists. */}
+      <TrustMosaic />
       <Labelled label="[ Featured Work ]"><FeaturedCaseStudies /></Labelled>
 
       {/* 9 — The ask */}

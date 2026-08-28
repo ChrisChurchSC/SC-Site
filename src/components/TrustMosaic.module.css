@@ -1,0 +1,152 @@
+/* The trust mosaic. Tiles of three kinds in one dense grid — see
+   TrustMosaic.jsx for what each may and may not show. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.6vw, 38px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 30ch;
+  margin: 0 0 10px;
+  text-wrap: balance;
+}
+
+/* auto-flow dense so the wide quote tiles do not leave holes behind them —
+   the reference's grid is read as one field, and a gap reads as a missing
+   tile rather than as rhythm. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-flow: row dense;
+  gap: 8px;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 18px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.tile:hover { border-color: rgba(255, 255, 255, 0.28); }
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 21px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+.logo {
+  max-width: 100%;
+  max-height: 26px;
+  object-fit: contain;
+}
+
+/* Quotes take two columns and read left-aligned: centred, a sentence of this
+   length turns into a diamond. */
+.tileQuote {
+  grid-column: span 2;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
+
+.quote {
+  font-family: 'Signifier', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(14px, 1.15vw, 17px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.by,
+.byPlaceholder {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* Dev only, and marked so it cannot be mistaken for a real byline. */
+.byPlaceholder {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.24);
+}
+
+.tileStat {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 2px;
+  text-align: left;
+}
+
+/* Built at the size a real figure would be: the gap should read as a missing
+   number, not as a design that never had one. */
+.statValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 4px;
+}
+
+.statLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.statClient {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 8px 0 0;
+}
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .tileQuote { grid-column: span 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile { transition: none; }
+}
