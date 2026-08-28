@@ -70,41 +70,47 @@
    with a name laid over it. The name and the measures both needed room the
    image was not going to give them, and type over a photograph has to be
    defended with a scrim at every size. */
+/* A text card. No media block at all — see the component: an empty frame
+   waiting for a picture reads as a failure to load, not as a promise. The
+   card carries the type, the name and the three measures, and its height
+   comes from those rather than from a ratio. */
 .card {
   flex: none;
-  width: clamp(240px, 27vw, 400px);
+  width: clamp(240px, 26vw, 340px);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
-}
-
-.card:hover { transform: translateY(-6px); }
-
-.media {
-  display: block;
-  aspect-ratio: 3 / 4;
+  gap: 10px;
+  padding: 28px 26px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--r-surface, 14px);
-  overflow: hidden;
-  background: #111;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.mediaEl {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.caption {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* No page yet, so no hover — it would promise one. */
+.cardFlat { cursor: default; }
+.cardFlat:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.type {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .name {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(22px, 2vw, 30px);
+  font-size: clamp(24px, 2.2vw, 34px);
   line-height: 1.1;
   color: rgba(255, 255, 255, 0.94);
 }
@@ -112,6 +118,7 @@
 .measures {
   display: flex;
   gap: 18px;
+  margin-top: 14px;
 }
 
 .measure {
@@ -121,8 +128,7 @@
   min-width: 0;
 }
 
-/* At the size a real figure would be — the gap should read as a missing
-   number, not as a design that never had one. */
+/* At the size a real figure would be. */
 .measureValue {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
@@ -140,7 +146,7 @@
 }
 
 @media (max-width: 760px) {
-  .card { width: 200px; }
+  .card { width: 230px; }
   .rail { padding-bottom: 10px; }
 }
 
