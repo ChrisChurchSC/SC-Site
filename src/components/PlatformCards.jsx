@@ -216,17 +216,30 @@ function RepoPreview() {
  * performance claim, and a visitor cannot tell an illustrative one from a
  * real one.
  *
- * WHICH IS WHY THE LIFT READS '––'. The card promises "what shipped and what
- * it moved". This can show the first half honestly and cannot show the
- * second, so the second carries the placeholder the case-study cards use.
- * Fill it when there is a real figure from a real client that someone has
- * signed off — not with a plausible one.
+ * THE LIFT IS FILLED IN, ON REQUEST, AND THE PANEL SAYS "SAMPLE DATA"
+ * BECAUSE OF IT.
+ *
+ * The +18% is invented. There is no sourced client lift anywhere in this
+ * repo or the brand one — Data/ holds Super Conscious's own site analytics
+ * (GA users, GSC impressions, single-digit daily actives across eight days
+ * in August 2026), which is our traffic during instrumentation, not a client
+ * outcome. Nothing in it can honestly be called a lift.
+ *
+ * A count of drafts is obviously a mock. A percentage with a plus in front
+ * of it is a performance claim, and a reader cannot tell an illustrative one
+ * from a real one — which is why it sat as '––' before. The marker in the
+ * label is what resolves that: it makes the panel say it is a demo, so the
+ * number is framed rather than asserted. It covers the counts too, which
+ * were always invented.
+ *
+ * IF A REAL FIGURE ARRIVES, swap it in and delete the marker. Do not delete
+ * the marker while the number is still made up.
  */
 const DASH = {
   stats: [
     { value: '42', label: 'shipped' },
     { value: '6', label: 'in review' },
-    { value: '––', label: 'lift', empty: true },
+    { value: '+18%', label: 'lift' },
   ],
   /* Relative heights only. No axis and no gridlines: there is nothing to
      read off it, and an axis would invite a measurement it has not earned. */
@@ -243,7 +256,10 @@ function DashPreview() {
 
   return (
     <div className={styles.panel}>
-      <span className={styles.panelLabel}>Output · last 8 weeks</span>
+      <span className={styles.panelLabel}>
+        Output · last 8 weeks
+        <span className={styles.sample}>Sample data</span>
+      </span>
 
       <div className={styles.dashStats}>
         {DASH.stats.map(({ value, label, empty }) => (

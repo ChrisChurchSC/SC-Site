@@ -56,35 +56,34 @@ import styles from './ComparisonTable.module.css'
  * drafting in voice and refusing unsourced claims — would make every cross
  * unarguable. Worth doing before this page meets an audience.
  *
- * WHAT "SCALE" MEANS HERE: does this option still work as YOU grow. It is a
- * question about the buyer's growth, not about the vendor's headcount. A
- * performance agency scores full because it absorbs a 10x in spend without
- * changing shape; a fractional CMO does not, because one person has a
- * ceiling in hours; a branding studio does not, because the project ends.
+ * THE AXES ARE STRUCTURAL, NOT VIRTUES. This table used to score Speed,
+ * Flexibility, Quality, Scale, Efficiency and AI, and it did not
+ * differentiate anything — those are the things every agency claims, they
+ * are the exact five buckets the competitive research found every rival
+ * leading with, and a reader has no way to check any of them. Worse, we
+ * scored full marks on all of them, which is what a table written by its own
+ * winner always looks like and is the fastest way to be disbelieved.
  *
- * We score full on it, and the earlier partial was a mistake. It was reasoned
- * from our own "what you don't get" line about staying small and turning work
- * away — a line that has since been deleted from the page. So the mark was
- * measuring vendor headcount while every other row was measuring the buyer's
- * growth, and the sentence that made sense of it was no longer there to read.
- * A reader was left with "they cannot scale" and nothing to explain it.
+ * These seven ask what an alternative can hold GIVEN WHAT IT IS. A branding
+ * studio cannot run growth media; it is not worse at it, it is not that. A
+ * rotating agency bench cannot be the same people. A fractional CMO cannot
+ * execute. AI tools cannot own an outcome. Each cross has a reason a reader
+ * can name without trusting us, which is the only kind of comparison worth
+ * putting on your own site.
  *
- * THE COST OF FIXING IT IS THAT OUR ROW NOW TAKES ALL SEVEN MARKS, which is
- * the scorecard shape this table was rebuilt to avoid. The clean fix is an
- * axis we genuinely do not win — cost per unit, where AI tools and a
- * freelance bench beat us and we would honestly be a partial. That is a
- * positioning decision, not a styling one, so it is Chris's to make.
+ * WE LOSE THE LAST COLUMN, ON PURPOSE AND VISIBLY. Cheapest option goes to
+ * AI tools, a freelance bench and doing nothing. It is true, our positioning
+ * has never claimed otherwise, and the research says cost is the one bucket
+ * every competitor leads with — so a table of ours that quietly omitted it
+ * would be conspicuous. It is also what makes the other six readable as
+ * findings rather than as boasts.
  *
- * THE AI AXIS USED TO READ "AI & STRATEGY", and unbundling it moved three
- * marks, because a fractional CMO and a freelance bench had both been scored
- * on the half that left, and AI Tools had been held to a partial by it.
- *
- * NOTE WHAT WENT WITH IT: strategy is now scored NOWHERE on this table. That
- * is a real gap, not a tidy-up. It is the entire value of the fractional-CMO
- * row, it is the first thing our own Platform section sells, and it is the
- * difference between a team and a bench. Quality and Brand Platform each
- * carry a piece of it by implication, but nothing on the page asks the
- * question directly any more. Its own column would be the better home.
+ * IN-HOUSE IS THE CLOSEST ROW AND SHOULD STAY THAT WAY. It holds the same
+ * people, embedded, and owning the outcome, because a team you employ
+ * genuinely does. What it does not hold is both disciplines at once, the
+ * platform, and the path from strategy to execution without hiring for
+ * every part of it. Marking it down to make our row look better would break
+ * the one comparison a founder is most likely to be making in their head.
  *
  * THE PRICING COLUMN CARRIES NO RATES, ON PURPOSE. It names how you pay, not
  * what you pay. The only dollar figures available were the ones in the
@@ -130,13 +129,13 @@ function ScMark({ className, size = 15, strokeWidth, ...rest }) {
 }
 
 const ATTRIBUTES = [
-  { key: 'speed',    label: 'Speed' },
-  { key: 'flex',     label: 'Flexibility' },
-  { key: 'quality',  label: 'Quality' },
-  { key: 'scale',    label: 'Scale' },
-  { key: 'eff',      label: 'Efficiency' },
-  { key: 'ai',       label: 'AI' },
-  { key: 'platform', label: 'Brand Platform' },
+  { key: 'both',     label: 'Brand + growth' },
+  { key: 'same',     label: 'Same people' },
+  { key: 'embedded', label: 'Embedded' },
+  { key: 'straight', label: 'Strategy to execution' },
+  { key: 'platform', label: 'Brand platform' },
+  { key: 'outcome',  label: 'Owns the outcome' },
+  { key: 'cheapest', label: 'Cheapest option' },
 ]
 
 /* 2 = holds it, 1 = partly or depends who you get, 0 = does not. The middle
@@ -154,7 +153,7 @@ const ROWS = [
     Icon: ScMark,
     name: 'Super~Conscious',
     note: 'One embedded team, brand through growth',
-    attrs: [FULL, FULL, FULL, FULL, FULL, FULL, FULL],
+    attrs: [FULL, FULL, FULL, FULL, FULL, FULL, NONE],
     cost: 'Project or subscription',
   },
   {
@@ -162,7 +161,7 @@ const ROWS = [
     Icon: Palette,
     name: 'A Branding Studio',
     note: 'Identity specialists, project by project',
-    attrs: [SOME, NONE, FULL, NONE, SOME, NONE, NONE],
+    attrs: [NONE, SOME, NONE, NONE, SOME, NONE, NONE],
     cost: 'Project fee',
   },
   {
@@ -170,7 +169,7 @@ const ROWS = [
     Icon: TrendingUp,
     name: 'A Performance Marketing Agency',
     note: 'Media buyers with a creative team attached',
-    attrs: [FULL, SOME, SOME, FULL, SOME, SOME, NONE],
+    attrs: [NONE, NONE, NONE, SOME, NONE, SOME, NONE],
     cost: 'Retainer + % of spend',
   },
   {
@@ -178,7 +177,7 @@ const ROWS = [
     Icon: Building2,
     name: 'A Full-Service Agency',
     note: 'Everything under one roof, at one roof’s price',
-    attrs: [NONE, NONE, FULL, FULL, NONE, SOME, NONE],
+    attrs: [FULL, NONE, NONE, FULL, SOME, SOME, NONE],
     cost: 'Retainer, high minimum',
   },
   {
@@ -186,7 +185,7 @@ const ROWS = [
     Icon: Briefcase,
     name: 'A Fractional CMO',
     note: 'Senior leadership, part time',
-    attrs: [SOME, SOME, FULL, NONE, SOME, NONE, NONE],
+    attrs: [NONE, FULL, SOME, NONE, NONE, NONE, NONE],
     cost: 'Day rate',
   },
   {
@@ -194,7 +193,7 @@ const ROWS = [
     Icon: Users,
     name: 'An In-House Hire or Team',
     note: 'Your own people, on your payroll',
-    attrs: [SOME, NONE, SOME, NONE, NONE, SOME, NONE],
+    attrs: [SOME, FULL, FULL, SOME, SOME, FULL, NONE],
     cost: 'Salaries + overhead',
   },
   {
@@ -202,7 +201,7 @@ const ROWS = [
     Icon: User,
     name: 'A Freelance Bench',
     note: 'A roster you brief and manage yourself',
-    attrs: [FULL, FULL, SOME, SOME, FULL, SOME, NONE],
+    attrs: [NONE, SOME, NONE, NONE, NONE, NONE, FULL],
     cost: 'Hourly, or per project',
   },
   {
@@ -213,7 +212,7 @@ const ROWS = [
     /* Credits what AI genuinely gives you. A row of pure downside, next to
        tools the reader uses daily, reads as a lie about the reader rather
        than about the tools. */
-    attrs: [FULL, FULL, NONE, FULL, FULL, FULL, NONE],
+    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, FULL],
     cost: 'Per seat',
   },
   {
@@ -221,7 +220,7 @@ const ROWS = [
     Icon: Repeat,
     name: 'Keep On Keeping On',
     note: 'Doing exactly what you’re doing now',
-    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, NONE],
+    attrs: [NONE, NONE, NONE, NONE, NONE, NONE, FULL],
     cost: 'Nothing new',
   },
 ]

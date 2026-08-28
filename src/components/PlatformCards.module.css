@@ -539,7 +539,22 @@
 
 /* The label replaces the window's title bar: it says what you are looking at
    in one line, without implying a screen. */
+/* Says the panel is a demo. It sits in the label rather than under the
+   number so it frames every figure in the panel, not just the one that
+   looks like an outcome — the counts are invented too. Dim, but not so dim
+   that it reads as decoration: the whole job of this tag is to be legible
+   to someone who is about to believe a percentage. */
+.sample {
+  margin-left: 8px;
+  padding: 1px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-control, 4px);
+  color: rgba(255, 255, 255, 0.42);
+}
+
 .panelLabel {
+  display: flex;
+  align-items: center;
   font-size: 8px;
   letter-spacing: 0.14em;
   text-transform: uppercase;

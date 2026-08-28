@@ -91,10 +91,11 @@
   overflow-x: auto;
   padding-bottom: 10px;
   scrollbar-width: none;
-  /* A hand-scroll comes to rest on a card edge too, not just the timer.
-     Without this the stepper tidies the alignment up to four seconds later,
-     which reads as the rail twitching on its own. */
-  scroll-snap-type: x mandatory;
+  /* NO SNAP. It went in for the card-by-card stepper, where it stopped a
+     hand-scroll resting between two cards. With a continuous drift it is
+     actively wrong: mandatory snapping fights a scrollLeft written every
+     frame, and the browser spends the whole animation trying to pull the
+     rail back onto the nearest card edge. */
 }
 
 .rail::-webkit-scrollbar { display: none; }
@@ -109,7 +110,6 @@
    comes from those rather than from a ratio. */
 .card {
   flex: none;
-  scroll-snap-align: start;
   width: clamp(240px, 26vw, 340px);
   /* 4:5, matching the service cards — the page has two rails of cards and
      they should be the same shape. The content sits at the foot of the card
