@@ -97,33 +97,34 @@
    that would run it under the nav cards. The gap below is clawed back to the
    grid's own 5px rhythm, so the bar reads as attached to the top of the page
    rather than as the first of the sections. */
+/* The two card bars — the wordmark at the top and the client strip below the
+   hero — stand in from the page by one inset, on one rule, so they cannot
+   drift apart. They are the same object twice, and the eye reads any
+   difference between them as a mistake rather than as intent.
+
+   Each edge is measured from a different reference, which is why this is one
+   number and several expressions rather than several numbers:
+
+     left  — from the page edge, so it subtracts the page's reading margin.
+     right — from the NAV COLUMN, not the page edge: a card must not run under
+             the fixed nav, so it stops short of it by the same inset. What
+             padding-right already leaves is --page-pad-right minus the nav's
+             300px (measured), and the margin makes up the difference.
+     top   — the page's own padding-top, set on the stack: the space above the
+             first card is padding, and a margin there would collapse against
+             it rather than add to it.
+
+   Expressed over the padding rather than as fixed pixels so each holds its
+   proportion as the margin scales with the viewport. */
+.barInset,
 .topBar {
-  /* The bar is chrome, not a passage of the page.
-
-     It began with the page's full reading margin and the full section gap,
-     which left the wordmark floating in a lot of nothing; then with the
-     grid's 12px and 5px, which put it tight into the corner. Both are wrong,
-     in opposite directions. Below is the midpoint of the two; the left goes
-     further, three quarters of the way back toward the grid's 12px.
-
-     The inset is now declared ONCE and applied to both sides, because the
-     two sides do not start from the same place and would drift apart if each
-     carried its own number:
-
-       left  — measured from the page edge, so it subtracts the page's own
-               reading margin.
-       right — measured from the nav column, not the page edge. The bar must
-               not run under the fixed nav, so it stops short of it by the
-               same inset. What padding-right already leaves before the nav
-               is --page-pad-right minus the nav's 300px (measured), and the
-               margin makes up only the difference.
-       top   — the page's own padding-top, set to the inset on the stack. A
-               margin here would collapse or fight the padding; the padding
-               is the thing that actually holds that space.
-
-     Expressed over the padding rather than as fixed pixels so both hold
-     their proportion as the margin scales with the viewport. */
   margin-left: calc(var(--bar-inset) - var(--page-pad-left));
   margin-right: calc(var(--bar-inset) - (var(--page-pad-right) - var(--nav-width)));
+}
+
+/* The bar began with the page's full reading margin and the full section gap,
+   which left the wordmark floating; then with the grid's 12px and 5px, which
+   put it tight into the corner. This is between the two. */
+.topBar {
   margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
 }
