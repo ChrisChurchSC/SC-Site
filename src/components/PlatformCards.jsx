@@ -278,10 +278,14 @@ function DashPreview() {
 /**
  * Agents: what each one reads from, and one of them refusing.
  *
- * THE KNOWLEDGE BASE IS THE POINT OF THE CARD. "Trained on your brand, not
- * on the internet" is a claim about where the words come from, and the only
- * way to show it is to show the sources attached to each agent. A list of
- * agent names alone could describe any wrapper around a chat model.
+ * A CONNECTED SYSTEM, NOT A LIST. Six agents wired to one repository — the
+ * ring says the thing the card is actually claiming, which is that they all
+ * read from the same place. A column of names could describe any wrapper
+ * around a chat model, and a column of names with files under each said the
+ * agents have sources without saying they share them.
+ *
+ * THE SOURCES ARE STILL WRITTEN OUT, under the ring, because a graph shows
+ * that there is a knowledge base and cannot show what is in it.
  *
  * THE FILENAMES ARE THE REPOSITORY'S OWN. Strategy/positioning.md and
  * Verbal/tone-of-voice.md are named in the brand's notes; verticals/ is a
@@ -290,9 +294,9 @@ function DashPreview() {
  * and Verbal, but the exact filenames are not confirmed — they are the
  * plausible half of this panel, and the one to check before it ships.
  *
- * SIX EXIST, THREE ARE SHOWN. The other three — design-critic, sales-analyst
- * and studio-ops — are real too; the card is 4:5 and three agents with their
- * sources say what six names in a list would not.
+ * ALL SIX ARE ON THE RING NOW. The chip layout only had room for three; the
+ * ring holds every one of them, which matters because "six trained" is a
+ * claim the panel should be able to back up by counting.
  *
  * IT ENDS ON A REFUSAL. [CLAIM NEEDED: …] is a marker these agents genuinely
  * write, and the brand's notes call those markers the product rather than
@@ -301,28 +305,79 @@ function DashPreview() {
  * this one marks the gap and hands it back.
  */
 const AGENTS = [
-  { name: 'brand-strategist', files: ['positioning.md', 'audience.md', 'proof-points.md'] },
-  { name: 'comms-writer', files: ['tone-of-voice.md', 'copy-standards.md'] },
+  { name: 'brand-strategist', files: ['positioning.md', 'audience.md'] },
+  { name: 'comms-writer', files: ['tone-of-voice.md'], drafting: true },
   { name: 'media-strategist', files: ['verticals/', 'metrics.csv'] },
+  { name: 'design-critic', files: [] },
+  { name: 'sales-analyst', files: [] },
+  { name: 'studio-ops', files: [] },
 ]
 
+/* Ring geometry. Computed from the roster rather than hand-placed, so a
+   seventh agent redistributes the ring instead of landing on top of a
+   neighbour. Starts at the top and goes clockwise. */
+const RING = { w: 340, h: 200, cx: 170, cy: 100, r: 72, hub: 20 }
+
+function ringNode(i, total) {
+  const angle = (i / total) * Math.PI * 2 - Math.PI / 2
+  return { x: RING.cx + Math.cos(angle) * RING.r, y: RING.cy + Math.sin(angle) * RING.r, angle }
+}
+
 function AgentsPreview() {
+  const nodes = AGENTS.map((a, i) => ({ ...a, ...ringNode(i, AGENTS.length) }))
+  const sources = [...new Set(AGENTS.flatMap(a => a.files))]
+
   return (
     <div className={styles.panel}>
-      <span className={styles.panelLabel}>6 trained · reading from</span>
+      <span className={styles.panelLabel}>{AGENTS.length} trained · one source</span>
 
-      <div className={styles.agentList}>
-        {AGENTS.map(({ name, files }) => (
-          <span key={name} className={styles.agentBlock}>
-            <span className={styles.agentName}>{name}</span>
-            <span className={styles.agentFiles}>
-              {files.map(file => (
-                <span key={file} className={styles.agentFile}>{file}</span>
-              ))}
-            </span>
-          </span>
+      {/* Decorative: the roster and the sources are both written out below in
+          real text, so nothing here is the only copy of anything. */}
+      <svg
+        className={styles.graph}
+        viewBox={`0 0 ${RING.w} ${RING.h}`}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+      >
+        {/* Edges first, so the nodes sit on top of them rather than being
+            crossed by their own lines. */}
+        {nodes.map(({ name, x, y }) => (
+          <line key={name} className={styles.edge} x1={RING.cx} y1={RING.cy} x2={x} y2={y} />
         ))}
-      </div>
+
+        <circle className={styles.hub} cx={RING.cx} cy={RING.cy} r={RING.hub} />
+        <text className={styles.hubText} x={RING.cx} y={RING.cy + 2.4} textAnchor="middle">SC-Brand</text>
+
+        {nodes.map(({ name, x, y, drafting }) => {
+          /* Labels lean away from the hub: the two on the flanks read
+             outward, the ones at top and bottom are centred. Anything else
+             puts a name across the ring. */
+          const side = Math.abs(x - RING.cx) < 1 ? 'mid' : x > RING.cx ? 'right' : 'left'
+          const anchor = side === 'mid' ? 'middle' : side === 'right' ? 'start' : 'end'
+          const dx = side === 'mid' ? 0 : side === 'right' ? 9 : -9
+          const dy = side === 'mid' ? (y < RING.cy ? -11 : 15) : 3
+
+          return (
+            <g key={name}>
+              <circle
+                className={drafting ? styles.nodeLive : styles.node}
+                cx={x}
+                cy={y}
+                r={4}
+              />
+              <text className={styles.nodeText} x={x + dx} y={y + dy} textAnchor={anchor}>{name}</text>
+            </g>
+          )
+        })}
+      </svg>
+
+      {/* The knowledge base, as text. The graph says the agents are wired to
+          one source; this says what is in it. */}
+      <span className={styles.agentFiles}>
+        {sources.map(file => (
+          <span key={file} className={styles.agentFile}>{file}</span>
+        ))}
+      </span>
 
       {/* The sentence around the marker is deliberately dull. The marker is
           the content. */}
@@ -367,8 +422,21 @@ function ReviewsPreview() {
   const pending = APPROVALS.filter(a => !a.done).length
 
   return (
-    <div className={styles.panel}>
-      <span className={styles.panelLabel}>{pending} awaiting a person</span>
+    /* Framed and punched in, like the repository panel — approvals are a
+       screen in the product, so this one is a window rather than a graphic.
+       Agents and Measurement stay frameless: there is no agents screen and
+       no dashboard, and dressing those as apps would claim screens that do
+       not exist.
+
+       Zoomed one step less than the repository. That panel is a wide window
+       in a 21:9 card; this is a narrow one in a 4:5 card, where the same 32%
+       and the same overhang would eat the meta line under every task. */
+    <div className={`${styles.ui} ${styles.uiZoomed} ${styles.uiZoomTight}`}>
+      <div className={styles.uiTop}>
+        <span className={styles.uiCrumb}>Approvals</span>
+        <span className={styles.uiSlash}>/</span>
+        <span className={styles.uiCrumbMuted}>{pending} pending</span>
+      </div>
 
       <div className={styles.review}>
         {APPROVALS.map(({ id, title, by, done }) => (

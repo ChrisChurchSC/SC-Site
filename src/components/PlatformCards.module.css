@@ -471,6 +471,14 @@
    the same 120px overhang would eat most of a panel that was drawn to fit
    there in the first place — the close-up is a treatment for a wide card
    showing a wide window, not a house style. */
+/* A gentler punch for a narrow panel in a 4:5 card. At the repository's
+   32% and 120px the approvals list lost the "proposed by …" line under every
+   task, which is the half that says a person is involved. */
+.uiZoomTight {
+  --zoom: 1.16;
+  --overhang: 40px;
+}
+
 .uiZoomed {
   /* ZOOMED AND CROPPED, like a close-up of a product rather than a whole
      window shrunk to fit.
@@ -489,7 +497,11 @@
 
      Transforms do not affect layout, so the panel still measures its
      unscaled self and the three-column grid inside it is unchanged. */
-  transform: scale(1.32);
+  --zoom: 1.32;
+  /* How far past the crop the panel is laid out. See below for why it is not
+     zero and not left to chance. */
+  --overhang: 120px;
+  transform: scale(var(--zoom));
   transform-origin: top left;
 
   /* WHAT THE CROP IS ALLOWED TO EAT. At width: 100% the panel laid itself
@@ -503,7 +515,7 @@
      are whole, and what runs off the edge is a panel the eye reads as
      continuing rather than as missing. 100% / 1.32 is exactly the width the
      crop shows; the 120px is the overhang. */
-  width: calc(100% / 1.32 + 120px);
+  width: calc(100% / var(--zoom) + var(--overhang));
 }
 
 /* ── THE THREE SMALL PREVIEWS ──────────────────────────────────────────────
@@ -636,22 +648,11 @@
 }
 
 /* ── Agents ── */
-.agentList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-  min-height: 0;
-}
 
-.agentBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
 
-.agentName { color: rgba(255, 255, 255, 0.72); }
+
+
+
 
 /* The sources, as chips. Wrapping rather than truncating: a half-shown
    filename is worse than a second line, and the count of them is part of
@@ -660,6 +661,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  flex: none;
 }
 
 .agentFile {
@@ -705,6 +707,9 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  /* Padding is the panel's own again — it is inside a window rather than
+     sitting on the card. */
+  padding: 14px 15px 15px;
   flex: 1;
   min-height: 0;
 }
@@ -763,4 +768,55 @@
   font-size: 9px;
   color: rgba(255, 255, 255, 0.32);
   line-height: 1.4;
+}
+
+/* ── The agents ring ───────────────────────────────────────────────────────
+   Six agents wired to one repository. The SVG scales to the card rather than
+   being sized in pixels, so the ring stays a ring at any width and the type
+   inside it scales with everything else — which is why the label sizes below
+   are in user units, not px. */
+.graph {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: visible;
+}
+
+.edge {
+  stroke: rgba(255, 255, 255, 0.13);
+  stroke-width: 1;
+}
+
+/* The hub is drawn, not filled: it is the thing they read from, and a solid
+   disc at this size reads as another node rather than as the centre. */
+.hub {
+  fill: rgba(223, 78, 214, 0.08);
+  stroke: var(--pink, #df4ed6);
+  stroke-width: 1.2;
+}
+
+.hubText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.04em;
+  fill: rgba(255, 255, 255, 0.82);
+}
+
+.node {
+  fill: #0d0d0d;
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 1.2;
+}
+
+/* The one currently drafting. Filled rather than ringed, so the difference
+   reads at four pixels across. */
+.nodeLive {
+  fill: var(--pink, #df4ed6);
+  stroke: none;
+}
+
+.nodeText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7.5px;
+  fill: rgba(255, 255, 255, 0.55);
 }
