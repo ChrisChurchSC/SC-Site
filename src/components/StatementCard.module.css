@@ -161,8 +161,27 @@
 .bare {
   background: none;
   border-radius: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: clamp(52px, 7vw, 104px) 0 clamp(52px, 7vw, 104px);
+  position: relative;
+}
+
+/* The rule runs the full width of the page, not the width of the column it
+   sits in. A border-top would stop at the section's own edges — inset by the
+   page's left margin and cut short by the nav column on the right — which
+   reads as a rule that ran out rather than a division of the page.
+
+   Centred on the section and pulled out to 100vw to escape every ancestor's
+   padding, so it does not have to know what that padding currently is. */
+.bare::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {

@@ -23,6 +23,15 @@
      occupies, plus the same increase, so the inset reads as even. */
   padding-left: clamp(20px, 3.4vw, 60px);
   padding-right: calc(312px + clamp(8px, 1.4vw, 28px));
+  /* The full-width rules in StatementCard's .bare are 100vw wide to escape
+     this padding. On a platform with overlay scrollbars — macOS, where this
+     was built — 100vw equals the client width and nothing overhangs. With
+     classic scrollbars it is WIDER by the scrollbar, and each rule would put
+     a horizontal scrollbar on the page.
+
+     clip rather than hidden: hidden would make this a scroll container and
+     break position:sticky for anything inside it later. */
+  overflow-x: clip;
 }
 
 @media (max-width: 900px) {
