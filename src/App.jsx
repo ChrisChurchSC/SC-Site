@@ -46,7 +46,7 @@ function ScrollToTop() {
 
 function ChromeGate({ children }) {
   const { pathname } = useLocation()
-  const fullBleed = pathname === '/v2' || pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
+  const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
   if (fullBleed) return null
   return children
 }
@@ -54,7 +54,8 @@ function ChromeGate({ children }) {
 function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
-  if (location.pathname === '/' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
+  // /v2 is a homepage, so it gets the homepage treatment: no back button.
+  if (location.pathname === '/' || location.pathname === '/v2' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {

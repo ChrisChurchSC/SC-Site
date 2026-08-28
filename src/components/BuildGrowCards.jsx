@@ -56,10 +56,17 @@ const CARDS = [
   },
 ]
 
-export default function BuildGrowCards() {
+/**
+ * Copy is passed in rather than fixed, so a homepage variant can carry
+ * different words through the same two cards. Defaults are the live
+ * homepage's, so <BuildGrowCards /> is unchanged. A card may carry an
+ * optional `price` line, and the section an optional `footnote`.
+ */
+export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
   return (
+    <>
     <section className={styles.row}>
-      {CARDS.map(({ id, name, body, cta, href, media }) => (
+      {cards.map(({ id, name, body, price, cta, href, media }) => (
         <NavLink
           key={id}
           to={href}
@@ -83,9 +90,12 @@ export default function BuildGrowCards() {
           ))}
           <h2 className={styles.name}>{name}</h2>
           <p className={styles.body}>{body}</p>
+          {price && <p className={styles.price}>{price}</p>}
           <span className={styles.cta}>{cta} →</span>
         </NavLink>
       ))}
     </section>
+    {footnote && <p className={styles.footnote}>{footnote}</p>}
+    </>
   )
 }

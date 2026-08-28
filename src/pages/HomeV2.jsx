@@ -1,60 +1,64 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import styles from './HomeV2.module.css'
-import LazyVideo from '../components/LazyVideo'
-import ContactCTA from '../components/ContactCTA'
-import { useCalDrawer } from '../context/CalDrawerContext'
+import { useState, useEffect, useRef } from 'react'
+import styles from './Home.module.css'
+import LogoWordmark from '../components/LogoWordmark'
+import { useNav } from '../context/NavContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
-import { clientLogos } from '../data/clientLogos'
-import { featuredCaseStudies } from '../data/featuredCaseStudies'
-import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
+import ClientStrip from '../components/ClientStrip'
+import TestimonialStrip from '../components/TestimonialStrip'
+import ContactCTA from '../components/ContactCTA'
+import StatementCard from '../components/StatementCard'
+import BuildGrowCards from '../components/BuildGrowCards'
+import AudienceCards from '../components/AudienceCards'
+import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
 
 /**
- * The homepage, restructured to the copy order in the "Super-Conscious
- * Homepage" design canvas: a copy-led hero, then clients, then who we are,
- * then the offer, then who it is for, then the reel, then proof, then work,
- * then the ask.
+ * The homepage with the design canvas's MESSAGING — its words, in its order.
  *
- * This is a SECOND homepage at /v2, not a replacement. The live one at / is
- * untouched, so the two can be compared side by side before either wins.
- * Promoting this one is a one-line change in App.jsx.
+ * Nothing about the page's design changes. Same grid, same cards, same client
+ * strip, same reel, same testimonial marquee, same featured work, same
+ * contact block, and the site's own nav rather than a bar of its own. It
+ * imports Home.module.css rather than a stylesheet of its own, because there
+ * is nothing here to style that the homepage does not already style.
  *
- * WHY THIS DOES NOT REUSE StatementCard, ClientStrip, BuildGrowCards,
- * TestimonialStrip AND FeaturedCaseStudies. Those five carry the copy the
- * live homepage ships, and this version was asked to carry the canvas's copy
- * verbatim instead. Editing them in place would have rewritten the live
- * homepage as a side effect of building a variant. So the sections are
- * written out here, against the same data files, and the shared components
- * are left alone. ContactCTA IS reused, because it already takes its copy as
- * props — and because the site is meant to have exactly one submission path.
+ * What actually differs from / is three things:
  *
- * The order below is the canvas's, and the differences from the live page
- * are: the reel moves out of the hero to its own section two thirds down,
- * and "Who we work with" is new.
+ *   1. The order. The canvas leads on words instead of the reel, and the reel
+ *      moves down to sit after the offer — so the page says what it is before
+ *      it shows what it made.
+ *   2. The words. The statement, the two card bodies, and the closing line
+ *      are the canvas's. They are passed in as props; the components keep the
+ *      live homepage's copy as their defaults, so / is untouched.
+ *   3. One new section — Who we work with — which the live page has no
+ *      equivalent of. See AudienceCards.
+ *
+ * Promoting this is a one-line change: point path="/" at HomeV2.
  */
+
+let didLoad = false
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
 
-/** Canvas copy, verbatim. */
-const NAV = [
-  { label: 'Build', href: '/services' },
-  { label: 'Grow', href: '/services' },
-  { label: 'Work', href: '/work' },
-  { label: 'About', href: '/about-us' },
-]
+/* ── The canvas's copy ─────────────────────────────────────────────────── */
 
-const WHO_WE_ARE = [
+/* The hero. Carries the h1, which is why the statement below it is an h2 —
+   the live homepage has that the other way round because it has no headline
+   above the statement. */
+const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
+const HERO = "We're Super-Conscious. We build and grow brands."
+
+const WHO_WE_ARE = 'We are creatives who also do marketing.'
+const WHO_WE_ARE_SUPPORT = [
   "Super-Conscious is your outsourced creative and marketing department. One embedded team handles both brand creation and growth media, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign.",
   "You'll know your team, and you'll have access to them. No pooled or anonymous labor, no rotating bench — the same people, every time.",
   "Our thinking doesn't sit in a deck, either. Strategy goes straight into brand, creative, and paid media — then we test it against the data and adjust. And while AI helps us move faster, it doesn't do the thinking: every idea, every asset, is 100% ours.",
 ]
 
-/* The two halves of the offer. The price lines are the canvas's own; see the
-   note in the page report about "FROM $4,500/MO · HOURLY RETAINER" naming two
-   different billing models in one line. Left verbatim rather than quietly
-   corrected, because which one is true is a pricing decision, not a typo. */
+/* Build and Grow, with the canvas's price lines added. "From $4,500/mo ·
+   Hourly retainer" is kept exactly as written although it names two billing
+   models in one line: which of them is true is a pricing decision, not a typo
+   to quietly correct here. Media is the live homepage's, unchanged. */
 const OFFER = [
   {
     id: 'build',
@@ -76,272 +80,188 @@ const OFFER = [
   },
 ]
 
-const AUDIENCES = [
-  {
-    id: 'new',
-    name: 'New',
-    body: 'A brand that needs to be defined from scratch: identity, visual system, voice.',
-    cta: 'See work for new brands',
-  },
-  {
-    id: 'pivoting',
-    name: 'Pivoting',
-    body: 'An existing brand reworking what it has — a facelift, or a full-scale overhaul to retain and amplify relevancy.',
-    cta: 'See work for pivots',
-  },
-  {
-    id: 'underdog',
-    name: 'Underdog',
-    body: 'A brand in a crowded category that needs to stand out.',
-    cta: 'See work for underdogs',
-  },
-]
+const OFFER_FOOTNOTE = 'Most clients do both — but you can start wherever you are.'
 
-/* THE ATTRIBUTIONS ARE NOT READY, AND THAT IS HANDLED THE WAY THE REST OF THE
-   SITE ALREADY HANDLES IT. All three quotes came off the canvas attributed to
-   "[CLIENT NAME]". TestimonialStrip established the rule for this: a
-   bracketed name renders on the dev server so the byline can be reviewed with
-   something in it, and is dropped from any build, because an unattributed
-   quote is weak proof but a fabricated attribution is not proof at all.
-   import.meta.env.DEV is false in every build, so this cannot ship by being
-   forgotten. Fill in `person` and it renders for real. */
-const PROOF = [
-  {
-    quote: "They've been our invisible production team for three years. They ship to our standards, communicate like part of the team, and never once tried to go around us to the client.",
-    person: '[CLIENT NAME]',
-  },
-  {
-    quote: 'Super-Conscious built the brand, then stayed and built the product. Years in, they still feel like our team.',
-    person: '[CLIENT NAME]',
-  },
-  {
-    quote: "They've become an extension of our marketing team. The content keeps shipping, the campaigns keep working, and the numbers keep moving.",
-    person: '[CLIENT NAME]',
-  },
-]
-
-const isPlaceholder = (s) => !s || /\[|\]/.test(s)
-const isVideo = (src) => /\.(mp4|webm|mov)$/i.test(src)
-
-function Eyebrow({ children }) {
-  return <p className={styles.eyebrow}>{children}</p>
-}
-
-/** The hero's concentric arcs. Decorative, so it is hidden from the tree. */
-function HeroMark() {
-  return (
-    <svg className={styles.heroMark} viewBox="0 0 320 320" fill="none" aria-hidden="true">
-      <line x1="160" y1="0" x2="160" y2="52" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-      <circle cx="160" cy="160" r="148" stroke="currentColor" strokeWidth="1" opacity="0.35" />
-      <circle cx="160" cy="160" r="112" stroke="currentColor" strokeWidth="1" opacity="0.22" />
-      <path d="M160 12 A148 148 0 0 1 308 160" stroke="var(--v2-accent)" strokeWidth="1.5" opacity="0.9" />
-      <path d="M48 160 A112 112 0 0 0 160 272" stroke="currentColor" strokeWidth="1" opacity="0.4" />
-      <circle cx="160" cy="160" r="3" fill="var(--v2-accent)" />
-    </svg>
-  )
-}
+const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
 export default function HomeV2() {
-  const cal = useCalDrawer()
+  const { menuOpen, setMenuOpen } = useNav()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
-  // noindex: this is a variant for comparison, not a page to be found.
-  useMeta({ title: 'Super Conscious — homepage v2', path: '/v2', noindex: true })
+  // noindex: a messaging variant to look at, not a page to be found.
+  useMeta({ title: 'Super Conscious — homepage messaging v2', path: '/v2', noindex: true })
 
-  const [index, setIndex] = useState(featuredCaseStudies.length - 1) // Wonderwerk leads, as on the canvas
-  const study = featuredCaseStudies[index]
-  const step = (n) => setIndex((i) => (i + n + featuredCaseStudies.length) % featuredCaseStudies.length)
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
+
+  const [reelOpen, setReelOpen] = useState(false)
+  const [playing, setPlaying] = useState(true)
+  const [muted, setMuted] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const videoRef = useRef(null)
+
+  const closeReel = () => {
+    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 }
+    setReelOpen(false)
+    setPlaying(true)
+    setProgress(0)
+  }
+
+  const togglePlay = () => {
+    if (playing) { videoRef.current.pause(); setPlaying(false) }
+    else { videoRef.current.play(); setPlaying(true) }
+  }
+
+  const toggleMute = () => {
+    videoRef.current.muted = !muted
+    setMuted(m => !m)
+  }
+
+  const handleScrub = (e) => {
+    const val = Number(e.target.value)
+    if (videoRef.current?.duration) {
+      videoRef.current.currentTime = (val / 100) * videoRef.current.duration
+    }
+    setProgress(val)
+  }
+
+  const handleTimeUpdate = () => {
+    const v = videoRef.current
+    if (v?.duration) setProgress((v.currentTime / v.duration) * 100)
+  }
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') closeReel() }
+    if (reelOpen) window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [reelOpen])
+
+  useEffect(() => {
+    document.body.classList.toggle('reel-open', reelOpen)
+    return () => document.body.classList.remove('reel-open')
+  }, [reelOpen])
 
   return (
     <main className={styles.main}>
 
-      {/* ── Top bar ─────────────────────────────────────────────── */}
-      <header className={styles.bar}>
-        <NavLink to="/" className={styles.wordmark}>Super~Conscious</NavLink>
-        <nav className={styles.barNav}>
-          {NAV.map(({ label, href }) => (
-            <NavLink key={label} to={href} className={styles.barLink}>{label}</NavLink>
-          ))}
-        </nav>
-        <button className={styles.barCta} onClick={cal.open}>Book a Discovery Call</button>
-      </header>
-
-      {/* ── Hero ────────────────────────────────────────────────── */}
-      <section className={styles.hero}>
-        <div className={styles.heroCopy}>
-          <Eyebrow>Creative + marketing, one embedded team</Eyebrow>
-          <h1 className={styles.heroHeading}>We're Super-Conscious.<br />We build and grow brands.</h1>
-          <div className={styles.heroActions}>
-            <button className={styles.solidBtn} onClick={cal.open}>Book a Discovery Call →</button>
-            <NavLink to="/work" className={styles.textLink}>See our work</NavLink>
+      {/* Intro card — unchanged from the live homepage */}
+      <section className={`${styles.row12} ${styles.introRow}`}>
+        <div className={styles.cornerNote} style={{ gridColumn: '1 / span 12' }}>
+          <div className={styles.cornerWordmark}>
+            <LogoWordmark fill="rgba(255,255,255,0.55)" />
+          </div>
+          <div className={styles.cornerTextStack}>
+            {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>
-        <HeroMark />
+        <button
+          className={styles.menuCard}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Toggle menu"
+        >
+          <span className={`${styles.menuLine} ${menuOpen ? styles.menuLineOpen : ''}`} />
+          <span className={`${styles.menuLine} ${menuOpen ? styles.menuLineOpen : ''}`} />
+        </button>
       </section>
 
-      {/* ── Select clients ──────────────────────────────────────── */}
-      <section className={styles.section}>
-        <Eyebrow>Select clients</Eyebrow>
-        <ul className={styles.clients}>
-          {clientLogos
-            .filter((c) => !c.slug || !HIDDEN_SLUGS.has(c.slug))
-            .map(({ name }) => <li key={name} className={styles.client}>{name}</li>)}
-        </ul>
-      </section>
+      {/* 1 — The canvas leads on the claim, not the reel */}
+      <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" />
 
-      {/* ── Who we are ──────────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>Who we are</Eyebrow>
-        <div className={styles.splitBody}>
-          <h2 className={styles.sectionHeading}>We are creatives who also do marketing.</h2>
-          {WHO_WE_ARE.map((p) => <p key={p.slice(0, 24)} className={styles.prose}>{p}</p>)}
-        </div>
-      </section>
+      {/* 2 — Who we have done it for */}
+      <ClientStrip />
 
-      {/* ── How we work ─────────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>How we work</Eyebrow>
-        <div className={styles.splitBody}>
-          <div className={styles.offer}>
-            {OFFER.map(({ id, name, body, price, cta, href, media }) => (
-              <NavLink key={id} to={href} className={styles.offerCard}>
-                {isVideo(media)
-                  ? <span className={styles.mediaLayer} aria-hidden="true"><LazyVideo src={media} className={styles.mediaVideo} /></span>
-                  : <span className={styles.media} style={{ backgroundImage: `url(${media})` }} aria-hidden="true" />}
-                <h3 className={styles.offerName}>{name}</h3>
-                <p className={styles.offerBody}>{body}</p>
-                <p className={styles.offerPrice}>{price}</p>
-                <span className={styles.cardCta}>{cta} →</span>
-              </NavLink>
-            ))}
-          </div>
-          <p className={styles.footnote}>Most clients do both — but you can start wherever you are.</p>
-        </div>
-      </section>
+      {/* 3 — Who we are, in full */}
+      <StatementCard
+        eyebrow="[ Who We Are ]"
+        statement={WHO_WE_ARE}
+        support={WHO_WE_ARE_SUPPORT}
+        as="h2"
+      />
 
-      {/* ── Who we work with ────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>Who we work with</Eyebrow>
-        <div className={`${styles.splitBody} ${styles.audiences}`}>
-          {AUDIENCES.map(({ id, name, body, cta }) => (
-            <div key={id} className={styles.audience}>
-              <h3 className={styles.audienceName}>{name}</h3>
-              <p className={styles.audienceBody}>{body}</p>
-              {/* Points at /work rather than a filtered view: the three
-                  filtered routes the canvas implies do not exist yet. A link
-                  to a page that is not there is worse than a broader one. */}
-              <NavLink to="/work" className={styles.textLink}>{cta} →</NavLink>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* 4 — The offer, in two halves, now with the price lines */}
+      <BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} />
 
-      {/* ── Reel ────────────────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>Reel</Eyebrow>
-        <div className={styles.splitBody}>
-          {/* The canvas has a "[ SHOWREEL PLACEHOLDER — FINAL CUT TBD ]" box
-              here. The site has a real reel, so it plays instead — a
-              placeholder standing in front of finished work would be the one
-              kind of dishonesty this page does not need. */}
+      {/* 5 — Who it is for. The one section the live page has no version of */}
+      <AudienceCards />
+
+      {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
+      <section className={styles.row12}>
+        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 12', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
           <video
-            className={styles.reel}
+            className={styles.heroReel}
             src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
-            poster="/reel-preview.gif"
-            controls
+            poster={assetUrl('/reel-preview.gif')}
+            autoPlay
+            muted
+            loop
             playsInline
-            preload="none"
           />
+          <span className={styles.label}>Showreel</span>
+          <button className={styles.playBtn} aria-label="Play showreel with sound">
+            <svg width="8" height="9" viewBox="0 0 10 12" fill="none">
+              <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
+            </svg>
+            <span>Watch with sound</span>
+          </button>
         </div>
       </section>
 
-      {/* ── Proof ───────────────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>Proof</Eyebrow>
-        <div className={`${styles.splitBody} ${styles.quotes}`}>
-          {PROOF.map(({ quote, person }) => (
-            <figure key={quote.slice(0, 24)} className={styles.quoteCard}>
-              <blockquote className={styles.quote}>“{quote}”</blockquote>
-              {isPlaceholder(person)
-                ? (import.meta.env.DEV && <figcaption className={styles.quoteByPlaceholder}>— {person}</figcaption>)
-                : <figcaption className={styles.quoteBy}>— {person}</figcaption>}
-            </figure>
-          ))}
-        </div>
-      </section>
+      {/* 7 — Proof, then 8 — the work it is about */}
+      <TestimonialStrip />
+      <FeaturedCaseStudies />
 
-      {/* ── Featured work ───────────────────────────────────────── */}
-      <section className={`${styles.section} ${styles.split}`}>
-        <Eyebrow>Featured work</Eyebrow>
-        <div className={styles.splitBody}>
-          <div className={styles.study}>
-            <div className={styles.studyMedia}>
-              {study.media
-                ? <LazyVideo src={study.media} className={styles.studyVideo} />
-                : <span className={styles.studyEmpty} aria-hidden="true" />}
-              <div className={styles.studyCaption}>
-                <p className={styles.studyType}>{study.type}</p>
-                <p className={styles.studyName}>{study.name}</p>
-              </div>
-            </div>
-            <div className={styles.studyMeta}>
-              <dl className={styles.stats}>
-                {study.stats.map(({ value, label }) => (
-                  <div key={label} className={styles.stat}>
-                    <dt className={styles.statValue}>{value}</dt>
-                    <dd className={styles.statLabel}>{label}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className={styles.studyNote}>More case studies in progress.</p>
-              {study.href
-                ? <NavLink to={study.href} className={styles.textLink}>Read the case study →</NavLink>
-                : <NavLink to="/work" className={styles.textLink}>View all work →</NavLink>}
-            </div>
-          </div>
-          <div className={styles.carouselBar}>
-            <div className={styles.dots}>
-              {featuredCaseStudies.map((c, i) => (
-                <button
-                  key={c.slug}
-                  className={`${styles.dot}${i === index ? ' ' + styles.dotOn : ''}`}
-                  onClick={() => setIndex(i)}
-                  aria-label={`Show ${c.name}`}
-                  aria-current={i === index || undefined}
-                />
-              ))}
-            </div>
-            <div className={styles.arrows}>
-              <button className={styles.arrow} onClick={() => step(-1)} aria-label="Previous case study">‹</button>
-              <button className={styles.arrow} onClick={() => step(1)} aria-label="Next case study">›</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 9 — The ask */}
+      <ContactCTA sub={CLOSING} />
 
-      {/* ── The ask ─────────────────────────────────────────────── */}
-      <ContactCTA sub="It might change your life. At minimum, we can answer your burning marketing questions." />
-
-      {/* ── Footer ──────────────────────────────────────────────── */}
-      <footer className={styles.footer}>
-        <div>
-          <p className={styles.footWordmark}>Super~Conscious</p>
-          <p className={styles.footTag}>Build your brand. Then grow it.</p>
-        </div>
-        <div className={styles.footCols}>
-          <div className={styles.footCol}>
-            <Eyebrow>Company</Eyebrow>
-            <NavLink to="/work" className={styles.footLink}>Work</NavLink>
-            <NavLink to="/about-us" className={styles.footLink}>About</NavLink>
-            <NavLink to="/thoughts" className={styles.footLink}>Thoughts</NavLink>
-            <NavLink to="/about-us" className={styles.footLink}>Careers</NavLink>
+      {reelOpen && (
+        <div className={styles.reelOverlay} onClick={closeReel}>
+          <button className={styles.reelClose} onClick={closeReel}>Close</button>
+          <video
+            ref={videoRef}
+            src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
+            autoPlay
+            playsInline
+            className={styles.reelVideo}
+            onClick={e => e.stopPropagation()}
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={() => setPlaying(false)}
+          />
+          <div className={styles.reelControls} onClick={e => e.stopPropagation()}>
+            <button className={styles.reelCtrlBtn} onClick={togglePlay}>
+              {playing ? (
+                <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="0" y="0" width="3" height="12" rx="1" fill="currentColor"/>
+                  <rect x="7" y="0" width="3" height="12" rx="1" fill="currentColor"/>
+                </svg>
+              ) : (
+                <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
+                </svg>
+              )}
+            </button>
+            <input
+              type="range"
+              className={styles.reelScrub}
+              min="0" max="100"
+              value={progress}
+              onChange={handleScrub}
+              style={{ background: `linear-gradient(to right, rgba(255,255,255,0.8) ${progress}%, rgba(255,255,255,0.18) ${progress}%)` }}
+            />
+            <button className={styles.reelCtrlBtn} onClick={toggleMute}>
+              {muted ? (
+                <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+                  <path d="M0 4H3L7 0V12L3 8H0V4Z" fill="currentColor"/>
+                  <path d="M9.5 4L13.5 8M13.5 4L9.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              ) : (
+                <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+                  <path d="M0 4H3L7 0V12L3 8H0V4Z" fill="currentColor"/>
+                  <path d="M9 3C10.3 4.1 11 5.5 11 7C11 8.5 10.3 9.9 9 11" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                </svg>
+              )}
+            </button>
           </div>
-          <div className={styles.footCol}>
-            <Eyebrow>Connect</Eyebrow>
-            <a href="mailto:hello@super-conscious.studio" className={styles.footLink}>hello@super-conscious.studio</a>
-            <a href="https://www.linkedin.com/company/super-conscious/" target="_blank" rel="noreferrer" className={styles.footLink}>LinkedIn</a>
-          </div>
         </div>
-      </footer>
+      )}
 
     </main>
   )

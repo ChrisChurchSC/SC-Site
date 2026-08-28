@@ -174,7 +174,32 @@
    these only need lifting out of the layer the image occupies. */
 .cardMedia .name,
 .cardMedia .body,
+.cardMedia .price,
 .cardMedia .cta {
   position: relative;
   z-index: 1;
+}
+
+/* Optional price line and footnote, used by the homepage variant. Both are
+   absent from the live homepage, so these rules do nothing there. The price
+   sits on the card's own label treatment — same mono, same tracking as the
+   labels everywhere else on the site — rather than a new one. */
+.price {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 4px 0 0;
+}
+
+.cardMedia .price { color: rgba(255, 255, 255, 0.55); }
+
+.footnote {
+  font-family: 'Signifier', Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  padding: 2px 0 18px;
+  color: rgba(255, 255, 255, 0.42);
+  margin: 14px 0 0;
 }

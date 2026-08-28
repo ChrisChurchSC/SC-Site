@@ -21,12 +21,28 @@ import styles from './StatementCard.module.css'
 const STATEMENT = 'Super-Conscious exists to level up challenger brands by combining world-class creative with analytics-driven marketing at an accessible price.'
 const SUPPORT = "One embedded team handles both brand creation/evolution and growth media and content tactics, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign."
 
-export default function StatementCard() {
+/**
+ * Copy is passed in rather than fixed, so a homepage variant can carry
+ * different words through the same card. The defaults are the live
+ * homepage's copy, so rendering <StatementCard /> is unchanged.
+ *
+ * `as` exists because the card is the page's h1 on the live homepage, and a
+ * variant that puts a headline above it needs this one to be an h2 — two h1s
+ * is the fault assert-build.mjs fails the build on, in the other direction.
+ * `support` accepts a string or an array of paragraphs.
+ */
+export default function StatementCard({
+  eyebrow = '[ Who We Are ]',
+  statement = STATEMENT,
+  support = SUPPORT,
+  as: Heading = 'h1',
+}) {
+  const paras = Array.isArray(support) ? support : [support]
   return (
     <section className={styles.card}>
-      <p className={styles.eyebrow}>[ Who We Are ]</p>
-      <h1 className={styles.statement}>{STATEMENT}</h1>
-      <p className={styles.support}>{SUPPORT}</p>
+      <p className={styles.eyebrow}>{eyebrow}</p>
+      <Heading className={styles.statement}>{statement}</Heading>
+      {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}
     </section>
   )
 }
