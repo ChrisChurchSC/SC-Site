@@ -70,6 +70,32 @@ const QUOTES_FALLBACK = [
   },
 ]
 
+/* THE COMPOSITION IS FIXED, NOT COMPUTED.
+ *
+ * The first version interleaved tiles on a modulo and gave every one the same
+ * footprint, which produced a neat grid — and a neat grid is the one thing
+ * the reference is not. What makes that wall read is irregularity: a wide
+ * quote beside a tall number beside two small marks, packed dense so the eye
+ * has no row to follow.
+ *
+ * You cannot get that from a rule that treats every tile the same, so the
+ * layout is a written composition. Each entry says what it is and how much
+ * room it takes; the clients fill in around them in order.
+ *
+ * Spans are in a 104px row unit — see the stylesheet. */
+const COMPOSITION = [
+  /* Quotes get three columns, not two. At two they were ~195px wide and the
+     text overran the tile and was cut by its overflow — a clipped quote is
+     worse than no quote, because it looks like the page broke rather than
+     like an excerpt. Wide and short is also what the reference does with
+     them: the eye reads a quote across, not down. */
+  { at: 3, kind: 'quote', q: 0, w: 3, h: 2 },
+  { at: 7, kind: 'stat', s: 0, w: 1, h: 2 },
+  { at: 11, kind: 'feature', q: 1, s: 1, w: 2, h: 2 },
+  { at: 15, kind: 'quote', q: 2, w: 3, h: 2 },
+  { at: 19, kind: 'stat', s: 2, w: 1, h: 1 },
+]
+
 export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   const { data } = useSanity(TESTIMONIALS_QUERY)
 
@@ -77,27 +103,19 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   const live = (data ?? []).filter(t => t?.quote)
   const quotes = (live.length ? live : QUOTES_FALLBACK).slice(0, 3)
 
-  /* One stat per case study rather than three from one, so the row reads as
-     three things the work moved rather than one measure repeated. */
+  /* One measure per case study rather than three off one, so the numbers read
+     as three things the work moved. */
   const stats = featuredCaseStudies
-    .slice(0, 2)
-    .map((cs, i) => ({ ...cs.stats[i] ?? cs.stats[0], client: cs.name }))
+    .slice(0, 3)
+    .map((cs, i) => ({ ...(cs.stats[i] ?? cs.stats[0]), client: cs.name }))
 
-  /* Interleaved rather than grouped: the reference's grid works because a
-     quote sits next to a name sits next to a number, and reading across it
-     you get evidence of three different kinds. Grouped, it would be three
-     lists stacked. */
   const tiles = []
-  let qi = 0
-  let si = 0
   clients.forEach((c, i) => {
-    tiles.push({ kind: 'name', key: `n-${c.name}`, ...c })
-    if (i % 6 === 2 && qi < quotes.length) tiles.push({ kind: 'quote', key: `q-${qi}`, ...quotes[qi++] })
-    if (i % 9 === 5 && si < stats.length) tiles.push({ kind: 'stat', key: `s-${si}`, ...stats[si++] })
+    COMPOSITION.filter(t => t.at === i).forEach(t => tiles.push(t))
+    tiles.push({ kind: 'name', ...c, w: 1, h: 1 })
   })
-  // Anything that did not land in the interleave still gets shown.
-  while (qi < quotes.length) tiles.push({ kind: 'quote', key: `q-${qi}`, ...quotes[qi++] })
-  while (si < stats.length) tiles.push({ kind: 'stat', key: `s-${si}`, ...stats[si++] })
+
+  const span = ({ w = 1, h = 1 }) => ({ gridColumn: `span ${w}`, gridRow: `span ${h}` })
 
   return (
     <section className={styles.section}>
@@ -106,36 +124,65 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
         Trusted by {clients.length} brands, and the people who run them.
       </h2>
 
-      <div className={styles.grid}>
-        {tiles.map(tile => {
-          if (tile.kind === 'quote') {
-            const person = tile.attribution
+      <div className={styles.panel}>
+        <div className={styles.grid}>
+          {tiles.map((tile, i) => {
+            const key = `${tile.kind}-${tile.name ?? i}-${i}`
+
+            if (tile.kind === 'quote') {
+              const { quote, attribution } = quotes[tile.q] ?? {}
+              if (!quote) return null
+              return (
+                <figure key={key} className={`${styles.tile} ${styles.tileQuote}`} style={span(tile)}>
+                  <blockquote className={styles.quote}>“{quote}”</blockquote>
+                  {isPlaceholder(attribution)
+                    ? (import.meta.env.DEV && <figcaption className={styles.byPlaceholder}>— {attribution}</figcaption>)
+                    : <figcaption className={styles.by}>— {attribution}</figcaption>}
+                </figure>
+              )
+            }
+
+            if (tile.kind === 'stat') {
+              const st = stats[tile.s]
+              if (!st) return null
+              return (
+                <div key={key} className={`${styles.tile} ${styles.tileStat}`} style={span(tile)}>
+                  <p className={styles.statValue}>{st.value}</p>
+                  <p className={styles.statLabel}>{st.label}</p>
+                  <p className={styles.statClient}>{st.client}</p>
+                </div>
+              )
+            }
+
+            /* The reference's big block: a client, a number and a quote in one
+               tile. It is the only tile that carries all three, which is what
+               makes it the one the eye lands on. */
+            if (tile.kind === 'feature') {
+              const { quote, attribution } = quotes[tile.q] ?? {}
+              const st = stats[tile.s]
+              if (!quote || !st) return null
+              return (
+                <div key={key} className={`${styles.tile} ${styles.tileFeature}`} style={span(tile)}>
+                  <p className={styles.featureClient}>{st.client}</p>
+                  <p className={styles.featureValue}>{st.value}</p>
+                  <p className={styles.featureLabel}>{st.label}</p>
+                  <p className={styles.featureQuote}>“{quote}”</p>
+                  {isPlaceholder(attribution) && import.meta.env.DEV && (
+                    <p className={styles.byPlaceholder}>— {attribution}</p>
+                  )}
+                </div>
+              )
+            }
+
             return (
-              <figure key={tile.key} className={`${styles.tile} ${styles.tileQuote}`}>
-                <blockquote className={styles.quote}>“{tile.quote}”</blockquote>
-                {isPlaceholder(person)
-                  ? (import.meta.env.DEV && <figcaption className={styles.byPlaceholder}>— {person || '[ attribution needed ]'}</figcaption>)
-                  : <figcaption className={styles.by}>— {person}</figcaption>}
-              </figure>
-            )
-          }
-          if (tile.kind === 'stat') {
-            return (
-              <div key={tile.key} className={`${styles.tile} ${styles.tileStat}`}>
-                <p className={styles.statValue}>{tile.value}</p>
-                <p className={styles.statLabel}>{tile.label}</p>
-                <p className={styles.statClient}>{tile.client}</p>
+              <div key={key} className={styles.tile} style={span(tile)}>
+                {tile.logo
+                  ? <img src={tile.logo} alt={tile.name} className={styles.logo} loading="lazy" />
+                  : <span className={styles.name}>{tile.name}</span>}
               </div>
             )
-          }
-          return (
-            <div key={tile.key} className={styles.tile}>
-              {tile.logo
-                ? <img src={tile.logo} alt={tile.name} className={styles.logo} loading="lazy" />
-                : <span className={styles.name}>{tile.name}</span>}
-            </div>
-          )
-        })}
+          })}
+        </div>
       </div>
     </section>
   )
