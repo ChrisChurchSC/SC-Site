@@ -31,6 +31,13 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * is the fault assert-build.mjs fails the build on, in the other direction.
  * `support` accepts a string or an array of paragraphs.
  *
+ * `display` sets the statement at hero scale — bigger and tighter than the
+ * card's default, which is sized for a paragraph-length claim rather than a
+ * short line. Off by default, so /v2's hero keeps the size it was tuned at.
+ *
+ * `children` render under the support text, for the actions a hero needs and
+ * a mid-page statement does not.
+ *
  * `center` centres the eyebrow and the statement, both the text itself and
  * the block it sits in — a max-width set on the statement would otherwise
  * keep it hard left however the text inside it is aligned.
@@ -56,13 +63,16 @@ export default function StatementCard({
   serif = false,
   bare = false,
   center = false,
+  display = false,
+  children = null,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${center ? ' ' + styles.center : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}
+      {children}
     </section>
   )
 }

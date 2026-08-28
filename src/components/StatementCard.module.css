@@ -201,3 +201,35 @@
   align-items: center;
   text-align: center;
 }
+
+/* Hero scale. The card's default is sized for a paragraph-length claim; this
+   is for a short line that has to carry a whole screen, so it goes bigger and
+   the line-height and tracking come in to match — at this size the default
+   1.08 leaves the lines floating apart.
+
+   Opt-in, because /v2's hero uses this same card at the size it was tuned at. */
+.display .statement {
+  font-size: clamp(38px, 6.4vw, 92px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+}
+
+/* The line under it: quiet, and on its own measure rather than the
+   statement's, which at 18ch would break it into a column. */
+.display .support {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(11px, 0.95vw, 14px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 62ch;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .display .statement {
+    font-size: clamp(30px, 9vw, 46px);
+    max-width: none;
+  }
+  .display .support { max-width: none; }
+}

@@ -177,6 +177,12 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
    to stand out". */
 const HERO = "We build brands people believe in, and grow them."
 
+/* The line under the hero. Cut down from the support copy that already runs
+   on this page — one embedded team, rather than a branding studio plus a
+   media shop plus whoever built the last campaign — so it is the site's own
+   argument, shortened, not a new one written for a hero. */
+const HERO_SUPPORT = "One embedded team for brand creation and growth media — not a branding studio, a media shop, and whoever built your last campaign."
+
 const WHO_WE_ARE = 'We are creatives who also do marketing.'
 const WHO_WE_ARE_SUPPORT = [
   "Super-Conscious is your outsourced creative and marketing department. One embedded team handles both brand creation and growth media, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign.",
@@ -510,7 +516,20 @@ export default function HomeV3() {
       </section>
 
       {/* 1 — The canvas leads on the claim, not the reel */}
-      <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" tall center />
+      <StatementCard
+        eyebrow={HERO_EYEBROW}
+        statement={HERO}
+        support={HERO_SUPPORT}
+        as="h1"
+        tall
+        center
+        display
+      >
+        <div className={v3.heroActions}>
+          <button className={v3.heroCta} onClick={cal.open}>Book a demo</button>
+          <NavLink to="/work" className={v3.heroGhost}>See our work</NavLink>
+        </div>
+      </StatementCard>
 
       {/* 2 — Who we have done it for */}
       {/* A card bar, like the wordmark at the top of the page: same ground,
