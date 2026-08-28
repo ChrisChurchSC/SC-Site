@@ -1,3 +1,5 @@
+import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+
 import styles from './PlatformCards.module.css'
 
 /**
@@ -276,117 +278,106 @@ function DashPreview() {
 }
 
 /**
- * Agents: what each one reads from, and one of them refusing.
+ * Agents: a character-select screen.
  *
- * A CONNECTED SYSTEM, NOT A LIST. Six agents wired to one repository — the
- * ring says the thing the card is actually claiming, which is that they all
- * read from the same place. A column of names could describe any wrapper
- * around a chat model, and a column of names with files under each said the
- * agents have sources without saying they share them.
+ * THE ROSTER IS THE CONTENT AND THE FRAME IS THE JOKE. Six slots, one
+ * picked, and a plate underneath naming what that agent will not do. It
+ * reads as a game because a card that says "six specialist agents" and then
+ * lists six hyphenated job titles is a paragraph pretending to be a
+ * feature — this makes the roster something you look at.
  *
- * THE SOURCES ARE STILL WRITTEN OUT, under the ring, because a graph shows
- * that there is a knowledge base and cannot show what is in it.
+ * EVERY "WILL NOT" IS FROM THE AGENT'S OWN DEFINITION, not written to fit
+ * the layout. brand-strategist marks a claim it cannot source; comms-writer
+ * escalates positioning rather than deciding it; media-strategist marks an
+ * unverified rate; design-critic measures rather than opines; sales-analyst
+ * produces evidence and hands strategy on; studio-ops passes persuasive
+ * prose to comms-writer. Those are the six agents' actual contracts, and
+ * they are the reason this card is worth a slot on the page: the refusals
+ * are the product.
  *
- * THE FILENAMES ARE THE REPOSITORY'S OWN. Strategy/positioning.md and
- * Verbal/tone-of-voice.md are named in the brand's notes; verticals/ is a
- * real folder and Data/ holds a metrics CSV. audience.md, proof-points.md
- * and copy-standards.md describe material those notes say lives in Strategy
- * and Verbal, but the exact filenames are not confirmed — they are the
- * plausible half of this panel, and the one to check before it ships.
+ * brand-strategist is the one picked because its refusal is the one with a
+ * marker to show — [CLAIM NEEDED: …] is a string those agents genuinely
+ * write, and the brand's notes call the markers the product rather than
+ * boilerplate.
  *
- * ALL SIX ARE ON THE RING NOW. The chip layout only had room for three; the
- * ring holds every one of them, which matters because "six trained" is a
- * claim the panel should be able to back up by counting.
- *
- * IT ENDS ON A REFUSAL. [CLAIM NEEDED: …] is a marker these agents genuinely
- * write, and the brand's notes call those markers the product rather than
- * boilerplate. A mock of an agent producing beautiful copy would say what
- * every AI panel on every site says; asked for a number nobody has sourced,
- * this one marks the gap and hands it back.
+ * WHAT THIS DROPPED. The previous version was a ring of nodes wired to the
+ * repository, with the source files listed under it. The ring said "they
+ * share one source", which is true and is also what the Brand Repository
+ * card two rows up already says with an actual screenshot of the repository.
+ * This says the thing only this card can: what the six of them refuse to do.
  */
 const AGENTS = [
-  { name: 'brand-strategist', files: ['positioning.md', 'audience.md'] },
-  { name: 'comms-writer', files: ['tone-of-voice.md'], drafting: true },
-  { name: 'media-strategist', files: ['verticals/', 'metrics.csv'] },
-  { name: 'design-critic', files: [] },
-  { name: 'sales-analyst', files: [] },
-  { name: 'studio-ops', files: [] },
+  {
+    name: 'brand-strategist',
+    Icon: Compass,
+    does: 'Owns positioning, audience, proof points and the messaging house.',
+    wont: 'Invent a claim',
+  },
+  {
+    name: 'comms-writer',
+    Icon: PenLine,
+    does: 'Drafts and edits anything the brand says out loud.',
+    wont: 'Decide positioning',
+  },
+  {
+    name: 'media-strategist',
+    Icon: TrendingUp,
+    does: 'Plans paid media — channels, budget, flighting and measurement.',
+    wont: 'Invent a rate',
+  },
+  {
+    name: 'design-critic',
+    Icon: Ruler,
+    does: 'Audits built interfaces against the design system.',
+    wont: 'Opine — it measures',
+  },
+  {
+    name: 'sales-analyst',
+    Icon: ChartBar,
+    does: 'Reads the CRM, transcripts and email for what customers say.',
+    wont: 'Infer strategy',
+  },
+  {
+    name: 'studio-ops',
+    Icon: ClipboardList,
+    does: 'Scopes projects, builds proposals and runs the retros.',
+    wont: 'Write the pitch',
+  },
 ]
 
-/* Ring geometry. Computed from the roster rather than hand-placed, so a
-   seventh agent redistributes the ring instead of landing on top of a
-   neighbour. Starts at the top and goes clockwise. */
-const RING = { w: 340, h: 200, cx: 170, cy: 100, r: 72, hub: 20 }
-
-function ringNode(i, total) {
-  const angle = (i / total) * Math.PI * 2 - Math.PI / 2
-  return { x: RING.cx + Math.cos(angle) * RING.r, y: RING.cy + Math.sin(angle) * RING.r, angle }
-}
+/* brand-strategist, because its refusal is the one with a marker to show. */
+const PICKED = 0
 
 function AgentsPreview() {
-  const nodes = AGENTS.map((a, i) => ({ ...a, ...ringNode(i, AGENTS.length) }))
-  const sources = [...new Set(AGENTS.flatMap(a => a.files))]
+  const picked = AGENTS[PICKED]
 
   return (
     <div className={styles.panel}>
-      <span className={styles.panelLabel}>{AGENTS.length} trained · one source</span>
+      <span className={styles.panelLabel}>Select agent</span>
 
-      {/* Decorative: the roster and the sources are both written out below in
-          real text, so nothing here is the only copy of anything. */}
-      <svg
-        className={styles.graph}
-        viewBox={`0 0 ${RING.w} ${RING.h}`}
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-      >
-        {/* Edges first, so the nodes sit on top of them rather than being
-            crossed by their own lines. */}
-        {nodes.map(({ name, x, y }) => (
-          <line key={name} className={styles.edge} x1={RING.cx} y1={RING.cy} x2={x} y2={y} />
+      <div className={styles.roster}>
+        {AGENTS.map(({ name, Icon }, i) => (
+          <span
+            key={name}
+            className={`${styles.slot}${i === PICKED ? ' ' + styles.slotPicked : ''}`}
+            title={name}
+          >
+            <Icon className={styles.slotIcon} size={18} strokeWidth={1.4} aria-hidden="true" />
+            {/* The name is in the plate below, not in the tile: six of these
+                at tile width would each wrap to three lines. The title
+                attribute carries it for a mouse, and the roster is written
+                out in the code either way. */}
+          </span>
         ))}
+      </div>
 
-        <circle className={styles.hub} cx={RING.cx} cy={RING.cy} r={RING.hub} />
-        <text className={styles.hubText} x={RING.cx} y={RING.cy + 2.4} textAnchor="middle">SC-Brand</text>
-
-        {nodes.map(({ name, x, y, drafting }) => {
-          /* Labels lean away from the hub: the two on the flanks read
-             outward, the ones at top and bottom are centred. Anything else
-             puts a name across the ring. */
-          const side = Math.abs(x - RING.cx) < 1 ? 'mid' : x > RING.cx ? 'right' : 'left'
-          const anchor = side === 'mid' ? 'middle' : side === 'right' ? 'start' : 'end'
-          const dx = side === 'mid' ? 0 : side === 'right' ? 9 : -9
-          const dy = side === 'mid' ? (y < RING.cy ? -11 : 15) : 3
-
-          return (
-            <g key={name}>
-              <circle
-                className={drafting ? styles.nodeLive : styles.node}
-                cx={x}
-                cy={y}
-                r={4}
-              />
-              <text className={styles.nodeText} x={x + dx} y={y + dy} textAnchor={anchor}>{name}</text>
-            </g>
-          )
-        })}
-      </svg>
-
-      {/* The knowledge base, as text. The graph says the agents are wired to
-          one source; this says what is in it. */}
-      <span className={styles.agentFiles}>
-        {sources.map(file => (
-          <span key={file} className={styles.agentFile}>{file}</span>
-        ))}
-      </span>
-
-      {/* The sentence around the marker is deliberately dull. The marker is
-          the content. */}
-      <div className={styles.agentDraft}>
-        <span className={styles.agentDraftHead}>comms-writer · draft</span>
-        <span className={styles.agentDraftBody}>
-          Teams ship in half the time with{' '}
-          <span className={styles.agentFlag}>[CLAIM NEEDED: source]</span>
+      <div className={styles.plate}>
+        <span className={styles.plateName}>{picked.name}</span>
+        <span className={styles.plateDoes}>{picked.does}</span>
+        <span className={styles.plateWont}>
+          <span className={styles.plateWontKey}>Will not</span> {picked.wont}
         </span>
+        <span className={styles.agentFlag}>[CLAIM NEEDED: source]</span>
       </div>
     </div>
   )
