@@ -237,3 +237,18 @@
   }
   .display .support { max-width: none; }
 }
+
+/* A shorter hero for the display variant.
+
+   .tall is min(84vh, 780px), which was set when the hero was a headline alone
+   on an otherwise empty screen. This one carries a headline and two buttons
+   and is followed immediately by the client wall, so 84vh pushed the wall
+   entirely below the fold and left a lot of empty ground in the middle.
+
+   Scoped to .tall.display rather than changed on .tall, because /v2's hero
+   uses .tall at the height it was tuned at. */
+.tall.display {
+  min-height: min(62vh, 560px);
+  padding-top: clamp(48px, 6vh, 80px);
+  padding-bottom: clamp(48px, 6vh, 80px);
+}

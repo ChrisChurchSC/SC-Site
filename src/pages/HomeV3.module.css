@@ -779,3 +779,25 @@
 @media (prefers-reduced-motion: reduce) {
   .heroCta, .heroGhost { transition: none; }
 }
+
+/* The panel's CTA when there is nowhere for it to go. Same size and place as
+   the real one so the panel keeps its shape, but visibly not a link. */
+.svcIntroCtaFlat {
+  color: rgba(255, 255, 255, 0.32);
+  cursor: default;
+}
+
+.svcIntroCtaFlat:hover { color: rgba(255, 255, 255, 0.32); }
+
+/* A full-width rule between sections.
+
+   Subtracts the page's side padding exactly rather than centring 100vw on the
+   content column — the column is not centred in the viewport (the nav takes
+   312px on the right on pages that have one), so a centred rule lands off
+   both edges. Same reasoning as StatementCard's .bare rule. */
+.divider {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

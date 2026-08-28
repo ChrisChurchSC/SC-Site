@@ -32,7 +32,20 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   const clients = clientLogos.filter(c => !c.slug || !HIDDEN_SLUGS.has(c.slug))
   const linkable = c => c.slug && !HIDDEN_SLUGS.has(c.slug) && !comingSoon.has(c.slug)
 
-  const Tile = ({ client }) => {
+  /* THREE ROWS, AND NO GAP AT THE END.
+   *
+   * Three rows of twenty does not divide: seven columns gives 21 slots and
+   * leaves one empty, and an empty slot inside a stroked panel is a hole the
+   * eye goes straight to. Rather than drop two clients to make the sum work,
+   * the last tile widens to swallow whatever is left over.
+   *
+   * Computed, not hardcoded, so it stays right when a client is added or
+   * removed — which is the thing a hand-set span would silently get wrong. */
+  const COLS = 7
+  const leftover = (COLS - (clients.length % COLS)) % COLS
+
+  const Tile = ({ client, span = 1 }) => {
+    const style = span > 1 ? { gridColumn: `span ${span}` } : undefined
     const inner = (
       <>
         {client.logo
@@ -40,9 +53,9 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
           : <span className={styles.name}>{client.name}</span>}
       </>
     )
-    if (!linkable(client)) return <div className={styles.tile}>{inner}</div>
+    if (!linkable(client)) return <div className={styles.tile} style={style}>{inner}</div>
     return (
-      <NavLink to={`/work/${client.slug}`} className={`${styles.tile} ${styles.tileLink}`}>
+      <NavLink to={`/work/${client.slug}`} className={`${styles.tile} ${styles.tileLink}`} style={style}>
         <span className={styles.arrow} aria-hidden="true">→</span>
         {inner}
       </NavLink>
@@ -62,8 +75,15 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
           beside a full grid. An empty tile is not a placeholder for a good
           one; it just makes the wall look unfinished. Put it back when there
           is a real figure for it. */}
-      <div className={styles.grid}>
-        {clients.map(c => <Tile key={c.name} client={c} />)}
+      {/* The stroke belongs to the wall, not to each tile: one outline around
+          the whole thing reads as a single object, where twenty outlines read
+          as twenty. It is also why the tiles inside stay borderless. */}
+      <div className={styles.panel}>
+        <div className={styles.grid}>
+          {clients.map((c, i) => (
+            <Tile key={c.name} client={c} span={i === clients.length - 1 ? leftover + 1 : 1} />
+          ))}
+        </div>
       </div>
     </section>
   )

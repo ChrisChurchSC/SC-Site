@@ -32,13 +32,34 @@
   text-wrap: balance;
 }
 
-/* width:100% is load-bearing. The section centres its children, and the grid
-   used to get its width from the wall wrapper that held it and the feature
-   card. With that wrapper gone the grid became shrink-to-fit and collapsed
-   into a single centred column of tiles. */
+/* The wall's own container: narrower than the page and drawn with a stroke,
+   the same hairline the nav bar and the panels use, so it belongs to the same
+   drawn system rather than introducing a second.
+
+   Not full width. At the page's width the twenty names spread into a band ten
+   columns wide and two rows deep, which reads as a strip running past you.
+   Held in, it reads as a block you look at — and the headline above it, which
+   is centred on a 24ch measure, finally has something the same size under it.
+
+   width:100% is load-bearing here: the section centres its children, so
+   without it the panel is shrink-to-fit and collapses to the width of one
+   tile. */
+.panel {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+}
+
+/* SEVEN COLUMNS — three rows of twenty, with the last tile widened to fill
+   the leftover slot. See the component: the span is computed from the client
+   count rather than set by hand, so adding or removing a client cannot leave
+   a hole inside the stroke. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
   width: 100%;
 }
@@ -99,7 +120,7 @@
 }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tile { min-height: 92px; }
 }
 

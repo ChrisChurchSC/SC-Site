@@ -60,11 +60,10 @@ let didLoad = false
    anchors or the pages exist, give each item an href and nothing else here
    changes. */
 const NAV_LINKS = [
-  // No page. Nothing on this site is a platform, and there is no route that
-  // could honestly carry the word, so it renders unlinked rather than
-  // pointing somewhere it does not describe — the same treatment the client
-  // strip and the featured set give work that has no page yet.
-  { label: 'Platform', href: null },
+  // No page, and now a panel of six more pages that also do not exist — see
+  // PLATFORM_PAGES above. The label stays unlinked for the same reason every
+  // row inside it is: there is nowhere to go yet.
+  { label: 'Platform', href: null, panel: 'platform' },
   { label: 'Services', href: '/services', panel: 'services' },
   { label: 'Case Studies', href: '/work', panel: 'work' },
   { label: 'Company', href: '/about-us', panel: 'company' },
@@ -114,6 +113,45 @@ const WORK_BY_SIZE = [
   'Seed to Series A',
   'Scale-up',
   'Enterprise',
+]
+
+/* PLATFORM. STILL A PROPOSAL — there is no platform in this repo, no route
+ * for one, nothing in Sanity, and no part of the site a client logs into. A
+ * nav item with six children is a claim to have built a thing; that claim is
+ * currently untrue and every row below stays unlinked until it is not.
+ *
+ * REWRITTEN, though. The first six were Overview / Brand system / Asset
+ * library / Requests / Reporting / Access — the shelves every SaaS nav has,
+ * which described no studio in particular and gave a visitor no reason to
+ * care. A platform is only worth a nav item if it does something this studio
+ * does and others do not.
+ *
+ * So these are built on what the studio has actually already built, which is
+ * a brand held as a system rather than as a deck:
+ *
+ *   Brand OS   — the SC-Brand repo is exactly this: positioning, audience,
+ *                proof points and tone as files, synced, with the rule that
+ *                Strategy holds what is true and Verbal holds how it sounds.
+ *   Agents     — six brand-trained subagents exist today, and their defining
+ *                property is the one worth selling: each refuses to invent
+ *                the thing it would be most tempting to invent, and marks
+ *                the gap instead.
+ *   Reviews    — the sync CLI already works this way. A push opens a numbered
+ *                review and writes nothing live; merging is a person's job.
+ *   Guardrails — the same discipline as the '––' placeholders on this site:
+ *                a claim without a source does not ship.
+ *
+ * Library and Measurement stay, because a brand system needs somewhere for
+ * the output to live and some account of whether it worked — but they are the
+ * two least differentiated of the six and the first to cut if this shortens.
+ */
+const PLATFORM_PAGES = [
+  { name: 'Brand OS', note: 'Positioning, audience, proof and tone — as a source of truth, not a deck.' },
+  { name: 'Agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
+  { name: 'Guardrails', note: 'Nothing ships with an unsourced number or an unapproved claim.' },
+  { name: 'Reviews', note: 'Every change is proposed, and a person approves it.' },
+  { name: 'Library', note: 'Every asset we have made, in use and findable.' },
+  { name: 'Measurement', note: 'What shipped, and what it moved.' },
 ]
 
 /* Company's panel, in three columns.
@@ -452,6 +490,29 @@ export default function HomeV3() {
             </div>
           )}
 
+          {openMenu === 'platform' && (
+            <div className={`${v3.panel} ${v3.panelService}`}>
+              <div className={v3.svcIntro}>
+                <p className={v3.panelTag}>[ The Platform ]</p>
+                <p className={v3.svcStatement}>One place to run the brand.</p>
+                {/* Unlinked, like everything else in this panel. */}
+                <span className={`${v3.svcIntroCta} ${v3.svcIntroCtaFlat}`}>Coming soon</span>
+              </div>
+
+              <div className={v3.svcGrid}>
+                {PLATFORM_PAGES.map(({ name, note }, i) => (
+                  <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>
+                    <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                    <span className={v3.svcBody}>
+                      <span className={v3.svcName}>{name}</span>
+                      <span className={v3.svcNote}>{note}</span>
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {openMenu === 'company' && (
             <div className={`${v3.panel} ${v3.panelCompany}`}>
               {COMPANY_COLS.map(({ tag, links }) => (
@@ -550,6 +611,11 @@ export default function HomeV3() {
       </StatementCard>
 
       {/* 2 — Who we have done it for */}
+      {/* Closes the hero. The page's other sections are divided by the rule
+          on the bare Who we are block; the hero had nothing under it, so it
+          ran straight into the wall. Same hairline, same full width. */}
+      <hr className={v3.divider} />
+
       {/* The client wall, at the top where the proof belongs.
 
           It replaces the card bar that used to sit here. That bar was the
