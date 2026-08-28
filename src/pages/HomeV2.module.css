@@ -92,16 +92,32 @@
    grid's own 5px rhythm, so the bar reads as attached to the top of the page
    rather than as the first of the sections. */
 .topBar {
-  /* Halfway between the two, on both axes.
+  /* The bar is chrome, not a passage of the page.
 
-     It had the page's full reading margin and the full section gap, which
-     left the wordmark floating; then it had the grid's 12px and 5px, which
-     put it tight to the corner and out of line with everything below it.
-     Neither was right, so this is the midpoint of each.
+     It began with the page's full reading margin and the full section gap,
+     which left the wordmark floating in a lot of nothing; then with the
+     grid's 12px and 5px, which put it tight into the corner. Both are wrong,
+     in opposite directions. Below is the midpoint of the two; the left goes
+     further, three quarters of the way back toward the grid's 12px.
 
-     Written as an expression rather than a pair of fixed numbers so it stays
-     the midpoint as the page margin scales with the viewport, instead of
-     being correct only at the width it was eyeballed on. */
-  margin-left: calc((12px - var(--page-pad-left)) / 2);
+     The inset is now declared ONCE and applied to both sides, because the
+     two sides do not start from the same place and would drift apart if each
+     carried its own number:
+
+       left  — measured from the page edge, so it subtracts the page's own
+               reading margin.
+       right — measured from the nav column, not the page edge. The bar must
+               not run under the fixed nav, so it stops short of it by the
+               same inset. What padding-right already leaves before the nav
+               is --page-pad-right minus the nav's 300px (measured), and the
+               margin makes up only the difference.
+
+     Expressed over the padding rather than as fixed pixels so both hold
+     their proportion as the margin scales with the viewport. */
+  --bar-inset: calc(var(--page-pad-left) * 0.25 + 9px);
+  --nav-width: 300px;
+
+  margin-left: calc(var(--bar-inset) - var(--page-pad-left));
+  margin-right: calc(var(--bar-inset) - (var(--page-pad-right) - var(--nav-width)));
   margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
 }
