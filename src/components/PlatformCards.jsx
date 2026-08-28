@@ -58,7 +58,138 @@ const CARDS = [
    hole beside it: one card in a two-column row is a gap, and a gap in a
    section this sparse reads as something failing to load. */
 
-function Card({ lead, rest, size }) {
+/**
+ * The Brand Repository card's preview: the product's own UI, rebuilt in
+ * markup.
+ *
+ * MARKUP RATHER THAN A SCREENSHOT. A PNG of a dark UI on a dark page has to
+ * be colour-matched by hand and re-shot every time the app changes a border;
+ * this inherits the page's own tokens, stays sharp at any density, weighs
+ * nothing, and reflows instead of squashing. It is also the only version
+ * that can be read in a light theme later without being re-exported.
+ *
+ * THE NUMBERS ARE REAL, AND THAT IS THE PART TO WATCH. Counts, ages and the
+ * composition split are Chris's actual SC-Brand workspace as of this build.
+ * That is what makes it worth showing, and it is also why it will be wrong
+ * eventually — a screenshot goes stale the same way, but silently. They are
+ * all in REPO below so it is one edit, and nothing here is load-bearing:
+ * if they drift, the card is dated, not incorrect.
+ *
+ * DECORATIVE. It sits inside the well, which is already aria-hidden — the
+ * card's heading is what carries the meaning. Nothing in here is focusable,
+ * so a keyboard skips it entirely rather than tabbing a fake file list.
+ */
+const REPO = {
+  folders: [
+    { name: 'Agents', count: 7, age: '1d' },
+    { name: 'Data', count: 1, age: '1d' },
+    { name: 'Strategy', count: 9, age: '22h' },
+    { name: 'Verbal', count: 3, age: '20h' },
+    { name: 'Visual', count: 7, age: '22h' },
+  ],
+  stats: [
+    { value: '68', label: 'assets' },
+    { value: '1', label: 'editor' },
+    { value: '0', label: 'not published' },
+  ],
+  /* Ordered biggest first, as the app shows it. The shares are the app's, not
+     recomputed from the counts above — assets are not evenly sized, so a
+     folder with 7 of them can be most of the repository by weight. */
+  composition: [
+    { name: 'Visual', pct: 63.2 },
+    { name: 'Strategy', pct: 17.6 },
+    { name: 'Agents', pct: 10.3 },
+    { name: 'Verbal', pct: 7.4 },
+    { name: 'Data', pct: 1.5 },
+  ],
+}
+
+function FolderIcon() {
+  return (
+    <svg className={styles.uiFolder} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M1.5 3.5h4l1.4 1.6h7.6v7.4a1 1 0 0 1-1 1h-12a1 1 0 0 1-1-1z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function RepoPreview() {
+  return (
+    <div className={styles.ui}>
+      <div className={styles.uiTop}>
+        <span className={styles.uiCrumbMuted}>Super Conscious</span>
+        <span className={styles.uiSlash}>/</span>
+        <span className={styles.uiCrumb}>SC-Brand</span>
+        <span className={styles.uiPrivate}>Private</span>
+      </div>
+
+      <div className={styles.uiBody}>
+        <div className={styles.uiTree}>
+          <span className={styles.uiTreeRoot}><FolderIcon />SC-Brand</span>
+          {REPO.folders.map(({ name, count }) => (
+            <span key={name} className={styles.uiTreeRow}>
+              <FolderIcon />
+              <span className={styles.uiTreeName}>{name}</span>
+              <span className={styles.uiCount}>{count}</span>
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.uiMain}>
+          <div className={styles.uiTabs}>
+            <span className={styles.uiTabOn}>Files</span>
+            <span className={styles.uiTab}>Pull requests</span>
+            <span className={styles.uiTab}>Activity</span>
+            <span className={styles.uiTab}>Usage</span>
+          </div>
+          <div className={styles.uiList}>
+            {REPO.folders.map(({ name, age }) => (
+              <span key={name} className={styles.uiRow}>
+                <FolderIcon />
+                <span className={styles.uiRowName}>{name}</span>
+                <span className={styles.uiAge}>{age}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.uiAside}>
+          <span className={styles.uiAsideHead}>About</span>
+          {REPO.stats.map(({ value, label }) => (
+            <span key={label} className={styles.uiStat}>
+              <b className={styles.uiStatValue}>{value}</b> {label}
+            </span>
+          ))}
+
+          <span className={styles.uiAsideHead}>Composition</span>
+          <span className={styles.uiBar}>
+            {REPO.composition.map(({ name, pct }, i) => (
+              <span
+                key={name}
+                className={styles.uiSeg}
+                /* One accent stepped down in opacity rather than five hues:
+                   a stacked bar in five unrelated colours reads as a legend
+                   to decode, not as one quantity split up. */
+                style={{ width: `${pct}%`, opacity: 1 - i * 0.17 }}
+              />
+            ))}
+          </span>
+          <span className={styles.uiKeys}>
+            {REPO.composition.slice(0, 3).map(({ name, pct }) => (
+              <span key={name} className={styles.uiKey}>{name} {pct}%</span>
+            ))}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Card({ id, lead, rest, size }) {
   return (
     <div className={`${styles.card} ${size === 'large' ? styles.cardLarge : styles.cardSmall}`}>
       <div className={styles.cardHead}>
@@ -70,8 +201,11 @@ function Card({ lead, rest, size }) {
             it is part of the card's shape; give it an href with the page. */}
         <span className={styles.arrow} aria-hidden="true">↗</span>
       </div>
-      {/* The preview well. Empty on purpose — see the note at the top. */}
-      <div className={styles.well} aria-hidden="true" />
+      {/* The well. The repository card fills it with the product's own UI;
+          the rest stay empty on purpose — see the note at the top. */}
+      <div className={styles.well} aria-hidden="true">
+        {id === 'brand-repository' ? <RepoPreview /> : null}
+      </div>
     </div>
   )
 }

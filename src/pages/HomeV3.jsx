@@ -359,6 +359,7 @@ const FOOTER_COLS = [
       ...WORK_BY_INDUSTRY.map(label => ({ label })),
     ],
   },
+  { tag: 'By company size', links: WORK_BY_SIZE.map(label => ({ label })) },
   ...COMPANY_COLS.map(({ tag, links }) => ({
     tag,
     links: links.map(({ label, href, external }) => ({ label, href, external })),

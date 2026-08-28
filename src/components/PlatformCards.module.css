@@ -150,7 +150,11 @@
    to the whole width would be enormous — and the three below it are portrait
    like the service cards, which is the page's other row of four-ish cards. */
 .cardLarge {
-  aspect-ratio: 16 / 9;
+  /* 21:9 rather than 16:9. The preview inside is a file browser with five
+     folders in it, and a real one does leave space below the last row — the
+     product does exactly this — but at 16:9 that space was most of the card
+     and read as something failing to load rather than as a window. */
+  aspect-ratio: 21 / 9;
   min-height: 0;
 }
 
@@ -233,6 +237,13 @@
 .well {
   flex: 1;
   min-height: 180px;
+  /* min-height: 0 alongside it so the preview inside can be told to fill a
+     flex child that is itself allowed to shrink. */
+  display: flex;
+  flex-direction: column;
+  /* Room on every side, so the preview reads as an application window
+     sitting on a surface rather than as the card's own lower half. */
+  padding: 22px;
   margin: 0 -26px -26px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   /* No texture. The dots are the section's ground; repeating them inside the
@@ -255,4 +266,199 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card, .arrow { transition: none; }
+}
+
+/* ── THE BRAND REPOSITORY PREVIEW ──────────────────────────────────────────
+   The product's UI, rebuilt in markup rather than shown as a PNG — see the
+   note in PlatformCards.jsx.
+
+   Everything here is mono and small. It is a picture of an interface, not an
+   interface: nothing is interactive, nothing is focusable, and the sizes are
+   chosen so the shape reads at a glance rather than so the labels can be
+   studied. It fills the well edge to edge, because a screenshot inset inside
+   a well would be a frame inside a frame. */
+.ui {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  /* AN APP WINDOW, NOT A BLEED. This first ran edge to edge in the well, on
+     the argument that a framed screenshot inside a framed well is a frame
+     inside a frame. That was wrong about what the frame is for: without one
+     the UI reads as the card's own furniture, and the thing being sold here
+     is that the platform is a product you open. The border, the radius and
+     the lift are what say "this is software" before a word is read.
+
+     Its ground is lighter than the well's, which is the opposite of how the
+     well relates to the card — a recess to sit in, then a surface that sits
+     proud of it. */
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.5);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  /* Clipped, not scrolled: the panel is meant to run out of room at the
+     bottom, the way a real window does. */
+  overflow: hidden;
+}
+
+.uiTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex: none;
+}
+
+.uiCrumbMuted { color: rgba(255, 255, 255, 0.38); }
+.uiSlash { color: rgba(255, 255, 255, 0.22); }
+.uiCrumb { color: rgba(255, 255, 255, 0.8); }
+
+.uiPrivate {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control, 4px);
+  padding: 2px 7px;
+}
+
+/* Three panes. The middle one takes the slack, so at a narrower card the
+   file list gives up width before the tree or the About column collapse. */
+.uiBody {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr) 176px;
+  flex: 1;
+  min-height: 0;
+}
+
+.uiTree {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.uiTreeRoot,
+.uiTreeRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.uiTreeRoot { color: rgba(255, 255, 255, 0.82); }
+.uiTreeRow { padding-left: 12px; }
+.uiTreeName { flex: 1; min-width: 0; }
+.uiCount { color: rgba(255, 255, 255, 0.28); }
+
+.uiFolder {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.uiMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.uiTabs {
+  display: flex;
+  gap: 16px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.uiTab { color: rgba(255, 255, 255, 0.32); }
+
+/* The selected tab, marked by a rule under it rather than by weight — the
+   app does the same and it survives being this small. */
+.uiTabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+.uiList {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 0;
+  min-width: 0;
+}
+
+.uiRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.uiRowName {
+  flex: 1;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.uiAge { color: rgba(255, 255, 255, 0.28); }
+
+.uiAside {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 14px 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.uiAsideHead {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+  margin-top: 6px;
+}
+
+.uiAsideHead:first-child { margin-top: 0; }
+
+.uiStat { color: rgba(255, 255, 255, 0.42); }
+.uiStatValue { color: rgba(255, 255, 255, 0.85); font-weight: 400; }
+
+/* One stacked bar. The segments are one accent stepped down in opacity, set
+   inline from the data — five hues would make it a legend to decode rather
+   than one quantity split up. */
+.uiBar {
+  display: flex;
+  height: 5px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 2px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.uiSeg { background: var(--blue, #5a76e5); }
+
+.uiKeys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  color: rgba(255, 255, 255, 0.36);
+  font-size: 9px;
+}
+
+.uiKey { white-space: nowrap; }
+
+/* Below this the three panes stop being legible at 10px and start being
+   stripes. The file list is the part worth keeping. */
+@media (max-width: 900px) {
+  .uiBody { grid-template-columns: minmax(0, 1fr); }
+  .uiTree,
+  .uiAside { display: none; }
 }

@@ -11,15 +11,19 @@
   border-radius: var(--r-panel, 18px);
 }
 
-/* 148px, not 168: at 168 the six nav columns came to about 40px more than
+/* 132px and a tighter gap. Adding By company size took the nav to seven
+   columns; at 148px with a 44px gap they came to more than the card holds
+   and Socials wrapped alone again. Sized so all seven sit on one row at
+   desktop — the longest label wraps to two lines instead, which costs
+   nothing. Was 168px: at 168 the six nav columns came to about 40px more than
    the card holds, so Socials wrapped alone onto a second row with five
    columns of empty beside it. auto-fit rather than a fixed six: the columns are short lists of very
    different lengths, and at a narrow window five fixed tracks would each be
    too thin to hold "Content programs" on one line. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-  gap: clamp(28px, 3vw, 44px);
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: clamp(24px, 2.2vw, 32px);
   align-items: start;
 }
 
@@ -28,8 +32,8 @@
    that failed to fit. */
 .legalRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-  gap: clamp(28px, 3vw, 44px);
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: clamp(24px, 2.2vw, 32px);
   margin-top: clamp(34px, 4vw, 64px);
   padding-top: clamp(24px, 3vw, 40px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
