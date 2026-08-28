@@ -18,7 +18,6 @@ import { SITE_CONFIG_QUERY } from '../lib/queries'
 import { buildDisciplines } from '../data/buildPackages'
 import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
-import ClientStrip from '../components/ClientStrip'
 import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
 import StatementCard from '../components/StatementCard'
@@ -36,7 +35,7 @@ import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
  *
  * It has its OWN stylesheet — HomeV3.module.css, also a copy — so the two can
  * diverge without either one moving the other. The shared components they
- * both render (StatementCard, ClientStrip, BuildGrowCards, AudienceCards,
+ * both render (StatementCard, BuildGrowCards, AudienceCards,
  * FeaturedCaseStudies, ContactCTA) take their copy and
  * their variants as props, so v3 changes what it passes rather than what
  * they contain — which is what keeps / and /v2 untouched as this moves.
@@ -551,10 +550,13 @@ export default function HomeV3() {
       </StatementCard>
 
       {/* 2 — Who we have done it for */}
-      {/* A card bar, like the wordmark at the top of the page: same ground,
-          same radius, same inset — see .barInset. No label; a row of client
-          names does not need to be told what it is. */}
-      <div className={v3.barInset}><ClientStrip outlined /></div>
+      {/* The client wall, at the top where the proof belongs.
+
+          It replaces the card bar that used to sit here. That bar was the
+          same twenty names this wall shows, and printing the client list
+          twice on one page halves what either instance is worth — the bar
+          scrolled them past you, the wall lets you read them. */}
+      <TrustMosaic />
 
       {/* 3 — The offer, in two halves, with the price lines */}
       <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>
@@ -601,12 +603,6 @@ export default function HomeV3() {
       </Labelled>
 
       {/* 7 — Proof, then 8 — the work it is about */}
-      {/* The mosaic carries its own label and headline, so it is not wrapped
-          in Labelled — that would print the eyebrow twice. It replaces the
-          testimonial marquee here: the marquee showed quotes alone, and this
-          puts them beside the clients and the numbers, which is what makes a
-          wall of proof read as proof rather than as three separate lists. */}
-      <TrustMosaic />
       <Labelled label="[ Featured Work ]"><FeaturedCaseStudies /></Labelled>
 
       {/* 9 — The ask */}

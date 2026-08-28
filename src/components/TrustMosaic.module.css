@@ -1,10 +1,8 @@
-/* The trust mosaic — see TrustMosaic.jsx for what each tile kind may show.
+/* The client wall — see TrustMosaic.jsx for what each part may show.
 
-   The reference is a wall of tiles at mixed sizes packed dense inside a
-   rounded panel, with the headline centred above it. The two things that
-   make it read are the irregular footprints (a written composition, not a
-   rule) and the packing: no row survives, so the eye wanders instead of
-   scanning. */
+   The reference is a flat grid of equal tiles with one large card beside it.
+   The tiles are almost seamless: a small gap and a generous radius, so the
+   wall reads as one surface divided rather than as a scatter of cards. */
 
 .section {
   display: flex;
@@ -22,8 +20,6 @@
   margin: 0;
 }
 
-/* Centred, as in the reference: the wall below is symmetrical and a
-   left-aligned line above it would sit off the axis of its own section. */
 .headline {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
@@ -31,59 +27,52 @@
   line-height: 1.15;
   color: rgba(255, 255, 255, 0.92);
   max-width: 24ch;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   text-align: center;
   text-wrap: balance;
 }
 
-/* The panel the wall sits in. Slightly off the page ground so the tiles have
-   something to sit on, generously rounded — the one place on this page that
-   is not 4px, because it is a container for the grid rather than a card in
-   it. */
-.panel {
+/* Wall = the tile grid plus the feature card beside it. The card takes the
+   full height of the grid rather than a row of it, which is what stops the
+   composition reading as seven columns of the same thing. */
+.wall {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 26%, 380px);
+  gap: 6px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.025);
-  border-radius: 20px;
-  padding: clamp(14px, 1.6vw, 26px);
-  overflow: hidden;
 }
 
-/* dense is the whole trick: without it every tall or wide tile leaves a hole
-   behind it and the wall becomes a form with gaps. grid-auto-rows fixes the
-   unit the spans are counted in. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
-  grid-auto-rows: 104px;
-  grid-auto-flow: row dense;
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 6px;
 }
 
 .tile {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: border-color 0.2s, background 0.2s;
+  min-height: 116px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  transition: background 0.18s;
 }
 
-.tile:hover {
-  border-color: rgba(255, 255, 255, 0.26);
-  background: #050505;
-}
+.tileLink:hover { background: rgba(255, 255, 255, 0.07); }
 
 .name {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(15px, 1.3vw, 20px);
-  line-height: 1.1;
-  color: rgba(255, 255, 255, 0.62);
+  font-size: clamp(15px, 1.25vw, 19px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
+  transition: color 0.18s;
 }
+
+.tileLink:hover .name { color: rgba(255, 255, 255, 0.95); }
 
 .logo {
   max-width: 100%;
@@ -91,142 +80,112 @@
   object-fit: contain;
 }
 
-/* ── Quote ── */
-.tileQuote {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  text-align: left;
-  padding: 20px;
-}
-
-.quote {
-  font-family: 'Signifier', Georgia, serif;
-  font-style: italic;
-  font-weight: 300;
-  /* Sized to fit the tile rather than to be admired: three columns by two
-     rows is 216px of height, and the longest of the three quotes has to sit
-     inside it with its byline. */
-  font-size: clamp(11px, 0.85vw, 13px);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-}
-
-.by,
-.byPlaceholder {
+/* Only on tiles that go somewhere — see the linkable test in the component. */
+.arrow {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  margin: 0;
-}
-
-/* Dev only, and marked so it cannot pass for a real byline. */
-.byPlaceholder {
-  font-style: italic;
-  text-transform: none;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.22);
-}
-
-/* ── Stat ── */
-.tileStat {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 1px;
-  text-align: left;
-  padding: 20px;
-}
-
-/* At the size a real figure would be, so the gap reads as a missing number
-   rather than as a design that never had one. */
-.statValue {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(26px, 2.4vw, 36px);
+  font-size: 11px;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 6px;
+  transition: background 0.18s, color 0.18s;
 }
 
-.statLabel {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0;
+.tileLink:hover .arrow,
+.feature:hover .arrow {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
 }
 
-.statClient {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.26);
-  margin: 10px 0 0;
+/* ── The feature card ── */
+.feature {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: 240px;
+  padding: 22px;
+  border-radius: 14px;
+  background: #000;
 }
 
-/* ── Feature: client, number and quote in one tile ── */
-.tileFeature {
+.featureMedia {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+/* The scrim, not a filter on the card: dimming the card would take the type
+   with it. */
+/* Two layers, not one. A gradient alone was not enough: the Wonderwerk cut
+   is a bright yellow-green with its own large wordmark in it, so the card
+   read as artwork with type lost on top of it. The flat layer takes the whole
+   frame down far enough that white type holds anywhere on it; the gradient
+   then deepens the bottom, where the client, the figure and the caption sit.
+
+   On the media rather than the card, because dimming the card would take the
+   type down with it. */
+.featureMedia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.2) 100%),
+    rgba(0, 0, 0, 0.42);
+}
+
+.featureVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featureBody {
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 0;
-  text-align: left;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.16);
+  gap: 2px;
 }
-
-.tileFeature:hover { background: rgba(255, 255, 255, 0.07); }
 
 .featureClient {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.92);
-  margin: 0 0 12px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 8px;
 }
 
+/* At the size a real figure would be. */
 .featureValue {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(24px, 2.2vw, 32px);
+  font-size: clamp(38px, 4vw, 58px);
   line-height: 1;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 4px;
+  color: #fff;
 }
 
 .featureLabel {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0 0 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 6px;
 }
 
-.featureQuote {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.5);
-  margin: auto 0 0;
-}
-
-@media (max-width: 700px) {
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
-    grid-auto-rows: 88px;
-  }
-  .panel { border-radius: 14px; }
+@media (max-width: 900px) {
+  .wall { grid-template-columns: minmax(0, 1fr); }
+  .feature { min-height: 200px; }
+  .grid { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+  .tile { min-height: 92px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile { transition: none; }
+  .tile, .name, .arrow { transition: none; }
 }
