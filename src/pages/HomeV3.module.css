@@ -213,3 +213,222 @@
 @media (prefers-reduced-motion: reduce) {
   .navLink, .navCta { transition: none; }
 }
+
+/* ── The hover panel ─────────────────────────────────────────────────────
+   The shell is the positioning context AND the hover region. It has to be
+   both: the panel sits below the bar, outside the bar's own box, so a
+   mouseleave bound to the bar would close it the moment the cursor set off
+   toward it. Bound to the shell, the trip from link to panel stays inside. */
+.navShell {
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 20%, 280px);
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(24px, 2.6vw, 40px);
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  animation: panelIn 0.16s ease both;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; translate: 0 -6px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.panelCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 40px) clamp(16px, 2vw, 36px);
+}
+
+.panelCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.panelTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+}
+
+.panelHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.92);
+  transition: color 0.15s;
+}
+
+.panelHeading:hover { color: #fff; }
+
+.panelList {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Text, not links. Every one of these would point at /services — see the
+   note on NAV_LINKS. */
+.panelItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Case Studies and Company: a list of real destinations, two lines each. */
+.panelWork {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 2px 18px;
+  align-content: start;
+}
+
+.workItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 10px;
+  margin: 0 -10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.workItem:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* No page to go to, so no hover affordance either — it would promise one. */
+.workItemFlat { cursor: default; }
+.workItemFlat:hover { background: none; }
+
+.workName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.workItemFlat .workName { color: rgba(255, 255, 255, 0.5); }
+
+.workType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* The promo, as in the reference: one thing worth looking at, given a face. */
+.panelPromo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  min-height: 190px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.panelPromo:hover { border-color: rgba(255, 255, 255, 0.34); }
+
+.panelPromoMedia {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.panelPromoMedia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.4) 55%, transparent 100%);
+}
+
+.panelPromoVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panelPromoTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.panelPromoName {
+  font-family: 'Signifier', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 24px;
+  color: #fff;
+}
+
+.panelPromoCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 6px;
+}
+
+/* ── The chevron ──
+   Drawn rather than a glyph, so it matches the hairline weight the rest of
+   the bar is drawn with and rotates cleanly. */
+.chev {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 7px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.18s;
+}
+
+.chevOpen { transform: translateY(0) rotate(225deg); }
+
+.navLinkOpen { color: #fff; }
+
+/* Shown, not linked — it has no page. Legible, but it does not pretend to
+   be a destination: no hover lift, and the cursor stays an arrow. */
+.navLinkFlat {
+  color: rgba(255, 255, 255, 0.32);
+  cursor: default;
+}
+
+.navLinkFlat:hover { color: rgba(255, 255, 255, 0.32); }
+
+@media (max-width: 1100px) {
+  .panel { grid-template-columns: minmax(0, 1fr); }
+  .panelCols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panelPromo { min-height: 130px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+  .chev, .panelPromo, .workItem, .panelHeading { transition: none; }
+}

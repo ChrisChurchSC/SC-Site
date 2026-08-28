@@ -3,10 +3,14 @@ import { NavLink } from 'react-router-dom'
 import styles from './Home.module.css'
 import v3 from './HomeV3.module.css'
 import LogoWordmark from '../components/LogoWordmark'
+import LazyVideo from '../components/LazyVideo'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
+import { buildDisciplines } from '../data/buildPackages'
+import { growDisciplines } from '../data/growPackages'
+import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import ClientStrip from '../components/ClientStrip'
 import TestimonialStrip from '../components/TestimonialStrip'
 import ContactCTA from '../components/ContactCTA'
@@ -39,11 +43,37 @@ let didLoad = false
    actual routes rather than a shortened set. Every one of these resolves —
    see App.jsx. Careers is not a route of its own on this branch (the About
    page carries it), so it is not listed as though it were. */
+/* The panel's columns are the real discipline lists off the Services page —
+   imported, not retyped, so they cannot drift from what that page shows.
+
+   WHAT THE PANEL CANNOT DO YET: the discipline NAME is the link, and the
+   items under it are text. Every one of them would otherwise point at
+   /services, because that is the only destination that exists — the page has
+   no section ids to anchor to and there are no per-discipline pages. Thirty
+   links to one URL is not depth, it is the appearance of depth. When the
+   anchors or the pages exist, give each item an href and nothing else here
+   changes. */
 const NAV_LINKS = [
-  { label: 'Services', href: '/services' },
-  { label: 'Work', href: '/work' },
-  { label: 'Thoughts', href: '/thoughts' },
-  { label: 'About', href: '/about-us' },
+  // No page. Nothing on this site is a platform, and there is no route that
+  // could honestly carry the word, so it renders unlinked rather than
+  // pointing somewhere it does not describe — the same treatment the client
+  // strip and the featured set give work that has no page yet.
+  { label: 'Platform', href: null },
+  { label: 'Services', href: '/services', panel: 'services' },
+  { label: 'Case Studies', href: '/work', panel: 'work' },
+  { label: 'Company', href: '/about-us', panel: 'company' },
+  // No page either. The rates DO exist — they are on /services, and the
+  // Build and Grow cards on this page quote them — but a nav item called
+  // Pricing that lands you halfway down another page is a worse promise than
+  // no link. Unlinked until it has somewhere of its own to go.
+  { label: 'Pricing', href: null },
+]
+
+/* Company's panel. Every one of these is a real route — see App.jsx. */
+const COMPANY_LINKS = [
+  { label: 'About', href: '/about-us', note: 'Who we are, and who is on the team.' },
+  { label: 'Thoughts', href: '/thoughts', note: 'Ideas, notes, and process.' },
+  { label: 'Contact', href: '/contact', note: 'Start a conversation.' },
 ]
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
@@ -117,6 +147,7 @@ export default function HomeV3() {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
   const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
 
+  const [openMenu, setOpenMenu] = useState(null)
   const [reelOpen, setReelOpen] = useState(false)
   const [playing, setPlaying] = useState(true)
   const [muted, setMuted] = useState(false)
@@ -153,6 +184,14 @@ export default function HomeV3() {
     if (v?.duration) setProgress((v.currentTime / v.duration) * 100)
   }
 
+  // Escape closes the nav panel as well as the reel — a hover panel with no
+  // keyboard way out is a trap for anyone who opened it by tabbing into it.
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setOpenMenu(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') closeReel() }
     if (reelOpen) window.addEventListener('keydown', onKey)
@@ -168,26 +207,112 @@ export default function HomeV3() {
     <main className={`${styles.main} ${v3.stack}`}>
 
       {/* The nav. It is the only navigation on the page — the side nav is
-          gone — so it carries the routes and the booking CTA. */}
+          gone — so it carries the routes, the booking CTA, and the panel. */}
       <section className={`${styles.row12} ${styles.introRow} ${v3.topBar}`}>
-        <div className={`${styles.cornerNote} ${v3.barCard}`} style={{ gridColumn: '1 / span 12' }}>
-          <NavLink to="/" className={styles.cornerWordmark} aria-label="Super Conscious, home">
-            <LogoWordmark fill="rgba(255,255,255,0.7)" />
-          </NavLink>
+        <div
+          className={v3.navShell}
+          style={{ gridColumn: '1 / span 12' }}
+          onMouseLeave={() => setOpenMenu(null)}
+        >
+          <div className={`${styles.cornerNote} ${v3.barCard}`}>
+            <NavLink to="/" className={styles.cornerWordmark} aria-label="Super Conscious, home">
+              <LogoWordmark fill="rgba(255,255,255,0.7)" />
+            </NavLink>
 
-          <nav className={v3.navLinks} aria-label="Main">
-            {NAV_LINKS.map(({ label, href }) => (
-              <NavLink key={label} to={href} className={v3.navLink}>{label}</NavLink>
-            ))}
-          </nav>
+            <nav className={v3.navLinks} aria-label="Main">
+              {NAV_LINKS.map(({ label, href, panel }) => {
+                const open = panel && openMenu === panel
+                const inner = (
+                  <>
+                    {label}
+                    {panel && <span className={`${v3.chev}${open ? ' ' + v3.chevOpen : ''}`} aria-hidden="true" />}
+                  </>
+                )
+                const shared = {
+                  className: `${v3.navLink}${open ? ' ' + v3.navLinkOpen : ''}${href ? '' : ' ' + v3.navLinkFlat}`,
+                  onMouseEnter: () => setOpenMenu(panel ?? null),
+                  onFocus: () => setOpenMenu(panel ?? null),
+                }
+                return href
+                  ? <NavLink key={label} to={href} {...shared} aria-expanded={panel ? open : undefined}>{inner}</NavLink>
+                  : <span key={label} {...shared}>{inner}</span>
+              })}
+            </nav>
 
-          <div className={v3.navActions}>
-            <NavLink to="/contact" className={v3.navLink}>Contact</NavLink>
-            <button className={v3.navCta} onClick={cal.open}>Book a Discovery Call</button>
+            <div className={v3.navActions}>
+              <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => setOpenMenu(null)}>Book a Discovery Call</button>
+            </div>
           </div>
+
+          {openMenu === 'services' && (
+            <div className={v3.panel}>
+              <div className={v3.panelCols}>
+                {[...buildDisciplines, ...growDisciplines].map(({ tag, name, items }) => (
+                  <div key={name} className={v3.panelCol}>
+                    <p className={v3.panelTag}>{tag}</p>
+                    <NavLink to="/services" className={v3.panelHeading}>{name}</NavLink>
+                    <ul className={v3.panelList}>
+                      {items.map(i => <li key={i} className={v3.panelItem}>{i}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              {/* The one case study with a page, a film and somewhere to go. */}
+              <NavLink to="/work/wonderwerk" className={v3.panelPromo}>
+                <span className={v3.panelPromoMedia} aria-hidden="true">
+                  <LazyVideo src="/wonderwerk-montage-compressed.mp4" className={v3.panelPromoVideo} />
+                </span>
+                <span className={v3.panelPromoTag}>Brand + Content</span>
+                <span className={v3.panelPromoName}>Wonderwerk</span>
+                <span className={v3.panelPromoCta}>Read the case study →</span>
+              </NavLink>
+            </div>
+          )}
+
+          {openMenu === 'company' && (
+            <div className={v3.panel}>
+              <div className={v3.panelWork}>
+                {COMPANY_LINKS.map(({ label, href, note }) => (
+                  <NavLink key={label} to={href} className={v3.workItem}>
+                    <span className={v3.workName}>{label}</span>
+                    <span className={v3.workType}>{note}</span>
+                  </NavLink>
+                ))}
+              </div>
+              <NavLink to="/contact" className={v3.panelPromo}>
+                <span className={v3.panelPromoTag}>Talk to us</span>
+                <span className={v3.panelPromoName}>Start a project</span>
+                <span className={v3.panelPromoCta}>Get in touch →</span>
+              </NavLink>
+            </div>
+          )}
+
+          {openMenu === 'work' && (
+            <div className={v3.panel}>
+              <div className={v3.panelWork}>
+                {featuredCaseStudies.map(({ slug, name, type, href }) => (
+                  href
+                    ? <NavLink key={slug} to={href} className={v3.workItem}>
+                        <span className={v3.workName}>{name}</span>
+                        <span className={v3.workType}>{type}</span>
+                      </NavLink>
+                    /* Unlinked where there is no page — the same treatment the
+                       wall, the client strip and the featured set already give
+                       these. Shown, not pretended to be reachable. */
+                    : <span key={slug} className={`${v3.workItem} ${v3.workItemFlat}`}>
+                        <span className={v3.workName}>{name}</span>
+                        <span className={v3.workType}>{type}</span>
+                      </span>
+                ))}
+              </div>
+              <NavLink to="/work" className={v3.panelPromo}>
+                <span className={v3.panelPromoTag}>Everything</span>
+                <span className={v3.panelPromoName}>All work</span>
+                <span className={v3.panelPromoCta}>View the wall →</span>
+              </NavLink>
+            </div>
+          )}
         </div>
-        {/* No menu button: it toggled the side nav, which this page does not
-            render. A control that opens nothing is worse than no control. */}
       </section>
 
       {/* 1 — The canvas leads on the claim, not the reel */}
