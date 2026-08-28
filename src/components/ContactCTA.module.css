@@ -344,3 +344,16 @@
   color: #e8908f;
   margin: 10px 0 0;
 }
+
+/* No card. The ground, the grid and the grain all come off — the grid is
+   drawn with background-image, so it goes with the background rather than
+   needing its own override, and the grain is a pseudo-element that has to be
+   turned off on its own. Padding stays: the block still needs its own space
+   even without an edge to hold it. */
+.pricingCardBare {
+  background-color: transparent;
+  background-image: none;
+  border-radius: 0;
+}
+
+.pricingCardBare::after { content: none; }

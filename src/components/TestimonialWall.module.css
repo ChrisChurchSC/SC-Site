@@ -102,6 +102,27 @@
   gap: 10px;
 }
 
+/* A circle, because that is what a profile mark is — one of the few places
+   a 50% radius is right rather than a break from the page's radius scale. */
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .who {
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;

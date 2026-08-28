@@ -862,3 +862,36 @@
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* The contact action, in place of the capture form. */
+.contactCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: #0a0a0a;
+  background: var(--pink);
+  border-radius: var(--r-control, 4px);
+  padding: 15px 26px;
+  margin-top: 6px;
+  transition: filter 0.15s;
+}
+
+.contactCta:hover { filter: brightness(1.12); }
+
+/* The sign-off wordmark.
+
+   Runs the full width of the page including the margins — it is the one
+   thing on the page that should touch both edges, because it is not content
+   any more, it is the page ending. Faint enough to read as a watermark
+   rather than as another headline competing with the one above it. */
+.signoff {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin: clamp(48px, 8vw, 120px) 0 0 calc(-1 * var(--page-pad-left, 0px));
+  padding: 0 clamp(8px, 2vw, 32px);
+}
+
+.signoff svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}

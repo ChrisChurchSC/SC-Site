@@ -24,20 +24,33 @@ export default function ContactCTA({
   confirmMessage = "Thanks — we'll be in touch shortly.",
   subject = 'Enquiry from super-conscious.studio',
   requestType = 'enquiry',
+  /* `form` false drops the capture fields and renders `children` in their
+     place. Default true, so / and /v2 keep the form they have — and keep the
+     single submission path this component exists to enforce. A page that
+     turns the form off is opting out of collecting anything here, so it has
+     to supply its own way onward; that is what children is for. */
+  form = true,
+  children = null,
+  /* `bare` drops the card behind the block — its ground, its 20px grid and
+     its grain layer — so the copy sits on the page. Off by default: / and
+     /v2 are built around that card. */
+  bare = false,
 }) {
   return (
     <section className={styles.pricingSection}>
-      <div className={styles.pricingCard}>
+      <div className={`${styles.pricingCard}${bare ? ' ' + styles.pricingCardBare : ''}`}>
         <p className={styles.pricingLabel}>{label}</p>
         <p className={styles.pricingSub}>{sub}</p>
-        <EmailCaptureForm
-          styles={styles}
-          variant="contact"
-          submitLabel={submitLabel}
-          confirmMessage={confirmMessage}
-          subject={subject}
-          requestType={requestType}
-        />
+        {form ? (
+          <EmailCaptureForm
+            styles={styles}
+            variant="contact"
+            submitLabel={submitLabel}
+            confirmMessage={confirmMessage}
+            subject={subject}
+            requestType={requestType}
+          />
+        ) : children}
       </div>
     </section>
   )

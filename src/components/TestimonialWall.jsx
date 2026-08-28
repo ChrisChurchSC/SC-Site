@@ -1,3 +1,4 @@
+import { User } from 'lucide-react'
 import styles from './TestimonialWall.module.css'
 import { useSanity } from '../hooks/useSanity'
 import { TESTIMONIALS_QUERY } from '../lib/queries'
@@ -20,7 +21,8 @@ import { TESTIMONIALS_QUERY } from '../lib/queries'
  * name is weak proof; a made-up name is not proof at all.
  *
  * The quotes fall back to a static mirror when Sanity does not answer — see
- * TrustMosaic, which found that failing silently.
+ * TrustMosaic, which found that failing silently. The fallback carries no
+ * avatar, which is correct: none of the three has one in Sanity either.
  */
 const isPlaceholder = (s) => !s || /\[|\]/.test(s)
 
@@ -39,14 +41,25 @@ const FALLBACK = [
   },
 ]
 
-function Card({ quote, attribution }) {
+function Card({ quote, attribution, avatar }) {
   const person = isPlaceholder(attribution) ? null : attribution
   return (
     <figure className={styles.card}>
       <figcaption className={styles.head}>
-        {/* No avatars: the field exists in Sanity and not one of the three
-            has an image in it. A row of identical blank circles is worse
-            than none. */}
+        {/* The real avatar when Sanity has one — testimonialAvatar is a field
+            on clientLanding and the query already returns it. None of the
+            three has an image today, so what shows is the glyph: a drawn mark
+            that says 'a person' without pretending to be one.
+
+            Deliberately not a photograph, an initial or a coloured circle.
+            An initial would be an invented name, and a coloured circle
+            standing in for a face is the kind of thing that stops looking
+            like a placeholder after a week. */}
+        <span className={styles.avatar} aria-hidden="true">
+          {avatar
+            ? <img src={avatar} alt="" className={styles.avatarImg} loading="lazy" />
+            : <User size={15} strokeWidth={1.5} />}
+        </span>
         <span className={styles.who}>
           {person ?? (import.meta.env.DEV
             ? <span className={styles.whoPlaceholder}>{attribution}</span>

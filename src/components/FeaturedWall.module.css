@@ -77,8 +77,15 @@
 .card {
   flex: none;
   width: clamp(240px, 26vw, 340px);
+  /* 4:5, matching the service cards — the page has two rails of cards and
+     they should be the same shape. The content sits at the foot of the card
+     and the space above it is the card, which is what the service cards do
+     too; a text card at this ratio with everything top-aligned is mostly
+     empty above nothing. */
+  aspect-ratio: 4 / 5;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 10px;
   padding: 28px 26px;
   background: rgba(255, 255, 255, 0.03);

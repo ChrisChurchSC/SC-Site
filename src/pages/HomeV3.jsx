@@ -276,8 +276,12 @@ const OFFER = [
        strategy, brand sprint, brand refresh and brand system. It is the
        strategy deliverable, not the software one in the Platform section
        below; the two share a word and are not the same thing, which is worth
-       watching if this page ever says both out loud in the same breath. */
-    body: 'We build your brand platform and its assets.',
+       watching if this page ever says both out loud in the same breath.
+
+       40 characters, dropping the 'its'. Measured rather than guessed: the
+       card body box is 294px and wraps past about 41 characters — Grow sits
+       on one line at 40, this was 44 and ran to two. */
+    body: 'We build your brand platform and assets.',
     price: null,
     cta: null,
     href: '/services',
@@ -631,7 +635,25 @@ export default function HomeV3() {
 
       <hr className={v3.divider} />
 
-      <Labelled label="[ Get In Touch ]"><ContactCTA sub={CLOSING} /></Labelled>
+      {/* No label and no card. This is the end of the page rather than another
+          section of it: the headline says what it is, and a label above a
+          closing line reads as filing it under something.
+
+          No capture fields either — the page asks for the booking instead of
+          running a form and a button at the same visitor. The form and the
+          card both still run on / and /v2. */}
+      <ContactCTA sub={CLOSING} form={false} bare>
+        <button className={v3.contactCta} onClick={cal.open}>Book a demo</button>
+      </ContactCTA>
+
+      {/* The wordmark, at the size the page ends on. Not a link and not a
+          logo lockup — it is the last thing on the page and its job is to be
+          the name, large. aria-hidden because the accessible name is already
+          on the wordmark at the top of the page; read out twice it is just
+          noise. */}
+      <div className={v3.signoff} aria-hidden="true">
+        <LogoWordmark fill="rgba(255,255,255,0.14)" />
+      </div>
 
     </main>
   )
