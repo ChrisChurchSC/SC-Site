@@ -92,6 +92,16 @@
    grid's own 5px rhythm, so the bar reads as attached to the top of the page
    rather than as the first of the sections. */
 .topBar {
-  margin-left: calc(12px - var(--page-pad-left));
-  margin-bottom: calc(5px - clamp(28px, 4vw, 64px));
+  /* Halfway between the two, on both axes.
+
+     It had the page's full reading margin and the full section gap, which
+     left the wordmark floating; then it had the grid's 12px and 5px, which
+     put it tight to the corner and out of line with everything below it.
+     Neither was right, so this is the midpoint of each.
+
+     Written as an expression rather than a pair of fixed numbers so it stays
+     the midpoint as the page margin scales with the viewport, instead of
+     being correct only at the width it was eyeballed on. */
+  margin-left: calc((12px - var(--page-pad-left)) / 2);
+  margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
 }
