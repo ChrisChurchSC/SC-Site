@@ -62,10 +62,16 @@ import styles from './ComparisonTable.module.css'
  * freelance bench beat us and we would honestly be a partial. That is a
  * positioning decision, not a styling one, so it is Chris's to make.
  *
- * "AI & STRATEGY" BUNDLES A TOOL AND A DISCIPLINE, which is the weakest of
- * the seven axes: a fractional CMO is all strategy and no AI, AI tools are
- * the reverse, and both land on the same middle mark for opposite reasons.
- * Scored as asked. If it stays, splitting it in two would say more.
+ * THE AI AXIS USED TO READ "AI & STRATEGY", and unbundling it moved three
+ * marks, because a fractional CMO and a freelance bench had both been scored
+ * on the half that left, and AI Tools had been held to a partial by it.
+ *
+ * NOTE WHAT WENT WITH IT: strategy is now scored NOWHERE on this table. That
+ * is a real gap, not a tidy-up. It is the entire value of the fractional-CMO
+ * row, it is the first thing our own Platform section sells, and it is the
+ * difference between a team and a bench. Quality and Brand Platform each
+ * carry a piece of it by implication, but nothing on the page asks the
+ * question directly any more. Its own column would be the better home.
  *
  * THE PRICING COLUMN CARRIES NO RATES, ON PURPOSE. It names how you pay, not
  * what you pay. The only dollar figures available were the ones in the
@@ -84,7 +90,7 @@ const ATTRIBUTES = [
   { key: 'quality',  label: 'Quality' },
   { key: 'scale',    label: 'Scale' },
   { key: 'eff',      label: 'Efficiency' },
-  { key: 'ai',       label: 'AI & Strategy' },
+  { key: 'ai',       label: 'AI' },
   { key: 'platform', label: 'Brand Platform' },
 ]
 
@@ -137,7 +143,7 @@ const ROWS = [
     Icon: Briefcase,
     name: 'A Fractional CMO',
     note: 'Senior leadership, part time',
-    attrs: [SOME, SOME, FULL, NONE, SOME, SOME, NONE],
+    attrs: [SOME, SOME, FULL, NONE, SOME, NONE, NONE],
     cost: 'Day rate',
   },
   {
@@ -153,7 +159,7 @@ const ROWS = [
     Icon: User,
     name: 'A Freelance Bench',
     note: 'A roster you brief and manage yourself',
-    attrs: [FULL, FULL, SOME, SOME, FULL, NONE, NONE],
+    attrs: [FULL, FULL, SOME, SOME, FULL, SOME, NONE],
     cost: 'Hourly, or per project',
   },
   {
@@ -164,7 +170,7 @@ const ROWS = [
     /* Credits what AI genuinely gives you. A row of pure downside, next to
        tools the reader uses daily, reads as a lie about the reader rather
        than about the tools. */
-    attrs: [FULL, FULL, NONE, FULL, FULL, SOME, NONE],
+    attrs: [FULL, FULL, NONE, FULL, FULL, FULL, NONE],
     cost: 'Per seat',
   },
   {
