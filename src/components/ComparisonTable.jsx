@@ -43,6 +43,25 @@ import styles from './ComparisonTable.module.css'
  * of guidelines and a live platform is the actual claim, and pretending
  * everyone else has nothing would make it easier to disbelieve, not harder.
  *
+ * WHAT "SCALE" MEANS HERE: does this option still work as YOU grow. It is a
+ * question about the buyer's growth, not about the vendor's headcount. A
+ * performance agency scores full because it absorbs a 10x in spend without
+ * changing shape; a fractional CMO does not, because one person has a
+ * ceiling in hours; a branding studio does not, because the project ends.
+ *
+ * We score full on it, and the earlier partial was a mistake. It was reasoned
+ * from our own "what you don't get" line about staying small and turning work
+ * away — a line that has since been deleted from the page. So the mark was
+ * measuring vendor headcount while every other row was measuring the buyer's
+ * growth, and the sentence that made sense of it was no longer there to read.
+ * A reader was left with "they cannot scale" and nothing to explain it.
+ *
+ * THE COST OF FIXING IT IS THAT OUR ROW NOW TAKES ALL SEVEN MARKS, which is
+ * the scorecard shape this table was rebuilt to avoid. The clean fix is an
+ * axis we genuinely do not win — cost per unit, where AI tools and a
+ * freelance bench beat us and we would honestly be a partial. That is a
+ * positioning decision, not a styling one, so it is Chris's to make.
+ *
  * "AI & STRATEGY" BUNDLES A TOOL AND A DISCIPLINE, which is the weakest of
  * the seven axes: a fractional CMO is all strategy and no AI, AI tools are
  * the reverse, and both land on the same middle mark for opposite reasons.
@@ -84,8 +103,7 @@ const ROWS = [
     Icon: Layers,
     name: 'Super~Conscious',
     note: 'One embedded team, brand through growth',
-    /* Scale is deliberately a partial — see the note above. */
-    attrs: [FULL, FULL, FULL, SOME, FULL, FULL, FULL],
+    attrs: [FULL, FULL, FULL, FULL, FULL, FULL, FULL],
     cost: 'Project or subscription',
   },
   {
