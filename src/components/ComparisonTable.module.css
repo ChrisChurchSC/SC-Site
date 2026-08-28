@@ -1,0 +1,175 @@
+/* The comparison table — see ComparisonTable.jsx for what the rows claim and
+   what still needs signing off.
+
+   A real <table>, not a grid of divs: it is tabular data, the row and column
+   headers mean something, and a screen reader should be able to say "Speed,
+   In-house team, No" rather than reading a wall of icons. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(24px, 4vw, 80px) clamp(16px, 5vw, 110px) 0;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 22ch;
+  margin: 4px 0 30px;
+  text-wrap: balance;
+}
+
+/* Five columns plus a name column does not fit a phone. Scrolling keeps the
+   type readable; shrinking it to fit would make the table complete and
+   illegible at the same time. */
+.scroller {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scroller::-webkit-scrollbar { display: none; }
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.colHead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 20px);
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 0 10px 22px;
+  white-space: nowrap;
+}
+
+.corner { width: 42%; }
+
+.rowHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  text-align: left;
+  font-weight: 400;
+  padding: 26px 24px 26px 0;
+}
+
+.rowIcon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: var(--r-control, 8px);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rowName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 1.9vw, 27px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.rowNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 42ch;
+}
+
+.cell {
+  text-align: center;
+  vertical-align: middle;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 26px 10px;
+}
+
+/* A hairline under each row rather than a border on the row, which does not
+   collapse cleanly across a separated-border table. */
+.row th,
+.row td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Our row. Pink is the page's one accent and already means 'the primary thing
+   here' on the nav and hero CTAs — reusing it keeps that meaning rather than
+   introducing a second highlight.
+
+   Dark type on it, like the buttons: white on this pink lands around 2.9:1,
+   under the 4.5:1 threshold, while #0a0a0a clears 7:1. */
+.rowUs th,
+.rowUs td {
+  background: var(--pink);
+  border-bottom: none;
+}
+
+.rowUs th:first-child { border-radius: var(--r-surface, 12px) 0 0 var(--r-surface, 12px); }
+.rowUs td:last-child { border-radius: 0 var(--r-surface, 12px) var(--r-surface, 12px) 0; }
+
+.rowUs .rowName,
+.rowUs .cell,
+.rowUs td { color: #0a0a0a; }
+
+.rowUs .rowNote { color: rgba(10, 10, 10, 0.72); }
+
+.rowUs .rowIcon {
+  background: rgba(10, 10, 10, 0.12);
+  color: #0a0a0a;
+}
+
+.mark {
+  font-family: 'Signifier', Georgia, serif;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Visually hidden, still read aloud — the yes/no behind each icon. */
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .rowHead { padding-right: 16px; }
+  .rowIcon { width: 38px; height: 38px; }
+}

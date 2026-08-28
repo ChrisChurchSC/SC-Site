@@ -23,7 +23,7 @@ import ContactCTA from '../components/ContactCTA'
 import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
-import AudienceCards from '../components/AudienceCards'
+import ComparisonTable from '../components/ComparisonTable'
 import PlatformCards from '../components/PlatformCards'
 import FeaturedWall from '../components/FeaturedWall'
 
@@ -613,7 +613,11 @@ export default function HomeV3() {
       {/* 5 — Who it is for. The one section the live page has no version of */}
       <hr className={v3.divider} />
 
-      <AudienceCards rows />
+      {/* Replaces Who we work with. That section sorted the audience by what
+          kind of brand they are; this one answers the question they are
+          actually asking at this point on the page, which is why you rather
+          than the two alternatives. AudienceCards still runs on /v2. */}
+      <ComparisonTable />
 
       {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
       {/* The reel is cut. It was a full-width film in the middle of a page
