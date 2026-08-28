@@ -76,10 +76,25 @@
   padding-bottom: clamp(72px, 9vh, 120px);
 }
 
+/* Hero type. Scoped to .tall so the statement in the middle of the page — and
+   the live homepage, which uses the same card — keep the size they set at 21
+   words. This one is 8, and it is the first thing on the page. */
+.tall .statement {
+  font-size: clamp(38px, 6vw, 92px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  max-width: 22ch;
+}
+
 @media (max-width: 768px) {
   .tall {
     min-height: 52vh;
     padding-top: 56px;
     padding-bottom: 56px;
+  }
+
+  .tall .statement {
+    font-size: clamp(30px, 8.5vw, 44px);
+    max-width: none;
   }
 }

@@ -46,7 +46,10 @@ const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407
    the live homepage has that the other way round because it has no headline
    above the statement. */
 const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
-const HERO = "We're Super-Conscious. We build and grow brands."
+/* The canvas opened "We're Super-Conscious. We build and grow brands." The
+   first sentence is cut: the wordmark is directly above it, so the page was
+   introducing itself twice before saying anything. */
+const HERO = 'We build and grow brands.'
 
 const WHO_WE_ARE = 'We are creatives who also do marketing.'
 const WHO_WE_ARE_SUPPORT = [
