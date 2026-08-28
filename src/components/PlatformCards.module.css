@@ -244,6 +244,9 @@
   /* Room on every side, so the preview reads as an application window
      sitting on a surface rather than as the card's own lower half. */
   padding: 22px;
+  /* Clips the zoom. Without it the magnified panel spills across the card's
+     own padding and out over its border. */
+  overflow: hidden;
   margin: 0 -26px -26px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   /* No texture. The dots are the section's ground; repeating them inside the
@@ -296,6 +299,39 @@
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: var(--r-surface, 12px);
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.5);
+
+  /* ZOOMED AND CROPPED, like a close-up of a product rather than a whole
+     window shrunk to fit.
+
+     A transform rather than larger type: this magnifies the borders, the
+     radius and the row rhythm along with the text, which is what makes it
+     read as a photograph of software instead of a diagram of one. Setting
+     every size in here 30% larger would have grown the words and left the
+     1px rules at 1px.
+
+     The origin is the top-left, so the tree and the file list — the part
+     that says "this is a repository" — stay whole, and it is the About
+     column and the empty space under the last row that run off. That empty
+     space was the problem with the un-zoomed version; here it pays for the
+     crop.
+
+     Transforms do not affect layout, so the panel still measures its
+     unscaled self and the three-column grid inside it is unchanged. */
+  transform: scale(1.32);
+  transform-origin: top left;
+
+  /* WHAT THE CROP IS ALLOWED TO EAT. At width: 100% the panel laid itself
+     out at the well width and then grew 32% past it, which put the file
+     ages outside the crop along with the whole About column — and a file
+     row with no timestamp is just a word, so the rows stopped saying
+     anything.
+
+     Laying out at the visible width plus a fixed overhang instead means the
+     crop lands INSIDE the About column: the tree, the rows and their ages
+     are whole, and what runs off the edge is a panel the eye reads as
+     continuing rather than as missing. 100% / 1.32 is exactly the width the
+     crop shows; the 120px is the overhang. */
+  width: calc(100% / 1.32 + 120px);
   font-family: 'Roboto Mono', monospace;
   font-size: 10px;
   line-height: 1.4;
