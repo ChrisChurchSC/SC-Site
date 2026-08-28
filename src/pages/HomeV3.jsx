@@ -1,5 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
+/* lucide-react is already a dependency of this project, so the icons are a
+   real stroke set at the hairline weight the bars are drawn with — not emoji
+   tiles, which the reference uses and which this site has no vocabulary for.
+   NOTE: lucide v1 dropped its brand icons; there is no Instagram, LinkedIn or
+   YouTube glyph any more, so the socials take ArrowUpRight, which says the
+   true thing about them — they leave the site. */
+import { Users, Briefcase, PenLine, Mail, ArrowUpRight } from 'lucide-react'
 import styles from './Home.module.css'
 import v3 from './HomeV3.module.css'
 import LogoWordmark from '../components/LogoWordmark'
@@ -110,11 +117,47 @@ const WORK_BY_SIZE = [
   'Enterprise',
 ]
 
-/* Company's panel. Every one of these is a real route — see App.jsx. */
-const COMPANY_LINKS = [
-  { label: 'About', href: '/about-us', note: 'Who we are, and who is on the team.' },
-  { label: 'Thoughts', href: '/thoughts', note: 'Ideas, notes, and process.' },
-  { label: 'Contact', href: '/contact', note: 'Start a conversation.' },
+/* Company's panel, in three columns.
+ *
+ * Every destination here is real and every one resolves. What the reference
+ * has that this does not:
+ *
+ *   Open roles — no route. Sanity has an openRole schema and a careersPage,
+ *                but nothing renders them; careers live on /about-us, which
+ *                Careers already points at. A second link to the same page
+ *                under a different name is not a second destination.
+ *   Blog       — this site calls it Thoughts, and that is what the nav card,
+ *                the footer and the route all say. Renaming it in one menu
+ *                would be the only place on the site that called it a blog.
+ *   Press      — no page, nothing to put on one.
+ *   YouTube    — the studio has Instagram and LinkedIn. Those two are in
+ *                Nav.jsx and in the homepage's schema.org sameAs; there is no
+ *                YouTube account anywhere in the repo to link to.
+ */
+const COMPANY_COLS = [
+  {
+    tag: 'Our company',
+    links: [
+      { label: 'About', href: '/about-us', Icon: Users },
+      // Careers is not its own route on this branch — the About page carries
+      // it, which is where Nav.jsx sends Careers too.
+      { label: 'Careers', href: '/about-us', Icon: Briefcase },
+      { label: 'Thoughts', href: '/thoughts', Icon: PenLine },
+    ],
+  },
+  {
+    tag: 'Get in touch',
+    links: [
+      { label: 'Contact', href: '/contact', Icon: Mail },
+    ],
+  },
+  {
+    tag: 'Socials',
+    links: [
+      { label: 'Instagram', href: 'https://www.instagram.com/_super_conscious/', Icon: ArrowUpRight, external: true },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/super-conscious/', Icon: ArrowUpRight, external: true },
+    ],
+  },
 ]
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
@@ -125,7 +168,14 @@ const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407
    the live homepage has that the other way round because it has no headline
    above the statement. */
 const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
-const HERO = "We're Super-Conscious. We build and grow brands."
+/* Warmer than "We're Super-Conscious. We build and grow brands.", which
+   introduced the studio and then described the transaction. This keeps the
+   build/grow structure — it is the whole offer, and the two cards below run
+   on it — but puts the reason first: belief, then reach. "Impossible to
+   ignore" is not a flourish either; it is the underdog case this page
+   already makes further down, in the brand "in a crowded category that needs
+   to stand out". */
+const HERO = "We build brands people believe in, and grow them until they're impossible to ignore."
 
 const WHO_WE_ARE = 'We are creatives who also do marketing.'
 const WHO_WE_ARE_SUPPORT = [
@@ -182,8 +232,21 @@ const SERVICE_ROWS = [
     note: body.split(/[:,]/)[0].trim() + '.',
     href,
   })),
-  { name: 'Support', note: null, href: null },
-  { name: 'Consult', note: null, href: null },
+  /* ─────────────────────────────────────────────────────────────────────
+     THESE TWO LINES ARE WRITTEN, NOT SOURCED. Nobody has defined Support or
+     Consult — they are not on /services, not in buildPackages or
+     growPackages, not in Sanity. Asked for, so written; but a one-line
+     definition of a service IS the service's positioning, and these are a
+     proposal for someone to approve or replace.
+
+     Built to sit parallel to Build and Grow, which are real: each is one
+     sentence, first person, says who does the work and what happens to it.
+     Read the four together and the ladder is deliberate — we make it, we run
+     it, we look after it, or we advise the people doing it.
+
+     Still unlinked: writing a line does not create a page. */
+  { name: 'Support', note: 'We look after what is live and keep it working.', href: null },
+  { name: 'Consult', note: 'We advise the team doing the work.', href: null },
 ]
 
 const OFFER_FOOTNOTE = 'Most clients do both — but you can start wherever you are.'
@@ -366,20 +429,23 @@ export default function HomeV3() {
           )}
 
           {openMenu === 'company' && (
-            <div className={v3.panel}>
-              <div className={v3.panelWork}>
-                {COMPANY_LINKS.map(({ label, href, note }) => (
-                  <NavLink key={label} to={href} className={v3.workItem}>
-                    <span className={v3.workName}>{label}</span>
-                    <span className={v3.workType}>{note}</span>
-                  </NavLink>
-                ))}
-              </div>
-              <NavLink to="/contact" className={v3.panelPromo}>
-                <span className={v3.panelPromoTag}>Talk to us</span>
-                <span className={v3.panelPromoName}>Start a project</span>
-                <span className={v3.panelPromoCta}>Get in touch →</span>
-              </NavLink>
+            <div className={`${v3.panel} ${v3.panelCompany}`}>
+              {COMPANY_COLS.map(({ tag, links }) => (
+                <div key={tag} className={v3.coCol}>
+                  <p className={v3.panelTag}>{tag}</p>
+                  {links.map(({ label, href, Icon, external }) => {
+                    const inner = (
+                      <>
+                        <span className={v3.coIcon} aria-hidden="true"><Icon size={14} strokeWidth={1.5} /></span>
+                        <span className={v3.coLabel}>{label}</span>
+                      </>
+                    )
+                    return external
+                      ? <a key={label} href={href} target="_blank" rel="noreferrer" className={v3.coLink}>{inner}</a>
+                      : <NavLink key={label} to={href} className={v3.coLink}>{inner}</NavLink>
+                  })}
+                </div>
+              ))}
             </div>
           )}
 

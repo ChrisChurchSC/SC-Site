@@ -671,3 +671,64 @@
 @media (prefers-reduced-motion: reduce) {
   .proofLink { transition: none; }
 }
+
+/* ── Company panel: three labelled columns of icon links ────────────────── */
+.panelCompany {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 56px);
+}
+
+.coCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.coLink {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 10px;
+  margin: 0 -10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.coLink:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* The tile the reference gives each icon, in this page's terms: outlined
+   rather than a filled pastel square, because every other box on this page is
+   drawn with a stroke. */
+.coIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.coLink:hover .coIcon {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.coLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+@media (max-width: 1100px) {
+  .panelCompany { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coLink, .coIcon { transition: none; }
+}
