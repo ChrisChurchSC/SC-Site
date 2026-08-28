@@ -119,7 +119,7 @@ function FolderIcon() {
 
 function RepoPreview() {
   return (
-    <div className={styles.ui}>
+    <div className={`${styles.ui} ${styles.uiZoomed}`}>
       <div className={styles.uiTop}>
         <span className={styles.uiCrumbMuted}>Super Conscious</span>
         <span className={styles.uiSlash}>/</span>
@@ -189,6 +189,97 @@ function RepoPreview() {
   )
 }
 
+/**
+ * The Measurement card's preview: the performance dashboard.
+ *
+ * WHAT THE NUMBERS ARE, AND WHAT THEY ARE NOT. The repository preview above
+ * shows real data, because SC-Brand exists and can be read. This one cannot:
+ * the platform is COMING SOON, and there is no dashboard to screenshot. So
+ * everything here is illustrative — the shape of the product, not a record
+ * of anything.
+ *
+ * WHICH IS WHY IT COUNTS THINGS RATHER THAN CLAIMING RESULTS. Every value is
+ * a count of work: assets shipped, assets in review, channels live, output
+ * per week. Not one of them is a lift, a conversion rate, a revenue figure
+ * or a percentage with a plus sign in front of it. That is deliberate and it
+ * is the line worth holding: a made-up count of drafts is obviously a mock,
+ * while a made-up "+284% engagement" is a performance claim, and a visitor
+ * has no way to tell an illustrative one from a real one. This site already
+ * refuses that trade in the case-study cards, which carry '––' rather than
+ * numbers nobody has sourced.
+ *
+ * SO THE OUTCOME METRIC IS EMPTY ON PURPOSE. The card's own headline says
+ * "what shipped and what it moved". The dashboard can show the first half
+ * honestly and cannot show the second, so the second reads '––', the same
+ * placeholder the case studies use. It is not an oversight and it should not
+ * be filled in with a plausible figure — it is filled in when there is a
+ * real one, from a real client, that someone has signed off.
+ *
+ * Decorative, like the other preview: it sits in the aria-hidden well and
+ * nothing inside is focusable.
+ */
+const DASH = {
+  stats: [
+    { value: '42', label: 'shipped' },
+    { value: '6', label: 'in review' },
+    /* Not a number, and not to be made one. See above. */
+    { value: '––', label: 'lift', empty: true },
+  ],
+  /* Assets out per week. Relative heights only — the panel has no y-axis and
+     asserts no scale, because it is a shape, not a reading. */
+  bars: [38, 52, 44, 61, 49, 72, 58, 80],
+  channels: [
+    { name: 'Paid social', pct: 42 },
+    { name: 'Email', pct: 31 },
+    { name: 'Organic', pct: 27 },
+  ],
+}
+
+function DashPreview() {
+  const peak = Math.max(...DASH.bars)
+
+  return (
+    <div className={styles.ui}>
+      <div className={styles.uiTop}>
+        <span className={styles.uiCrumb}>Performance</span>
+        <span className={styles.uiSlash}>/</span>
+        <span className={styles.uiCrumbMuted}>Last 8 weeks</span>
+      </div>
+
+      <div className={styles.dash}>
+        <div className={styles.dashStats}>
+          {DASH.stats.map(({ value, label, empty }) => (
+            <span key={label} className={styles.dashStat}>
+              <b className={`${styles.dashValue}${empty ? ' ' + styles.dashValueEmpty : ''}`}>{value}</b>
+              <span className={styles.dashLabel}>{label}</span>
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.dashChart}>
+          {DASH.bars.map((v, i) => (
+            /* Keyed by position: these are eight weeks, and two of them can
+               legitimately hold the same value. */
+            <span key={i} className={styles.dashBar} style={{ height: `${(v / peak) * 100}%` }} />
+          ))}
+        </div>
+
+        <div className={styles.dashRows}>
+          {DASH.channels.map(({ name, pct }) => (
+            <span key={name} className={styles.dashRow}>
+              <span className={styles.dashRowName}>{name}</span>
+              <span className={styles.dashTrack}>
+                <span className={styles.dashFill} style={{ width: `${pct}%` }} />
+              </span>
+              <span className={styles.dashPct}>{pct}%</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Card({ id, lead, rest, size }) {
   return (
     <div className={`${styles.card} ${size === 'large' ? styles.cardLarge : styles.cardSmall}`}>
@@ -205,6 +296,7 @@ function Card({ id, lead, rest, size }) {
           the rest stay empty on purpose — see the note at the top. */}
       <div className={styles.well} aria-hidden="true">
         {id === 'brand-repository' ? <RepoPreview /> : null}
+        {id === 'measurement' ? <DashPreview /> : null}
       </div>
     </div>
   )
