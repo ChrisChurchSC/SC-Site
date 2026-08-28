@@ -190,19 +190,26 @@
 
 /* Light on a black bar, the inverse of the reference's dark button on white:
    the primary action should be the one thing in the bar that is filled. */
+/* Pink, and the only colour in the bar — which is the point of a primary
+   action. --pink is the token from index.css (#df4ed6), not a new value: the
+   page had no colour in it at all until now, and inventing a second one to
+   sit beside the existing three would start a palette rather than use one.
+
+   Near-black type on it rather than white: white on #df4ed6 lands around
+   2.9:1, under the 4.5:1 body threshold, while #0a0a0a on it clears 7:1. */
 .navCta {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.02em;
   color: #0a0a0a;
-  background: #f2f0ea;
+  background: var(--pink);
   border-radius: 4px;
   padding: 10px 16px;
   white-space: nowrap;
-  transition: background 0.15s;
+  transition: filter 0.15s;
 }
 
-.navCta:hover { background: #fff; }
+.navCta:hover { filter: brightness(1.12); }
 
 @media (max-width: 860px) {
   /* The links go before the CTA does: losing the way to book is worse than
@@ -612,7 +619,7 @@
 
 .proofCols {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(18px, 2.4vw, 40px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: clamp(14px, 1.6vw, 22px);

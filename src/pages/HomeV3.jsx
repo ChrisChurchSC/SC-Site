@@ -69,20 +69,46 @@ const NAV_LINKS = [
   { label: 'Pricing', href: null },
 ]
 
-/* The two columns of the Case Studies panel.
+/* The two columns of the Case Studies panel: by industry, and by company
+ * size.
  *
- * The reference groups by INDUSTRY and by TEAM. This site has neither: there
- * is no industry field on a project and no team taxonomy anywhere — not in
- * Sanity, not in projects.js. Inventing ten industries to fill a menu would
- * be making up a way of organising work that nobody organises it by.
+ * ─────────────────────────────────────────────────────────────────────────
+ * THESE TWO TAXONOMIES DO NOT EXIST IN THE DATA. NOBODY HAS SIGNED THEM OFF.
  *
- * What is real is the service each project carries — Brand, Content, Product,
- * the values the client index on the homepage already prints — and the
- * clients themselves. So the columns are those.
+ * There is no industry field on a project and no size field either — not in
+ * Sanity (a project has comingSoon, descriptor, name, order, password,
+ * published, relationship, slug, type, year), not in projects.js, nowhere.
+ * Both lists below were written to fill this menu because they were asked
+ * for, and they are a proposal, not a record.
  *
- * Every service link lands on /work: the filtered views the reference implies
- * do not exist. Give them an href each when they do. */
-const WORK_BY_SERVICE = ['Brand', 'Content', 'Product']
+ * They are grounded in the client roster rather than pulled from the air —
+ * food and drink, crypto, consumer health, retail and technology are all
+ * plainly represented in clientLogos — but WHICH categories the studio wants
+ * to be found under is positioning, and that is not a code decision.
+ *
+ * What is deliberately NOT done here: no client is filed under any category.
+ * Listing the labels is a proposal about how work might be grouped; saying
+ * "Smashburger is Food & Beverage" on the studio's own site is a statement
+ * about a client, and that needs someone to have decided it.
+ *
+ * Confirm or replace the two lists, and give each entry an href once /work
+ * can filter. Nothing else here changes.
+ * ───────────────────────────────────────────────────────────────────────── */
+const WORK_BY_INDUSTRY = [
+  'Consumer & CPG',
+  'Food & Beverage',
+  'Crypto & Web3',
+  'Health & Wellness',
+  'Technology & SaaS',
+  'Retail & Apparel',
+]
+
+const WORK_BY_SIZE = [
+  'Founder-led',
+  'Seed to Series A',
+  'Scale-up',
+  'Enterprise',
+]
 
 /* Company's panel. Every one of these is a real route — see App.jsx. */
 const COMPANY_LINKS = [
@@ -136,9 +162,11 @@ const OFFER = [
 /* THE FOUR SERVICES, for the nav panel.
  *
  * Build and Grow take their line from OFFER above — the same copy the cards
- * on this page carry — cut at the colon, which is where each sentence stops
- * being the definition and starts being the list. Derived rather than
- * retyped, so the panel cannot drift from the cards.
+ * on this page carry — cut at the first colon OR comma, whichever comes
+ * first. Both marks are where the sentence stops defining the service and
+ * starts listing what is in it, and the earlier of the two is what keeps
+ * these to one line in a menu. Derived rather than retyped, so the panel
+ * cannot drift from the cards.
  *
  * SUPPORT AND CONSULT HAVE NO COPY AND NO PAGE. They are not on /services,
  * not in buildPackages or growPackages, not in Sanity. What they cover is a
@@ -151,7 +179,7 @@ const OFFER = [
 const SERVICE_ROWS = [
   ...OFFER.map(({ name, body, href }) => ({
     name,
-    note: body.split(':')[0].trim() + '.',
+    note: body.split(/[:,]/)[0].trim() + '.',
     href,
   })),
   { name: 'Support', note: null, href: null },
@@ -295,7 +323,7 @@ export default function HomeV3() {
                   and Pricing get. Give it an href when there is a client area
                   to log in to. */}
               <span className={`${v3.navLink} ${v3.navLinkFlat}`} onMouseEnter={() => setOpenMenu(null)}>Log in</span>
-              <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => setOpenMenu(null)}>Book a Discovery Call</button>
+              <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => setOpenMenu(null)}>Book a demo</button>
             </div>
           </div>
 
@@ -392,18 +420,20 @@ export default function HomeV3() {
 
                 <div className={v3.proofCols}>
                   <div className={v3.proofCol}>
-                    <p className={v3.panelTag}>By service</p>
-                    {WORK_BY_SERVICE.map(s => (
-                      <NavLink key={s} to="/work" className={v3.proofLink}>{s}</NavLink>
+                    <p className={v3.panelTag}>By industry</p>
+                    {WORK_BY_INDUSTRY.map(i => (
+                      /* /work cannot filter yet, so every one of these lands
+                         on the wall. Unlinked would be worse here than
+                         repetitive: these are categories a visitor is meant
+                         to browse, and the wall is the honest answer to all
+                         of them until the filters exist. */
+                      <NavLink key={i} to="/work" className={v3.proofLink}>{i}</NavLink>
                     ))}
                   </div>
                   <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
-                    <p className={v3.panelTag}>By client</p>
-                    {featuredCaseStudies.map(({ slug, name, href }) => (
-                      href
-                        ? <NavLink key={slug} to={href} className={v3.proofLink}>{name}</NavLink>
-                        /* No page — shown, not linked, as everywhere else. */
-                        : <span key={slug} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{name}</span>
+                    <p className={v3.panelTag}>By company size</p>
+                    {WORK_BY_SIZE.map(s => (
+                      <NavLink key={s} to="/work" className={v3.proofLink}>{s}</NavLink>
                     ))}
                   </div>
                 </div>
