@@ -32,20 +32,15 @@
   text-wrap: balance;
 }
 
-/* Wall = the tile grid plus the feature card beside it. The card takes the
-   full height of the grid rather than a row of it, which is what stops the
-   composition reading as seven columns of the same thing. */
-.wall {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(240px, 26%, 380px);
-  gap: 6px;
-  width: 100%;
-}
-
+/* width:100% is load-bearing. The section centres its children, and the grid
+   used to get its width from the wall wrapper that held it and the feature
+   card. With that wrapper gone the grid became shrink-to-fit and collapsed
+   into a single centred column of tiles. */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 6px;
+  width: 100%;
 }
 
 .tile {
@@ -98,90 +93,12 @@
   transition: background 0.18s, color 0.18s;
 }
 
-.tileLink:hover .arrow,
-.feature:hover .arrow {
+.tileLink:hover .arrow {
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
 }
 
-/* ── The feature card ── */
-.feature {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  min-height: 240px;
-  padding: 22px;
-  border-radius: 14px;
-  background: #000;
-}
-
-.featureMedia {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-
-/* The scrim, not a filter on the card: dimming the card would take the type
-   with it. */
-/* Two layers, not one. A gradient alone was not enough: the Wonderwerk cut
-   is a bright yellow-green with its own large wordmark in it, so the card
-   read as artwork with type lost on top of it. The flat layer takes the whole
-   frame down far enough that white type holds anywhere on it; the gradient
-   then deepens the bottom, where the client, the figure and the caption sit.
-
-   On the media rather than the card, because dimming the card would take the
-   type down with it. */
-.featureMedia::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.2) 100%),
-    rgba(0, 0, 0, 0.42);
-}
-
-.featureVideo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.featureBody {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.featureClient {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
-  margin-bottom: 8px;
-}
-
-/* At the size a real figure would be. */
-.featureValue {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(38px, 4vw, 58px);
-  line-height: 1;
-  color: #fff;
-}
-
-.featureLabel {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 6px;
-}
-
 @media (max-width: 900px) {
-  .wall { grid-template-columns: minmax(0, 1fr); }
-  .feature { min-height: 200px; }
   .grid { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
   .tile { min-height: 92px; }
 }

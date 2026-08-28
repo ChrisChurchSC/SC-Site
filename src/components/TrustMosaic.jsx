@@ -1,12 +1,11 @@
 import { NavLink } from 'react-router-dom'
 import styles from './TrustMosaic.module.css'
 import { clientLogos } from '../data/clientLogos'
-import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
 /**
- * The client wall: a flat grid of clients, and one feature card.
+ * The client wall: a flat grid of clients.
  *
  * Built on the reference — equal tiles, an arrow on the ones you can follow,
  * and a single large card carrying a client, a number and a caption. The
@@ -26,22 +25,12 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
  *                 hidden and not still being written. The same test the wall,
  *                 the nav and the client strip already use. An arrow on a
  *                 tile that goes nowhere is a promise the page cannot keep.
- *   The number  — '––'. Every stat in featuredCaseStudies is a placeholder
- *                 and that file says not to ship invented ones. It is set at
- *                 the size a real figure would be, so the gap reads as a
- *                 missing number rather than as a design that never had one.
- *
- * The feature card is Wonderwerk: the one case study with a page, a film and
- * somewhere to go.
  */
 export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   const comingSoon = useComingSoon()
 
   const clients = clientLogos.filter(c => !c.slug || !HIDDEN_SLUGS.has(c.slug))
   const linkable = c => c.slug && !HIDDEN_SLUGS.has(c.slug) && !comingSoon.has(c.slug)
-
-  const feature = featuredCaseStudies.find(cs => cs.slug === 'wonderwerk') ?? featuredCaseStudies[0]
-  const stat = feature?.stats?.[0]
 
   const Tile = ({ client }) => {
     const inner = (
@@ -67,33 +56,14 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
         Trusted by {clients.length} brands, and the people who run them.
       </h2>
 
-      <div className={styles.wall}>
-        <div className={styles.grid}>
-          {clients.map(c => <Tile key={c.name} client={c} />)}
-        </div>
-
-        {feature && (
-          <NavLink to={feature.href ?? '/work'} className={styles.feature}>
-            {/* No film here. The card looped the Wonderwerk montage behind
-                the type, which put a moving picture directly beside a grid of
-                still names — the motion pulled the eye off the wall the
-                section exists to show, and the card needed a heavy scrim to
-                stay legible over it, which made the film hard to see anyway.
-                It is doing neither job well, so it does neither. The montage
-                still plays in the Services panel and on the featured work
-                below, where nothing competes with it. */}
-            <span className={styles.arrow} aria-hidden="true">→</span>
-            <span className={styles.featureBody}>
-              <span className={styles.featureClient}>{feature.name}</span>
-              {stat && (
-                <>
-                  <span className={styles.featureValue}>{stat.value}</span>
-                  <span className={styles.featureLabel}>{stat.label}</span>
-                </>
-              )}
-            </span>
-          </NavLink>
-        )}
+      {/* No feature card. It carried a client name and a missing number —
+          every case-study stat in this repo is a placeholder — and once its
+          film came off there was nothing in it but a large empty rectangle
+          beside a full grid. An empty tile is not a placeholder for a good
+          one; it just makes the wall look unfinished. Put it back when there
+          is a real figure for it. */}
+      <div className={styles.grid}>
+        {clients.map(c => <Tile key={c.name} client={c} />)}
       </div>
     </section>
   )
