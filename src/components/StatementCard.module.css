@@ -209,10 +209,14 @@
 
    Opt-in, because /v2's hero uses this same card at the size it was tuned at. */
 .display .statement {
-  font-size: clamp(38px, 6.4vw, 92px);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  max-width: 18ch;
+  font-size: clamp(32px, 4.6vw, 66px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  /* Wide enough that a two-beat line can break at its full stop rather than
+     inside the second clause. At 20ch "So you / can run the business" split
+     the turn of the sentence across a line, which is the one break a line
+     built on a turn cannot afford. */
+  max-width: 26ch;
 }
 
 /* The line under it: quiet, and on its own measure rather than the

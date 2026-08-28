@@ -175,13 +175,32 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
    ignore" is not a flourish either; it is the underdog case this page
    already makes further down, in the brand "in a crowded category that needs
    to stand out". */
-const HERO = "We build brands people believe in, and grow them."
+/* WRITTEN, NOT SOURCED — a proposal, like the Support and Consult lines.
+ *
+ * On the shape of Air's "Air keeps track. So you keep creating.", not its
+ * words: an eyebrow that names the category, then two beats — what we do,
+ * then what that frees the reader to do. The turn is the whole line; the
+ * second beat has to be about them or the sentence is just a boast with a
+ * conjunction in it.
+ *
+ * Both halves are the site's own: Build says "we make your brand and its
+ * assets", Grow says "we take that brand to market and run it". Run it is
+ * their word, not a new claim.
+ *
+ * NO SUPPORTING LINE. The hero is the eyebrow, the headline and the actions.
+ * The line that was here explained the offer before anyone had asked; the
+ * headline says it in two beats and the Who we are block further down says
+ * it in full. Saying it three times was the problem.
+ *
+ * NOTE — THIS IS A DIFFERENT MOVE FROM THE LAST ONE. The previous headline
+ * stated the problem ("Your brand is stitched together from vendors who never
+ * meet."), which made the reader recognise something before we claimed
+ * anything. This one leads with what we do and pays it off with what they
+ * get. Both are in the history; neither is more correct, and which one is
+ * right depends on whether the page is for people who already know they have
+ * the problem. */
+const HERO = "We build the brand and run it. So you can run the business."
 
-/* The line under the hero. Cut down from the support copy that already runs
-   on this page — one embedded team, rather than a branding studio plus a
-   media shop plus whoever built the last campaign — so it is the site's own
-   argument, shortened, not a new one written for a hero. */
-const HERO_SUPPORT = "One embedded team for brand creation and growth media — not a branding studio, a media shop, and whoever built your last campaign."
 
 const WHO_WE_ARE = 'We are creatives who also do marketing.'
 const WHO_WE_ARE_SUPPORT = [
@@ -519,7 +538,7 @@ export default function HomeV3() {
       <StatementCard
         eyebrow={HERO_EYEBROW}
         statement={HERO}
-        support={HERO_SUPPORT}
+        support={null}
         as="h1"
         tall
         center
