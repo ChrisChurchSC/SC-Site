@@ -69,6 +69,21 @@ const NAV_LINKS = [
   { label: 'Pricing', href: null },
 ]
 
+/* The two columns of the Case Studies panel.
+ *
+ * The reference groups by INDUSTRY and by TEAM. This site has neither: there
+ * is no industry field on a project and no team taxonomy anywhere — not in
+ * Sanity, not in projects.js. Inventing ten industries to fill a menu would
+ * be making up a way of organising work that nobody organises it by.
+ *
+ * What is real is the service each project carries — Brand, Content, Product,
+ * the values the client index on the homepage already prints — and the
+ * clients themselves. So the columns are those.
+ *
+ * Every service link lands on /work: the filtered views the reference implies
+ * do not exist. Give them an href each when they do. */
+const WORK_BY_SERVICE = ['Brand', 'Content', 'Product']
+
 /* Company's panel. Every one of these is a real route — see App.jsx. */
 const COMPANY_LINKS = [
   { label: 'About', href: '/about-us', note: 'Who we are, and who is on the team.' },
@@ -341,28 +356,58 @@ export default function HomeV3() {
           )}
 
           {openMenu === 'work' && (
-            <div className={v3.panel}>
-              <div className={v3.panelWork}>
-                {featuredCaseStudies.map(({ slug, name, type, href }) => (
-                  href
-                    ? <NavLink key={slug} to={href} className={v3.workItem}>
-                        <span className={v3.workName}>{name}</span>
-                        <span className={v3.workType}>{type}</span>
-                      </NavLink>
-                    /* Unlinked where there is no page — the same treatment the
-                       wall, the client strip and the featured set already give
-                       these. Shown, not pretended to be reachable. */
-                    : <span key={slug} className={`${v3.workItem} ${v3.workItemFlat}`}>
-                        <span className={v3.workName}>{name}</span>
-                        <span className={v3.workType}>{type}</span>
-                      </span>
-                ))}
+            <div className={`${v3.panel} ${v3.panelService}`}>
+              <div className={v3.svcIntro}>
+                <p className={v3.panelTag}>[ Proof ]</p>
+                {/* The site's own descriptor for Work — the line the nav card
+                    already uses — rather than a headline written for a menu. */}
+                <p className={v3.svcStatement}>Selected case studies.</p>
+                <NavLink to="/work" className={v3.svcIntroCta}>View all case studies →</NavLink>
               </div>
-              <NavLink to="/work" className={v3.panelPromo}>
-                <span className={v3.panelPromoTag}>Everything</span>
-                <span className={v3.panelPromoName}>All work</span>
-                <span className={v3.panelPromoCta}>View the wall →</span>
-              </NavLink>
+
+              <div className={v3.proofBody}>
+                {/* THE NUMBERS ARE ABSENT ON PURPOSE. featuredCaseStudies
+                    carries '––' for every stat and says in its own header not
+                    to ship invented ones: there is no source for these
+                    anywhere in the repo or in Sanity. The layout is real and
+                    the figures are visibly missing, which is the same thing
+                    the featured section further down this page does. */}
+                <div className={v3.statCards}>
+                  {featuredCaseStudies.slice(0, 3).map(({ slug, name, stats }, i) => {
+                    /* A different measure per card. Taking stats[0] for all
+                       three printed "Audience growth" three times, which
+                       reads as one metric repeated rather than as three
+                       things the work moved. The set is the same across every
+                       case study, so the index is what varies. */
+                    const stat = stats[i] ?? stats[0]
+                    return (
+                      <div key={slug} className={v3.statCard}>
+                        <p className={v3.statValue}>{stat.value}</p>
+                        <p className={v3.statNote}>{stat.label}</p>
+                        <p className={v3.statClient}>{name}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className={v3.proofCols}>
+                  <div className={v3.proofCol}>
+                    <p className={v3.panelTag}>By service</p>
+                    {WORK_BY_SERVICE.map(s => (
+                      <NavLink key={s} to="/work" className={v3.proofLink}>{s}</NavLink>
+                    ))}
+                  </div>
+                  <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
+                    <p className={v3.panelTag}>By client</p>
+                    {featuredCaseStudies.map(({ slug, name, href }) => (
+                      href
+                        ? <NavLink key={slug} to={href} className={v3.proofLink}>{name}</NavLink>
+                        /* No page — shown, not linked, as everywhere else. */
+                        : <span key={slug} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{name}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>

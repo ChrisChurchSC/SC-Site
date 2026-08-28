@@ -552,3 +552,115 @@
   font-style: italic;
   color: rgba(255, 255, 255, 0.22);
 }
+
+/* ── Case Studies panel: stat cards, then two taxonomy columns ─────────── */
+.proofBody {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 26px);
+  min-width: 0;
+}
+
+.statCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* Filled, unlike everything else in the panel. The reference's cards are the
+   one raised surface in an otherwise flat menu, and that is what makes the
+   numbers read as the point rather than as another list. */
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  padding: 16px 16px 14px;
+  min-width: 0;
+}
+
+/* '––' at display size. It is deliberately the same weight a real figure
+   would be: the gap should look like a missing number, not like a design
+   that never had one. */
+.statValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.statNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 2px 0 0;
+}
+
+.statClient {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: auto 0 0;
+  padding-top: 10px;
+}
+
+.proofCols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.4vw, 40px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: clamp(14px, 1.6vw, 22px);
+}
+
+.proofCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+}
+
+/* The rule between the two columns, as in the reference. */
+.proofColRuled {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: clamp(18px, 2.4vw, 40px);
+}
+
+.proofLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.15s;
+}
+
+.proofLink:hover { color: #fff; }
+
+/* No page to reach — legible, but not offered as a destination. */
+.proofLinkFlat {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+}
+
+.proofLinkFlat:hover { color: rgba(255, 255, 255, 0.4); }
+
+@media (max-width: 1100px) {
+  .statCards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proofCols { grid-template-columns: minmax(0, 1fr); }
+  .proofColRuled {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proofLink { transition: none; }
+}
