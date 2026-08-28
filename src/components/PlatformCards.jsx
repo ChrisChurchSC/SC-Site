@@ -190,43 +190,44 @@ function RepoPreview() {
 }
 
 /**
- * The Measurement card's preview: the performance dashboard.
+ * THE THREE SMALL PREVIEWS ARE NOT WINDOWS.
  *
- * WHAT THE NUMBERS ARE, AND WHAT THEY ARE NOT. The repository preview above
- * shows real data, because SC-Brand exists and can be read. This one cannot:
- * the platform is COMING SOON, and there is no dashboard to screenshot. So
- * everything here is illustrative — the shape of the product, not a record
- * of anything.
+ * The repository card shows the product's actual UI, so it is framed and
+ * chromed like the application it is. These three are not screenshots of
+ * anything — there is no agents screen, no approvals screen and no dashboard
+ * to photograph, because the platform is Coming Soon. Dressing them in the
+ * same window chrome claimed four products exist and made the row read as
+ * one app repeated four times.
  *
- * WHICH IS WHY IT COUNTS THINGS RATHER THAN CLAIMING RESULTS. Every value is
- * a count of work: assets shipped, assets in review, channels live, output
- * per week. Not one of them is a lift, a conversion rate, a revenue figure
- * or a percentage with a plus sign in front of it. That is deliberate and it
- * is the line worth holding: a made-up count of drafts is obviously a mock,
- * while a made-up "+284% engagement" is a performance claim, and a visitor
- * has no way to tell an illustrative one from a real one. This site already
- * refuses that trade in the case-study cards, which carry '––' rather than
- * numbers nobody has sourced.
+ * So they sit directly on the card: a small label, then the content. What
+ * they show is true — the agents, their sources, the approval flow — without
+ * the frame implying a screen that has been built.
+ */
+
+/**
+ * Measurement: the counts, the output chart, the channel split.
  *
- * SO THE OUTCOME METRIC IS EMPTY ON PURPOSE. The card's own headline says
- * "what shipped and what it moved". The dashboard can show the first half
- * honestly and cannot show the second, so the second reads '––', the same
- * placeholder the case studies use. It is not an oversight and it should not
- * be filled in with a plausible figure — it is filled in when there is a
- * real one, from a real client, that someone has signed off.
+ * EVERY VALUE IS A COUNT OF WORK. Assets shipped, assets in review, output
+ * per week, share per channel. Not one is a lift, a conversion rate, a
+ * revenue figure or a percentage with a plus in front of it. A made-up count
+ * of drafts is obviously a mock; a made-up "+284% engagement" is a
+ * performance claim, and a visitor cannot tell an illustrative one from a
+ * real one.
  *
- * Decorative, like the other preview: it sits in the aria-hidden well and
- * nothing inside is focusable.
+ * WHICH IS WHY THE LIFT READS '––'. The card promises "what shipped and what
+ * it moved". This can show the first half honestly and cannot show the
+ * second, so the second carries the placeholder the case-study cards use.
+ * Fill it when there is a real figure from a real client that someone has
+ * signed off — not with a plausible one.
  */
 const DASH = {
   stats: [
     { value: '42', label: 'shipped' },
     { value: '6', label: 'in review' },
-    /* Not a number, and not to be made one. See above. */
     { value: '––', label: 'lift', empty: true },
   ],
-  /* Assets out per week. Relative heights only — the panel has no y-axis and
-     asserts no scale, because it is a shape, not a reading. */
+  /* Relative heights only. No axis and no gridlines: there is nothing to
+     read off it, and an axis would invite a measurement it has not earned. */
   bars: [38, 52, 44, 61, 49, 72, 58, 80],
   channels: [
     { name: 'Paid social', pct: 42 },
@@ -239,159 +240,151 @@ function DashPreview() {
   const peak = Math.max(...DASH.bars)
 
   return (
-    <div className={styles.ui}>
-      <div className={styles.uiTop}>
-        <span className={styles.uiCrumb}>Performance</span>
-        <span className={styles.uiSlash}>/</span>
-        <span className={styles.uiCrumbMuted}>Last 8 weeks</span>
+    <div className={styles.panel}>
+      <span className={styles.panelLabel}>Output · last 8 weeks</span>
+
+      <div className={styles.dashStats}>
+        {DASH.stats.map(({ value, label, empty }) => (
+          <span key={label} className={styles.dashStat}>
+            <b className={`${styles.dashValue}${empty ? ' ' + styles.dashValueEmpty : ''}`}>{value}</b>
+            <span className={styles.dashLabel}>{label}</span>
+          </span>
+        ))}
       </div>
 
-      <div className={styles.dash}>
-        <div className={styles.dashStats}>
-          {DASH.stats.map(({ value, label, empty }) => (
-            <span key={label} className={styles.dashStat}>
-              <b className={`${styles.dashValue}${empty ? ' ' + styles.dashValueEmpty : ''}`}>{value}</b>
-              <span className={styles.dashLabel}>{label}</span>
-            </span>
-          ))}
-        </div>
+      <div className={styles.dashChart}>
+        {DASH.bars.map((v, i) => (
+          /* Keyed by position: eight weeks, two of which can hold the same
+             value. */
+          <span key={i} className={styles.dashBar} style={{ height: `${(v / peak) * 100}%` }} />
+        ))}
+      </div>
 
-        <div className={styles.dashChart}>
-          {DASH.bars.map((v, i) => (
-            /* Keyed by position: these are eight weeks, and two of them can
-               legitimately hold the same value. */
-            <span key={i} className={styles.dashBar} style={{ height: `${(v / peak) * 100}%` }} />
-          ))}
-        </div>
-
-        <div className={styles.dashRows}>
-          {DASH.channels.map(({ name, pct }) => (
-            <span key={name} className={styles.dashRow}>
-              <span className={styles.dashRowName}>{name}</span>
-              <span className={styles.dashTrack}>
-                <span className={styles.dashFill} style={{ width: `${pct}%` }} />
-              </span>
-              <span className={styles.dashPct}>{pct}%</span>
+      <div className={styles.dashRows}>
+        {DASH.channels.map(({ name, pct }) => (
+          <span key={name} className={styles.dashRow}>
+            <span className={styles.dashRowName}>{name}</span>
+            <span className={styles.dashTrack}>
+              <span className={styles.dashFill} style={{ width: `${pct}%` }} />
             </span>
-          ))}
-        </div>
+            <span className={styles.dashPct}>{pct}%</span>
+          </span>
+        ))}
       </div>
     </div>
   )
 }
 
 /**
- * The Agents card's preview: the roster, and one of them refusing.
+ * Agents: what each one reads from, and one of them refusing.
  *
- * THE SIX ARE REAL AND SO ARE THE MARKERS. brand-strategist, comms-writer,
- * media-strategist, design-critic, sales-analyst and studio-ops are the six
- * subagents that exist in SC-Brand/Agents today, and [CLAIM NEEDED: …] is
- * one of the two escape hatches those agents actually write — the other is
- * [RATE UNVERIFIED: …]. The brand's own notes call those the product rather
- * than boilerplate, which is exactly why the panel shows one instead of
- * showing a finished paragraph.
+ * THE KNOWLEDGE BASE IS THE POINT OF THE CARD. "Trained on your brand, not
+ * on the internet" is a claim about where the words come from, and the only
+ * way to show it is to show the sources attached to each agent. A list of
+ * agent names alone could describe any wrapper around a chat model.
  *
- * IT SHOWS A REFUSAL, NOT AN OUTPUT. A mock of an agent producing beautiful
- * copy would say what every AI panel on every site says. The distinguishing
- * property is the opposite one: asked for a number nobody has sourced, it
- * marks the gap and hands it back. That is the thing worth putting on a
- * card, and it is honest — the agents genuinely behave this way.
+ * THE FILENAMES ARE THE REPOSITORY'S OWN. Strategy/positioning.md and
+ * Verbal/tone-of-voice.md are named in the brand's notes; verticals/ is a
+ * real folder and Data/ holds a metrics CSV. audience.md, proof-points.md
+ * and copy-standards.md describe material those notes say lives in Strategy
+ * and Verbal, but the exact filenames are not confirmed — they are the
+ * plausible half of this panel, and the one to check before it ships.
+ *
+ * SIX EXIST, THREE ARE SHOWN. The other three — design-critic, sales-analyst
+ * and studio-ops — are real too; the card is 4:5 and three agents with their
+ * sources say what six names in a list would not.
+ *
+ * IT ENDS ON A REFUSAL. [CLAIM NEEDED: …] is a marker these agents genuinely
+ * write, and the brand's notes call those markers the product rather than
+ * boilerplate. A mock of an agent producing beautiful copy would say what
+ * every AI panel on every site says; asked for a number nobody has sourced,
+ * this one marks the gap and hands it back.
  */
 const AGENTS = [
-  'brand-strategist',
-  'comms-writer',
-  'media-strategist',
-  'design-critic',
-  'sales-analyst',
-  'studio-ops',
+  { name: 'brand-strategist', files: ['positioning.md', 'audience.md', 'proof-points.md'] },
+  { name: 'comms-writer', files: ['tone-of-voice.md', 'copy-standards.md'] },
+  { name: 'media-strategist', files: ['verticals/', 'metrics.csv'] },
 ]
 
 function AgentsPreview() {
   return (
-    <div className={styles.ui}>
-      <div className={styles.uiTop}>
-        <span className={styles.uiCrumb}>Agents</span>
-        <span className={styles.uiSlash}>/</span>
-        <span className={styles.uiCrumbMuted}>{AGENTS.length} trained</span>
+    <div className={styles.panel}>
+      <span className={styles.panelLabel}>6 trained · reading from</span>
+
+      <div className={styles.agentList}>
+        {AGENTS.map(({ name, files }) => (
+          <span key={name} className={styles.agentBlock}>
+            <span className={styles.agentName}>{name}</span>
+            <span className={styles.agentFiles}>
+              {files.map(file => (
+                <span key={file} className={styles.agentFile}>{file}</span>
+              ))}
+            </span>
+          </span>
+        ))}
       </div>
 
-      <div className={styles.agents}>
-        <div className={styles.agentList}>
-          {AGENTS.map(name => (
-            <span key={name} className={styles.agentRow}>
-              <span className={styles.agentDot} />
-              <span className={styles.agentName}>{name}</span>
-            </span>
-          ))}
-        </div>
-
-        {/* The refusal. Its point is the marker, so the sentence around it is
-            deliberately dull. */}
-        <div className={styles.agentDraft}>
-          <span className={styles.agentDraftHead}>comms-writer · draft</span>
-          <span className={styles.agentDraftBody}>
-            Teams ship in half the time with{' '}
-            <span className={styles.agentFlag}>[CLAIM NEEDED: source]</span>
-          </span>
-        </div>
+      {/* The sentence around the marker is deliberately dull. The marker is
+          the content. */}
+      <div className={styles.agentDraft}>
+        <span className={styles.agentDraftHead}>comms-writer · draft</span>
+        <span className={styles.agentDraftBody}>
+          Teams ship in half the time with{' '}
+          <span className={styles.agentFlag}>[CLAIM NEEDED: source]</span>
+        </span>
       </div>
     </div>
   )
 }
 
 /**
- * The Reviews card's preview: a change proposed, waiting on a person.
+ * Reviews: a queue of approvals.
  *
- * THIS IS HOW THE SYNC CLI ALREADY WORKS, not a wish. A push opens a
- * numbered review holding what the files would become and writes nothing
- * live; merging is a separate, human step. Claude Desktop reaches the same
- * brand through MCP and can propose but cannot write live, delete or invite.
- * So the panel shows a numbered review, the agent that proposed it, the
- * files it touches, and the one thing that has not happened yet.
+ * A QUEUE, NOT A DIFF. This first showed one review with its changed files
+ * and their added and deleted line counts, which is a developer's view of
+ * the same event — it says "here is a patch" when the card's headline is
+ * that a person still approves the work.
  *
- * THE STATE IS "AWAITING", DELIBERATELY. An approved review would show a
- * green tick and say nothing; the card's headline is that a person still
- * approves the work, and the only frame that demonstrates it is the one
- * where the machine has stopped and is waiting.
+ * THE FLOW IS REAL, THE ITEMS ARE ILLUSTRATIVE. A push opens a numbered
+ * review holding what the files would become and writes nothing live;
+ * merging is a separate, human step; Claude Desktop can propose through MCP
+ * but cannot write live, delete or invite. The four titles are made up, and
+ * safe to make up because they describe work rather than results.
+ *
+ * BOTH STATES ARE SHOWN. Nothing but pending items reads as a backlog;
+ * nothing but ticks reads as a rubber stamp. Two of each, with the approved
+ * ones carrying the name of the person who approved them, is what makes the
+ * gate look like a decision rather than a delay.
  */
-const REVIEW = {
-  number: 4,
-  title: 'Tighten the positioning statement',
-  author: 'brand-strategist',
-  files: [
-    { path: 'Strategy/positioning.md', add: 12, del: 4 },
-    { path: 'Verbal/tone-of-voice.md', add: 3, del: 1 },
-  ],
-}
+const APPROVALS = [
+  { id: 'positioning', title: 'Tighten the positioning statement', by: 'brand-strategist', done: false },
+  { id: 'launch', title: 'Q3 launch copy — 6 assets', by: 'comms-writer', done: false },
+  { id: 'rates', title: 'Update the rate card', by: 'media-strategist', done: true },
+  { id: 'tone', title: 'Tone pass on the FAQ', by: 'comms-writer', done: true },
+]
 
 function ReviewsPreview() {
+  const pending = APPROVALS.filter(a => !a.done).length
+
   return (
-    <div className={styles.ui}>
-      <div className={styles.uiTop}>
-        <span className={styles.uiCrumb}>Reviews</span>
-        <span className={styles.uiSlash}>/</span>
-        <span className={styles.uiCrumbMuted}>#{REVIEW.number}</span>
-        <span className={styles.uiPrivate}>Open</span>
-      </div>
+    <div className={styles.panel}>
+      <span className={styles.panelLabel}>{pending} awaiting a person</span>
 
       <div className={styles.review}>
-        <span className={styles.reviewTitle}>{REVIEW.title}</span>
-        <span className={styles.reviewMeta}>proposed by {REVIEW.author}</span>
-
-        <div className={styles.reviewFiles}>
-          {REVIEW.files.map(({ path, add, del }) => (
-            <span key={path} className={styles.reviewFile}>
-              <span className={styles.reviewPath}>{path}</span>
-              <span className={styles.reviewAdd}>+{add}</span>
-              <span className={styles.reviewDel}>−{del}</span>
+        {APPROVALS.map(({ id, title, by, done }) => (
+          <span key={id} className={styles.task}>
+            {/* Two of these are empty, and that is the product. */}
+            <span className={`${styles.taskBox}${done ? ' ' + styles.taskBoxDone : ''}`} aria-hidden="true">
+              {done ? '✓' : ''}
             </span>
-          ))}
-        </div>
-
-        <div className={styles.reviewGate}>
-          <span className={styles.reviewGateDot} />
-          <span>Awaiting approval — chris-church</span>
-        </div>
+            <span className={styles.taskText}>
+              <span className={`${styles.taskTitle}${done ? ' ' + styles.taskTitleDone : ''}`}>{title}</span>
+              <span className={styles.taskMeta}>
+                {done ? 'approved by chris-church' : `proposed by ${by}`}
+              </span>
+            </span>
+          </span>
+        ))}
       </div>
     </div>
   )

@@ -447,7 +447,7 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
-.uiSeg { background: var(--blue, #5a76e5); }
+.uiSeg { background: var(--pink, #df4ed6); }
 
 .uiKeys {
   display: flex;
@@ -506,27 +506,41 @@
   width: calc(100% / 1.32 + 120px);
 }
 
-/* ── THE MEASUREMENT PREVIEW ───────────────────────────────────────────────
-   A dashboard drawn to fit a 4:5 card, so unlike the repository panel it is
-   not zoomed or cropped — it was never a wide window in the first place.
+/* ── THE THREE SMALL PREVIEWS ──────────────────────────────────────────────
+   Not windows. The repository card is framed because it is the application;
+   these three are frameless because there is no agents screen, no approvals
+   screen and no dashboard to photograph — see the note in the component.
 
-   Three bands: the counts, the output chart, then the channel split. They
-   share the panel's vertical space rather than each taking what they need,
-   so the chart absorbs a taller or shorter card instead of the type
-   resizing. */
-.dash {
+   They sit straight on the card with the well's own padding around them, so
+   the row reads as four different things rather than one app four times. */
+.panel {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px 16px 18px;
+  gap: 13px;
   flex: 1;
   min-height: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
 }
 
+/* The label replaces the window's title bar: it says what you are looking at
+   in one line, without implying a screen. */
+.panelLabel {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  flex: none;
+}
+
+/* ── Measurement ── */
 .dashStats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  flex: none;
 }
 
 .dashStat {
@@ -544,9 +558,8 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* The unsourced one. Set at the size a real figure would be, and dimmer, so
-   it reads as a number that is missing rather than as a design that never
-   had one — the same treatment the case-study cards give '––'. */
+/* The unsourced one, at the size a real figure would be and dimmer, so it
+   reads as a number missing rather than a design that never had one. */
 .dashValueEmpty { color: rgba(255, 255, 255, 0.3); }
 
 .dashLabel {
@@ -556,9 +569,6 @@
   color: rgba(255, 255, 255, 0.34);
 }
 
-/* Bars from the bottom, evenly spaced, no axis and no gridlines. There is
-   nothing to read off it — it is the shape of output over eight weeks, and
-   an axis would invite a measurement the panel has not earned. */
 .dashChart {
   display: flex;
   align-items: flex-end;
@@ -567,21 +577,23 @@
   min-height: 54px;
 }
 
+/* Pink, stepped: the bars are the brand's accent at low alpha and the
+   current week is the accent at full. One hue rather than grey-plus-accent,
+   so it reads as one series with a head on it. */
 .dashBar {
   flex: 1;
   min-width: 0;
   border-radius: 2px 2px 0 0;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(223, 78, 214, 0.28);
 }
 
-/* The most recent week carries the accent, so the eye lands on "now" rather
-   than reading the row left to right like a sentence. */
-.dashBar:last-child { background: var(--blue, #5a76e5); }
+.dashBar:last-child { background: var(--pink, #df4ed6); }
 
 .dashRows {
   display: flex;
   flex-direction: column;
   gap: 7px;
+  flex: none;
 }
 
 .dashRow {
@@ -591,9 +603,9 @@
 }
 
 .dashRowName {
-  /* 76px, because 62 broke "Paid social" over two lines and dropped that
-     row out of line with the two under it. Measured against the longest
-     label rather than the average one. */
+  /* 76px, because 62 broke "Paid social" over two lines and dropped that row
+     out of line with the two under it. Measured against the longest label
+     rather than the average one. */
   width: 76px;
   white-space: nowrap;
   flex: none;
@@ -612,7 +624,7 @@
 .dashFill {
   display: block;
   height: 100%;
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(223, 78, 214, 0.65);
 }
 
 .dashPct {
@@ -623,47 +635,42 @@
   flex: none;
 }
 
-/* ── THE AGENTS PREVIEW ────────────────────────────────────────────────────
-   The roster, then one of them refusing to invent a number. Both bands are
-   fixed; the list takes the slack, so a taller card gives more roster rather
-   than stretching the draft. */
-.agents {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 14px 16px 16px;
-  flex: 1;
-  min-height: 0;
-}
-
+/* ── Agents ── */
 .agentList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
   min-height: 0;
 }
 
-.agentRow {
+.agentBlock {
   display: flex;
-  align-items: center;
-  gap: 9px;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
 }
 
-/* Trained, not running. A pulsing or coloured dot would imply live activity
-   the panel is not claiming. */
-.agentDot {
-  width: 5px;
-  height: 5px;
-  flex: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+.agentName { color: rgba(255, 255, 255, 0.72); }
+
+/* The sources, as chips. Wrapping rather than truncating: a half-shown
+   filename is worse than a second line, and the count of them is part of
+   what the panel is saying. */
+.agentFiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
-.agentName { color: rgba(255, 255, 255, 0.66); }
+.agentFile {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-control, 4px);
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
 
-/* The draft. Inset on its own ground so it reads as output rather than as
-   another row of the list. */
 .agentDraft {
   display: flex;
   flex-direction: column;
@@ -672,6 +679,7 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: var(--r-control, 6px);
   background: rgba(255, 255, 255, 0.03);
+  flex: none;
 }
 
 .agentDraftHead {
@@ -686,80 +694,73 @@
   line-height: 1.55;
 }
 
-/* The marker carries the accent, because it is the point of the panel — the
-   sentence around it is filler and should look like it. */
+/* The marker carries the accent, because it is the point of the panel. */
 .agentFlag {
   color: var(--pink, #df4ed6);
   white-space: nowrap;
 }
 
-/* ── THE REVIEWS PREVIEW ───────────────────────────────────────────────────
-   One numbered review, its files, and the approval that has not happened. */
+/* ── Reviews ── */
 .review {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px 16px;
+  gap: 14px;
   flex: 1;
   min-height: 0;
 }
 
-.reviewTitle {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.25;
-  color: rgba(255, 255, 255, 0.88);
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.reviewMeta { color: rgba(255, 255, 255, 0.32); }
+/* The box is the fastest read in the panel: two are empty, and that is the
+   product. An empty one is weighted to be as visible as a ticked one — a
+   faint empty box would make the queue look finished.
 
-.reviewFiles {
+   The tick stays teal while the charts went pink. It is a state, not a
+   series: pink is what this page uses to mean "ours", and colouring an
+   approval with it would say the approval is a brand flourish rather than a
+   thing that either has or has not happened. */
+.taskBox {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--r-control, 4px);
+  color: transparent;
+}
+
+.taskBoxDone {
+  border-color: var(--teal, #4ecfb3);
+  background: var(--teal, #4ecfb3);
+  color: #0a0a0a;
+}
+
+.taskText {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-  /* Takes the slack, so the gate below stays pinned to the foot of the
-     panel whatever the card's height does. */
-  flex: 1;
-  min-height: 0;
-}
-
-.reviewFile {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.reviewPath {
-  flex: 1;
+  gap: 3px;
   min-width: 0;
-  color: rgba(255, 255, 255, 0.6);
-  /* The path is the useful half; truncate rather than wrap, so the counts
-     stay on the same line as the file they belong to. */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.reviewAdd { color: var(--teal, #4ecfb3); flex: none; }
-.reviewDel { color: rgba(255, 255, 255, 0.3); flex: none; }
-
-/* The gate. Amber would be a fifth colour on this page for no reason; the
-   hollow ring already says "not yet". */
-.reviewGate {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.5);
+.taskTitle {
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.4;
 }
 
-.reviewGateDot {
-  width: 8px;
-  height: 8px;
-  flex: none;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.34);
+/* Done items recede but are not struck through: this is an approval, not a
+   chore, and a line through it would read as cancelled. */
+.taskTitleDone { color: rgba(255, 255, 255, 0.42); }
+
+.taskMeta {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.32);
+  line-height: 1.4;
 }
