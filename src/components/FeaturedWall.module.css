@@ -160,3 +160,13 @@
 @media (prefers-reduced-motion: reduce) {
   .card, .explore { transition: none; }
 }
+
+/* Two identical passes inside the scroller. The pass carries the same gap as
+   the rail, so the seam between them is indistinguishable from any other gap
+   between two cards. */
+.pass {
+  display: flex;
+  align-items: flex-start;
+  flex: none;
+  gap: 14px;
+}

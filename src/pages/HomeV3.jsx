@@ -20,6 +20,7 @@ import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
+import FooterCard from '../components/FooterCard'
 import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
@@ -649,6 +650,12 @@ export default function HomeV3() {
       <ContactCTA sub={CLOSING} form={false} bare>
         <button className={v3.contactCta} onClick={cal.open}>Book a demo</button>
       </ContactCTA>
+
+      {/* The site's routes, grouped, between the ask and the sign-off. It
+          goes after the CTA because the CTA is the one thing this page wants;
+          a wall of links above it would give a reader somewhere else to go
+          at the exact moment they were being asked to book. */}
+      <FooterCard />
 
       {/* The wordmark, at the size the page ends on. Not a link and not a
           logo lockup — it is the last thing on the page and its job is to be
