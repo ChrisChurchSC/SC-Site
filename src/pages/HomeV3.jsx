@@ -245,27 +245,35 @@ export default function HomeV3() {
           </div>
 
           {openMenu === 'services' && (
-            <div className={v3.panel}>
-              <div className={v3.panelCols}>
-                {[...buildDisciplines, ...growDisciplines].map(({ tag, name, items }) => (
-                  <div key={name} className={v3.panelCol}>
-                    <p className={v3.panelTag}>{tag}</p>
-                    <NavLink to="/services" className={v3.panelHeading}>{name}</NavLink>
-                    <ul className={v3.panelList}>
-                      {items.map(i => <li key={i} className={v3.panelItem}>{i}</li>)}
-                    </ul>
-                  </div>
+            /* Statement on the left, numbered services on the right, as in the
+               reference. The promo card comes off this panel: the reference
+               has no room for one, and the left column is doing that job. */
+            <div className={`${v3.panel} ${v3.panelService}`}>
+              <div className={v3.svcIntro}>
+                <p className={v3.panelTag}>[ The Service ]</p>
+                {/* The site's own descriptor for Services — the wording the
+                    nav card uses on / and /v2. Not a new claim written for a
+                    menu. */}
+                <p className={v3.svcStatement}>Build the brand, then grow it.</p>
+                <NavLink to="/contact" className={v3.svcIntroCta}>Talk to us →</NavLink>
+              </div>
+
+              <div className={v3.svcGrid}>
+                {[...buildDisciplines, ...growDisciplines].map(({ tag, name }, i) => (
+                  /* Every row lands on /services — there are no per-discipline
+                     pages and the page has no anchors. Six rows to one
+                     destination is repetitive; thirty would have been a lie
+                     about depth, which is why the sub-items are gone. */
+                  <NavLink key={name} to="/services" className={v3.svcRow}>
+                    <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                    <span className={v3.svcBody}>
+                      <span className={v3.svcName}>{name}</span>
+                      {/* The discipline's own one-liner, off the Services page. */}
+                      <span className={v3.svcNote}>{tag}</span>
+                    </span>
+                  </NavLink>
                 ))}
               </div>
-              {/* The one case study with a page, a film and somewhere to go. */}
-              <NavLink to="/work/wonderwerk" className={v3.panelPromo}>
-                <span className={v3.panelPromoMedia} aria-hidden="true">
-                  <LazyVideo src="/wonderwerk-montage-compressed.mp4" className={v3.panelPromoVideo} />
-                </span>
-                <span className={v3.panelPromoTag}>Brand + Content</span>
-                <span className={v3.panelPromoName}>Wonderwerk</span>
-                <span className={v3.panelPromoCta}>Read the case study →</span>
-              </NavLink>
             </div>
           )}
 
