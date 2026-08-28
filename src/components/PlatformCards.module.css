@@ -5,18 +5,49 @@
    what makes the second row read as a continuation rather than as a new
    section. Same card here, two size modifiers. */
 
+/* A dot field behind the whole section, as in the reference.
+
+   On a pseudo-element rather than the section's own background, and pulled
+   out past the page margin, so the texture runs edge to edge while the cards
+   stay on the page's grid — a texture that stops where the content stops
+   reads as a panel, not as ground.
+
+   Faded at top and bottom: a field with a hard edge is a rectangle, and the
+   point of this one is that the section sits ON something rather than in a
+   box. Behind everything (z-index) and non-interactive. */
 .section {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+.section::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  bottom: -40px;
+  left: calc(-1 * var(--page-pad-left, 0px));
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 16px 16px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+}
+
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
   margin: 0;
 }
 
@@ -67,6 +98,11 @@
 }
 
 .rowTwo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* One large card left in the top row: it takes the full width rather than
+   half of it. Set from the card count in the component, not hardcoded, so
+   putting a second large card back restores the two-up on its own. */
+.rowOne { grid-template-columns: minmax(0, 1fr); }
 .rowThree { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 .card {
@@ -74,7 +110,9 @@
   flex-direction: column;
   gap: 20px;
   padding: 26px;
-  background: rgba(255, 255, 255, 0.03);
+  /* Opaque-ish over the dot field: at 0.03 alpha the dots read straight
+     through the card and it stopped looking like a surface. */
+  background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   overflow: hidden;
@@ -83,10 +121,10 @@
 
 .card:hover {
   border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  background: #111;
 }
 
-.cardLarge { min-height: 420px; }
+.cardLarge { min-height: 360px; }
 .cardSmall { min-height: 380px; }
 
 .cardHead {
@@ -141,12 +179,10 @@
   min-height: 180px;
   margin: 0 -26px -26px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.014) 0 10px,
-      transparent 10px 20px
-    );
+  /* Dots, matching the field behind the section — two different textures in
+     one section would read as two different kinds of emptiness. */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 14px 14px;
 }
 
 @media (max-width: 900px) {

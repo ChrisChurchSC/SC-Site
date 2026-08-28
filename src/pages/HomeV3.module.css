@@ -41,7 +41,47 @@
 
      The right is the nav column plus the same inset, so the content stops
      short of the fixed nav by exactly what it stands in from the left. */
-  --bar-inset: calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px);
+  /* Section labels. They were 9px at 0.3 white, which put them below the
+     threshold where a label reads as a label rather than as a smudge — and
+     they are the page's whole navigation for a reader skimming it. Brighter,
+     a point larger, and tracked wider so the extra weight does not close the
+     letters up.
+
+     Set here and read by every eyebrow rule with the old values as their
+     fallback, so / and /v2 — which never set these — are untouched. */
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  /* The fill. A chip rather than a bare line: at 10px the label was competing
+     with the body copy near it for the eye's attention and losing. The fill
+     gives it an edge, which is what makes it read as a marker on the page
+     rather than as the first line of the section under it. */
+  --label-display: inline-block;
+  /* Grey, and the site's own: #161616 is the card ground used by every panel
+     on / and /v2, so the chip belongs to the existing system rather than
+     introducing a fourth surface value.
+
+     It went light wash to black to here. The wash made the label glow off the
+     page; black closed it up so far the chip stopped reading as a chip at
+     all — at #0a0a0a page ground there was almost nothing between them. This
+     sits clearly above the page and clearly below the type. */
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+  /* fit-content, or the chip stretches. Every section is a flex column with
+     align-items:stretch, so a blockified child takes the full width — the
+     chip ran the whole page and read as a bar, not a label. Tokenised like
+     the rest: auto by default, so / and /v2 are unchanged. */
+  --label-width: fit-content;
+
+  /* The page margin, and the nav bar reads it too, so widening this widens
+     everything together — which is the point: the sections were asked to
+     match the nav, so there is one number for all of them.
+
+     Was calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px), about 22px, which came
+     from splitting the difference on the bar alone back when the bar was the
+     only thing using it. */
+  --bar-inset: clamp(22px, 3.6vw, 58px);
   /* No side nav on this page — see NavGate in App.jsx. The right side is a
      plain margin again, the same as the left, rather than a column reserved
      for something that is not there. */
@@ -87,10 +127,15 @@
 
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
   margin: 0;
 }
 

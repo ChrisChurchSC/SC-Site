@@ -23,10 +23,15 @@
    24px rhythm, which is spaced for the display line and the mono block. */
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
   margin: 0 0 -12px;
 }
 
@@ -248,7 +253,11 @@
    Scoped to .tall.display rather than changed on .tall, because /v2's hero
    uses .tall at the height it was tuned at. */
 .tall.display {
-  min-height: min(62vh, 560px);
-  padding-top: clamp(48px, 6vh, 80px);
-  padding-bottom: clamp(48px, 6vh, 80px);
+  /* Taller again — 62vh was set when the wall sat immediately under the hero
+     and the page needed to show it. The wall is still there, but the hero has
+     lost its supporting line and now holds a headline and two buttons in a
+     lot of space; at 62vh it read as cramped rather than composed. */
+  min-height: min(78vh, 700px);
+  padding-top: clamp(64px, 8vh, 110px);
+  padding-bottom: clamp(64px, 8vh, 110px);
 }

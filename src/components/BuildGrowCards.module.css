@@ -210,3 +210,31 @@
   color: rgba(255, 255, 255, 0.42);
   margin: 14px 0 0;
 }
+
+/* Compact: four across instead of two, and shorter — four cards at the
+   two-up's height would run most of a screen. Opt-in, so / and /v2 keep the
+   two large cards they were designed around. */
+.rowCompact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cardCompact {
+  /* The base card is aspect-ratio 4/5, which is why min-height:0 did nothing:
+     the height was coming from the ratio, not a minimum. Four portrait cards
+     across a row is most of a screen for four short lines. */
+  aspect-ratio: auto;
+  min-height: 0;
+  padding: 26px 24px;
+  gap: 10px;
+}
+
+.cardCompact .name { font-size: clamp(20px, 1.8vw, 26px); }
+.cardCompact .body { font-size: 11px; }
+
+@media (max-width: 1000px) {
+  .rowCompact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .rowCompact { grid-template-columns: minmax(0, 1fr); }
+}

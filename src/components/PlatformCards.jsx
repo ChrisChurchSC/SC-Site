@@ -31,12 +31,6 @@ const CARDS = [
     id: 'agents',
     lead: 'Agents',
     rest: 'trained on your brand, not on the internet',
-    size: 'large',
-  },
-  {
-    id: 'guardrails',
-    lead: 'Guardrails',
-    rest: 'that stop an unsourced claim shipping',
     size: 'small',
   },
   {
@@ -53,9 +47,16 @@ const CARDS = [
   },
 ]
 
-/* Library is the sixth feature in the nav panel and is not a card here: the
-   layout takes five and Library is the least differentiated of the six. If
-   the section grows to six, it is the one to add back. */
+/* Two of the nav panel's six are not cards here.
+
+   Guardrails is cut. Library was already out. Both still appear in the
+   Platform dropdown, which is the fuller list — the section is the argument,
+   the menu is the index, and they do not have to be the same length.
+
+   Agents moved down to the second row, which leaves Brand OS alone on the
+   first. It takes the whole width there rather than sitting at half with a
+   hole beside it: one card in a two-column row is a gap, and a gap in a
+   section this sparse reads as something failing to load. */
 
 function Card({ lead, rest, size }) {
   return (
@@ -89,7 +90,7 @@ export default function PlatformCards({ eyebrow = '[ The Platform ]' }) {
         <span className={styles.ghost}>Take a tour</span>
       </div>
 
-      <div className={styles.rowTwo}>
+      <div className={`${styles.rowTwo}${large.length === 1 ? ' ' + styles.rowOne : ''}`}>
         {large.map(c => <Card key={c.id} {...c} />)}
       </div>
 

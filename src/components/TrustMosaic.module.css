@@ -13,10 +13,15 @@
 
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
   margin: 0;
 }
 
@@ -45,13 +50,17 @@
    without it the panel is shrink-to-fit and collapses to the width of one
    tile. */
 .panel {
-  /* No max-width. Every other section on this page — the nav bar, the
-     platform cards, the audience row, the copy — starts at the page margin
-     and ends at it. The wall was the only thing held to 1080 and centred, so
-     it was the one block that did not line up with anything above or below
-     it. Matching the margin matters more here than the tiles being any
-     particular width. */
+  /* Deliberately inset well past the page margin — the one block on the page
+     that is. Everything else runs to the page's own edge; this steps in, and
+     the step is what makes a wall of twenty-one names read as a held object
+     rather than as a band spanning the screen.
+
+     Big enough to be read as intent. A small inset looks like a mistake in
+     the margin; this one cannot be mistaken for one. */
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(100% - clamp(24px, 11vw, 220px));
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;

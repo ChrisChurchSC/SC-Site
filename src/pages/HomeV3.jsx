@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 /* lucide-react is already a dependency of this project, so the icons are a
    real stroke set at the hairline weight the bars are drawn with — not emoji
@@ -61,18 +61,19 @@ let didLoad = false
    anchors or the pages exist, give each item an href and nothing else here
    changes. */
 const NAV_LINKS = [
-  // No page, and now a panel of six more pages that also do not exist — see
-  // PLATFORM_PAGES above. The label stays unlinked for the same reason every
-  // row inside it is: there is nowhere to go yet.
+  // Active now, and behaves like a menu heading: still no href, because there
+  // is no platform page to send anyone to, but it opens its panel on hover
+  // like Services and Company and is no longer dimmed. The chevron says it
+  // does something.
   { label: 'Platform', href: null, panel: 'platform' },
   { label: 'Services', href: '/services', panel: 'services' },
   { label: 'Case Studies', href: '/work', panel: 'work' },
   { label: 'Company', href: '/about-us', panel: 'company' },
-  // No page either. The rates DO exist — they are on /services, and the
-  // Build and Grow cards on this page quote them — but a nav item called
-  // Pricing that lands you halfway down another page is a worse promise than
-  // no link. Unlinked until it has somewhere of its own to go.
-  { label: 'Pricing', href: null },
+  // Now points at /services, where the rates actually are: the Build and Grow
+  // cards quote them and every package on that page carries a price. Not a
+  // pricing page, and landing mid-page is not ideal — but a live link to the
+  // real numbers beats the dead label it was.
+  { label: 'Pricing', href: '/services' },
 ]
 
 /* The two columns of the Case Studies panel: by industry, and by company
@@ -198,8 +199,6 @@ const COMPANY_COLS = [
   },
 ]
 
-const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
-
 /* ── The canvas's copy ─────────────────────────────────────────────────── */
 
 /* The hero. Carries the h1, which is why the statement below it is an h2 —
@@ -239,80 +238,68 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
  * the problem. */
 const HERO = "We build the brand and run it. So you can run the business."
 
-
-const WHO_WE_ARE = 'We are creatives who also do marketing.'
-const WHO_WE_ARE_SUPPORT = [
-  "Super-Conscious is your outsourced creative and marketing department. One embedded team handles both brand creation and growth media, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign.",
-  "You'll know your team, and you'll have access to them. No pooled or anonymous labor, no rotating bench — the same people, every time.",
-  "Our thinking doesn't sit in a deck, either. Strategy goes straight into brand, creative, and paid media — then we test it against the data and adjust. And while AI helps us move faster, it doesn't do the thinking: every idea, every asset, is 100% ours.",
-]
-
-/* Build and Grow, with the canvas's price lines added. "From $4,500/mo ·
-   Hourly retainer" is kept exactly as written although it names two billing
-   models in one line: which of them is true is a pricing decision, not a typo
-   to quietly correct here. Media is the live homepage's, unchanged. */
+/* THE FOUR SERVICES, as cards.
+ *
+ * Build and Grow were two large cards carrying film. It is four now, at a
+ * smaller size, and none of them carries artwork: four films on one row is a
+ * lot of motion in a section whose job is to be read, and the two new
+ * services have no artwork of their own — two cards with film and two without
+ * would read as two finished and two unfinished.
+ *
+ * NO PRICES AND NO CTAS. The two that had them now match the two that never
+ * could: Support and Consult have no rate anybody has set and no page to link
+ * to, so a row where half the cards quoted a number and offered a way in read
+ * as two real services beside two placeholders. The rates are still on
+ * /services, which the nav's Pricing item now points at.
+ *
+ * The footnote — 'Most clients do both, but you can start wherever you are' —
+ * goes with them. It was written about two services; with four it is no
+ * longer true as stated.
+ *
+ * The lines are one clause each. At four across, a card is roughly a quarter
+ * of the row and the long Build and Grow bodies — which listed everything in
+ * the service after a colon — filled it top to bottom and turned four cards
+ * into four paragraphs. The list belongs on /services; the card only has to
+ * say what the service is.
+ *
+ * Support and Consult are STILL UNDEFINED. Their lines were written to fill
+ * this out and have not been signed off; both are also unlinked, because
+ * neither has a page. Same standing note as the nav panel they share.
+ */
 const OFFER = [
   {
     id: 'build',
     name: 'Build',
-    body: 'We make your brand and its assets, from scratch or refreshed from what you have: brand strategy, identity, voice, messaging, website, app.',
-    price: 'From $10,000 · Project-based',
-    cta: 'How we build',
+    body: 'We make your brand and its assets.',
+    price: null,
+    cta: null,
     href: '/services',
-    media: '/build-card-compressed.mp4',
   },
   {
     id: 'grow',
     name: 'Grow',
-    body: 'We take that brand to market and run it: campaigns, paid media, organic content, and an embedded marketing team, measured and optimized every month.',
-    price: 'From $4,500/mo · Hourly retainer',
-    cta: 'How we grow',
+    body: 'We take that brand to market and run it.',
+    price: null,
+    cta: null,
     href: '/services',
-    media: '/grow-card.gif',
+  },
+  {
+    id: 'support',
+    name: 'Support',
+    body: 'We look after what is live.',
+    price: null,
+    cta: null,
+    href: null,
+  },
+  {
+    id: 'consult',
+    name: 'Consult',
+    body: 'We advise the team doing the work.',
+    price: null,
+    cta: null,
+    href: null,
   },
 ]
-
-/* THE FOUR SERVICES, for the nav panel.
- *
- * Build and Grow take their line from OFFER above — the same copy the cards
- * on this page carry — cut at the first colon OR comma, whichever comes
- * first. Both marks are where the sentence stops defining the service and
- * starts listing what is in it, and the earlier of the two is what keeps
- * these to one line in a menu. Derived rather than retyped, so the panel
- * cannot drift from the cards.
- *
- * SUPPORT AND CONSULT HAVE NO COPY AND NO PAGE. They are not on /services,
- * not in buildPackages or growPackages, not in Sanity. What they cover is a
- * positioning decision, not a line to be written to fill a menu, so nothing
- * is invented here: they render as a name with no description, unlinked, and
- * the marker below shows on the dev server only so the gap is visible while
- * the page is being worked on. import.meta.env.DEV is false in every build.
- *
- * Give either one a `note` and an `href` and it behaves like the other two. */
-const SERVICE_ROWS = [
-  ...OFFER.map(({ name, body, href }) => ({
-    name,
-    note: body.split(/[:,]/)[0].trim() + '.',
-    href,
-  })),
-  /* ─────────────────────────────────────────────────────────────────────
-     THESE TWO LINES ARE WRITTEN, NOT SOURCED. Nobody has defined Support or
-     Consult — they are not on /services, not in buildPackages or
-     growPackages, not in Sanity. Asked for, so written; but a one-line
-     definition of a service IS the service's positioning, and these are a
-     proposal for someone to approve or replace.
-
-     Built to sit parallel to Build and Grow, which are real: each is one
-     sentence, first person, says who does the work and what happens to it.
-     Read the four together and the ladder is deliberate — we make it, we run
-     it, we look after it, or we advise the people doing it.
-
-     Still unlinked: writing a line does not create a page. */
-  { name: 'Support', note: 'We look after what is live and keep it working.', href: null },
-  { name: 'Consult', note: 'We advise the team doing the work.', href: null },
-]
-
-const OFFER_FOOTNOTE = 'Most clients do both — but you can start wherever you are.'
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
@@ -338,45 +325,7 @@ export default function HomeV3() {
   // noindex: a messaging variant to look at, not a page to be found.
   useMeta({ title: 'Super Conscious — homepage v3', path: '/v3', noindex: true })
 
-  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
-  const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
-
   const [openMenu, setOpenMenu] = useState(null)
-  const [reelOpen, setReelOpen] = useState(false)
-  const [playing, setPlaying] = useState(true)
-  const [muted, setMuted] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const videoRef = useRef(null)
-
-  const closeReel = () => {
-    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 }
-    setReelOpen(false)
-    setPlaying(true)
-    setProgress(0)
-  }
-
-  const togglePlay = () => {
-    if (playing) { videoRef.current.pause(); setPlaying(false) }
-    else { videoRef.current.play(); setPlaying(true) }
-  }
-
-  const toggleMute = () => {
-    videoRef.current.muted = !muted
-    setMuted(m => !m)
-  }
-
-  const handleScrub = (e) => {
-    const val = Number(e.target.value)
-    if (videoRef.current?.duration) {
-      videoRef.current.currentTime = (val / 100) * videoRef.current.duration
-    }
-    setProgress(val)
-  }
-
-  const handleTimeUpdate = () => {
-    const v = videoRef.current
-    if (v?.duration) setProgress((v.currentTime / v.duration) * 100)
-  }
 
   // Escape closes the nav panel as well as the reel — a hover panel with no
   // keyboard way out is a trap for anyone who opened it by tabbing into it.
@@ -385,17 +334,6 @@ export default function HomeV3() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') closeReel() }
-    if (reelOpen) window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [reelOpen])
-
-  useEffect(() => {
-    document.body.classList.toggle('reel-open', reelOpen)
-    return () => document.body.classList.remove('reel-open')
-  }, [reelOpen])
 
   return (
     <main className={`${styles.main} ${v3.stack}`}>
@@ -423,7 +361,7 @@ export default function HomeV3() {
                   </>
                 )
                 const shared = {
-                  className: `${v3.navLink}${open ? ' ' + v3.navLinkOpen : ''}${href ? '' : ' ' + v3.navLinkFlat}`,
+                  className: `${v3.navLink}${open ? ' ' + v3.navLinkOpen : ''}`,
                   onMouseEnter: () => setOpenMenu(panel ?? null),
                   onFocus: () => setOpenMenu(panel ?? null),
                 }
@@ -626,110 +564,43 @@ export default function HomeV3() {
       <TrustMosaic />
 
       {/* 3 — The offer, in two halves, with the price lines */}
-      <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>
+      <hr className={v3.divider} />
+
+      <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} compact /></Labelled>
 
       {/* The platform, after the offer it supports and before the longer
           read about who we are. Card layout only — the previews are empty
           wells; see PlatformCards. */}
+      <hr className={v3.divider} />
+
       <PlatformCards />
 
-      {/* 4 — Who we are, in full, behind the offer it explains */}
-      <StatementCard
-        eyebrow="[ Who We Are ]"
-        statement={WHO_WE_ARE}
-        support={WHO_WE_ARE_SUPPORT}
-        as="h2"
-        serif
-        bare
-      />
+      {/* Who we are is cut. It was the page's one long read — a headline and
+          three paragraphs — and everything around it had become short: four
+          service cards of a clause each, a wall of names, cards with no copy
+          in them yet. It had stopped matching the page it was on. The full
+          version still runs on / and /v2. */}
 
       {/* 5 — Who it is for. The one section the live page has no version of */}
+      <hr className={v3.divider} />
+
       <AudienceCards />
 
       {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
-      <Labelled label="[ Reel ]">
-      <section className={styles.row12}>
-        <div className={`${styles.block} ${styles.r169} ${styles.heroBlock}`} style={{ gridColumn: '1 / span 12', cursor: 'pointer' }} onClick={() => setReelOpen(true)}>
-          <video
-            className={styles.heroReel}
-            src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
-            poster={assetUrl('/reel-preview.gif')}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          {/* The block's own "Showreel" caption is dropped here: the section
-              carries a [ Reel ] label now, and naming it twice — once in the
-              page's label column and once inside the frame — reads as an
-              oversight. The live homepage keeps its caption, because there
-              the reel is the hero and has no label above it. */}
-          <button className={styles.playBtn} aria-label="Play showreel with sound">
-            <svg width="8" height="9" viewBox="0 0 10 12" fill="none">
-              <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
-            </svg>
-            <span>Watch with sound</span>
-          </button>
-        </div>
-      </section>
-      </Labelled>
+      {/* The reel is cut. It was a full-width film in the middle of a page
+          that now opens on a client wall and carries film nowhere else — the
+          one moving thing on a still page, taking every eye on the way past.
+          It still plays on / and /v2. */}
 
       {/* 7 — Proof, then 8 — the work it is about */}
+      <hr className={v3.divider} />
+
       <Labelled label="[ Featured Work ]"><FeaturedCaseStudies /></Labelled>
 
       {/* 9 — The ask */}
-      <Labelled label="[ Get In Touch ]"><ContactCTA sub={CLOSING} /></Labelled>
+      <hr className={v3.divider} />
 
-      {reelOpen && (
-        <div className={styles.reelOverlay} onClick={closeReel}>
-          <button className={styles.reelClose} onClick={closeReel}>Close</button>
-          <video
-            ref={videoRef}
-            src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
-            autoPlay
-            playsInline
-            className={styles.reelVideo}
-            onClick={e => e.stopPropagation()}
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={() => setPlaying(false)}
-          />
-          <div className={styles.reelControls} onClick={e => e.stopPropagation()}>
-            <button className={styles.reelCtrlBtn} onClick={togglePlay}>
-              {playing ? (
-                <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-                  <rect x="0" y="0" width="3" height="12" rx="1" fill="currentColor"/>
-                  <rect x="7" y="0" width="3" height="12" rx="1" fill="currentColor"/>
-                </svg>
-              ) : (
-                <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-                  <path d="M0 0L10 6L0 12V0Z" fill="currentColor"/>
-                </svg>
-              )}
-            </button>
-            <input
-              type="range"
-              className={styles.reelScrub}
-              min="0" max="100"
-              value={progress}
-              onChange={handleScrub}
-              style={{ background: `linear-gradient(to right, rgba(255,255,255,0.8) ${progress}%, rgba(255,255,255,0.18) ${progress}%)` }}
-            />
-            <button className={styles.reelCtrlBtn} onClick={toggleMute}>
-              {muted ? (
-                <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
-                  <path d="M0 4H3L7 0V12L3 8H0V4Z" fill="currentColor"/>
-                  <path d="M9.5 4L13.5 8M13.5 4L9.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              ) : (
-                <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
-                  <path d="M0 4H3L7 0V12L3 8H0V4Z" fill="currentColor"/>
-                  <path d="M9 3C10.3 4.1 11 5.5 11 7C11 8.5 10.3 9.9 9 11" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
+      <Labelled label="[ Get In Touch ]"><ContactCTA sub={CLOSING} /></Labelled>
 
     </main>
   )

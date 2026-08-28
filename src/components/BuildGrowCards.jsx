@@ -62,7 +62,12 @@ const CARDS = [
  * homepage's, so <BuildGrowCards /> is unchanged. A card may carry an
  * optional `price` line, and the section an optional `footnote`.
  */
-export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
+function CardShell({ href, className, children }) {
+  if (!href) return <div className={className}>{children}</div>
+  return <NavLink to={href} className={className}>{children}</NavLink>
+}
+
+export default function BuildGrowCards({ cards = CARDS, footnote = null, compact = false }) {
   /* The section and its footnote are wrapped together ONLY when there is a
      footnote. They are both children of the page's flex column, so a page
      that opens its section gap up — /v2 does, at up to 64px — would push the
@@ -72,12 +77,14 @@ export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
      Without a footnote the section is returned bare, exactly as before, so
      the live homepage's DOM is unchanged rather than merely equivalent. */
   const cardsRow = (
-    <section className={styles.row}>
+    <section className={`${styles.row}${compact ? ' ' + styles.rowCompact : ''}`}>
       {cards.map(({ id, name, body, price, cta, href, media }) => (
-        <NavLink
+        /* A card without an href renders as a div: NavLink with to={null}
+           throws, and two of the four services have no page yet. */
+        <CardShell
           key={id}
-          to={href}
-          className={`${styles.card}${media ? ' ' + styles.cardMedia : ''}`}
+          href={href}
+          className={`${styles.card}${media ? ' ' + styles.cardMedia : ''}${compact ? ' ' + styles.cardCompact : ''}`}
         >
           {media && (isVideo(media) ? (
             // Wrapped rather than filtered: the span carries the scrim and
@@ -98,8 +105,8 @@ export default function BuildGrowCards({ cards = CARDS, footnote = null }) {
           <h2 className={styles.name}>{name}</h2>
           <p className={styles.body}>{body}</p>
           {price && <p className={styles.price}>{price}</p>}
-          <span className={styles.cta}>{cta} →</span>
-        </NavLink>
+          {cta && href && <span className={styles.cta}>{cta} →</span>}
+        </CardShell>
       ))}
     </section>
   )
