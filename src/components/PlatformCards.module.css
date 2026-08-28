@@ -29,12 +29,23 @@
   bottom: -40px;
   left: calc(-1 * var(--page-pad-left, 0px));
   width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  z-index: -1;
+  /* z-index 0, NOT -1. At -1 the field painted behind the nearest ancestor
+     background, and main carries #0a0a0a — so the dots were rendering and
+     were completely hidden by the page itself. The section content is lifted
+     to 1 below instead, which puts the field between the page and the cards
+     where it belongs. */
+  z-index: 0;
   pointer-events: none;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
   background-size: 16px 16px;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+}
+
+/* Everything in the section sits above the dot field. */
+.section > * {
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow {
@@ -179,10 +190,12 @@
   min-height: 180px;
   margin: 0 -26px -26px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  /* Dots, matching the field behind the section — two different textures in
-     one section would read as two different kinds of emptiness. */
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 14px 14px;
+  /* No texture. The dots are the section's ground; repeating them inside the
+     cards put the same field on two planes at once and the cards stopped
+     reading as objects sitting on it. A flat inset instead — the well is a
+     space waiting for a preview, and it only has to be darker than the card
+     to say so. */
+  background: rgba(0, 0, 0, 0.35);
 }
 
 @media (max-width: 900px) {

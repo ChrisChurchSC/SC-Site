@@ -33,7 +33,18 @@
   text-wrap: balance;
 }
 
+/* A black wash down each side, over the rows.
+
+   The window already masks the cards to transparent at the edges, which stops
+   them being cut off mid-card. This sits on top of that and darkens the last
+   stretch before the edge, so a card is well out of focus by the time it
+   leaves rather than simply thinning out.
+
+   On the container, not on each row, so the two rows fade as one edge — two
+   separately faded rows would show their own seams. Above the cards and
+   non-interactive. */
 .rows {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -120,4 +131,25 @@
   /* Stops dead rather than slowing: a reader who asked for no motion gets
      none, and the row is still legible standing still. */
   .track { animation: none; }
+}
+
+.rows::before,
+.rows::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(70px, 12vw, 220px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.rows::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 100%);
+}
+
+.rows::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 100%);
 }

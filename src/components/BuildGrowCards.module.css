@@ -219,17 +219,16 @@
 }
 
 .cardCompact {
-  /* The base card is aspect-ratio 4/5, which is why min-height:0 did nothing:
-     the height was coming from the ratio, not a minimum. Four portrait cards
-     across a row is most of a screen for four short lines. */
-  aspect-ratio: auto;
-  min-height: 0;
-  padding: 26px 24px;
-  gap: 10px;
+  /* Keeps the base card's 4/5, so all four are portrait like the two they
+     replaced. Only the padding and the type come down — a quarter-width card
+     needs less inset than a half-width one, and at the base size the name ran
+     to two lines in a column this narrow. */
+  padding: 30px 26px 26px;
+  gap: 12px;
 }
 
-.cardCompact .name { font-size: clamp(20px, 1.8vw, 26px); }
-.cardCompact .body { font-size: 11px; }
+.cardCompact .name { font-size: clamp(24px, 2.2vw, 34px); }
+.cardCompact .body { font-size: 12px; }
 
 @media (max-width: 1000px) {
   .rowCompact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
