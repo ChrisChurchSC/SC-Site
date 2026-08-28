@@ -45,9 +45,13 @@
    without it the panel is shrink-to-fit and collapses to the width of one
    tile. */
 .panel {
+  /* No max-width. Every other section on this page — the nav bar, the
+     platform cards, the audience row, the copy — starts at the page margin
+     and ends at it. The wall was the only thing held to 1080 and centred, so
+     it was the one block that did not line up with anything above or below
+     it. Matching the margin matters more here than the tiles being any
+     particular width. */
   width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
