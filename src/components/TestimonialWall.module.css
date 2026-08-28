@@ -1,0 +1,123 @@
+/* The testimonial wall — see TestimonialWall.jsx. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 22ch;
+  margin: 4px 0 28px;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+}
+
+/* Fades both ends so cards enter and leave rather than being cut off. */
+.window {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: drift 90s linear infinite;
+}
+
+.trackReverse { animation-direction: reverse; }
+
+/* Pauses on hover so a quote can actually be read — a wall that will not
+   hold still is decoration, not proof. */
+.track:hover { animation-play-state: paused; }
+
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.pass {
+  display: flex;
+  gap: 12px;
+  padding-right: 12px;
+  flex-shrink: 0;
+}
+
+.card {
+  flex: none;
+  width: clamp(260px, 24vw, 340px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 22px;
+  background: #0f0f0f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.who {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Dev only, and marked so it cannot pass for a real name. */
+.whoPlaceholder {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.quote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Stops dead rather than slowing: a reader who asked for no motion gets
+     none, and the row is still legible standing still. */
+  .track { animation: none; }
+}

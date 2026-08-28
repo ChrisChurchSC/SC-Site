@@ -1,0 +1,112 @@
+/* Featured work — see FeaturedWall.jsx. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 20ch;
+  margin: 4px 0 0;
+  text-wrap: balance;
+}
+
+/* The pill, as in the reference: light on dark rather than dark on light. */
+.explore {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: #0a0a0a;
+  background: #f2f0ea;
+  border-radius: 999px;
+  padding: 12px 24px;
+  margin: 18px 0 30px;
+  transition: background 0.15s;
+}
+
+.explore:hover { background: #fff; }
+
+/* Runs past the page's right edge on purpose. The negative margin lets it
+   bleed while the section's copy stays on the page grid, and the row scrolls
+   rather than wrapping — a wrapped row would end the drift at the first
+   break. */
+.rail {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: calc(100% + var(--page-pad-right, 0px));
+  overflow-x: auto;
+  padding-bottom: 90px;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar { display: none; }
+
+.card {
+  position: relative;
+  flex: none;
+  width: clamp(190px, 20vw, 280px);
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.card:hover { transform: translateY(-6px); }
+
+/* No page to reach, so no lift either — it would promise one. */
+.cardFlat { cursor: default; }
+.cardFlat:hover { transform: none; }
+
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+.mediaEl {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+}
+
+@media (max-width: 760px) {
+  .card { width: 150px; }
+  .rail { padding-bottom: 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .explore { transition: none; }
+}

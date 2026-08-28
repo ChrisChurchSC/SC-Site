@@ -20,11 +20,12 @@ import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
+import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import AudienceCards from '../components/AudienceCards'
 import PlatformCards from '../components/PlatformCards'
-import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
+import FeaturedWall from '../components/FeaturedWall'
 
 /**
  * Homepage v3 — a third direction, alongside / and /v2.
@@ -584,7 +585,7 @@ export default function HomeV3() {
       {/* 5 — Who it is for. The one section the live page has no version of */}
       <hr className={v3.divider} />
 
-      <AudienceCards />
+      <AudienceCards rows />
 
       {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
       {/* The reel is cut. It was a full-width film in the middle of a page
@@ -595,9 +596,15 @@ export default function HomeV3() {
       {/* 7 — Proof, then 8 — the work it is about */}
       <hr className={v3.divider} />
 
-      <Labelled label="[ Featured Work ]"><FeaturedCaseStudies /></Labelled>
+      {/* Carries its own label and headline, so it is not wrapped. */}
+      <FeaturedWall />
 
       {/* 9 — The ask */}
+      <hr className={v3.divider} />
+
+      {/* Carries its own label, so it is not wrapped. */}
+      <TestimonialWall />
+
       <hr className={v3.divider} />
 
       <Labelled label="[ Get In Touch ]"><ContactCTA sub={CLOSING} /></Labelled>

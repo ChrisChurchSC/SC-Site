@@ -81,3 +81,90 @@
     aspect-ratio: auto;
   }
 }
+
+/* ── Row list variant ─────────────────────────────────────────────────────
+   One list with a focus, not three cards with hover states. The whole effect
+   is that the row you are on lifts and the others recede — which is why the
+   dimming lives on the list, not on each row. */
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 22ch;
+  margin: 4px 0 28px;
+  text-wrap: balance;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.listRow {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) 30px;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 20px;
+  margin: 0 -20px;
+  border-radius: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.18s, opacity 0.18s;
+}
+
+/* Everything fades while the pointer is in the list; the row under it does
+   not. Two rules rather than one so the list at rest is fully lit. */
+.list:hover .listRow { opacity: 0.45; }
+.list .listRow:hover { opacity: 1; background: #161616; border-bottom-color: transparent; }
+
+.listName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 36px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.listLine {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Only on the row you are on, as in the reference. */
+.listArrow {
+  justify-self: end;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.listRow:hover .listArrow { opacity: 1; }
+
+.listAll {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 22px;
+  transition: color 0.15s;
+}
+
+.listAll:hover { color: #fff; }
+
+@media (max-width: 760px) {
+  .listRow {
+    grid-template-columns: minmax(0, 1fr) 24px;
+    gap: 6px 16px;
+  }
+  .listLine { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listRow, .listArrow, .listAll { transition: none; }
+}
