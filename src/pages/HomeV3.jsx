@@ -213,7 +213,7 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
    ignore" is not a flourish either; it is the underdog case this page
    already makes further down, in the brand "in a crowded category that needs
    to stand out". */
-/* WRITTEN, NOT SOURCED — a proposal, like the Support and Consult lines.
+/* WRITTEN, NOT SOURCED — a proposal, like the Support and Represent lines.
  *
  * On the shape of Air's "Air keeps track. So you keep creating.", not its
  * words: an eyebrow that names the category, then two beats — what we do,
@@ -248,7 +248,7 @@ const HERO = "We build the brand and run it. So you can run the business."
  * would read as two finished and two unfinished.
  *
  * NO PRICES AND NO CTAS. The two that had them now match the two that never
- * could: Support and Consult have no rate anybody has set and no page to link
+ * could: Support and Represent have no rate anybody has set and no page to link
  * to, so a row where half the cards quoted a number and offered a way in read
  * as two real services beside two placeholders. The rates are still on
  * /services, which the nav's Pricing item now points at.
@@ -263,7 +263,7 @@ const HERO = "We build the brand and run it. So you can run the business."
  * into four paragraphs. The list belongs on /services; the card only has to
  * say what the service is.
  *
- * Support and Consult are STILL UNDEFINED. Their lines were written to fill
+ * Support and Represent are STILL UNDEFINED. Their lines were written to fill
  * this out and have not been signed off; both are also unlinked, because
  * neither has a page. Same standing note as the nav panel they share.
  */
@@ -271,7 +271,13 @@ const OFFER = [
   {
     id: 'build',
     name: 'Build',
-    body: 'We make your brand and its assets.',
+    /* Names the brand platform, which is a real service — 'Brand platform'
+       is one of the named services in serviceConstants, alongside brand
+       strategy, brand sprint, brand refresh and brand system. It is the
+       strategy deliverable, not the software one in the Platform section
+       below; the two share a word and are not the same thing, which is worth
+       watching if this page ever says both out loud in the same breath. */
+    body: 'We build your brand platform and its assets.',
     price: null,
     cta: null,
     href: '/services',
@@ -293,14 +299,32 @@ const OFFER = [
     href: null,
   },
   {
-    id: 'consult',
-    name: 'Consult',
-    body: 'We advise the team doing the work.',
+    id: 'represent',
+    name: 'Represent',
+    /* Shortened to fit one line rather than forced onto one with nowrap: at a
+       quarter of the row the card is about 285px inside its padding, and 41
+       characters at this size does not fit. nowrap would have made it fit by
+       letting it overflow the card instead. This is 33, which is the length
+       Build already sets on one line.
+       
+       Still unsigned-off copy either way — see the note above. */
+    body: 'We speak for the brand in public.',
     price: null,
     cta: null,
     href: null,
   },
 ]
+
+/* The Services nav panel's rows, derived from OFFER so the menu and the cards
+   cannot say different things about the same four services.
+ *
+ * IT WAS DELETED BY ACCIDENT. Restructuring OFFER from two cards to four cut
+ * from the comment above it to the constant below, and this sat in between.
+ * Nothing failed at build time and nothing failed on load: the panel only
+ * renders on hover, so the ReferenceError was waiting for the first person to
+ * point at SERVICES. Derived rather than retyped, which is also why it is
+ * cheap to restore correctly. */
+const SERVICE_ROWS = OFFER.map(({ name, body, href }) => ({ name, note: body, href }))
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 

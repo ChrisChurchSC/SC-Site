@@ -5,6 +5,10 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  /* Stands in from the page margin on the left. The rail still bleeds off the
+     right, so the section reads as starting further in and running out —
+     which is the shape of a rail rather than a row that happens to be cut. */
+  padding-left: clamp(16px, 5vw, 110px);
 }
 
 .eyebrow {
@@ -38,7 +42,7 @@
   font-size: 12px;
   color: #0a0a0a;
   background: #f2f0ea;
-  border-radius: 999px;
+  border-radius: var(--r-control, 999px);
   padding: 12px 24px;
   margin: 18px 0 30px;
   transition: background 0.15s;
@@ -54,34 +58,35 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  width: calc(100% + var(--page-pad-right, 0px));
+  width: calc(100% + var(--page-pad-right, 0px) + clamp(16px, 5vw, 110px));
   overflow-x: auto;
-  padding-bottom: 90px;
+  padding-bottom: 10px;
   scrollbar-width: none;
 }
 
 .rail::-webkit-scrollbar { display: none; }
 
+/* The card is the media plus a caption under it now, rather than the media
+   with a name laid over it. The name and the measures both needed room the
+   image was not going to give them, and type over a photograph has to be
+   defended with a scrim at every size. */
 .card {
-  position: relative;
   flex: none;
-  width: clamp(190px, 20vw, 280px);
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #111;
+  width: clamp(240px, 27vw, 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
 }
 
 .card:hover { transform: translateY(-6px); }
 
-/* No page to reach, so no lift either — it would promise one. */
-.cardFlat { cursor: default; }
-.cardFlat:hover { transform: none; }
-
 .media {
-  position: absolute;
-  inset: 0;
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-surface, 14px);
+  overflow: hidden;
+  background: #111;
 }
 
 .mediaEl {
@@ -90,21 +95,53 @@
   object-fit: cover;
 }
 
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .name {
-  position: absolute;
-  left: 16px;
-  bottom: 14px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.measures {
+  display: flex;
+  gap: 18px;
+}
+
+.measure {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+/* At the size a real figure would be — the gap should read as a missing
+   number, not as a design that never had one. */
+.measureValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.measureLabel {
   font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 8px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #fff;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.38);
 }
 
 @media (max-width: 760px) {
-  .card { width: 150px; }
-  .rail { padding-bottom: 60px; }
+  .card { width: 200px; }
+  .rail { padding-bottom: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

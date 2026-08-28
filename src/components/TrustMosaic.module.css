@@ -63,7 +63,7 @@
   max-width: calc(100% - clamp(24px, 11vw, 220px));
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
+  border-radius: var(--r-panel, 18px);
 }
 
 /* SEVEN COLUMNS — three rows of twenty, with the last tile widened to fill
@@ -85,7 +85,7 @@
   min-height: 116px;
   padding: 18px;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 14px;
+  border-radius: var(--r-surface, 14px);
   transition: background 0.18s;
 }
 

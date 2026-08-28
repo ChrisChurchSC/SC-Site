@@ -49,6 +49,22 @@
 
      Set here and read by every eyebrow rule with the old values as their
      fallback, so / and /v2 — which never set these — are untouched. */
+  /* ONE RADIUS SCALE. The page had ten different values on it — 4, 6, 8, 10,
+     12, 14, 16, 18, 999 and 50% — most of them arrived one section at a time
+     and none of them agreed. Three steps now:
+
+       control  4px, matching the site's own language on / and /v2, for
+                buttons, inputs, chips, icon tiles and rows inside a menu.
+       surface  12px for the cards and tiles the page is built from.
+       panel    18px for the one container holding a grid of surfaces.
+
+     Every rule reads these with its old value as the fallback, so nothing
+     outside /v3 moves. A circle is left as a circle — 50% on the mosaic's
+     arrow is not a rounded rectangle. */
+  --r-control: 4px;
+  --r-surface: 12px;
+  --r-panel: 18px;
+
   --label-color: rgba(255, 255, 255, 0.62);
   --label-size: 10px;
   --label-tracking: 0.18em;
@@ -248,7 +264,7 @@
   letter-spacing: 0.02em;
   color: #0a0a0a;
   background: var(--pink);
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   padding: 10px 16px;
   white-space: nowrap;
   transition: filter 0.15s;
@@ -287,7 +303,7 @@
   padding: clamp(24px, 2.6vw, 40px);
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 4px;
+  border-radius: var(--r-panel, 4px);
   animation: panelIn 0.16s ease both;
 }
 
@@ -360,7 +376,7 @@
   gap: 2px;
   padding: 9px 10px;
   margin: 0 -10px;
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   transition: background 0.15s;
 }
 
@@ -399,7 +415,7 @@
   min-height: 190px;
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 4px;
+  border-radius: var(--r-surface, 4px);
   transition: border-color 0.2s;
 }
 
@@ -627,7 +643,7 @@
   flex-direction: column;
   gap: 4px;
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   padding: 16px 16px 14px;
   min-width: 0;
 }
@@ -737,7 +753,7 @@
   gap: 11px;
   padding: 6px 10px;
   margin: 0 -10px;
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   transition: background 0.15s;
 }
 
@@ -753,7 +769,7 @@
   height: 28px;
   flex: none;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   color: rgba(255, 255, 255, 0.6);
   transition: color 0.15s, border-color 0.15s;
 }
@@ -796,7 +812,7 @@
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.02em;
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   padding: 14px 22px;
   white-space: nowrap;
 }

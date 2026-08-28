@@ -20,6 +20,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Stands in from the page margin and drops further from the section above.
+     It is the one part of the page that is a product rather than the studio,
+     and the inset is what separates it — the dot field behind it still runs
+     to the page edges, so the section reads as content sitting on a ground
+     rather than as a narrower column. */
+  padding: clamp(40px, 6vw, 96px) clamp(20px, 5vw, 110px) 0;
 }
 
 .section::before {
@@ -27,8 +33,11 @@
   position: absolute;
   top: -40px;
   bottom: -40px;
-  left: calc(-1 * var(--page-pad-left, 0px));
-  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  /* Measured from the section's padding box, which is now inset, so the pull
+     has to cover the section's own padding as well as the page's. */
+  left: calc(-1 * (var(--page-pad-left, 0px) + clamp(20px, 5vw, 110px)));
+  right: calc(-1 * (var(--page-pad-right, 0px) + clamp(20px, 5vw, 110px)));
+  width: auto;
   /* z-index 0, NOT -1. At -1 the field painted behind the nearest ancestor
      background, and main carries #0a0a0a — so the dots were rendering and
      were completely hidden by the page itself. The section content is lifted
@@ -87,7 +96,7 @@
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.02em;
-  border-radius: 4px;
+  border-radius: var(--r-control, 4px);
   padding: 12px 18px;
   cursor: default;
 }
@@ -125,7 +134,7 @@
      through the card and it stopped looking like a surface. */
   background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: var(--r-surface, 16px);
   overflow: hidden;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -135,8 +144,20 @@
   background: #111;
 }
 
-.cardLarge { min-height: 360px; }
-.cardSmall { min-height: 380px; }
+/* Ratios rather than minimums, so the cards keep their shape at any column
+   width instead of growing taller as the page narrows. The large one is
+   landscape because it sits alone across the full row — a 4:5 card stretched
+   to the whole width would be enormous — and the three below it are portrait
+   like the service cards, which is the page's other row of four-ish cards. */
+.cardLarge {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+
+.cardSmall {
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+}
 
 .cardHead {
   display: flex;
@@ -154,6 +175,16 @@
   max-width: 22ch;
 }
 
+/* The wide card has a full row to itself, so its headline has no reason to
+   wrap — 22ch was a measure set for a half-width card and it was breaking
+   'Brand OS that everyone works from' after 'works'. No measure here, and
+   nowrap so it cannot break at a narrower viewport either; the clamp on the
+   font size is what keeps it inside the card. */
+.cardLarge .cardTitle {
+  max-width: none;
+  white-space: nowrap;
+}
+
 /* Two weights in one phrase: the subject holds, the rest recedes. Without
    this a two-line card headline reads as two separate lines. */
 .lead { color: rgba(255, 255, 255, 0.95); }
@@ -165,7 +196,7 @@
   flex: none;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--r-control, 8px);
   border: 1px solid rgba(255, 255, 255, 0.16);
   color: rgba(255, 255, 255, 0.6);
   font-family: 'Roboto Mono', monospace;
@@ -202,7 +233,10 @@
   .rowTwo,
   .rowThree { grid-template-columns: minmax(0, 1fr); }
   .cardLarge,
-  .cardSmall { min-height: 300px; }
+  .cardSmall {
+    aspect-ratio: auto;
+    min-height: 300px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

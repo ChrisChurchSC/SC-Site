@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import styles from './FeaturedWall.module.css'
 import LazyVideo from './LazyVideo'
 import { BLOCK_MAP } from '../lib/blockMap'
+import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import { useComingSoon } from '../context/ComingSoonContext'
 import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
@@ -18,31 +19,45 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
  * That also means nobody has to keep two lists in step. Add media to a block
  * in BLOCK_MAP and it appears here.
  *
- * Linking follows the same test as everywhere else on this page: published,
- * not hidden, not still being written. A card with no page is shown and not
- * linked rather than dropped — the work exists even when the write-up does
- * not.
- *
- * THE STAGGER is the whole idea of the reference: each card sits lower than
- * the one before it, so the row reads as a drift rather than a filmstrip. It
- * is computed from the index and wraps, so it stays a rhythm however many
- * cards there are instead of a hand-set list of offsets.
+ * NO STAGGER. The reference steps each card lower than the last; asked for
+ * aligned, so they sit on one baseline. Worth knowing what that costs: the
+ * drift was what stopped the row reading as a filmstrip, and a flat row of
+ * equal cards is a filmstrip. The width and the bleed off the right edge are
+ * now doing that work alone.
  */
+/* THE MEASURES ARE SHARED AND THE NUMBERS ARE ABSENT.
+ *
+ * featuredCaseStudies uses one set of labels across every case study on
+ * purpose — its own comment says so: the section should read as one
+ * comparable table rather than four unrelated brag sheets. So the labels are
+ * taken from it rather than restated here, and they are the same under every
+ * card because that is the design.
+ *
+ * Every value is '––'. That file says in capitals not to ship invented ones:
+ * there is no source for these anywhere in the repo or in Sanity. They are
+ * set at the size a real figure would be, so the gap reads as a missing
+ * number rather than as a design that never had one. */
+const MEASURES = featuredCaseStudies[0]?.stats ?? []
+
 const NAME = slug => slug.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
 
 export default function FeaturedWall({ eyebrow = '[ Featured Work ]' }) {
   const comingSoon = useComingSoon()
 
+  const linkable = slug => !HIDDEN_SLUGS.has(slug) && !comingSoon.has(slug)
+
+  /* CASE STUDIES ONLY. Every card here now goes somewhere: a block needs both
+     media AND a published, non-hidden, not-still-being-written case study to
+     appear. Before, a block with a file but no write-up rendered unlinked —
+     which made a section called Featured Work partly a gallery of things you
+     cannot read about.
+     
+     Six at most. The wall at /work is the catalogue; this is a rail. */
   const cards = Object.values(BLOCK_MAP)
     .filter(b => b.img && b.slug)
-    .filter(b => !HIDDEN_SLUGS.has(b.slug))
-
-  const linkable = slug => !HIDDEN_SLUGS.has(slug) && !comingSoon.has(slug)
+    .filter(b => linkable(b.slug))
+    .slice(0, 6)
   const isVideo = src => /\.(mp4|webm|mov)$/i.test(src)
-
-  /* Four steps, then it repeats. Enough to read as a drift, few enough that
-     the row does not walk off the bottom of the section. */
-  const STEPS = [0, 34, 68, 34]
 
   return (
     <section className={styles.section}>
@@ -53,7 +68,7 @@ export default function FeaturedWall({ eyebrow = '[ Featured Work ]' }) {
       {/* Scrolls rather than wraps, and runs off the right edge on purpose —
           the row continuing past the frame is what says there is more. */}
       <div className={styles.rail}>
-        {cards.map((c, i) => {
+        {cards.map(c => {
           const inner = (
             <>
               <span className={styles.media} aria-hidden="true">
@@ -61,13 +76,20 @@ export default function FeaturedWall({ eyebrow = '[ Featured Work ]' }) {
                   ? <LazyVideo src={c.img} className={styles.mediaEl} />
                   : <img src={c.img} alt="" className={styles.mediaEl} loading="lazy" />}
               </span>
-              <span className={styles.name}>{NAME(c.slug)}</span>
+              <span className={styles.caption}>
+                <span className={styles.name}>{NAME(c.slug)}</span>
+                <span className={styles.measures}>
+                  {MEASURES.map(({ value, label }) => (
+                    <span key={label} className={styles.measure}>
+                      <span className={styles.measureValue}>{value}</span>
+                      <span className={styles.measureLabel}>{label}</span>
+                    </span>
+                  ))}
+                </span>
+              </span>
             </>
           )
-          const style = { marginTop: STEPS[i % STEPS.length] }
-          return linkable(c.slug)
-            ? <NavLink key={c.slug} to={`/work/${c.slug}`} className={styles.card} style={style}>{inner}</NavLink>
-            : <div key={c.slug} className={`${styles.card} ${styles.cardFlat}`} style={style}>{inner}</div>
+          return <NavLink key={c.slug} to={`/work/${c.slug}`} className={styles.card}>{inner}</NavLink>
         })}
       </div>
     </section>
