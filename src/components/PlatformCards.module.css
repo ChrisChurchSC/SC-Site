@@ -177,12 +177,26 @@
 
 /* The wide card has a full row to itself, so its headline has no reason to
    wrap — 22ch was a measure set for a half-width card and it was breaking
-   'Brand OS that everyone works from' after 'works'. No measure here, and
+   'Brand Repository that everyone works from' after 'works'. No measure
+   here, and
    nowrap so it cannot break at a narrower viewport either; the clamp on the
    font size is what keeps it inside the card. */
 .cardLarge .cardTitle {
   max-width: none;
   white-space: nowrap;
+  /* Its own step down from the shared clamp. "Brand Repository that everyone
+     works from" is nine characters longer than the name this card was sized
+     for, and at the shared clamp it ended EXACTLY on the card's content edge
+     — zero pixels of headroom, measured, which is not a fit but a
+     coincidence about one viewport width. */
+  font-size: clamp(17px, 1.5vw, 23px);
+}
+
+/* Below this the card is narrower than the phrase can be set at its own
+   minimum, so nowrap stops being a preference and starts being an overflow.
+   One line is the intent, not a promise to keep at any cost. */
+@media (max-width: 1180px) {
+  .cardLarge .cardTitle { white-space: normal; }
 }
 
 /* Two weights in one phrase: the subject holds, the rest recedes. Without

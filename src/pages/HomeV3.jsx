@@ -133,7 +133,8 @@ const WORK_BY_SIZE = [
  * So these are built on what the studio has actually already built, which is
  * a brand held as a system rather than as a deck:
  *
- *   Brand OS   — the SC-Brand repo is exactly this: positioning, audience,
+ *   Brand Repository — the SC-Brand repo is exactly this: positioning,
+ *                     audience,
  *                proof points and tone as files, synced, with the rule that
  *                Strategy holds what is true and Verbal holds how it sounds.
  *   Agents     — six brand-trained subagents exist today, and their defining
@@ -150,7 +151,7 @@ const WORK_BY_SIZE = [
  * two least differentiated of the six and the first to cut if this shortens.
  */
 const PLATFORM_PAGES = [
-  { name: 'Brand OS', note: 'Positioning, audience, proof and tone — as a source of truth, not a deck.' },
+  { name: 'Brand Repository', note: 'Strategy, verbal, visual, agents and data — versioned, and every change reviewed.' },
   { name: 'Agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
   { name: 'Guardrails', note: 'Nothing ships with an unsourced number or an unapproved claim.' },
   { name: 'Reviews', note: 'Every change is proposed, and a person approves it.' },
@@ -596,7 +597,7 @@ export default function HomeV3() {
       {/* 3 — The offer, in two halves, with the price lines */}
       <hr className={v3.divider} />
 
-      <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} compact /></Labelled>
+      <Labelled label="[ Services ]"><BuildGrowCards cards={OFFER} compact /></Labelled>
 
       {/* The platform, after the offer it supports and before the longer
           read about who we are. Card layout only — the previews are empty

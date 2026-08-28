@@ -22,8 +22,8 @@ import styles from './PlatformCards.module.css'
  */
 const CARDS = [
   {
-    id: 'brand-os',
-    lead: 'Brand OS',
+    id: 'brand-repository',
+    lead: 'Brand Repository',
     rest: 'that everyone works from',
     size: 'large',
   },
@@ -53,7 +53,7 @@ const CARDS = [
    Platform dropdown, which is the fuller list — the section is the argument,
    the menu is the index, and they do not have to be the same length.
 
-   Agents moved down to the second row, which leaves Brand OS alone on the
+   Agents moved down to the second row, which leaves Brand Repository alone
    first. It takes the whole width there rather than sitting at half with a
    hole beside it: one card in a two-column row is a gap, and a gap in a
    section this sparse reads as something failing to load. */
