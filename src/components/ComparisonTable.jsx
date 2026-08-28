@@ -1,4 +1,4 @@
-import { Layers, Palette, TrendingUp, Building2, Briefcase, Users, User, Bot, Repeat } from 'lucide-react'
+import { Layers, Palette, TrendingUp, Building2, Briefcase, Users, User, Bot, Repeat, Check, Minus, X } from 'lucide-react'
 
 import styles from './ComparisonTable.module.css'
 
@@ -86,7 +86,7 @@ const ROWS = [
     note: 'One embedded team, brand through growth',
     /* Scale is deliberately a partial — see the note above. */
     attrs: [FULL, FULL, FULL, SOME, FULL, FULL, FULL],
-    cost: 'Monthly retainer',
+    cost: 'Project or subscription',
   },
   {
     id: 'branding-studio',
@@ -160,6 +160,13 @@ const ROWS = [
 ]
 
 const STATE_WORD = ['No', 'Partly', 'Strong']
+const STATE_ICON = [X, Minus, Check]
+const STATE_CLASS = ['markNone', 'markSome', 'markFull']
+
+function Mark({ level, styles }) {
+  const Glyph = STATE_ICON[level] ?? X
+  return <Glyph className={styles[STATE_CLASS[level] ?? 'markNone']} size={16} strokeWidth={2} aria-hidden="true" />
+}
 
 export default function ComparisonTable({ eyebrow = '[ Competitive Alternatives ]' }) {
   return (
@@ -202,10 +209,7 @@ export default function ComparisonTable({ eyebrow = '[ Competitive Alternatives 
                     {/* The mark is decorative; the word is what a screen
                         reader gets, so the table still reads as a table
                         rather than as a grid of unlabelled squares. */}
-                    <span
-                      aria-hidden="true"
-                      className={[styles.pip, styles.pipSome, styles.pipFull][attrs[i]] ?? styles.pip}
-                    />
+                    <Mark level={attrs[i]} styles={styles} />
                     <span className={styles.sr}>{STATE_WORD[attrs[i]] ?? 'No'}</span>
                   </td>
                 ))}
@@ -218,9 +222,12 @@ export default function ComparisonTable({ eyebrow = '[ Competitive Alternatives 
       </div>
 
       <p className={styles.legend}>
-        <span className={styles.legendState}><span className={styles.pipFull} />Strong</span>
-        <span className={styles.legendState}><span className={styles.pipSome} />Partly</span>
-        <span className={styles.legendState}><span className={styles.pip} />No</span>
+        {[2, 1, 0].map(level => (
+          <span key={level} className={styles.legendState}>
+            <Mark level={level} styles={styles} />
+            {STATE_WORD[level]}
+          </span>
+        ))}
       </p>
     </section>
   )

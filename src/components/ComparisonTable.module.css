@@ -154,28 +154,20 @@
   padding: 13px 6px;
 }
 
-/* ONE MARK PER CELL. Squares rather than dots: they line up on a grid down
-   the column, which is the whole reason the prose came out. */
-.pip {
+/* ONE MARK PER CELL — a check, a dash or a cross. The dash is the middle
+   state and is drawn at the same weight as the other two on purpose: a
+   fainter check would read as a failed check, and an empty cell would read
+   as a rendering bug. */
+.markFull,
+.markSome,
+.markNone {
   display: inline-block;
-  width: 11px;
-  height: 11px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  vertical-align: middle;
 }
 
-.pipSome {
-  composes: pip;
-  background: rgba(255, 255, 255, 0.32);
-  box-shadow: none;
-}
-
-.pipFull {
-  composes: pip;
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: none;
-}
+.markFull { color: rgba(255, 255, 255, 0.92); }
+.markSome { color: rgba(255, 255, 255, 0.42); }
+.markNone { color: rgba(255, 255, 255, 0.18); }
 
 .row:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
 
@@ -210,8 +202,9 @@
 .rowUs .rowNote { color: rgba(255, 255, 255, 0.5); }
 .rowUs .rowIcon { color: var(--pink); }
 .rowUs .cellCost { color: rgba(255, 255, 255, 0.85); }
-.rowUs .pipFull { background: var(--pink); }
-.rowUs .pipSome { background: rgba(223, 78, 214, 0.45); }
+.rowUs .markFull { color: var(--pink); }
+.rowUs .markSome { color: rgba(223, 78, 214, 0.55); }
+.rowUs .markNone { color: rgba(223, 78, 214, 0.3); }
 
 /* Three states, nothing else — the seven axes name themselves in the header
    row now, so the legend only has to say what a square means. */
