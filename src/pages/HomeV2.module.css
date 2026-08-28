@@ -25,21 +25,27 @@
      this padding can subtract exactly it, rather than guessing with 100vw.
      Custom property names are not hashed by CSS modules, so other modules
      can read these — see ClientStrip's .bleed and StatementCard's rule. */
-  --page-pad-left: clamp(20px, 3.4vw, 60px);
-  /* The top bar's inset, declared here rather than on the bar because the
-     page's own top padding is what sets the space ABOVE the bar — the bar
-     cannot set it from the inside. One value, three edges. */
+  /* ONE MARGIN FOR THE WHOLE PAGE.
+
+     The bars and the content used to stand in by different amounts — the
+     bars at the inset below, the copy and cards at a wider reading margin —
+     and the two left edges did not line up down the page. They are the same
+     value now, so everything shares one edge: the wordmark bar, the client
+     strip, the section labels, the copy and the cards.
+
+     --bar-inset keeps its name because it is still what positions the bars;
+     it is simply the page's margin as well now. With the two equal, the
+     bars' own margins compute to zero and the .barInset rule becomes inert —
+     kept rather than deleted because it is what holds them together if the
+     two ever diverge again.
+
+     The right is the nav column plus the same inset, so the content stops
+     short of the fixed nav by exactly what it stands in from the left. */
   --bar-inset: calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px);
   --nav-width: 300px;
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: calc(var(--nav-width) + var(--bar-inset));
   padding-top: var(--bar-inset);
-  /* Exactly the nav column, and nothing on top of it.
-
-     The left margin is a reading margin and was widened on purpose. This one
-     is not a margin at all — it is the space the fixed nav occupies, and the
-     content clears it. Adding a reading margin here as well pushed the copy
-     33px short of the nav instead of the grid's 12px, which read as a gap
-     hanging off the right of the page rather than as an even inset. */
-  --page-pad-right: 312px;
   padding-left: var(--page-pad-left);
   padding-right: var(--page-pad-right);
   /* Full-bleed children subtract the padding above exactly, so nothing should
@@ -56,7 +62,7 @@
   /* The nav column is not beside the content at this width, so the right
      padding is a margin like any other. */
   .stack.stack {
-    --page-pad-right: clamp(20px, 3.4vw, 60px);
+    --page-pad-right: var(--bar-inset);
   }
 }
 
