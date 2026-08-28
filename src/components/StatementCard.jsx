@@ -30,16 +30,21 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * variant that puts a headline above it needs this one to be an h2 — two h1s
  * is the fault assert-build.mjs fails the build on, in the other direction.
  * `support` accepts a string or an array of paragraphs.
+ *
+ * `tall` gives the card a viewport-relative minimum height with its contents
+ * centred in it — for a card used as a hero, where the copy is short and the
+ * room is the point. Off by default, so the live homepage is unaffected.
  */
 export default function StatementCard({
   eyebrow = '[ Who We Are ]',
   statement = STATEMENT,
   support = SUPPORT,
   as: Heading = 'h1',
+  tall = false,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={styles.card}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}

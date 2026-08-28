@@ -64,3 +64,22 @@
 
   .statement { max-width: none; }
 }
+
+/* Hero use: give the card real room and centre the copy in it, rather than
+   letting a two-line statement sit in a box sized to its own text. Bounded in
+   vh so it scales with the window, and floored in px so it does not collapse
+   on a short laptop screen. Unused by the live homepage. */
+.tall {
+  min-height: min(68vh, 620px);
+  justify-content: center;
+  padding-top: clamp(72px, 9vh, 120px);
+  padding-bottom: clamp(72px, 9vh, 120px);
+}
+
+@media (max-width: 768px) {
+  .tall {
+    min-height: 52vh;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+}

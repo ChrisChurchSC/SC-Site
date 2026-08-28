@@ -164,7 +164,7 @@ export default function HomeV2() {
       </section>
 
       {/* 1 — The canvas leads on the claim, not the reel */}
-      <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" />
+      <StatementCard eyebrow={HERO_EYEBROW} statement={HERO} support={null} as="h1" tall />
 
       {/* 2 — Who we have done it for */}
       <ClientStrip />
