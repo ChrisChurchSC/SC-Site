@@ -23,6 +23,7 @@ import ContactCTA from '../components/ContactCTA'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import AudienceCards from '../components/AudienceCards'
+import PlatformCards from '../components/PlatformCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
 
 /**
@@ -626,6 +627,11 @@ export default function HomeV3() {
 
       {/* 3 — The offer, in two halves, with the price lines */}
       <Labelled label="[ How We Work ]"><BuildGrowCards cards={OFFER} footnote={OFFER_FOOTNOTE} /></Labelled>
+
+      {/* The platform, after the offer it supports and before the longer
+          read about who we are. Card layout only — the previews are empty
+          wells; see PlatformCards. */}
+      <PlatformCards />
 
       {/* 4 — Who we are, in full, behind the offer it explains */}
       <StatementCard

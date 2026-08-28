@@ -1,0 +1,161 @@
+/* The platform section — see PlatformCards.jsx.
+
+   Two rows: a pair of large cards, then three smaller ones. The reference
+   uses the same card in both rows at different widths and heights, which is
+   what makes the second row read as a continuation rather than as a new
+   section. Same card here, two size modifiers. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 46px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 22ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+/* Both are spans, not buttons: there is nothing to press yet. They carry the
+   shape the section will have without pretending to work. */
+.cta,
+.ghost {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  padding: 12px 18px;
+  cursor: default;
+}
+
+.cta {
+  color: #0a0a0a;
+  background: var(--pink);
+}
+
+.ghost {
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.rowTwo,
+.rowThree {
+  display: grid;
+  gap: 10px;
+}
+
+.rowTwo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rowThree { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 26px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cardLarge { min-height: 420px; }
+.cardSmall { min-height: 380px; }
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cardTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.7vw, 25px);
+  line-height: 1.25;
+  margin: 0;
+  max-width: 22ch;
+}
+
+/* Two weights in one phrase: the subject holds, the rest recedes. Without
+   this a two-line card headline reads as two separate lines. */
+.lead { color: rgba(255, 255, 255, 0.95); }
+.rest { color: rgba(255, 255, 255, 0.5); }
+
+.arrow {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.card:hover .arrow {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* The preview well.
+
+   Empty, and it should look empty — a faint inset rather than a blank patch
+   of card, so it reads as a space waiting for something rather than as a card
+   that failed to load. Whatever goes in sits flush to the bottom edge, the
+   way the reference lets its screenshots run out of the card. */
+.well {
+  flex: 1;
+  min-height: 180px;
+  margin: 0 -26px -26px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.014) 0 10px,
+      transparent 10px 20px
+    );
+}
+
+@media (max-width: 900px) {
+  .rowTwo,
+  .rowThree { grid-template-columns: minmax(0, 1fr); }
+  .cardLarge,
+  .cardSmall { min-height: 300px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .arrow { transition: none; }
+}
