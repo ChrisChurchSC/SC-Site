@@ -114,17 +114,22 @@
    later edit — which is exactly what happened when they carried separate
    font-size declarations.
 
-   With scale no longer available to mark the opening line, colour does it:
-   the statement keeps 0.92 white against the paragraphs' 0.6. Line-height
-   and measure match too, otherwise it reads as a heading that happens to be
-   the same size rather than as the first line of one block.
+   Colour is shared too, so size, weight, line-height, measure and ink are
+   all one value across the statement and the paragraphs. Nothing marks the
+   opening line but its position.
 
-   The measure is 46ch rather than the default 62ch because the face
-   changed: 62ch of 11px mono and 62ch of 28px serif are not the same line,
-   and the longer one is past where the eye reliably finds the next line. */
+   The measure is 44ch rather than the default 62ch because the face
+   changed: 62ch of 11px mono and 62ch of 38px serif are not the same line,
+   and the longer one is far past where the eye reliably finds the next
+   line. It tightens as the type grows, not in spite of it. */
 .serif {
-  --serif-size: clamp(18px, 1.7vw, 28px);
-  --serif-measure: 46ch;
+  --serif-size: clamp(22px, 2.3vw, 38px);
+  --serif-measure: 44ch;
+  /* One ink for the whole block. The statement previously sat at 0.92 and
+     the paragraphs at 0.6, which was how the opening line was told apart
+     once they shared a size. Asked to match, so nothing distinguishes it now
+     but its position — which at this size is enough. */
+  --serif-ink: rgba(255, 255, 255, 0.92);
 }
 
 .serif .statement,
@@ -132,17 +137,15 @@
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: var(--serif-size);
-  line-height: 1.5;
+  line-height: 1.42;
   letter-spacing: 0;
+  color: var(--serif-ink);
   max-width: var(--serif-measure);
 }
 
-.serif .statement { color: rgba(255, 255, 255, 0.92); }
-.serif .support   { color: rgba(255, 255, 255, 0.6); }
-
 @media (max-width: 768px) {
   .serif {
-    --serif-size: clamp(16px, 4.4vw, 21px);
+    --serif-size: clamp(17px, 5vw, 24px);
     --serif-measure: none;
   }
 }
