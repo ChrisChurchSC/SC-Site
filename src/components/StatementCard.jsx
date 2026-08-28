@@ -31,6 +31,10 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * is the fault assert-build.mjs fails the build on, in the other direction.
  * `support` accepts a string or an array of paragraphs.
  *
+ * `center` centres the eyebrow and the statement, both the text itself and
+ * the block it sits in — a max-width set on the statement would otherwise
+ * keep it hard left however the text inside it is aligned.
+ *
  * `bare` drops the card entirely — no ground, no box — so the type sits on
  * the page and a hairline rule does the work the card's edge was doing. For a
  * page that does not want every passage in a container.
@@ -51,10 +55,11 @@ export default function StatementCard({
   tall = false,
   serif = false,
   bare = false,
+  center = false,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${center ? ' ' + styles.center : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}

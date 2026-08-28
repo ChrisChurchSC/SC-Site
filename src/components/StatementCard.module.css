@@ -170,3 +170,12 @@
     padding: 40px 0;
   }
 }
+
+/* Centred. Both halves are needed: text-align centres the lines within each
+   block, align-items centres the blocks themselves inside the card — without
+   it the statement's max-width would hold it hard against the left edge with
+   its lines merely centred inside that column. */
+.center {
+  align-items: center;
+  text-align: center;
+}

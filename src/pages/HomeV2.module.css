@@ -12,4 +12,23 @@
    which is not something to leave to chance. */
 .stack.stack {
   gap: clamp(28px, 4vw, 64px);
+  /* The homepage runs its cards to a 12px edge, because a grid of butted
+     cards wants the page's full width. This page has passages of type on the
+     open ground between them, and 12px is not a margin — it is the absence
+     of one.
+
+     Applied at the page rather than per section, so the cards, the section
+     labels and the bare copy all share one left edge rather than each
+     arriving at its own. The right side keeps the 312px the fixed nav column
+     occupies, plus the same increase, so the inset reads as even. */
+  padding-left: clamp(20px, 3.4vw, 60px);
+  padding-right: calc(312px + clamp(8px, 1.4vw, 28px));
+}
+
+@media (max-width: 900px) {
+  /* The nav column is not beside the content at this width, so the right
+     padding is a margin like any other. */
+  .stack.stack {
+    padding-right: clamp(20px, 3.4vw, 60px);
+  }
 }
