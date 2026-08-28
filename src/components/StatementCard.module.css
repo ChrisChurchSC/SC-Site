@@ -103,35 +103,46 @@
   }
 }
 
-/* Support copy as prose, not as a caption.
+/* Support copy as prose, not as a caption — and the whole block at ONE size.
 
-   The default .support is 11px Roboto Mono at 62ch — a metadata treatment,
-   right for one line of qualifier under a display statement and wrong for
-   three paragraphs somebody is meant to actually read. This sets the whole
-   card in Signifier and gives the statement a lift to stay ahead of it.
+   The default .support is 11px Roboto Mono at 62ch: a metadata treatment,
+   right for a single line of qualifier under a display statement and wrong
+   for three paragraphs somebody is meant to actually read.
 
-   The measure drops from 62ch to 46ch with the face change: 62ch of mono at
-   11px and 62ch of serif at 22px are not the same line, and the longer one
-   is past the point where the eye reliably finds the next line. */
-.serif .statement {
-  font-size: clamp(32px, 4.6vw, 66px);
-  max-width: 26ch;
+   Size is declared once, as a custom property, and inherited by the
+   statement and the paragraphs alike, so the two cannot drift apart in a
+   later edit — which is exactly what happened when they carried separate
+   font-size declarations.
+
+   With scale no longer available to mark the opening line, colour does it:
+   the statement keeps 0.92 white against the paragraphs' 0.6. Line-height
+   and measure match too, otherwise it reads as a heading that happens to be
+   the same size rather than as the first line of one block.
+
+   The measure is 46ch rather than the default 62ch because the face
+   changed: 62ch of 11px mono and 62ch of 28px serif are not the same line,
+   and the longer one is past where the eye reliably finds the next line. */
+.serif {
+  --serif-size: clamp(18px, 1.7vw, 28px);
+  --serif-measure: 46ch;
 }
 
+.serif .statement,
 .serif .support {
-  font-family: Signifier, Georgia, serif;
+  font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(17px, 1.55vw, 25px);
+  font-size: var(--serif-size);
   line-height: 1.5;
   letter-spacing: 0;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 46ch;
+  max-width: var(--serif-measure);
 }
 
+.serif .statement { color: rgba(255, 255, 255, 0.92); }
+.serif .support   { color: rgba(255, 255, 255, 0.6); }
+
 @media (max-width: 768px) {
-  .serif .statement { max-width: none; }
-  .serif .support {
-    font-size: clamp(16px, 4.4vw, 20px);
-    max-width: none;
+  .serif {
+    --serif-size: clamp(16px, 4.4vw, 21px);
+    --serif-measure: none;
   }
 }
