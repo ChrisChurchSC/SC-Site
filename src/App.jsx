@@ -13,6 +13,7 @@ import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
+import HomeV2 from './pages/HomeV2'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -45,7 +46,7 @@ function ScrollToTop() {
 
 function ChromeGate({ children }) {
   const { pathname } = useLocation()
-  const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
+  const fullBleed = pathname === '/v2' || pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
   if (fullBleed) return null
   return children
 }
@@ -94,6 +95,10 @@ export default function App() {
             <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                {/* The design-canvas homepage, alongside the live one so the
+                    two can be compared. Promoting it is a one-line change:
+                    point path="/" at HomeV2 and drop this route. */}
+                <Route path="/v2" element={<HomeV2 />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
