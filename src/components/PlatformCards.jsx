@@ -280,6 +280,123 @@ function DashPreview() {
   )
 }
 
+/**
+ * The Agents card's preview: the roster, and one of them refusing.
+ *
+ * THE SIX ARE REAL AND SO ARE THE MARKERS. brand-strategist, comms-writer,
+ * media-strategist, design-critic, sales-analyst and studio-ops are the six
+ * subagents that exist in SC-Brand/Agents today, and [CLAIM NEEDED: …] is
+ * one of the two escape hatches those agents actually write — the other is
+ * [RATE UNVERIFIED: …]. The brand's own notes call those the product rather
+ * than boilerplate, which is exactly why the panel shows one instead of
+ * showing a finished paragraph.
+ *
+ * IT SHOWS A REFUSAL, NOT AN OUTPUT. A mock of an agent producing beautiful
+ * copy would say what every AI panel on every site says. The distinguishing
+ * property is the opposite one: asked for a number nobody has sourced, it
+ * marks the gap and hands it back. That is the thing worth putting on a
+ * card, and it is honest — the agents genuinely behave this way.
+ */
+const AGENTS = [
+  'brand-strategist',
+  'comms-writer',
+  'media-strategist',
+  'design-critic',
+  'sales-analyst',
+  'studio-ops',
+]
+
+function AgentsPreview() {
+  return (
+    <div className={styles.ui}>
+      <div className={styles.uiTop}>
+        <span className={styles.uiCrumb}>Agents</span>
+        <span className={styles.uiSlash}>/</span>
+        <span className={styles.uiCrumbMuted}>{AGENTS.length} trained</span>
+      </div>
+
+      <div className={styles.agents}>
+        <div className={styles.agentList}>
+          {AGENTS.map(name => (
+            <span key={name} className={styles.agentRow}>
+              <span className={styles.agentDot} />
+              <span className={styles.agentName}>{name}</span>
+            </span>
+          ))}
+        </div>
+
+        {/* The refusal. Its point is the marker, so the sentence around it is
+            deliberately dull. */}
+        <div className={styles.agentDraft}>
+          <span className={styles.agentDraftHead}>comms-writer · draft</span>
+          <span className={styles.agentDraftBody}>
+            Teams ship in half the time with{' '}
+            <span className={styles.agentFlag}>[CLAIM NEEDED: source]</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The Reviews card's preview: a change proposed, waiting on a person.
+ *
+ * THIS IS HOW THE SYNC CLI ALREADY WORKS, not a wish. A push opens a
+ * numbered review holding what the files would become and writes nothing
+ * live; merging is a separate, human step. Claude Desktop reaches the same
+ * brand through MCP and can propose but cannot write live, delete or invite.
+ * So the panel shows a numbered review, the agent that proposed it, the
+ * files it touches, and the one thing that has not happened yet.
+ *
+ * THE STATE IS "AWAITING", DELIBERATELY. An approved review would show a
+ * green tick and say nothing; the card's headline is that a person still
+ * approves the work, and the only frame that demonstrates it is the one
+ * where the machine has stopped and is waiting.
+ */
+const REVIEW = {
+  number: 4,
+  title: 'Tighten the positioning statement',
+  author: 'brand-strategist',
+  files: [
+    { path: 'Strategy/positioning.md', add: 12, del: 4 },
+    { path: 'Verbal/tone-of-voice.md', add: 3, del: 1 },
+  ],
+}
+
+function ReviewsPreview() {
+  return (
+    <div className={styles.ui}>
+      <div className={styles.uiTop}>
+        <span className={styles.uiCrumb}>Reviews</span>
+        <span className={styles.uiSlash}>/</span>
+        <span className={styles.uiCrumbMuted}>#{REVIEW.number}</span>
+        <span className={styles.uiPrivate}>Open</span>
+      </div>
+
+      <div className={styles.review}>
+        <span className={styles.reviewTitle}>{REVIEW.title}</span>
+        <span className={styles.reviewMeta}>proposed by {REVIEW.author}</span>
+
+        <div className={styles.reviewFiles}>
+          {REVIEW.files.map(({ path, add, del }) => (
+            <span key={path} className={styles.reviewFile}>
+              <span className={styles.reviewPath}>{path}</span>
+              <span className={styles.reviewAdd}>+{add}</span>
+              <span className={styles.reviewDel}>−{del}</span>
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.reviewGate}>
+          <span className={styles.reviewGateDot} />
+          <span>Awaiting approval — chris-church</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Card({ id, lead, rest, size }) {
   return (
     <div className={`${styles.card} ${size === 'large' ? styles.cardLarge : styles.cardSmall}`}>
@@ -296,6 +413,8 @@ function Card({ id, lead, rest, size }) {
           the rest stay empty on purpose — see the note at the top. */}
       <div className={styles.well} aria-hidden="true">
         {id === 'brand-repository' ? <RepoPreview /> : null}
+        {id === 'agents' ? <AgentsPreview /> : null}
+        {id === 'reviews' ? <ReviewsPreview /> : null}
         {id === 'measurement' ? <DashPreview /> : null}
       </div>
     </div>

@@ -622,3 +622,144 @@
   text-align: right;
   flex: none;
 }
+
+/* ── THE AGENTS PREVIEW ────────────────────────────────────────────────────
+   The roster, then one of them refusing to invent a number. Both bands are
+   fixed; the list takes the slack, so a taller card gives more roster rather
+   than stretching the draft. */
+.agents {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 16px 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.agentList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.agentRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* Trained, not running. A pulsing or coloured dot would imply live activity
+   the panel is not claiming. */
+.agentDot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.agentName { color: rgba(255, 255, 255, 0.66); }
+
+/* The draft. Inset on its own ground so it reads as output rather than as
+   another row of the list. */
+.agentDraft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--r-control, 6px);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.agentDraftHead {
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.agentDraftBody {
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.55;
+}
+
+/* The marker carries the accent, because it is the point of the panel — the
+   sentence around it is filler and should look like it. */
+.agentFlag {
+  color: var(--pink, #df4ed6);
+  white-space: nowrap;
+}
+
+/* ── THE REVIEWS PREVIEW ───────────────────────────────────────────────────
+   One numbered review, its files, and the approval that has not happened. */
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.reviewTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.reviewMeta { color: rgba(255, 255, 255, 0.32); }
+
+.reviewFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  /* Takes the slack, so the gate below stays pinned to the foot of the
+     panel whatever the card's height does. */
+  flex: 1;
+  min-height: 0;
+}
+
+.reviewFile {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.reviewPath {
+  flex: 1;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.6);
+  /* The path is the useful half; truncate rather than wrap, so the counts
+     stay on the same line as the file they belong to. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reviewAdd { color: var(--teal, #4ecfb3); flex: none; }
+.reviewDel { color: rgba(255, 255, 255, 0.3); flex: none; }
+
+/* The gate. Amber would be a fifth colour on this page for no reason; the
+   hollow ring already says "not yet". */
+.reviewGate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reviewGateDot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.34);
+}
