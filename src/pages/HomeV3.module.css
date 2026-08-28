@@ -42,7 +42,10 @@
      The right is the nav column plus the same inset, so the content stops
      short of the fixed nav by exactly what it stands in from the left. */
   --bar-inset: calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px);
-  --nav-width: 300px;
+  /* No side nav on this page — see NavGate in App.jsx. The right side is a
+     plain margin again, the same as the left, rather than a column reserved
+     for something that is not there. */
+  --nav-width: 0px;
   --page-pad-left: var(--bar-inset);
   --page-pad-right: calc(var(--nav-width) + var(--bar-inset));
   padding-top: var(--bar-inset);

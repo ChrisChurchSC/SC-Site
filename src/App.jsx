@@ -45,6 +45,15 @@ function ScrollToTop() {
   return null
 }
 
+/* /v3 runs without the side nav. Gated on its own rather than through
+   ChromeGate, which would take the theme toggle down with it — the deck
+   pages want all of the chrome gone, this page wants only the nav gone. */
+function NavGate() {
+  const { pathname } = useLocation()
+  if (pathname === '/v3') return null
+  return <Nav />
+}
+
 function ChromeGate({ children }) {
   const { pathname } = useLocation()
   const fullBleed = pathname === '/capabilities' || pathname === '/agency-capabilities' || pathname === '/brand-systems' || pathname === '/content-programs' || pathname === '/digital-products' || pathname === '/content-packages'
@@ -88,7 +97,7 @@ export default function App() {
           <TransitionBar />
           <Cursor />
           <ChromeGate>
-            <Nav />
+            <NavGate />
             <ThemeToggle />
             <BackButton />
           </ChromeGate>

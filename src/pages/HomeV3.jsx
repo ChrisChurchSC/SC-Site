@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import styles from './Home.module.css'
 import v3 from './HomeV3.module.css'
 import LogoWordmark from '../components/LogoWordmark'
-import { useNav } from '../context/NavContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
@@ -97,7 +96,6 @@ function Labelled({ label, children }) {
 }
 
 export default function HomeV3() {
-  const { menuOpen, setMenuOpen } = useNav()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   // noindex: a messaging variant to look at, not a page to be found.
   useMeta({ title: 'Super Conscious — homepage v3', path: '/v3', noindex: true })
@@ -165,14 +163,8 @@ export default function HomeV3() {
             {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>
-        <button
-          className={styles.menuCard}
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label="Toggle menu"
-        >
-          <span className={`${styles.menuLine} ${menuOpen ? styles.menuLineOpen : ''}`} />
-          <span className={`${styles.menuLine} ${menuOpen ? styles.menuLineOpen : ''}`} />
-        </button>
+        {/* No menu button: it toggled the side nav, which this page does not
+            render. A control that opens nothing is worse than no control. */}
       </section>
 
       {/* 1 — The canvas leads on the claim, not the reel */}
