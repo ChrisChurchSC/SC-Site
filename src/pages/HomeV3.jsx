@@ -729,7 +729,7 @@ export default function HomeV3() {
           on the wordmark at the top of the page; read out twice it is just
           noise. */}
       <div className={v3.signoff} aria-hidden="true">
-        <LogoWordmark fill="rgba(255,255,255,0.14)" />
+        <LogoWordmark fill="currentColor" />
       </div>
 
     </main>

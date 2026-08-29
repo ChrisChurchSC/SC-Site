@@ -892,10 +892,28 @@
   padding: 0 clamp(8px, 2vw, 32px);
 }
 
+/* Pink, and lit. The colour is set here rather than passed in because the
+   wordmark takes currentColor, which means the glow and the fill cannot get
+   out of step. */
+.signoff { color: var(--pink, #df4ed6); }
+
 .signoff svg {
   width: 100%;
   height: auto;
   display: block;
+
+  /* Three drop-shadows, not one. A single large blur reads as a smudge
+     behind the letters; a tight one, a mid one and a wide one stack into
+     something that falls off the way light does. They follow the glyph
+     because drop-shadow works on the alpha channel — box-shadow would draw
+     a rectangle around the whole SVG.
+
+     No blur radius above ~60px: this element is the full width of the page,
+     and the filter is rasterised at that size on every paint. */
+  filter:
+    drop-shadow(0 0 6px rgba(223, 78, 214, 0.55))
+    drop-shadow(0 0 22px rgba(223, 78, 214, 0.35))
+    drop-shadow(0 0 56px rgba(223, 78, 214, 0.22));
 }
 
 /* ── THE HERO EMAIL CAPTURE ────────────────────────────────────────────────
