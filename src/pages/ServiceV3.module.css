@@ -1,0 +1,332 @@
+/* One stylesheet for all four service pages — they differ in words, not in
+   shape. Same language as /v3 and /pricing: Signifier for sentences, mono
+   for labels, pink for the one thing being pointed at. */
+.page {
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  --nav-width: 0px;
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: var(--bar-inset);
+  --r-control: 4px;
+  --r-surface: 12px;
+  --r-panel: 18px;
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+
+  padding: var(--bar-inset) var(--page-pad-right) clamp(50px, 7vw, 100px) var(--page-pad-left);
+  color: rgba(255, 255, 255, 0.9);
+  overflow-x: clip;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(40px, 6vw, 88px) 0 clamp(30px, 4vw, 52px);
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--label-color);
+  background: var(--label-bg);
+  padding: var(--label-pad);
+  border-radius: var(--label-radius);
+  margin: 0 0 18px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 5vw, 62px);
+  line-height: 1.06;
+  color: #fff;
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+/* Visible, not buried in a comment: a reader should be able to tell that
+   nobody has signed this description off. Pink because that is what this
+   page's family uses to mean "look here", and bordered so it reads as a
+   stamp on the page rather than as a line of the copy. */
+.draftFlag {
+  margin: 20px 0 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: 999px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--pink, #df4ed6);
+}
+
+.intro {
+  margin: 24px 0 0;
+  max-width: 62ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.ctaFilled,
+.ctaGhost {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: var(--r-control);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, filter 0.15s;
+}
+
+.ctaFilled {
+  border: 1px solid var(--pink, #df4ed6);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+}
+
+.ctaFilled:hover { filter: brightness(1.08); }
+
+.ctaGhost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaGhost:hover { background: rgba(255, 255, 255, 0.06); }
+
+.block { padding: clamp(30px, 4vw, 56px) 0; }
+
+.blockHead {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: start;
+  gap: 14px clamp(24px, 4vw, 64px);
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+
+@media (max-width: 760px) {
+  .blockHead { grid-template-columns: minmax(0, 1fr); }
+}
+
+.blockName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1;
+  color: #fff;
+  margin: 0;
+}
+
+.blockIntro {
+  margin: 0;
+  max-width: 58ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.pillar {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+}
+
+.pillarNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--pink, #df4ed6);
+  margin-bottom: 10px;
+}
+
+.pillarName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 21px;
+  line-height: 1.15;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.why {
+  margin: 0 0 14px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  list-style: none;
+  margin: auto 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pill {
+  position: relative;
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* The same tooltip device as /pricing: a data attribute, so any element can
+   carry one without a wrapper or a hook. Above the pill, because these sit
+   at the foot of a card and a bubble below would fall off it. */
+.pill[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  z-index: 5;
+  width: max-content;
+  max-width: 220px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-control);
+  background: #191919;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.14s, transform 0.14s;
+}
+
+.pill[data-tip]:hover { border-color: rgba(223, 78, 214, 0.5); }
+
+.pill[data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Price ── */
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+  background: #0d0d0d;
+}
+
+.priceLabel {
+  margin: 0 0 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.priceLead {
+  margin: 0;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1;
+  color: #fff;
+}
+
+/* No published rate. Dimmer, so it does not read as a price. */
+.priceNone { color: rgba(255, 255, 255, 0.55); }
+
+.priceNote {
+  margin: 10px 0 0;
+  max-width: 54ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── The other three ── */
+.others { padding: clamp(40px, 5vw, 72px) 0 0; }
+
+.otherGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: clamp(18px, 2.4vw, 28px);
+}
+
+.otherCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+  background: #0d0d0d;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.otherCard:hover {
+  border-color: rgba(223, 78, 214, 0.4);
+  background: #111;
+}
+
+.otherName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: #fff;
+}
+
+.otherTagline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaFilled, .ctaGhost, .otherCard, .pill[data-tip]::after { transition: none; }
+}

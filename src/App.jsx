@@ -16,6 +16,7 @@ import Home from './pages/Home'
 import HomeV2 from './pages/HomeV2'
 import HomeV3 from './pages/HomeV3'
 import PricingV3 from './pages/PricingV3'
+import ServiceV3 from './pages/ServiceV3'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -53,9 +54,12 @@ function ScrollToTop() {
    nav gone. */
 const V3_PAGES = ['/v3', '/pricing']
 
+const isV3Page = (pathname) =>
+  V3_PAGES.includes(pathname) || pathname.startsWith('/services/')
+
 function NavGate() {
   const { pathname } = useLocation()
-  if (V3_PAGES.includes(pathname)) return null
+  if (isV3Page(pathname)) return null
   return <Nav />
 }
 
@@ -72,7 +76,7 @@ function BackButton() {
   // /v2 is a homepage, so it gets the homepage treatment: no back button.
   // The v3-family pages have a full nav bar of their own; a floating back
   // button on top of it is a second way to leave, offered twice.
-  if (location.pathname === '/' || location.pathname === '/v2' || V3_PAGES.includes(location.pathname) || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
+  if (location.pathname === '/' || location.pathname === '/v2' || isV3Page(location.pathname) || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
@@ -119,6 +123,7 @@ export default function App() {
                 <Route path="/v2" element={<HomeV2 />} />
                 <Route path="/v3" element={<HomeV3 />} />
         <Route path="/pricing" element={<PricingV3 />} />
+        <Route path="/services/:slug" element={<ServiceV3 />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />

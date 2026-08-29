@@ -263,7 +263,7 @@ export const OFFER = [
     body: 'We build your brand platform and assets.',
     price: null,
     cta: null,
-    href: '/services',
+    href: '/services/build',
   },
   {
     id: 'grow',
@@ -271,7 +271,7 @@ export const OFFER = [
     body: 'We take that brand to market and run it.',
     price: null,
     cta: null,
-    href: '/services',
+    href: '/services/grow',
   },
   {
     id: 'support',
@@ -279,7 +279,7 @@ export const OFFER = [
     body: 'We look after what is live.',
     price: null,
     cta: null,
-    href: null,
+    href: '/services/support',
   },
   {
     id: 'represent',
@@ -294,7 +294,7 @@ export const OFFER = [
     body: 'We speak for the brand in public.',
     price: null,
     cta: null,
-    href: null,
+    href: '/services/represent',
   },
 ]
 
@@ -353,7 +353,11 @@ export default function V3Nav() {
             onMouseLeave={() => setOpenMenu(null)}
           >
             <div className={`${styles.cornerNote} ${v3.barCard}`}>
-              <NavLink to="/" className={styles.cornerWordmark} aria-label="Super Conscious, home">
+              {/* Back to the v3 homepage, not the live one — every page carrying this
+                bar belongs to that family, and a wordmark that jumps to a
+                different design of the same site is a dead end dressed as a
+                home button. */}
+            <NavLink to="/v3" className={styles.cornerWordmark} aria-label="Super Conscious, home">
                 <LogoWordmark fill="rgba(255,255,255,0.7)" />
               </NavLink>
 
