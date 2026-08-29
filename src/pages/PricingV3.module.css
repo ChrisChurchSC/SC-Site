@@ -46,12 +46,26 @@
 .headline {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(34px, 5.6vw, 72px);
+  /* 4.6vw rather than 5.6: at the larger size the line was 1,088px of a
+     1,396px measure and every narrowing broke it in two. */
+  font-size: clamp(28px, 4.6vw, 62px);
   line-height: 1.06;
   color: #fff;
   margin: 0;
-  max-width: 16ch;
-  text-wrap: balance;
+  /* One line, as asked. No measure and no balancing — both exist to choose
+     where a line breaks, and this one does not break. */
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* Below this the phrase is wider than the screen at its own minimum size, so
+   one line stops being possible rather than merely tight. */
+@media (max-width: 700px) {
+  .headline {
+    white-space: normal;
+    max-width: 16ch;
+    text-wrap: balance;
+  }
 }
 
 .sub {
@@ -119,14 +133,20 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* Sized to hold four, since two tabs carry four cards and one carries
+   three. 1fr with a low minimum rather than a fixed max: at 232px minimum
+   the row is four across on a wide screen and drops to two and then one
+   without a breakpoint, and a three-card tab fills the same width rather
+   than leaving a hole where a fourth would be. */
 .tiers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
   gap: 16px;
   align-items: stretch;
   max-width: 1180px;
   margin: 0 auto;
 }
+
 
 .tier {
   display: flex;

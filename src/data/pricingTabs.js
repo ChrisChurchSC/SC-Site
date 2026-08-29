@@ -3,22 +3,24 @@
 // ─────────────────────────────────────────────────────────────────────────
 // WHICH NUMBERS ARE REAL.
 //
-// PROJECT is real. Every figure in it is one Chris gave directly — the four
-// Build pillars ($15,000 / $10,000 / $15,000 / $10,000 per channel) and the
-// Grow hour tiers (25/50/100/150 hrs at $180/$165/$150/$140). The hour tiers
-// are internally consistent: hours × rate is exactly the monthly figure,
-// checked.
+// PROJECT AND SUBSCRIPTION are real. Every figure in them is one Chris gave
+// directly — the four Build pillars ($15,000 / $10,000 / $15,000 / $10,000
+// per channel) and the hour tiers (25/50/100/150 hrs at $180/$165/$150/$140,
+// internally consistent: hours × rate is exactly the monthly figure).
 //
-// PLATFORM AND TASKS ARE NOT. There is no seat price and no per-task price
+// PLATFORM IS NOT. There is no seat price and no per-task price
 // anywhere in this repo or in anything supplied, and the platform itself is
 // Coming Soon. Every unsourced figure reads '––', the same placeholder the
 // case-study cards use, at the size a real number would be — so the gap is
 // visible rather than filled with something plausible.
 //
 // A seat price is a commercial term. Guessing one puts a quote on the site
-// that nobody has agreed to, and a visitor cannot tell an invented $49/seat
-// from a real one. THREE NUMBERS WOULD FINISH THIS PAGE: what a seat costs,
-// what ongoing development costs per month, and what a task costs.
+// nobody has agreed to, and a visitor cannot tell an invented $49/seat from
+// a real one. ONE NUMBER FINISHES THIS PAGE: what a seat costs per month.
+//
+// Everything else is real. Project is the four Build pillars at the prices
+// Chris gave; Subscription is the four hour tiers, and those were checked —
+// hours × rate is exactly the monthly figure on all four.
 // ─────────────────────────────────────────────────────────────────────────
 
 export const TBC = '––'
@@ -83,91 +85,96 @@ export const tabs = [
     id: 'project',
     label: 'Project',
     eyebrow: 'Have us build it',
-    blurb: 'Scoped up front, or retained by the hour. These are the numbers we quote from.',
+    blurb: 'Scoped and priced before it starts. Almost all branding and marketing falls into one of these four.',
     tiers: [
       {
-        kicker: 'Fixed scope',
-        name: 'Scoped engagement',
-        price: 10000,
-        unit: 'from, per project',
+        kicker: '01',
+        name: 'Your Brand',
+        price: 15000,
+        unit: 'starting at',
         note: null,
-        summary: 'A brand, a website, a marketing mix or a channel — scoped and priced before it starts.',
-        lines: [
-          'Your Brand — from $15,000',
-          'Your Website & App — from $10,000',
-          'Your Marketing Mix — from $15,000',
-          'Your Channels — from $10,000 per channel',
-        ],
+        summary: 'New brand, rebrand, refresh or sub-brand — positioning, identity and the guidelines to run it.',
+        lines: ['New Brand', 'Rebrand', 'Brand Refresh', 'Sub-brand', 'Brand Guidelines', 'Product Positioning'],
         cta: 'Book a demo',
       },
       {
-        kicker: 'Month to month',
-        name: 'Ongoing development',
-        price: TBC,
-        unit: 'per month',
-        note: 'Price to confirm',
-        summary: 'Continuous build on the platform and the product, rather than a project with an end date.',
-        lines: [
-          'A standing team, not a queue',
-          'Ships every week',
-          'Roadmap reviewed monthly',
-        ],
+        kicker: '02',
+        name: 'Your Website & App',
+        price: 10000,
+        unit: 'starting at',
+        note: null,
+        summary: 'A brochure site, an ecom build or a web app — designed, built, integrated and deployed.',
+        lines: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
         cta: 'Book a demo',
       },
       {
-        kicker: 'Billed quarterly',
-        name: 'Hourly support',
-        price: 4500,
-        unit: 'from, per month',
-        note: 'One quarter minimum. Media spend is separate.',
-        featured: true,
-        summary: 'Optimizations, extensions and additions once the apparatus is in good shape.',
-        lines: [
-          '25 hrs / month — $4,500 · $180 per hour',
-          '50 hrs / month — $8,250 · $165 per hour',
-          '100 hrs / month — $15,000 · $150 per hour',
-          '150 hrs / month — $21,000 · $140 per hour',
-        ],
+        kicker: '03',
+        name: 'Your Marketing Mix',
+        price: 15000,
+        unit: 'starting at',
+        note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work billed separately. All production costs are billed separately.',
+        summary: 'Audiences, campaign strategy and concept, paid media, partnerships and the dashboards under them.',
+        lines: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
+        cta: 'Book a demo',
+      },
+      {
+        kicker: '04',
+        name: 'Your Channels',
+        price: 10000,
+        unit: 'per channel',
+        note: 'Covers initial channel set-up and two months of organic content.',
+        summary: 'The channels your audience is actually on, set up and fed.',
+        lines: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
         cta: 'Book a demo',
       },
     ],
   },
   {
-    id: 'tasks',
-    label: 'Tasks',
-    eyebrow: 'Pay per task',
-    blurb: 'One thing at a time, priced on its own. No retainer, no minimum.',
+    id: 'subscription',
+    label: 'Subscription',
+    eyebrow: 'Keep us on',
+    blurb: 'Ongoing support, billed hourly and invoiced quarterly with a one quarter minimum. Media spend is separate — our management fee is flat, never a percentage of the buy.',
     tiers: [
       {
-        kicker: 'Single',
-        name: 'One task',
-        price: TBC,
-        unit: 'per task',
-        note: 'Price to confirm',
-        summary: 'A post, a page, an edit, a deck. Sent in, priced back, delivered.',
-        lines: ['No minimum', 'Priced before it starts', 'The same people who build'],
-        cta: 'Book a demo',
-      },
-      {
-        kicker: 'Bundle',
-        name: 'Task pack',
-        price: TBC,
-        unit: 'per pack',
-        note: 'Price to confirm',
-        featured: true,
-        summary: 'A block of tasks drawn down as you need them, at a lower rate than one at a time.',
-        lines: ['Drawn down over the quarter', 'Any task type', 'Unused tasks roll once'],
-        cta: 'Book a demo',
-      },
-      {
-        kicker: 'Standing',
-        name: 'Always-on',
-        price: 'Talk to us',
-        unit: null,
+        kicker: '25 hrs / month',
+        name: '$180 per hour',
+        price: 4500,
+        unit: 'per month',
         note: null,
-        summary: 'A continuous flow of tasks with a queue we manage for you.',
-        lines: ['A named producer', 'Agreed turnaround', 'Monthly report on what shipped'],
-        cta: 'Talk to us',
+        summary: 'Focus on one pillar to keep things current.',
+        lines: ['One pillar', 'Billed quarterly', 'One quarter minimum'],
+        cta: 'Book a demo',
+      },
+      {
+        kicker: '50 hrs / month',
+        name: '$165 per hour',
+        price: 8250,
+        unit: 'per month',
+        note: null,
+        summary: 'Focus on two pillars to ensure things are running properly across your most important channels.',
+        lines: ['Two pillars', 'Billed quarterly', 'One quarter minimum'],
+        cta: 'Book a demo',
+      },
+      {
+        kicker: '100 hrs / month',
+        name: '$150 per hour',
+        price: 15000,
+        unit: 'per month',
+        note: null,
+        featured: true,
+        summary: 'Focus on three pillars, every month, for a comprehensive view of performance and quick optimizations.',
+        lines: ['Three pillars', 'Billed quarterly', 'One quarter minimum'],
+        cta: 'Book a demo',
+      },
+      {
+        kicker: '150 hrs / month',
+        name: '$140 per hour',
+        price: 21000,
+        unit: 'per month',
+        note: null,
+        summary: 'Focus on all four pillars, the most robust support for optimal brand oversight, maintenance, and seamless evolution.',
+        lines: ['All four pillars', 'Billed quarterly', 'One quarter minimum'],
+        cta: 'Book a demo',
       },
     ],
   },
