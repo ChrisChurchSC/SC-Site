@@ -165,39 +165,61 @@
 
 /* Inventory. Mono and small, because it is a list of things rather than a
    sentence, and it should read as a spec sheet. */
-.items {
-  list-style: none;
-  margin: 0 0 18px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.6);
+/* Small and large, as a definition list — it is literally a term and its
+   description, and the semantics are free. */
+.scopes {
+  margin: 0 0 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  align-items: baseline;
 }
+
+.scopeKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.scopeVal {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+
 
 /* The argument. Set in the serif and above the price, so the card reads
    inventory, reason, cost — and takes the slack so the prices line up across
    the row whatever the lists do. */
-.why {
-  flex: 1;
-  margin: 0 0 18px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+/* The caveat, on the two pillars that carry one. Smaller and dimmer than
+   the inventory above it: it qualifies the price rather than selling the
+   work. */
+.note {
+  margin: 0 0 16px;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: 14px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
 }
 
+
+/* Pinned to the foot of the card. The four inventories run from eight items
+   to eleven and two carry a caveat, so left in flow the prices sat at four
+   different heights — the one number on each card a reader is scanning for,
+   in four different places. */
 .pillarPrice {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  margin: 0;
+  margin: auto 0 0;
+  padding-top: 18px;
 }
 
 .startingAt,
@@ -231,56 +253,17 @@
 }
 
 /* ── The retainer tiers ── */
-.tiersHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: clamp(34px, 4vw, 60px) 0 18px;
-}
 
-.tiersTitle {
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(20px, 2.4vw, 30px);
-  color: #fff;
-  margin: 0;
-}
 
-.toggle {
-  display: inline-flex;
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--r-control);
-  background: rgba(255, 255, 255, 0.03);
-}
 
-.toggleOff,
-.toggleOn {
-  padding: 8px 14px;
-  border: 0;
-  border-radius: 3px;
-  background: transparent;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
 
-.toggleOn {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
 
-.toggleOff:hover { color: rgba(255, 255, 255, 0.8); }
 
-.tiers {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
-}
+
+
+
+
+
 
 .tier {
   position: relative;
@@ -360,9 +343,7 @@
   font-size: 10px;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.4);
-  margin: 8px 0 20px;
-  /* Takes the slack so every button sits on one line across the row. */
-  flex: 1;
+  margin: 8px 0 0;
 }
 
 .tierCta,
@@ -454,5 +435,61 @@
 .ctaGhost:hover { background: rgba(255, 255, 255, 0.06); }
 
 @media (prefers-reduced-motion: reduce) {
-  .tierCta, .ctaFilled, .ctaGhost, .toggleOff, .toggleOn { transition: none; }
+  .tierCta, .ctaFilled, .ctaGhost { transition: none; }
+}
+
+/* ── Second-pass additions ── */
+
+/* The line under each section name. It is the shape of the deal in five
+   words, so it sits with the heading rather than in the paragraph. */
+.kicker {
+  margin: 8px 0 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.pillarsIntro {
+  max-width: 78ch;
+  margin: 0 0 clamp(22px, 3vw, 36px);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* The pillar number sits above the name rather than beside it — the names
+   run to three words and a leading number pushed them onto two lines. */
+.pillarNum {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.pillarName { margin: 0 0 14px; }
+
+/* "per channel" qualifies the figure, so it hangs off it rather than
+   sitting on its own line pretending to be a second fact. */
+.priceSuffix {
+  margin-left: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* What the tier is for. The number and the price say what it costs; this is
+   the only line that says what you would use it for. */
+.tierBlurb {
+  margin: 14px 0 20px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  /* Takes the slack so the four buttons share a line whatever the blurbs
+     do — they run from six words to twenty. */
+  flex: 1;
 }
