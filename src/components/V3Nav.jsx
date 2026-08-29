@@ -46,7 +46,7 @@ export const NAV_LINKS = [
   // There WAS a /pricing page, built on figures Chris supplied directly and
   // scrapped on request. It is in the history on this branch if it is ever
   // wanted back: see 110265f and the four commits before it.
-  { label: 'Pricing', href: '/services' },
+  { label: 'Pricing', href: '/pricing' },
 ]
 
 /* The two columns of the Case Studies panel: by industry, and by company
@@ -320,7 +320,7 @@ export const FOOTER_COLS = [
     links: [
       ...SERVICE_ROWS.map(({ name, href }) => ({ label: name, href })),
       // The nav's own Pricing item, and its destination, unchanged.
-      { label: 'Pricing', href: '/services' },
+      { label: 'Pricing', href: '/pricing' },
     ],
   },
   {

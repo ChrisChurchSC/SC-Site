@@ -1,0 +1,276 @@
+/* The pricing page. Centred hero and a pill switcher, as in the reference,
+   in /v3's language — Signifier for sentences, mono for labels, pink for the
+   one thing being pointed at. */
+.page {
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  --nav-width: 0px;
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: var(--bar-inset);
+  --r-control: 4px;
+  --r-surface: 12px;
+  --r-panel: 18px;
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  --label-display: inline-block;
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+  --label-width: fit-content;
+
+  padding: var(--bar-inset) var(--page-pad-right) clamp(50px, 7vw, 100px) var(--page-pad-left);
+  color: rgba(255, 255, 255, 0.9);
+  overflow-x: clip;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(44px, 7vw, 96px) 0 clamp(30px, 4vw, 50px);
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--label-color);
+  background: var(--label-bg);
+  padding: var(--label-pad);
+  border-radius: var(--label-radius);
+  margin: 0 0 20px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(34px, 5.6vw, 72px);
+  line-height: 1.06;
+  color: #fff;
+  margin: 0;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+.sub {
+  margin: 18px 0 0;
+  max-width: 48ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* The switcher. A pill of three, the active one lifted onto its own ground
+   rather than coloured — this page has one accent and it is spent on the
+   recommended card. */
+.switcher {
+  display: inline-flex;
+  margin-top: clamp(28px, 4vw, 48px);
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tab,
+.tabOn {
+  padding: 10px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab:hover { color: rgba(255, 255, 255, 0.85); }
+
+.tabOn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.panel { padding-top: clamp(20px, 3vw, 36px); }
+
+.panelEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+.panelBlurb {
+  margin: 0 auto clamp(26px, 3.4vw, 44px);
+  max-width: 56ch;
+  text-align: center;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.tier {
+  display: flex;
+  flex-direction: column;
+  padding: 26px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+}
+
+/* Outlined rather than filled: on a dark page a filled panel reads as a
+   different surface, not as the same card emphasised. */
+.tierFeatured {
+  border-color: rgba(223, 78, 214, 0.45);
+  box-shadow: 0 0 0 1px rgba(223, 78, 214, 0.18);
+}
+
+.kicker {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.36);
+  margin: 0 0 10px;
+}
+
+.tierName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.1;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 0;
+}
+
+.price {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 34px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* A number that is missing, not a design that never had one — the same
+   treatment the case-study cards give '––'. Set at the size a real figure
+   would be so the gap is the right shape. */
+.priceEmpty { color: rgba(255, 255, 255, 0.3); }
+
+.unit {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.note {
+  margin: 10px 0 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+/* The ones waiting on a number say so in the accent, so nobody ships the
+   page thinking the dashes are a style. */
+.noteFlag { color: var(--pink, #df4ed6); }
+
+.summary {
+  margin: 18px 0 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.lines {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  /* Takes the slack so every button shares a line across the row. */
+  flex: 1;
+}
+
+.lines li {
+  position: relative;
+  padding-left: 15px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.lines li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.tierFeatured .lines li::before { background: var(--pink, #df4ed6); }
+
+.cta {
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--r-control);
+  background: transparent;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, filter 0.15s;
+}
+
+.cta:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.tierFeatured .cta {
+  background: var(--pink, #df4ed6);
+  border-color: var(--pink, #df4ed6);
+  color: #0a0a0a;
+}
+
+.tierFeatured .cta:hover { filter: brightness(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tab, .tabOn, .cta { transition: none; }
+}

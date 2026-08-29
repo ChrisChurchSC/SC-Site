@@ -15,6 +15,7 @@ import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import HomeV2 from './pages/HomeV2'
 import HomeV3 from './pages/HomeV3'
+import PricingV3 from './pages/PricingV3'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -50,7 +51,7 @@ function ScrollToTop() {
    here rather than through ChromeGate, which would take the theme toggle
    down with it: the deck pages want all the chrome gone, these want only the
    nav gone. */
-const V3_PAGES = ['/v3']
+const V3_PAGES = ['/v3', '/pricing']
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -117,6 +118,7 @@ export default function App() {
                     point path="/" at HomeV2 and drop this route. */}
                 <Route path="/v2" element={<HomeV2 />} />
                 <Route path="/v3" element={<HomeV3 />} />
+        <Route path="/pricing" element={<PricingV3 />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
