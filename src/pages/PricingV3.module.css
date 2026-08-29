@@ -1,0 +1,397 @@
+/* The pricing page. Same language as /v3 — the bar and the footer are the
+   same components, so this only has to dress what sits between them. */
+.page {
+  /* The tokens the shared bar, the footer and the dividers all read. Set
+     here rather than inherited, because this page is not inside /v3's
+     stack. */
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  --nav-width: 0px;
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: var(--bar-inset);
+  --r-control: 4px;
+  --r-surface: 12px;
+  --r-panel: 18px;
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  --label-display: inline-block;
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+  --label-width: fit-content;
+
+  padding: var(--bar-inset) var(--page-pad-right) clamp(60px, 8vw, 120px) var(--page-pad-left);
+  color: rgba(255, 255, 255, 0.9);
+  overflow-x: clip;
+}
+
+.hero {
+  padding: clamp(40px, 7vw, 96px) 0 clamp(30px, 4vw, 56px);
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--label-color);
+  background: var(--label-bg);
+  padding: var(--label-pad);
+  border-radius: var(--label-radius);
+  width: var(--label-width);
+  display: inline-block;
+  margin: 0 0 18px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 5.2vw, 66px);
+  line-height: 1.08;
+  color: #fff;
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.block { padding: clamp(30px, 4vw, 60px) 0; }
+
+.blockHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 32px;
+  margin-bottom: clamp(24px, 3vw, 44px);
+}
+
+.blockName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1;
+  color: #fff;
+  margin: 0;
+}
+
+.blockIntro {
+  flex: 1;
+  min-width: 280px;
+  max-width: 74ch;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.56);
+}
+
+/* Four across, then two, then one — auto-fit rather than a breakpoint per
+   step. */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.pillar {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+}
+
+.pillarHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pillarNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--pink, #df4ed6);
+}
+
+.pillarName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 21px;
+  line-height: 1.15;
+  color: #fff;
+  margin: 0;
+}
+
+/* Inventory. Mono and small, because it is a list of things rather than a
+   sentence, and it should read as a spec sheet. */
+.items {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The argument. Set in the serif and above the price, so the card reads
+   inventory, reason, cost — and takes the slack so the prices line up across
+   the row whatever the lists do. */
+.why {
+  flex: 1;
+  margin: 0 0 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pillarPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+}
+
+.startingAt,
+.priceNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+/* Sentence case and not uppercase: it is a qualifying clause, not a label. */
+.priceNote {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  line-height: 1.5;
+}
+
+.amount {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1;
+  color: #fff;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: clamp(20px, 3vw, 40px) 0 0;
+}
+
+/* ── The retainer tiers ── */
+.tiersHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: clamp(34px, 4vw, 60px) 0 18px;
+}
+
+.tiersTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2.4vw, 30px);
+  color: #fff;
+  margin: 0;
+}
+
+.toggle {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.toggleOff,
+.toggleOn {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toggleOn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.toggleOff:hover { color: rgba(255, 255, 255, 0.8); }
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-panel);
+}
+
+.tierCommon {
+  border-color: rgba(223, 78, 214, 0.45);
+  box-shadow: 0 0 0 1px rgba(223, 78, 214, 0.18);
+}
+
+.badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+}
+
+.hours {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 0 0 18px;
+}
+
+.hoursNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 34px;
+  line-height: 1;
+  color: #fff;
+}
+
+.hoursUnit {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tierPrice {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 26px;
+  line-height: 1;
+  color: #fff;
+  margin: 0;
+}
+
+.tierRate {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 8px 0 20px;
+  /* Takes the slack so every button sits on one line across the row. */
+  flex: 1;
+}
+
+.tierCta,
+.ctaFilled,
+.ctaGhost {
+  display: inline-block;
+  text-align: center;
+  padding: 11px 20px;
+  border-radius: var(--r-control);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, filter 0.15s;
+}
+
+.tierCta {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tierCta:hover { background: rgba(255, 255, 255, 0.06); }
+
+.tierCommon .tierCta {
+  background: var(--pink, #df4ed6);
+  border-color: var(--pink, #df4ed6);
+  color: #0a0a0a;
+}
+
+.tierCommon .tierCta:hover { filter: brightness(1.08); }
+
+.smallprint {
+  margin: 22px 0 0;
+  max-width: 62ch;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+/* ── The close ── */
+.close {
+  text-align: center;
+  padding: clamp(50px, 7vw, 100px) 0 clamp(40px, 5vw, 70px);
+}
+
+.closeHead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.6vw, 44px);
+  color: #fff;
+  margin: 0;
+}
+
+.closeBody {
+  margin: 12px 0 26px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.closeActions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ctaFilled {
+  border: 1px solid var(--pink, #df4ed6);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+}
+
+.ctaFilled:hover { filter: brightness(1.08); }
+
+.ctaGhost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaGhost:hover { background: rgba(255, 255, 255, 0.06); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tierCta, .ctaFilled, .ctaGhost, .toggleOff, .toggleOn { transition: none; }
+}

@@ -15,6 +15,7 @@ import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import HomeV2 from './pages/HomeV2'
 import HomeV3 from './pages/HomeV3'
+import PricingV3 from './pages/PricingV3'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -45,12 +46,16 @@ function ScrollToTop() {
   return null
 }
 
-/* /v3 runs without the side nav. Gated on its own rather than through
-   ChromeGate, which would take the theme toggle down with it — the deck
-   pages want all of the chrome gone, this page wants only the nav gone. */
+/* The v3-family pages bring their own top bar (V3Nav), so they run without
+   the side nav — two navigations on one page is worse than either. Gated
+   here rather than through ChromeGate, which would take the theme toggle
+   down with it: the deck pages want all the chrome gone, these want only the
+   nav gone. */
+const V3_PAGES = ['/v3', '/pricing']
+
 function NavGate() {
   const { pathname } = useLocation()
-  if (pathname === '/v3') return null
+  if (V3_PAGES.includes(pathname)) return null
   return <Nav />
 }
 
@@ -65,7 +70,9 @@ function BackButton() {
   const location = useLocation()
   const navigate = useNavigate()
   // /v2 is a homepage, so it gets the homepage treatment: no back button.
-  if (location.pathname === '/' || location.pathname === '/v2' || location.pathname === '/v3' || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
+  // The v3-family pages have a full nav bar of their own; a floating back
+  // button on top of it is a second way to leave, offered twice.
+  if (location.pathname === '/' || location.pathname === '/v2' || V3_PAGES.includes(location.pathname) || location.pathname === '/lp' || location.pathname.startsWith('/lp/')) return null
   const handleBack = () => {
     const parts = location.pathname.split('/').filter(Boolean)
     if (parts.length > 1) {
@@ -111,6 +118,7 @@ export default function App() {
                     point path="/" at HomeV2 and drop this route. */}
                 <Route path="/v2" element={<HomeV2 />} />
                 <Route path="/v3" element={<HomeV3 />} />
+        <Route path="/pricing" element={<PricingV3 />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
