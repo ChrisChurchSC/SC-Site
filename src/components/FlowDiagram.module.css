@@ -1,20 +1,26 @@
 /* The hero diagram — see FlowDiagram.jsx. */
 .wrap {
   position: relative;
-  /* Bleeds to the page's own margins so the wash reaches the edges the way
-     the reference's does. */
-  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  margin-left: calc(-1 * var(--page-pad-left, 0px));
-  padding: clamp(28px, 4vw, 60px) clamp(16px, 3vw, 48px) clamp(30px, 4vw, 64px);
+  /* NO LONGER FULL BLEED. It used to widen past the page margin, so the
+     cards began 45px from the screen edge on a 1512 viewport — a narrower
+     margin than the page copy above it, which made the diagram read as
+     something bolted onto the page rather than part of it. It now sits
+     inside a column of its own, wider than the text measure but well short
+     of the edges. */
+  padding: clamp(20px, 3vw, 44px) clamp(12px, 4.5vw, 96px) clamp(30px, 4vw, 64px);
 }
+
 
 /* The wash. Rounded and inset at the top so the cards in the first row
    overhang it, which is what stops the whole thing reading as one flat
    panel. */
 .ground {
   position: absolute;
-  left: clamp(8px, 2vw, 40px);
-  right: clamp(8px, 2vw, 40px);
+  /* Inset a little further than the cards, so their left and right edges
+     overhang it — which is what stops the whole thing reading as one flat
+     panel. */
+  left: clamp(4px, 1.4vw, 26px);
+  right: clamp(4px, 1.4vw, 26px);
   top: clamp(56px, 8vw, 120px);
   bottom: 0;
   border-radius: clamp(16px, 2vw, 28px) clamp(16px, 2vw, 28px) 0 0;
