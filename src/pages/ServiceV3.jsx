@@ -4,6 +4,7 @@ import styles from './ServiceV3.module.css'
 import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import FlowDiagram from '../components/FlowDiagram'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { services, serviceBySlug } from '../data/services'
@@ -66,6 +67,16 @@ export default function ServiceV3() {
           <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
         </div>
       </header>
+
+      {/* The hero diagram: what an engagement starts from, the service, and
+          what it produces. The right column is the same four pillars the
+          section below lists, so the picture and the detail cannot say
+          different things. */}
+      <FlowDiagram
+        inputs={service.flowIn}
+        centre={service.name}
+        outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
+      />
 
       <section className={styles.block} aria-labelledby="covers">
         <div className={styles.blockHead}>

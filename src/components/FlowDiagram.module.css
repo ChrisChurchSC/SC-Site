@@ -1,0 +1,181 @@
+/* The hero diagram — see FlowDiagram.jsx. */
+.wrap {
+  position: relative;
+  /* Bleeds to the page's own margins so the wash reaches the edges the way
+     the reference's does. */
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+  padding: clamp(28px, 4vw, 60px) clamp(16px, 3vw, 48px) clamp(30px, 4vw, 64px);
+}
+
+/* The wash. Rounded and inset at the top so the cards in the first row
+   overhang it, which is what stops the whole thing reading as one flat
+   panel. */
+.ground {
+  position: absolute;
+  left: clamp(8px, 2vw, 40px);
+  right: clamp(8px, 2vw, 40px);
+  top: clamp(56px, 8vw, 120px);
+  bottom: 0;
+  border-radius: clamp(16px, 2vw, 28px) clamp(16px, 2vw, 28px) 0 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(223, 78, 214, 0.5) 0%,
+    rgba(223, 78, 214, 0.22) 45%,
+    rgba(223, 78, 214, 0.04) 100%
+  );
+}
+
+.flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(28px, 4vw, 58px);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 26px);
+}
+
+/* A card, and its arrow. The arrow is on the card rather than between the
+   columns so it stays beside the thing it points from at every width. */
+.node {
+  position: relative;
+  padding: 14px 16px;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.nodeName {
+  display: block;
+  margin-bottom: 10px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: #fff;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  padding: 3px 8px;
+  border-radius: var(--r-control, 4px);
+  background: rgba(255, 255, 255, 0.06);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* Drawn with borders rather than a glyph: a character would sit on the text
+   baseline and change size with the font. */
+.arrow {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-top: 1.5px solid rgba(223, 78, 214, 0.8);
+  border-right: 1.5px solid rgba(223, 78, 214, 0.8);
+}
+
+.arrowIn {
+  right: clamp(-30px, -2vw, -14px);
+  transform: rotate(45deg);
+}
+
+/* The outputs point away from the centre, so their arrow sits on the left
+   edge pointing right — into the card, from the repo. */
+.arrowOut {
+  left: clamp(-30px, -2vw, -14px);
+  transform: rotate(45deg);
+}
+
+.centre {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-surface, 12px);
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.centreHead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(223, 78, 214, 0.1);
+}
+
+.centreMark {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--pink, #df4ed6);
+}
+
+.centreName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Deliberately unreadable. It is a diagram of a flow, not a screenshot — the
+   real interface is further down the page and a legible fake here would
+   compete with it. */
+.centreBody {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rowIcon {
+  flex: none;
+  width: 11px;
+  height: 9px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.rowBar {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Stacked below this: three columns of cards at 300px each is three columns
+   of nothing. Inputs, then the repo, then outputs — the same order, read
+   downward, with the arrows turned to match. */
+@media (max-width: 860px) {
+  .flow { grid-template-columns: minmax(0, 1fr); }
+
+  .arrow {
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: clamp(-19px, -1.6vw, -13px);
+    margin: 0 0 0 -5px;
+    transform: rotate(135deg);
+  }
+
+  .ground { top: clamp(40px, 10vw, 90px); }
+}
