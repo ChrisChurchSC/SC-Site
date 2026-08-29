@@ -38,10 +38,15 @@ export const NAV_LINKS = [
   { label: 'Services', href: '/services', panel: 'services' },
   { label: 'Case Studies', href: '/work', panel: 'work' },
   { label: 'Company', href: '/about-us', panel: 'company' },
-  // There is a pricing page now. This was a dead label, then a link into the
-  // middle of /services because that was where the numbers lived; both are
-  // fixed.
-  { label: 'Pricing', href: '/pricing' },
+  // Points at /services, where the rates actually are: the Build and Grow
+  // cards quote them and every package on that page carries a price. Not a
+  // pricing page, and landing mid-page is not ideal — but a live link to the
+  // real numbers beats the dead label it was.
+  //
+  // There WAS a /pricing page, built on figures Chris supplied directly and
+  // scrapped on request. It is in the history on this branch if it is ever
+  // wanted back: see 110265f and the four commits before it.
+  { label: 'Pricing', href: '/services' },
 ]
 
 /* The two columns of the Case Studies panel: by industry, and by company
@@ -315,7 +320,7 @@ export const FOOTER_COLS = [
     links: [
       ...SERVICE_ROWS.map(({ name, href }) => ({ label: name, href })),
       // The nav's own Pricing item, and its destination, unchanged.
-      { label: 'Pricing', href: '/pricing' },
+      { label: 'Pricing', href: '/services' },
     ],
   },
   {
