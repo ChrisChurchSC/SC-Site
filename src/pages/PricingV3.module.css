@@ -25,9 +25,36 @@
   overflow-x: clip;
 }
 
+/* Headline left, clients right — the reference's shape, and the reason the
+   first screen no longer has an empty half. */
 .hero {
-  padding: clamp(40px, 7vw, 96px) 0 clamp(30px, 4vw, 56px);
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: start;
+  gap: 32px clamp(24px, 4vw, 64px);
+  padding: clamp(36px, 5vw, 72px) 0 clamp(30px, 4vw, 56px);
 }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Two columns of names rather than one long list: at this width a single
+   column would run past the fold and read as a directory. */
+.clients {
+  columns: 2;
+  column-gap: 28px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 2;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.clients li { break-inside: avoid; }
 
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
@@ -56,12 +83,24 @@
 
 .block { padding: clamp(30px, 4vw, 60px) 0; }
 
+/* The Grow block ends on the small print and the closing section brings its
+   own space above the rule, so this one needs no tail of its own.
+
+   A class rather than :last-of-type: that selector matches the last SECTION
+   among siblings, which is the closing one — so the rule never reached the
+   block it was written for. */
+.blockTail { padding-bottom: 0; }
+
 .blockHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 12px 32px;
-  margin-bottom: clamp(24px, 3vw, 44px);
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: start;
+  gap: 14px clamp(24px, 4vw, 64px);
+  margin-bottom: clamp(26px, 3.4vw, 48px);
+}
+
+@media (max-width: 760px) {
+  .blockHead { grid-template-columns: minmax(0, 1fr); }
 }
 
 .blockName {
@@ -74,13 +113,13 @@
 }
 
 .blockIntro {
-  flex: 1;
-  min-width: 280px;
-  max-width: 74ch;
   margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.56);
+  max-width: 58ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 /* Four across, then two, then one — auto-fit rather than a breakpoint per
@@ -258,23 +297,37 @@
   box-shadow: 0 0 0 1px rgba(223, 78, 214, 0.18);
 }
 
+/* Reserved on every card so the four line up whether or not they carry a
+   badge — see the note in the JSX. */
+/* Flex with a fixed height, not a min-height on a block. As a block its
+   height came from the badge line box on one card and from nothing on the
+   other three, so the marked card sat 4px lower than its neighbours —
+   measured, not guessed. */
+.badgeRow {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  margin-bottom: 14px;
+}
+
 .badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 3px 8px;
+  display: inline-block;
+  padding: 3px 9px;
   border-radius: 999px;
   background: var(--pink, #df4ed6);
   color: #0a0a0a;
   font-family: 'Roboto Mono', monospace;
   font-size: 9px;
+  letter-spacing: 0.04em;
 }
 
 .hours {
   display: flex;
   align-items: baseline;
-  gap: 7px;
-  margin: 0 0 18px;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .hoursNum {
@@ -342,18 +395,23 @@
 .tierCommon .tierCta:hover { filter: brightness(1.08); }
 
 .smallprint {
-  margin: 22px 0 0;
-  max-width: 62ch;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 10px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.32);
+  margin: 20px 0 0;
+  max-width: 66ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.38);
 }
 
 /* ── The close ── */
+/* The gap above the rule was the block padding and this margin stacked —
+   about 130px of nothing between the last sentence and the next section.
+   The rule is the separation; the space only has to let it breathe. */
 .close {
-  text-align: center;
-  padding: clamp(50px, 7vw, 100px) 0 clamp(40px, 5vw, 70px);
+  padding: clamp(32px, 4vw, 56px) 0 clamp(10px, 2vw, 24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: clamp(16px, 2vw, 28px);
 }
 
 .closeHead {
@@ -366,13 +424,16 @@
 
 .closeBody {
   margin: 12px 0 26px;
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.5);
+  max-width: 46ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .closeActions {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 }

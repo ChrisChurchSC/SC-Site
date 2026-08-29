@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './PricingV3.module.css'
 import FooterCard from '../components/FooterCard'
+import { clientLogos } from '../data/clientLogos'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
@@ -81,8 +82,19 @@ export default function PricingV3() {
       <V3Nav />
 
       <header className={styles.hero}>
-        <p className={styles.eyebrow}>[ Pricing ]</p>
-        <h1 className={styles.headline}>What it costs to build it, and to run it.</h1>
+        <div>
+          <p className={styles.eyebrow}>[ Pricing ]</p>
+          <h1 className={styles.headline}>What it costs to build it, and to run it.</h1>
+        </div>
+
+        {/* The reference puts client logos across from its headline. We have
+            no logo files for these — the client wall on the homepage is names
+            too — so it is names, which is honest and fills a half of the
+            first screen that was otherwise empty. Twelve, because the point
+            is the weight of the list rather than any one of them. */}
+        <ul className={styles.clients} aria-label="Selected clients">
+          {clientLogos.slice(0, 12).map(({ name }) => <li key={name}>{name}</li>)}
+        </ul>
       </header>
 
       <section className={styles.block} aria-labelledby="build-heading">
@@ -98,7 +110,7 @@ export default function PricingV3() {
 
       <hr className={styles.rule} />
 
-      <section className={styles.block} aria-labelledby="grow-heading">
+      <section className={[styles.block, styles.blockTail].join(' ')} aria-labelledby="grow-heading">
         <div className={styles.blockHead}>
           <h2 className={styles.blockName} id="grow-heading">Grow</h2>
           <p className={styles.blockIntro}>{growIntro}</p>
@@ -132,7 +144,14 @@ export default function PricingV3() {
         <div className={styles.tiers}>
           {growTiers.map(({ hours, monthly, rate, common }) => (
             <div key={hours} className={`${styles.tier}${common ? ' ' + styles.tierCommon : ''}`}>
-              {common && <span className={styles.badge}>Most common</span>}
+              {/* A slot on every card, filled on one. Absolutely positioned,
+                  the badge landed on top of the hours line of the card it was
+                  meant to mark; in flow it needs the same reserved row on all
+                  four or the marked card's contents sit lower than its
+                  neighbours'. */}
+              <span className={styles.badgeRow}>
+                {common && <span className={styles.badge}>Most common</span>}
+              </span>
 
               <p className={styles.hours}>
                 <span className={styles.hoursNum}>{hours * period.months}</span>
