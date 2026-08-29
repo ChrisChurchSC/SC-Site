@@ -173,6 +173,8 @@ function RepoPreview() {
               <span
                 key={name}
                 className={styles.uiSeg}
+                /* The legend under the bar names only the top three. */
+                data-tip={`${name} · ${pct}%`}
                 /* One accent stepped down in opacity rather than five hues:
                    a stacked bar in five unrelated colours reads as a legend
                    to decode, not as one quantity split up. */
@@ -209,12 +211,21 @@ function RepoPreview() {
 /**
  * Measurement: the counts, the output chart, the channel split.
  *
- * EVERY VALUE IS A COUNT OF WORK. Assets shipped, assets in review, output
- * per week, share per channel. Not one is a lift, a conversion rate, a
- * revenue figure or a percentage with a plus in front of it. A made-up count
- * of drafts is obviously a mock; a made-up "+284% engagement" is a
- * performance claim, and a visitor cannot tell an illustrative one from a
- * real one.
+ * IT SHOWS PERFORMANCE, NOT OUTPUT, because that is what the card promises —
+ * "what shipped and what it moved" — and a dashboard of assets-shipped
+ * counts only ever answered the first half. Lift, click rate, conversions, a
+ * weekly conversion trend, and conversion rate by channel.
+ *
+ * ALL OF IT IS INVENTED, AND THAT IS WHY THE PANEL SAYS SAMPLE DATA. This
+ * used to be counts precisely because a made-up count of drafts is obviously
+ * a mock while a made-up conversion rate is a performance claim a visitor
+ * cannot tell from a real one. The tag is what makes the second kind
+ * publishable: it frames the whole panel rather than any one figure.
+ * DO NOT REMOVE IT WHILE THESE NUMBERS ARE MADE UP.
+ *
+ * The weekly figures sum to the conversions total on purpose. A panel whose
+ * headline does not match its own chart is the detail that gives a mock
+ * away.
  *
  * THE LIFT IS FILLED IN, ON REQUEST, AND THE PANEL SAYS "SAMPLE DATA"
  * BECAUSE OF IT.
@@ -237,27 +248,33 @@ function RepoPreview() {
  */
 const DASH = {
   stats: [
-    { value: '42', label: 'shipped' },
-    { value: '6', label: 'in review' },
     { value: '+18%', label: 'lift' },
+    { value: '4.2%', label: 'click rate' },
+    { value: '454', label: 'conversions' },
   ],
-  /* Relative heights only. No axis and no gridlines: there is nothing to
-     read off it, and an axis would invite a measurement it has not earned. */
-  bars: [38, 52, 44, 61, 49, 72, 58, 80],
+  /* Conversions per week. They sum to the 454 above on purpose: a panel whose
+     total does not match its own chart is the detail that makes a mock look
+     like a mock. */
+  weeks: [38, 52, 44, 61, 49, 72, 58, 80],
+  /* Conversion rate by channel, not share of output. The bars are scaled to
+     the best of the three rather than to 100, or three single-digit
+     percentages render as three slivers and the comparison — which is the
+     only thing this row is for — disappears. */
   channels: [
-    { name: 'Paid social', pct: 42 },
-    { name: 'Email', pct: 31 },
-    { name: 'Organic', pct: 27 },
+    { name: 'Email', rate: 5.1 },
+    { name: 'Paid social', rate: 3.8 },
+    { name: 'Organic', rate: 2.4 },
   ],
 }
 
 function DashPreview() {
-  const peak = Math.max(...DASH.bars)
+  const peak = Math.max(...DASH.weeks)
+  const best = Math.max(...DASH.channels.map(c => c.rate))
 
   return (
     <div className={styles.panel}>
       <span className={styles.panelLabel}>
-        Output · last 8 weeks
+        Performance · last 8 weeks
         <span className={styles.sample}>Sample data</span>
       </span>
 
@@ -271,21 +288,26 @@ function DashPreview() {
       </div>
 
       <div className={styles.dashChart}>
-        {DASH.bars.map((v, i) => (
+        {DASH.weeks.map((v, i) => (
           /* Keyed by position: eight weeks, two of which can hold the same
              value. */
-          <span key={i} className={styles.dashBar} style={{ height: `${(v / peak) * 100}%` }} />
+          <span
+            key={i}
+            className={styles.dashBar}
+            data-tip={`Week ${i + 1} · ${v} conversions`}
+            style={{ height: `${(v / peak) * 100}%` }}
+          />
         ))}
       </div>
 
       <div className={styles.dashRows}>
-        {DASH.channels.map(({ name, pct }) => (
-          <span key={name} className={styles.dashRow}>
+        {DASH.channels.map(({ name, rate }) => (
+          <span key={name} className={styles.dashRow} data-tip={`${name} · ${rate}% of clicks convert`}>
             <span className={styles.dashRowName}>{name}</span>
             <span className={styles.dashTrack}>
-              <span className={styles.dashFill} style={{ width: `${pct}%` }} />
+              <span className={styles.dashFill} style={{ width: `${(rate / best) * 100}%` }} />
             </span>
-            <span className={styles.dashPct}>{pct}%</span>
+            <span className={styles.dashPct}>{rate}%</span>
           </span>
         ))}
       </div>
@@ -376,7 +398,10 @@ function AgentsPreview() {
           <span
             key={name}
             className={`${styles.slot}${i === PICKED ? ' ' + styles.slotPicked : ''}`}
-            title={name}
+            /* The five unpicked names are not written anywhere on the card —
+               the plate only describes the one that is selected — so without
+               this the roster is five anonymous icons. */
+            data-tip={`${name} · will not ${AGENTS[i].wont.toLowerCase()}`}
           >
             <Icon className={styles.slotIcon} size={18} strokeWidth={1.4} aria-hidden="true" />
             {/* The name is in the plate below, not in the tile: six of these
@@ -474,8 +499,10 @@ function Card({ id, lead, rest, size }) {
           <span className={styles.rest}>{rest}</span>
         </h3>
         {/* Not a link yet — there is nowhere for it to go. It is here because
-            it is part of the card's shape; give it an href with the page. */}
-        <span className={styles.arrow} aria-hidden="true">↗</span>
+            it is part of the card's shape; give it an href with the page.
+            The tip is what stops that being a broken promise: the badge
+            reads as a link, so hovering it should say why nothing happens. */}
+        <span className={styles.arrow} data-tip="Coming soon" aria-hidden="true">↗</span>
       </div>
       {/* The well. The repository card fills it with the product's own UI;
           the rest stay empty on purpose — see the note at the top. */}
