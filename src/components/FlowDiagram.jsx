@@ -1,3 +1,5 @@
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+
 import styles from './FlowDiagram.module.css'
 import { repoFiles } from '../data/repo'
 
@@ -56,7 +58,7 @@ function Folder() {
   )
 }
 
-function Column({ label, groups, side }) {
+function Column({ label, groups }) {
   return (
     <div className={styles.column} aria-label={label}>
       {groups.map(({ name, items }) => (
@@ -67,14 +69,93 @@ function Column({ label, groups, side }) {
               {items.map((i) => <span key={i} className={styles.chip}>{i}</span>)}
             </span>
           )}
-          <span className={`${styles.arrow} ${side === 'in' ? styles.arrowIn : styles.arrowOut}`} aria-hidden="true" />
         </div>
       ))}
     </div>
   )
 }
 
+/* THE WIRES ARE MEASURED, NOT ASSUMED.
+ *
+ * Five cards on the left are the same height and evenly spaced, so their
+ * centres could be worked out arithmetically. The four on the right are not
+ * — a card with three chips is taller than one with two — so any formula
+ * would put the curves near the cards rather than on them. The positions are
+ * read from the DOM after layout and redrawn whenever anything resizes.
+ *
+ * They converge on ONE node per side. Five separate lines each ending in
+ * their own dot said "five things, five connections"; a single junction says
+ * everything meets in one place, which is the repository's whole argument.
+ */
 export default function FlowDiagram({ centre, outputs }) {
+  const flowRef = useRef(null)
+  const [wires, setWires] = useState(null)
+
+  const measure = useCallback(() => {
+    const flow = flowRef.current
+    if (!flow) return
+    /* Skip the overlay. It is the first child of .flow, so reading
+       flow.children directly made the SVG the left column, shifted the other
+       two along, and drew twenty-four wires to a junction sixteen pixels off
+       the left edge of the page. */
+    const [left, middle, right] = [...flow.children].filter((el) => el.tagName !== "svg")
+    if (!left || !middle || !right) return
+
+    const base = flow.getBoundingClientRect()
+    const mid = middle.getBoundingClientRect()
+    const centreOf = (el) => {
+      const r = el.getBoundingClientRect()
+      return { top: r.top - base.top + r.height / 2, left: r.left - base.left, right: r.right - base.left }
+    }
+
+    const repo = centreOf(middle)
+    /* The junctions sit in the gap rather than on the panel's edge, so the
+       curves have somewhere to straighten out before they land. */
+    const inJunction = { x: repo.left - 16, y: repo.top }
+    const outJunction = { x: repo.right + 16, y: repo.top }
+
+    const path = (from, to) => {
+      const dx = Math.abs(to.x - from.x)
+      const c = Math.max(18, dx * 0.55)
+      const dir = to.x > from.x ? 1 : -1
+      return `M ${from.x} ${from.y} C ${from.x + c * dir} ${from.y}, ${to.x - c * dir} ${to.y}, ${to.x} ${to.y}`
+    }
+
+    const cards = (col) => [...col.children].map(centreOf)
+
+    setWires({
+      width: base.width,
+      height: base.height,
+      inJunction,
+      outJunction,
+      /* +6 / -6 so a wire starts just clear of the card's edge rather than
+         under its border. */
+      in: cards(left).map((c) => path({ x: c.right + 6, y: c.top }, inJunction)),
+      out: cards(right).map((c) => path(outJunction, { x: c.left - 6, y: c.top })),
+    })
+  }, [])
+
+  useLayoutEffect(() => {
+    measure()
+    const flow = flowRef.current
+    if (!flow || typeof ResizeObserver === 'undefined') return
+
+    /* Observes the flow and every card in it: the columns reflow when the
+       page does, and a card can change height on its own when its chips
+       wrap. */
+    const ro = new ResizeObserver(measure)
+    ro.observe(flow)
+    for (const col of [...flow.children].filter((el) => el.tagName !== "svg")) {
+      for (const card of col.children) ro.observe(card)
+    }
+
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [measure, outputs])
+
   return (
     <div className={styles.wrap}>
       {/* The wash behind it, which the reference uses to tie the three
@@ -82,8 +163,23 @@ export default function FlowDiagram({ centre, outputs }) {
           that the cards still read as sitting on the page. */}
       <div className={styles.ground} aria-hidden="true" />
 
-      <div className={styles.flow}>
-        <Column label="What goes in" groups={REPO_INPUTS} side="in" />
+      <div className={styles.flow} ref={flowRef}>
+        {wires && (
+          <svg
+            className={styles.wires}
+            viewBox={`0 0 ${wires.width} ${wires.height}`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {[...wires.in, ...wires.out].map((d) => (
+              <path key={d} className={styles.wire} d={d} />
+            ))}
+            <circle className={styles.junction} cx={wires.inJunction.x} cy={wires.inJunction.y} r="5" />
+            <circle className={styles.junction} cx={wires.outJunction.x} cy={wires.outJunction.y} r="5" />
+          </svg>
+        )}
+
+        <Column label="What goes in" groups={REPO_INPUTS} ref={undefined} />
 
         <div className={styles.centre}>
           <div className={styles.centreHead}>
@@ -114,7 +210,7 @@ export default function FlowDiagram({ centre, outputs }) {
           </ul>
         </div>
 
-        <Column label="What comes out" groups={outputs} side="out" />
+        <Column label="What comes out" groups={outputs} />
       </div>
     </div>
   )

@@ -48,41 +48,48 @@ export default function ServiceV3() {
     <main className={styles.page}>
       <V3Nav />
 
-      <header className={styles.hero}>
-        <p className={styles.eyebrow}>[ {service.name} ]</p>
-        <h1 className={styles.headline}>{service.tagline}</h1>
+      {/* The hero and its diagram share one ground, so the dot field runs
+          behind both rather than stopping where the copy ends. They were
+          siblings and the texture belonged to the diagram alone, which drew
+          a line across the page at exactly the point the eye is still
+          reading. */}
+      <div className={styles.top}>
+        <header className={styles.hero}>
+          <p className={styles.eyebrow}>[ {service.name} ]</p>
+          <h1 className={styles.headline}>{service.tagline}</h1>
 
-        {service.draft && (
-          /* On the page, not only in the source. Someone reading this should
-             be able to tell that nobody has signed it off yet. */
-          <p className={styles.draftFlag}>
-            Draft — this description has not been signed off yet.
-          </p>
-        )}
+          {service.draft && (
+            /* On the page, not only in the source. Someone reading this should
+               be able to tell that nobody has signed it off yet. */
+            <p className={styles.draftFlag}>
+              Draft — this description has not been signed off yet.
+            </p>
+          )}
 
-        <p className={styles.intro}>{service.intro}</p>
+          <p className={styles.intro}>{service.intro}</p>
 
-        <div className={styles.heroActions}>
-          <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-          <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
-        </div>
-      </header>
+          <div className={styles.heroActions}>
+            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
+            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+          </div>
+        </header>
 
-      {/* THE REPO IS THE MIDDLE, not the service.
+        {/* THE REPO IS THE MIDDLE, not the service.
 
-          The first version put the service name in the centre, which drew
-          the wrong picture: it said the inputs become Build, and Build
-          becomes a brand. What actually happens is that everything goes into
-          the repo, and the outputs come out of it — the service is the work
-          around that, not a stage in the middle of it. Putting the platform
-          there is also the argument the rest of the site makes.
+            The first version put the service name in the centre, which drew
+            the wrong picture: it said the inputs become Build, and Build
+            becomes a brand. What actually happens is that everything goes into
+            the repo, and the outputs come out of it — the service is the work
+            around that, not a stage in the middle of it. Putting the platform
+            there is also the argument the rest of the site makes.
 
-          The right column is the same four pillars the section below lists,
-          so the picture and the detail cannot disagree. */}
-      <FlowDiagram
-        centre="Repo"
-        outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
-      />
+            The right column is the same four pillars the section below lists,
+            so the picture and the detail cannot disagree. */}
+        <FlowDiagram
+          centre="Repo"
+          outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
+        />
+      </div>
 
       <section className={styles.block} aria-labelledby="covers">
         <div className={styles.blockHead}>

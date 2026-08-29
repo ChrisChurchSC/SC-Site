@@ -24,6 +24,61 @@
 /* Centred, as the reference is. The diagram below it is three columns with
    the subject in the middle, and a left-aligned headline over a symmetrical
    diagram reads as two designs stacked. */
+/* THE TOP OF THE PAGE, hero and diagram together, on one ground.
+
+   Black at the top, pink at the foot — so the section starts on the page and
+   arrives at the brand, and the diagram sits in the part that has colour.
+   Full bleed, because a gradient that stops at the reading margin is a
+   panel rather than a page.
+
+   The dot field is a separate layer on top, masked at the sides and the
+   bottom; keeping them apart means the texture can fade where the colour
+   does not, which is what stops the whole thing ending on a line. */
+.top {
+  position: relative;
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+  padding: 0 var(--page-pad-right, 0px) 0 var(--page-pad-left, 0px);
+  background: linear-gradient(
+    to bottom,
+    #0a0a0a 0%,
+    rgba(223, 78, 214, 0.06) 55%,
+    rgba(223, 78, 214, 0.22) 100%
+  );
+}
+
+
+.top::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 0, not -1: at -1 the field paints behind the page background and
+     disappears entirely — the platform section on /v3 has the same note for
+     the same reason. */
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 16px 16px;
+  /* Two masks, intersected: one fades the field out at the foot, the other
+     at both sides. Without the horizontal one the dots ran to the screen
+     edge and the texture read as a tiled background rather than as a pool of
+     light behind the diagram. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0, #000 calc(100% - 160px), transparent 100%),
+    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, #000 0, #000 calc(100% - 160px), transparent 100%),
+    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Everything sits above the field. */
+.top > * {
+  position: relative;
+  z-index: 1;
+}
+
 .hero {
   display: flex;
   flex-direction: column;
