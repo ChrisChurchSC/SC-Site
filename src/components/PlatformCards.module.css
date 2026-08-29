@@ -479,6 +479,7 @@
   .uiBody { grid-template-columns: minmax(0, 1fr); }
   .uiTree,
   .uiAside { display: none; }
+
 }
 
 /* The zoom is the repository preview's alone. On a 4:5 card the same 32% and
@@ -869,4 +870,20 @@
 @media (prefers-reduced-motion: reduce) {
   [data-tip]::after { transition: opacity 0.14s; transform: translateX(-50%); }
   [data-tip]:hover::after { transform: translateX(-50%); }
+}
+
+/* STOP ZOOMING ON SMALL SCREENS. The close-up is a treatment for a wide card
+   showing a wide window: below this width the tree and the About column are
+   already hidden, so a 32% blow-up with a 120px overhang was magnifying a
+   single file list and then cutting the timestamps off the end of it.
+
+   At the END of the file on purpose. The first attempt put this inside the
+   earlier .uiBody media query, which sits above .uiZoomed in source order —
+   so the plain rule won on order and the variables never changed. Same
+   specificity means last one wins, and this is the last one. */
+@media (max-width: 900px) {
+  .uiZoomed {
+    --zoom: 1;
+    --overhang: 0px;
+  }
 }

@@ -799,6 +799,12 @@
    radius there; 4px here, because every other button and card on this site
    is 4px and a pair of pills would be the only round things on the page. */
 .heroActions {
+  /* Stretch, and take the full width. The hero card centres its children, so
+     without this the actions row is shrink-to-fit — and the form inside it
+     asking for width: 100% then resolved against a box the width of its own
+     button, collapsing a 520px field to about 205. */
+  align-self: stretch;
+  width: 100%;
   display: flex;
   /* A column now: it holds one form and the line under it, not two buttons
      side by side. */
@@ -964,8 +970,13 @@
      actions are a centred flex column, so the form is shrink-to-fit and the
      percentage resolved against a box narrower than the field needed. The
      placeholder came out clipped mid-word. */
-  width: 520px;
-  max-width: 100%;
+  /* width:100% with a cap, not width:520px with max-width:100%. The second
+     form measured 520px inside a 500px viewport, because the max-width
+     resolved against a parent wider than the screen. This one can only ever
+     be as wide as what contains it. */
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
   padding: 6px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1044,4 +1055,123 @@
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── THE SMALL-SCREEN MENU ─────────────────────────────────────────────────
+   Above the breakpoint the link row does the work and this does not exist;
+   below it, the row is display:none and this is the only way to the rest of
+   the site. */
+.navToggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: 10px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-control, 4px);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Three bars from one element: the middle is the box, the outer two are its
+   shadows. Fewer nodes than three spans, and they cannot get out of step. */
+.burger {
+  width: 16px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 -5px 0 rgba(255, 255, 255, 0.8),
+    0 5px 0 rgba(255, 255, 255, 0.8);
+}
+
+.mobileNav {
+  display: none;
+  flex-direction: column;
+  margin-top: 8px;
+  padding: 6px;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-surface, 12px);
+}
+
+.mobileLink,
+.mobileText {
+  padding: 13px 14px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--r-control, 4px);
+}
+
+.mobileLink { color: rgba(255, 255, 255, 0.82); }
+.mobileLink:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* No destination, so no hover and no pointer — see the note in the JSX. */
+.mobileText { color: rgba(255, 255, 255, 0.34); }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 860px) {
+  .navToggle { display: grid; }
+  .mobileNav { display: flex; }
+}
+
+/* THE BAR IS A BAR, NOT A CARD.
+
+   The nav shell reuses the homepage's grid-cell classes, and below the
+   breakpoint one of those gives every cell aspect-ratio: 4 / 5 so the
+   homepage's tiles stay square-ish on a phone. Applied to a full-width nav
+   bar that is 456px across, that reserved 570px of height for 70px of
+   content — half a screen of nothing between the logo and the headline, on
+   the one viewport where vertical space is scarcest.
+
+   Doubled selector to outrank the media-query rule it is undoing without
+   reaching for !important. */
+.navShell.navShell {
+  /* !important, reluctantly and specifically. The rule being undone is
+     ".row12 > * { aspect-ratio: 4 / 5 !important }" in the shared homepage
+     stylesheet — it turns every cell of that grid into a portrait tile on a
+     phone, which is right for the homepage's tiles and wrong for a nav bar.
+     An important declaration can only be beaten by another one, and editing
+     the shared file would change / and /v2.
+
+     The doubled class outranks ".row12 > *" on specificity, so this wins
+     rather than merely ties. */
+  aspect-ratio: auto !important;
+  height: auto !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* One line stops being one line. At this width the button takes 130px of a
+   343px pill and the field is left with less room than its own placeholder
+   needs — "What's your work emai" was being cut mid-word. Stacked, both get
+   the full width, and the pill becomes a block without changing anything
+   about how it works. */
+@media (max-width: 560px) {
+  .emailForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .emailSubmit { width: 100%; }
+
+  /* The input has no border of its own, so on its own line it needs a
+     ground to sit on or it reads as loose text above a button. */
+  .emailInput {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--r-control, 4px);
+  }
 }

@@ -394,6 +394,10 @@ export default function HomeV3() {
   useMeta({ title: 'Super Conscious — homepage v3', path: '/v3', noindex: true })
 
   const [openMenu, setOpenMenu] = useState(null)
+  /* Small screens only. The wide bar's panels open on hover, and a touch
+     screen has no hover to open them with, so below the breakpoint the whole
+     row collapses to one button and a list. */
+  const [menuOpen, setMenuOpen] = useState(false)
 
   // Escape closes the nav panel as well as the reel — a hover panel with no
   // keyboard way out is a trap for anyone who opened it by tabbing into it.
@@ -438,6 +442,22 @@ export default function HomeV3() {
                   : <span key={label} {...shared}>{inner}</span>
               })}
             </nav>
+
+            {/* THE SMALL-SCREEN MENU BUTTON. Below 860px the link row is
+                display: none, and until now nothing replaced it — Services,
+                Case Studies, Company and Pricing were simply unreachable from
+                this page on a phone. A wordmark and a Book a demo button is
+                not navigation. */}
+            <button
+              type="button"
+              className={v3.navToggle}
+              aria-expanded={menuOpen}
+              aria-controls="v3-mobile-nav"
+              onClick={() => setMenuOpen(o => !o)}
+            >
+              <span className={v3.srOnly}>{menuOpen ? 'Close menu' : 'Open menu'}</span>
+              <span className={v3.burger} aria-hidden="true" />
+            </button>
 
             <div className={v3.navActions}>
               {/* Log in, as in the reference: a quiet text link beside the
@@ -596,6 +616,29 @@ export default function HomeV3() {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {menuOpen && (
+            <div className={v3.mobileNav} id="v3-mobile-nav">
+              {NAV_LINKS.map(({ label, href }) => (
+                href
+                  ? (
+                    <NavLink
+                      key={label}
+                      to={href}
+                      className={v3.mobileLink}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {label}
+                    </NavLink>
+                  )
+                  /* Platform has no route on the wide bar either — it opens a
+                     panel there, and there is no page behind it. Rendered as
+                     text rather than as a link to nowhere, the same way the
+                     footer treats every entry without a destination. */
+                  : <span key={label} className={v3.mobileText}>{label}</span>
+              ))}
             </div>
           )}
         </div>
