@@ -36,7 +36,7 @@ export const deliverableNotes = {
   Analytics: 'Instrumented, so you can see what happens.',
   Deployment: 'Shipped, hosted and monitored.',
 
-  // Marketing Mix
+  // Campaign
   'Audience Architecture': 'Who you are talking to, defined and segmented.',
   'Launch Campaign Strategy & Concept': 'The idea and the plan for a launch.',
   'Always-On Campaign Strategy & Concept': 'The idea and the plan for the work that never stops.',

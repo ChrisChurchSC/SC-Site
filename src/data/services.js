@@ -31,13 +31,6 @@ export const services = [
       'we probably know someone who can.',
     priceLead: 'from $10,000',
     priceNote: 'Scoped and priced before it starts. Every engagement over $20,000 includes full platform set-up.',
-    /* Left column of the hero diagram. MINE, not Chris's — the material an
-       engagement starts from. The right column is the pillars below, so only
-       this half is drafted. */
-    flowIn: [
-      { name: 'Where you are', items: ['Existing brand', 'What you sell', 'Who it is for'] },
-      { name: 'What you have', items: ['Assets', 'Copy', 'Data'] },
-    ],
     pillars: [
       {
         n: '01',
@@ -51,7 +44,7 @@ export const services = [
       },
       {
         n: '03',
-        name: 'Marketing Mix',
+        name: 'Campaign',
         items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
       },
       {
@@ -74,13 +67,6 @@ export const services = [
     pillarsIntro: 'The same four pillars, kept moving rather than built.',
     priceLead: 'from $4,500 / month',
     priceNote: '25 to 150 hours a month, billed quarterly. Spend them on any of the four.',
-    /* Left column of the hero diagram. MINE, not Chris's — the material an
-       engagement starts from. The right column is the pillars below, so only
-       this half is drafted. */
-    flowIn: [
-      { name: 'What is live', items: ['The brand', 'The site', 'The channels'] },
-      { name: 'What it is doing', items: ['Traffic', 'Conversion', 'Spend'] },
-    ],
     pillars: [
       {
         n: '01',
@@ -96,7 +82,7 @@ export const services = [
       },
       {
         n: '03',
-        name: 'Marketing Mix',
+        name: 'Campaign',
         items: ['Campaign Extensions', 'Paid Media Management', 'Creative Testing', 'Audience Expansion', 'Reporting & Dashboards'],
         why: 'Budget moves toward what is working, on evidence rather than instinct.',
       },
@@ -120,13 +106,6 @@ export const services = [
     pillarsIntro: 'What tends to come up, and who catches it.',
     priceLead: null,
     priceNote: 'No published rate. Scoped against the same hours as Grow.',
-    /* Left column of the hero diagram. MINE, not Chris's — the material an
-       engagement starts from. The right column is the pillars below, so only
-       this half is drafted. */
-    flowIn: [
-      { name: 'What shipped', items: ['Brand system', 'The site', 'The library'] },
-      { name: 'What comes up', items: ['Requests', 'Fixes', 'New formats'] },
-    ],
     pillars: [
       { n: '01', name: 'Upkeep', items: ['Guideline questions', 'Asset requests', 'Format variants', 'Template updates'] },
       { n: '02', name: 'The live site', items: ['Content updates', 'Bug fixes', 'Dependency updates', 'Uptime and performance'] },
@@ -146,13 +125,6 @@ export const services = [
     pillarsIntro: 'Where a brand gets spoken for.',
     priceLead: null,
     priceNote: 'No published rate. Scoped per engagement.',
-    /* Left column of the hero diagram. MINE, not Chris's — the material an
-       engagement starts from. The right column is the pillars below, so only
-       this half is drafted. */
-    flowIn: [
-      { name: 'What you have to say', items: ['The story', 'The proof', 'The people'] },
-      { name: 'Where it lands', items: ['Press', 'Stages', 'Awards'] },
-    ],
     pillars: [
       { n: '01', name: 'Press', items: ['Media relations', 'Statements and responses', 'Launch announcements'] },
       { n: '02', name: 'Stage', items: ['Conference talks', 'Panel prep', 'Event narrative'] },

@@ -80,7 +80,6 @@ export default function ServiceV3() {
           The right column is the same four pillars the section below lists,
           so the picture and the detail cannot disagree. */}
       <FlowDiagram
-        inputs={service.flowIn}
         centre="Repo"
         outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
       />

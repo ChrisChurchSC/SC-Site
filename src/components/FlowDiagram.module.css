@@ -61,7 +61,9 @@
 
 .nodeName {
   display: block;
-  margin-bottom: 10px;
+  /* No gap when the card is only a name — five of those on the left, and a
+     trailing margin under each made them look like something was missing. */
+  margin-bottom: 0;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
   font-size: 17px;
@@ -70,6 +72,7 @@
 
 .chips {
   display: flex;
+  margin-top: 10px;
   flex-wrap: wrap;
   gap: 5px;
 }
@@ -121,59 +124,101 @@
 .centreHead {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 13px 16px;
+  gap: 8px;
+  padding: 12px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(223, 78, 214, 0.1);
+  background: rgba(223, 78, 214, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
 }
 
-.centreMark {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: var(--pink, #df4ed6);
+.centreCrumbMuted { color: rgba(255, 255, 255, 0.38); }
+.centreSlash { color: rgba(255, 255, 255, 0.22); }
+.centreName { color: rgba(255, 255, 255, 0.88); }
+
+/* The service name, in the slot the repository panel uses for PRIVATE — it
+   says which page you are on without adding a second heading. */
+.centrePrivate {
+  margin-left: auto;
+  padding: 2px 7px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
 }
 
-.centreName {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.04em;
+.centreTabs {
+  display: flex;
+  gap: 14px;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
   color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
 }
 
-/* Deliberately unreadable. It is a diagram of a flow, not a screenshot — the
-   real interface is further down the page and a legible fake here would
-   compete with it. */
+
+/* Real files in real folders. The repository panel on /v3 lists the folders;
+   this lists one file from each, which is the same store seen one level in
+   — and a diagram whose middle is a blank table says nothing about what is
+   being stored. */
 .centreBody {
   display: flex;
   flex-direction: column;
-  /* Fills whatever height the flow ends up being; the rows do not repeat to
-     fill it, which is correct — a file list ends. */
   flex: 1;
-  padding: 6px 0;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
 }
 
 .row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
+  padding: 11px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.rowIcon {
+.row:last-child { border-bottom: 0; }
+
+.folder {
   flex: none;
-  width: 11px;
-  height: 9px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.14);
+  width: 12px;
+  height: 12px;
+  color: rgba(255, 255, 255, 0.32);
 }
 
-.rowBar {
-  height: 7px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+.rowPath {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.78);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
+/* The folder reads as the path it is, one stop back from the file name. */
+.rowFolder { color: rgba(255, 255, 255, 0.36); }
+
+.rowAge {
+  flex: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+
 
 /* Stacked below this: three columns of cards at 300px each is three columns
    of nothing. Inputs, then the repo, then outputs — the same order, read

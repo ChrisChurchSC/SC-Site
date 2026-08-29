@@ -67,7 +67,7 @@ export const tabs = [
       },
       {
         kicker: '03',
-        name: 'Marketing Mix',
+        name: 'Campaign',
         price: 15000,
         unit: 'starting at',
         note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work billed separately. All production costs are billed separately.',
