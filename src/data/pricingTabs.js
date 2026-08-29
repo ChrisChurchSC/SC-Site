@@ -34,16 +34,12 @@ export const tabs = [
        the other is either an unexplained freebie or a feature list nobody
        was offered. */
     feature: {
+      /* No items list here: the card renders PLATFORM_PAGES from V3Nav, so
+         the pricing page and the nav panel cannot describe the platform
+         differently. */
       eyebrow: 'What the set-up gives you',
       name: 'The platform',
       body: 'Every project leaves behind more than files. The brand goes into a repo your whole team works from, with agents trained on it, and a review step before anything lands.',
-      items: [
-        { name: 'Agents', note: 'Trained on your brand, not on the internet.' },
-        { name: 'Memory files', note: 'What was decided, what shipped, and why.' },
-        { name: 'Library set-up', note: 'Every asset we have made, in use and findable.' },
-        { name: 'Push & Pull Repo with reviews', note: 'Changes are proposed, and a person approves them before they land.' },
-        { name: 'Analytics dashboard', note: 'What shipped, and what it moved.' },
-      ],
       price: 7500,
       unit: 'starting at',
       cta: 'Book a demo',

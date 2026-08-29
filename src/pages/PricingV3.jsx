@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { Check } from 'lucide-react'
 
 import styles from './PricingV3.module.css'
 import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
-import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import V3Nav, { FOOTER_COLS, PLATFORM_PAGES } from '../components/V3Nav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { tabs, TBC, faqs } from '../data/pricingTabs'
@@ -247,11 +246,18 @@ export default function PricingV3() {
               </button>
             </div>
 
+            {/* PLATFORM_PAGES, not a list of its own. This is the same six
+                things the Platform panel in the nav describes, and a second
+                copy here would disagree with that one the first time either
+                is edited — which had already happened: this card was showing
+                five, with different names.
+
+                Numbered to match how the panel presents them. */}
             <ul className={styles.featureGrid}>
-              {tab.feature.items.map(({ name, note }) => (
+              {PLATFORM_PAGES.map(({ name, note }, i) => (
                 <li key={name} className={styles.featureItem}>
                   <span className={styles.featureItemName}>
-                    <Check className={styles.featureTick} size={13} strokeWidth={2.4} aria-hidden="true" />
+                    <span className={styles.featureNum}>{String(i + 1).padStart(2, '0')}</span>
                     {name}
                   </span>
                   <span className={styles.featureItemNote}>{note}</span>

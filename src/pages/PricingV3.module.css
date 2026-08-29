@@ -600,8 +600,8 @@
    half; six across would give each about thirty characters. */
 .featureGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 18px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px 24px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -641,7 +641,8 @@
 /* Monthly / annual. The same pill as the tab switcher at a smaller size, so
    it reads as a control of the same family rather than a second idea. */
 .periods {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   margin: 0 auto clamp(18px, 2.4vw, 26px);
   padding: 3px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -682,18 +683,35 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* The switcher is centred above the grid. */
-.panel { display: flex; flex-direction: column; }
-.panel > [class*="periods"] { align-self: center; }
+/* THE PANEL IS A BLOCK, NOT A FLEX COLUMN, and the reason is worth keeping.
+
+   As a flex column its children stretched to its width — except .tiers,
+   which carries margin: 0 auto to centre itself. An auto margin on a flex
+   item cancels the stretch, so the grid became shrink-to-fit and sized
+   itself to its own content: four 232px tracks plus gaps, 976px, inside a
+   406px column on a phone. auto-fit never collapsed, and .page's overflow-x:
+   clip HID the result — cards three and four were simply not on the page,
+   with no scrollbar to say so. min-width: 0 does not help, because the width
+   was not being constrained in the first place.
+
+   As a block, the grid is width: auto against the column and auto-fit
+   collapses as it should. The switcher centres on its own margins.
+
+   Measured at a 500px viewport: grid 976px before, one row of four; the
+   fix is verified below rather than assumed. */
+.panel { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   .period, .periodOn { transition: none; }
 }
 
-/* The tick against each thing the platform includes. Replaces a left rule,
-   which said "these are a group" where a tick says "you get this". */
-.featureTick {
+/* The index, as the platform panel numbers them. A tick said "you get
+   this", which the card already says; a number says "there are six of
+   them", which is the part worth counting. */
+.featureNum {
   flex: none;
+  font-size: 9px;
+  letter-spacing: 0.1em;
   color: var(--pink, #df4ed6);
 }
 

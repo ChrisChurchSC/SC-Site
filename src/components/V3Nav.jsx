@@ -184,7 +184,7 @@ export const COMPANY_COLS = [
 /* The hero. Carries the h1, which is why the statement below it is an h2 —
    the live homepage has that the other way round because it has no headline
    above the statement. */
-const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
+export const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
 /* Warmer than "We're Super-Conscious. We build and grow brands.", which
    introduced the studio and then described the transaction. This keeps the
    build/grow structure — it is the whole offer, and the two cards below run
@@ -216,7 +216,7 @@ const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
  * get. Both are in the history; neither is more correct, and which one is
  * right depends on whether the page is for people who already know they have
  * the problem. */
-const HERO = "We build the brand and run it. So you can run the business."
+export const HERO = "We build the brand and run it. So you can run the business."
 
 /* THE FOUR SERVICES, as cards.
  *
