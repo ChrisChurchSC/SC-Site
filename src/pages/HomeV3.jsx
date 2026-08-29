@@ -22,6 +22,8 @@ import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import FooterCard from '../components/FooterCard'
+import PromoCard from '../components/PromoCard'
+import DotNav from '../components/DotNav'
 import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
@@ -731,6 +733,12 @@ export default function HomeV3() {
       <div className={v3.signoff} aria-hidden="true">
         <LogoWordmark fill="currentColor" />
       </div>
+
+      {/* Both are fixed overlays, so they sit at the end of the document
+          rather than in the flow — and after the sign-off, so the last thing
+          in the source order is the last thing on the page. */}
+      <DotNav />
+      <PromoCard onBook={cal.open} />
 
     </main>
   )

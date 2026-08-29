@@ -1,0 +1,60 @@
+/* The dot rail — see DotNav.jsx for how it finds its sections. */
+.rail {
+  position: fixed;
+  right: clamp(10px, 1.6vw, 22px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* The hit area is 20px; the mark inside is 6. A 6px target is a miss
+   waiting to happen, and padding it out costs nothing on a fixed rail. */
+.dot {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.dot::before,
+.dotOn::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot:hover::before { background: rgba(255, 255, 255, 0.6); }
+
+/* The active one is pink and larger. Both, not either: colour alone is a
+   weak signal at six pixels, and on a page this dark a size change reads
+   before a hue change does. */
+.dotOn {
+  composes: dot;
+}
+
+.dotOn::before {
+  background: var(--pink, #df4ed6);
+  transform: scale(1.5);
+}
+
+/* The rail sits over content at narrow widths, where there is no margin for
+   it to live in. */
+@media (max-width: 900px) {
+  .rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot::before,
+  .dotOn::before { transition: none; }
+}

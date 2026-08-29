@@ -79,7 +79,10 @@
      and the hero is not a card at all. Transparent rather than #0a0a0a
      spelled out again, so it stays right if the page ground ever changes. */
   background: none;
-  min-height: min(84vh, 780px);
+  /* Down from min(84vh, 780px). The hero held a headline, an email field and
+     one line under it, and at 84vh the space below the form was larger than
+     everything above it — the section read as empty rather than as generous. */
+  min-height: min(70vh, 640px);
   justify-content: center;
   padding-top: clamp(72px, 9vh, 120px);
   padding-bottom: clamp(72px, 9vh, 120px);
@@ -97,7 +100,7 @@
 
 @media (max-width: 768px) {
   .tall {
-    min-height: 62vh;
+    min-height: 56vh;
     padding-top: 56px;
     padding-bottom: 56px;
   }

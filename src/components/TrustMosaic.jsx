@@ -26,6 +26,19 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
  *                 the nav and the client strip already use. An arrow on a
  *                 tile that goes nowhere is a promise the page cannot keep.
  */
+/* THIS NUMBER IS NO LONGER THE ONE ON SCREEN, and that is the point to
+   notice. It used to read clients.length — the wall shows what it counts, so
+   the headline could not be wrong. It now says 100+, which is a claim about
+   how many brands the studio has worked with over its life, not about how
+   many logos are in this grid. Twenty-one are.
+ 
+   That makes it the one line here nobody can check from the page, so it is
+   Chris's to stand behind and brand-strategist's to approve. It is a claim
+   about our own history rather than about a third party, which is the mildest
+   kind — but if the wall ever grows past a hundred, put clients.length back
+   and the problem disappears. */
+const CLIENT_CLAIM = '100+'
+
 export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   const comingSoon = useComingSoon()
 
@@ -66,7 +79,7 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
     <section className={styles.section}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <h2 className={styles.headline}>
-        Trusted by {clients.length} brands, and the people who run them.
+        Trusted by {CLIENT_CLAIM} brands, and the people who run them.
       </h2>
 
       {/* No feature card. It carried a client name and a missing number —
