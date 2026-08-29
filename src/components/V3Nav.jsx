@@ -104,7 +104,7 @@ export const WORK_BY_SIZE = [
  * So these are built on what the studio has actually already built, which is
  * a brand held as a system rather than as a deck:
  *
- *   Brand Repository
+ *   Repo
  *              — THE STRUCTURE, NOT ITS CONTENTS. This is the correction
  *                worth keeping: the repository is not the strategy, the
  *                verbal, the visual and the agents. Those are what goes in
@@ -128,7 +128,7 @@ export const WORK_BY_SIZE = [
  * two least differentiated of the six and the first to cut if this shortens.
  */
 export const PLATFORM_PAGES = [
-  { name: 'Brand Repository', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
+  { name: 'Repo', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
   { name: 'Agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
   { name: 'Memory', note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', note: 'Every change is proposed, and a person approves it.' },

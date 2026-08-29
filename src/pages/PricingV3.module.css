@@ -539,3 +539,196 @@
   font-size: 14px;
   line-height: 1;
 }
+
+/* ── The platform card ─────────────────────────────────────────────────────
+   One wide card under the four projects. It spans rather than joining the
+   grid: as a fifth column it would read as a project you can buy, and it is
+   not — it is what the other four leave behind. */
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  gap: clamp(24px, 3vw, 48px);
+  max-width: 1180px;
+  margin: 16px auto 0;
+  padding: 26px;
+  /* THE SAME CARD AS THE OTHER FOUR — same ground, same radius, same
+     padding. It was a gradient panel, which made it a banner sitting under
+     the cards rather than one more of them. The pink border is the treatment
+     this page already uses for the card being pointed at. */
+  background: #0d0d0d;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-panel);
+  box-shadow: 0 0 0 1px rgba(223, 78, 214, 0.18);
+}
+
+
+@media (max-width: 860px) {
+  .feature { grid-template-columns: minmax(0, 1fr); }
+}
+
+.featureHead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.featureEyebrow {
+  margin: 0 0 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.featureName {
+  margin: 0 0 12px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.05;
+  color: #fff;
+}
+
+.featureBody {
+  margin: 0 0 22px;
+  max-width: 42ch;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.featureCta {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 12px 20px;
+  border: 1px solid var(--pink, #df4ed6);
+  border-radius: var(--r-control);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.featureCta:hover { filter: brightness(1.08); }
+
+/* Two columns of three. Six in one column would run past the card's left
+   half; six across would give each about thirty characters. */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.featureItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.featureItemName {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.featureItemNote {
+  /* Indented to the tick, so the note hangs under the name rather than
+     under the mark. */
+  padding-left: 20px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featureCta { transition: none; }
+}
+
+/* Monthly / annual. The same pill as the tab switcher at a smaller size, so
+   it reads as a control of the same family rather than a second idea. */
+.periods {
+  display: inline-flex;
+  margin: 0 auto clamp(18px, 2.4vw, 26px);
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.period,
+.periodOn {
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.period:hover { color: rgba(255, 255, 255, 0.85); }
+
+.periodOn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Says what the annual figure is. Without it a twelve-times number beside a
+   period switch implies a discount that is not there. */
+.periodNote {
+  max-width: 60ch;
+  margin: 18px auto 0;
+  text-align: center;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* The switcher is centred above the grid. */
+.panel { display: flex; flex-direction: column; }
+.panel > [class*="periods"] { align-self: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .period, .periodOn { transition: none; }
+}
+
+/* The tick against each thing the platform includes. Replaces a left rule,
+   which said "these are a group" where a tick says "you get this". */
+.featureTick {
+  flex: none;
+  color: var(--pink, #df4ed6);
+}
+
+/* THE SAVING, MADE TO POP. Inside the button rather than after it, filled
+   rather than tinted, and it keeps its colour whether the tab is active or
+   not — it is the reason to press the button, so it should not go quiet when
+   the button is the one you have not pressed. */
+.saveBadge {
+  margin-left: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}

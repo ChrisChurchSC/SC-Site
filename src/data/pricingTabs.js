@@ -1,26 +1,20 @@
 // The pricing page's three tabs: Platform, Project, Tasks.
 //
 // ─────────────────────────────────────────────────────────────────────────
-// WHICH NUMBERS ARE REAL.
+// EVERY NUMBER ON THIS PAGE IS ONE CHRIS GAVE DIRECTLY. The four Build
+// pillars ($15,000 / $10,000 / $15,000 / $10,000 per channel), the four hour
+// tiers (25/50/100/150 hrs at $180/$165/$150/$140), and the $20,000 platform
+// threshold. The hour tiers are internally consistent — hours × rate is
+// exactly the monthly figure, checked.
 //
-// PROJECT AND SUBSCRIPTION are real. Every figure in them is one Chris gave
-// directly — the four Build pillars ($15,000 / $10,000 / $15,000 / $10,000
-// per channel) and the hour tiers (25/50/100/150 hrs at $180/$165/$150/$140,
-// internally consistent: hours × rate is exactly the monthly figure).
+// THERE IS NOTHING LEFT TO CONFIRM. There was a Platform tab priced by seat,
+// and every figure in it read '––' because no seat price exists. It is gone:
+// the platform is now the wide card under the Project tab, which describes
+// what the set-up gives you rather than selling it by the seat. If seat
+// pricing is ever set, that tab is in the history — see 555e77b.
 //
-// PLATFORM IS NOT. There is no seat price and no per-task price
-// anywhere in this repo or in anything supplied, and the platform itself is
-// Coming Soon. Every unsourced figure reads '––', the same placeholder the
-// case-study cards use, at the size a real number would be — so the gap is
-// visible rather than filled with something plausible.
-//
-// A seat price is a commercial term. Guessing one puts a quote on the site
-// nobody has agreed to, and a visitor cannot tell an invented $49/seat from
-// a real one. ONE NUMBER FINISHES THIS PAGE: what a seat costs per month.
-//
-// Everything else is real. Project is the four Build pillars at the prices
-// Chris gave; Subscription is the four hour tiers, and those were checked —
-// hours × rate is exactly the monthly figure on all four.
+// TBC is kept for the next unpriced thing rather than deleted; it is the
+// convention the case-study cards use and it should stay one import away.
 // ─────────────────────────────────────────────────────────────────────────
 
 export const TBC = '––'
@@ -34,7 +28,27 @@ export const tabs = [
     /* A threshold rather than a line on every card: it depends on the size
        of the order, not on which project it is. Rendered above the cards —
        see the note in the JSX. */
-    perk: 'Every engagement over $20,000 includes full platform set-up — your Brand Repository, agents and approvals, stood up and running.',
+    perk: 'Every engagement over $20,000 includes full platform set-up — your Repo, agents and approvals, stood up and running.',
+    /* The wide card under the four. The banner above says you GET it; this
+       says what it IS — they are the offer and the product, and one without
+       the other is either an unexplained freebie or a feature list nobody
+       was offered. */
+    feature: {
+      eyebrow: 'What the set-up gives you',
+      name: 'The platform',
+      body: 'Every project leaves behind more than files. The brand goes into a repository your whole team works from, with agents trained on it, and an approval step before anything ships.',
+      items: [
+        { name: 'Repo', note: 'The structure that holds everything the brand is made of.' },
+        { name: 'Agents', note: 'Trained on your brand, not on the internet.' },
+        { name: 'Memory', note: 'What was decided, what shipped, and why.' },
+        { name: 'Reviews', note: 'Every change proposed, and a person approves it.' },
+        { name: 'Library', note: 'Every asset we have made, in use and findable.' },
+        { name: 'Measurement', note: 'What shipped, and what it moved.' },
+      ],
+      price: 7500,
+      unit: 'starting at',
+      cta: 'Talk to us about the platform',
+    },
     tiers: [
       {
         kicker: '01',
@@ -80,13 +94,22 @@ export const tabs = [
   },
   {
     id: 'subscription',
+    /* Annual saves 10%. That is a real commercial term now rather than my
+       arithmetic, so the discount belongs in the data and every figure on
+       the card derives from it — including the hourly rate, which is 10%
+       lower if you pay for the year. A card showing a discounted total
+       beside an undiscounted rate would be quoting two different deals. */
+    periods: [
+      { id: 'monthly', label: 'Monthly', months: 1, discount: 0, unit: 'per month' },
+      { id: 'annual', label: 'Annual', badge: 'Save 10%', months: 12, discount: 0.1, unit: 'per year' },
+    ],
     label: 'Subscription',
     eyebrow: 'Keep us on',
     blurb: 'Ongoing support, billed hourly and invoiced quarterly with a one quarter minimum. Media spend is separate — our management fee is flat, never a percentage of the buy.',
     tiers: [
       {
         kicker: '25 hrs / month',
-        name: '$180 per hour',
+        rate: 180,
         price: 4500,
         unit: 'per month',
         note: null,
@@ -96,7 +119,7 @@ export const tabs = [
       },
       {
         kicker: '50 hrs / month',
-        name: '$165 per hour',
+        rate: 165,
         price: 8250,
         unit: 'per month',
         note: null,
@@ -106,7 +129,7 @@ export const tabs = [
       },
       {
         kicker: '100 hrs / month',
-        name: '$150 per hour',
+        rate: 150,
         price: 15000,
         unit: 'per month',
         note: null,
@@ -117,68 +140,13 @@ export const tabs = [
       },
       {
         kicker: '150 hrs / month',
-        name: '$140 per hour',
+        rate: 140,
         price: 21000,
         unit: 'per month',
         note: null,
         summary: 'Focus on all four pillars, the most robust support for optimal brand oversight, maintenance, and seamless evolution.',
         lines: ['All four pillars', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
-      },
-    ],
-  },
-  {
-    id: 'platform',
-    label: 'Platform',
-    eyebrow: 'Subscribe to the platform',
-    blurb: 'Your brand, your agents and your approvals — run by your own team.',
-    tiers: [
-      {
-        kicker: 'One team',
-        name: 'Team',
-        price: TBC,
-        unit: 'per seat / month',
-        note: 'Price to confirm',
-        summary: 'The repository, the agents and the approval queue, for the people who work in it every day.',
-        lines: [
-          'Brand Repository — one source everything is written from',
-          'Agents trained on your brand, not on the internet',
-          'Approvals before anything ships',
-          'Unlimited assets in the library',
-        ],
-        cta: 'Book a demo',
-      },
-      {
-        kicker: 'Whole company',
-        name: 'Org',
-        price: TBC,
-        unit: 'per seat / month',
-        note: 'Price to confirm',
-        featured: true,
-        summary: 'The same platform across every team, with the guardrails set centrally.',
-        lines: [
-          'Everything in Team, plus:',
-          'Sub-brands, each with its own repository',
-          'Central guardrails and claim rules',
-          'Single sign-on and role-based access',
-          'Measurement across every team',
-        ],
-        cta: 'Book a demo',
-      },
-      {
-        kicker: 'Bring your own',
-        name: 'Enterprise',
-        price: 'Talk to us',
-        unit: null,
-        note: null,
-        summary: 'Your infrastructure, your review process, your compliance rules.',
-        lines: [
-          'Everything in Org, plus:',
-          'Self-hosted or private cloud',
-          'Custom agents on your own material',
-          'A named person on your account',
-        ],
-        cta: 'Talk to us',
       },
     ],
   },

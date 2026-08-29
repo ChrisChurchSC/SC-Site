@@ -892,68 +892,7 @@
    thing on the page that should touch both edges, because it is not content
    any more, it is the page ending. Faint enough to read as a watermark
    rather than as another headline competing with the one above it. */
-.signoff {
-  position: relative;
-  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  margin: clamp(48px, 8vw, 120px) 0 0 calc(-1 * var(--page-pad-left, 0px));
-  padding: 0 clamp(8px, 2vw, 32px);
-}
 
-/* THE PAGE ENDS IN PINK. A wash rising from the bottom edge, behind the
-   wordmark, so the last screen resolves into the brand colour instead of
-   stopping on the same black it started on.
-
-   It reaches well above the sign-off — 55vh — because a gradient confined to
-   the wordmark's own box reads as a panel behind the logo rather than as the
-   page changing. The top stop is fully transparent, so there is no seam
-   where it begins.
-
-   Behind the letters, not over them: the wordmark is z-index 1 and this is
-   0. Painting it on top would wash out the glow it is supposed to sit
-   under. */
-.signoff::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: -55vh;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(223, 78, 214, 0) 0%,
-    rgba(223, 78, 214, 0.06) 55%,
-    rgba(223, 78, 214, 0.16) 82%,
-    rgba(223, 78, 214, 0.26) 100%
-  );
-}
-
-/* Pink, and lit. The colour is set here rather than passed in because the
-   wordmark takes currentColor, which means the glow and the fill cannot get
-   out of step. */
-.signoff { color: var(--pink, #df4ed6); }
-
-.signoff svg {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: auto;
-  display: block;
-
-  /* Three drop-shadows, not one. A single large blur reads as a smudge
-     behind the letters; a tight one, a mid one and a wide one stack into
-     something that falls off the way light does. They follow the glyph
-     because drop-shadow works on the alpha channel — box-shadow would draw
-     a rectangle around the whole SVG.
-
-     No blur radius above ~60px: this element is the full width of the page,
-     and the filter is rasterised at that size on every paint. */
-  filter:
-    drop-shadow(0 0 6px rgba(223, 78, 214, 0.55))
-    drop-shadow(0 0 22px rgba(223, 78, 214, 0.35))
-    drop-shadow(0 0 56px rgba(223, 78, 214, 0.22));
-}
 
 /* ── THE HERO EMAIL CAPTURE ────────────────────────────────────────────────
    One field and one button in a single pill, as in the reference. These six

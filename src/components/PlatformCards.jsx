@@ -25,7 +25,7 @@ import styles from './PlatformCards.module.css'
 const CARDS = [
   {
     id: 'brand-repository',
-    lead: 'Brand Repository',
+    lead: 'Repo',
     rest: 'that everyone works from',
     size: 'large',
   },
@@ -55,13 +55,13 @@ const CARDS = [
    Platform dropdown, which is the fuller list — the section is the argument,
    the menu is the index, and they do not have to be the same length.
 
-   Agents moved down to the second row, which leaves Brand Repository alone
+   Agents moved down to the second row, which leaves Repo alone
    first. It takes the whole width there rather than sitting at half with a
    hole beside it: one card in a two-column row is a gap, and a gap in a
    section this sparse reads as something failing to load. */
 
 /**
- * The Brand Repository card's preview: the product's own UI, rebuilt in
+ * The Repo card's preview: the product's own UI, rebuilt in
  * markup.
  *
  * MARKUP RATHER THAN A SCREENSHOT. A PNG of a dark UI on a dark page has to
@@ -340,7 +340,7 @@ function DashPreview() {
  *
  * WHAT THIS DROPPED. The previous version was a ring of nodes wired to the
  * repository, with the source files listed under it. The ring said "they
- * share one source", which is true and is also what the Brand Repository
+ * share one source", which is true and is also what the Repo
  * card two rows up already says with an actual screenshot of the repository.
  * This says the thing only this card can: what the six of them refuse to do.
  */

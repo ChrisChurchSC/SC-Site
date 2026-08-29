@@ -25,6 +25,7 @@ import FooterCard from '../components/FooterCard'
 import V3Nav, { OFFER, FOOTER_COLS } from '../components/V3Nav'
 import PromoCard from '../components/PromoCard'
 import DotNav from '../components/DotNav'
+import V3Signoff from '../components/V3Signoff'
 import TestimonialWall from '../components/TestimonialWall'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
@@ -226,14 +227,7 @@ export default function HomeV3() {
           at the exact moment they were being asked to book. */}
       <FooterCard columns={FOOTER_COLS} />
 
-      {/* The wordmark, at the size the page ends on. Not a link and not a
-          logo lockup — it is the last thing on the page and its job is to be
-          the name, large. aria-hidden because the accessible name is already
-          on the wordmark at the top of the page; read out twice it is just
-          noise. */}
-      <div className={v3.signoff} aria-hidden="true">
-        <LogoWordmark fill="currentColor" />
-      </div>
+      <V3Signoff />
 
       {/* Both are fixed overlays, so they sit at the end of the document
           rather than in the flow — and after the sign-off, so the last thing

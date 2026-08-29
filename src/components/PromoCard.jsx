@@ -70,7 +70,7 @@ export default function PromoCard({ onBook }) {
 
       <span className={styles.label}>The platform</span>
       <p className={styles.body}>
-        Brand Repository, agents and approvals. Not built yet — but the team
+        Repo, agents and approvals. Not built yet — but the team
         behind it is.
       </p>
       <button className={styles.cta} onClick={onBook}>Book a demo</button>
