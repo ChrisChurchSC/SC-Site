@@ -205,17 +205,6 @@ export default function PricingV3() {
           </div>
         )}
 
-        {/* ABOVE THE CARDS, NOT UNDER THEM. As a footnote it was the last
-            thing on the tab and read as a condition; the platform is what
-            this studio has that the others do not, and being given it with
-            the work is the best sentence on the page. */}
-        {tab.perk && (
-          <p className={styles.perk}>
-            <span className={styles.perkMark} aria-hidden="true">+</span>
-            {tab.perk}
-          </p>
-        )}
-
         <div className={styles.tiers}>
           {tab.tiers.map((t) => (
             <Tier
@@ -294,6 +283,20 @@ export default function PricingV3() {
       <FooterCard columns={FOOTER_COLS} />
 
       <V3Signoff />
+
+      {/* FIXED TO THE VIEWPORT, not to the end of the document. It is the
+          condition that changes what an order is worth, so it should be
+          readable at the moment somebody is looking at a price rather than
+          only once they have scrolled past all of them.
+
+          The page carries bottom padding to match, or the bar would sit on
+          top of the sign-off it is meant to float above. */}
+      {tab.perk && (
+        <div className={styles.perkBar}>
+          <span className={styles.perkMark} aria-hidden="true">+</span>
+          <p className={styles.perkText}>{tab.perk}</p>
+        </div>
+      )}
     </main>
   )
 }

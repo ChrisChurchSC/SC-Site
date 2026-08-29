@@ -28,7 +28,7 @@ export const tabs = [
     /* A threshold rather than a line on every card: it depends on the size
        of the order, not on which project it is. Rendered above the cards —
        see the note in the JSX. */
-    perk: 'Every engagement over $20,000 includes full platform set-up — your Repo, agents and approvals, stood up and running.',
+    perk: 'Every engagement over $20,000 includes full platform set-up.',
     /* The wide card under the four. The banner above says you GET it; this
        says what it IS — they are the offer and the product, and one without
        the other is either an unexplained freebie or a feature list nobody
@@ -36,18 +36,17 @@ export const tabs = [
     feature: {
       eyebrow: 'What the set-up gives you',
       name: 'The platform',
-      body: 'Every project leaves behind more than files. The brand goes into a repository your whole team works from, with agents trained on it, and an approval step before anything ships.',
+      body: 'Every project leaves behind more than files. The brand goes into a repo your whole team works from, with agents trained on it, and a review step before anything lands.',
       items: [
-        { name: 'Repo', note: 'The structure that holds everything the brand is made of.' },
         { name: 'Agents', note: 'Trained on your brand, not on the internet.' },
-        { name: 'Memory', note: 'What was decided, what shipped, and why.' },
-        { name: 'Reviews', note: 'Every change proposed, and a person approves it.' },
-        { name: 'Library', note: 'Every asset we have made, in use and findable.' },
-        { name: 'Measurement', note: 'What shipped, and what it moved.' },
+        { name: 'Memory files', note: 'What was decided, what shipped, and why.' },
+        { name: 'Library set-up', note: 'Every asset we have made, in use and findable.' },
+        { name: 'Push & Pull Repo with reviews', note: 'Changes are proposed, and a person approves them before they land.' },
+        { name: 'Analytics dashboard', note: 'What shipped, and what it moved.' },
       ],
       price: 7500,
       unit: 'starting at',
-      cta: 'Talk to us about the platform',
+      cta: 'Book a demo',
     },
     tiers: [
       {
@@ -56,8 +55,8 @@ export const tabs = [
         price: 15000,
         unit: 'starting at',
         note: null,
-        summary: 'New brand, rebrand, refresh or sub-brand — positioning, identity and the guidelines to run it.',
-        lines: ['New Brand', 'Rebrand', 'Brand Refresh', 'Sub-brand', 'Brand Guidelines', 'Product Positioning'],
+        summary: 'A substantial standing team, pointed at whatever needs it most.',
+        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
       },
       {
@@ -113,8 +112,8 @@ export const tabs = [
         price: 4500,
         unit: 'per month',
         note: null,
-        summary: 'Focus on one pillar to keep things current.',
-        lines: ['One pillar', 'Billed quarterly', 'One quarter minimum'],
+        summary: 'A light standing capacity for upkeep and the small pieces that keep coming up.',
+        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
       },
       {
@@ -123,8 +122,8 @@ export const tabs = [
         price: 8250,
         unit: 'per month',
         note: null,
-        summary: 'Focus on two pillars to ensure things are running properly across your most important channels.',
-        lines: ['Two pillars', 'Billed quarterly', 'One quarter minimum'],
+        summary: 'Enough to keep a couple of things moving properly every month.',
+        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
       },
       {
@@ -134,8 +133,8 @@ export const tabs = [
         unit: 'per month',
         note: null,
         featured: true,
-        summary: 'Focus on three pillars, every month, for a comprehensive view of performance and quick optimizations.',
-        lines: ['Three pillars', 'Billed quarterly', 'One quarter minimum'],
+        summary: 'A substantial standing team, pointed at whatever needs it most.',
+        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
       },
       {
@@ -144,8 +143,8 @@ export const tabs = [
         price: 21000,
         unit: 'per month',
         note: null,
-        summary: 'Focus on all four pillars, the most robust support for optimal brand oversight, maintenance, and seamless evolution.',
-        lines: ['All four pillars', 'Billed quarterly', 'One quarter minimum'],
+        summary: 'The most capacity, with room to take on new work as it arrives.',
+        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
         cta: 'Book a demo',
       },
     ],

@@ -2,6 +2,9 @@
    in /v3's language — Signifier for sentences, mono for labels, pink for the
    one thing being pointed at. */
 .page {
+  /* Room for the fixed bar, so it floats above the sign-off rather than
+     sitting on it. */
+  padding-bottom: 96px;
   --bar-inset: clamp(22px, 3.6vw, 58px);
   --nav-width: 0px;
   --page-pad-left: var(--bar-inset);
@@ -499,30 +502,7 @@
   .faqMark::after { transition: none; }
 }
 
-/* THE PLATFORM PERK. Above the cards and dressed as an offer rather than a
-   condition — it is the one thing on this page nobody else can match, and as
-   a grey footnote under four cards it read like a terms line.
 
-   Tinted, bordered and lit: the same three moves the wordmark at the foot of
-   /v3 uses, at a tenth of the strength, so it belongs to the same light
-   without shouting over the prices it sits above. */
-.perk {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  max-width: 1180px;
-  margin: 0 auto clamp(20px, 3vw, 32px);
-  padding: 16px 22px;
-  border: 1px solid rgba(223, 78, 214, 0.4);
-  border-radius: var(--r-panel);
-  background: rgba(223, 78, 214, 0.07);
-  box-shadow: 0 0 34px rgba(223, 78, 214, 0.1);
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(14px, 1.5vw, 17px);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.88);
-}
 
 /* A filled mark rather than a character in the sentence: it reads as a badge
    on the offer instead of punctuation inside it. */
@@ -731,4 +711,43 @@
   font-size: 9px;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+/* THE PLATFORM OFFER, FIXED TO THE VIEWPORT. Short enough for one line and
+   present while somebody is reading prices, rather than a banner they scroll
+   past once.
+
+   Centred and only as wide as its contents: a full-width bar reads as a
+   cookie notice, which is the one thing a reader has been trained to
+   dismiss without looking. */
+.perkBar {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(16px, 2.5vw, 28px);
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 22px 12px 14px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: 999px;
+  background: rgba(16, 12, 16, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 0 30px rgba(223, 78, 214, 0.14);
+}
+
+.perkText {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 560px) {
+  .perkText { font-size: 12.5px; }
+  .perkBar { padding: 10px 16px 10px 12px; }
 }
