@@ -26,17 +26,25 @@
   );
 }
 
+/* stretch, not start. The columns hold different numbers of cards — two on
+   the left of a Build page against four on the right — and aligned to the
+   top the short column left a hole in the wash and the middle panel floated
+   against nothing. Stretched, the repo spans the whole flow, which is also
+   what it does. */
 .flow {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
   gap: clamp(28px, 4vw, 58px);
 }
 
 .column {
   display: flex;
   flex-direction: column;
+  /* Centred against the taller column, so two cards sit beside the middle of
+     four rather than at the top of them. */
+  justify-content: center;
   gap: clamp(14px, 2vw, 26px);
 }
 
@@ -101,6 +109,8 @@
 }
 
 .centre {
+  display: flex;
+  flex-direction: column;
   background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--r-surface, 12px);
@@ -137,6 +147,9 @@
 .centreBody {
   display: flex;
   flex-direction: column;
+  /* Fills whatever height the flow ends up being; the rows do not repeat to
+     fill it, which is correct — a file list ends. */
+  flex: 1;
   padding: 6px 0;
 }
 
@@ -167,6 +180,7 @@
    downward, with the arrows turned to match. */
 @media (max-width: 860px) {
   .flow { grid-template-columns: minmax(0, 1fr); }
+  .column { justify-content: flex-start; }
 
   .arrow {
     top: auto;

@@ -68,13 +68,20 @@ export default function ServiceV3() {
         </div>
       </header>
 
-      {/* The hero diagram: what an engagement starts from, the service, and
-          what it produces. The right column is the same four pillars the
-          section below lists, so the picture and the detail cannot say
-          different things. */}
+      {/* THE REPO IS THE MIDDLE, not the service.
+
+          The first version put the service name in the centre, which drew
+          the wrong picture: it said the inputs become Build, and Build
+          becomes a brand. What actually happens is that everything goes into
+          the repo, and the outputs come out of it — the service is the work
+          around that, not a stage in the middle of it. Putting the platform
+          there is also the argument the rest of the site makes.
+
+          The right column is the same four pillars the section below lists,
+          so the picture and the detail cannot disagree. */}
       <FlowDiagram
         inputs={service.flowIn}
-        centre={service.name}
+        centre="Repo"
         outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
       />
 

@@ -3,10 +3,14 @@ import styles from './FlowDiagram.module.css'
 /**
  * The hero diagram: what goes into the platform, and what comes out.
  *
- * THREE COLUMNS AND TWO ARROWS. Inputs on the left, the repo in the middle,
+ * THREE COLUMNS AND TWO ARROWS. Inputs on the left, the REPO in the middle,
  * outputs on the right — the shape of the reference, and the shape of the
  * actual claim: everything the brand is goes into one place, and everything
- * the brand says comes out of it.
+ * the brand makes comes out of it.
+ *
+ * The middle is the platform on every one of these pages, not the service.
+ * A service page that put its own name there drew the inputs turning into
+ * "Build" and Build turning into a brand, which is not what happens.
  *
  * THE DATA COMES IN AS PROPS, one flow per service, from services.js. The
  * right-hand column of each is that service's own pillars — Chris's names,
