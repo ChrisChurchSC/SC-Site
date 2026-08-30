@@ -313,6 +313,15 @@ export const SERVICE_ROWS = OFFER.map(({ name, body, href }) => ({ name, note: b
    from, so the two cannot disagree. Anything without an href renders as
    text rather than as a link to the nearest page that happens to exist —
    the nav panels already behave this way. */
+const USE_CASES = [
+  'Get to market faster',
+  'Ship more without more headcount',
+  'Know what is working',
+  'Keep the brand consistent',
+  'Launch into a new market',
+  'Stop rebuilding the same assets',
+]
+
 export const FOOTER_COLS = [
   { tag: 'Platform', links: PLATFORM_PAGES.map(({ name }) => ({ label: name })) },
   {
@@ -323,6 +332,8 @@ export const FOOTER_COLS = [
       { label: 'Pricing', href: '/pricing' },
     ],
   },
+  /* After Services, because a use case is a way into the same four. */
+  { tag: 'Use cases', links: USE_CASES.map(label => ({ label })) },
   {
     tag: 'Case studies',
     links: [

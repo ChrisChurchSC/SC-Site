@@ -9,6 +9,8 @@ import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
 import FeaturedWall from '../components/FeaturedWall'
+import TestimonialCard from '../components/TestimonialCard'
+import ServiceFaq from '../components/ServiceFaq'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { serviceBySlug } from '../data/services'
@@ -68,8 +70,6 @@ export default function ServiceV3() {
             </p>
           )}
 
-          <p className={styles.intro}>{service.intro}</p>
-
           <div className={styles.heroActions}>
             <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
             <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
@@ -115,6 +115,10 @@ export default function ServiceV3() {
       <PlatformOutputs />
 
       <FeaturedWall />
+
+      <TestimonialCard />
+
+      <ServiceFaq />
 
       <FooterCard columns={FOOTER_COLS} />
 
