@@ -1,5 +1,5 @@
 import styles from './PlatformIntro.module.css'
-import { PLATFORM_PAGES } from './V3Nav'
+import PlatformFlow from './PlatformFlow'
 
 /**
  * WHAT A BRAND PLATFORM IS — the first section under the hero.
@@ -9,14 +9,12 @@ import { PLATFORM_PAGES } from './V3Nav'
  * panel below carrying the picture. Everything is left-aligned and the
  * headline is deliberately allowed to wrap — the wrap is the layout.
  *
- * THE PANEL HOLDS THE SIX PLATFORM PAGES, not a decorative canvas. They are
- * read from PLATFORM_PAGES, the same list the nav and the pricing card use,
- * so a seventh capability appears here the moment it exists anywhere else.
- * The hero above already shows the repo, so repeating that window here would
- * have said the same thing twice.
+ * THE PANEL HOLDS THE REVIEW LOOP as a canvas — see PlatformFlow. It is the
+ * platform's actual argument: a change is drafted, proposed, approved by a
+ * person, and only then does it land. The hero above already shows the repo
+ * window, so repeating that here would have said the same thing twice.
  *
- * THE HEADLINE AND THE PARAGRAPH ARE MINE and have not been signed off. The
- * six names and their notes are existing copy.
+ * THE HEADLINE AND THE PARAGRAPH ARE MINE and have not been signed off.
  */
 const EYEBROW = '[ The Platform ]'
 const HEADLINE = 'Your brand, in one place you can open.'
@@ -32,17 +30,10 @@ export default function PlatformIntro() {
       <h2 className={styles.headline} id="platform-intro">{HEADLINE}</h2>
       <p className={styles.body}>{BODY}</p>
 
-      {/* The dot field is the panel's own, masked at the foot so the grid
-          fades rather than stopping on a line. */}
+      {/* The dot field is the panel's own, masked at the foot so it fades
+          rather than stopping on a line. */}
       <div className={styles.panel}>
-        <div className={styles.grid}>
-          {PLATFORM_PAGES.map(({ name, note }) => (
-            <article key={name} className={styles.card}>
-              <h3 className={styles.cardName}>{name}</h3>
-              <p className={styles.cardNote}>{note}</p>
-            </article>
-          ))}
-        </div>
+        <PlatformFlow />
       </div>
     </section>
   )

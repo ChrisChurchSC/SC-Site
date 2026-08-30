@@ -1,0 +1,160 @@
+/* The review loop as a canvas — see PlatformFlow.jsx.
+
+   Two columns with a gutter wide enough to carry a labelled spine. The
+   reference puts its label above the line rather than beside the arrowhead,
+   which is what keeps a diagram this dense readable. */
+
+.canvas {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(60px, 11vw, 190px);
+  align-items: start;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.4vw, 34px);
+  min-width: 0;
+}
+
+/* A card and the chips or status that hang off it, held together so the
+   group reads as one object — the reference nests them in a tinted well. */
+.group {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: calc(var(--r-surface, 12px) + 4px);
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+/* The icon well carries the card's tone. The reference gives every card a
+   different coloured tile; ours are the three brand accents rather than a
+   new colour per card, so the canvas stays inside the palette. */
+.icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.glyph { width: 16px; height: 16px; }
+
+.pink  .icon { background: rgba(223, 78, 214, 0.14); color: var(--pink, #df4ed6); }
+.teal  .icon { background: rgba(78, 207, 179, 0.14); color: var(--teal, #4ecfb3); }
+.blue  .icon { background: rgba(90, 118, 229, 0.16); color: var(--blue, #5a76e5); }
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.name {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.note {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12.5px, 0.95vw, 14px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Chips are mono: they are an inventory, not a sentence. Same rule the rest
+   of the site follows. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 6px 2px;
+}
+
+.chip {
+  padding: 5px 9px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.62);
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+}
+
+.chipMore { color: rgba(255, 255, 255, 0.34); }
+
+.status { padding: 10px 6px 2px; }
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px 6px 9px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+}
+
+.tick { width: 14px; height: 14px; flex: none; }
+
+/* THE WIRES. Unscaled: the viewBox is set to the measured pixel size, so one
+   unit is one pixel and nothing has to be converted. */
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+/* Dotted rather than solid, as the reference is — it reads as a route
+   something takes rather than a structural join. */
+.wire {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+  stroke-linecap: round;
+}
+
+.head { fill: rgba(255, 255, 255, 0.34); }
+
+.label {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  fill: rgba(255, 255, 255, 0.42);
+}
+
+/* One column under the wide breakpoint. The wires are measured from the DOM,
+   so they follow — but a spine drawn down a gutter that no longer exists is
+   noise, so they are hidden and the stack reads top to bottom instead. */
+@media (max-width: 860px) {
+  .canvas { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .wires { display: none; }
+}
