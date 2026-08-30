@@ -1,3 +1,4 @@
+import { Plug, Mail, Megaphone, Search, Globe, Contact, Wallet } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './PlatformMeasurement.module.css'
@@ -93,6 +94,23 @@ const FAQS = [
 ]
 
 
+const SOURCES = [
+  { Icon: Mail, name: 'Email', state: 'Connected' },
+  { Icon: Megaphone, name: 'Paid social', state: 'Connected' },
+  { Icon: Search, name: 'Organic search', state: 'Connected' },
+  { Icon: Globe, name: 'Web analytics', state: 'Connected' },
+  { Icon: Contact, name: 'CRM', state: 'Connected' },
+  { Icon: Wallet, name: 'Spend', state: 'Not connected', off: true },
+]
+
+/* The mark for a row: a real file when there is one, a letter tile when there
+   is not. Never a drawn lookalike. */
+function Mark({ logo, initials, name, Icon }) {
+  if (logo) return <img className={styles.logo} src={logo} alt="" width="20" height="20" />
+  if (initials) return <span className={styles.initials}>{initials}</span>
+  return <Icon size={15} strokeWidth={1.3} />
+}
+
 export default function PlatformMeasurement() {
   const cal = useCalDrawer()
 
@@ -186,6 +204,53 @@ export default function PlatformMeasurement() {
 
         <div className={styles.windowWrap}>
           <DiffWindow />
+        </div>
+      </section>
+
+      <hr className={styles.divider} />
+
+      <section className={styles.block} aria-labelledby="sources">
+        <div className={styles.sources}>
+          <div className={styles.sourcesCopy}>
+            <p className={styles.sectionEyebrow}>[ What it reads from ]</p>
+            <h2 className={styles.blockHead} id="sources">
+              Connect what you already run.
+            </h2>
+            <p className={styles.blockIntro}>
+              Measurement reads your own accounts rather than a copy of them. Nothing is retyped
+              into a slide and nothing is modelled &mdash; and where a source is not connected,
+              the figures it would feed show &ndash;&ndash; instead of a guess.
+            </p>
+          </div>
+
+          <div className={styles.sourcesCard} aria-hidden="true">
+            <div className={styles.sourcesHead}>
+              <span className={styles.sourcesTile}>
+                <Plug size={17} strokeWidth={1.4} />
+              </span>
+              <p className={styles.sourcesTitle}>
+                Six sources <span className={styles.sourcesTitleDim}>into one view</span>
+              </p>
+            </div>
+            <div className={styles.sourcesBody}>
+              {SOURCES.map(({ Icon, name, state, off, logo, initials }) => (
+                <div
+                  key={name}
+                  className={`${styles.sourceRow}${off ? ' ' + styles.sourceRowOff : ''}`}
+                >
+                  <span className={styles.sourceIcon}>
+                    <Mark Icon={Icon} logo={logo} initials={initials} name={name} />
+                  </span>
+                  <span className={styles.sourceName}>{name}</span>
+                  <span className={styles.sourceState}>
+                    {off ? <span className={styles.blank}>&ndash;&ndash;</span> : null}
+                    <span className={styles.dot} />
+                    {state}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

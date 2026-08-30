@@ -448,3 +448,171 @@
 .cardsBlock {
   padding: clamp(36px, 4.5vw, 68px) 0 clamp(4px, 0.6vw, 10px);
 }
+
+/* ── WHAT IT READS FROM ────────────────────────────────────────────────────
+   The reference's shape: copy on the left of a tinted panel, and a card on
+   the right that runs off the panel's edge rather than sitting inside it with
+   equal margins. The bleed is what makes it read as a window onto something
+   larger instead of a picture pasted on. */
+.sources {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  margin: clamp(36px, 4.5vw, 68px) 0 0;
+  padding: clamp(32px, 4vw, 64px) 0 clamp(32px, 4vw, 64px) clamp(24px, 3.4vw, 56px);
+  border-radius: var(--r-panel, 18px);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.sourcesCopy { display: flex; flex-direction: column; }
+
+.sourcesCopy .blockHead {
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+.sourcesCopy .blockIntro { margin-top: clamp(14px, 1.6vw, 20px); }
+
+/* Runs to the panel's right edge and past its vertical padding, so the card
+   is cropped by the panel rather than framed by it. */
+.sourcesCard {
+  align-self: stretch;
+  margin: calc(-1 * clamp(32px, 4vw, 64px)) 0;
+  display: flex;
+  flex-direction: column;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 0;
+  border-radius: var(--r-surface, 12px) 0 0 var(--r-surface, 12px);
+}
+
+.sourcesHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(16px, 1.8vw, 22px) clamp(16px, 2vw, 26px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sourcesTile {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 9px;
+  background: rgba(223, 78, 214, 0.1);
+  border: 1px solid rgba(223, 78, 214, 0.3);
+  color: var(--pink, #df4ed6);
+}
+
+.sourcesTitle {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 21px);
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sourcesTitleDim { color: rgba(255, 255, 255, 0.45); }
+
+/* The rows sit on a faint ruling, as the reference's dots sit on a grid. */
+.sourcesBody {
+  flex: 1;
+  min-height: 0;
+  padding: clamp(10px, 1.2vw, 16px) 0;
+  background-image:
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 88px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 52px);
+}
+
+.sourceRow {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px clamp(16px, 2vw, 26px);
+}
+
+.sourceIcon { color: rgba(255, 255, 255, 0.4); display: grid; place-items: center; }
+
+/* A real mark, rendered at its own shape. Grey by default so six different
+   brand colours do not fight the page, full colour on hover of the row. */
+.logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.75;
+  transition: filter 0.15s, opacity 0.15s;
+}
+
+.sourceRow:hover .logo { filter: none; opacity: 1; }
+
+/* And the stand-in until the file exists: initials, not a lookalike. */
+.initials {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sourceName {
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sourceState {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal, #4ecfb3);
+}
+
+/* The one that is not connected, which is the row that matters: it shows the
+   placeholder rather than a number, and the page's own rule says why. */
+.sourceRowOff .sourceName { color: rgba(255, 255, 255, 0.42); }
+.sourceRowOff .dot { background: rgba(255, 255, 255, 0.22); }
+.sourceRowOff .sourceState { color: rgba(255, 255, 255, 0.3); }
+
+.blank {
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 900px) {
+  .sources {
+    grid-template-columns: minmax(0, 1fr);
+    padding: clamp(24px, 4vw, 40px);
+  }
+  .sourcesCard {
+    margin: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--r-surface, 12px);
+  }
+}
