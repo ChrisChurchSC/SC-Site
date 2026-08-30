@@ -141,6 +141,16 @@
   gap: 18px;
 }
 
+/* The label over a centred row centres with it. Only the chip moves:
+   text-align here would inherit into the cards and centre every line in
+   them. The eyebrow is an inline-block by token, so it is made a block of
+   its own width first — margin auto does nothing to an inline-block. */
+.labelledCenter .eyebrow {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+}
+
 .eyebrow {
   font-family: 'Roboto Mono', monospace;
   font-size: var(--label-size, 9px);

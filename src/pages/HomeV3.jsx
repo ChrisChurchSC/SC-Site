@@ -67,9 +67,9 @@ const CLOSING = 'It might change your life. At minimum, we can answer your burni
  * StatementCard and AudienceCards render their own eyebrow — they already
  * had one — so they are NOT wrapped in this; wrapping them would print two.
  */
-function Labelled({ label, children }) {
+function Labelled({ label, children, center = false }) {
   return (
-    <div className={v3.labelled}>
+    <div className={`${v3.labelled}${center ? ' ' + v3.labelledCenter : ''}`}>
       <p className={v3.eyebrow}>{label}</p>
       {children}
     </div>
@@ -162,7 +162,7 @@ export default function HomeV3() {
       {/* 3 — The offer, in two halves, with the price lines */}
       <hr className={v3.divider} />
 
-      <Labelled label="[ Services ]"><BuildGrowCards cards={OFFER} compact /></Labelled>
+      <Labelled label="[ Services ]" center><BuildGrowCards cards={OFFER} compact /></Labelled>
 
       {/* The platform, after the offer it supports and before the longer
           read about who we are. Card layout only — the previews are empty

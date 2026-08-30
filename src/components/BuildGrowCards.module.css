@@ -26,10 +26,12 @@
   justify-content: flex-end;
   aspect-ratio: 4 / 5;
   background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--r-surface, 4px);
   padding: 40px 36px 34px;
   animation: cardIn 0.5s ease both;
   transition: background 0.2s ease,
+              border-color 0.2s ease,
               transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
               box-shadow 0.25s ease;
 }
@@ -43,6 +45,7 @@
    behave the same way under the cursor. */
 .card:hover {
   background: #1c1c1c;
+  border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-6px);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
               0 16px 36px rgba(0, 0, 0, 0.6);
@@ -217,6 +220,23 @@
 .rowCompact {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+
+/* FEWER THAN THREE. Two cards in a four-column grid are quarter width and
+   hard left, with half the row empty beside them. They take a column each of
+   a narrower, centred track instead — bigger cards, same 4:5, and the pair
+   sits under the middle of the headline rather than off to one side. */
+.rowCompactFew {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  max-width: min(1040px, 100%);
+  margin-inline: auto;
+}
+
+/* And at that width the type has room to come back up — the step down exists
+   because a quarter-width card broke the name over two lines. */
+.rowCompactFew .name { font-size: clamp(28px, 2.6vw, 40px); }
+.rowCompactFew .body { font-size: 13px; }
+.rowCompactFew .cardCompact { padding: 36px 32px 32px; gap: 14px; }
 
 .cardCompact {
   /* Keeps the base card's 4/5, so all four are portrait like the two they

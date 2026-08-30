@@ -77,7 +77,11 @@ export default function BuildGrowCards({ cards = CARDS, footnote = null, compact
      Without a footnote the section is returned bare, exactly as before, so
      the live homepage's DOM is unchanged rather than merely equivalent. */
   const cardsRow = (
-    <section className={`${styles.row}${compact ? ' ' + styles.rowCompact : ''}`}>
+    <section
+      className={`${styles.row}${compact ? ' ' + styles.rowCompact : ''}${
+        compact && cards.length < 3 ? ' ' + styles.rowCompactFew : ''
+      }`}
+    >
       {cards.map(({ id, name, body, price, cta, href, media }) => (
         /* A card without an href renders as a div: NavLink with to={null}
            throws, and two of the four services have no page yet. */
