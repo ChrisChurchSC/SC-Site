@@ -549,7 +549,7 @@ export default function V3Nav() {
                   <span className={`${v3.svcIntroCta} ${v3.svcIntroCtaFlat}`}>Coming soon</span>
                 </div>
 
-                <div className={v3.svcGrid}>
+                <div className={`${v3.svcGrid} ${v3.svcGridTwo}`}>
                   {PLATFORM_PAGES.map(({ name, note, Icon }) => (
                     <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>
                       <span className={v3.svcIcon}>

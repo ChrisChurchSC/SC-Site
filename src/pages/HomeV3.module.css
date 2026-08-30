@@ -1260,3 +1260,19 @@
   color: var(--pink, #df4ed6);
   border-color: rgba(223, 78, 214, 0.4);
 }
+
+/* TWO COLUMNS OF THREE, for the panel that still has six rows. The hairline
+   belongs to the row rather than the grid, so it lands under every row in
+   both columns rather than only where a gap happens to fall. */
+.svcGridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 3vw, 48px);
+  align-content: start;
+}
+
+/* One column on a narrow panel — two columns of a name and a sentence at
+   half a phone's width is two columns of wrapping. */
+@media (max-width: 900px) {
+  .svcGridTwo { grid-template-columns: minmax(0, 1fr); }
+}
