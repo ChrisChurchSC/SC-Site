@@ -1,7 +1,10 @@
 import { useState } from 'react'
 
 import styles from './HowItWorks.module.css'
+import ScopeWindow from './ScopeWindow'
+import ReviewWindow from './ReviewWindow'
 import AssetsGridWindow from './AssetsGridWindow'
+import RepoWindow from './RepoWindow'
 import AssetWindow from './AssetWindow'
 import InMarketPanel from './InMarketPanel'
 import DashboardWindow from './DashboardWindow'
@@ -34,32 +37,37 @@ import DashboardWindow from './DashboardWindow'
  */
 const SETS = {
   build: {
-    headline: 'Scoped, made, approved — and handed over as something you can run.',
+    headline: 'Define it, design it, encode it — and deploy something your team can run.',
     steps: [
       {
         n: '01',
-        name: 'Scope',
-        note: 'What it is and what it costs, agreed before anything starts.',
+        name: 'Define',
+        visual: 'scope',
+        note: 'What the brand is, who it is for and what it may claim — settled before anything gets made.',
       },
       {
         n: '02',
-        name: 'Make',
-        note: 'The brand, the site, the campaign, the channels — built once and built properly.',
+        name: 'Design',
+        visual: 'assets',
+        note: 'The brand, the site, the campaign and the channels. Made once, and made properly.',
       },
       {
         n: '03',
-        name: 'Review',
-        note: 'Every change is proposed rather than published. A person approves it before it lands.',
+        name: 'Encode',
+        visual: 'repo',
+        note: 'It goes into the repo as files and agents, so the system can use it and not only people.',
       },
       {
         n: '04',
-        name: 'Hand over',
-        note: 'It goes into the repo set up and documented, so your team can use it without us in the room.',
+        name: 'Deploy',
+        visual: 'review',
+        note: 'It goes live the way every change does: proposed, approved by a person, then out.',
       },
     ],
     closing: 'A project that ends, and leaves something behind that does not.',
     loops: false,
   },
+
 
   grow: {
     headline: 'Ship, distribute, measure — and start the next one further along.',
@@ -132,6 +140,12 @@ const SETS = {
    channel panel, the measurement window and the repo are all already built,
    and a second illustrated version of any of them would drift. */
 const VISUALS = {
+  /* The agreed scope, read from the same pillar list /pricing sells from. */
+  scope: ScopeWindow,
+  /* The review queue — proposed, not published, until a person merges. */
+  review: ReviewWindow,
+  /* Where it lands: the repo, set up and documented. */
+  repo: () => <RepoWindow big />,
   /* The creative that got made. */
   assets: AssetsGridWindow,
   /* The same assets, seen by where they went. */
