@@ -16,7 +16,12 @@ import RepoWindow from './RepoWindow'
  * A service page that put its own name there drew the inputs turning into
  * "Build" and Build turning into a brand, which is not what happens.
  *
- * ONLY THE RIGHT COLUMN IS A PROP. It is that service's own pillars, from
+ * BOTH OUTER COLUMNS ARE PROPS NOW. The left defaults to the five that feed
+ * the repo, which is right on every service page; /platform/measurement is
+ * the one page where what arrives is results rather than the brand, so it
+ * passes its own.
+ *
+ * ONLY THE RIGHT COLUMN WAS A PROP. It is that service's own pillars, from
  * services.js — Chris's names, unchanged. The left is the same five on every
  * page, so it lives in this file.
  *
@@ -81,7 +86,7 @@ function Column({ label, groups, sync = false }) {
  * their own dot said "five things, five connections"; a single junction says
  * everything meets in one place, which is the repository's whole argument.
  */
-export default function FlowDiagram({ centre, outputs }) {
+export default function FlowDiagram({ centre, outputs, inputs = REPO_INPUTS, inputsLabel = 'What goes in' }) {
   const flowRef = useRef(null)
   const [wires, setWires] = useState(null)
 
@@ -174,7 +179,7 @@ export default function FlowDiagram({ centre, outputs }) {
           </svg>
         )}
 
-        <Column label="What goes in" groups={REPO_INPUTS} sync />
+        <Column label={inputsLabel} groups={inputs} sync />
 
         <RepoWindow label={centre} />
 

@@ -1,4 +1,3 @@
-import { ChartNoAxesColumn, TrendingUp, Activity, Target, GitPullRequest, CheckCheck } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './PlatformMeasurement.module.css'
@@ -8,6 +7,7 @@ import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
 import DiffWindow from '../components/DiffWindow'
+import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
 import HowItWorks from '../components/HowItWorks'
 import DotNav from '../components/DotNav'
@@ -40,37 +40,26 @@ import { useMeta } from '../hooks/useMeta'
  * are mine and have not been signed off.
  */
 
-const ICONS = [ChartNoAxesColumn, TrendingUp, Activity, Target, GitPullRequest, CheckCheck]
+/* WHAT COMES BACK. Categories of data rather than figures — the numbers
+   live in src/data/dashboard.js and are drawn where they can carry a Sample
+   data tag. These names are wording and have not been signed off. */
+const RESULTS = [
+  { name: 'Email', items: ['Sends', 'Opens', 'Clicks', 'Conversions'] },
+  { name: 'Paid social', items: ['Spend', 'Impressions', 'CTR'] },
+  { name: 'Organic', items: ['Sessions', 'Referrers'] },
+  { name: 'Web', items: ['Sessions', 'Signups'] },
+  { name: 'CRM', items: ['Pipeline', 'Closed won'] },
+]
 
-/* The same field as the agents page, cell for cell — the two are pages about
-   one system and the hero is where that has to be obvious. Columns are
-   counted from the left on the left and from the right on the right, so the
-   pattern holds its distance from both edges at any width. */
-const CELLS = [
-  { r: 2, c: 3, i: 0 },
-  { r: 4, c: 6, i: null },
-  { r: 5, c: 2, i: 1 },
-  { r: 7, c: 5, i: 4, accent: true },
-  { r: 9, c: 3, i: null },
-  { r: 10, c: 7, i: 2 },
-  { r: 12, c: 2, i: 3 },
-
-  { r: 2, c: -4, i: 5 },
-  { r: 4, c: -7, i: null },
-  { r: 5, c: -3, i: 0 },
-  { r: 7, c: -5, i: 4, accent: true },
-  { r: 9, c: -3, i: null },
-  { r: 10, c: -6, i: 1 },
-  { r: 12, c: -4, i: 2 },
-
-  { r: 14, c: 11, i: 3 },
-  { r: 15, c: 15, i: null },
-  { r: 14, c: -13, i: 5 },
-  { r: 16, c: -17, i: null },
-  { r: 15, c: 20, i: 4, accent: true },
-
-  { r: 1, c: 13, i: null },
-  { r: 1, c: -15, i: 2 },
+/* AND WHAT CHANGES BECAUSE OF IT. The right column is the point of the page:
+   results do not end in a chart, they end in an edit to a file. Strategy
+   holds what is true and Verbal holds how it sounds, so a lesson lands in
+   one or the other. */
+const CHANGES = [
+  { name: 'Proof points', items: ['Sourced claims', 'Re-check dates'] },
+  { name: 'Tone of voice', items: ['What lands', 'What to cut'] },
+  { name: 'Channel notes', items: ['Where it works', 'What to stop'] },
+  { name: 'The next brief', items: ['Starts from this'] },
 ]
 
 /* The questions the page provokes. Every mechanism in an answer is real: the
@@ -117,37 +106,29 @@ export default function PlatformMeasurement() {
       <V3Nav />
 
       <header className={styles.hero}>
-        <div className={styles.field}>
-          <span className={styles.lines} aria-hidden="true" />
+        <p className={styles.eyebrow}>[ Measurement ]</p>
+        <h1 className={styles.headline}>
+          The brand gets sharper, and you can read the diff.
+        </h1>
+        <p className={styles.intro}>
+          Results do not sit in a dashboard waiting to be remembered. What worked comes back
+          as a proposed change to the brand itself &mdash; so the next round starts from it.
+        </p>
+        <div className={styles.actions}>
+          <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
+          <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+        </div>
 
-          {CELLS.map(({ r, c, i, accent }, k) => {
-            const Icon = i === null ? null : ICONS[i]
-            return (
-              <span
-                key={k}
-                className={`${styles.cell}${accent ? ' ' + styles.cellAccent : ''}`}
-                style={{ gridRow: r, gridColumn: c }}
-                aria-hidden="true"
-              >
-                {Icon && <Icon size={15} strokeWidth={1.3} aria-hidden="true" />}
-              </span>
-            )
-          })}
-
-          <div className={styles.heroCard}>
-            <p className={styles.eyebrow}>[ Measurement ]</p>
-            <h1 className={styles.headline}>
-              The brand gets sharper, and you can read the diff.
-            </h1>
-            <p className={styles.intro}>
-              Results do not sit in a dashboard waiting to be remembered. What worked comes back
-              as a proposed change to the brand itself — so the next round starts from it.
-            </p>
-            <div className={styles.actions}>
-              <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-              <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
-            </div>
-          </div>
+        {/* THE LOOP, DRAWN. The same diagram the service heroes use, because
+            it is the same repo in the middle — only what arrives and what
+            changes are this page's. */}
+        <div className={styles.flowWrap}>
+          <FlowDiagram
+            centre="Repo"
+            inputs={RESULTS}
+            inputsLabel="What comes back"
+            outputs={CHANGES}
+          />
         </div>
       </header>
 
