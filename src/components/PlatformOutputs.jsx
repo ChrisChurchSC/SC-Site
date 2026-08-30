@@ -4,8 +4,19 @@ import styles from './PlatformOutputs.module.css'
 import { tabs } from '../data/pricingTabs'
 
 /**
- * WHAT THE PLATFORM MAKES — the section under it, and the same four things
- * /pricing sells.
+ * WHAT YOU GET — the section under the platform.
+ *
+ * Build shows the project tiers, read from pricingTabs so the section cannot
+ * describe something /pricing has stopped selling.
+ *
+ * Grow hands over its own pillars instead. It is bought by the hour, and a
+ * section headed "what you get" answering with a rate card answers the wrong
+ * question: the hours are how it is billed, and what you get is what they
+ * are spent making.
+ *
+ * It was "What it makes", which described the platform's output. This says
+ * the same cards from the buyer's side: not what the machine produces, but
+ * what you are left holding.
  *
  * WHERE A TIER NAMES ITS OWN OUTPUTS, those are shown instead of its
  * deliverables. Campaign is the case: its deliverable list opens with
@@ -28,10 +39,17 @@ import { tabs } from '../data/pricingTabs'
  * Those are real audiences but nothing prices them, so the cards could only
  * ever have linked at pricing rather than carried it.
  */
-const project = tabs.find((t) => t.id === 'project')
-const CUT = new Set(['Brand'])
-const TIERS = project.tiers.filter((t) => !CUT.has(t.name))
+/* THE DEFAULT SET: the project tiers, for a service bought as projects.
+   A caller can hand over its own cards instead — see the `cards` prop.
 
+   Brand is cut here and only here: still a tier, still on /pricing.
+   Excluded by name rather than index so reordering the tiers cannot
+   silently drop a different one. */
+const CUT = new Set(['Brand'])
+
+const projectCards = tabs
+  .find((t) => t.id === 'project')
+  .tiers.filter((t) => !CUT.has(t.name))
 /**
  * One card. The pills pick which deliverable the well shows, so the list is
  * something you can look through rather than a label.
@@ -54,7 +72,7 @@ function Card({ kicker, name, summary, items, note }) {
         <span className={styles.mediaLabel} aria-live="polite">{items[active]}</span>
       </div>
 
-      <span className={styles.kicker}>{kicker}</span>
+      {kicker && <span className={styles.kicker}>{kicker}</span>}
       <h3 className={styles.name}>{name}</h3>
       <p className={styles.note}>{summary}</p>
 
@@ -77,19 +95,21 @@ function Card({ kicker, name, summary, items, note }) {
   )
 }
 
-export default function PlatformOutputs() {
+export default function PlatformOutputs({ cards }) {
+  const TIERS = cards ?? projectCards
+
   return (
     <section className={styles.section} aria-labelledby="what-it-makes">
-      <p className={styles.eyebrow}>[ What it makes ]</p>
+      <p className={styles.eyebrow}>[ What you get ]</p>
       <h2 className={styles.headline} id="what-it-makes">
-        One store, and everything that comes out of it.
+        What you end up with.
       </h2>
 
       <div className={styles.grid}>
         {TIERS.map(({ kicker, name, summary, lines, outputs, note, outputsNote }, i) => (
           <Card
-            key={kicker}
-            kicker={String(i + 1).padStart(2, '0')}
+            key={name}
+            kicker={kicker ? String(i + 1).padStart(2, '0') : null}
             name={name}
             summary={summary}
             /* A tier that names its own outputs uses them; the rest fall

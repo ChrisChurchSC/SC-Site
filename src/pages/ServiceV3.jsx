@@ -38,6 +38,36 @@ import { serviceBySlug } from '../data/services'
  * AN UNKNOWN SLUG REDIRECTS rather than rendering an empty shell — there are
  * exactly four services, and /services/anything-else is a typo.
  */
+/* WHAT GROW'S HOURS MAKE — see the note at the mount below. Deliverables
+   are Chris's own words from services.js; the website/app split and the App
+   summary are mine. */
+const GROW_CARDS = [
+  {
+    kicker: '01',
+    name: 'Website',
+    summary: 'The site stops being a launch and becomes something you tune every month.',
+    lines: ['Conversion Optimization', 'Landing Pages', 'A/B Testing', 'Ongoing SEO/AEO'],
+  },
+  {
+    kicker: '02',
+    name: 'App',
+    summary: 'What you shipped keeps shipping — new features, and the speed to hold them.',
+    lines: ['New Features', 'Performance'],
+  },
+  {
+    kicker: '03',
+    name: 'Campaigns',
+    summary: 'Budget moves toward what is working, on evidence rather than instinct.',
+    lines: ['Ad Variants', 'Audience Segments', 'Performance Report'],
+  },
+  {
+    kicker: '04',
+    name: 'Channels',
+    summary: 'The feed keeps moving at the volume the platforms want, without the work getting worse.',
+    lines: ['Always-On Content', 'Short-Form Video', 'Community Management', 'Email & SMS', 'Channel Expansion'],
+  },
+]
+
 export default function ServiceV3() {
   const { slug } = useParams()
   const cal = useCalDrawer()
@@ -123,11 +153,24 @@ export default function ServiceV3() {
 
       <hr className={styles.divider} />
 
-      <PlatformIntro />
+      <PlatformIntro visual={service.heroVisual === 'dashboard' ? 'asset' : 'repo'} />
 
       <hr className={styles.divider} />
 
-      <PlatformOutputs />
+      {/* Grow is bought by the hour, so its cards are what the hours make.
+          Four, as Chris listed them: website, app, campaigns, channels.
+
+          BRAND IS NOT ONE OF THEM here. Grow's Brand pillar is governance
+          and upkeep — keeping the system coherent — which is what Support
+          covers on the page next door. It is still in services.js and still
+          in the hero diagram; it is only cut from this section.
+
+          WEBSITE AND APP ARE ONE PILLAR IN THE DATA and two cards here. The
+          split of its six deliverables between them is MINE and is not
+          signed off: optimization, landing pages, testing and SEO read as
+          site work; features and performance read as app work. The App
+          summary is mine too — the pillar's own line is about the site. */}
+      <PlatformOutputs cards={service.slug === 'grow' ? GROW_CARDS : undefined} />
 
       <hr className={styles.divider} />
 

@@ -54,3 +54,50 @@ export const metricsSample = {
     { name: 'Email', value: 8 },
   ],
 }
+
+/* ONE ASSET, WITH ITS OWN NUMBERS — for the asset view in the platform
+ * section on Grow.
+ *
+ * AHEAD OF THE PRODUCT, DELIBERATELY. The app has no per-asset performance
+ * anywhere: its Usage tab says, in as many words, "Nothing in the workspace
+ * records where an asset goes once it leaves here." This draws the view the
+ * platform is heading for, not one it has, and the panel carries the same
+ * "Sample data" tag as everything else here.
+ *
+ * The vocabulary is still the app's — impressions, clicks, events, channels.
+ * No CTR, no conversion rate, no spend: those columns do not exist anywhere
+ * in the product, and inventing a metric is what the Grow hero was just
+ * fixed for.
+ */
+export const assetSample = {
+  name: 'always-on-q3-01.jpg',
+  path: 'Library / Social',
+  live: 'Live since 08-14',
+  stats: [
+    { label: 'Impressions', value: '1,416' },
+    { label: 'Clicks', value: '22' },
+    { label: 'Events', value: '184' },
+  ],
+  /* Daily events for this one asset, over the same 8 days as the table on
+     the hero, so the two panels describe the same period. */
+  days: [12, 19, 16, 28, 24, 9, 41, 35],
+  channels: ['Meta', 'LinkedIn', 'Email'],
+  /* File metadata, which is real information about an asset rather than
+     another performance number. The app has no CTR, spend or reach column,
+     and adding "more metrics" by inventing some would undo the fix this
+     panel just had. Days live and the best day are DERIVED from the series
+     above, so they cannot disagree with the chart. */
+  format: '1080 × 1080 · JPG',
+  version: 'v3',
+  updated: '08-22',
+  /* Against the account's own trailing average rather than an industry
+     figure — see the note above the file. Sample deltas. */
+  benchmark: {
+    basis: 'your 90-day average',
+    rows: [
+      { label: 'Impressions', delta: 14 },
+      { label: 'Clicks', delta: -8 },
+      { label: 'Events', delta: 22 },
+    ],
+  },
+}

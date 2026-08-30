@@ -30,7 +30,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* auto-fit: three cards on Build, four on Grow. */
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: clamp(12px, 1.4vw, 20px);
 }
 
