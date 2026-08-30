@@ -17,20 +17,16 @@ import { useMeta } from '../hooks/useMeta'
 /**
  * /platform/measurement — the second of the six platform pages.
  *
- * THE ARGUMENT OF THE PAGE IS THE LOOP, NOT THE DASHBOARD. Charts are the
- * least differentiated thing this system does; every analytics tool on the
- * market draws them, and none of them can do the step after. An analytics
- * tool never saw the brief, so the most it can tell you is that a number
- * moved. Here the number arrives attached to the asset that earned it, the
- * agent that drafted it and the decision it came from — which is what makes
- * it possible to propose a change to the brand rather than merely report on
- * it.
+ * THE PAGE IS ANALYTICS FIRST, AND THE LOOP IS WHAT HAPPENS AFTER. This page
+ * led with the diff for a version, which put the argument before the thing:
+ * Measurement is a dashboard, and a visitor who has not been shown one has no
+ * reason to care what the system does with it. So the dashboard is the hero.
  *
- * So the centre of the page is a diff, not a chart. What worked becomes a
- * proposed edit to the files every agent reads, and a person merges it. The
- * dashboard is still here, one section down, because the view is real and the
- * page should show it — but it is evidence for the argument rather than the
- * argument.
+ * Then the differentiator, in order. The flow diagram shows every channel
+ * arriving in one place and joining to the work that earned it — which is
+ * what an analytics tool cannot do, because it never saw the brief. And the
+ * diff is the payoff: what the numbers proved, proposed as an edit to the
+ * files every agent reads, waiting on a person.
  *
  * EVERY FIGURE ON THIS PAGE IS SAMPLE and comes from src/data/dashboard.js,
  * which is the one place the site keeps them so two surfaces cannot disagree.
@@ -68,16 +64,16 @@ const CHANGES = [
    THE WORDING IS MINE AND UNAPPROVED. */
 const FAQS = [
   {
-    q: 'How is this different from an analytics dashboard?',
-    a: 'An analytics tool never saw the brief. It can tell you a number moved; it cannot tell you which asset, which draft, or which decision moved it. Here the result arrives joined to all three, which is why it can propose a change to the brand instead of only reporting one.',
-  },
-  {
     q: 'Where do the numbers come from?',
     a: 'Your own channels, connected to the workspace. Nothing is modelled or estimated.',
   },
   {
     q: 'What happens when a number has no source?',
     a: 'It shows as ––. A blank you can see is worth more than a figure you cannot check, and it is the same rule the agents follow when a claim has no proof point.',
+  },
+  {
+    q: 'How is this different from an analytics dashboard?',
+    a: 'An analytics tool never saw the brief. It can tell you a number moved; it cannot tell you which asset, which draft, or which decision moved it. Here the result arrives joined to all three, which is why it can propose a change to the brand instead of only reporting one.',
   },
   {
     q: 'Does it change the brand on its own?',
@@ -108,27 +104,22 @@ export default function PlatformMeasurement() {
       <header className={styles.hero}>
         <p className={styles.eyebrow}>[ Measurement ]</p>
         <h1 className={styles.headline}>
-          The brand gets sharper, and you can read the diff.
+          What shipped, and what it moved.
         </h1>
         <p className={styles.intro}>
-          Results do not sit in a dashboard waiting to be remembered. What worked comes back
-          as a proposed change to the brand itself &mdash; so the next round starts from it.
+          Every channel in one view, each figure joined to the asset that earned it &mdash; so
+          performance reads as the work that produced it rather than as a row in a chart.
         </p>
         <div className={styles.actions}>
           <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
           <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
         </div>
 
-        {/* THE LOOP, DRAWN. The same diagram the service heroes use, because
-            it is the same repo in the middle — only what arrives and what
-            changes are this page's. */}
-        <div className={styles.flowWrap}>
-          <FlowDiagram
-            centre="Repo"
-            inputs={RESULTS}
-            inputsLabel="What comes back"
-            outputs={CHANGES}
-          />
+        {/* THE VIEW ITSELF, and nothing beside it. Measurement is a
+            dashboard before it is anything else, and the top of the page is
+            where that gets shown rather than described. */}
+        <div className={styles.heroWindow}>
+          <DashboardWindow />
         </div>
       </header>
 
@@ -137,37 +128,42 @@ export default function PlatformMeasurement() {
       </div>
 
       <section className={`${styles.block} ${styles.blockCentered}`} aria-labelledby="what">
-        <p className={styles.sectionEyebrow}>[ What it is ]</p>
+        <p className={styles.sectionEyebrow}>[ What it measures ]</p>
         <h2 className={styles.blockHead} id="what">
-          A result, and the change it argues for.
+          Every channel, joined to the work.
         </h2>
         <p className={styles.blockIntro}>
-          Measurement here ends in an edit, not a chart. What the quarter proved is proposed
-          against the files every agent reads, with the evidence attached and a person&rsquo;s
-          name on the merge.
+          Results arrive in one place and attach to the asset that earned them, the agent that
+          drafted it and the brief behind it. An analytics tool can tell you a number moved. It
+          cannot tell you which piece of work moved it.
         </p>
 
-        <div className={styles.windowWrap}>
-          <DiffWindow />
+        <div className={styles.flowWrap}>
+          <FlowDiagram
+            centre="Repo"
+            inputs={RESULTS}
+            inputsLabel="What comes back"
+            outputs={CHANGES}
+          />
         </div>
       </section>
 
       <hr className={styles.divider} />
 
-      {/* The view is real and the page should show it — but one section down,
-          as evidence for the argument rather than as the argument. */}
-      <section className={styles.block} aria-labelledby="view">
-        <p className={styles.sectionEyebrow}>[ The view ]</p>
-        <h2 className={styles.blockHead} id="view">
-          What shipped, and what it moved.
+      {/* AND THE PAYOFF. Everything above is a report until this happens. */}
+      <section className={`${styles.block} ${styles.blockCentered}`} aria-labelledby="next">
+        <p className={styles.sectionEyebrow}>[ What happens next ]</p>
+        <h2 className={styles.blockHead} id="next">
+          The brand gets sharper, and you can read the diff.
         </h2>
         <p className={styles.blockIntro}>
-          Every asset that leaves the library is tagged, so the quarter is a list rather than
-          somebody&rsquo;s memory of it — and each figure traces back to the work that earned it.
+          What the quarter proved is proposed against the files every agent reads &mdash; a claim
+          you may now make, a way of saying it &mdash; with the evidence attached and a
+          person&rsquo;s name on the merge.
         </p>
 
         <div className={styles.windowWrap}>
-          <DashboardWindow />
+          <DiffWindow />
         </div>
       </section>
 
