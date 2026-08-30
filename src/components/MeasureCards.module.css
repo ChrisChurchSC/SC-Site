@@ -1,0 +1,171 @@
+/* The three under the measurement hero — see MeasureCards.jsx. The card
+   chrome comes from PlatformCards; everything here is what goes in the well. */
+
+.rowThree {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* THE WELL'S CONTENTS. A pane rather than a floating stack: the platform
+   cards put a surface inside the card and the previews read as product
+   because of it. */
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  padding: 14px 15px;
+  border-radius: 10px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.paneHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.path {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Teal, not pink: this is a state that is fine, and pink on this site means
+   the one thing being pointed at. */
+.ok,
+.sample {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+}
+
+.ok {
+  border: 1px solid rgba(78, 207, 179, 0.4);
+  color: var(--teal, #4ecfb3);
+}
+
+.sample {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── PROVE ─────────────────────────────────────────────────────────────── */
+
+.lines { display: flex; flex-direction: column; gap: 8px; }
+
+.add {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(78, 207, 179, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.sign { flex: none; color: var(--teal, #4ecfb3); }
+
+.meta {
+  padding-left: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── SPEND ─────────────────────────────────────────────────────────────── */
+
+.bars { display: flex; flex-direction: column; gap: 11px; }
+
+.barRow {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 9px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.barName { color: rgba(255, 255, 255, 0.6); }
+
+.track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(223, 78, 214, 0.42);
+}
+
+/* The best of the three carries the full colour, so the comparison reads
+   before the numbers are. */
+.fillBest { background: var(--pink, #df4ed6); }
+
+.barValue { text-align: right; color: rgba(255, 255, 255, 0.75); }
+
+/* ── COMPOUND ──────────────────────────────────────────────────────────── */
+
+.rows { display: flex; flex-direction: column; gap: 9px; margin: 0; }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rowKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.rowValue {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: right;
+}
+
+/* The line that says what the pane above it is for, at the foot of every one
+   of the three so they end on the same beat. */
+.foot {
+  margin: auto 0 0;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 860px) {
+  .rowThree { grid-template-columns: minmax(0, 1fr); }
+}

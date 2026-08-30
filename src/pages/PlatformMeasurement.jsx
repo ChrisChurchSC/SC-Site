@@ -1,4 +1,3 @@
-import { Layers, GitBranch, EyeOff } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './PlatformMeasurement.module.css'
@@ -8,6 +7,7 @@ import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
 import DiffWindow from '../components/DiffWindow'
+import MeasureCards from '../components/MeasureCards'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
@@ -93,24 +93,6 @@ const FAQS = [
 ]
 
 
-const UNDER_HERO = [
-  {
-    Icon: Layers,
-    name: 'One view',
-    note: 'Email, paid, organic, web and the CRM in a single place, read from your own accounts rather than retyped into a slide.',
-  },
-  {
-    Icon: GitBranch,
-    name: 'Joined to the work',
-    note: 'Every figure carries the asset that earned it, the agent that drafted it and the brief it came from.',
-  },
-  {
-    Icon: EyeOff,
-    name: 'No number without a source',
-    note: 'Where there is nothing to read from it shows \u2013\u2013, because a blank you can see is worth more than a figure you cannot check.',
-  },
-]
-
 export default function PlatformMeasurement() {
   const cal = useCalDrawer()
 
@@ -157,18 +139,8 @@ export default function PlatformMeasurement() {
         </div>
       </header>
 
-      <section className={styles.block} aria-label="What the view gives you">
-        <div className={styles.threeUp}>
-          {UNDER_HERO.map(({ Icon, name, note }) => (
-            <article key={name} className={styles.upCard}>
-              <span className={styles.upIcon}>
-                <Icon size={16} strokeWidth={1.3} aria-hidden="true" />
-              </span>
-              <h2 className={styles.upName}>{name}</h2>
-              <p className={styles.upNote}>{note}</p>
-            </article>
-          ))}
-        </div>
+      <section className={styles.cardsBlock} aria-label="What measurement does for the brand">
+        <MeasureCards />
       </section>
 
       <hr className={styles.divider} />

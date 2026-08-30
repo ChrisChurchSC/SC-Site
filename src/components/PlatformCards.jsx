@@ -439,7 +439,7 @@ function ReviewsPreview() {
   )
 }
 
-function Card({ id, lead, rest, size }) {
+export function Card({ id, lead, rest, size, preview }) {
   return (
     <div className={`${styles.card} ${size === 'large' ? styles.cardLarge : styles.cardSmall}`}>
       <div className={styles.cardHead}>
@@ -456,10 +456,11 @@ function Card({ id, lead, rest, size }) {
       {/* The well. The repository card fills it with the product's own UI;
           the rest stay empty on purpose — see the note at the top. */}
       <div className={styles.well} aria-hidden="true">
-        {id === 'brand-repository' ? <RepoPreview /> : null}
-        {id === 'agents' ? <AgentsPreview /> : null}
-        {id === 'reviews' ? <ReviewsPreview /> : null}
-        {id === 'measurement' ? <DashPreview /> : null}
+        {preview ?? null}
+        {!preview && id === 'brand-repository' ? <RepoPreview /> : null}
+        {!preview && id === 'agents' ? <AgentsPreview /> : null}
+        {!preview && id === 'reviews' ? <ReviewsPreview /> : null}
+        {!preview && id === 'measurement' ? <DashPreview /> : null}
       </div>
     </div>
   )
