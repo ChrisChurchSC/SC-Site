@@ -129,7 +129,7 @@ function Donut({ slices, total }) {
   )
 }
 
-export default function DashboardWindow({ label = 'Measurement', ratio, bare = false }) {
+export default function DashboardWindow({ label = 'Measurement', ratio, bare = false, scroll = true }) {
   const { source, columns, rows, channels } = metricsSample
 
   const tiles = [
@@ -210,7 +210,7 @@ export default function DashboardWindow({ label = 'Measurement', ratio, bare = f
         </div>
       </div>
 
-      <div className={`${styles.gridWrap}${bare ? ' ' + styles.gridFade : ''}`}>
+      <div className={`${styles.gridWrap}${bare ? ' ' + styles.gridFade : ''}${scroll ? '' : ' ' + styles.gridStatic}`}>
         <table className={styles.grid}>
           <thead>
             <tr>

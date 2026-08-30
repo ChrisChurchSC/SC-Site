@@ -103,6 +103,15 @@
 /* The table runs past the bottom of a fixed-ratio window on purpose — there
    is more data than fits, and that is true of the real view too. It fades
    out rather than being sliced through the middle of a row. */
+/* Not scrollable: what fits is what shows, and the cut is a fade rather than
+   a row sliced through the middle. Its own fade, because a static table needs
+   one whether or not the window is in bare mode. */
+.gridStatic.gridStatic {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);
+}
+
 .gridFade {
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);
   mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);

@@ -45,6 +45,14 @@ const FALLBACKS = {
     attribution: '[Name], [Role], [Company]',
     placeholder: true,
   },
+  measurement: {
+    quote:
+      'We can finally see which work earned the result, and the next brief ' +
+      'starts from that rather than from an argument about it. Nothing gets ' +
+      're-litigated every quarter.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
   grow: {
     quote:
       'We used to go quiet between launches. Now there is always something in ' +

@@ -66,7 +66,6 @@ function ProofPreview() {
         </div>
       </dl>
 
-      <p className={styles.foot}>A claim the writer may now use, because it has something behind it.</p>
     </div>
   )
 }
@@ -122,7 +121,6 @@ function SpendPreview() {
         </div>
       </dl>
 
-      <p className={styles.foot}>The next budget argues from this rather than from last year&rsquo;s split.</p>
     </div>
   )
 }
@@ -173,7 +171,6 @@ function CompoundPreview() {
         </span>
       </div>
 
-      <p className={styles.foot}>Nobody re-derives what was already settled.</p>
     </div>
   )
 }

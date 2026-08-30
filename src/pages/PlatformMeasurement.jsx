@@ -5,13 +5,13 @@ import styles from './PlatformMeasurement.module.css'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
-import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
 import MeasureCards from '../components/MeasureCards'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
 import HowItWorks from '../components/HowItWorks'
+import TestimonialCard from '../components/TestimonialCard'
 import DotNav from '../components/DotNav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
@@ -175,11 +175,7 @@ export default function PlatformMeasurement() {
 
       <hr className={styles.divider} />
 
-      <div className={styles.strip}>
-        <ClientStrip banner />
-      </div>
-
-      <section className={`${styles.block} ${styles.blockCentered}`} aria-labelledby="what">
+      <section className={`${styles.block} ${styles.blockCentered} ${styles.blockTight}`} aria-labelledby="what">
         <p className={styles.sectionEyebrow}>[ What it measures ]</p>
         <h2 className={styles.blockHead} id="what">
           Every channel, joined to the work.
@@ -197,14 +193,14 @@ export default function PlatformMeasurement() {
             outputs={CHANGES}
             /* The dashboard, not the file browser: on this page what the
                numbers turn into on the way through is the view itself. */
-            centreVisual={<DashboardWindow ratio="4 / 5" />}
+            centreVisual={<DashboardWindow ratio="4 / 5" scroll={false} />}
           />
         </div>
       </section>
 
       <hr className={styles.divider} />
 
-      <section className={styles.block} aria-labelledby="sources">
+      <section className={`${styles.block} ${styles.dotted}`} aria-labelledby="sources">
         <div className={styles.sources}>
           <div className={styles.sourcesCopy}>
             <p className={styles.sectionEyebrow}>[ What it reads from ]</p>
@@ -280,6 +276,10 @@ export default function PlatformMeasurement() {
       <hr className={styles.divider} />
 
       <HowItWorks slug="measurement" />
+
+      <hr className={styles.divider} />
+
+      <TestimonialCard variant="measurement" />
 
       <hr className={styles.divider} />
 
