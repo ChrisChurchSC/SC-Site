@@ -102,7 +102,7 @@ export default function PlatformOutputs({ cards }) {
     <section className={styles.section} aria-labelledby="what-it-makes">
       <p className={styles.eyebrow}>[ What you get ]</p>
       <h2 className={styles.headline} id="what-it-makes">
-        What you end up with.
+        Everything the brand shows up as.
       </h2>
 
       <div className={styles.grid}>
