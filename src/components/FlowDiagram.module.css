@@ -25,6 +25,20 @@
   gap: clamp(28px, 4vw, 58px);
 }
 
+/* A DASHBOARD NEEDS ROOM A FILE LIST DOES NOT. When a page supplies its own
+   centre the middle takes a bigger share and the wrapper gives back its side
+   padding, which is there to keep a 1.35fr middle off the page edges. The
+   side columns lose a little and can afford it — they hold two lines and a
+   row of chips. */
+.flowWide {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.wrapWide {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .column {
   display: flex;
   flex-direction: column;

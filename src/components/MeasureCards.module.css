@@ -169,3 +169,89 @@
 @media (max-width: 860px) {
   .rowThree { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ── ADDED DETAIL ──────────────────────────────────────────────────────────
+   The panes were a header, one fact and a lot of dark. These fill them with
+   the rest of what the artifact actually holds. */
+
+/* The claim as it stood before it had a source, struck. */
+.cut {
+  display: flex;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.34);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+}
+
+.cut .sign { color: rgba(255, 255, 255, 0.3); text-decoration: none; }
+
+/* Which way the whole thing is going, under the comparison of its parts. */
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trendLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 34px;
+}
+
+.sparkBar {
+  flex: 1;
+  min-height: 3px;
+  border-radius: 2px 2px 0 0;
+  background: rgba(223, 78, 214, 0.35);
+}
+
+.spark .sparkBar:last-child { background: var(--pink, #df4ed6); }
+
+/* The loop as three beats: what was read, what was merged, and the round
+   that opens from it. */
+.chain {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.chainStep {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.chainDotDone,
+.chainDotNow {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  justify-self: center;
+}
+
+.chainDotDone { background: rgba(255, 255, 255, 0.28); }
+.chainDotNow { background: var(--pink, #df4ed6); }
+
+.chainText { color: rgba(255, 255, 255, 0.7); }
+.chainNote { color: rgba(255, 255, 255, 0.3); text-align: right; }
+.chainNoteNow { color: var(--pink, #df4ed6); text-align: right; }

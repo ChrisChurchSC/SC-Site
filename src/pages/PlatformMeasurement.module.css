@@ -532,6 +532,22 @@
     repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 52px);
 }
 
+.groupLabel {
+  margin: 0;
+  padding: 4px clamp(16px, 2vw, 26px) 8px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.groupLabelRule {
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
 .sourceRow {
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr) auto;

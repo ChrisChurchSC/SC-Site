@@ -58,3 +58,33 @@
   .dot::before,
   .dotOn::before { transition: none; }
 }
+
+/* THE TIP COMES OUT TO THE LEFT. The shared [data-tip] rule puts it above and
+   centred, which is right for a control in the middle of a page and wrong for
+   a rail pinned to the right edge — above a 20px dot it sits over the dot
+   above it, and it reaches toward the edge it is already against.
+
+   The doubled class outranks the bare attribute selector rather than tying
+   with it, so this does not depend on which stylesheet loads first. */
+.dot.dot[data-tip]::after,
+.dotOn.dotOn[data-tip]::after {
+  bottom: auto;
+  left: auto;
+  top: 50%;
+  right: calc(100% + 9px);
+  transform: translateY(-50%) translateX(3px);
+}
+
+.dot.dot[data-tip]:hover::after,
+.dotOn.dotOn[data-tip]:hover::after {
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot.dot[data-tip]::after,
+  .dotOn.dotOn[data-tip]::after,
+  .dot.dot[data-tip]:hover::after,
+  .dotOn.dotOn[data-tip]:hover::after {
+    transform: translateY(-50%);
+  }
+}

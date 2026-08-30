@@ -167,12 +167,12 @@ export default function FlowDiagram({
   }, [measure, outputs])
 
   return (
-    <div className={styles.wrap}>
+    <div className={`${styles.wrap}${centreVisual ? ' ' + styles.wrapWide : ''}`}>
       {/* The wash behind it, which the reference uses to tie the three
           columns into one object. Pink rather than orange, and low enough
           that the cards still read as sitting on the page. */}
 
-      <div className={styles.flow} ref={flowRef}>
+      <div className={`${styles.flow}${centreVisual ? ' ' + styles.flowWide : ''}`} ref={flowRef}>
         {wires && (
           <svg
             className={styles.wires}

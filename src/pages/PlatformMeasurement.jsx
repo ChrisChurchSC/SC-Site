@@ -7,7 +7,6 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
-import DiffWindow from '../components/DiffWindow'
 import MeasureCards from '../components/MeasureCards'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import FlowDiagram from '../components/FlowDiagram'
@@ -94,6 +93,12 @@ const FAQS = [
 ]
 
 
+const READERS = [
+  { name: 'Claude', initials: 'Cl', logo: '/marks/claude.png' },
+  { name: 'Grok', initials: 'Gr', logo: '/marks/grok.png' },
+  { name: 'ChatGPT', initials: 'GPT', logo: '/marks/chatgpt.png' },
+]
+
 const SOURCES = [
   { name: 'Google Analytics', initials: 'GA', logo: '/marks/google-analytics.svg' },
   { name: 'Meta Ads', initials: 'MA', logo: '/marks/meta-ads.png' },
@@ -162,6 +167,8 @@ export default function PlatformMeasurement() {
         </div>
       </header>
 
+      <hr className={styles.divider} />
+
       <section className={styles.cardsBlock} aria-label="What measurement does for the brand">
         <MeasureCards />
       </section>
@@ -197,25 +204,6 @@ export default function PlatformMeasurement() {
 
       <hr className={styles.divider} />
 
-      {/* AND THE PAYOFF. Everything above is a report until this happens. */}
-      <section className={`${styles.block} ${styles.blockCentered}`} aria-labelledby="next">
-        <p className={styles.sectionEyebrow}>[ What happens next ]</p>
-        <h2 className={styles.blockHead} id="next">
-          The brand gets sharper, and you can read the diff.
-        </h2>
-        <p className={styles.blockIntro}>
-          What the quarter proved is proposed against the files every agent reads &mdash; a claim
-          you may now make, a way of saying it &mdash; with the evidence attached and a
-          person&rsquo;s name on the merge.
-        </p>
-
-        <div className={styles.windowWrap}>
-          <DiffWindow />
-        </div>
-      </section>
-
-      <hr className={styles.divider} />
-
       <section className={styles.block} aria-labelledby="sources">
         <div className={styles.sources}>
           <div className={styles.sourcesCopy}>
@@ -224,9 +212,10 @@ export default function PlatformMeasurement() {
               There is no list to be on.
             </h2>
             <p className={styles.blockIntro}>
-              An agent reads the numbers wherever they already live and writes them into the repo
-              as a file. So a platform nobody has integrated is a new row rather than a feature
-              request &mdash; and every figure on the page can name the file it came from.
+              The models do the reading. They pull the numbers from wherever those already live
+              and write them into the repo as a file &mdash; so a platform nobody has integrated is
+              a new row rather than a feature request, and every figure can name the file it came
+              from.
             </p>
           </div>
 
@@ -240,6 +229,21 @@ export default function PlatformMeasurement() {
               </p>
             </div>
             <div className={styles.sourcesBody}>
+              <p className={styles.groupLabel}>Read by</p>
+              {READERS.map(({ name, logo, initials }) => (
+                <div key={name} className={styles.sourceRow}>
+                  <span className={styles.sourceIcon}>
+                    <Mark logo={logo} initials={initials} name={name} />
+                  </span>
+                  <span className={styles.sourceName}>{name}</span>
+                  <span className={styles.sourceState}>
+                    <span className={styles.dot} />
+                    Scraping
+                  </span>
+                </div>
+              ))}
+
+              <p className={`${styles.groupLabel} ${styles.groupLabelRule}`}>From</p>
               {SOURCES.map(({ name, logo, initials }) => (
                 <div key={name} className={styles.sourceRow}>
                   <span className={styles.sourceIcon}>
