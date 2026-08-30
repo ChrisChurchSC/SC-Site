@@ -37,17 +37,12 @@
 .card {
   display: flex;
   flex-direction: column;
-  aspect-ratio: 4 / 5;
   padding: clamp(20px, 2.2vw, 30px);
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--r-surface, 12px);
 }
 
-.card:hover {
-  border-color: rgba(223, 78, 214, 0.4);
-  background: #131313;
-}
 
 .name {
   margin: 0 0 8px;
@@ -76,6 +71,10 @@
 }
 
 .chip {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
   padding: 6px 10px;
   font-family: "Roboto Mono", monospace;
   font-size: 11px;
@@ -95,29 +94,29 @@
   .headline { max-width: none; }
 }
 
-/* The affordance sits under the chips, so the card reads name, promise,
-   inventory, way in — in that order. */
-.cardLink {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: clamp(18px, 2vw, 26px);
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.42);
-  transition: color 0.15s;
-}
 
-.card:hover .cardLink { color: var(--pink, #df4ed6); }
 
-.arrow { transition: transform 0.15s; }
-.card:hover .arrow { transform: translateX(3px); }
 
 /* The real entry price, under all three. */
 
 
 @media (prefers-reduced-motion: reduce) {
-  .card, .cardLink, .arrow { transition: none; }
+  .card { transition: none; }
+}
+
+
+/* The image well. Flat fill for now — see the note in the JSX. */
+.media {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: clamp(18px, 2vw, 26px);
+  border-radius: calc(var(--r-surface, 12px) - 4px);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* The tier number, in the pricing page's own register. */
@@ -135,7 +134,6 @@
    than trailing the card. */
 .footnote {
   margin: 16px 0 0;
-  order: 1;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: 12.5px;
@@ -143,34 +141,38 @@
   color: rgba(255, 255, 255, 0.36);
 }
 
-/* Pinned to the bottom by the auto margin, so the four figures line up
-   across a row whatever the deliverable lists do above them. */
-.price {
-  order: 2;
-  margin-top: auto;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding-top: clamp(18px, 2vw, 26px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
 
 
-.unit {
-  font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.4);
-}
 
-.figure {
-  margin-left: auto;
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(24px, 2.2vw, 32px);
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.96);
-}
 
 /* The chips stop growing the card and the price stays at the foot. */
 .card > .chips { margin-bottom: 0; }
+
+/* What the well is showing. Mono, because it is naming a thing in a list
+   rather than saying a sentence. */
+.mediaLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+/* The selected pill. Border and text rather than a filled ground: filled, it
+   read as the primary action on the card, which it is not — it is a
+   selection within a list. */
+.chipOn {
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(223, 78, 214, 0.55);
+  background: rgba(223, 78, 214, 0.1);
+}
+
+.chip:hover { color: rgba(255, 255, 255, 0.9); }
+
+.chip:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip { transition: none; }
+}

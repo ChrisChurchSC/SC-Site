@@ -8,6 +8,7 @@ import FlowDiagram from '../components/FlowDiagram'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
+import FeaturedWall from '../components/FeaturedWall'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { serviceBySlug } from '../data/services'
@@ -112,6 +113,8 @@ export default function ServiceV3() {
       <PlatformIntro />
 
       <PlatformOutputs />
+
+      <FeaturedWall />
 
       <FooterCard columns={FOOTER_COLS} />
 

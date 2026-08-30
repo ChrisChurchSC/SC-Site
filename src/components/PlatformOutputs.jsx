@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import styles from './PlatformOutputs.module.css'
 import { tabs } from '../data/pricingTabs'
 
@@ -11,11 +13,13 @@ import { tabs } from '../data/pricingTabs'
  * to a campaign rather than things it hands over — right on /pricing, wrong
  * under a heading that says what the platform makes.
  *
- * READ, NOT RETYPED. Every card here is a project tier out of pricingTabs:
- * the name, the summary, the deliverables, the footnote, the price and its
- * unit. Nothing is duplicated, so this section cannot quote a price the
- * pricing page has stopped charging — which is exactly what "tied to the
- * pricing" has to mean for it to be worth anything.
+ * READ, NOT RETYPED. Every card here is a project tier out of pricingTabs —
+ * the name, the summary, the deliverables and the footnote — so this section
+ * cannot describe a tier the pricing page has stopped selling.
+ *
+ * NO FIGURES. The cards carried their price and unit for a while and no
+ * longer do; the price lives on /pricing. The tie to pricing is now the
+ * shared source rather than a number on the card.
  *
  * BRAND IS CUT HERE, and only here — it is still a tier and still on
  * /pricing. Three cards, three across.
@@ -28,7 +32,50 @@ const project = tabs.find((t) => t.id === 'project')
 const CUT = new Set(['Brand'])
 const TIERS = project.tiers.filter((t) => !CUT.has(t.name))
 
-const money = (n) => `$${n.toLocaleString('en-US')}`
+/**
+ * One card. The pills pick which deliverable the well shows, so the list is
+ * something you can look through rather than a label.
+ *
+ * The well is still a flat fill — there is no artwork in the repo for any of
+ * these — so what changes on a click is the name in it. That is enough to
+ * make the control legible now, and the moment images exist this is the one
+ * place that has to change: give the well an <img> and keep the index.
+ *
+ * The pills are real buttons, so they are focusable and operable from the
+ * keyboard without anything extra. aria-pressed carries the state, and the
+ * well is aria-live so a screen reader hears the change it just made.
+ */
+function Card({ kicker, name, summary, items, note }) {
+  const [active, setActive] = useState(0)
+
+  return (
+    <article className={styles.card}>
+      <div className={styles.media}>
+        <span className={styles.mediaLabel} aria-live="polite">{items[active]}</span>
+      </div>
+
+      <span className={styles.kicker}>{kicker}</span>
+      <h3 className={styles.name}>{name}</h3>
+      <p className={styles.note}>{summary}</p>
+
+      <div className={styles.chips}>
+        {items.map((l, i) => (
+          <button
+            key={l}
+            type="button"
+            className={`${styles.chip}${i === active ? ' ' + styles.chipOn : ''}`}
+            aria-pressed={i === active}
+            onClick={() => setActive(i)}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {note && <p className={styles.footnote}>{note}</p>}
+    </article>
+  )
+}
 
 export default function PlatformOutputs() {
   return (
@@ -39,35 +86,19 @@ export default function PlatformOutputs() {
       </h2>
 
       <div className={styles.grid}>
-        {TIERS.map(({ kicker, name, summary, lines, outputs, note, outputsNote, price, unit }) => (
-          <article key={kicker} className={styles.card}>
-            <span className={styles.kicker}>{kicker}</span>
-            <h3 className={styles.name}>{name}</h3>
-            <p className={styles.note}>{summary}</p>
-
-            <div className={styles.chips}>
-              {/* A tier that names its own outputs uses them; the rest fall
-                  back to their deliverables, which already read as outputs. */}
-              {(outputs ?? lines).map((l) => <span key={l} className={styles.chip}>{l}</span>)}
-            </div>
-
-            {/* Only Campaign and Channels carry one, and it qualifies the
-                price, so it sits with the price rather than the list. A tier
-                can give this section a shorter note than /pricing shows —
-                Campaign does, because its full scope caveat belongs beside a
-                quote rather than beside a picture. */}
-            {(outputsNote ?? note) && (
-              <p className={styles.footnote}>{outputsNote ?? note}</p>
-            )}
-
-            <div className={styles.price}>
-              <span className={styles.unit}>{unit}</span>
-              <span className={styles.figure}>{money(price)}</span>
-            </div>
-          </article>
+        {TIERS.map(({ kicker, name, summary, lines, outputs, note, outputsNote }, i) => (
+          <Card
+            key={kicker}
+            kicker={String(i + 1).padStart(2, '0')}
+            name={name}
+            summary={summary}
+            /* A tier that names its own outputs uses them; the rest fall
+               back to their deliverables, which already read as outputs. */
+            items={outputs ?? lines}
+            note={outputsNote ?? note}
+          />
         ))}
       </div>
-
     </section>
   )
 }
