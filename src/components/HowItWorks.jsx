@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
 import styles from './HowItWorks.module.css'
+import AssetsGridWindow from './AssetsGridWindow'
 import AssetWindow from './AssetWindow'
 import InMarketPanel from './InMarketPanel'
 import DashboardWindow from './DashboardWindow'
-import RepoWindow from './RepoWindow'
 
 /**
  * HOW IT WORKS — the operating loop of a service.
@@ -39,7 +39,7 @@ const SETS = {
       {
         n: '01',
         name: 'Ship',
-        visual: 'asset',
+        visual: 'assets',
         note: 'The work gets made and goes out — drafted out of the repo, so it already sounds like you.',
       },
       {
@@ -57,7 +57,7 @@ const SETS = {
       {
         n: '04',
         name: 'Compound',
-        visual: 'repo',
+        visual: 'learning',
         note: 'Next month starts from what worked. Nothing gets rebuilt, and nothing gets guessed twice.',
       },
     ],
@@ -104,10 +104,15 @@ const SETS = {
    channel panel, the measurement window and the repo are all already built,
    and a second illustrated version of any of them would drift. */
 const VISUALS = {
-  asset: AssetWindow,
+  /* The creative that got made. */
+  assets: AssetsGridWindow,
+  /* The same assets, seen by where they went. */
   market: InMarketPanel,
+  /* The analytics. */
   dashboard: DashboardWindow,
-  repo: () => <RepoWindow big />,
+  /* The learning: one asset against the account's own trailing average,
+     which is the reading a decision to repeat or drop it comes from. */
+  learning: AssetWindow,
 }
 
 export default function HowItWorks({ slug = 'grow' }) {

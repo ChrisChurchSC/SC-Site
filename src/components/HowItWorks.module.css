@@ -204,3 +204,39 @@
 @media (max-width: 1000px) {
   .split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }
+
+/* ONE FRAME, FOUR SCREENS. The windows size themselves differently on their
+   own pages — the dashboard is 16:9, the repo and the asset view are as tall
+   as their content — and switching between them here made the section jump
+   by hundreds of pixels each time. The stage sets the shape and every screen
+   fills it.
+
+   .split .stage > * rather than .stage > *: the child carries its own
+   .window class from its own stylesheet, and at equal specificity which rule
+   wins depends on bundle order. Two classes beats one, whatever the order. */
+.stage {
+  /* A GROUND BEHIND THE SCREEN, so the pair reads as one framed image rather
+     than a floating panel — the same move the platform section makes with
+     its dot field. The window sits inset on it, which is what gives it a
+     mount instead of an edge. */
+  aspect-ratio: 1 / 1;
+  padding: clamp(14px, 1.8vw, 26px);
+  border-radius: clamp(14px, 1.6vw, 22px);
+  background: radial-gradient(
+    120% 100% at 50% 0%,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.02) 55%,
+    rgba(255, 255, 255, 0.012) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.split .stage > * {
+  height: 100%;
+  width: 100%;
+  /* Undoes the dashboard's own 16:9. */
+  aspect-ratio: auto;
+  /* A screen taller than the frame scrolls inside it rather than being cut:
+     a clipped table looks like a bug, a scrolling one looks like a window. */
+  overflow: auto;
+}
