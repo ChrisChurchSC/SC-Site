@@ -542,18 +542,24 @@
 
 .sourceIcon { color: rgba(255, 255, 255, 0.4); display: grid; place-items: center; }
 
-/* A real mark, rendered at its own shape. Grey by default so six different
-   brand colours do not fight the page, full colour on hover of the row. */
-.logo {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.75;
-  transition: filter 0.15s, opacity 0.15s;
+/* A pale plaque under every mark. Klaviyo's is near-black and would vanish
+   on this card, and a mark that is legible only if its owner picked a light
+   colour is not a treatment. */
+.plaque {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  overflow: hidden;
 }
 
-.sourceRow:hover .logo { filter: none; opacity: 1; }
+.logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
 
 /* And the stand-in until the file exists: initials, not a lookalike. */
 .initials {

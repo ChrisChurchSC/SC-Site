@@ -95,18 +95,24 @@ const FAQS = [
 
 
 const SOURCES = [
-  { name: 'Google Analytics', initials: 'GA' },
-  { name: 'Meta Ads', initials: 'MA' },
-  { name: 'LinkedIn', initials: 'Li' },
-  { name: 'Klaviyo', initials: 'Kl' },
-  { name: 'HubSpot', initials: 'HS' },
-  { name: 'Shopify', initials: 'Sh' },
+  { name: 'Google Analytics', initials: 'GA', logo: '/marks/google-analytics.svg' },
+  { name: 'Meta Ads', initials: 'MA', logo: '/marks/meta-ads.png' },
+  { name: 'LinkedIn', initials: 'Li', logo: '/marks/linkedin.png' },
+  { name: 'Klaviyo', initials: 'Kl', logo: '/marks/klaviyo.png' },
+  { name: 'HubSpot', initials: 'HS', logo: '/marks/hubspot.png' },
+  { name: 'Shopify', initials: 'Sh', logo: '/marks/shopify.png' },
 ]
 
 /* The mark for a row: a real file when there is one, a letter tile when there
    is not. Never a drawn lookalike. */
 function Mark({ logo, initials, name }) {
-  if (logo) return <img className={styles.logo} src={logo} alt="" width="20" height="20" />
+  if (logo) {
+    return (
+      <span className={styles.plaque}>
+        <img className={styles.logo} src={logo} alt="" width="18" height="18" loading="lazy" />
+      </span>
+    )
+  }
   return <span className={styles.initials} title={name}>{initials}</span>
 }
 
