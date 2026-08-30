@@ -14,8 +14,10 @@ import { repoFiles } from '../data/repo'
  * (src/data/repo.js); this puts the frame in one place too.
  *
  * `label` fills the slot the repository panel uses for PRIVATE. `big` is the
- * standalone treatment: larger type and taller rows, for when the window is
- * the subject rather than one of three columns.
+ * standalone treatment: larger type, taller rows, and a second pane of real
+ * assets beside the file list — for when the window is the subject rather
+ * than one of three columns. The asset pane is big-only because at the
+ * hero's 464px it would have left two unreadable halves.
  */
 
 /* Drawn rather than imported — one path is cheaper than a dependency for a
@@ -33,6 +35,8 @@ function Folder() {
   )
 }
 
+const ASSET_TILES = 9
+
 export default function RepoWindow({ label = 'Repo', big = false }) {
   return (
     <div className={`${styles.window}${big ? ' ' + styles.big : ''}`}>
@@ -49,17 +53,38 @@ export default function RepoWindow({ label = 'Repo', big = false }) {
         <span className={styles.tab}>Activity</span>
       </div>
 
-      <ul className={styles.body}>
-        {repoFiles.map(({ folder, name, age }) => (
-          <li key={folder + name} className={styles.row}>
-            <Folder />
-            <span className={styles.rowPath}>
-              <span className={styles.rowFolder}>{folder}/</span>{name}
-            </span>
-            <span className={styles.rowAge}>{age}</span>
-          </li>
-        ))}
-      </ul>
+      <div className={styles.panes}>
+        <ul className={styles.body}>
+          {repoFiles.map(({ folder, name, age }) => (
+            <li key={folder + name} className={styles.row}>
+              <Folder />
+              <span className={styles.rowPath}>
+                <span className={styles.rowFolder}>{folder}/</span>{name}
+              </span>
+              <span className={styles.rowAge}>{age}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Assets, only in the standalone treatment — see .panes. */}
+        {big && (
+          <div className={styles.assets}>
+            <div className={styles.assetsHead}>
+              <span className={styles.assetsPath}>Library/</span>
+              <span className={styles.assetsCount}>{ASSET_TILES} of ––</span>
+            </div>
+            {/* PLACEHOLDER FILLS, deliberately. These stood in as real case
+                study stills for one revision; two of those paths 404'd, and
+                the colour pulled the eye off the file list beside them. They
+                are flat tiles until somebody picks the artwork. */}
+            <div className={styles.assetGrid} aria-hidden="true">
+              {Array.from({ length: ASSET_TILES }, (_, i) => (
+                <div key={i} className={styles.asset} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
