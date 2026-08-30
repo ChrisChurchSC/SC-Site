@@ -1,12 +1,12 @@
-/* One agent at work — see AgentWindow.jsx. Same chrome as every other window
-   on the site; only the body differs. */
+/* One agent's definition file — see AgentWindow.jsx. Same chrome as every
+   other window on the site; only the body differs. */
 
 .window {
   position: relative;
   display: flex;
   flex-direction: column;
-  /* 16:9. The draft column scrolls inside it rather than the window growing,
-     so the ratio holds and nothing is clipped. */
+  /* 16:9, with the document column scrolling inside it rather than the
+     window growing — the ratio holds and nothing clips. */
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #101010;
@@ -19,11 +19,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px 22px;
+  padding: 15px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
   font-family: "Roboto Mono", monospace;
-  font-size: 13px;
+  font-size: 12.5px;
 }
 
 .crumbMuted { color: rgba(255, 255, 255, 0.38); }
@@ -34,8 +34,8 @@
   padding: 3px 9px;
   border: 1px solid rgba(223, 78, 214, 0.45);
   border-radius: var(--r-control, 4px);
-  font-size: 9.5px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
   color: var(--pink, #df4ed6);
 }
@@ -43,11 +43,11 @@
 .tabs {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 14px 22px;
+  gap: 18px;
+  padding: 12px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-family: "Roboto Mono", monospace;
-  font-size: 12px;
+  font-size: 11.5px;
 }
 
 .tab { color: rgba(255, 255, 255, 0.3); }
@@ -63,41 +63,41 @@
   padding: 3px 9px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* The definition beside the draft, so the rule and the thing it produced are
-   readable together — that pairing is the point of the screen. */
 .body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.42fr);
 }
 
+/* THE SIDE PANEL IS THE AGENT; the column beside it is its file. It was a
+   name and a line in a half-empty pane — the meta and the refusal are what
+   give it something to be. */
 .side {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: clamp(16px, 2vw, 24px) clamp(16px, 2vw, 22px);
+  gap: clamp(14px, 1.8vw, 20px);
+  padding: clamp(16px, 2vw, 22px) clamp(16px, 1.8vw, 20px);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   overflow: auto;
 }
 
-/* The agent, at the top of its own panel. */
 .who {
   display: flex;
   align-items: flex-start;
   gap: 11px;
-  padding-bottom: 14px;
+  padding-bottom: clamp(14px, 1.8vw, 18px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* A disc, so it reads as a profile picture — the shape does that work, and
-   the glyph inside keeps it honest about being a role. */
+/* A disc, so it reads as a profile picture — the shape does that, and the
+   glyph inside keeps it honest about being a role rather than a person. */
 .avatar {
   display: grid;
   place-items: center;
@@ -105,12 +105,12 @@
   height: 36px;
   flex: none;
   border-radius: 50%;
-  background: rgba(223, 78, 214, 0.12);
-  border: 1px solid rgba(223, 78, 214, 0.32);
-  color: var(--pink, #df4ed6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.whoText { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.whoText { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 
 .whoName {
   font-family: "Roboto Mono", monospace;
@@ -121,64 +121,156 @@
 .whoDoes {
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
-  font-size: 12px;
-  line-height: 1.35;
+  font-size: 12.5px;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.45);
 }
 
-.sideLabel {
+/* Key over value rather than side by side: at this column width a two-up
+   row leaves the value one word per line. */
+.meta { display: flex; flex-direction: column; gap: 12px; margin: 0; }
+
+.metaRow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+
+.metaKey {
   font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.3);
 }
 
-.def { display: flex; flex-direction: column; gap: 12px; margin: 0; }
-
-.defRow { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-
-.defKey {
-  font-family: "Roboto Mono", monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.32);
-}
-
-.defValue {
+.metaValue {
   margin: 0;
   font-family: "Roboto Mono", monospace;
   font-size: 11px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.75);
 }
 
-
-
-
-
-/* WHERE IT STOPS, as a block rather than a trailing clause: the refusal is
-   the line that makes the rest of the file trustworthy. */
-.marker {
+/* The refusal, pushed to the foot of the panel — it is the last word on what
+   this agent is, and it is the reason the file can be trusted. */
+.wont {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin: 4px 0 0;
-  padding: 12px 14px;
+  margin-top: auto;
+  padding: 12px 13px;
   border-radius: 8px;
   background: rgba(223, 78, 214, 0.08);
   border: 1px solid rgba(223, 78, 214, 0.32);
+}
+
+.wontKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.wontValue {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* THE FILE. */
+.doc {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(11px, 1.3vw, 15px);
+  padding: clamp(14px, 1.6vw, 20px) clamp(18px, 2.2vw, 28px);
+  overflow: auto;
+}
+
+/* Frontmatter, fenced as it is in the file — the part that makes an agent a
+   thing rather than a prompt. */
+.front {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 13px;
+  border-radius: 8px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   font-family: "Roboto Mono", monospace;
   font-size: 11px;
   line-height: 1.5;
 }
 
-.markerKey { color: var(--pink, #df4ed6); letter-spacing: 0.06em; }
-.markerBody { color: rgba(255, 255, 255, 0.72); }
+.fence { color: rgba(255, 255, 255, 0.22); }
 
-@media (max-width: 760px) {
+.frontRow { display: flex; gap: 7px; min-width: 0; }
+
+.frontKey { color: rgba(255, 255, 255, 0.45); flex: none; }
+.frontValue { color: rgba(255, 255, 255, 0.75); min-width: 0; }
+
+.sec { display: flex; flex-direction: column; gap: 6px; }
+
+/* A rule above each heading, so the file reads as sections rather than as a
+   run of labelled lines. */
+.secHead {
+  margin: 0 0 2px;
+  padding-top: clamp(9px, 1vw, 12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+/* Sentences in the serif, paths and lists in mono — the same rule the rest
+   of the site follows. */
+.secLine {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 0.98vw, 15px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.secMono {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* The marker it writes when it has to stop, at the foot of the file. */
+.marker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+
+.markerKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.markerBody {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 860px) {
   .window { aspect-ratio: auto; }
   .body { grid-template-columns: minmax(0, 1fr); }
   .side { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  .wont, .marker { margin-top: 0; }
 }

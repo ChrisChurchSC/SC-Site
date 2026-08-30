@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom'
 import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+import { NavLink } from 'react-router-dom'
 
 import styles from './PlatformAgents.module.css'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
@@ -8,10 +8,11 @@ import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
 import AgentWindow from '../components/AgentWindow'
+import AgentRail from '../components/AgentRail'
+import HowItWorks from '../components/HowItWorks'
 import DotNav from '../components/DotNav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
-import { agents } from '../data/agents'
 
 /**
  * /platform/agents — the first of the six platform pages.
@@ -29,12 +30,13 @@ import { agents } from '../data/agents'
  * The icons are this page's own, matching the homepage card's set so the six
  * are recognisable across surfaces.
  */
-const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
 
 /* How a draft actually gets from an agent to something live. This is the
    sync CLI's real behaviour: a push opens a numbered review holding what the
    files would become, it writes nothing live, and merging is a person's
    job. */
+const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
+
 const CELLS = [
   { r: 2, c: 3, i: 0 },
   { r: 4, c: 6, i: null },
@@ -68,23 +70,6 @@ const CELLS = [
 ]
 
 
-const FLOW = [
-  {
-    n: '01',
-    name: 'It drafts',
-    note: 'Out of the repo — your positioning, your voice, your approved claims. Not a general model guessing at your brand.',
-  },
-  {
-    n: '02',
-    name: 'It marks what it cannot source',
-    note: 'A claim with no proof point behind it comes back flagged rather than invented. The gap is the output.',
-  },
-  {
-    n: '03',
-    name: 'A person approves it',
-    note: 'Every change is proposed. Nothing an agent writes goes live until somebody merges it.',
-  },
-]
 
 export default function PlatformAgents() {
   const cal = useCalDrawer()
@@ -145,7 +130,7 @@ export default function PlatformAgents() {
         <ClientStrip banner />
       </div>
 
-      <section className={styles.block} aria-labelledby="what">
+      <section className={`${styles.block} ${styles.blockCentered}`} aria-labelledby="what">
         <p className={styles.sectionEyebrow}>[ What they are ]</p>
         <h2 className={styles.blockHead} id="what">
           Not a chatbot. A role, written down.
@@ -163,52 +148,11 @@ export default function PlatformAgents() {
 
       <hr className={styles.divider} />
 
-      <section className={styles.block} aria-labelledby="roster">
-        <p className={styles.sectionEyebrow}>[ The six ]</p>
-        <h2 className={styles.blockHead} id="roster">
-          One for each part of the job.
-        </h2>
-
-        <div className={styles.grid}>
-          {agents.map(({ name, does, wont }, i) => {
-            const Icon = ICONS[i]
-            return (
-              <article key={name} className={styles.card}>
-                <span className={styles.cardIcon}>
-                  <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
-                </span>
-                <h3 className={styles.cardName}>{name}</h3>
-                <p className={styles.cardDoes}>{does}</p>
-                {/* The refusal as the card's tag — the reference puts a
-                    category chip here, and for these six the refusal is the
-                    category that matters. */}
-                <span className={styles.cardWont}>
-                  <span className={styles.wontKey}>Will not</span> {wont}
-                </span>
-              </article>
-            )
-          })}
-        </div>
-      </section>
+      <AgentRail />
 
       <hr className={styles.divider} />
 
-      <section className={styles.block} aria-labelledby="how">
-        <p className={styles.sectionEyebrow}>[ How they work ]</p>
-        <h2 className={styles.blockHead} id="how">
-          A draft, a flag, and a person who says yes.
-        </h2>
-
-        <ol className={styles.flow}>
-          {FLOW.map(({ n, name, note }) => (
-            <li key={n} className={styles.step}>
-              <span className={styles.stepNum}>{n}</span>
-              <h3 className={styles.stepName}>{name}</h3>
-              <p className={styles.stepNote}>{note}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <HowItWorks slug="agents" />
 
       <hr className={styles.divider} />
 

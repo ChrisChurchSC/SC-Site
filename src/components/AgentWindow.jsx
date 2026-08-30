@@ -4,16 +4,21 @@ import styles from './AgentWindow.module.css'
 import { agents } from '../data/agents'
 
 /**
- * ONE AGENT, AT WORK — the window in the "what they are" section.
+ * ONE AGENT'S DEFINITION FILE — the window in the "what they are" section.
  *
- * THE FILE, NOT ITS OUTPUT. It showed a draft with a marker in it, which
- * demonstrated what an agent DOES — but the section it sits in is explaining
- * what an agent IS, and the answer to that is the definition.
+ * IT IS THE FILE, drawn the way the file actually looks: frontmatter at the
+ * top, then the body. That is the answer to "what is an agent" — a markdown
+ * file with a name, a description, a tool list and a rule it will not break.
  *
- * Every line is from comms-writer's own definition: what it drafts, which
- * files it reads, the tools it has, and the thing it escalates rather than
- * deciding. [CLAIM NEEDED: …] is a string these agents genuinely write — the
- * brand's notes call the markers the product rather than boilerplate.
+ * EVERYTHING HERE IS REAL. The description and the escalation are
+ * comms-writer's own; the tool list is the one it is given; [CLAIM NEEDED: …]
+ * is a string these agents genuinely write, and the brand's notes call the
+ * markers the product rather than boilerplate. The dates in the side panel
+ * are sample, which is what the tag says.
+ *
+ * comms-writer is shown because its refusal is the legible one: it drafts
+ * everything the brand says out loud, and it still will not decide what may
+ * be claimed.
  */
 const ICONS = {
   'brand-strategist': Compass,
@@ -27,23 +32,37 @@ const ICONS = {
 const AGENT = agents.find((a) => a.name === 'comms-writer') ?? agents[0]
 const AgentIcon = ICONS[AGENT.name] ?? PenLine
 
-const DEFINITION = [
+/* The frontmatter, as it is written in the file. */
+const FRONTMATTER = [
+  ['name', 'comms-writer'],
+  ['description', 'Drafts and edits anything the brand says out loud.'],
+  ['tools', 'Read, Grep, Glob, Write, Edit'],
+]
+
+const SECTIONS = [
   {
-    key: 'Role',
-    value: 'Drafts and edits anything the brand says out loud — launch copy, landing pages, emails, posts, decks, client comms, case studies.',
+    head: 'Use when',
+    lines: ['Finished words are the deliverable — launch copy, landing pages, emails, posts, decks, client comms, case studies.'],
   },
   {
-    key: 'Reads',
-    value: 'Verbal/tone-of-voice.md · Strategy/positioning.md',
+    head: 'Reads',
+    lines: ['Verbal/tone-of-voice.md', 'Strategy/positioning.md', 'Strategy/proof-points.md'],
+    mono: true,
   },
   {
-    key: 'Tools',
-    value: 'Read · Grep · Glob · Write · Edit',
+    head: 'Escalates',
+    lines: ['Positioning and claims → brand-strategist'],
+    mono: true,
   },
-  {
-    key: 'Escalates',
-    value: 'Positioning and claims → brand-strategist',
-  },
+]
+
+/* The side panel's meta. Type and model are what a subagent actually
+   carries; the dates are sample. */
+const META = [
+  ['Type', 'Subagent'],
+  ['Scope', 'SC-Brand'],
+  ['Version', 'v4'],
+  ['Updated', '08-22'],
 ]
 
 export default function AgentWindow() {
@@ -64,8 +83,6 @@ export default function AgentWindow() {
 
       <div className={styles.body}>
         <aside className={styles.side}>
-          {/* The agent itself, at the top of its own panel — the definition
-              below is its file, and this is who the file is for. */}
           <div className={styles.who}>
             <span className={styles.avatar}>
               <AgentIcon size={18} strokeWidth={1.4} aria-hidden="true" />
@@ -76,29 +93,55 @@ export default function AgentWindow() {
             </span>
           </div>
 
-        </aside>
-
-        <div className={styles.doc}>
-          <span className={styles.sideLabel}>{AGENT.name}.md</span>
-
-          <dl className={styles.def}>
-            {DEFINITION.map(({ key, value }) => (
-              <div key={key} className={styles.defRow}>
-                <dt className={styles.defKey}>{key}</dt>
-                <dd className={styles.defValue}>{value}</dd>
+          <dl className={styles.meta}>
+            {META.map(([k, v]) => (
+              <div key={k} className={styles.metaRow}>
+                <dt className={styles.metaKey}>{k}</dt>
+                <dd className={styles.metaValue}>{v}</dd>
               </div>
             ))}
           </dl>
 
-          {/* THE REFUSAL AS A BLOCK. It is the line that makes the rest of
-              the file trustworthy, so it is not a row like the others. */}
-          <p className={styles.marker}>
-            <span className={styles.markerKey}>Will not</span>
-            <span className={styles.markerBody}>{' '}
-              {AGENT.wont.toLowerCase()} — where there is no proof point it writes
-              [CLAIM NEEDED] rather than something plausible.
+          {/* THE REFUSAL, in the side panel where it reads as a property of
+              the agent rather than as one more section of the file. */}
+          <div className={styles.wont}>
+            <span className={styles.wontKey}>Will not</span>
+            <span className={styles.wontValue}>{AGENT.wont.toLowerCase()}</span>
+          </div>
+        </aside>
+
+        <div className={styles.doc}>
+          {/* Frontmatter, fenced as it is in the file — this is the part that
+              makes an agent a thing rather than a prompt. */}
+          <div className={styles.front}>
+            <span className={styles.fence}>---</span>
+            {FRONTMATTER.map(([k, v]) => (
+              <span key={k} className={styles.frontRow}>
+                <span className={styles.frontKey}>{k}:</span>
+                <span className={styles.frontValue}>{v}</span>
+              </span>
+            ))}
+            <span className={styles.fence}>---</span>
+          </div>
+
+          {SECTIONS.map(({ head, lines, mono }) => (
+            <section key={head} className={styles.sec}>
+              <h4 className={styles.secHead}>{head}</h4>
+              {lines.map((l) => (
+                <p key={l} className={mono ? styles.secMono : styles.secLine}>{l}</p>
+              ))}
+            </section>
+          ))}
+
+          {/* The marker it writes when it has to stop — the output, not an
+              error state. */}
+          <div className={styles.marker}>
+            <span className={styles.markerKey}>[ CLAIM NEEDED: … ]</span>
+            <span className={styles.markerBody}>
+              Written in place of any claim with no proof point behind it, so the gap comes
+              back to you as a gap.
             </span>
-          </p>
+          </div>
         </div>
       </div>
     </div>

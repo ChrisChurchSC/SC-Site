@@ -1,0 +1,146 @@
+/* The six, as a rail — see AgentRail.jsx. The same shape as the featured
+   work section: copy on the page grid, cards running off the right. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  /* Stands in from the page margin on the left. The rail still bleeds off
+     the right, so the section reads as starting further in and running out
+     — the shape of a rail rather than a row that happens to be cut. */
+  padding-left: clamp(16px, 5vw, 110px);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.headline {
+  margin: 4px 0 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.intro {
+  margin: 10px 0 0;
+  max-width: 56ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Runs past the page's right edge on purpose. The scrollport is pulled out
+   to both screen edges while the content keeps the indent via padding, so a
+   card leaving to the left goes off the screen rather than being sliced by
+   an edge sitting in open space. */
+.rail {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin-top: clamp(24px, 3vw, 40px);
+
+  --bleed-left: calc(var(--page-pad-left, 0px) + clamp(16px, 5vw, 110px));
+  margin-left: calc(-1 * var(--bleed-left));
+  width: calc(100% + var(--bleed-left) + var(--page-pad-right, 0px));
+  padding-left: var(--bleed-left);
+  padding-right: var(--page-pad-right, 16px);
+  padding-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar { display: none; }
+
+.card {
+  flex: none;
+  width: clamp(260px, 26vw, 330px);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 2.2vw, 28px);
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-surface, 12px);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.card:hover { background: #131313; border-color: rgba(255, 255, 255, 0.16); }
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.cardIcon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The brand this instance is trained on. A slot, not a client name. */
+.slot {
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  color: rgba(255, 255, 255, 0.42);
+  text-transform: uppercase;
+}
+
+/* An agent name is a label — a filename with one .md behind it. */
+.cardName {
+  align-self: flex-start;
+  margin: 0 0 12px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.62));
+  background: var(--label-bg, #161616);
+  padding: var(--label-pad, 6px 10px);
+  border-radius: var(--label-radius, 4px);
+}
+
+.cardDoes {
+  margin: 0 0 auto;
+  padding-bottom: clamp(18px, 2vw, 24px);
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The refusal is the point of the card, so it gets the rule and the colour
+   rather than trailing off the description. */
+.cardWont {
+  margin: 0;
+  padding-top: clamp(14px, 1.6vw, 18px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.wontKey { color: var(--pink, #df4ed6); letter-spacing: 0.04em; }

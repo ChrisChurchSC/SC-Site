@@ -4,6 +4,7 @@ import styles from './HowItWorks.module.css'
 import InputsWindow from './InputsWindow'
 import DesignWindow from './DesignWindow'
 import DeployWindow from './DeployWindow'
+import AgentWindow from './AgentWindow'
 import AdoptWindow from './AdoptWindow'
 import AssetsGridWindow from './AssetsGridWindow'
 import RepoWindow from './RepoWindow'
@@ -38,6 +39,37 @@ import DashboardWindow from './DashboardWindow'
  * is promised, and Support's four describe what gets done, not how well.
  */
 const SETS = {
+  /* THE AGENTS PAGE. Three steps, because three is what the mechanism
+     actually has: it drafts out of the repo, it marks what it cannot source,
+     and a person approves before anything lands. A fourth would be padding.
+     
+     The middle one is the argument — an agent that stops is worth more than
+     one that fills the gap, and the marker is the thing it hands back. */
+  agents: {
+    headline: 'It drafts, it flags what it cannot source, and a person says yes.',
+    steps: [
+      {
+        n: '01',
+        name: 'It drafts',
+        visual: 'assets',
+        note: 'Out of the repo — your positioning, your voice, your approved claims. Not a general model guessing at your brand.',
+      },
+      {
+        n: '02',
+        name: 'It marks the gap',
+        visual: 'agent',
+        note: 'A claim with no proof point behind it comes back flagged rather than invented. The gap is the output.',
+      },
+      {
+        n: '03',
+        name: 'A person approves it',
+        visual: 'repo',
+        note: 'Every change is proposed. Nothing an agent writes goes live until somebody merges it.',
+      },
+    ],
+    loops: false,
+  },
+
   build: {
     headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
     steps: [
@@ -133,6 +165,8 @@ const VISUALS = {
   deploy: DeployWindow,
   /* The people working in it — their teams on Build, ours on Grow. */
   adopt: AdoptWindow,
+  /* One agent's definition, with the marker it writes when it stops. */
+  agent: AgentWindow,
   /* Where it lands: the repo, set up and documented. */
   repo: () => <RepoWindow big assets={false} agents />,
   /* The creative that got made. */

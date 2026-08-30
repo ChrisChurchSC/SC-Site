@@ -45,6 +45,18 @@
 }
 
 /* The paragraph under a section head, where the head needs one. */
+.blockCentered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* The measures stay, so centring does not turn the paragraph into a triangle
+   of full-width lines. */
+.blockCentered .blockHead { max-width: 22ch; }
+.blockCentered .blockIntro { max-width: 58ch; }
+
 .blockIntro {
   margin: calc(-1 * clamp(30px, 3.6vw, 52px)) 0 clamp(30px, 3.6vw, 52px);
   max-width: 62ch;
@@ -88,7 +100,7 @@
   font-weight: 300;
   font-size: clamp(26px, 2.6vw, 36px);
   line-height: 1;
-  color: rgba(223, 78, 214, 0.5);
+  color: rgba(255, 255, 255, 0.28);
 }
 
 .stepName {
