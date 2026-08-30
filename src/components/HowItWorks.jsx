@@ -7,6 +7,7 @@ import DeployWindow from './DeployWindow'
 import AgentWindow from './AgentWindow'
 import DraftWindow from './DraftWindow'
 import ReviewWindow from './ReviewWindow'
+import DiffWindow from './DiffWindow'
 import AdoptWindow from './AdoptWindow'
 import AssetsGridWindow from './AssetsGridWindow'
 import RepoWindow from './RepoWindow'
@@ -72,6 +73,37 @@ const SETS = {
     loops: false,
   },
 
+
+  measurement: {
+    headline: 'Results come back, and the brand changes because of them.',
+    steps: [
+      {
+        n: '01',
+        name: 'What shipped',
+        visual: 'assets',
+        note: 'Every asset leaves the library tagged, so the quarter is a list rather than somebody\u2019s memory of it.',
+      },
+      {
+        n: '02',
+        name: 'What it moved',
+        visual: 'dashboard',
+        note: 'The numbers come back joined to the asset that earned them, the agent that drafted it and the brief behind it.',
+      },
+      {
+        n: '03',
+        name: 'What changes because of it',
+        visual: 'diff',
+        note: 'What worked is proposed as an edit to the brand files \u2014 a claim you may now make, a way of saying it \u2014 with the evidence attached.',
+      },
+      {
+        n: '04',
+        name: 'Every agent starts there',
+        visual: 'reading',
+        note: 'A person merges it. The next draft begins from what you just learned instead of from where you started.',
+      },
+    ],
+    loops: true,
+  },
 
   build: {
     headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
@@ -177,6 +209,7 @@ const VISUALS = {
   /* The review queue, for the step about a person approving. */
   review: ReviewWindow,
   /* Where it lands: the repo, set up and documented. */
+  diff: DiffWindow,
   repo: () => <RepoWindow big assets={false} agents />,
   /* The creative that got made. */
   assets: AssetsGridWindow,

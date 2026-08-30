@@ -18,6 +18,7 @@ import HomeV3 from './pages/HomeV3'
 import PricingV3 from './pages/PricingV3'
 import ServiceV3 from './pages/ServiceV3'
 import PlatformAgents from './pages/PlatformAgents'
+import PlatformMeasurement from './pages/PlatformMeasurement'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
@@ -128,6 +129,7 @@ export default function App() {
         <Route path="/pricing" element={<PricingV3 />} />
         <Route path="/services/:slug" element={<ServiceV3 />} />
         <Route path="/platform/agents" element={<PlatformAgents />} />
+        <Route path="/platform/measurement" element={<PlatformMeasurement />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />

@@ -138,7 +138,7 @@ export const PLATFORM_PAGES = [
   { name: 'Memory', Icon: BookMarked, note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },
   { name: 'Library', Icon: LayoutGrid, note: 'Every asset we have made, in use and findable.' },
-  { name: 'Measurement', Icon: ChartNoAxesColumn, note: 'What shipped, and what it moved.' },
+  { name: 'Measurement', Icon: ChartNoAxesColumn, href: '/platform/measurement', note: 'What shipped, and what it moved.' },
 ]
 
 /* Company's panel, in three columns.
