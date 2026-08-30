@@ -74,8 +74,14 @@ export default function FooterCard({ columns = [] }) {
        what tells a screen reader which navigation this is. */
     <nav className={styles.card} aria-label="Footer">
       <div className={styles.grid}>
-        {columns.map(col => <Column key={col.tag} {...col} />)}
+        {columns.filter(col => col.row !== 2).map(col => <Column key={col.tag} {...col} />)}
       </div>
+
+      {columns.some(col => col.row === 2) && (
+        <div className={styles.secondRow}>
+          {columns.filter(col => col.row === 2).map(col => <Column key={col.tag} {...col} />)}
+        </div>
+      )}
 
       <div className={styles.legalRow}>
         <Column {...LEGAL} />

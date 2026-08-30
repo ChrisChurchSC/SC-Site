@@ -11,6 +11,7 @@ import PlatformOutputs from '../components/PlatformOutputs'
 import FeaturedWall from '../components/FeaturedWall'
 import TestimonialCard from '../components/TestimonialCard'
 import ServiceFaq from '../components/ServiceFaq'
+import DotNav from '../components/DotNav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { serviceBySlug } from '../data/services'
@@ -46,7 +47,6 @@ export default function ServiceV3() {
   })
 
   if (!service) return <Navigate to="/services" replace />
-
 
   return (
     <main className={styles.page}>
@@ -110,19 +110,33 @@ export default function ServiceV3() {
         <ClientStrip banner />
       </div>
 
+      <hr className={styles.divider} />
+
       <PlatformIntro />
+
+      <hr className={styles.divider} />
 
       <PlatformOutputs />
 
+      <hr className={styles.divider} />
+
       <FeaturedWall />
 
+      <hr className={styles.divider} />
+
       <TestimonialCard />
+
+      <hr className={styles.divider} />
 
       <ServiceFaq />
 
       <FooterCard columns={FOOTER_COLS} />
 
       <V3Signoff />
+
+      {/* Fixed to the viewport rather than in the flow, so it goes after
+          everything else in the source. */}
+      <DotNav />
     </main>
   )
 }

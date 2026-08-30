@@ -27,6 +27,17 @@
   align-items: start;
 }
 
+/* A second row of navigation columns, under the first. No border above it:
+   the rule under the legal row exists to separate legal from navigation, and
+   this row is still navigation. */
+.secondRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: clamp(24px, 2.2vw, 32px);
+  margin-top: clamp(28px, 3vw, 44px);
+  align-items: start;
+}
+
 /* The legal group drops to its own row under the rest, as in the reference.
    The rule is what makes that read as deliberate rather than as a column
    that failed to fit. */

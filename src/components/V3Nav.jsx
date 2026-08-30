@@ -314,12 +314,12 @@ export const SERVICE_ROWS = OFFER.map(({ name, body, href }) => ({ name, note: b
    text rather than as a link to the nearest page that happens to exist —
    the nav panels already behave this way. */
 const USE_CASES = [
-  'Get to market faster',
-  'Ship more without more headcount',
-  'Know what is working',
-  'Keep the brand consistent',
-  'Launch into a new market',
-  'Stop rebuilding the same assets',
+  'Get more leads',
+  'Improve your win rate',
+  'Shorten the sales cycle',
+  'Lower cost per acquisition',
+  'Launch faster',
+  'Enter a new market',
 ]
 
 export const FOOTER_COLS = [
@@ -333,7 +333,7 @@ export const FOOTER_COLS = [
     ],
   },
   /* After Services, because a use case is a way into the same four. */
-  { tag: 'Use cases', links: USE_CASES.map(label => ({ label })) },
+  { tag: 'Use cases', row: 2, links: USE_CASES.map(label => ({ label })) },
   {
     tag: 'Case studies',
     links: [
@@ -344,6 +344,7 @@ export const FOOTER_COLS = [
   { tag: 'By company size', links: WORK_BY_SIZE.map(label => ({ label })) },
   ...COMPANY_COLS.map(({ tag, links }) => ({
     tag,
+    ...(tag === 'Socials' ? { row: 2 } : null),
     links: links.map(({ label, href, external }) => ({ label, href, external })),
   })),
 ]

@@ -398,3 +398,12 @@
   width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
   margin-left: calc(-1 * var(--page-pad-left, 0px));
 }
+
+/* Section rules, full bleed. Same treatment as the v3 homepage's .divider,
+   so the two pages break at the same weight. */
+.divider {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
