@@ -34,6 +34,28 @@ const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
    sync CLI's real behaviour: a push opens a numbered review holding what the
    files would become, it writes nothing live, and merging is a person's
    job. */
+const CELLS = [
+  { r: 2, c: 3, i: 0 },
+  { r: 4, c: 6, i: null },
+  { r: 5, c: 2, i: 1 },
+  { r: 7, c: 5, i: 2, accent: true },
+  { r: 9, c: 3, i: null },
+  { r: 10, c: 7, i: 3 },
+  { r: 12, c: 2, i: 4 },
+  { r: 13, c: 5, i: null },
+  { r: 15, c: 4, i: 5 },
+
+  { r: 2, c: -4, i: 3 },
+  { r: 4, c: -7, i: null },
+  { r: 5, c: -3, i: 4 },
+  { r: 7, c: -5, i: 5, accent: true },
+  { r: 9, c: -3, i: null },
+  { r: 10, c: -6, i: 0 },
+  { r: 12, c: -4, i: 1 },
+  { r: 13, c: -7, i: null },
+  { r: 15, c: -5, i: 2 },
+]
+
 const FLOW = [
   {
     n: '01',
@@ -70,14 +92,22 @@ export default function PlatformAgents() {
               fades them at the edges does not also fade the card. */}
           <span className={styles.lines} aria-hidden="true" />
 
-          {/* A few cells carry an icon, placed on the grid rather than
-              scattered — the reference reads as a system with things in it,
-              not as confetti. */}
-          {ICONS.map((Icon, i) => (
-            <span key={i} className={`${styles.cell} ${styles[`cell${i + 1}`]}`} aria-hidden="true">
-              <Icon size={16} strokeWidth={1.3} aria-hidden="true" />
-            </span>
-          ))}
+          {/* Filled cells, some with an icon and some without — a field of
+              six logos reads as a logo wall, and the empty ones are what
+              make it read as a grid with things in it. */}
+          {CELLS.map(({ r, c, i, accent }, k) => {
+            const Icon = i === null ? null : ICONS[i]
+            return (
+              <span
+                key={k}
+                className={`${styles.cell}${accent ? ' ' + styles.cellAccent : ''}`}
+                style={{ gridRow: r, gridColumn: c }}
+                aria-hidden="true"
+              >
+                {Icon && <Icon size={15} strokeWidth={1.3} aria-hidden="true" />}
+              </span>
+            )
+          })}
 
           {/* SET INTO THE GRID, not laid over it: the card is a grid item, so
               its edges fall on gridlines and it reads as cells that have been

@@ -144,12 +144,11 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
-.cell1 { grid-area: 3 / 3 / span 2 / span 2; }
-.cell2 { grid-area: 7 / 5 / span 2 / span 2; color: var(--pink, #df4ed6); background: rgba(223, 78, 214, 0.12); border-color: rgba(223, 78, 214, 0.28); }
-.cell3 { grid-area: 3 / -5 / span 2 / span 2; }
-.cell4 { grid-area: 11 / 3 / span 2 / span 2; }
-.cell5 { grid-area: 11 / -7 / span 2 / span 2; }
-.cell6 { grid-area: 7 / -4 / span 2 / span 2; }
+.cellAccent {
+  color: var(--pink, #df4ed6);
+  background: rgba(223, 78, 214, 0.12);
+  border-color: rgba(223, 78, 214, 0.28);
+}
 
 .heroCard {
   position: relative;
