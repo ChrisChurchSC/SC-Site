@@ -1184,6 +1184,14 @@
   transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* The panel is a direct child too, so the rule above put it at the bar's own
+   top and it covered the bar. It belongs underneath: --bar-h is the measured
+   height of the bar, published by V3Nav, and the 8px is the gap the ::before
+   bridge spans so the cursor never crosses dead space on the way down. */
+.navFloat > .panel {
+  top: calc(var(--bar-inset, 22px) + var(--bar-h, 64px) + 8px);
+}
+
 /* Out of the way once the page has moved past it. Translated rather than
    hidden, so it can come back without a reflow — and far enough that the
    shadow under it clears the top edge too. */

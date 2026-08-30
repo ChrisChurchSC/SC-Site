@@ -7,12 +7,14 @@ import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
 import DiffWindow from '../components/DiffWindow'
+import EmailCaptureForm from '../components/EmailCaptureForm'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
 import HowItWorks from '../components/HowItWorks'
 import DotNav from '../components/DotNav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
+import { dashboard } from '../data/dashboard'
 
 /**
  * /platform/measurement — the second of the six platform pages.
@@ -89,6 +91,25 @@ const FAQS = [
   },
 ]
 
+
+const HELPS = [
+  {
+    name: 'Conversion rate',
+    file: 'Proof points',
+    note: 'What converted becomes a sourced claim in the strategy files, so the next asset argues from it rather than starting the case over.',
+  },
+  {
+    name: 'Click-through rate',
+    file: 'Tone of voice',
+    note: 'What earned attention is written back into how things are said — not left in a report nobody opens twice.',
+  },
+  {
+    name: 'Return on spend',
+    file: 'Channel notes',
+    note: 'Where the money worked and where it did not, recorded against the channel instead of remembered by whoever was there.',
+  },
+]
+
 export default function PlatformMeasurement() {
   const cal = useCalDrawer()
 
@@ -111,9 +132,19 @@ export default function PlatformMeasurement() {
             Every channel in one view, each figure joined to the asset that earned it &mdash; so
             performance reads as the work that produced it rather than as a row in a chart.
           </p>
-          <div className={styles.actions}>
-            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+          <div className={styles.formWrap}>
+            <EmailCaptureForm
+              styles={styles}
+              variant="compact"
+              placeholder="What's your work email?"
+              submitLabel="Book a walkthrough"
+              subject="Measurement page — demo request"
+              requestType="platform-measurement-demo"
+              confirmMessage="Thanks — we will send over a couple of times to walk you through it."
+            />
+            {/* Says what the form does, and nothing about how fast anyone
+                replies. Response times are Chris's to keep. */}
+            <p className={styles.formNote}>We&rsquo;ll follow up by email.</p>
           </div>
         </div>
 
@@ -124,6 +155,25 @@ export default function PlatformMeasurement() {
           <DashboardWindow ratio="1 / 1" bare />
         </div>
       </header>
+
+      <hr className={styles.divider} />
+
+      <section className={styles.block} aria-labelledby="helps">
+        <div className={styles.metricsHead}>
+          <h2 className={styles.blockHead} id="helps">What it helps you lift.</h2>
+        </div>
+        <div className={styles.metrics}>
+          {HELPS.map(({ name, file, note }) => (
+            <div key={name} className={styles.metric}>
+              <span className={styles.metricValue}>{name}</span>
+              <span className={styles.metricLabel}>{file}</span>
+              <p className={styles.metricNote}>{note}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <hr className={styles.divider} />
 
       <div className={styles.strip}>
         <ClientStrip banner />

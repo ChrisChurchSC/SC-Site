@@ -428,6 +428,8 @@ export default function V3Nav() {
               gridColumn: '1 / span 12',
               /* Holds the space the fixed bar leaves. */
               ...(barHeight ? { minHeight: barHeight } : null),
+              /* And tells the panel how far down to start. */
+              ...(barHeight ? { '--bar-h': `${barHeight}px` } : null),
             }}
             onMouseLeave={closeSoon}
             onMouseEnter={cancelClose}
