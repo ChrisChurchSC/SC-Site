@@ -26,8 +26,8 @@
    diagram reads as two designs stacked. */
 /* THE TOP OF THE PAGE, hero and diagram together, on one ground.
 
-   Black at the top, pink at the foot — so the section starts on the page and
-   arrives at the brand, and the diagram sits in the part that has colour.
+   Black at the top, pink at the foot, so the section starts on the page and
+   arrives at the brand.
    Full bleed, because a gradient that stops at the reading margin is a
    panel rather than a page.
 
@@ -42,8 +42,8 @@
   background: linear-gradient(
     to bottom,
     #0a0a0a 0%,
-    rgba(223, 78, 214, 0.06) 55%,
-    rgba(223, 78, 214, 0.22) 100%
+    rgba(223, 78, 214, 0.12) 55%,
+    rgba(223, 78, 214, 0.38) 100%
   );
 }
 

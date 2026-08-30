@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { RefreshCw } from 'lucide-react'
 
 import styles from './FlowDiagram.module.css'
 import { repoFiles } from '../data/repo'
@@ -34,12 +35,17 @@ import { repoFiles } from '../data/repo'
    and Measurement where this has Feedback and Marketing Data. They are the
    same things called two ways, and worth reconciling once somebody decides
    which name is right. */
+/* The items are what each input is made of, and they render through the same
+   Column component as the right-hand pillars — one chip markup, so the two
+   sides of the diagram cannot drift apart in style.
+
+   These are wording, not sourced fact, and have not been signed off. */
 const REPO_INPUTS = [
-  { name: 'Memory' },
-  { name: 'Library' },
-  { name: 'Agents' },
-  { name: 'Feedback' },
-  { name: 'Data' },
+  { name: 'Memory', items: ['Marketing mix', 'Audience', 'Comms strategy'] },
+  { name: 'Library', items: ['Logo', 'Type', 'Color', 'Photography'] },
+  { name: 'Agents', items: ['Strategist', 'Writer', 'Designer', 'Analyst'] },
+  { name: 'Feedback', items: ['Reviews', 'Approvals'] },
+  { name: 'Data', items: ['Social', 'Search', 'Email', 'Paid', 'Web', 'CRM'] },
 ]
 
 /* A folder glyph, drawn rather than imported — the platform card on /v3
@@ -58,12 +64,15 @@ function Folder() {
   )
 }
 
-function Column({ label, groups }) {
+function Column({ label, groups, sync = false }) {
   return (
     <div className={styles.column} aria-label={label}>
       {groups.map(({ name, items }) => (
         <div key={name} className={styles.node}>
-          <span className={styles.nodeName}>{name}</span>
+          <span className={styles.nodeRow}>
+            <span className={styles.nodeName}>{name}</span>
+            {sync && <RefreshCw className={styles.sync} aria-hidden="true" />}
+          </span>
           {items && (
             <span className={styles.chips}>
               {items.map((i) => <span key={i} className={styles.chip}>{i}</span>)}
@@ -161,7 +170,6 @@ export default function FlowDiagram({ centre, outputs }) {
       {/* The wash behind it, which the reference uses to tie the three
           columns into one object. Pink rather than orange, and low enough
           that the cards still read as sitting on the page. */}
-      <div className={styles.ground} aria-hidden="true" />
 
       <div className={styles.flow} ref={flowRef}>
         {wires && (
@@ -174,12 +182,14 @@ export default function FlowDiagram({ centre, outputs }) {
             {[...wires.in, ...wires.out].map((d) => (
               <path key={d} className={styles.wire} d={d} />
             ))}
-            <circle className={styles.junction} cx={wires.inJunction.x} cy={wires.inJunction.y} r="5" />
-            <circle className={styles.junction} cx={wires.outJunction.x} cy={wires.outJunction.y} r="5" />
+            {/* Squares, not dots — offset by half their size so the wire meets
+                the middle of the mark rather than its corner. */}
+            <rect className={styles.junction} x={wires.inJunction.x - 3} y={wires.inJunction.y - 3} width="6" height="6" />
+            <rect className={styles.junction} x={wires.outJunction.x - 3} y={wires.outJunction.y - 3} width="6" height="6" />
           </svg>
         )}
 
-        <Column label="What goes in" groups={REPO_INPUTS} ref={undefined} />
+        <Column label="What goes in" groups={REPO_INPUTS} sync />
 
         <div className={styles.centre}>
           <div className={styles.centreHead}>

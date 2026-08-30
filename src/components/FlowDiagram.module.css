@@ -11,23 +11,6 @@
 }
 
 
-/* THE GROUND, now only a soft panel edge. The section behind it carries the
-   black-to-pink gradient and the dot field, so a second filled surface here
-   would flatten both — this is just enough lift to keep the cards from
-   floating on nothing. */
-.ground {
-  position: absolute;
-  left: clamp(4px, 1.4vw, 26px);
-  right: clamp(4px, 1.4vw, 26px);
-  top: clamp(56px, 8vw, 120px);
-  bottom: 0;
-  border-radius: clamp(16px, 2vw, 28px) clamp(16px, 2vw, 28px) 0 0;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 0;
-}
-
-
 
 /* stretch, not start. The columns hold different numbers of cards — two on
    the left of a Build page against four on the right — and aligned to the
@@ -104,7 +87,11 @@
   height: 100%;
   pointer-events: none;
   overflow: visible;
-  z-index: 0;
+  /* Above the cards, which are z-index 1. The junctions sit in the gap either
+     side of the repo, so underneath they were clipped by its panel and the
+     square read as a notch on the edge rather than a node on top of it.
+     pointer-events stays none, so nothing here catches a click. */
+  z-index: 2;
 }
 
 .wire {
@@ -120,13 +107,33 @@
 }
 
 
+/* THE REPO IS ONE OF THE WINDOWS. Same ground, same border, same radius and
+   the same lift as the cards either side of it — it is taller and it has
+   chrome, but it is the same object.
+
+   This rule went missing in an earlier edit that sliced from .centreHead
+   onward, which left the panel with no background at all: the dot field
+   behind it showed straight through, and the repo read as a hole in the
+   diagram rather than the thing at the middle of it. */
+.centre {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
 .centreHead {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(223, 78, 214, 0.08);
+  background: rgba(255, 255, 255, 0.03);
   font-family: "Roboto Mono", monospace;
   font-size: 10.5px;
 }
@@ -229,5 +236,32 @@
   /* The wires are measured from live layout, so stacking needs no special
      case — they redraw against the new positions. */
 
-  .ground { top: clamp(40px, 10vw, 90px); }
+}
+
+/* Name on the left, sync mark on the right. */
+.nodeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Only the left column carries this — those cards are the ones kept in step
+   with the repo. It turns slowly rather than spinning: the mark says "in
+   sync", and a fast spinner says "loading", which is a different claim. */
+.sync {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--pink, #df4ed6);
+  opacity: 0.65;
+  animation: syncTurn 6s linear infinite;
+}
+
+@keyframes syncTurn {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sync { animation: none; }
 }

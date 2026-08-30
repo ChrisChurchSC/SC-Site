@@ -289,6 +289,12 @@
    toward it. Bound to the shell, the trip from link to panel stays inside. */
 .navShell {
   position: relative;
+  /* Above the section that follows it. The service hero is itself positioned
+     and full bleed, so with the bar at z-index auto the later element simply
+     painted over it — the nav read fine on /v3, where nothing positioned
+     follows it, and was buried on a service page. Higher than the .panel
+     inside it, which is 40 and stacks within this context. */
+  z-index: 50;
 }
 
 .panel {
