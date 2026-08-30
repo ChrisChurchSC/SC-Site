@@ -1,0 +1,116 @@
+/* What a brand platform is — see PlatformIntro.jsx.
+
+   Left-aligned throughout. The hero above it is centred, so this section
+   changing axis is what tells you the page has moved on from the pitch to
+   the explanation. */
+
+.section {
+  padding: clamp(56px, 8vw, 120px) clamp(8px, 5vw, 96px) clamp(24px, 3vw, 44px);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(18px, 2vw, 28px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+/* Big enough to wrap to three lines at the top of the range, which is the
+   shape of the reference. max-width is in characters rather than pixels so
+   the wrap holds as the size changes. */
+.headline {
+  margin: 0;
+  max-width: 16ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(30px, 4.2vw, 58px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.body {
+  margin: clamp(20px, 2.4vw, 32px) 0 0;
+  max-width: 54ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* THE PANEL. A framed well on a dot field, as the reference has — the field
+   is this panel's own rather than the page's, so it starts and stops with
+   the frame. */
+.panel {
+  position: relative;
+  margin-top: clamp(36px, 5vw, 72px);
+  padding: clamp(20px, 3vw, 40px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--r-panel, 4px);
+  background: rgba(255, 255, 255, 0.015);
+  overflow: hidden;
+}
+
+/* 0, not -1: below zero the field paints behind the panel's own background
+   and disappears. The same note sits on the hero field and on /v3. */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 16px 16px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 55%, transparent 100%);
+}
+
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--r-surface, 12px);
+  overflow: hidden;
+}
+
+/* The 1px gap above is the rule between cards: each card paints its own
+   ground over a grid that is one flat colour, so the lines are the gaps and
+   there are no doubled borders to line up. */
+.card {
+  padding: clamp(18px, 2.2vw, 30px);
+  background: #0d0d0d;
+}
+
+.cardName {
+  margin: 0 0 10px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.7vw, 25px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.cardNote {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .headline { max-width: none; }
+}

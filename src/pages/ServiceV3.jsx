@@ -6,6 +6,7 @@ import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
 import ClientStrip from '../components/ClientStrip'
+import PlatformIntro from '../components/PlatformIntro'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { services, serviceBySlug } from '../data/services'
@@ -106,6 +107,8 @@ export default function ServiceV3() {
       <div className={styles.clients}>
         <ClientStrip banner />
       </div>
+
+      <PlatformIntro />
 
       <section className={styles.block} aria-labelledby="covers">
         <div className={styles.blockHead}>
