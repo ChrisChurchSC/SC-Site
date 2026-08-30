@@ -51,8 +51,8 @@ export const tabs = [
         price: 15000,
         unit: 'starting at',
         note: null,
-        summary: 'A substantial standing team, pointed at whatever needs it most.',
-        lines: ['Spend them on Build, Grow, Support or Represent', 'Billed quarterly', 'One quarter minimum'],
+        summary: 'Naming, identity and the system that holds it — new, rebuilt or refreshed.',
+        lines: ['New Brand', 'Rebrand', 'Brand Refresh', 'Sub-brand', 'Brand Guidelines', 'Product Positioning'],
         cta: 'Book a demo',
       },
       {

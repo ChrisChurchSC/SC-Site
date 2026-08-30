@@ -1,33 +1,30 @@
+import { NavLink } from 'react-router-dom'
+
 import styles from './PlatformOutputs.module.css'
+import { tabs } from '../data/pricingTabs'
 
 /**
- * WHAT THE PLATFORM MAKES — the section under it.
+ * WHAT THE PLATFORM MAKES — the section under it, and the same four things
+ * /pricing sells.
  *
- * Three functions rather than four service pillars. The hero diagram already
- * shows the pillars, so listing them again here would answer a question the
- * page answered two screens ago; Product, Marketing and Sales are the people
- * the output is FOR, which is a different cut of the same store.
+ * READ, NOT RETYPED. Every card here is a project tier out of pricingTabs:
+ * the name, the summary, the deliverables, the footnote, the price and its
+ * unit. Nothing is duplicated, so this section cannot quote a price the
+ * pricing page has stopped charging — which is exactly what "tied to the
+ * pricing" has to mean for it to be worth anything.
  *
- * The names are Chris's. The notes and the chips under them are mine and are
- * not signed off.
+ * BRAND IS CUT HERE, and only here — it is still a tier and still on
+ * /pricing. Three cards, three across.
+ *
+ * An earlier version of this section listed Product, Marketing and Sales.
+ * Those are real audiences but nothing prices them, so the cards could only
+ * ever have linked at pricing rather than carried it.
  */
-const MAKES = [
-  {
-    name: 'Product',
-    note: 'Naming, positioning and the words that ship alongside it.',
-    items: ['Naming', 'Positioning', 'Launch copy', 'Site pages', 'Release notes'],
-  },
-  {
-    name: 'Marketing',
-    note: 'Campaigns, and the channels they run on.',
-    items: ['Campaigns', 'Social', 'Email', 'Ads', 'Landing pages'],
-  },
-  {
-    name: 'Sales',
-    note: 'The deck, the one-pager and the follow-up, on message.',
-    items: ['Decks', 'One-pagers', 'Case studies', 'Outreach', 'Proposals'],
-  },
-]
+const project = tabs.find((t) => t.id === 'project')
+const CUT = new Set(['Brand'])
+const TIERS = project.tiers.filter((t) => !CUT.has(t.name))
+
+const money = (n) => `$${n.toLocaleString('en-US')}`
 
 export default function PlatformOutputs() {
   return (
@@ -38,16 +35,37 @@ export default function PlatformOutputs() {
       </h2>
 
       <div className={styles.grid}>
-        {MAKES.map(({ name, note, items }) => (
-          <article key={name} className={styles.card}>
+        {TIERS.map(({ kicker, name, summary, lines, note, price, unit }) => (
+          <article key={kicker} className={styles.card}>
+            <span className={styles.kicker}>{kicker}</span>
             <h3 className={styles.name}>{name}</h3>
-            <p className={styles.note}>{note}</p>
+            <p className={styles.note}>{summary}</p>
+
+            <p className={styles.chipsLabel}>Individual deliverables — pick what you need</p>
             <div className={styles.chips}>
-              {items.map((i) => <span key={i} className={styles.chip}>{i}</span>)}
+              {lines.map((l) => <span key={l} className={styles.chip}>{l}</span>)}
+            </div>
+
+            {/* Only Campaign and Channels carry one. It qualifies the price,
+                so it sits with the price rather than with the list. */}
+            {note && <p className={styles.footnote}>{note}</p>}
+
+            <div className={styles.price}>
+              <span className={styles.unit}>{unit}</span>
+              <span className={styles.figure}>{money(price)}</span>
             </div>
           </article>
         ))}
       </div>
+
+      {/* The threshold is a property of the order rather than of any one
+          card, which is why /pricing renders it above the four and this
+          renders it under them. Chris's line, read from the same place. */}
+      <p className={styles.priceLine}>
+        {project.perk}
+        <br />
+        <NavLink className={styles.priceLink} to="/pricing">See full pricing</NavLink>
+      </p>
     </section>
   )
 }

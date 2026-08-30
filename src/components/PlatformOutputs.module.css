@@ -43,6 +43,11 @@
   border-radius: var(--r-surface, 12px);
 }
 
+.card:hover {
+  border-color: rgba(223, 78, 214, 0.4);
+  background: #131313;
+}
+
 .name {
   margin: 0 0 8px;
   font-family: "Signifier", Georgia, serif;
@@ -53,8 +58,7 @@
 }
 
 .note {
-  margin: 0 0 auto;
-  padding-bottom: clamp(18px, 2vw, 26px);
+  margin: 0 0 clamp(18px, 2vw, 26px);
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: clamp(14px, 1.05vw, 16px);
@@ -81,7 +85,116 @@
   border-radius: 7px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
   .grid { grid-template-columns: minmax(0, 1fr); }
   .headline { max-width: none; }
 }
+
+/* The affordance sits under the chips, so the card reads name, promise,
+   inventory, way in — in that order. */
+.cardLink {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: clamp(18px, 2vw, 26px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.15s;
+}
+
+.card:hover .cardLink { color: var(--pink, #df4ed6); }
+
+.arrow { transition: transform 0.15s; }
+.card:hover .arrow { transform: translateX(3px); }
+
+/* The real entry price, under all three. */
+.priceLine {
+  margin: clamp(22px, 2.4vw, 32px) 0 0;
+  max-width: 70ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.priceLink {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: var(--pink, #df4ed6);
+}
+
+.priceLink:hover { text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .cardLink, .arrow { transition: none; }
+}
+
+/* The tier number, in the pricing page's own register. */
+.kicker {
+  display: block;
+  margin-bottom: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--pink, #df4ed6);
+}
+
+/* Says the list is a menu rather than a package — the same sentence the
+   pricing page puts above its deliverables. */
+.chipsLabel {
+  margin: 0 0 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Qualifies the price, so it sits between the list and the figure rather
+   than trailing the card. */
+.footnote {
+  margin: 16px 0 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.36);
+}
+
+/* Pinned to the bottom by the auto margin, so the four figures line up
+   across a row whatever the deliverable lists do above them. */
+.price {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: clamp(20px, 2.2vw, 28px);
+  padding-top: clamp(16px, 1.8vw, 22px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.unit {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.figure {
+  margin-left: auto;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+/* The chips stop growing the card and the price stays at the foot. */
+.card > .chips { margin-bottom: 0; }
