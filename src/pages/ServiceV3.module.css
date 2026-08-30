@@ -84,7 +84,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: clamp(40px, 6vw, 88px) 0 clamp(24px, 3vw, 40px);
+  padding: clamp(64px, 8vw, 124px) 0 clamp(24px, 3vw, 40px);
 }
 
 .eyebrow {

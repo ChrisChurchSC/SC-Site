@@ -1,0 +1,155 @@
+import { NavLink } from 'react-router-dom'
+import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+
+import styles from './PlatformAgents.module.css'
+import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import FooterCard from '../components/FooterCard'
+import V3Signoff from '../components/V3Signoff'
+import ClientStrip from '../components/ClientStrip'
+import ServiceFaq from '../components/ServiceFaq'
+import DotNav from '../components/DotNav'
+import { useCalDrawer } from '../context/CalDrawerContext'
+import { useMeta } from '../hooks/useMeta'
+import { agents } from '../data/agents'
+
+/**
+ * /platform/agents — the first of the six platform pages.
+ *
+ * THE ARGUMENT OF THE PAGE IS THE REFUSALS. Six specialist agents is a
+ * feature anyone can claim and nobody can check. What each one will not do
+ * is checkable, and it is the reason a draft out of this system can be sent
+ * rather than merely read: an agent that cannot invent a claim cannot put one
+ * in your copy.
+ *
+ * EVERY "WILL NOT" COMES FROM THE AGENT'S OWN DEFINITION, read from
+ * src/data/agents.js — the same list the /v3 card and the Encode step draw.
+ * Nothing on this page is written to fit the layout.
+ *
+ * The icons are this page's own, matching the homepage card's set so the six
+ * are recognisable across surfaces.
+ */
+const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
+
+/* How a draft actually gets from an agent to something live. This is the
+   sync CLI's real behaviour: a push opens a numbered review holding what the
+   files would become, it writes nothing live, and merging is a person's
+   job. */
+const FLOW = [
+  {
+    n: '01',
+    name: 'It drafts',
+    note: 'Out of the repo — your positioning, your voice, your approved claims. Not a general model guessing at your brand.',
+  },
+  {
+    n: '02',
+    name: 'It marks what it cannot source',
+    note: 'A claim with no proof point behind it comes back flagged rather than invented. The gap is the output.',
+  },
+  {
+    n: '03',
+    name: 'A person approves it',
+    note: 'Every change is proposed. Nothing an agent writes goes live until somebody merges it.',
+  },
+]
+
+export default function PlatformAgents() {
+  const cal = useCalDrawer()
+
+  useMeta({
+    title: 'Agents | Super Conscious',
+    description: 'Six agents trained on your brand — and the one thing each of them will not do.',
+  })
+
+  return (
+    <main className={styles.page}>
+      <V3Nav />
+
+      <header className={styles.hero}>
+        <div className={styles.field} aria-hidden="true">
+          {/* A few cells carry an icon, placed on the grid rather than
+              scattered at random — the reference reads as a system with
+              things in it, not as confetti. */}
+          {ICONS.map((Icon, i) => (
+            <span key={i} className={`${styles.cell} ${styles[`cell${i + 1}`]}`}>
+              <Icon size={20} strokeWidth={1.3} aria-hidden="true" />
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.heroCard}>
+          <p className={styles.eyebrow}>[ Agents ]</p>
+          <h1 className={styles.headline}>
+            Trained on your brand, and honest about what they do not know.
+          </h1>
+          <p className={styles.intro}>
+            Six specialists that draft out of your repo — in your voice, off your positioning,
+            against claims somebody has already approved.
+          </p>
+          <div className={styles.actions}>
+            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
+            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+          </div>
+        </div>
+      </header>
+
+      <div className={styles.strip}>
+        <ClientStrip banner />
+      </div>
+
+      <section className={styles.block} aria-labelledby="roster">
+        <p className={styles.eyebrow}>[ The six ]</p>
+        <h2 className={styles.blockHead} id="roster">
+          One for each part of the job.
+        </h2>
+
+        <div className={styles.grid}>
+          {agents.map(({ name, does, wont }, i) => {
+            const Icon = ICONS[i]
+            return (
+              <article key={name} className={styles.card}>
+                <span className={styles.cardIcon}>
+                  <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
+                </span>
+                <h3 className={styles.cardName}>{name}</h3>
+                <p className={styles.cardDoes}>{does}</p>
+                {/* The refusal as the card's tag — the reference puts a
+                    category chip here, and for these six the refusal is the
+                    category that matters. */}
+                <span className={styles.cardWont}>
+                  <span className={styles.wontKey}>Will not</span> {wont}
+                </span>
+              </article>
+            )
+          })}
+        </div>
+      </section>
+
+      <hr className={styles.divider} />
+
+      <section className={styles.block} aria-labelledby="how">
+        <p className={styles.eyebrow}>[ How they work ]</p>
+        <h2 className={styles.blockHead} id="how">
+          A draft, a flag, and a person who says yes.
+        </h2>
+
+        <ol className={styles.flow}>
+          {FLOW.map(({ n, name, note }) => (
+            <li key={n} className={styles.step}>
+              <span className={styles.stepNum}>{n}</span>
+              <h3 className={styles.stepName}>{name}</h3>
+              <p className={styles.stepNote}>{note}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <hr className={styles.divider} />
+
+      <ServiceFaq />
+
+      <FooterCard columns={FOOTER_COLS} />
+      <V3Signoff />
+      <DotNav />
+    </main>
+  )
+}

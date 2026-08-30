@@ -134,7 +134,7 @@ export const WORK_BY_SIZE = [
  */
 export const PLATFORM_PAGES = [
   { name: 'Repo', Icon: FolderGit2, note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
-  { name: 'Agents', Icon: Bot, note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
+  { name: 'Agents', Icon: Bot, href: '/platform/agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
   { name: 'Memory', Icon: BookMarked, note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },
   { name: 'Library', Icon: LayoutGrid, note: 'Every asset we have made, in use and findable.' },
@@ -309,7 +309,7 @@ const USE_CASES = [
 ]
 
 export const FOOTER_COLS = [
-  { tag: 'Platform', links: PLATFORM_PAGES.map(({ name }) => ({ label: name })) },
+  { tag: 'Platform', links: PLATFORM_PAGES.map(({ name, href }) => ({ label: name, href })) },
   {
     tag: 'Services',
     links: [
@@ -547,17 +547,23 @@ export default function V3Nav() {
                 </div>
 
                 <div className={`${v3.svcGrid} ${v3.svcGridTwo}`}>
-                  {PLATFORM_PAGES.map(({ name, note, Icon }) => (
-                    <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>
-                      <span className={v3.svcIcon}>
-                        {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden="true" />}
-                      </span>
-                      <span className={v3.svcBody}>
-                        <span className={v3.svcName}>{name}</span>
-                        <span className={v3.svcNote}>{note}</span>
-                      </span>
-                    </span>
-                  ))}
+                  {PLATFORM_PAGES.map(({ name, note, Icon, href }) => {
+                    const inner = (
+                      <>
+                        <span className={v3.svcIcon}>
+                          {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden="true" />}
+                        </span>
+                        <span className={v3.svcBody}>
+                          <span className={v3.svcName}>{name}</span>
+                          <span className={v3.svcNote}>{note}</span>
+                        </span>
+                      </>
+                    )
+                    return href
+                      ? <NavLink key={name} to={href} className={v3.svcRow}>{inner}</NavLink>
+                      /* No page yet, so no link and no hover. */
+                      : <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>{inner}</span>
+                  })}
                 </div>
               </div>
             )}
