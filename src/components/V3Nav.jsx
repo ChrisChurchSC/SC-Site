@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Users, Briefcase, PenLine, Mail, ArrowUpRight } from 'lucide-react'
 
@@ -340,6 +340,35 @@ export const FOOTER_COLS = [
 export default function V3Nav() {
   const cal = useCalDrawer()
   const [openMenu, setOpenMenu] = useState(null)
+  /* CLOSING IS DELAYED; OPENING IS NOT.
+
+     Leaving the bar used to close the panel on the same frame, which made the
+     panel awkward in the ordinary case: the cursor travels diagonally from a
+     link toward the item it is aiming at, and that path leaves the trigger
+     before it reaches the panel. The panel is a DOM child of the shell, so
+     moving INTO it is not a leave at all — but there was a 6px gap between
+     the two where the cursor is over neither, and that fired the close.
+
+     The gap is bridged in CSS as well. This grace period is the part that
+     matters, because it also covers a path that swings wide of the panel
+     before coming back to it. 260ms is long enough to cross the gap and
+     short enough that a panel never feels stuck open. */
+  const closeTimer = useRef(null)
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }
+  const openPanel = (panel) => {
+    cancelClose()
+    setOpenMenu(panel ?? null)
+  }
+  const closeSoon = () => {
+    cancelClose()
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 260)
+  }
+  useEffect(() => cancelClose, [])
   /* Small screens only. The panels open on hover, which a touch screen does
      not have, so below the breakpoint the bar collapses to one button and a
      list — the whole navigation on a phone rather than a convenience. */
@@ -350,7 +379,8 @@ export default function V3Nav() {
           <div
             className={v3.navShell}
             style={{ gridColumn: '1 / span 12' }}
-            onMouseLeave={() => setOpenMenu(null)}
+            onMouseLeave={closeSoon}
+            onMouseEnter={cancelClose}
           >
             <div className={`${styles.cornerNote} ${v3.barCard}`}>
               {/* Back to the v3 homepage, not the live one — every page carrying this
@@ -372,8 +402,8 @@ export default function V3Nav() {
                   )
                   const shared = {
                     className: `${v3.navLink}${open ? ' ' + v3.navLinkOpen : ''}`,
-                    onMouseEnter: () => setOpenMenu(panel ?? null),
-                    onFocus: () => setOpenMenu(panel ?? null),
+                    onMouseEnter: () => openPanel(panel),
+                    onFocus: () => openPanel(panel),
                   }
                   return href
                     ? <NavLink key={label} to={href} {...shared} aria-expanded={panel ? open : undefined}>{inner}</NavLink>
@@ -412,8 +442,8 @@ export default function V3Nav() {
                     So it renders unlinked and dim, the same treatment Platform
                     and Pricing get. Give it an href when there is a client area
                     to log in to. */}
-                <span className={`${v3.navLink} ${v3.navLinkFlat}`} onMouseEnter={() => setOpenMenu(null)}>Log in</span>
-                <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => setOpenMenu(null)}>Book a demo</button>
+                <span className={`${v3.navLink} ${v3.navLinkFlat}`} onMouseEnter={() => openPanel(null)}>Log in</span>
+                <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => openPanel(null)}>Book a demo</button>
               </div>
             </div>
 

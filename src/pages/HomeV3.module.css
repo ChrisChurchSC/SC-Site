@@ -297,6 +297,19 @@
   z-index: 50;
 }
 
+/* Bridges the 6px gap between the bar and this panel. Without it the cursor
+   passes over neither element on the way down, so the shell sees a mouseleave
+   before the panel sees a mouseenter. Invisible, and only present while the
+   panel is. */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+
 .panel {
   position: absolute;
   top: calc(100% + 6px);
