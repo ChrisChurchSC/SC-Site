@@ -5,6 +5,8 @@ import InputsWindow from './InputsWindow'
 import DesignWindow from './DesignWindow'
 import DeployWindow from './DeployWindow'
 import AgentWindow from './AgentWindow'
+import DraftWindow from './DraftWindow'
+import ReviewWindow from './ReviewWindow'
 import AdoptWindow from './AdoptWindow'
 import AssetsGridWindow from './AssetsGridWindow'
 import RepoWindow from './RepoWindow'
@@ -46,29 +48,30 @@ const SETS = {
      The middle one is the argument — an agent that stops is worth more than
      one that fills the gap, and the marker is the thing it hands back. */
   agents: {
-    headline: 'It drafts, it flags what it cannot source, and a person says yes.',
+    headline: 'It reads your brand, drafts from it, and stops where it cannot source a claim.',
     steps: [
       {
         n: '01',
-        name: 'It drafts',
-        visual: 'assets',
-        note: 'Out of the repo — your positioning, your voice, your approved claims. Not a general model guessing at your brand.',
+        name: 'It reads your brand',
+        visual: 'inputs',
+        note: 'Positioning, voice, audience, the claims already cleared — out of the repo, not out of a prompt somebody pasted.',
       },
       {
         n: '02',
-        name: 'It marks the gap',
-        visual: 'agent',
-        note: 'A claim with no proof point behind it comes back flagged rather than invented. The gap is the output.',
+        name: 'It drafts, and flags',
+        visual: 'draft',
+        note: 'In your voice, off your own positioning. Where there is no proof point it writes [CLAIM NEEDED] instead of something plausible.',
       },
       {
         n: '03',
         name: 'A person approves it',
-        visual: 'repo',
-        note: 'Every change is proposed. Nothing an agent writes goes live until somebody merges it.',
+        visual: 'review',
+        note: 'Every change is proposed as a numbered review. Nothing an agent writes goes live until somebody merges it.',
       },
     ],
     loops: false,
   },
+
 
   build: {
     headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
@@ -165,8 +168,12 @@ const VISUALS = {
   deploy: DeployWindow,
   /* The people working in it — their teams on Build, ours on Grow. */
   adopt: AdoptWindow,
-  /* One agent's definition, with the marker it writes when it stops. */
+  /* One agent's definition — the file, for the step about reading a brand. */
   agent: AgentWindow,
+  /* A draft with the marker in it, for the step about flagging. */
+  draft: DraftWindow,
+  /* The review queue, for the step about a person approving. */
+  review: ReviewWindow,
   /* Where it lands: the repo, set up and documented. */
   repo: () => <RepoWindow big assets={false} agents />,
   /* The creative that got made. */

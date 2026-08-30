@@ -1,0 +1,132 @@
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+}
+
+.crumbMuted { color: rgba(255, 255, 255, 0.38); }
+.slash { color: rgba(255, 255, 255, 0.22); }
+.name { color: rgba(255, 255, 255, 0.88); }
+
+.badge {
+  margin-left: auto;
+  padding: 3px 9px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 13px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+.count { margin-left: auto; font-size: 10.5px; color: rgba(255, 255, 255, 0.3); }
+
+.foot {
+  margin: 0;
+  padding: 14px 20px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.by { font-size: 10.5px; color: rgba(255, 255, 255, 0.3); }
+
+.sample {
+  margin-left: auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 1.6vw, 18px);
+  padding: clamp(20px, 2.6vw, 34px) clamp(22px, 3vw, 44px);
+  overflow: auto;
+}
+
+/* The draft is the brand's own voice, so it is set in the brand's own serif
+   — it is copy, not output. */
+.line {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 19px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.lineDim { color: rgba(255, 255, 255, 0.38); }
+
+/* The marker sits in the flow of the copy, in place of the sentence it would
+   have written — that is where it appears in a real draft, and it is the
+   output rather than an error state. */
+.marker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 13px 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(223, 78, 214, 0.45);
+}
+
+.markerKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.markerBody {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+}

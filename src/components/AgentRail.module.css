@@ -6,11 +6,12 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  /* Stands in from the page margin on the left. The rail still bleeds off
-     the right, so the section reads as starting further in and running out
-     — the shape of a rail rather than a row that happens to be cut. */
+  /* Room above and below, so the rail is a section rather than a row wedged
+     between two others. */
+  padding: clamp(56px, 7vw, 112px) 0 clamp(56px, 7vw, 112px);
   padding-left: clamp(16px, 5vw, 110px);
 }
+
 
 .eyebrow {
   margin: 0;
@@ -45,20 +46,41 @@
    card leaving to the left goes off the screen rather than being sliced by
    an edge sitting in open space. */
 .rail {
-  display: flex;
-  align-items: stretch;
-  gap: 14px;
   margin-top: clamp(24px, 3vw, 40px);
 
+  /* Bleeds to both screen edges — a card leaving to the left should go off
+     the screen rather than be sliced by an edge sitting in open space. */
   --bleed-left: calc(var(--page-pad-left, 0px) + clamp(16px, 5vw, 110px));
   margin-left: calc(-1 * var(--bleed-left));
   width: calc(100% + var(--bleed-left) + var(--page-pad-right, 0px));
-  padding-left: var(--bleed-left);
-  padding-right: var(--page-pad-right, 16px);
-  padding-bottom: 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: hidden;
 }
+
+/* LEFT TO RIGHT. The track sits one pass to the left and travels back to
+   zero, which moves the cards rightwards; the duplicated pass means the
+   reset at 0 lands on identical content and the loop has no seam. */
+.track {
+  display: flex;
+  width: max-content;
+  animation: agentDrift 64s linear infinite;
+}
+
+.track:hover { animation-play-state: paused; }
+
+.pass { display: flex; gap: 14px; padding-right: 14px; }
+
+@keyframes agentDrift {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+/* Someone who asked for less movement gets a row that holds still and
+   scrolls by hand instead. */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; transform: none; }
+  .rail { overflow-x: auto; scrollbar-width: none; }
+}
+
 
 .rail::-webkit-scrollbar { display: none; }
 

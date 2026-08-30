@@ -47,27 +47,34 @@ export default function AgentRail() {
       </p>
 
       <div className={styles.rail}>
-        {agents.map(({ name, does, wont }, i) => {
-          const Icon = ICONS[i]
-          return (
-            <article key={name} className={styles.card}>
-              <div className={styles.cardTop}>
-                <span className={styles.cardIcon}>
-                  <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
-                </span>
-                <span className={styles.slot}>{DISCIPLINE[name] ?? 'Agent'}</span>
-              </div>
+        <div className={styles.track}>
+          {[false, true].map((dup) => (
+            <div key={String(dup)} className={styles.pass} aria-hidden={dup || undefined}>
+              {agents.map(({ name, does, wont }, i) => {
+                const Icon = ICONS[i]
+                return (
+                  <article key={name} className={styles.card}>
+                    <div className={styles.cardTop}>
+                      <span className={styles.cardIcon}>
+                        <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
+                      </span>
+                      <span className={styles.slot}>{DISCIPLINE[name] ?? 'Agent'}</span>
+                    </div>
 
-              <h3 className={styles.cardName}>{name}</h3>
-              <p className={styles.cardDoes}>{does}</p>
+                    <h3 className={styles.cardName}>{name}</h3>
+                    <p className={styles.cardDoes}>{does}</p>
 
-              <p className={styles.cardWont}>
-                <span className={styles.wontKey}>Will not</span> {wont.toLowerCase()}
-              </p>
-            </article>
-          )
-        })}
+                    <p className={styles.cardWont}>
+                      <span className={styles.wontKey}>Will not</span> {wont.toLowerCase()}
+                    </p>
+                  </article>
+                )
+              })}
+            </div>
+          ))}
+        </div>
       </div>
+
     </section>
   )
 }
