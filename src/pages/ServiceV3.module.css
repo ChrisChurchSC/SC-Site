@@ -407,3 +407,10 @@
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* Room above and below the featured rail. FeaturedWall has its own left
+   inset and deliberately bleeds off the right, so only the vertical is set
+   here. */
+.featured {
+  padding: clamp(48px, 6vw, 96px) 0;
+}

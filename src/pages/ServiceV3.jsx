@@ -120,7 +120,9 @@ export default function ServiceV3() {
 
       <hr className={styles.divider} />
 
-      <FeaturedWall />
+      <div className={styles.featured}>
+        <FeaturedWall />
+      </div>
 
       <hr className={styles.divider} />
 
