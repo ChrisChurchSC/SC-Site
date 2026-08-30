@@ -27,3 +27,17 @@ export const repoFiles = [
   { folder: 'Verbal', name: 'tone-of-voice.md', age: '20h' },
   { folder: 'Visual', name: 'logo.svg', age: '22h' },
 ]
+
+/* THE AGENTS IN THE REPO. These six are real — they live in SC-Brand/Agents
+ * as one markdown file each, and the "will not" line is the thing each one
+ * refuses to fake. That refusal is the product, not boilerplate: it is why a
+ * draft out of this repo can be trusted enough to send.
+ */
+export const repoAgents = [
+  { name: 'brand-strategist', wont: 'invent a claim' },
+  { name: 'comms-writer', wont: 'invent a proof point' },
+  { name: 'design-critic', wont: 'guess a measurement' },
+  { name: 'media-strategist', wont: 'invent a rate' },
+  { name: 'sales-analyst', wont: 'infer a number' },
+  { name: 'studio-ops', wont: 'invent a price' },
+]

@@ -102,8 +102,10 @@
   color: rgba(255, 255, 255, 0.28);
 }
 
-/* The mark gets the biggest cell — it is the part people recognise. */
+/* The mark is square because it is; the logotype is wide because it is.
+   Giving them the same box was the thing that made them read as one asset. */
 .cellMark { grid-column: span 2; grid-row: span 2; }
+.cellType { grid-column: span 2; grid-row: span 1; }
 
 /* Photography is the other large one: it is the part of a brand that is an
    image rather than a token, and at one cell it read as a swatch. */
@@ -111,7 +113,7 @@
 
 .cellWide { grid-column: span 2; }
 
-.mark {
+.markBox, .typeBox {
   flex: 1;
   display: grid;
   place-items: center;
@@ -119,7 +121,16 @@
   padding: 6px 4px;
 }
 
-.mark svg { width: 100%; height: auto; max-height: 100%; display: block; }
+
+.glyph {
+  width: clamp(38px, 4.6vw, 62px);
+  height: auto;
+  flex: none;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.typeBox svg { width: 100%; height: auto; max-height: 100%; display: block; }
+.markBox svg { height: auto; max-height: 100%; }
 
 .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 

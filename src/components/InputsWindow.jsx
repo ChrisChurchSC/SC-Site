@@ -7,33 +7,26 @@ import styles from './InputsWindow.module.css'
  * work will be made from. So this shows the inputs themselves, grouped by
  * the folder each one lands in.
  *
- * THE STRUCTURE IS THE REAL ONE. Strategy holds what is true — positioning,
- * audience, proof points, the messaging house, the competitive landscape.
- * Verbal holds how it sounds. Visual is the design system. Data is the
- * numbers. That split is set in the brand repo's own README and mirrors the
- * agent split: the strategist decides what may be claimed, the writer decides
- * how it is said.
+ * THE EIGHT GROUPS AND EVERY ITEM IN THEM ARE CHRIS'S, verbatim. This
+ * previously showed the four repo folders, which are directory names; these
+ * are the things actually being defined, which is what the step is about.
  *
- * The states are sample. What is not sample is that these are the things
- * that get defined, and where each one ends up.
+ * LEGAL IS THE ONE WORTH NOTICING. Approved claims, disclaimers and expiry
+ * dates are the machinery behind an agent refusing to invent a claim — the
+ * only group here that can make a draft wrong rather than merely weak.
  */
 const GROUPS = [
+  { name: 'Strategy', items: ['Positioning', 'Voice', 'Lexicon', 'Narrative', 'Naming rules'] },
+  { name: 'Goals', items: ['Business', 'Brand', 'Campaign', 'Asset-level'] },
+  { name: 'Evidence', items: ['Proof points', 'Objections', 'Audience'] },
+  { name: 'Legal', items: ['Approved claims', 'Disclaimers', 'Expiry dates'] },
   {
-    folder: 'Strategy/',
-    items: ['Positioning', 'Audience', 'Proof points', 'Messaging house', 'Competitive landscape'],
+    name: 'Design',
+    items: ['Tokens', 'Components', 'Iconography', 'Layout', 'Motion', 'Sound', 'Imagery direction', 'Illustration style'],
   },
-  {
-    folder: 'Verbal/',
-    items: ['Tone of voice', 'Copy standards'],
-  },
-  {
-    folder: 'Visual/',
-    items: ['Logo', 'Type', 'Color', 'Photography'],
-  },
-  {
-    folder: 'Data/',
-    items: ['Channels', 'Metrics'],
-  },
+  { name: 'Language', items: ['Headline patterns', 'Body copy', 'Microcopy', 'Dataviz conventions'] },
+  { name: 'Learned', items: ['Decisions', 'Rejections with reasons', 'Exceptions', 'Candidate rules', 'Performance summary'] },
+  { name: 'Operating', items: ['Channel specs', 'Agent definitions', 'Prompt library', 'Access rules', 'Provenance'] },
 ]
 
 const TOTAL = GROUPS.reduce((n, g) => n + g.items.length, 0)
@@ -55,25 +48,19 @@ export default function InputsWindow() {
       </div>
 
       <div className={styles.list}>
-        {GROUPS.map(({ folder, items }) => (
-          <div key={folder} className={styles.group}>
-            <span className={styles.folder}>{folder}</span>
+        {GROUPS.map(({ name, items }) => (
+          <div key={name} className={styles.group}>
+            <span className={styles.folder}>
+              {name}
+              <span className={styles.n}>{items.length}</span>
+            </span>
             <div className={styles.chips}>
-              {items.map((i) => (
-                <span key={i} className={styles.chip}>
-                  <svg className={styles.tick} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M3.5 8.5l3 3 6-6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  {i}
-                </span>
-              ))}
+              {items.map((i) => <span key={i} className={styles.chip}>{i}</span>)}
             </div>
           </div>
         ))}
       </div>
 
-      {/* The reason this step exists at all. */}
-      <p className={styles.foot}>Everything the work gets made from, settled before it starts.</p>
     </div>
   )
 }

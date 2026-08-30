@@ -195,7 +195,31 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-.railOn .railRule { background: var(--pink, #df4ed6); }
+/* The open row keeps the grey rule; the fill runs across it, so the bar
+   reads as progress rather than as the row changing colour. */
+.railRule { position: relative; overflow: hidden; }
+
+.railFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  width: 0;
+  background: var(--pink, #df4ed6);
+  animation-name: railProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes railProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* No auto-advance under reduced motion, so the open row simply reads as
+   open rather than as a bar that never finishes. */
+@media (prefers-reduced-motion: reduce) {
+  .railFill { animation: none; width: 100%; }
+}
 
 /* The screen. min-width: 0 so a wide window scrolls inside its own frame
    rather than widening the grid column. */

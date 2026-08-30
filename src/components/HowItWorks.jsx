@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import styles from './HowItWorks.module.css'
 import InputsWindow from './InputsWindow'
@@ -72,7 +72,6 @@ const SETS = {
         note: 'Teams, partners and agencies trained and working in it from day one.',
       },
     ],
-    closing: 'A project that ends, and leaves something behind that does not.',
     loops: false,
   },
 
@@ -121,6 +120,10 @@ const SETS = {
    one row. Reused components rather than drawings — the asset view, the
    channel panel, the measurement window and the repo are all already built,
    and a second illustrated version of any of them would drift. */
+/* One dwell, shared by the timer and the rule that draws it — they have to
+   be the same number or the bar finishes somewhere other than the switch. */
+const STEP_MS = 6000
+
 const VISUALS = {
   /* The inputs, settled: what the work will be made from. */
   inputs: InputsWindow,
@@ -131,7 +134,7 @@ const VISUALS = {
   /* The people working in it — their teams on Build, ours on Grow. */
   adopt: AdoptWindow,
   /* Where it lands: the repo, set up and documented. */
-  repo: () => <RepoWindow big />,
+  repo: () => <RepoWindow big assets={false} agents />,
   /* The creative that got made. */
   assets: AssetsGridWindow,
   /* The same assets, seen by where they went. */
@@ -146,6 +149,30 @@ const VISUALS = {
 export default function HowItWorks({ slug = 'grow' }) {
   const set = SETS[slug]
   const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [seen, setSeen] = useState(false)
+  const sectionRef = useRef(null)
+
+  /* Only while it is on screen. */
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => setSeen(entry.isIntersecting),
+      { threshold: 0.35 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  const count = set?.steps?.length ?? 0
+
+  useEffect(() => {
+    if (!seen || paused || count < 2) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setTimeout(() => setActive((i) => (i + 1) % count), STEP_MS)
+    return () => clearTimeout(t)
+  }, [active, seen, paused, count])
   /* A service with no set has no section, rather than an empty one. */
   if (!set) return null
 
@@ -153,7 +180,13 @@ export default function HowItWorks({ slug = 'grow' }) {
   const id = `how-it-works-${slug}`
 
   return (
-    <section className={styles.section} aria-labelledby={id}>
+    <section
+      ref={sectionRef}
+      className={`${styles.section}${loops ? '' : ' ' + styles.noLoop}`}
+      aria-labelledby={id}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <p className={styles.eyebrow}>[ How it works ]</p>
       <h2 className={styles.headline} id={id}>
         {headline}
@@ -178,9 +211,19 @@ export default function HowItWorks({ slug = 'grow' }) {
                   <span className={styles.railName}>{name}</span>
                 </button>
                 {i === active && <p className={styles.railNote}>{note}</p>}
-                {/* The rule under each row fills on the open one, which is
-                    what marks position without a progress bar of its own. */}
-                <span className={styles.railRule} aria-hidden="true" />
+                {/* The rule under each row doubles as the progress bar: it
+                    fills over the dwell on the open row, which is what the
+                    reference does and what makes the timer legible rather
+                    than surprising. */}
+                <span className={styles.railRule} aria-hidden="true">
+                  {i === active && (
+                    <span
+                      key={active}
+                      className={styles.railFill}
+                      style={{ animationDuration: `${STEP_MS}ms`, animationPlayState: paused ? 'paused' : 'running' }}
+                    />
+                  )}
+                </span>
               </li>
             ))}
           </ol>
@@ -205,13 +248,15 @@ export default function HowItWorks({ slug = 'grow' }) {
         </ol>
       )}
 
-      <p className={styles.loop}>
-        {/* The return mark belongs to the loop. Support's row ends where it
-            ends, so it gets a standing mark rather than one that says the
-            work comes back round. */}
-        <span className={styles.loopMark} aria-hidden="true">{loops ? '↺' : '·'}</span>
-        {closing}
-      </p>
+      {closing && (
+        <p className={styles.loop}>
+          {/* The return mark belongs to the loop. Support's row ends where it
+              ends, so it gets a standing mark rather than one that says the
+              work comes back round. */}
+          <span className={styles.loopMark} aria-hidden="true">{loops ? '↺' : '·'}</span>
+          {closing}
+        </p>
+      )}
     </section>
   )
 }

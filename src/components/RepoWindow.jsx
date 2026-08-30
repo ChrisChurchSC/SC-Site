@@ -1,5 +1,8 @@
 import styles from './RepoWindow.module.css'
+import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+
 import { repoFiles } from '../data/repo'
+import { agents as ROSTER } from '../data/agents'
 
 /**
  * THE REPO, AS A WINDOW. Breadcrumb, tabs, then rows of real files in real
@@ -12,6 +15,16 @@ import { repoFiles } from '../data/repo'
  * section below it — and two copies of this chrome would have drifted the
  * first time either was touched. The file list already came from one place
  * (src/data/repo.js); this puts the frame in one place too.
+ *
+ * `agents` lists the six agents beside the files. OFF by default: only the
+ * Encode step wants them, because Encode is the step about the brand being
+ * made machine-readable. The platform section shows the same window without
+ * them.
+ *
+ * `assets` shows the Library pane, on by default. The platform section wants
+ * it — that grid is why the panel says assets are in there. The Encode step
+ * does not: Encode is about the brand being written down, not about what is
+ * stored beside it.
  *
  * `label` fills the slot the repository panel uses for PRIVATE. `big` is the
  * standalone treatment: larger type, taller rows, and a second pane of real
@@ -37,7 +50,14 @@ function Folder() {
 
 const ASSET_TILES = 9
 
-export default function RepoWindow({ label = 'Repo', big = false }) {
+/* Same six, same order, same icons as the Agents card on /v3 — it is one
+   roster, so it should look like one roster. */
+const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
+
+/* brand-strategist, because its refusal is the one with a marker to show. */
+const PICKED = 0
+
+export default function RepoWindow({ label = 'Repo', big = false, assets = true, agents = false }) {
   return (
     <div className={`${styles.window}${big ? ' ' + styles.big : ''}`}>
       <div className={styles.head}>
@@ -66,8 +86,40 @@ export default function RepoWindow({ label = 'Repo', big = false }) {
           ))}
         </ul>
 
+        {big && agents && (
+          <div className={styles.agents}>
+            <span className={styles.agentsLabel}>Select agent</span>
+
+            <div className={styles.roster}>
+              {ROSTER.map(({ name, wont }, i) => {
+                const Icon = ICONS[i]
+                return (
+                  <span
+                    key={name}
+                    className={`${styles.slot}${i === PICKED ? ' ' + styles.slotPicked : ''}`}
+                    /* The five unpicked names appear nowhere else on the
+                       panel — without this the roster is five anonymous
+                       icons. */
+                    title={`${name} · will not ${wont.toLowerCase()}`}
+                  >
+                    <Icon size={16} strokeWidth={1.4} aria-hidden="true" />
+                  </span>
+                )
+              })}
+            </div>
+
+            <div className={styles.plate}>
+              <span className={styles.plateName}>{ROSTER[PICKED].name}</span>
+              <span className={styles.plateDoes}>{ROSTER[PICKED].does}</span>
+              <span className={styles.plateWont}>
+                <span className={styles.plateWontKey}>Will not</span> {ROSTER[PICKED].wont}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Assets, only in the standalone treatment — see .panes. */}
-        {big && (
+        {big && assets && (
           <div className={styles.assets}>
             <div className={styles.assetsHead}>
               <span className={styles.assetsPath}>Library/</span>

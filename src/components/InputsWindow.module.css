@@ -78,50 +78,52 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* Grouped by the folder each input lands in, so the screen says where these
-   things go as well as what they are. */
+/* TWO COLUMNS. Eight groups and thirty-seven items in a square window is a
+   lot; one column of them is a scroll with no shape, two is a document.
+   It still scrolls, which is right — a screen showing everything the work is
+   made from should look like more than fits. */
 .list {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: clamp(10px, 1.4vw, 18px);
-  padding: clamp(14px, 1.8vw, 22px) 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: clamp(12px, 1.6vw, 18px) clamp(10px, 1.4vw, 18px);
+  padding: clamp(14px, 1.8vw, 20px) 20px;
   overflow: auto;
 }
 
-.group { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.group { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
 
 .folder {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
   font-family: "Roboto Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.32);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+/* A count per group rather than a tick per item: thirty-seven ticks is a
+   texture, not a confirmation. */
+.n {
+  font-size: 9px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(223, 78, 214, 0.7);
+}
 
-/* Each input as a settled thing — the tick is the point of the step. */
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
 .chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px 5px 8px;
+  padding: 4px 7px;
   font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 9.5px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.62);
   background: #0d0d0d;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 7px;
-}
-
-/* Teal, not pink: it is a confirmation. Pink on this page means "look here",
-   not "this is done". */
-.tick {
-  width: 11px;
-  height: 11px;
-  flex: none;
-  color: rgba(78, 207, 179, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 5px;
 }

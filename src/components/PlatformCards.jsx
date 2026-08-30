@@ -1,5 +1,6 @@
 import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
 import { dashboard as DASH } from '../data/dashboard'
+import { agents as ROSTER } from '../data/agents'
 
 import styles from './PlatformCards.module.css'
 
@@ -325,44 +326,11 @@ function DashPreview() {
  * card two rows up already says with an actual screenshot of the repository.
  * This says the thing only this card can: what the six of them refuse to do.
  */
-const AGENTS = [
-  {
-    name: 'brand-strategist',
-    Icon: Compass,
-    does: 'Owns positioning, audience, proof points and the messaging house.',
-    wont: 'Invent a claim',
-  },
-  {
-    name: 'comms-writer',
-    Icon: PenLine,
-    does: 'Drafts and edits anything the brand says out loud.',
-    wont: 'Decide positioning',
-  },
-  {
-    name: 'media-strategist',
-    Icon: TrendingUp,
-    does: 'Plans paid media — channels, budget, flighting and measurement.',
-    wont: 'Invent a rate',
-  },
-  {
-    name: 'design-critic',
-    Icon: Ruler,
-    does: 'Audits built interfaces against the design system.',
-    wont: 'Opine — it measures',
-  },
-  {
-    name: 'sales-analyst',
-    Icon: ChartBar,
-    does: 'Reads the CRM, transcripts and email for what customers say.',
-    wont: 'Infer strategy',
-  },
-  {
-    name: 'studio-ops',
-    Icon: ClipboardList,
-    does: 'Scopes projects, builds proposals and runs the retros.',
-    wont: 'Write the pitch',
-  },
-]
+/* The roster and every refusal now live in src/data/agents.js, shared with
+   the Encode step on a service page. Icons stay here because they are this
+   card's own. */
+const AGENT_ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
+const AGENTS = ROSTER.map((a, i) => ({ ...a, Icon: AGENT_ICONS[i] }))
 
 /* brand-strategist, because its refusal is the one with a marker to show. */
 const PICKED = 0

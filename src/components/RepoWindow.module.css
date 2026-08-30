@@ -192,3 +192,91 @@
   .assetsHead { padding: 15px 15px 11px; }
   .assetGrid { padding: 0 15px 16px; }
 }
+
+/* THE AGENTS AS A CHARACTER SELECT, the same shape as the Agents card on
+   /v3 — six slots with one picked, and a plate under it. It is one roster,
+   so it should look like one roster.
+
+   A list of six hyphenated job titles is a paragraph pretending to be a
+   feature; this makes the roster something you look at. */
+.agents {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+}
+
+.agentsLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.slot {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* The picked one, in the colour that means "this is the one being talked
+   about" everywhere else on the site. */
+.slotPicked {
+  border-color: rgba(223, 78, 214, 0.55);
+  background: rgba(223, 78, 214, 0.1);
+  color: var(--pink, #df4ed6);
+}
+
+.plate {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.plateName {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.plateDoes {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* The refusal is the reason the card is worth its place, so it gets the
+   colour and the key word rather than being a trailing clause. */
+.plateWont {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.plateWontKey {
+  color: var(--pink, #df4ed6);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .agents { border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+}

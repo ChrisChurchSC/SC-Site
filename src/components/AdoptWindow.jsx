@@ -88,7 +88,6 @@ export default function AdoptWindow() {
         ))}
       </div>
 
-      <p className={styles.foot}>Working in it from day one, without us in the room.</p>
     </div>
   )
 }
