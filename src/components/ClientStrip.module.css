@@ -108,3 +108,32 @@
   background: #000000;
   border: 1px solid rgba(255, 255, 255, 0.14);
 }
+
+/* BANNER — see the `banner` prop. No card: the strip is a rule across the
+   page rather than an object on it, which is what lets it sit directly under
+   a hero without reading as a second panel.
+
+   No entrance animation either. The card version slides in because it is one
+   more block arriving in the homepage grid; this one is a divider, and a
+   divider that animates draws attention to itself at exactly the moment the
+   hero above it is trying to hold it. */
+.banner {
+  background: transparent;
+  border-radius: 0;
+  height: auto;
+  padding: clamp(20px, 2.6vw, 34px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  animation: none;
+}
+
+/* More air than the card gets: the row is wider here, and the reference for
+   this treatment spaces its marks well apart. */
+.banner .item { padding: 0 clamp(24px, 3vw, 44px); }
+.banner .name { font-size: clamp(17px, 1.35vw, 20px); }
+.banner .logo { height: 22px; }
+
+@media (max-width: 768px) {
+  .banner { padding: 18px 0; }
+  .banner .item { padding: 0 20px; }
+}

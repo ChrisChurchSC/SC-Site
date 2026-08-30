@@ -391,3 +391,10 @@
 @media (prefers-reduced-motion: reduce) {
   .ctaFilled, .ctaGhost, .otherCard, .pill[data-tip]::after { transition: none; }
 }
+
+/* The client strip runs the full width, like the hero block above it. Same
+   escape from the page padding that .top uses, so the two edges agree. */
+.clients {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+}

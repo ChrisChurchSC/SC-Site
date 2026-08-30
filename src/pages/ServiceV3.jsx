@@ -5,6 +5,7 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
+import ClientStrip from '../components/ClientStrip'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { services, serviceBySlug } from '../data/services'
@@ -95,6 +96,15 @@ export default function ServiceV3() {
             items: (outputs ?? items).slice(0, 3),
           }))}
         />
+      </div>
+
+      {/* Under the hero, not inside it: the block above carries the gradient
+          and the dot field, and pulling the strip into that would put client
+          names on top of the texture. Out here it does the job a strip does,
+          which is to end the hero. Full bleed, so its rules run the width of
+          the page rather than stopping at the reading margin. */}
+      <div className={styles.clients}>
+        <ClientStrip banner />
       </div>
 
       <section className={styles.block} aria-labelledby="covers">
