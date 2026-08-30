@@ -2,7 +2,7 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 
 import styles from './FlowDiagram.module.css'
-import { repoFiles } from '../data/repo'
+import RepoWindow from './RepoWindow'
 
 /**
  * The hero diagram: what goes into the platform, and what comes out.
@@ -48,21 +48,6 @@ const REPO_INPUTS = [
   { name: 'Data', items: ['Social', 'Search', 'Email', 'Paid', 'Web', 'CRM'] },
 ]
 
-/* A folder glyph, drawn rather than imported — the platform card on /v3
-   draws its own for the same reason: one path is cheaper than a dependency
-   for a shape this simple. */
-function Folder() {
-  return (
-    <svg className={styles.folder} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path
-        d="M1.5 3.5h4l1.4 1.6h7.6v7.4a1 1 0 0 1-1 1h-12a1 1 0 0 1-1-1z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
 
 function Column({ label, groups, sync = false }) {
   return (
@@ -191,34 +176,7 @@ export default function FlowDiagram({ centre, outputs }) {
 
         <Column label="What goes in" groups={REPO_INPUTS} sync />
 
-        <div className={styles.centre}>
-          <div className={styles.centreHead}>
-            <span className={styles.centreCrumbMuted}>Super Conscious</span>
-            <span className={styles.centreSlash}>/</span>
-            <span className={styles.centreName}>SC-Brand</span>
-            <span className={styles.centrePrivate}>{centre}</span>
-          </div>
-          {/* The same chrome as the repository panel on /v3 — breadcrumb,
-              tabs, then rows — so the thing in the middle of this diagram
-              and the thing on the homepage are recognisably one product. */}
-          <div className={styles.centreTabs}>
-            <span className={styles.tabOn}>Files</span>
-            <span className={styles.tab}>Pull requests</span>
-            <span className={styles.tab}>Activity</span>
-          </div>
-
-          <ul className={styles.centreBody}>
-            {repoFiles.map(({ folder, name, age }) => (
-              <li key={folder + name} className={styles.row}>
-                <Folder />
-                <span className={styles.rowPath}>
-                  <span className={styles.rowFolder}>{folder}/</span>{name}
-                </span>
-                <span className={styles.rowAge}>{age}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <RepoWindow label={centre} />
 
         <Column label="What comes out" groups={outputs} />
       </div>

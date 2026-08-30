@@ -135,15 +135,21 @@
 
 /* Dotted rather than solid, as the reference is — it reads as a route
    something takes rather than a structural join. */
+/* THE HERO'S TREATMENT, EXACTLY — same pink, same weight, same curve. The
+   two diagrams sit two screens apart on the same page, and a dotted white
+   elbow here against a curved pink wire up there read as two systems rather
+   than one page. */
 .wire {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1.2;
-  stroke-dasharray: 2 4;
-  stroke-linecap: round;
+  stroke: rgba(223, 78, 214, 0.45);
+  stroke-width: 1;
 }
 
-.head { fill: rgba(255, 255, 255, 0.34); }
+/* One junction, filled so it reads as a terminal rather than another bend,
+   and square, as the hero's are. */
+.junction {
+  fill: var(--pink, #df4ed6);
+}
 
 .label {
   font-family: "Roboto Mono", monospace;

@@ -1,5 +1,5 @@
 import styles from './PlatformIntro.module.css'
-import PlatformFlow from './PlatformFlow'
+import RepoWindow from './RepoWindow'
 import { useCalDrawer } from '../context/CalDrawerContext'
 
 /**
@@ -10,10 +10,9 @@ import { useCalDrawer } from '../context/CalDrawerContext'
  * panel below carrying the picture. Everything is left-aligned and the
  * headline is deliberately allowed to wrap — the wrap is the layout.
  *
- * THE PANEL HOLDS THE REVIEW LOOP as a canvas — see PlatformFlow. It is the
- * platform's actual argument: a change is drafted, proposed, approved by a
- * person, and only then does it land. The hero above already shows the repo
- * window, so repeating that here would have said the same thing twice.
+ * THE PANEL HOLDS THE REPO ITSELF, big. The hero diagram shows the same
+ * window small, as one of three columns; here it is the subject, which is
+ * what the section is about. Same component, so the two cannot drift.
  *
  * THE HEADLINE AND THE PARAGRAPH ARE MINE and have not been signed off.
  */
@@ -40,7 +39,7 @@ export default function PlatformIntro() {
       {/* The dot field is the panel's own, masked at the foot so it fades
           rather than stopping on a line. */}
       <div className={styles.panel}>
-        <PlatformFlow />
+        <RepoWindow big />
       </div>
     </section>
   )

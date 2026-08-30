@@ -1,0 +1,128 @@
+/* The repo window — see RepoWindow.jsx. These rules were FlowDiagram's
+   .centre* set, moved here whole so the hero diagram renders exactly as it
+   did. Do not restyle one caller from the outside; add a variant here. */
+
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.crumbMuted { color: rgba(255, 255, 255, 0.38); }
+.slash { color: rgba(255, 255, 255, 0.22); }
+.name { color: rgba(255, 255, 255, 0.88); }
+
+/* The slot the repository panel uses for PRIVATE. */
+.private {
+  margin-left: auto;
+  padding: 2px 7px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.tabs {
+  display: flex;
+  gap: 14px;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+/* Real files in real folders. The repository panel on /v3 lists the folders;
+   this lists one file from each, which is the same store seen one level in —
+   and a window whose body is a blank table says nothing about what is being
+   stored. */
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.row:last-child { border-bottom: 0; }
+
+.folder {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.rowPath {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.78);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The folder reads as the path it is, one stop back from the file name. */
+.rowFolder { color: rgba(255, 255, 255, 0.36); }
+
+.rowAge {
+  flex: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* BIG — the standalone treatment, for when the window is the subject rather
+   than one of three columns. Everything scales together: chrome, rows and
+   type. The row padding is what does most of the work; type alone in a tight
+   row reads as a zoomed screenshot rather than a bigger window. */
+.big .head { padding: 16px 22px; font-size: 13px; gap: 10px; }
+.big .private { padding: 3px 9px; font-size: 9.5px; }
+.big .tabs { padding: 14px 22px; gap: 20px; font-size: 12px; }
+.big .row { padding: 17px 22px; gap: 14px; }
+.big .folder { width: 15px; height: 15px; }
+.big .rowPath { font-size: 13px; }
+.big .rowAge { font-size: 11.5px; }
+.big .body { padding: 6px 0; }
+
+@media (max-width: 620px) {
+  .big .head, .big .tabs, .big .row { padding-left: 15px; padding-right: 15px; }
+  .big .rowPath { font-size: 11.5px; }
+}

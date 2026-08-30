@@ -3,42 +3,43 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import styles from './PlatformFlow.module.css'
 
 /**
- * A PLATFORM ALREADY IN PLACE, AND WHAT IT MAKES — the visual inside the
- * platform section.
+ * THE FEEDBACK LOOP — the visual inside the platform section.
  *
- * Not how the platform gets set up, and not how it gets updated: both of
- * those were tried here and both answered a question this page is not
- * asking. The page is selling the work, so the picture has to be the thing
- * standing up and producing.
+ * Something changes, an agent drafts it out of the repo, and the change is
+ * proposed rather than published: a person approves it, it gets written
+ * down, and it gets measured once it is live.
  *
- * Left is the platform and the agents trained on it. Right is the everyday
- * output — copy, design, plans — with the actual artifacts as chips. The four
- * service pillars are deliberately NOT on the right: the hero diagram above
- * already shows those, and repeating them would answer a question the page
- * answered one screen ago.
+ * Two other shapes were tried here and both were wrong for this page. One
+ * drew how the platform gets SET UP; the other drew how it gets UPDATED,
+ * step by step with a return leg. Both answered a question the page is not
+ * asking.
+ *
+ * THE WIRES MATCH THE HERO: curved, pink, one stroke weight, converging on a
+ * single square junction. They were dotted white elbows with arrowheads, and
+ * against the hero's curves two screens up that read as two different
+ * systems rather than one page.
  *
  * NO THIRD-PARTY MARKS. The reference format leans on vendor logos to say
  * "this plugs into your stack". We have neither those integrations nor
  * licensed marks for them, so every card is our own and every icon is a
  * drawn path.
  *
- * THE COPY HERE IS MINE and is not signed off.
+ * The right-hand copy is the existing PLATFORM_PAGES wording. The left-hand
+ * cards and the connector labels are mine and are not signed off.
  */
 
 const LEFT = [
   {
-    id: 'repo',
-    name: 'Your platform, set up',
-    note: 'Everything the brand is made of, in one structure.',
-    tone: 'teal',
-    chips: ['Positioning', 'Tone of voice', 'Logo & type', 'Audiences', 'Data'],
+    id: 'change',
+    name: 'Something changes',
+    tone: 'pink',
+    chips: ['New data', 'New asset', 'Feedback', 'A brief'],
   },
   {
-    id: 'agents',
-    name: 'Agents trained on it',
-    note: 'They draft out of the repo, and refuse to invent a claim.',
+    id: 'draft',
+    name: 'An agent drafts it',
+    note: 'In your voice, out of the repo. It will not invent a claim.',
     tone: 'blue',
-    chips: ['Strategist', 'Writer', 'Designer', 'Media'],
   },
 ]
 
@@ -47,36 +48,38 @@ const LEFT = [
    would be answering a question the page has just answered. */
 const RIGHT = [
   {
-    id: 'words',
-    name: 'Copy',
-    note: 'In your voice, off your own positioning.',
+    id: 'reviews',
+    name: 'Reviews',
+    note: 'Every change is proposed, and a person approves it.',
+    status: 'Nothing is live yet',
     tone: 'pink',
-    chips: ['Posts', 'Emails', 'Landing page', 'Deck'],
   },
   {
-    id: 'visuals',
-    name: 'Design',
-    note: 'On the system, rather than off-brand by accident.',
-    tone: 'pink',
-    chips: ['Key visual', 'Social set', 'Banners', 'Templates'],
-  },
-  {
-    id: 'plans',
-    name: 'Plans',
-    note: 'Built on the data already in the repo.',
+    id: 'memory',
+    name: 'Memory',
+    note: 'What was decided, what shipped, and why.',
+    status: 'Decision logged',
     tone: 'teal',
-    chips: ['Campaign concept', 'Media plan', 'Audiences'],
+  },
+  {
+    id: 'measurement',
+    name: 'Measurement',
+    note: 'What shipped, and what it moved.',
+    status: 'Tracked',
+    tone: 'blue',
   },
 ]
 
 /* Drawn rather than imported: one path is cheaper than a dependency for a
    shape this simple, and these inherit currentColor so the tone tints them. */
+const LABELS = ['proposed, not live', 'written down', 'measured once live']
+
 const GLYPHS = {
-  repo: 'M1.8 3.6h4l1.4 1.6h7v7.2a1 1 0 0 1-1 1h-10.4a1 1 0 0 1-1-1z',
-  agents: 'M8 8.4a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2M3.2 13.4c0-2.4 2.1-3.9 4.8-3.9s4.8 1.5 4.8 3.9',
-  words: 'M4.5 2.5h5L12.5 5.5v8h-8zM6.4 8.4h4M6.4 10.8h2.6',
-  visuals: 'M2.6 2.6h4.6v4.6H2.6zM11.4 13.4a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8',
-  plans: 'M3 13V8.4M8 13V3.4M13 13V6.4',
+  change: 'M8 2.5v11M2.5 8h11',
+  draft: 'M3 13l2.5-.6 7-7a1.4 1.4 0 0 0-2-2l-7 7z',
+  reviews: 'M3.5 8.5l3 3 6-6.5',
+  memory: 'M3 4.5h10v8H3zM3 7.5h10',
+  measurement: 'M3 13V8M8 13V4M13 13v-7',
 }
 
 
@@ -142,19 +145,39 @@ export default function PlatformFlow() {
       return { x: (side === 'right' ? r.right : r.left) - base.left, y: r.top - base.top + r.height / 2 }
     }
 
-    /* One spine down the gutter, with an elbow into each card on the right.
-       The last left card is the one everything flows from, so the spine
-       starts at its edge. */
-    const from = edge(left.lastElementChild, 'right')
-    const targets = [...right.children].map((el) => edge(el.firstElementChild, 'left'))
-    const spineX = from.x + (targets[0].x - from.x) * 0.32
+    /* EVERY CARD MEETS AT ONE POINT, as the hero diagram does. Each card on
+       the left curves out to the junction and each card on the right curves
+       away from it, so the picture says "all of this, through one thing"
+       rather than "these three, separately".
 
-    return setWires({
+       The junction sits halfway across the gutter and on the average of the
+       endpoints it serves, so no curve has to double back on itself. */
+    const froms = [...left.children].map((el) => edge(el.firstElementChild, 'right'))
+    const targets = [...right.children].map((el) => edge(el.firstElementChild, 'left'))
+    if (!froms.length || !targets.length) return
+
+    const ends = [...froms, ...targets]
+    const junction = {
+      x: Math.max(...froms.map((f) => f.x)) + (Math.min(...targets.map((t) => t.x)) - Math.max(...froms.map((f) => f.x))) / 2,
+      y: ends.reduce((sum, e) => sum + e.y, 0) / ends.length,
+    }
+
+    /* Same curve as the hero's: control points pushed out along x, so the
+       line leaves and arrives horizontally whatever the vertical distance. */
+    const path = (from, to) => {
+      const dx = Math.abs(to.x - from.x)
+      const c = Math.max(18, dx * 0.55)
+      const dir = to.x > from.x ? 1 : -1
+      return `M ${from.x} ${from.y} C ${from.x + c * dir} ${from.y}, ${to.x - c * dir} ${to.y}, ${to.x} ${to.y}`
+    }
+
+    setWires({
       width: base.width,
       height: base.height,
-      from,
-      spineX,
+      junction,
       targets,
+      in: froms.map((f) => path({ x: f.x + 6, y: f.y }, junction)),
+      out: targets.map((t) => path(junction, { x: t.x - 6, y: t.y })),
     })
   }, [])
 
@@ -172,7 +195,6 @@ export default function PlatformFlow() {
 
   /* Kept short: these sit in a gutter, and a label that has to be measured
      against the layout is a label that will not survive the next breakpoint. */
-  const LABELS = ['in your voice', 'on the system', 'from your data']
 
   return (
     <div className={styles.canvas} ref={canvasRef}>
@@ -183,17 +205,16 @@ export default function PlatformFlow() {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          {/* Out of the last left card, into the spine. */}
-          <path className={styles.wire} d={`M ${wires.from.x} ${wires.from.y} H ${wires.spineX}`} />
+          {[...wires.in, ...wires.out].map((d) => (
+            <path key={d} className={styles.wire} d={d} />
+          ))}
+
+          {/* Square, offset by half its size so the curves meet the middle of
+              the mark rather than its corner — same as the hero. */}
+          <rect className={styles.junction} x={wires.junction.x - 3} y={wires.junction.y - 3} width="6" height="6" />
+
           {wires.targets.map((t, i) => (
-            <g key={i}>
-              <path
-                className={styles.wire}
-                d={`M ${wires.spineX} ${wires.from.y} V ${t.y} H ${t.x - 7}`}
-              />
-              <path className={styles.head} d={`M ${t.x - 7} ${t.y} l -5 -3.4 v 6.8 z`} />
-              <text className={styles.label} textAnchor="end" x={t.x - 12} y={t.y - 9}>{LABELS[i]}</text>
-            </g>
+            <text key={i} className={styles.label} textAnchor="end" x={t.x - 12} y={t.y - 9}>{LABELS[i]}</text>
           ))}
         </svg>
       )}
