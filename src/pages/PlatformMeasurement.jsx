@@ -185,10 +185,12 @@ export default function PlatformMeasurement() {
 
         <div className={styles.flowWrap}>
           <FlowDiagram
-            centre="Repo"
             inputs={RESULTS}
             inputsLabel="What comes back"
             outputs={CHANGES}
+            /* The dashboard, not the file browser: on this page what the
+               numbers turn into on the way through is the view itself. */
+            centreVisual={<DashboardWindow ratio="4 / 5" />}
           />
         </div>
       </section>

@@ -151,3 +151,23 @@
 @media (prefers-reduced-motion: reduce) {
   .sync { animation: none; }
 }
+
+/* THE MIDDLE SLOT, when a page puts something other than the repo there.
+   A grid item's min-width is auto, so a window whose content is wider than
+   the track — a table, say — grows past it and the right-hand column ends up
+   underneath. This caps it at the track and stretches it to the row's height,
+   which is what the repo window did by being the tallest thing in the row. */
+.centreSlot {
+  min-width: 0;
+  align-self: stretch;
+  display: grid;
+}
+
+/* Width only. Letting it take the row's height instead made the window's own
+   content set the height — 791px against columns of 515 — so the page grew
+   around it. The caller passes a ratio that fits the row, and the window
+   scrolls what does not fit inside itself, as it does everywhere else. */
+.centreSlot.centreSlot > * {
+  width: 100%;
+  min-width: 0;
+}

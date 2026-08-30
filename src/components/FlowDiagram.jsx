@@ -16,6 +16,11 @@ import RepoWindow from './RepoWindow'
  * A service page that put its own name there drew the inputs turning into
  * "Build" and Build turning into a brand, which is not what happens.
  *
+ * WHICH FACE OF THE PLATFORM is a prop. /platform/measurement puts the
+ * dashboard in the middle rather than the file browser, because on that page
+ * what the numbers become on the way through IS the view. It is still the
+ * platform in the middle — just the part of it that page is about.
+ *
  * BOTH OUTER COLUMNS ARE PROPS NOW. The left defaults to the five that feed
  * the repo, which is right on every service page; /platform/measurement is
  * the one page where what arrives is results rather than the brand, so it
@@ -86,7 +91,13 @@ function Column({ label, groups, sync = false }) {
  * their own dot said "five things, five connections"; a single junction says
  * everything meets in one place, which is the repository's whole argument.
  */
-export default function FlowDiagram({ centre, outputs, inputs = REPO_INPUTS, inputsLabel = 'What goes in' }) {
+export default function FlowDiagram({
+  centre,
+  outputs,
+  inputs = REPO_INPUTS,
+  inputsLabel = 'What goes in',
+  centreVisual = null,
+}) {
   const flowRef = useRef(null)
   const [wires, setWires] = useState(null)
 
@@ -181,7 +192,11 @@ export default function FlowDiagram({ centre, outputs, inputs = REPO_INPUTS, inp
 
         <Column label={inputsLabel} groups={inputs} sync />
 
-        <RepoWindow label={centre} />
+        {centreVisual ? (
+          <div className={styles.centreSlot}>{centreVisual}</div>
+        ) : (
+          <RepoWindow label={centre} />
+        )}
 
         <Column label="What comes out" groups={outputs} />
       </div>
