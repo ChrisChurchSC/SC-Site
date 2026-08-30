@@ -46,28 +46,53 @@ const GROW_CARDS = [
     kicker: '01',
     name: 'Website',
     summary: 'The site stops being a launch and becomes something you tune every month.',
-    lines: ['Conversion Optimization', 'Landing Pages', 'A/B Testing', 'Ongoing SEO/AEO'],
+    lines: [
+      'Conversion Optimization',
+      'Landing Pages',
+      'A/B Testing',
+      'Ongoing SEO/AEO',
+      'Analytics',
+      /* mine */ 'Content Updates',
+    ],
   },
   {
     kicker: '02',
     name: 'App',
     summary: 'What you shipped keeps shipping — new features, and the speed to hold them.',
-    lines: ['New Features', 'Performance'],
+    lines: [
+      'New Features',
+      'Performance',
+      'Integrations',
+      'Deployment',
+      /* mine */ 'Release Notes',
+    ],
   },
   {
     kicker: '03',
     name: 'Campaigns',
     summary: 'Budget moves toward what is working, on evidence rather than instinct.',
-    lines: ['Ad Variants', 'Audience Segments', 'Performance Report'],
+    lines: [
+      'Ad Variants',
+      'Audience Segments',
+      'Creative Tests',
+      'Performance Report',
+      'Dashboards',
+      /* mine */ 'Budget Shifts',
+    ],
   },
   {
     kicker: '04',
     name: 'Channels',
     summary: 'The feed keeps moving at the volume the platforms want, without the work getting worse.',
-    lines: ['Always-On Content', 'Short-Form Video', 'Community Management', 'Email & SMS', 'Channel Expansion'],
+    lines: [
+      'Always-On Content',
+      'Short-Form Video',
+      'Email & SMS',
+      'Channel Expansion',
+      /* mine */ 'Channel Reporting',
+    ],
   },
 ]
-
 export default function ServiceV3() {
   const { slug } = useParams()
   const cal = useCalDrawer()
@@ -180,7 +205,7 @@ export default function ServiceV3() {
 
       <hr className={styles.divider} />
 
-      <TestimonialCard />
+      <TestimonialCard variant={service.slug} />
 
       <hr className={styles.divider} />
 

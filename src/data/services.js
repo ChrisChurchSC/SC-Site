@@ -104,7 +104,7 @@ export const services = [
       {
         n: '04',
         name: 'Channels',
-        items: ['Always-On Content', 'Short-Form Video', 'Community Management', 'Email & SMS', 'Channel Expansion'],
+        items: ['Always-On Content', 'Short-Form Video', 'Email & SMS', 'Channel Expansion'],
         why: 'The feed keeps moving at the volume the platforms want, without the work getting worse.',
       },
     ],

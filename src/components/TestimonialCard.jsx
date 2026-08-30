@@ -11,7 +11,11 @@ import { TESTIMONIALS_QUERY } from '../lib/queries'
  * written quotes as the fallback. Nothing is written here, so the quote on
  * this card cannot say something the wall does not.
  *
- * THE FALLBACK QUOTE IS INVENTED, ON PURPOSE, AND SAYS SO. It is placeholder
+ * THERE IS ONE FALLBACK PER SERVICE, because the page around it argues
+ * something different: Build's is about getting to market with the thing
+ * built, Grow's about what happens after.
+ *
+ * THE FALLBACK QUOTES ARE INVENTED, ON PURPOSE, AND SAY SO. It is placeholder
  * copy for the design and carries a visible "Placeholder copy" tag plus a
  * bracketed attribution, which every testimonial component here already
  * treats as "not a real person". A live quote from Sanity replaces it and
@@ -32,19 +36,30 @@ import { TESTIMONIALS_QUERY } from '../lib/queries'
  */
 const isPlaceholder = (s) => !s || /\[|\]/.test(s)
 
-const FALLBACK = {
-  quote:
-    'We go from idea to live in days, not weeks — and for the first time we ' +
-    'can see which of it is actually working. Far less guessing, far more ' +
-    'shipping.',
-  attribution: '[Name], [Role], [Company]',
-  placeholder: true,
+const FALLBACKS = {
+  default: {
+    quote:
+      'We go from idea to live in days, not weeks — and for the first time we ' +
+      'can see which of it is actually working. Far less guessing, far more ' +
+      'shipping.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
+  grow: {
+    quote:
+      'We used to go quiet between launches. Now there is always something in ' +
+      'market, it always sounds like us, and we can see which of it is worth ' +
+      'doing again.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
 }
 
-export default function TestimonialCard() {
+export default function TestimonialCard({ variant = 'default' }) {
   const { data } = useSanity(TESTIMONIALS_QUERY)
   const live = (data ?? []).filter((t) => t?.quote)
-  const { quote, attribution, avatar, placeholder } = live[0] ?? FALLBACK
+  const fallback = FALLBACKS[variant] ?? FALLBACKS.default
+  const { quote, attribution, avatar, placeholder } = live[0] ?? fallback
   const person = isPlaceholder(attribution) ? null : attribution
 
   return (
