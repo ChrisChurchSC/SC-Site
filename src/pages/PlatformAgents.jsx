@@ -65,29 +65,36 @@ export default function PlatformAgents() {
       <V3Nav />
 
       <header className={styles.hero}>
-        <div className={styles.field} aria-hidden="true">
+        <div className={styles.field}>
+          {/* The lines are a background on their own layer so the mask that
+              fades them at the edges does not also fade the card. */}
+          <span className={styles.lines} aria-hidden="true" />
+
           {/* A few cells carry an icon, placed on the grid rather than
-              scattered at random — the reference reads as a system with
-              things in it, not as confetti. */}
+              scattered — the reference reads as a system with things in it,
+              not as confetti. */}
           {ICONS.map((Icon, i) => (
-            <span key={i} className={`${styles.cell} ${styles[`cell${i + 1}`]}`}>
-              <Icon size={20} strokeWidth={1.3} aria-hidden="true" />
+            <span key={i} className={`${styles.cell} ${styles[`cell${i + 1}`]}`} aria-hidden="true">
+              <Icon size={16} strokeWidth={1.3} aria-hidden="true" />
             </span>
           ))}
-        </div>
 
-        <div className={styles.heroCard}>
-          <p className={styles.eyebrow}>[ Agents ]</p>
-          <h1 className={styles.headline}>
-            Trained on your brand, and honest about what they do not know.
-          </h1>
-          <p className={styles.intro}>
-            Six specialists that draft out of your repo — in your voice, off your positioning,
-            against claims somebody has already approved.
-          </p>
-          <div className={styles.actions}>
-            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+          {/* SET INTO THE GRID, not laid over it: the card is a grid item, so
+              its edges fall on gridlines and it reads as cells that have been
+              filled rather than a panel dropped on top. */}
+          <div className={styles.heroCard}>
+            <p className={styles.eyebrow}>[ Agents ]</p>
+            <h1 className={styles.headline}>
+              Trained on your brand, and honest about what they do not know.
+            </h1>
+            <p className={styles.intro}>
+              Six specialists that draft out of your repo — in your voice, off your positioning,
+              against claims somebody has already approved.
+            </p>
+            <div className={styles.actions}>
+              <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
+              <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+            </div>
           </div>
         </div>
       </header>

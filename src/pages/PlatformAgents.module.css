@@ -104,62 +104,71 @@
 .hero {
   position: relative;
   isolation: isolate;
-  padding: clamp(80px, 10vw, 168px) 0 clamp(48px, 6vw, 96px);
+  padding: clamp(56px, 7vw, 104px) 0 clamp(48px, 6vw, 96px);
   width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
   margin-left: calc(-1 * var(--page-pad-left, 0px));
   overflow: hidden;
 }
 
+/* THE FIELD IS THE GRID, and the card is one of its items — 64px cells, so
+   the ruling is fine enough to read as graph paper rather than as boxes. */
 .field {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  grid-auto-rows: 96px;
-  background-image:
-    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 96px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 96px);
-  /* Fades at the edges so the field reads as a surface the page sits on
-     rather than a texture that stops at a border. */
-  -webkit-mask-image: radial-gradient(120% 90% at 50% 45%, #000 35%, transparent 100%);
-  mask-image: radial-gradient(120% 90% at 50% 45%, #000 35%, transparent 100%);
+  grid-template-columns: repeat(auto-fill, 64px);
+  grid-auto-rows: 64px;
+  justify-content: center;
 }
 
-/* Placed on the grid rather than scattered: the reference reads as a system
-   with things in it, not as confetti. */
+/* The lines on their own layer, so the mask that fades them at the edges
+   does not fade the card set into them. */
+.lines {
+  position: absolute;
+  inset: -40% 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px);
+  background-position: center;
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 50%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(120% 80% at 50% 50%, #000 30%, transparent 100%);
+}
+
 .cell {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.45);
 }
 
 .cell1 { grid-area: 2 / 2; }
-.cell2 { grid-area: 3 / 4; color: var(--pink, #df4ed6); background: rgba(223, 78, 214, 0.12); border-color: rgba(223, 78, 214, 0.28); }
-.cell3 { grid-area: 2 / 10; }
-.cell4 { grid-area: 4 / 3; }
-.cell5 { grid-area: 4 / 12; }
-.cell6 { grid-area: 3 / 13; }
+.cell2 { grid-area: 4 / 3; color: var(--pink, #df4ed6); background: rgba(223, 78, 214, 0.12); border-color: rgba(223, 78, 214, 0.28); }
+.cell3 { grid-area: 2 / -3; }
+.cell4 { grid-area: 6 / 2; }
+.cell5 { grid-area: 6 / -4; }
+.cell6 { grid-area: 4 / -2; }
 
-/* The copy on a panel over the field — the reference lays a solid card over
-   its grid, which is what keeps the headline readable on a busy ground. */
 .heroCard {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  grid-column: 4 / -4;
+  grid-row: 2 / span 7;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  gap: 0;
-  max-width: min(880px, calc(100% - clamp(24px, 8vw, 160px)));
-  margin: 0 auto;
-  padding: clamp(36px, 5vw, 72px) clamp(24px, 4vw, 64px);
+  padding: clamp(28px, 3.4vw, 52px) clamp(20px, 3vw, 56px);
   background: #0a0a0a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--r-panel, 18px);
+  /* No radius: a rounded card cannot sit in a square cell without leaving
+     four slivers of grid showing at its corners. */
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 
 .headline {
   margin: 0;
@@ -291,5 +300,5 @@
 
 @media (max-width: 620px) {
   .field { display: none; }
-  .heroCard { border: 0; background: transparent; padding-left: 0; padding-right: 0; }
+  .heroCard { grid-column: 1 / -1; grid-row: auto; border: 0; background: transparent; padding-left: 0; padding-right: 0; }
 }
