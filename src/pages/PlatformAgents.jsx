@@ -7,6 +7,7 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import ClientStrip from '../components/ClientStrip'
 import ServiceFaq from '../components/ServiceFaq'
+import AgentWindow from '../components/AgentWindow'
 import DotNav from '../components/DotNav'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
@@ -65,6 +66,7 @@ const CELLS = [
   { r: 1, c: 13, i: null },
   { r: 1, c: -15, i: 4 },
 ]
+
 
 const FLOW = [
   {
@@ -143,8 +145,26 @@ export default function PlatformAgents() {
         <ClientStrip banner />
       </div>
 
+      <section className={styles.block} aria-labelledby="what">
+        <p className={styles.sectionEyebrow}>[ What they are ]</p>
+        <h2 className={styles.blockHead} id="what">
+          Not a chatbot. A role, written down.
+        </h2>
+        <p className={styles.blockIntro}>
+          Each agent is a file in your repo — what it owns, what it reads, and the one thing
+          it will not do. It drafts from your brand rather than from the internet, and it is
+          specific enough to be wrong in a way you can correct.
+        </p>
+
+        <div className={styles.windowWrap}>
+          <AgentWindow />
+        </div>
+      </section>
+
+      <hr className={styles.divider} />
+
       <section className={styles.block} aria-labelledby="roster">
-        <p className={styles.eyebrow}>[ The six ]</p>
+        <p className={styles.sectionEyebrow}>[ The six ]</p>
         <h2 className={styles.blockHead} id="roster">
           One for each part of the job.
         </h2>
@@ -174,7 +194,7 @@ export default function PlatformAgents() {
       <hr className={styles.divider} />
 
       <section className={styles.block} aria-labelledby="how">
-        <p className={styles.eyebrow}>[ How they work ]</p>
+        <p className={styles.sectionEyebrow}>[ How they work ]</p>
         <h2 className={styles.blockHead} id="how">
           A draft, a flag, and a person who says yes.
         </h2>

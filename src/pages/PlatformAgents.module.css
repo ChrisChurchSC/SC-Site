@@ -6,6 +6,13 @@
   --bar-inset: clamp(22px, 3.6vw, 58px);
   --page-pad-left: var(--bar-inset);
   --page-pad-right: var(--bar-inset);
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+
   --r-control: 4px;
   --r-surface: 12px;
   --r-panel: 18px;
@@ -35,6 +42,17 @@
   line-height: 1.08;
   letter-spacing: -0.015em;
   color: rgba(255, 255, 255, 0.96);
+}
+
+/* The paragraph under a section head, where the head needs one. */
+.blockIntro {
+  margin: calc(-1 * clamp(30px, 3.6vw, 52px)) 0 clamp(30px, 3.6vw, 52px);
+  max-width: 62ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .divider {
@@ -168,6 +186,31 @@
 }
 
 
+/* The house label: mono, 10px, 0.18em, on a chip — the same rule the hero
+   eyebrow on a service page uses, reading from the same tokens. */
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--label-color);
+  background: var(--label-bg);
+  padding: var(--label-pad);
+  border-radius: var(--label-radius);
+}
+
+/* Section eyebrows take the plain pink form the service pages use below
+   their hero — a chip on every section would make eight of them. */
+.sectionEyebrow {
+  margin: 0 0 clamp(16px, 1.8vw, 24px);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
 .headline {
   margin: 0;
   max-width: 26ch;
@@ -265,11 +308,18 @@
 /* Mono, because an agent name is a filename — one .md each in the repo, and
    a serif would hide that. */
 .cardName {
-  margin: 0 0 10px;
+  align-self: flex-start;
+  margin: 0 0 14px;
   font-family: "Roboto Mono", monospace;
-  font-size: clamp(13px, 1.1vw, 15px);
-  color: rgba(255, 255, 255, 0.94);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--label-color);
+  background: var(--label-bg);
+  padding: var(--label-pad);
+  border-radius: var(--label-radius);
 }
+
 
 .cardDoes {
   margin: 0 0 auto;
@@ -299,4 +349,10 @@
 @media (max-width: 620px) {
   .field { display: none; }
   .heroCard { grid-column: 1 / -1; grid-row: auto; border: 0; background: transparent; padding-left: 0; padding-right: 0; }
+}
+
+/* The window sits in the section's own measure rather than running to the
+   page edge — it is an illustration of the paragraph above it. */
+.windowWrap {
+  max-width: 1100px;
 }
