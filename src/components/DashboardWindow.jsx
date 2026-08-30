@@ -129,7 +129,7 @@ function Donut({ slices, total }) {
   )
 }
 
-export default function DashboardWindow({ label = 'Measurement' }) {
+export default function DashboardWindow({ label = 'Measurement', ratio, bare = false }) {
   const { source, columns, rows, channels } = metricsSample
 
   const tiles = [
@@ -141,26 +141,33 @@ export default function DashboardWindow({ label = 'Measurement' }) {
   ]
 
   return (
-    <div className={styles.window}>
-      <div className={styles.head}>
-        <span className={styles.crumbMuted}>Super Conscious</span>
-        <span className={styles.slash}>/</span>
-        <span className={styles.name}>SC-Brand</span>
-        <span className={styles.private}>{label}</span>
-      </div>
+    <div className={styles.window} style={ratio ? { aspectRatio: ratio } : undefined}>
+      {!bare && (
+        <div className={styles.head}>
+          <span className={styles.crumbMuted}>Super Conscious</span>
+          <span className={styles.slash}>/</span>
+          <span className={styles.name}>SC-Brand</span>
+          <span className={styles.private}>{label}</span>
+        </div>
+      )}
 
-      <div className={styles.tabs}>
-        <span className={styles.tabOn}>Performance</span>
-        <span className={styles.tab}>Usage</span>
-        <span className={styles.sample}>Sample data</span>
-      </div>
+      {!bare && (
+        <div className={styles.tabs}>
+          <span className={styles.tabOn}>Performance</span>
+          <span className={styles.tab}>Usage</span>
+          <span className={styles.sample}>Sample data</span>
+        </div>
+      )}
 
       {/* The app puts the provenance directly above the figures, which is
           most of why they can be trusted there. */}
-      <p className={styles.source}>
-        {source.days} days to {source.to}
-        <span className={styles.sourceDim}> · from {source.file} · {source.path}</span>
-      </p>
+      <div className={bare ? styles.sourceRow : undefined}>
+        <p className={styles.source}>
+          {source.days} days to {source.to}
+          <span className={styles.sourceDim}> · from {source.file} · {source.path}</span>
+        </p>
+        {bare && <span className={styles.sample}>Sample data</span>}
+      </div>
 
       <div className={styles.tiles}>
         {tiles.map(({ label: l, value, note, series }) => (
@@ -203,7 +210,7 @@ export default function DashboardWindow({ label = 'Measurement' }) {
         </div>
       </div>
 
-      <div className={styles.gridWrap}>
+      <div className={`${styles.gridWrap}${bare ? ' ' + styles.gridFade : ''}`}>
         <table className={styles.grid}>
           <thead>
             <tr>

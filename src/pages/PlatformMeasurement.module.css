@@ -139,27 +139,42 @@
   .step { padding-left: 0; border-left: 0; }
 }
 
-/* THE HERO IS THE SHAPE OF THE CLAIM — what comes back on the left, the repo
-   in the middle, what changes on the right. The copy sits centred above it,
-   the way the service heroes do, and the diagram gets the room because it is
-   the argument rather than an illustration of it. */
 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 72px);
+  padding: clamp(48px, 6vw, 92px) 0 clamp(40px, 5vw, 72px);
+}
+
+.heroCopy {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: clamp(56px, 7vw, 104px) 0 clamp(24px, 3vw, 40px);
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* THE FILL BEHIND THE WINDOW is what makes it read as a picture of the
+   product rather than as a panel bolted to the page — the window keeps its
+   own border and sits inset on a lighter ground. */
+.heroStage {
+  padding: clamp(16px, 2.4vw, 40px);
+  border-radius: var(--r-panel, 18px);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* One column under this: a 16:9 dashboard beside a paragraph is two things
+   too narrow to read rather than one that is wide enough. */
+@media (max-width: 1020px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .heroCopy { align-items: center; text-align: center; }
+  .heroCopy .actions { justify-content: center; }
 }
 
 .flowWrap {
   width: 100%;
   margin-top: clamp(30px, 4vw, 60px);
-}
-
-.heroWindow {
-  width: 100%;
-  margin-top: clamp(30px, 4vw, 60px);
-  padding: 0 clamp(0px, 4vw, 90px);
 }
 
 
@@ -196,7 +211,7 @@
 
 .headline {
   margin: 0;
-  max-width: 26ch;
+  max-width: 18ch;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: clamp(28px, 4vw, 52px);
@@ -208,7 +223,7 @@
 
 .intro {
   margin: clamp(16px, 1.8vw, 24px) 0 0;
-  max-width: 56ch;
+  max-width: 46ch;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: clamp(15px, 1.15vw, 17px);
@@ -219,7 +234,7 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   margin-top: clamp(22px, 2.6vw, 32px);
 }

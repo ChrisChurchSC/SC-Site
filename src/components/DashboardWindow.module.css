@@ -88,6 +88,26 @@
 
 .sourceDim { color: rgba(255, 255, 255, 0.28); }
 
+/* Bare mode: the tag that has to stay rides the provenance line rather than
+   holding an empty row of its own where the tabs were. */
+.sourceRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(14px, 1.6vw, 20px) 22px 0;
+}
+
+.sourceRow .source { padding: 0; flex: 1; min-width: 0; }
+.sourceRow .sample { margin-left: auto; flex: none; }
+
+/* The table runs past the bottom of a fixed-ratio window on purpose — there
+   is more data than fits, and that is true of the real view too. It fades
+   out rather than being sliced through the middle of a row. */
+.gridFade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 46px), transparent 100%);
+}
+
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

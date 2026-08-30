@@ -102,24 +102,26 @@ export default function PlatformMeasurement() {
       <V3Nav />
 
       <header className={styles.hero}>
-        <p className={styles.eyebrow}>[ Measurement ]</p>
-        <h1 className={styles.headline}>
-          What shipped, and what it moved.
-        </h1>
-        <p className={styles.intro}>
-          Every channel in one view, each figure joined to the asset that earned it &mdash; so
-          performance reads as the work that produced it rather than as a row in a chart.
-        </p>
-        <div className={styles.actions}>
-          <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-          <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>[ Measurement ]</p>
+          <h1 className={styles.headline}>
+            What shipped, and what it moved.
+          </h1>
+          <p className={styles.intro}>
+            Every channel in one view, each figure joined to the asset that earned it &mdash; so
+            performance reads as the work that produced it rather than as a row in a chart.
+          </p>
+          <div className={styles.actions}>
+            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
+            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+          </div>
         </div>
 
-        {/* THE VIEW ITSELF, and nothing beside it. Measurement is a
-            dashboard before it is anything else, and the top of the page is
-            where that gets shown rather than described. */}
-        <div className={styles.heroWindow}>
-          <DashboardWindow />
+        {/* THE VIEW ITSELF, on a ground of its own. Measurement is a dashboard
+            before it is anything else, and the top of the page is where that
+            gets shown rather than described. */}
+        <div className={styles.heroStage}>
+          <DashboardWindow ratio="1 / 1" bare />
         </div>
       </header>
 
