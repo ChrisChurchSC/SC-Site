@@ -7,6 +7,12 @@ import { tabs } from '../data/pricingTabs'
  * WHAT THE PLATFORM MAKES — the section under it, and the same four things
  * /pricing sells.
  *
+ * WHERE A TIER NAMES ITS OWN OUTPUTS, those are shown instead of its
+ * deliverables. Campaign is the case: its deliverable list opens with
+ * audience architecture and two strategy-and-concept lines, which are inputs
+ * to a campaign rather than things it hands over — right on /pricing, wrong
+ * under a heading that says what the platform makes.
+ *
  * READ, NOT RETYPED. Every card here is a project tier out of pricingTabs:
  * the name, the summary, the deliverables, the footnote, the price and its
  * unit. Nothing is duplicated, so this section cannot quote a price the
@@ -35,7 +41,7 @@ export default function PlatformOutputs() {
       </h2>
 
       <div className={styles.grid}>
-        {TIERS.map(({ kicker, name, summary, lines, note, price, unit }) => (
+        {TIERS.map(({ kicker, name, summary, lines, outputs, note, price, unit }) => (
           <article key={kicker} className={styles.card}>
             <span className={styles.kicker}>{kicker}</span>
             <h3 className={styles.name}>{name}</h3>
@@ -43,7 +49,9 @@ export default function PlatformOutputs() {
 
             <p className={styles.chipsLabel}>Individual deliverables — pick what you need</p>
             <div className={styles.chips}>
-              {lines.map((l) => <span key={l} className={styles.chip}>{l}</span>)}
+              {/* A tier that names its own outputs uses them; the rest fall
+                  back to their deliverables, which already read as outputs. */}
+              {(outputs ?? lines).map((l) => <span key={l} className={styles.chip}>{l}</span>)}
             </div>
 
             {/* Only Campaign and Channels carry one. It qualifies the price,

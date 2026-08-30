@@ -73,6 +73,16 @@ export const tabs = [
         note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work billed separately. All production costs are billed separately.',
         summary: 'Audiences, campaign strategy and concept, paid media, partnerships and the dashboards under them.',
         lines: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
+        /* WHAT THE CAMPAIGN HANDS OVER, as opposed to what goes into it.
+           Read by the "What it makes" section on a service page; /pricing
+           still renders `lines`. Audience architecture and a campaign
+           concept are inputs to a campaign, not things it produces, and
+           under a "what it makes" heading they read as the wrong half of
+           the job. Same split as `outputs` on the Campaign pillar in
+           services.js, and the two lists should be kept in step.
+
+           My wording, not signed off. */
+        outputs: ['Key Visual', 'Campaign Film', 'Paid Ads', 'Social Assets', 'Landing Page', 'Media Plan', 'Dashboards'],
         cta: 'Book a demo',
       },
       {
