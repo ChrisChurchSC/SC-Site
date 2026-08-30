@@ -5,6 +5,7 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
+import DashboardWindow from '../components/DashboardWindow'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
@@ -57,7 +58,7 @@ export default function ServiceV3() {
           siblings and the texture belonged to the diagram alone, which drew
           a line across the page at exactly the point the eye is still
           reading. */}
-      <div className={styles.top}>
+      <div className={`${styles.top}${service.heroVisual === 'dashboard' ? ' ' + styles.topPurple : ''}`}>
         <header className={styles.hero}>
           <p className={styles.eyebrow}>[ {service.name} ]</p>
           <h1 className={styles.headline}>{service.tagline}</h1>
@@ -89,16 +90,22 @@ export default function ServiceV3() {
             It used to be echoed by a "What it covers" section underneath;
             that is cut, so this diagram is now the only place the pillars
             appear on the page. */}
-        <FlowDiagram
-          centre="Repo"
-          outputs={service.pillars.map(({ name, items, outputs }) => ({
-            name,
-            /* A pillar that names its own outputs uses them; the rest fall
-               back to the first three deliverables, which read as outputs
-               already. */
-            items: (outputs ?? items).slice(0, 3),
-          }))}
-        />
+        {service.heroVisual === 'dashboard' ? (
+          <div className={styles.heroWindow}>
+            <DashboardWindow />
+          </div>
+        ) : (
+          <FlowDiagram
+            centre="Repo"
+            outputs={service.pillars.map(({ name, items, outputs }) => ({
+              name,
+              /* A pillar that names its own outputs uses them; the rest fall
+                 back to the first three deliverables, which read as outputs
+                 already. */
+              items: (outputs ?? items).slice(0, 3),
+            }))}
+          />
+        )}
       </div>
 
       {/* Under the hero, not inside it: the block above carries the gradient

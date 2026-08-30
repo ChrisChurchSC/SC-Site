@@ -65,6 +65,10 @@ export const services = [
   {
     slug: 'grow',
     name: 'Grow',
+    /* 'dashboard' swaps the hero's flow diagram for the Measurement window,
+       and turns the hero ground purple. Omitted elsewhere, so the other
+       three keep the diagram. */
+    heroVisual: 'dashboard',
     tagline: 'We take that brand to market and run it.',
     intro:
       'With the brand and marketing apparatus in good shape, we can pivot our focus towards ' +

@@ -414,3 +414,21 @@
 .featured {
   padding: clamp(48px, 6vw, 96px) 0;
 }
+
+/* PURPLE GROUND, for a service whose hero is the dashboard. Same shape as
+   the default: black at the top falling into colour at the foot, so the two
+   pages resolve the same way and only the hue differs. */
+.topPurple {
+  background: linear-gradient(
+    to bottom,
+    #0a0a0a 0%,
+    rgba(122, 90, 229, 0.14) 55%,
+    rgba(122, 90, 229, 0.4) 100%
+  );
+}
+
+/* The hero window sits in the same column the diagram does, with margins
+   wide enough that it does not run to the page edge. */
+.heroWindow {
+  padding: clamp(20px, 3vw, 44px) clamp(12px, 4.5vw, 96px) clamp(40px, 5vw, 80px);
+}

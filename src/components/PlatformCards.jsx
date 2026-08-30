@@ -1,4 +1,5 @@
 import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+import { dashboard as DASH } from '../data/dashboard'
 
 import styles from './PlatformCards.module.css'
 
@@ -246,26 +247,6 @@ function RepoPreview() {
  * IF A REAL FIGURE ARRIVES, swap it in and delete the marker. Do not delete
  * the marker while the number is still made up.
  */
-const DASH = {
-  stats: [
-    { value: '+18%', label: 'lift' },
-    { value: '4.2%', label: 'click rate' },
-    { value: '454', label: 'conversions' },
-  ],
-  /* Conversions per week. They sum to the 454 above on purpose: a panel whose
-     total does not match its own chart is the detail that makes a mock look
-     like a mock. */
-  weeks: [38, 52, 44, 61, 49, 72, 58, 80],
-  /* Conversion rate by channel, not share of output. The bars are scaled to
-     the best of the three rather than to 100, or three single-digit
-     percentages render as three slivers and the comparison — which is the
-     only thing this row is for — disappears. */
-  channels: [
-    { name: 'Email', rate: 5.1 },
-    { name: 'Paid social', rate: 3.8 },
-    { name: 'Organic', rate: 2.4 },
-  ],
-}
 
 function DashPreview() {
   const peak = Math.max(...DASH.weeks)
