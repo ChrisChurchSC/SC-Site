@@ -50,7 +50,7 @@ export default function AgentRail() {
         <div className={styles.track}>
           {[false, true].map((dup) => (
             <div key={String(dup)} className={styles.pass} aria-hidden={dup || undefined}>
-              {agents.map(({ name, does, wont }, i) => {
+              {agents.map(({ name, label, does, wont }, i) => {
                 const Icon = ICONS[i]
                 return (
                   <article key={name} className={styles.card}>
@@ -61,7 +61,7 @@ export default function AgentRail() {
                       <span className={styles.slot}>{DISCIPLINE[name] ?? 'Agent'}</span>
                     </div>
 
-                    <h3 className={styles.cardName}>{name}</h3>
+                    <h3 className={styles.cardName}>{label}</h3>
                     <p className={styles.cardDoes}>{does}</p>
 
                     <p className={styles.cardWont}>

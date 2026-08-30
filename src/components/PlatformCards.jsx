@@ -362,7 +362,7 @@ function AgentsPreview() {
       </div>
 
       <div className={styles.plate}>
-        <span className={styles.plateName}>{picked.name}</span>
+        <span className={styles.plateName}>{picked.label ?? picked.name}</span>
         <span className={styles.plateDoes}>{picked.does}</span>
         <span className={styles.plateWont}>
           <span className={styles.plateWontKey}>Will not</span> {picked.wont}

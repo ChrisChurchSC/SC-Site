@@ -119,7 +119,7 @@ export default function RepoWindow({ label = 'Repo', big = false, assets = true,
             </div>
 
             <div className={styles.plate}>
-              <span className={styles.plateName}>{ROSTER[PICKED].name}</span>
+              <span className={styles.plateName}>{ROSTER[PICKED].label ?? ROSTER[PICKED].name}</span>
               <span className={styles.plateDoes}>{ROSTER[PICKED].does}</span>
               <span className={styles.plateWont}>
                 <span className={styles.plateWontKey}>Will not</span> {ROSTER[PICKED].wont}

@@ -9,13 +9,18 @@ import styles from './ReviewWindow.module.css'
  * actually does — `push` opens a review by default and `merge` is a separate,
  * human act.
  *
+ * THE ROWS ARE OUTPUTS. What waits in this queue is the work an agent drafted
+ * — an email, a post, a concept — not the brand's inputs. A person authors
+ * positioning and tone of voice; nobody approves an agent's edit to them,
+ * because agents do not write them.
+ *
  * The three rows are sample, and the panel says so. What is NOT sample is the
  * shape: numbered, open until approved, and one of them already merged.
  */
 const REVIEWS = [
-  { n: '#128', title: 'Tone of voice — shorter sentences in product copy', by: 'comms-writer', state: 'open' },
-  { n: '#127', title: 'Positioning — sharpen the second proof point', by: 'brand-strategist', state: 'open' },
-  { n: '#126', title: 'Logo lockup — clear space on dark grounds', by: 'design-critic', state: 'merged' },
+  { n: '#128', title: 'Launch email — platform announcement', by: 'comms-writer', state: 'open' },
+  { n: '#127', title: 'Always-on post — week 3, LinkedIn', by: 'comms-writer', state: 'open' },
+  { n: '#126', title: 'Q3 campaign concept — audience and angle', by: 'brand-strategist', state: 'merged' },
 ]
 
 export default function ReviewWindow() {
@@ -51,8 +56,23 @@ export default function ReviewWindow() {
         ))}
       </ul>
 
-      {/* The whole argument of the platform, in one line. */}
-      <p className={styles.foot}>Nothing is live until a person merges it.</p>
+      {/* THE PERSON, AND THE DECISION IN FRONT OF THEM. The queue said
+          changes were waiting; this is what "a person approves it" looks
+          like. */}
+      <div className={styles.approve}>
+        <span className={styles.reviewer}>
+          <span className={styles.reviewerAvatar} aria-hidden="true">CC</span>
+          <span className={styles.reviewerText}>
+            <span className={styles.reviewerName}>Reviewing #128</span>
+            <span className={styles.reviewerNote}>Launch email — platform announcement</span>
+          </span>
+        </span>
+
+        <span className={styles.actions}>
+          <span className={styles.reject}>Request change</span>
+          <span className={styles.merge}>Approve &amp; merge</span>
+        </span>
+      </div>
     </div>
   )
 }

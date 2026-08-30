@@ -88,7 +88,7 @@ export default function AgentWindow() {
               <AgentIcon size={18} strokeWidth={1.4} aria-hidden="true" />
             </span>
             <span className={styles.whoText}>
-              <span className={styles.whoName}>{AGENT.name}</span>
+              <span className={styles.whoName}>{AGENT.label ?? AGENT.name}</span>
               <span className={styles.whoDoes}>{AGENT.does}</span>
             </span>
           </div>

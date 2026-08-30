@@ -53,8 +53,8 @@ const SETS = {
       {
         n: '01',
         name: 'It reads your brand',
-        visual: 'inputs',
-        note: 'Positioning, voice, audience, the claims already cleared — out of the repo, not out of a prompt somebody pasted.',
+        visual: 'reading',
+        note: 'Positioning, voice, audience, the claims already cleared. It reads them; your team writes them.',
       },
       {
         n: '02',
@@ -162,6 +162,8 @@ const STEP_MS = 6000
 const VISUALS = {
   /* The inputs, settled: what the work will be made from. */
   inputs: InputsWindow,
+  /* The same window, showing itself being read. */
+  reading: () => <InputsWindow reading />,
   /* Those same inputs, designed — the system rather than a sheet of posts. */
   design: DesignWindow,
   /* What comes out of the repo once it is being used. */

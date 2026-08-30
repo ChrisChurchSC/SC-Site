@@ -136,3 +136,79 @@
   color: rgba(78, 207, 179, 0.85);
   border: 1px solid rgba(78, 207, 179, 0.3);
 }
+
+/* THE APPROVAL BAR. A person, the change in front of them, and the two
+   things they can do — which is what the step claims happens. */
+.approve {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.reviewer { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+
+/* A person, not an agent — initials rather than a glyph, which is the one
+   visual difference that matters on this screen. */
+.reviewerAvatar {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #5a76e5, #3d4fb8);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.reviewerText { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.reviewerName {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.reviewerNote {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.42);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions { display: flex; align-items: center; gap: 8px; flex: none; }
+
+.reject, .merge {
+  padding: 8px 12px;
+  border-radius: var(--r-control, 4px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.reject {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Teal, as every confirmation on this site is — and the merge is the one
+   action on the screen that changes anything. */
+.merge {
+  border: 1px solid rgba(78, 207, 179, 0.5);
+  background: rgba(78, 207, 179, 0.14);
+  color: rgba(78, 207, 179, 0.95);
+}
+
+@media (max-width: 620px) {
+  .approve { flex-direction: column; align-items: flex-start; }
+  .actions { width: 100%; }
+}

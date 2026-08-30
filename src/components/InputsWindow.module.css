@@ -127,3 +127,52 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 5px;
 }
+
+/* THE SCAN LINE. It says what is being read and how far in — the difference
+   between a screen of a folder and a screen of an agent working. */
+.scan {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+}
+
+/* Pulses, so the row reads as live rather than as a status printed once. */
+.scanDot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--pink, #df4ed6);
+  animation: scanPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes scanPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.scanText { color: rgba(255, 255, 255, 0.72); }
+.scanCount { margin-left: auto; color: rgba(255, 255, 255, 0.3); }
+
+/* The group it is in, lit — so the scan line and the list agree. */
+.groupOn .folder { color: var(--pink, #df4ed6); }
+.groupOn .chip { border-color: rgba(223, 78, 214, 0.35); color: rgba(255, 255, 255, 0.85); }
+
+@media (prefers-reduced-motion: reduce) {
+  .scanDot { animation: none; }
+}
+
+/* Says the agent cannot write here. The inputs are authored by people; an
+   agent reads them and writes copy somewhere else. */
+.ro {
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+}
