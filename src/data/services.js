@@ -46,6 +46,14 @@ export const services = [
         n: '03',
         name: 'Campaign',
         items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
+        /* The diagram's right column is what comes OUT of the repo, and the
+           first three items above are the strategy that goes IN — audience
+           architecture and a campaign concept are inputs to a campaign, not
+           things it produces. outputs is read by FlowDiagram only; items is
+           the deliverable list on /pricing and is untouched.
+
+           Wording is mine and has not been signed off. */
+        outputs: ['Key Visual', 'Campaign Film', 'Paid Ads'],
       },
       {
         n: '04',
@@ -84,6 +92,9 @@ export const services = [
         n: '03',
         name: 'Campaign',
         items: ['Campaign Extensions', 'Paid Media Management', 'Creative Testing', 'Audience Expansion', 'Reporting & Dashboards'],
+        /* Same problem as Build's: management and testing are the work, not
+           what the work hands over. Wording is mine, not signed off. */
+        outputs: ['Ad Variants', 'Audience Segments', 'Performance Report'],
         why: 'Budget moves toward what is working, on evidence rather than instinct.',
       },
       {

@@ -87,7 +87,13 @@ export default function ServiceV3() {
             so the picture and the detail cannot disagree. */}
         <FlowDiagram
           centre="Repo"
-          outputs={service.pillars.map(({ name, items }) => ({ name, items: items.slice(0, 3) }))}
+          outputs={service.pillars.map(({ name, items, outputs }) => ({
+            name,
+            /* A pillar that names its own outputs uses them; the rest fall
+               back to the first three deliverables, which read as outputs
+               already. */
+            items: (outputs ?? items).slice(0, 3),
+          }))}
         />
       </div>
 
