@@ -9,10 +9,15 @@
 .eyebrow {
   margin: 0 0 clamp(16px, 1.8vw, 24px);
   font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: var(--label-size, 11px);
+  letter-spacing: var(--label-tracking, 0.14em);
   text-transform: uppercase;
-  color: var(--pink, #df4ed6);
+  color: var(--label-color, var(--pink, #df4ed6));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
 }
 
 .headline {

@@ -19,7 +19,12 @@
   font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
-  color: var(--pink, #df4ed6);
+  color: var(--label-color, var(--pink, #df4ed6));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
 }
 
 .headline {

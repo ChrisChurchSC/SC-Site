@@ -71,6 +71,37 @@ const CELLS = [
 
 
 
+const FAQS = [
+  {
+    q: 'Can an agent publish something without me seeing it?',
+    a: 'No. Every draft is proposed as a numbered review and writes nothing live. A person merges it, and that is the only way anything lands.',
+  },
+  {
+    q: 'What are they trained on?',
+    a: 'Your repo — positioning, tone of voice, audience, proof points, and the claims somebody has already approved. Not a general model guessing at your brand from its name.',
+  },
+  {
+    q: 'Can an agent learn from feedback?',
+    a: 'Yes, though nothing retrains. What changes is the repo: a rejected review, an edit you made, a claim you struck out — those get written back into the brand files, and every agent reads the corrected version the next time it runs. The learning is a commit, so you can see exactly what it learned and when.',
+  },
+  {
+    q: 'What happens when there is no proof point for a claim?',
+    a: 'It writes [CLAIM NEEDED] where the sentence would have gone, with what it was looking for. The gap comes back to you as a gap rather than as something plausible.',
+  },
+  {
+    q: 'Where do they run?',
+    a: 'Anywhere the repo is connected — a terminal, Claude Desktop, the Conscious app. An agent is a file rather than a seat in one tool, so it goes where the brand goes.',
+  },
+  {
+    q: 'Can we add our own?',
+    a: 'Yes. An agent is a markdown file — a role, what it reads, its tools, and the thing it will not do. Adding one is adding a file.',
+  },
+  {
+    q: 'Do they replace the people who write for us?',
+    a: 'No. They draft and they refuse; every decision about what may be claimed still belongs to a person.',
+  },
+]
+
 export default function PlatformAgents() {
   const cal = useCalDrawer()
 
@@ -156,7 +187,7 @@ export default function PlatformAgents() {
 
       <hr className={styles.divider} />
 
-      <ServiceFaq />
+      <ServiceFaq items={FAQS} headline="The ones we get asked about agents." />
 
       <FooterCard columns={FOOTER_COLS} />
       <V3Signoff />
