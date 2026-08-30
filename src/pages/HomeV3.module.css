@@ -289,9 +289,6 @@
    toward it. Bound to the shell, the trip from link to panel stays inside. */
 .navShell {
   position: relative;
-  /* The transition is on the shell so the bar inside it moves as one thing
-     rather than each part easing on its own schedule. */
-  transition: max-width 0.28s ease, margin 0.28s ease;
   /* Above the section that follows it. The service hero is itself positioned
      and full bleed, so with the bar at z-index auto the later element simply
      painted over it — the nav read fine on /v3, where nothing positioned
@@ -1136,108 +1133,6 @@
   }
 }
 
-/* FIXED ONCE SCROLLED, not sticky. .page carries overflow-x: clip for its
-   full-bleed sections, which creates a clipping box and defeats sticky — the
-   bar scrolled away instead of holding. The element keeps its measured
-   height inline so the page does not jump when this engages. */
-.navFixed > * {
-  position: fixed;
-  top: clamp(8px, 1.2vw, 16px);
-  left: var(--page-pad-left, 16px);
-  right: var(--page-pad-right, 16px);
-  z-index: 60;
-  transition: left 0.28s ease, right 0.28s ease;
-}
-
-/* Centred and narrow when condensed — left and right are what move, so the
-   bar closes in from both edges rather than sliding across. */
-.navSmall > * {
-  left: max(var(--page-pad-left, 16px), calc(50% - 62px));
-  right: max(var(--page-pad-right, 16px), calc(50% - 62px));
-}
-
-/* The bar's own padding comes in with it, or a 124px pill is mostly gutter.
-   Doubled class so it beats .barCard, whatever the bundle order. */
-.navSmall.navSmall > * > * {
-  padding-left: 14px;
-  padding-right: 14px;
-  gap: 10px;
-  justify-content: center;
-}
-
-/* Everything but the mark and the chevron folds away. */
-.navSmall .navCta,
-.navSmall .navLinkFlat,
-.navSmall .navToggle {
-  max-width: 0;
-  padding: 0;
-  border: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-/* THE AFFORDANCE. A chevron, so the pill reads as something that opens
-   rather than a logo that grows when a cursor happens to cross it. */
-.navExpand {
-  position: relative;
-  width: 9px;
-  height: 9px;
-  flex: none;
-  margin-left: 2px;
-}
-
-.navExpand::before,
-.navExpand::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  width: 6px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.navExpand::before { left: -1px; transform: rotate(45deg); }
-.navExpand::after { right: -1px; transform: rotate(-45deg); }
-
-/* CONDENSED. Narrower and centred, with the middle links folded away — what
-   is left is the wordmark and the one action. Hovering the bar, or opening a
-   panel from it, returns it to full width. */
-
-
-.navShell.navSmall .navLinks {
-  max-width: 0;
-  padding: 0;
-  gap: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: max-width 0.28s ease, opacity 0.16s ease;
-}
-
-/* Expanded again — the links come back with the width. */
-.navShell .navLinks {
-  max-width: 100vw;
-  opacity: 1;
-  transition: max-width 0.28s ease, opacity 0.22s ease 0.06s;
-}
-
-/* Someone who has asked for less movement gets the condensed bar without the
-   easing — the state still changes, it just does not animate. */
-@media (prefers-reduced-motion: reduce) {
-  .navShell,
-  .navShell .navLinks,
-  .navShell.navSmall .navLinks { transition: none; }
-}
-
-/* The mark in the condensed bar. Sized to the logotype's own height so the
-   bar does not change height when the two swap. */
-.navMark {
-  height: clamp(20px, 2vw, 26px);
-  width: auto;
-  display: block;
-  color: rgba(255, 255, 255, 0.7);
-}
 
 /* The icon sits where the number was. A well rather than a bare glyph: six
    loose icons down a panel read as decoration, and six in boxes read as an
@@ -1275,4 +1170,31 @@
    half a phone's width is two columns of wrapping. */
 @media (max-width: 900px) {
   .svcGridTwo { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* THE BAR FLOATS, and the shell holds its place. Always fixed rather than
+   switching on scroll: changing position mid-scroll collapses the space the
+   bar held and jumps the page by its height. */
+.navFloat > * {
+  position: fixed;
+  top: var(--bar-inset, 22px);
+  left: var(--page-pad-left, 16px);
+  right: var(--page-pad-right, 16px);
+  z-index: 60;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Out of the way once the page has moved past it. Translated rather than
+   hidden, so it can come back without a reflow — and far enough that the
+   shadow under it clears the top edge too. */
+.navHidden > * {
+  transform: translateY(calc(-100% - var(--bar-inset, 22px) - 12px));
+  pointer-events: none;
+}
+
+/* Someone who asked for less movement gets the bar appearing and
+   disappearing rather than sliding. */
+@media (prefers-reduced-motion: reduce) {
+  .navFloat > * { transition: none; }
+  .navHidden > * { transform: none; }
 }

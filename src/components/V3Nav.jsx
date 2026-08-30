@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import ScMark from './ScMark'
 import { NavLink } from 'react-router-dom'
 import {
   Users, Briefcase, PenLine, Mail, ArrowUpRight,
@@ -294,7 +293,7 @@ export const OFFER = [
  * renders on hover, so the ReferenceError was waiting for the first person to
  * point at SERVICES. Derived rather than retyped, which is also why it is
  * cheap to restore correctly. */
-export const SERVICE_ROWS = OFFER.map(({ name, body, href }) => ({ name, note: body, href }))
+export const SERVICE_ROWS = OFFER.map(({ name, body, href, Icon }) => ({ name, note: body, href, Icon }))
 
 /* The footer's columns, built from the same constants the nav bar renders
    from, so the two cannot disagree. Anything without an href renders as
@@ -369,12 +368,9 @@ export default function V3Nav() {
   }
   useEffect(() => cancelClose, [])
 
-  /* Condensed once the page has moved past the bar itself. */
-  const [condensed, setCondensed] = useState(false)
-  const [nearBar, setNearBar] = useState(false)
-  const condensedRef = useRef(false)
   const barRef = useRef(null)
   const [barHeight, setBarHeight] = useState(0)
+  const [scrolledUp, setScrolledUp] = useState(true)
 
   useEffect(() => {
     const el = barRef.current
@@ -386,21 +382,26 @@ export default function V3Nav() {
     return () => ro.disconnect()
   }, [])
 
+  /* One read per frame, and state only set when the answer changes — a
+     scroll listener that sets state per event is a re-render per frame for
+     nothing. */
   useEffect(() => {
     let frame = 0
+    let last = window.scrollY
+    let shown = true
+
     const read = () => {
       frame = 0
-      const next = window.scrollY > 96
-      if (next !== condensedRef.current) {
-        condensedRef.current = next
-        setCondensed(next)
-      }
+      const y = window.scrollY
+      /* Ignore the wobble: a couple of pixels either way is not a direction,
+         and without this the bar flickers on any small jitter. */
+      if (Math.abs(y - last) < 6) return
+      const next = y < last || y < 80
+      last = y
+      if (next !== shown) { shown = next; setScrolledUp(next) }
     }
-    const onScroll = () => {
-      /* One read per frame, not one per scroll event. */
-      if (!frame) frame = requestAnimationFrame(read)
-    }
-    read()
+
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read) }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', onScroll)
@@ -408,10 +409,11 @@ export default function V3Nav() {
     }
   }, [])
 
-  /* Hovering expands it, and so does having a panel open — a condensed bar
-     with a full menu hanging off it is the one state that would look
-     broken. */
-  const small = condensed && !nearBar && !openMenu
+  /* Shown when scrolling up, at the top of the page, or while a panel is
+     open — a menu hanging off a bar that has just slid away is the one state
+     that would look broken. */
+  const navShown = scrolledUp || Boolean(openMenu)
+
   /* Small screens only. The panels open on hover, which a touch screen does
      not have, so below the breakpoint the bar collapses to one button and a
      list — the whole navigation on a phone rather than a convenience. */
@@ -421,27 +423,22 @@ export default function V3Nav() {
         <section className={`${styles.row12} ${styles.introRow} ${v3.topBar}`}>
           <div
             ref={barRef}
-            className={`${v3.navShell}${condensed ? ' ' + v3.navFixed : ''}${small ? ' ' + v3.navSmall : ''}`}
+            className={`${v3.navShell} ${v3.navFloat}${navShown ? '' : ' ' + v3.navHidden}`}
             style={{
               gridColumn: '1 / span 12',
-              /* Holds the space the bar leaves when it goes fixed. */
-              ...(condensed && barHeight ? { minHeight: barHeight } : null),
+              /* Holds the space the fixed bar leaves. */
+              ...(barHeight ? { minHeight: barHeight } : null),
             }}
-            onMouseLeave={() => { setNearBar(false); closeSoon() }}
-            onMouseEnter={() => { setNearBar(true); cancelClose() }}
+            onMouseLeave={closeSoon}
+            onMouseEnter={cancelClose}
           >
             <div className={`${styles.cornerNote} ${v3.barCard}`}>
-              {/* Says the pill opens. Only while it is closed — once the bar
-                  is expanded the links themselves are the affordance. */}
-              {small && <span className={v3.navExpand} aria-hidden="true" />}
               {/* Back to the v3 homepage, not the live one — every page carrying this
                 bar belongs to that family, and a wordmark that jumps to a
                 different design of the same site is a dead end dressed as a
                 home button. */}
             <NavLink to="/v3" className={styles.cornerWordmark} aria-label="Super Conscious, home">
-                {small
-                  ? <ScMark className={v3.navMark} />
-                  : <LogoWordmark fill="rgba(255,255,255,0.7)" />}
+                <LogoWordmark fill="rgba(255,255,255,0.7)" />
               </NavLink>
 
               <nav className={v3.navLinks} aria-label="Main">
