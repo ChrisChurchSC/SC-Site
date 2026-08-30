@@ -6,10 +6,13 @@ import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
+import SupportWindow from '../components/SupportWindow'
+import RepresentWindow from '../components/RepresentWindow'
 import InMarketPanel from '../components/InMarketPanel'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
+import HowItWorks from '../components/HowItWorks'
 import FeaturedWall from '../components/FeaturedWall'
 import TestimonialCard from '../components/TestimonialCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -179,6 +182,13 @@ export default function ServiceV3() {
       <hr className={styles.divider} />
 
       <PlatformIntro visual={service.heroVisual === 'dashboard' ? 'asset' : 'repo'} />
+
+      {service.slug === 'grow' && (
+        <>
+          <hr className={styles.divider} />
+          <HowItWorks />
+        </>
+      )}
 
       <hr className={styles.divider} />
 

@@ -1,0 +1,207 @@
+/* The public record — see RepresentWindow.jsx. Chrome as RepoWindow and
+   DashboardWindow; the rail and the register below it are this window's. */
+
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /* 16:9, as the other two hero windows, so all four service pages put the
+     same shape in the same place. */
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+}
+
+.crumbMuted { color: rgba(255, 255, 255, 0.38); }
+.slash { color: rgba(255, 255, 255, 0.22); }
+.name { color: rgba(255, 255, 255, 0.88); }
+
+/* Blue, to the ground under this hero — same reason Support's pill is teal. */
+.private {
+  margin-left: auto;
+  padding: 3px 9px;
+  border: 1px solid rgba(90, 118, 229, 0.55);
+  border-radius: var(--r-control, 4px);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue, #5a76e5);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+/* SAYS THE STATES ARE NOT REAL, in the same place and the same shape the
+   Measurement window says it of its figures. */
+.sample {
+  margin-left: auto;
+  padding: 3px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  /* The rail is fixed and the register takes the rest: the four headings are
+     the point and must not compress when the list gets longer. */
+  grid-template-columns: minmax(200px, 27%) 1fr;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: clamp(12px, 1.4vw, 18px) 0;
+}
+
+.railItem {
+  position: relative;
+  padding: clamp(9px, 1vw, 13px) clamp(14px, 1.6vw, 22px);
+  border-left: 2px solid transparent;
+}
+
+/* A blue edge on each, rather than one highlighted row: nothing here is
+   selected, and a selected state would imply a view that does not exist. */
+.railItem { border-left-color: rgba(90, 118, 229, 0.45); }
+
+.railN {
+  display: block;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(90, 118, 229, 0.8);
+  margin-bottom: 4px;
+}
+
+.railName {
+  margin: 0;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.1;
+  color: #fff;
+}
+
+.railGloss {
+  margin: 4px 0 0;
+  font-size: clamp(10.5px, 0.8vw, 12px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.4);
+  padding-right: 26px;
+}
+
+/* Counted from the rows, never typed — see the component. */
+.railCount {
+  position: absolute;
+  top: clamp(9px, 1vw, 13px);
+  right: clamp(14px, 1.6vw, 22px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.registerWrap {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.register {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Roboto Mono", monospace;
+}
+
+.register th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #101010;
+  padding: 12px clamp(12px, 1.4vw, 20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 400;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.thText { text-align: left; }
+.thState { text-align: right; }
+
+.register td {
+  padding: 10px clamp(12px, 1.4vw, 20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  font-size: clamp(10.5px, 0.8vw, 12px);
+  line-height: 1.35;
+  vertical-align: middle;
+}
+
+.tdItem { color: rgba(255, 255, 255, 0.82); }
+.tdGroup { color: rgba(255, 255, 255, 0.34); }
+.tdState { text-align: right; white-space: nowrap; }
+
+.chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Three states, three weights of the same blue rather than three hues: they
+   are stages of one thing, and a red/amber/green would have read as health. */
+.chipOut { color: var(--blue, #5a76e5); }
+.chipInreview { color: rgba(90, 118, 229, 0.62); }
+.chipDrafted { color: rgba(255, 255, 255, 0.3); }
+
+/* Under a phone width the rail stacks over the register and the window
+   stops holding its ratio, the same concession Support's board makes. */
+@media (max-width: 720px) {
+  .window { aspect-ratio: auto; }
+  .body { grid-template-columns: 1fr; }
+  .rail {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .registerWrap { max-height: 320px; }
+}

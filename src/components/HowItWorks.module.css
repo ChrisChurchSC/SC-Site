@@ -1,0 +1,129 @@
+/* The operating loop — see HowItWorks.jsx. */
+
+.section {
+  padding: clamp(48px, 6vw, 96px) clamp(8px, 5vw, 96px);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(16px, 1.8vw, 24px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.headline {
+  margin: 0 0 clamp(36px, 4.5vw, 64px);
+  max-width: 30ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+/* THE RULE RUNS BEHIND THE ROW, with a dot per step sitting on it — one line
+   through four steps reads as one process, where four bordered cards read as
+   four options. */
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.step {
+  position: relative;
+  padding-top: 26px;
+  min-width: 0;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--pink, #df4ed6);
+}
+
+/* The last step is where the loop turns back, so its dot is hollow — it is a
+   junction rather than a terminus. */
+.step:last-child .dot {
+  background: #0a0a0a;
+  border: 1px solid var(--pink, #df4ed6);
+}
+
+.num {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.name {
+  margin: 0 0 8px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.8vw, 26px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.note {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The return leg, said rather than drawn — an arc looping from the fourth
+   step back to the first is a lot of ink for one sentence. */
+.loop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(28px, 3.4vw, 44px) 0 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.loopMark {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--pink, #df4ed6);
+}
+
+/* Two up, then one. Four columns of a sentence each is four columns too
+   narrow to read. */
+@media (max-width: 900px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 34px; }
+  .steps::before { display: none; }
+  .headline { max-width: none; }
+}
+
+@media (max-width: 560px) {
+  .steps { grid-template-columns: minmax(0, 1fr); }
+}
