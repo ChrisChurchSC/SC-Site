@@ -92,24 +92,6 @@ const FAQS = [
 ]
 
 
-const HELPS = [
-  {
-    name: 'Conversion rate',
-    file: 'Proof points',
-    note: 'What converted becomes a sourced claim in the strategy files, so the next asset argues from it rather than starting the case over.',
-  },
-  {
-    name: 'Click-through rate',
-    file: 'Tone of voice',
-    note: 'What earned attention is written back into how things are said — not left in a report nobody opens twice.',
-  },
-  {
-    name: 'Return on spend',
-    file: 'Channel notes',
-    note: 'Where the money worked and where it did not, recorded against the channel instead of remembered by whoever was there.',
-  },
-]
-
 export default function PlatformMeasurement() {
   const cal = useCalDrawer()
 
@@ -155,23 +137,6 @@ export default function PlatformMeasurement() {
           <DashboardWindow ratio="1 / 1" bare />
         </div>
       </header>
-
-      <hr className={styles.divider} />
-
-      <section className={styles.block} aria-labelledby="helps">
-        <div className={styles.metricsHead}>
-          <h2 className={styles.blockHead} id="helps">What it helps you lift.</h2>
-        </div>
-        <div className={styles.metrics}>
-          {HELPS.map(({ name, file, note }) => (
-            <div key={name} className={styles.metric}>
-              <span className={styles.metricValue}>{name}</span>
-              <span className={styles.metricLabel}>{file}</span>
-              <p className={styles.metricNote}>{note}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <hr className={styles.divider} />
 
