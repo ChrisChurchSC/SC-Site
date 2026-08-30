@@ -49,6 +49,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.blockCentered .blockHead,
+.blockCentered .blockIntro {
   text-align: center;
 }
 

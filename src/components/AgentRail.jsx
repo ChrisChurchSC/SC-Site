@@ -12,15 +12,28 @@ import { agents } from '../data/agents'
  * shape, because an agent is instantiated per brand and the six are a
  * starting roster rather than a catalogue.
  *
- * EACH CARD IS BRAND-SPECIFIC, and the eyebrow says so with a slot rather
- * than a client name. Naming real clients here would claim those clients
- * have agents running, and the platform is not shipped — the studio's own
- * SC-Brand is the only repo with these six in it.
+ * THE BRAND-SPECIFIC POINT IS MADE ONCE, in the intro above the rail. It was
+ * a "your brand" chip on all six cards, which is six identical badges saying
+ * nothing — a label has to vary to be worth reading. The card label is the
+ * discipline instead: the part of the job that agent owns.
+ *
+ * Naming real clients there would claim those clients have agents running,
+ * and the platform is not shipped — the studio's own SC-Brand is the only
+ * repo with these six in it.
  *
  * The names, what each does and every refusal are read from
  * src/data/agents.js — the same list the homepage card, the Encode step and
  * the definition window use.
  */
+const DISCIPLINE = {
+  'brand-strategist': 'Strategy',
+  'comms-writer': 'Copy',
+  'media-strategist': 'Media',
+  'design-critic': 'Design',
+  'sales-analyst': 'Sales',
+  'studio-ops': 'Operations',
+}
+
 const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
 
 export default function AgentRail() {
@@ -42,9 +55,7 @@ export default function AgentRail() {
                 <span className={styles.cardIcon}>
                   <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
                 </span>
-                {/* The brand slot rather than a client name — see the note
-                    above the component. */}
-                <span className={styles.slot}>your brand</span>
+                <span className={styles.slot}>{DISCIPLINE[name] ?? 'Agent'}</span>
               </div>
 
               <h3 className={styles.cardName}>{name}</h3>

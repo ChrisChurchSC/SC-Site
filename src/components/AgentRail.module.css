@@ -99,7 +99,7 @@
 .slot {
   padding: 5px 9px;
   border-radius: 999px;
-  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   font-family: "Roboto Mono", monospace;
   font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
