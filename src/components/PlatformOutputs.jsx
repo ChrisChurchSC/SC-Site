@@ -1,5 +1,3 @@
-import { NavLink } from 'react-router-dom'
-
 import styles from './PlatformOutputs.module.css'
 import { tabs } from '../data/pricingTabs'
 
@@ -41,22 +39,26 @@ export default function PlatformOutputs() {
       </h2>
 
       <div className={styles.grid}>
-        {TIERS.map(({ kicker, name, summary, lines, outputs, note, price, unit }) => (
+        {TIERS.map(({ kicker, name, summary, lines, outputs, note, outputsNote, price, unit }) => (
           <article key={kicker} className={styles.card}>
             <span className={styles.kicker}>{kicker}</span>
             <h3 className={styles.name}>{name}</h3>
             <p className={styles.note}>{summary}</p>
 
-            <p className={styles.chipsLabel}>Individual deliverables — pick what you need</p>
             <div className={styles.chips}>
               {/* A tier that names its own outputs uses them; the rest fall
                   back to their deliverables, which already read as outputs. */}
               {(outputs ?? lines).map((l) => <span key={l} className={styles.chip}>{l}</span>)}
             </div>
 
-            {/* Only Campaign and Channels carry one. It qualifies the price,
-                so it sits with the price rather than with the list. */}
-            {note && <p className={styles.footnote}>{note}</p>}
+            {/* Only Campaign and Channels carry one, and it qualifies the
+                price, so it sits with the price rather than the list. A tier
+                can give this section a shorter note than /pricing shows —
+                Campaign does, because its full scope caveat belongs beside a
+                quote rather than beside a picture. */}
+            {(outputsNote ?? note) && (
+              <p className={styles.footnote}>{outputsNote ?? note}</p>
+            )}
 
             <div className={styles.price}>
               <span className={styles.unit}>{unit}</span>
@@ -66,14 +68,6 @@ export default function PlatformOutputs() {
         ))}
       </div>
 
-      {/* The threshold is a property of the order rather than of any one
-          card, which is why /pricing renders it above the four and this
-          renders it under them. Chris's line, read from the same place. */}
-      <p className={styles.priceLine}>
-        {project.perk}
-        <br />
-        <NavLink className={styles.priceLink} to="/pricing">See full pricing</NavLink>
-      </p>
     </section>
   )
 }

@@ -71,6 +71,7 @@ export const tabs = [
         price: 15000,
         unit: 'starting at',
         note: 'Covers initial marketing set-up and the initial flighting of any campaigns. Campaign extensions and subsequent campaign work billed separately. All production costs are billed separately.',
+        outputsNote: 'All production costs are billed separately.',
         summary: 'Audiences, campaign strategy and concept, paid media, partnerships and the dashboards under them.',
         lines: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
         /* WHAT THE CAMPAIGN HANDS OVER, as opposed to what goes into it.
@@ -93,6 +94,7 @@ export const tabs = [
         note: 'Covers initial channel set-up and two months of organic content.',
         summary: 'The channels your audience is actually on, set up and fed.',
         lines: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
+        outputs: ['Channel Set-up', 'Profile Assets', 'Content Calendar', 'Organic Posts', 'Short-Form Video', 'Reporting'],
         cta: 'Book a demo',
       },
     ],

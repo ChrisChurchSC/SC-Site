@@ -37,6 +37,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  aspect-ratio: 4 / 5;
   padding: clamp(20px, 2.2vw, 30px);
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -113,25 +114,7 @@
 .card:hover .arrow { transform: translateX(3px); }
 
 /* The real entry price, under all three. */
-.priceLine {
-  margin: clamp(22px, 2.4vw, 32px) 0 0;
-  max-width: 70ch;
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(14px, 1.05vw, 16px);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.5);
-}
 
-.priceLink {
-  display: inline-block;
-  margin-top: 10px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  color: var(--pink, #df4ed6);
-}
-
-.priceLink:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   .card, .cardLink, .arrow { transition: none; }
@@ -147,20 +130,12 @@
   color: var(--pink, #df4ed6);
 }
 
-/* Says the list is a menu rather than a package — the same sentence the
-   pricing page puts above its deliverables. */
-.chipsLabel {
-  margin: 0 0 10px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.3);
-}
 
 /* Qualifies the price, so it sits between the list and the figure rather
    than trailing the card. */
 .footnote {
   margin: 16px 0 0;
+  order: 1;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: 12.5px;
@@ -171,14 +146,15 @@
 /* Pinned to the bottom by the auto margin, so the four figures line up
    across a row whatever the deliverable lists do above them. */
 .price {
+  order: 2;
   margin-top: auto;
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin-top: clamp(20px, 2.2vw, 28px);
-  padding-top: clamp(16px, 1.8vw, 22px);
+  padding-top: clamp(18px, 2vw, 26px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 
 .unit {
   font-family: "Roboto Mono", monospace;
