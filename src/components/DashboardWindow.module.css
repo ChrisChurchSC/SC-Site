@@ -7,6 +7,10 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
+  /* 16:9. The head, tabs, source, tiles and charts are all fixed height, so
+     the grid takes what is left and scrolls inside itself — the ratio holds
+     exactly and no row is clipped. */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -71,101 +75,222 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-.body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: clamp(20px, 3vw, 44px);
-  align-items: center;
-  padding: clamp(22px, 3vw, 40px) 22px clamp(26px, 3.4vw, 44px);
+/* Provenance, directly above the figures — which is most of why they can be
+   trusted in the app. */
+.source {
+  margin: 0;
+  padding: 12px 22px 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Stacked, not in a row: three figures side by side at this width made each
-   one small, and the number is the thing being read. */
-.stats {
+.sourceDim { color: rgba(255, 255, 255, 0.28); }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 16px 22px 0;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Each tile paints its own ground over a flat grid, so the 1px gaps are the
+   rules and there are no doubled borders to line up. */
+.tile {
   display: flex;
   flex-direction: column;
-  gap: clamp(14px, 1.8vw, 22px);
+  gap: 3px;
+  padding: 14px 16px 12px;
+  background: #0d0d0d;
 }
 
-.stat { display: flex; flex-direction: column; gap: 4px; }
+.tileLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.36);
+}
 
-.value {
+.tileValue {
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
-  font-size: clamp(26px, 2.6vw, 38px);
-  line-height: 1;
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1.05;
   color: rgba(255, 255, 255, 0.96);
 }
 
-.label {
+.tileNote {
   font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.36);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.28);
 }
 
-.chartWrap { display: flex; flex-direction: column; gap: 12px; }
+/* Under the note, so the tile reads label, figure, period, then shape. */
+.spark {
+  width: 100%;
+  height: 22px;
+  margin-top: 6px;
+  color: rgba(223, 78, 214, 0.75);
+}
 
-.chartLabel {
+/* The grid scrolls inside itself rather than widening the window — eight
+   columns at a phone width has to go somewhere. */
+.gridWrap {
+  flex: 1;
+  min-height: 0;
+  margin: 14px 0 0;
+  overflow: auto;
+}
+
+.grid {
+  width: 100%;
+  border-collapse: collapse;
   font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
+  font-size: 11px;
+}
+
+.thText, .thNum, .tdDate, .tdNum, .tdNote {
+  padding: 9px 12px;
+  white-space: nowrap;
+}
+
+.thText, .thNum {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 400;
+  font-size: 10px;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.36);
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Numbers right, labels left — the only way a column of figures reads as a
+   column. */
+.thNum, .tdNum { text-align: right; }
+.thText, .tdDate, .tdNote { text-align: left; }
+
+.thText:first-child, .tdDate { padding-left: 22px; }
+.thText:last-child, .tdNote { padding-right: 22px; }
+
+.tdDate { color: rgba(255, 255, 255, 0.55); }
+.tdNum { color: rgba(255, 255, 255, 0.8); }
+
+/* The stale-day note, in the colour the rest of the site uses for "look at
+   this" rather than for "something is wrong". */
+.tdNote { color: rgba(223, 78, 214, 0.65); }
+
+.grid tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.grid tbody tr:last-child { border-bottom: 0; }
+
+@media (max-width: 860px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: 15px; margin-right: 15px; }
+  .head, .tabs { padding-left: 15px; padding-right: 15px; }
+  .source { padding-left: 15px; padding-right: 15px; }
+  .thText:first-child, .tdDate { padding-left: 15px; }
+  .thText:last-child, .tdNote { padding-right: 15px; }
+}
+
+/* THE CHART STRIP. Three panels on one row, the way the app stacks its
+   charts under the tiles. */
+.charts {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(0, 0.7fr);
+  gap: 1px;
+  margin: 1px 22px 0;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
 }
 
 .chart {
   display: flex;
-  align-items: flex-end;
-  gap: clamp(5px, 0.8vw, 10px);
-  height: clamp(90px, 11vw, 150px);
-}
-
-.bar {
-  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #0d0d0d;
   min-width: 0;
-  border-radius: 3px 3px 0 0;
-  background: rgba(255, 255, 255, 0.16);
 }
 
-/* The most recent week, in the brand colour — the eye lands on where the
-   line has got to rather than on the tallest bar. */
-.bar:last-child { background: var(--pink, #df4ed6); }
+.chartLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.36);
+}
 
-.rows { display: flex; flex-direction: column; gap: 12px; }
+.chartSvg {
+  width: 100%;
+  height: 56px;
+  display: block;
+  overflow: visible;
+}
 
-.row {
+.bar { fill: rgba(255, 255, 255, 0.16); }
+
+/* The most recent day in the brand colour — the eye goes to where the line
+   has got to, not to the tallest bar. */
+.barLast { fill: var(--pink, #df4ed6); }
+
+/* The mean, dashed so it reads as a reference rather than as data. */
+.mean {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.legend {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.rowName { flex: none; width: 72px; }
+.keyPink, .keyGrey {
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+}
 
-.track {
+.keyPink { background: rgba(223, 78, 214, 0.85); }
+.keyGrey { background: rgba(255, 255, 255, 0.32); margin-left: 8px; }
+
+/* The donut, with its total in the middle — the app puts the figure in the
+   hole rather than in a legend, which is what makes the ring readable
+   without one. */
+.donutWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
   flex: 1;
-  min-width: 0;
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  min-height: 0;
 }
 
-.fill {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: rgba(223, 78, 214, 0.6);
+.donut { width: 78px; height: 78px; display: block; }
+
+.donutTotal {
+  position: absolute;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.pct { flex: none; color: rgba(255, 255, 255, 0.7); }
+/* The tiles sit directly on the charts, so their bottom corners square off
+   and the two read as one panel. */
+.tiles { border-radius: 8px 8px 0 0; }
 
-/* Stacked below this: three columns of a dashboard on a phone is three
-   unreadable columns. */
 @media (max-width: 860px) {
-  .body { grid-template-columns: minmax(0, 1fr); }
-  .stats { flex-direction: row; justify-content: space-between; }
-  .head, .tabs { padding-left: 15px; padding-right: 15px; }
-  .body { padding-left: 15px; padding-right: 15px; }
+  .window { aspect-ratio: auto; }
+  .charts { grid-template-columns: minmax(0, 1fr); margin-left: 15px; margin-right: 15px; }
+  .gridWrap { overflow-x: auto; }
 }
