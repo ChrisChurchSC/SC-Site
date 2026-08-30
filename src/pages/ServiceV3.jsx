@@ -96,6 +96,26 @@ const GROW_CARDS = [
     ],
   },
 ]
+/* WHICH GROUND EACH HERO SITS ON. Keyed by hero visual, not by slug: the
+   window and the colour under it are one decision, and splitting them across
+   two lookups is how a page ends up teal with a purple panel in it.
+
+   A service with no hero visual falls through to .top's pink default, which
+   is Build. */
+const GROUND = {
+  dashboard: 'topPurple',
+  support: 'topTeal',
+  represent: 'topBlue',
+}
+
+/* The services with a how-it-works set in HowItWorks.jsx. Represent has no
+   four steps anybody has written, so it gets no section rather than an
+   invented one.
+
+   Grow's four and Support's four are Chris's words. Build's are mine and are
+   not signed off. */
+const HAS_STEPS = ['build', 'grow', 'support']
+
 export default function ServiceV3() {
   const { slug } = useParams()
   const cal = useCalDrawer()
@@ -117,7 +137,11 @@ export default function ServiceV3() {
           siblings and the texture belonged to the diagram alone, which drew
           a line across the page at exactly the point the eye is still
           reading. */}
-      <div className={`${styles.top}${service.heroVisual === 'dashboard' ? ' ' + styles.topPurple : ''}`}>
+      {/* A GROUND PER SERVICE. Three of the four pages used to share the pink
+          default, which is most of why they read as one page with the words
+          swapped. The hue is picked off the hero visual rather than the slug,
+          so a service that changes its window changes its ground with it. */}
+      <div className={`${styles.top}${GROUND[service.heroVisual] ? ' ' + styles[GROUND[service.heroVisual]] : ''}`}>
         <header className={styles.hero}>
           <p className={styles.eyebrow}>[ {service.name} ]</p>
           <h1 className={styles.headline}>{service.tagline}</h1>
@@ -156,6 +180,16 @@ export default function ServiceV3() {
               <InMarketPanel />
             </div>
           </div>
+        ) : service.heroVisual === 'support' ? (
+          /* The board is the only place Support's four areas appear, which is
+             why it is handed the pillars rather than drawing its own. */
+          <div className={styles.heroWindow}>
+            <SupportWindow pillars={service.pillars} />
+          </div>
+        ) : service.heroVisual === 'represent' ? (
+          <div className={styles.heroWindow}>
+            <RepresentWindow pillars={service.pillars} />
+          </div>
         ) : (
           <FlowDiagram
             centre="Repo"
@@ -183,10 +217,13 @@ export default function ServiceV3() {
 
       <PlatformIntro visual={service.heroVisual === 'dashboard' ? 'asset' : 'repo'} />
 
-      {service.slug === 'grow' && (
+      {/* The section renders itself only for a service that has four steps,
+          so this is a slug test rather than a list to keep in sync — see
+          HowItWorks.jsx. Grow's four and Support's four are both Chris's. */}
+      {HAS_STEPS.includes(service.slug) && (
         <>
           <hr className={styles.divider} />
-          <HowItWorks />
+          <HowItWorks slug={service.slug} />
         </>
       )}
 

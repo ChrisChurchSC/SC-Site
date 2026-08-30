@@ -33,6 +33,34 @@ import DashboardWindow from './DashboardWindow'
  * is promised, and Support's four describe what gets done, not how well.
  */
 const SETS = {
+  build: {
+    headline: 'Scoped, made, approved — and handed over as something you can run.',
+    steps: [
+      {
+        n: '01',
+        name: 'Scope',
+        note: 'What it is and what it costs, agreed before anything starts.',
+      },
+      {
+        n: '02',
+        name: 'Make',
+        note: 'The brand, the site, the campaign, the channels — built once and built properly.',
+      },
+      {
+        n: '03',
+        name: 'Review',
+        note: 'Every change is proposed rather than published. A person approves it before it lands.',
+      },
+      {
+        n: '04',
+        name: 'Hand over',
+        note: 'It goes into the repo set up and documented, so your team can use it without us in the room.',
+      },
+    ],
+    closing: 'A project that ends, and leaves something behind that does not.',
+    loops: false,
+  },
+
   grow: {
     headline: 'Ship, distribute, measure — and start the next one further along.',
     steps: [
