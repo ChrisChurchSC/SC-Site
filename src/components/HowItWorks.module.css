@@ -24,9 +24,9 @@
   color: rgba(255, 255, 255, 0.96);
 }
 
-/* THE RULE RUNS BEHIND THE ROW, with a dot per step sitting on it — one line
-   through four steps reads as one process, where four bordered cards read as
-   four options. */
+/* FOUR COLUMNS DIVIDED BY HAIRLINES. Not a track with markers on it: that
+   drew left-to-right travel and read as a schedule you pass through once.
+   These four happen every month, so they are set as a group of equals. */
 .steps {
   position: relative;
   display: grid;
@@ -37,46 +37,31 @@
   list-style: none;
 }
 
-.steps::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 4px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
-}
 
 .step {
   position: relative;
-  padding-top: 26px;
+  padding-left: clamp(16px, 2vw, 30px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
   min-width: 0;
 }
 
-.dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--pink, #df4ed6);
+/* The first column carries no rule — a hairline at the left edge of the page
+   would read as a border on the section rather than as a division inside
+   it. */
+.step:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
 
-/* The last step is where the loop turns back, so its dot is hollow — it is a
-   junction rather than a terminus. */
-.step:last-child .dot {
-  background: #0a0a0a;
-  border: 1px solid var(--pink, #df4ed6);
-}
 
 .num {
   display: block;
-  margin-bottom: 8px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 14px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 2.8vw, 40px);
+  line-height: 1;
+  color: rgba(223, 78, 214, 0.5);
 }
 
 .name {
@@ -120,10 +105,102 @@
    narrow to read. */
 @media (max-width: 900px) {
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 34px; }
-  .steps::before { display: none; }
+  /* The third column starts a new row, so its rule would divide nothing. */
+  .step:nth-child(odd) { padding-left: 0; border-left: 0; }
   .headline { max-width: none; }
 }
 
 @media (max-width: 560px) {
   .steps { grid-template-columns: minmax(0, 1fr); }
+  .step { padding-left: 0; border-left: 0; }
+}
+
+/* THE REFERENCE FORMAT: the steps down the left, the screen they are about
+   on the right. Left is narrower — it is a list of four short lines, and the
+   thing being shown is the point. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+
+.rail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.railItem, .railOn { position: relative; }
+
+/* A button, so it is focusable and operable from the keyboard with nothing
+   extra, and reset out of its browser styling. */
+.railButton {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(14px, 1.6vw, 20px) 0 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.9vw, 27px);
+  line-height: 1.15;
+  /* Closed rows are dimmed rather than hidden — the four together are the
+     argument, and one open row above three empty ones is an accordion. */
+  color: rgba(255, 255, 255, 0.34);
+  transition: color 0.16s;
+}
+
+.railButton:hover { color: rgba(255, 255, 255, 0.6); }
+
+.railOn .railButton { color: rgba(255, 255, 255, 0.96); }
+
+.railButton:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 3px;
+}
+
+.railNum {
+  flex: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(223, 78, 214, 0.55);
+}
+
+.railOn .railNum { color: var(--pink, #df4ed6); }
+
+.railName { min-width: 0; }
+
+.railNote {
+  margin: 10px 0 0 34px;
+  max-width: 44ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The rule under each row. On the open one it is pink and full width, which
+   marks position without adding a progress bar of its own. */
+.railRule {
+  display: block;
+  height: 1px;
+  margin-top: clamp(14px, 1.6vw, 20px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.railOn .railRule { background: var(--pink, #df4ed6); }
+
+/* The screen. min-width: 0 so a wide window scrolls inside its own frame
+   rather than widening the grid column. */
+.stage { min-width: 0; }
+
+@media (max-width: 1000px) {
+  .split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }
