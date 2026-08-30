@@ -42,8 +42,6 @@ const CELLS = [
   { r: 9, c: 3, i: null },
   { r: 10, c: 7, i: 3 },
   { r: 12, c: 2, i: 4 },
-  { r: 13, c: 5, i: null },
-  { r: 15, c: 4, i: 5 },
 
   { r: 2, c: -4, i: 3 },
   { r: 4, c: -7, i: null },
@@ -52,8 +50,20 @@ const CELLS = [
   { r: 9, c: -3, i: null },
   { r: 10, c: -6, i: 0 },
   { r: 12, c: -4, i: 1 },
-  { r: 13, c: -7, i: null },
-  { r: 15, c: -5, i: 2 },
+
+  /* Under the card, across the middle — the rows below it are clear the
+     whole width, so the field reads as one surface rather than two margins
+     with a panel between them. */
+  { r: 14, c: 11, i: 5 },
+  { r: 15, c: 15, i: null },
+  { r: 14, c: -13, i: 2 },
+  { r: 16, c: -17, i: null },
+  { r: 15, c: 20, i: 1, accent: true },
+
+  /* And two above it, so the card is not sitting on the top edge of the
+     pattern. */
+  { r: 1, c: 13, i: null },
+  { r: 1, c: -15, i: 4 },
 ]
 
 const FLOW = [
