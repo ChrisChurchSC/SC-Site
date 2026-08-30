@@ -273,29 +273,8 @@ export const OFFER = [
     cta: null,
     href: '/services/grow',
   },
-  {
-    id: 'support',
-    name: 'Support',
-    body: 'We look after what is live.',
-    price: null,
-    cta: null,
-    href: '/services/support',
-  },
-  {
-    id: 'represent',
-    name: 'Represent',
-    /* Shortened to fit one line rather than forced onto one with nowrap: at a
-       quarter of the row the card is about 285px inside its padding, and 41
-       characters at this size does not fit. nowrap would have made it fit by
-       letting it overflow the card instead. This is 33, which is the length
-       Build already sets on one line.
-       
-       Still unsigned-off copy either way — see the note above. */
-    body: 'We speak for the brand in public.',
-    price: null,
-    cta: null,
-    href: '/services/represent',
-  },
+
+
 ]
 
 /* The Services nav panel's rows, derived from OFFER so the menu and the cards

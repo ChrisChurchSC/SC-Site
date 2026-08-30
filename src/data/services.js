@@ -5,12 +5,16 @@
 // each, and their item lists. Build's prices are his too and match the
 // pricing page, because both read the same figures.
 //
-// SUPPORT AND REPRESENT ARE STILL DRAFTS, but no longer wholly invented.
-// SUPPORT’S FOUR HEADINGS — Maintain, Tune, Enable, Extend — ARE CHRIS’S,
-// given as the how-it-works section for that service. They replaced four of
-// mine that named places rather than actions. The glosses under them, and the
-// items under those, are mine: the items are the earlier draft’s list
-// re-sorted beneath his headings, not new claims.
+// SUPPORT AND REPRESENT ARE STILL DRAFTS. Everything in their entries below
+// — the four areas, the glosses, the items — is mine and unsigned.
+//
+// CHRIS’S FOUR VERBS FOR SUPPORT — maintain, tune, enable, extend — ARE NOT
+// HERE. They are the how-it-works section, and they live in HowItWorks.jsx
+// beside Grow’s four, which are also his. The split is deliberate and it is
+// the one Grow already makes: this file holds the AREAS work lands in, and
+// that file holds the STEPS the service runs. Putting his verbs here as
+// pillar names collapsed the two and printed the same four words twice on
+// one page.
 //
 // REPRESENT IS ENTIRELY MINE. Nothing behind it has been set: the services
 // row on /v3 gives it a single sentence and no packages and no price.
@@ -116,105 +120,8 @@ export const services = [
       },
     ],
   },
-  {
-    slug: 'support',
-    name: 'Support',
-    /* 'support' swaps the hero's flow diagram for the standing-work board and
-       turns the hero ground teal. The board is the only place Support's four
-       appear on the page, so it takes `pillars` rather than drawing its own. */
-    heroVisual: 'support',
-    tagline: 'We look after what is live.',
-    draft: true,
-    intro:
-      'Everything already shipped still needs somebody. Support is the standing arrangement ' +
-      'for the work that has no project around it — the fix, the update, the version of the ' +
-      'asset for the format nobody anticipated.',
-    pillarsIntro: 'What tends to come up, and who catches it.',
-    priceLead: null,
-    priceNote: 'No published rate. Scoped against the same hours as Grow.',
-    /* MAINTAIN, TUNE, ENABLE, EXTEND ARE CHRIS'S — given as the how-it-works
-       section for Support, and they replace the four headings that were here
-       before (Upkeep, The live site, The library, The platform), which were
-       mine and named places rather than actions.
 
-       THE GLOSSES AND THE ITEMS ARE STILL MINE. The items are the previous
-       draft's, re-sorted under his four rather than rewritten — nothing new
-       is claimed, it is the same list under better headings. The gloss is one
-       line per heading because "how it works" has to say how it works; strike
-       them and the board still stands. */
-    pillars: [
-      {
-        n: '01',
-        name: 'Maintain',
-        gloss: 'What shipped keeps working.',
-        items: ['Bug fixes', 'Content updates', 'Dependency updates', 'Uptime and performance'],
-      },
-      {
-        n: '02',
-        name: 'Tune',
-        gloss: 'The weak parts get better.',
-        items: ['Page speed', 'Accessibility fixes', 'Copy refinements', 'Search hygiene'],
-      },
-      {
-        n: '03',
-        name: 'Enable',
-        gloss: 'Your people can use it without us.',
-        items: ['Access for new people', 'Guideline questions', 'Template updates', 'Walkthroughs'],
-      },
-      {
-        n: '04',
-        name: 'Extend',
-        gloss: 'It stretches to things it was not drawn for.',
-        items: ['Format variants', 'New collateral', 'New assets filed', 'Agents retrained'],
-      },
-    ],
-  },
-  {
-    slug: 'represent',
-    name: 'Represent',
-    /* 'represent' swaps the diagram for the public schedule and turns the
-       ground blue. Same arrangement as Support: the schedule is the only place
-       this service's four appear, so it reads `pillars`. */
-    heroVisual: 'represent',
-    tagline: 'We speak for the brand in public.',
-    draft: true,
-    intro:
-      'Some of the brand is not an asset at all — it is a person in a room, a byline, an ' +
-      'answer to a journalist. Represent is the arrangement for the work that happens in ' +
-      'public and cannot be handed to a queue.',
-    pillarsIntro: 'Where a brand gets spoken for.',
-    priceLead: null,
-    priceNote: 'No published rate. Scoped per engagement.',
-    /* ALL FOUR ARE STILL MINE. Support now carries Chris's headings; these do
-       not, and nothing here has been signed off. The `when` values are the
-       schedule's ordering, not commitments — the window flags itself sample. */
-    pillars: [
-      {
-        n: '01',
-        name: 'Press',
-        gloss: 'Somebody answers the journalist.',
-        items: ['Media relations', 'Statements and responses', 'Launch announcements'],
-      },
-      {
-        n: '02',
-        name: 'Stage',
-        gloss: 'The talk is the brand, for forty minutes.',
-        items: ['Conference talks', 'Panel prep', 'Event narrative'],
-      },
-      {
-        n: '03',
-        name: 'Founder',
-        gloss: 'The person in front of it has a position.',
-        items: ['Founder positioning', 'Bylines and essays', 'Interview and podcast prep'],
-      },
-      {
-        n: '04',
-        name: 'Recognition',
-        gloss: 'The work gets entered, written up and credited.',
-        items: ['Award submissions', 'Case study write-ups', 'Speaker applications'],
-      },
-    ],
-  },
+
 ]
 
 export const serviceBySlug = (slug) => services.find((s) => s.slug === slug)

@@ -1,0 +1,298 @@
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+}
+
+.crumbMuted { color: rgba(255, 255, 255, 0.38); }
+.slash { color: rgba(255, 255, 255, 0.22); }
+.name { color: rgba(255, 255, 255, 0.88); }
+
+.badge {
+  margin-left: auto;
+  padding: 3px 9px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 13px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+.count { margin-left: auto; font-size: 10.5px; color: rgba(255, 255, 255, 0.3); }
+
+.foot {
+  margin: 0;
+  padding: 14px 20px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* THE BENTO. Four columns by four rows inside a square window, so the cells
+   come out close to square and the two large ones read as the anchors.
+
+   1px gaps over a flat ground, with each cell painting its own background —
+   the lines are the gaps, and there are no doubled borders to line up. */
+.bento {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(86px, auto);
+  gap: 1px;
+  margin: clamp(14px, 1.8vw, 20px) 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(10px, 1.2vw, 15px);
+  background: #0d0d0d;
+  min-width: 0;
+  min-height: 0;
+}
+
+.cellLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* The mark gets the biggest cell — it is the part people recognise. */
+.cellMark { grid-column: span 2; grid-row: span 2; }
+
+/* Photography is the other large one: it is the part of a brand that is an
+   image rather than a token, and at one cell it read as a swatch. */
+.cellPhoto { grid-column: span 2; grid-row: span 2; }
+
+.cellWide { grid-column: span 2; }
+
+.mark {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 6px 4px;
+}
+
+.mark svg { width: 100%; height: auto; max-height: 100%; display: block; }
+
+.swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+
+.swatch { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+/* Read by area, not as a bullet. */
+.chip {
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hex {
+  font-family: "Roboto Mono", monospace;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.serif {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.mono {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.photo {
+  flex: 1;
+  min-height: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
+/* A drawn baseline rather than a diagram of one. */
+.rule {
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(223, 78, 214, 0.5) 0 10px,
+    transparent 10px 14px
+  );
+}
+
+.meta {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.35);
+}
+/* UI gets two rows: four components stacked need the height, and at one row
+   they were four slivers. */
+.cellUi { grid-column: span 2; grid-row: span 2; }
+
+.ui {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+}
+
+/* The site's own button styles, at the size they are actually used. */
+.btnFilled, .btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: var(--r-control, 4px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.btnFilled {
+  background: var(--pink, #df4ed6);
+  border: 1px solid var(--pink, #df4ed6);
+  color: #0a0a0a;
+}
+
+.btnGhost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.input {
+  padding: 7px 10px;
+  border-radius: var(--r-control, 4px);
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.34);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uiRow { display: flex; align-items: center; gap: 8px; }
+
+.toggle {
+  width: 26px;
+  height: 15px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(223, 78, 214, 0.5);
+}
+
+.knob {
+  width: 11px;
+  height: 11px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(78, 207, 179, 0.35);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  color: rgba(78, 207, 179, 0.9);
+}
+
+/* Spread across the cell rather than bunched left — a set of icons is read
+   as a set. */
+.icons {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.illos { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+
+.illo { display: flex; flex-direction: column; gap: 4px; min-width: 0; min-height: 0; }
+
+/* Flat, like every other placeholder here. */
+.illoFill {
+  flex: 1;
+  min-height: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.illoName {
+  font-family: "Roboto Mono", monospace;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.3);
+}

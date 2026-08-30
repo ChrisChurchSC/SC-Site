@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
 import styles from './HowItWorks.module.css'
-import ScopeWindow from './ScopeWindow'
-import ReviewWindow from './ReviewWindow'
+import InputsWindow from './InputsWindow'
+import DesignWindow from './DesignWindow'
+import DeployWindow from './DeployWindow'
+import AdoptWindow from './AdoptWindow'
 import AssetsGridWindow from './AssetsGridWindow'
 import RepoWindow from './RepoWindow'
 import AssetWindow from './AssetWindow'
@@ -37,102 +39,82 @@ import DashboardWindow from './DashboardWindow'
  */
 const SETS = {
   build: {
-    headline: 'Define it, design it, encode it — and deploy something your team can run.',
+    headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
     steps: [
       {
         n: '01',
         name: 'Define',
-        visual: 'scope',
-        note: 'What the brand is, who it is for and what it may claim — settled before anything gets made.',
+        visual: 'inputs',
+        note: 'Positioning, voice, story, audience, and what you are setting out to achieve.',
       },
       {
         n: '02',
         name: 'Design',
-        visual: 'assets',
-        note: 'The brand, the site, the campaign and the channels. Made once, and made properly.',
+        visual: 'design',
+        note: 'Identity, and the full system it runs on: type, color, components, imagery, motion, language.',
       },
       {
         n: '03',
         name: 'Encode',
         visual: 'repo',
-        note: 'It goes into the repo as files and agents, so the system can use it and not only people.',
+        note: 'The brand becomes machine-readable, so your teams and AI can use it without getting it wrong.',
       },
       {
         n: '04',
         name: 'Deploy',
-        visual: 'review',
-        note: 'It goes live the way every change does: proposed, approved by a person, then out.',
+        visual: 'deploy',
+        note: 'The foundational channels built from it: website, app, and the places you show up first.',
+      },
+      {
+        n: '05',
+        name: 'Adopt',
+        visual: 'adopt',
+        note: 'Teams, partners and agencies trained and working in it from day one.',
       },
     ],
     closing: 'A project that ends, and leaves something behind that does not.',
     loops: false,
   },
 
-
   grow: {
-    headline: 'Ship, distribute, measure — and start the next one further along.',
+    headline: 'Produced from the system, measured against what it moved, and starting each round further along.',
     steps: [
       {
         n: '01',
-        name: 'Ship',
+        name: 'Grow',
         visual: 'assets',
-        note: 'The work gets made and goes out — drafted out of the repo, so it already sounds like you.',
+        note: 'Every asset, every channel, produced from the system — so the brand shows up more, and shows up right.',
       },
       {
         n: '02',
-        name: 'Distribute',
-        visual: 'market',
-        note: 'It goes where your audience actually is. The channels are set up and fed, not just posted to.',
+        name: 'Measure',
+        visual: 'dashboard',
+        note: 'Output and performance tied back to what drove it.',
       },
       {
         n: '03',
-        name: 'Measure',
-        visual: 'dashboard',
-        note: 'What it did comes back into the platform, against the asset that did it.',
+        name: 'Compound',
+        visual: 'learning',
+        note: 'Every decision and result makes the brand stronger, so each round starts ahead.',
       },
       {
         n: '04',
-        name: 'Compound',
-        visual: 'learning',
-        note: 'Next month starts from what worked. Nothing gets rebuilt, and nothing gets guessed twice.',
+        name: 'Maintain',
+        visual: 'repo',
+        note: 'The brand stays current and consistent as teams, channels and products change.',
+      },
+      {
+        n: '05',
+        name: 'Embed',
+        visual: 'adopt',
+        note: 'Our people inside your team — standing things up, translating intent, and capturing decisions at the source.',
       },
     ],
     closing: 'And again the following month, from a better starting position.',
     loops: true,
   },
 
-  /* CHRIS'S FOUR VERBS FOR SUPPORT, in his order. The notes under them are
-     mine and unsigned, and they deliberately say nothing Grow says: tuning
-     here is speed and legibility, not conversion, because conversion
-     optimisation is Grow's line and putting it on both pages would sell the
-     same hour twice. */
-  support: {
-    headline: 'Maintain, tune, enable, extend — and none of it waits for a project.',
-    steps: [
-      {
-        n: '01',
-        name: 'Maintain',
-        note: 'What is already live keeps working — the fix, the content change, the dependency nobody wants to think about.',
-      },
-      {
-        n: '02',
-        name: 'Tune',
-        note: 'The weak parts get better where they are weak: page speed, accessibility, the line that never quite landed.',
-      },
-      {
-        n: '03',
-        name: 'Enable',
-        note: 'Your own people can use the system without us in the room — access, templates, and an answer when they ask.',
-      },
-      {
-        n: '04',
-        name: 'Extend',
-        note: 'It stretches to the format, the channel or the piece of collateral it was never drawn for.',
-      },
-    ],
-    closing: 'Standing work, not a schedule — it runs for as long as the thing is live.',
-    loops: false,
-  },
+
 }
 
 /* Each step shows the screen it is about, so the claim and the thing are on
@@ -140,10 +122,14 @@ const SETS = {
    channel panel, the measurement window and the repo are all already built,
    and a second illustrated version of any of them would drift. */
 const VISUALS = {
-  /* The agreed scope, read from the same pillar list /pricing sells from. */
-  scope: ScopeWindow,
-  /* The review queue — proposed, not published, until a person merges. */
-  review: ReviewWindow,
+  /* The inputs, settled: what the work will be made from. */
+  inputs: InputsWindow,
+  /* Those same inputs, designed — the system rather than a sheet of posts. */
+  design: DesignWindow,
+  /* What comes out of the repo once it is being used. */
+  deploy: DeployWindow,
+  /* The people working in it — their teams on Build, ours on Grow. */
+  adopt: AdoptWindow,
   /* Where it lands: the repo, set up and documented. */
   repo: () => <RepoWindow big />,
   /* The creative that got made. */

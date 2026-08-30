@@ -6,8 +6,6 @@ import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
-import SupportWindow from '../components/SupportWindow'
-import RepresentWindow from '../components/RepresentWindow'
 import InMarketPanel from '../components/InMarketPanel'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
@@ -104,8 +102,6 @@ const GROW_CARDS = [
    is Build. */
 const GROUND = {
   dashboard: 'topPurple',
-  support: 'topTeal',
-  represent: 'topBlue',
 }
 
 /* The services with a how-it-works set in HowItWorks.jsx. Represent has no
@@ -114,7 +110,7 @@ const GROUND = {
 
    Grow's four and Support's four are Chris's words. Build's are mine and are
    not signed off. */
-const HAS_STEPS = ['build', 'grow', 'support']
+const HAS_STEPS = ['build', 'grow']
 
 export default function ServiceV3() {
   const { slug } = useParams()
@@ -179,16 +175,6 @@ export default function ServiceV3() {
               <DashboardWindow />
               <InMarketPanel />
             </div>
-          </div>
-        ) : service.heroVisual === 'support' ? (
-          /* The board is the only place Support's four areas appear, which is
-             why it is handed the pillars rather than drawing its own. */
-          <div className={styles.heroWindow}>
-            <SupportWindow pillars={service.pillars} />
-          </div>
-        ) : service.heroVisual === 'represent' ? (
-          <div className={styles.heroWindow}>
-            <RepresentWindow pillars={service.pillars} />
           </div>
         ) : (
           <FlowDiagram

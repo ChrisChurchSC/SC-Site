@@ -427,6 +427,34 @@
   );
 }
 
+/* TEAL FOR SUPPORT, BLUE FOR REPRESENT — same gradient, same stops, only the
+   hue moves, so the four service pages resolve identically at the foot and
+   are still telling you which one you are on. Both hues are the tokens the
+   site already has (--teal, --blue); the values are inlined here for the same
+   reason .topPurple inlines its purple, which is that a gradient stop cannot
+   take an alpha off a hex token without a colour function this file does not
+   otherwise use.
+
+   Teal is the quieter of the two on purpose: Support is the service that runs
+   in the background, and a hero that shouted was drawing the wrong service. */
+.topTeal {
+  background: linear-gradient(
+    to bottom,
+    #0a0a0a 0%,
+    rgba(78, 207, 179, 0.1) 55%,
+    rgba(78, 207, 179, 0.3) 100%
+  );
+}
+
+.topBlue {
+  background: linear-gradient(
+    to bottom,
+    #0a0a0a 0%,
+    rgba(90, 118, 229, 0.14) 55%,
+    rgba(90, 118, 229, 0.4) 100%
+  );
+}
+
 /* The hero window sits in the same column the diagram does, with margins
    wide enough that it does not run to the page edge. */
 .heroWindow {
