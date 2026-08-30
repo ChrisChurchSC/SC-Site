@@ -115,20 +115,20 @@
 .field {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 64px);
-  grid-auto-rows: 64px;
+  grid-template-columns: repeat(auto-fill, 40px);
+  grid-auto-rows: 40px;
 }
 
 /* The lines on their own layer, so the mask that fades them at the edges
    does not fade the card set into them. */
 .lines {
   position: absolute;
-  inset: -40% 0 -40% 0;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
   background-image:
-    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px);
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 40px);
   background-position: 0 0;
   -webkit-mask-image: radial-gradient(120% 80% at 50% 50%, #000 30%, transparent 100%);
   mask-image: radial-gradient(120% 80% at 50% 50%, #000 30%, transparent 100%);
@@ -144,18 +144,18 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
-.cell1 { grid-area: 2 / 2; }
-.cell2 { grid-area: 4 / 3; color: var(--pink, #df4ed6); background: rgba(223, 78, 214, 0.12); border-color: rgba(223, 78, 214, 0.28); }
-.cell3 { grid-area: 2 / -3; }
-.cell4 { grid-area: 6 / 2; }
-.cell5 { grid-area: 6 / -4; }
-.cell6 { grid-area: 4 / -2; }
+.cell1 { grid-area: 3 / 3 / span 2 / span 2; }
+.cell2 { grid-area: 7 / 5 / span 2 / span 2; color: var(--pink, #df4ed6); background: rgba(223, 78, 214, 0.12); border-color: rgba(223, 78, 214, 0.28); }
+.cell3 { grid-area: 3 / -5 / span 2 / span 2; }
+.cell4 { grid-area: 11 / 3 / span 2 / span 2; }
+.cell5 { grid-area: 11 / -7 / span 2 / span 2; }
+.cell6 { grid-area: 7 / -4 / span 2 / span 2; }
 
 .heroCard {
   position: relative;
   z-index: 2;
-  grid-column: 4 / -4;
-  grid-row: 2 / span 7;
+  grid-column: 9 / -9;
+  grid-row: 3 / span 13;
   display: flex;
   flex-direction: column;
   align-items: center;
