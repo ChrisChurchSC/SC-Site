@@ -1,4 +1,4 @@
-import { Plug, Mail, Megaphone, Search, Globe, Contact, Wallet } from 'lucide-react'
+import { Plug, FileSpreadsheet } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './PlatformMeasurement.module.css'
@@ -69,7 +69,7 @@ const CHANGES = [
 const FAQS = [
   {
     q: 'Where do the numbers come from?',
-    a: 'Your own channels, connected to the workspace. Nothing is modelled or estimated.',
+    a: 'From wherever they already live. An agent reads them and writes them into the repo as a file, so a source does not have to be on a supported list. Nothing is modelled or estimated.',
   },
   {
     q: 'What happens when a number has no source?',
@@ -95,20 +95,19 @@ const FAQS = [
 
 
 const SOURCES = [
-  { Icon: Mail, name: 'Email', state: 'Connected' },
-  { Icon: Megaphone, name: 'Paid social', state: 'Connected' },
-  { Icon: Search, name: 'Organic search', state: 'Connected' },
-  { Icon: Globe, name: 'Web analytics', state: 'Connected' },
-  { Icon: Contact, name: 'CRM', state: 'Connected' },
-  { Icon: Wallet, name: 'Spend', state: 'Not connected', off: true },
+  { name: 'Google Analytics', initials: 'GA' },
+  { name: 'Meta Ads', initials: 'MA' },
+  { name: 'LinkedIn', initials: 'Li' },
+  { name: 'Klaviyo', initials: 'Kl' },
+  { name: 'HubSpot', initials: 'HS' },
+  { name: 'Shopify', initials: 'Sh' },
 ]
 
 /* The mark for a row: a real file when there is one, a letter tile when there
    is not. Never a drawn lookalike. */
-function Mark({ logo, initials, name, Icon }) {
+function Mark({ logo, initials, name }) {
   if (logo) return <img className={styles.logo} src={logo} alt="" width="20" height="20" />
-  if (initials) return <span className={styles.initials}>{initials}</span>
-  return <Icon size={15} strokeWidth={1.3} />
+  return <span className={styles.initials} title={name}>{initials}</span>
 }
 
 export default function PlatformMeasurement() {
@@ -214,12 +213,12 @@ export default function PlatformMeasurement() {
           <div className={styles.sourcesCopy}>
             <p className={styles.sectionEyebrow}>[ What it reads from ]</p>
             <h2 className={styles.blockHead} id="sources">
-              Connect what you already run.
+              There is no list to be on.
             </h2>
             <p className={styles.blockIntro}>
-              Measurement reads your own accounts rather than a copy of them. Nothing is retyped
-              into a slide and nothing is modelled &mdash; and where a source is not connected,
-              the figures it would feed show &ndash;&ndash; instead of a guess.
+              An agent reads the numbers wherever they already live and writes them into the repo
+              as a file. So a platform nobody has integrated is a new row rather than a feature
+              request &mdash; and every figure on the page can name the file it came from.
             </p>
           </div>
 
@@ -229,26 +228,38 @@ export default function PlatformMeasurement() {
                 <Plug size={17} strokeWidth={1.4} />
               </span>
               <p className={styles.sourcesTitle}>
-                Six sources <span className={styles.sourcesTitleDim}>into one view</span>
+                Anything you run <span className={styles.sourcesTitleDim}>into one file</span>
               </p>
             </div>
             <div className={styles.sourcesBody}>
-              {SOURCES.map(({ Icon, name, state, off, logo, initials }) => (
-                <div
-                  key={name}
-                  className={`${styles.sourceRow}${off ? ' ' + styles.sourceRowOff : ''}`}
-                >
+              {SOURCES.map(({ name, logo, initials }) => (
+                <div key={name} className={styles.sourceRow}>
                   <span className={styles.sourceIcon}>
-                    <Mark Icon={Icon} logo={logo} initials={initials} name={name} />
+                    <Mark logo={logo} initials={initials} name={name} />
                   </span>
                   <span className={styles.sourceName}>{name}</span>
                   <span className={styles.sourceState}>
-                    {off ? <span className={styles.blank}>&ndash;&ndash;</span> : null}
                     <span className={styles.dot} />
-                    {state}
+                    Read
                   </span>
                 </div>
               ))}
+
+              <div className={`${styles.sourceRow} ${styles.sourceRowOut}`}>
+                <span className={styles.sourceIcon}>
+                  <span className={styles.initials}>+</span>
+                </span>
+                <span className={styles.sourceName}>Anything else you run</span>
+                <span className={styles.sourceState}>Scraped</span>
+              </div>
+
+              <div className={`${styles.sourceRow} ${styles.sourceRowFile}`}>
+                <span className={styles.sourceIcon}>
+                  <FileSpreadsheet size={15} strokeWidth={1.3} />
+                </span>
+                <span className={styles.sourceName}>Data/metrics.csv</span>
+                <span className={styles.sourceState}>In the repo</span>
+              </div>
             </div>
           </div>
         </div>

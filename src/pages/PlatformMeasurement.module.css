@@ -475,6 +475,7 @@
   text-wrap: balance;
 }
 
+.sourcesCopy .blockHead { margin-bottom: 0; }
 .sourcesCopy .blockIntro { margin-top: clamp(14px, 1.6vw, 20px); }
 
 /* Runs to the panel's right edge and past its vertical padding, so the card
@@ -593,11 +594,23 @@
   background: var(--teal, #4ecfb3);
 }
 
-/* The one that is not connected, which is the row that matters: it shows the
-   placeholder rather than a number, and the page's own rule says why. */
-.sourceRowOff .sourceName { color: rgba(255, 255, 255, 0.42); }
-.sourceRowOff .dot { background: rgba(255, 255, 255, 0.22); }
-.sourceRowOff .sourceState { color: rgba(255, 255, 255, 0.3); }
+.sourceRowOut .sourceName { color: rgba(255, 255, 255, 0.55); }
+.sourceRowOut .initials {
+  border-style: dashed;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* The file the numbers become, under a rule: it is the destination rather
+   than one more source. */
+.sourceRowFile {
+  margin-top: 6px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sourceRowFile .sourceIcon { color: var(--teal, #4ecfb3); }
+.sourceRowFile .sourceName { color: rgba(255, 255, 255, 0.9); }
+.sourceRowFile .sourceState { color: var(--teal, #4ecfb3); }
 
 .blank {
   font-family: "Roboto Mono", monospace;
