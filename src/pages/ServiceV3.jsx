@@ -9,8 +9,7 @@ import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
-import { services, serviceBySlug } from '../data/services'
-import { deliverableNotes } from '../data/deliverables'
+import { serviceBySlug } from '../data/services'
 
 /**
  * One page per service, from one template.
@@ -44,7 +43,6 @@ export default function ServiceV3() {
 
   if (!service) return <Navigate to="/services" replace />
 
-  const others = services.filter((s) => s.slug !== slug)
 
   return (
     <main className={styles.page}>
@@ -85,8 +83,10 @@ export default function ServiceV3() {
             around that, not a stage in the middle of it. Putting the platform
             there is also the argument the rest of the site makes.
 
-            The right column is the same four pillars the section below lists,
-            so the picture and the detail cannot disagree. */}
+            The right column is this service's four pillars, from services.js.
+            It used to be echoed by a "What it covers" section underneath;
+            that is cut, so this diagram is now the only place the pillars
+            appear on the page. */}
         <FlowDiagram
           centre="Repo"
           outputs={service.pillars.map(({ name, items, outputs }) => ({
@@ -109,57 +109,6 @@ export default function ServiceV3() {
       </div>
 
       <PlatformIntro />
-
-      <section className={styles.block} aria-labelledby="covers">
-        <div className={styles.blockHead}>
-          <h2 className={styles.blockName} id="covers">What it covers</h2>
-          <p className={styles.blockIntro}>{service.pillarsIntro}</p>
-        </div>
-
-        <div className={styles.pillars}>
-          {service.pillars.map(({ n, name, items, why }) => (
-            <article key={n} className={styles.pillar}>
-              <span className={styles.pillarNum}>{n}</span>
-              <h3 className={styles.pillarName}>{name}</h3>
-              {why && <p className={styles.why}>{why}</p>}
-
-              <ul className={styles.pills}>
-                {items.map((i) => (
-                  /* Same hover notes as the pricing page, from the same map.
-                     A name with no entry gets no tooltip rather than an empty
-                     bubble. */
-                  <li key={i} className={styles.pill} data-tip={deliverableNotes[i] || undefined}>
-                    {i}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.price}>
-        <div>
-          <p className={styles.priceLabel}>What it costs</p>
-          {service.priceLead
-            ? <p className={styles.priceLead}>{service.priceLead}</p>
-            : <p className={`${styles.priceLead} ${styles.priceNone}`}>Talk to us</p>}
-          <p className={styles.priceNote}>{service.priceNote}</p>
-        </div>
-        <NavLink className={styles.ctaGhost} to="/pricing">See full pricing</NavLink>
-      </section>
-
-      <section className={styles.others} aria-labelledby="others">
-        <h2 className={styles.blockName} id="others">The other three</h2>
-        <div className={styles.otherGrid}>
-          {others.map((s) => (
-            <NavLink key={s.slug} to={`/services/${s.slug}`} className={styles.otherCard}>
-              <span className={styles.otherName}>{s.name}</span>
-              <span className={styles.otherTagline}>{s.tagline}</span>
-            </NavLink>
-          ))}
-        </div>
-      </section>
 
       <FooterCard columns={FOOTER_COLS} />
 

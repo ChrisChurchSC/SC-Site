@@ -10,9 +10,6 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   gap: clamp(60px, 11vw, 190px);
   align-items: start;
-  /* Left inset and bottom lane for the return leg, which routes around the
-     outside of both columns rather than through them. */
-  padding: 0 0 46px 30px;
 }
 
 .col {
@@ -69,23 +66,6 @@
   min-width: 0;
 }
 
-/* The step number sits with the name rather than above it: the cards are
-   short, and a number on its own line made every one of them taller than its
-   content needed. */
-.head {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.step {
-  flex: none;
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--pink, #df4ed6);
-}
-
 .name {
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
@@ -124,7 +104,7 @@
 
 .chipMore { color: rgba(255, 255, 255, 0.34); }
 
-.statusRow { padding: 10px 6px 2px; }
+.status { padding: 10px 6px 2px; }
 
 .statusPill {
   display: inline-flex;
@@ -163,13 +143,7 @@
   stroke-linecap: round;
 }
 
-.headFill { fill: rgba(255, 255, 255, 0.34); }
-
-/* Dimmer, and a longer dash: it is the same route run backwards, and at full
-   strength it competed with the forward step it points at. */
-.wireLoop { stroke: rgba(223, 78, 214, 0.3); stroke-dasharray: 3 6; }
-.headLoop { fill: rgba(223, 78, 214, 0.42); }
-.labelLoop { fill: rgba(223, 78, 214, 0.5); }
+.head { fill: rgba(255, 255, 255, 0.34); }
 
 .label {
   font-family: "Roboto Mono", monospace;

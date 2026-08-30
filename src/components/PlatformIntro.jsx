@@ -1,5 +1,6 @@
 import styles from './PlatformIntro.module.css'
 import PlatformFlow from './PlatformFlow'
+import { useCalDrawer } from '../context/CalDrawerContext'
 
 /**
  * WHAT A BRAND PLATFORM IS — the first section under the hero.
@@ -24,11 +25,17 @@ const BODY =
   'drives and decks. It is what the work comes out of, and what it goes back into.'
 
 export default function PlatformIntro() {
+  const cal = useCalDrawer()
+
   return (
     <section className={styles.section} aria-labelledby="platform-intro">
       <p className={styles.eyebrow}>{EYEBROW}</p>
       <h2 className={styles.headline} id="platform-intro">{HEADLINE}</h2>
       <p className={styles.body}>{BODY}</p>
+
+      <div className={styles.actions}>
+        <button className={styles.cta} onClick={cal.open}>Book a demo</button>
+      </div>
 
       {/* The dot field is the panel's own, masked at the foot so it fades
           rather than stopping on a line. */}

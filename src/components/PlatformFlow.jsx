@@ -3,77 +3,82 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import styles from './PlatformFlow.module.css'
 
 /**
- * HOW THE BRAND PLATFORM IS UPDATED — the visual inside the platform section.
+ * A PLATFORM ALREADY IN PLACE, AND WHAT IT MAKES — the visual inside the
+ * platform section.
  *
- * This draws the actual mechanism, not a generic before/after: you PULL the
- * brand into wherever you work, change it, and PUSH. A push opens a numbered
- * review and writes nothing live. A person merges it. Then the live brand
- * moves and everyone pulls to catch up — which is why this is a loop and not
- * a fan-out. The first version of this diagram had one arrow leaving and
- * three landing in parallel, which said the change ends somewhere; it does
- * not, it comes back round.
+ * Not how the platform gets set up, and not how it gets updated: both of
+ * those were tried here and both answered a question this page is not
+ * asking. The page is selling the work, so the picture has to be the thing
+ * standing up and producing.
+ *
+ * Left is the platform and the agents trained on it. Right is the everyday
+ * output — copy, design, plans — with the actual artifacts as chips. The four
+ * service pillars are deliberately NOT on the right: the hero diagram above
+ * already shows those, and repeating them would answer a question the page
+ * answered one screen ago.
  *
  * NO THIRD-PARTY MARKS. The reference format leans on vendor logos to say
  * "this plugs into your stack". We have neither those integrations nor
- * licensed marks for them, so every card here is our own and every icon is a
+ * licensed marks for them, so every card is our own and every icon is a
  * drawn path.
  *
- * The steps and their copy follow the sync CLI's real behaviour — push opens
- * a review by default, --live is the escape hatch, merging is a person's job,
- * both directions refuse to run over a conflict. The WORDING is mine and is
- * not signed off; the BEHAVIOUR it describes is not invented.
+ * THE COPY HERE IS MINE and is not signed off.
  */
 
 const LEFT = [
   {
-    id: 'pull',
-    name: 'Pull the brand',
-    note: 'The whole platform, as files you can open.',
+    id: 'repo',
+    name: 'Your platform, set up',
+    note: 'Everything the brand is made of, in one structure.',
     tone: 'teal',
-    chips: ['Strategy', 'Verbal', 'Visual', 'Agents', 'Data'],
+    chips: ['Positioning', 'Tone of voice', 'Logo & type', 'Audiences', 'Data'],
   },
   {
-    id: 'change',
-    name: 'Change it',
-    note: 'An agent drafts, or a person edits. Same files either way.',
+    id: 'agents',
+    name: 'Agents trained on it',
+    note: 'They draft out of the repo, and refuse to invent a claim.',
     tone: 'blue',
-    chips: ['An agent drafts', 'You edit', 'Claude proposes'],
+    chips: ['Strategist', 'Writer', 'Designer', 'Media'],
   },
 ]
 
+/* WHAT IT MAKES — the everyday output, not the four service pillars. The
+   hero diagram above already shows those, and a section that repeated them
+   would be answering a question the page has just answered. */
 const RIGHT = [
   {
-    id: 'review',
-    name: 'Push opens a review',
-    note: 'A numbered proposal holding what the files would become.',
-    status: 'Nothing is live yet',
+    id: 'words',
+    name: 'Copy',
+    note: 'In your voice, off your own positioning.',
     tone: 'pink',
+    chips: ['Posts', 'Emails', 'Landing page', 'Deck'],
   },
   {
-    id: 'merge',
-    name: 'A person merges it',
-    note: 'Approving is a person’s job. Nothing merges itself.',
-    status: 'Approved',
+    id: 'visuals',
+    name: 'Design',
+    note: 'On the system, rather than off-brand by accident.',
     tone: 'pink',
+    chips: ['Key visual', 'Social set', 'Banners', 'Templates'],
   },
   {
-    id: 'live',
-    name: 'The live brand moves',
-    note: 'Every agent, page and asset now reads the new version.',
-    status: 'One version, everywhere',
+    id: 'plans',
+    name: 'Plans',
+    note: 'Built on the data already in the repo.',
     tone: 'teal',
+    chips: ['Campaign concept', 'Media plan', 'Audiences'],
   },
 ]
 
 /* Drawn rather than imported: one path is cheaper than a dependency for a
    shape this simple, and these inherit currentColor so the tone tints them. */
 const GLYPHS = {
-  pull: 'M8 2.5v8M4.8 7.6L8 10.9l3.2-3.3M3 13.5h10',
-  change: 'M3 13l2.5-.6 7-7a1.4 1.4 0 0 0-2-2l-7 7z',
-  review: 'M3 4.5h10v8H3zM3 7.5h10M6 10.5h4',
-  merge: 'M3.5 8.5l3 3 6-6.5',
-  live: 'M8 2.6a5.4 5.4 0 1 1-5.4 5.4M8 5.4v2.9l2 1.2',
+  repo: 'M1.8 3.6h4l1.4 1.6h7v7.2a1 1 0 0 1-1 1h-10.4a1 1 0 0 1-1-1z',
+  agents: 'M8 8.4a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2M3.2 13.4c0-2.4 2.1-3.9 4.8-3.9s4.8 1.5 4.8 3.9',
+  words: 'M4.5 2.5h5L12.5 5.5v8h-8zM6.4 8.4h4M6.4 10.8h2.6',
+  visuals: 'M2.6 2.6h4.6v4.6H2.6zM11.4 13.4a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8',
+  plans: 'M3 13V8.4M8 13V3.4M13 13V6.4',
 }
+
 
 function Glyph({ id }) {
   return (
@@ -83,16 +88,13 @@ function Glyph({ id }) {
   )
 }
 
-function Card({ id, name, note, chips, status, tone, step }) {
+function Card({ id, name, note, chips, status, tone }) {
   return (
     <div className={styles.group}>
       <div className={`${styles.card} ${styles[tone]}`}>
         <span className={styles.icon}><Glyph id={id} /></span>
         <span className={styles.text}>
-          <span className={styles.head}>
-            <span className={styles.step}>{step}</span>
-            <span className={styles.name}>{name}</span>
-          </span>
+          <span className={styles.name}>{name}</span>
           {note && <span className={styles.note}>{note}</span>}
         </span>
       </div>
@@ -100,11 +102,12 @@ function Card({ id, name, note, chips, status, tone, step }) {
       {chips && (
         <div className={styles.chips}>
           {chips.map((c) => <span key={c} className={styles.chip}>{c}</span>)}
+          <span className={`${styles.chip} ${styles.chipMore}`}>…</span>
         </div>
       )}
 
       {status && (
-        <div className={styles.statusRow}>
+        <div className={styles.status}>
           <span className={styles.statusPill}>
             <svg className={styles.tick} viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <circle cx="8" cy="8" r="6.2" stroke="currentColor" strokeWidth="1.2" />
@@ -118,9 +121,9 @@ function Card({ id, name, note, chips, status, tone, step }) {
   )
 }
 
-/* The wires are measured from the DOM. The cards are different heights — one
-   carries five chips, another a status pill — so any arithmetic would put the
-   elbows near them rather than on them. */
+/* The connectors are measured, for the same reason FlowDiagram's are: the
+   cards are different heights, so any arithmetic would put the elbows near
+   them rather than on them. */
 export default function PlatformFlow() {
   const canvasRef = useRef(null)
   const leftRef = useRef(null)
@@ -134,47 +137,24 @@ export default function PlatformFlow() {
     if (!canvas || !left || !right) return
 
     const base = canvas.getBoundingClientRect()
-    const box = (el) => {
+    const edge = (el, side) => {
       const r = el.getBoundingClientRect()
-      return {
-        left: r.left - base.left,
-        right: r.right - base.left,
-        top: r.top - base.top,
-        bottom: r.bottom - base.top,
-        mid: r.top - base.top + r.height / 2,
-      }
+      return { x: (side === 'right' ? r.right : r.left) - base.left, y: r.top - base.top + r.height / 2 }
     }
 
-    const leftCards = [...left.children].map((g) => box(g.firstElementChild))
-    const rightCards = [...right.children].map((g) => box(g.firstElementChild))
-    if (leftCards.length < 2 || rightCards.length < 3) return
+    /* One spine down the gutter, with an elbow into each card on the right.
+       The last left card is the one everything flows from, so the spine
+       starts at its edge. */
+    const from = edge(left.lastElementChild, 'right')
+    const targets = [...right.children].map((el) => edge(el.firstElementChild, 'left'))
+    const spineX = from.x + (targets[0].x - from.x) * 0.32
 
-    /* Down the left column, across to the first review card, then down the
-       right column. One route, in the order the steps happen. */
-    const gutterX = leftCards[1].right + (rightCards[0].left - leftCards[1].right) * 0.34
-
-    setWires({
+    return setWires({
       width: base.width,
       height: base.height,
-      /* Pull -> Change, straight down the left column. */
-      down: { x: leftCards[0].left + 22, from: leftCards[0].bottom, to: leftCards[1].top },
-      /* Change -> the review, across the gutter. */
-      cross: { fromX: leftCards[1].right, y: leftCards[1].mid, elbowX: gutterX, toX: rightCards[0].left, toY: rightCards[0].mid },
-      /* Review -> merge -> live, down the right column. */
-      steps: rightCards.slice(1).map((c, i) => ({
-        x: rightCards[0].left + 22,
-        from: rightCards[i].bottom,
-        to: c.top,
-      })),
-      /* And back round: the live brand is what the next pull pulls. */
-      loop: {
-        fromX: rightCards[2].left + 22,
-        fromY: rightCards[2].bottom,
-        laneY: base.height - 10,
-        laneX: 10,
-        toY: leftCards[0].mid,
-        toX: leftCards[0].left,
-      },
+      from,
+      spineX,
+      targets,
     })
   }, [])
 
@@ -190,10 +170,9 @@ export default function PlatformFlow() {
     return () => ro.disconnect()
   }, [measure])
 
-  const arrow = (x, y, dir) =>
-    dir === 'down'
-      ? `M ${x} ${y} l -3.4 -5 h 6.8 z`
-      : `M ${x} ${y} l -5 -3.4 v 6.8 z`
+  /* Kept short: these sit in a gutter, and a label that has to be measured
+     against the layout is a label that will not survive the next breakpoint. */
+  const LABELS = ['in your voice', 'on the system', 'from your data']
 
   return (
     <div className={styles.canvas} ref={canvasRef}>
@@ -204,45 +183,27 @@ export default function PlatformFlow() {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path className={styles.wire} d={`M ${wires.down.x} ${wires.down.from} V ${wires.down.to - 7}`} />
-          <path className={styles.headFill} d={arrow(wires.down.x, wires.down.to - 1, 'down')} />
-
-          <path
-            className={styles.wire}
-            d={`M ${wires.cross.fromX} ${wires.cross.y} H ${wires.cross.elbowX} V ${wires.cross.toY} H ${wires.cross.toX - 7}`}
-          />
-          <path className={styles.headFill} d={arrow(wires.cross.toX - 1, wires.cross.toY, 'right')} />
-          <text className={styles.label} textAnchor="end" x={wires.cross.toX - 12} y={wires.cross.toY - 9}>
-            push
-          </text>
-
-          {wires.steps.map((s, i) => (
+          {/* Out of the last left card, into the spine. */}
+          <path className={styles.wire} d={`M ${wires.from.x} ${wires.from.y} H ${wires.spineX}`} />
+          {wires.targets.map((t, i) => (
             <g key={i}>
-              <path className={styles.wire} d={`M ${s.x} ${s.from} V ${s.to - 7}`} />
-              <path className={styles.headFill} d={arrow(s.x, s.to - 1, 'down')} />
+              <path
+                className={styles.wire}
+                d={`M ${wires.spineX} ${wires.from.y} V ${t.y} H ${t.x - 7}`}
+              />
+              <path className={styles.head} d={`M ${t.x - 7} ${t.y} l -5 -3.4 v 6.8 z`} />
+              <text className={styles.label} textAnchor="end" x={t.x - 12} y={t.y - 9}>{LABELS[i]}</text>
             </g>
           ))}
-
-          {/* The return leg, dimmer than the rest: it is the same route run
-              backwards, and drawn at full strength it competed with the step
-              it points back at. */}
-          <path
-            className={`${styles.wire} ${styles.wireLoop}`}
-            d={`M ${wires.loop.fromX} ${wires.loop.fromY} V ${wires.loop.laneY} H ${wires.loop.laneX} V ${wires.loop.toY} H ${wires.loop.toX - 7}`}
-          />
-          <path className={`${styles.headFill} ${styles.headLoop}`} d={arrow(wires.loop.toX - 1, wires.loop.toY, 'right')} />
-          <text className={`${styles.label} ${styles.labelLoop}`} x={wires.loop.laneX + 14} y={wires.loop.laneY - 9}>
-            pull — and everyone is on the new version
-          </text>
         </svg>
       )}
 
       <div className={styles.col} ref={leftRef}>
-        {LEFT.map((c, i) => <Card key={c.id} {...c} step={`0${i + 1}`} />)}
+        {LEFT.map((c) => <Card key={c.id} {...c} />)}
       </div>
 
       <div className={styles.col} ref={rightRef}>
-        {RIGHT.map((c, i) => <Card key={c.id} {...c} step={`0${i + 3}`} />)}
+        {RIGHT.map((c) => <Card key={c.id} {...c} />)}
       </div>
     </div>
   )

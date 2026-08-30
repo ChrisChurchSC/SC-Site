@@ -41,6 +41,31 @@
   color: rgba(255, 255, 255, 0.62);
 }
 
+.actions {
+  margin-top: clamp(24px, 2.8vw, 34px);
+}
+
+/* Matches the hero's filled button exactly — same padding, same mono, same
+   pink. A second CTA style on one page reads as a second kind of action. */
+.cta {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid var(--pink, #df4ed6);
+  border-radius: var(--r-control, 4px);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.cta:hover { filter: brightness(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}
+
 /* THE PANEL. A framed well on a dot field, as the reference has — the field
    is this panel's own rather than the page's, so it starts and stops with
    the frame. */
