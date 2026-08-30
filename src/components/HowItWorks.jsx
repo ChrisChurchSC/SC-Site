@@ -98,8 +98,8 @@ const SETS = {
       {
         n: '04',
         name: 'Every agent starts there',
-        visual: 'reading',
-        note: 'A person merges it. The next draft begins from what you just learned instead of from where you started.',
+        visual: 'repo',
+        note: 'A person merges it and it is in the repo. The next draft opens with the lesson already in it, rather than with somebody remembering to mention it.',
       },
     ],
     loops: true,
