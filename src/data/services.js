@@ -20,7 +20,7 @@ export const services = [
   {
     slug: 'build',
     name: 'Build',
-    tagline: 'We build your brand platform and assets.',
+    tagline: 'Everything you need to go to market, and the system that keeps it working.',
     intro:
       'These are typically one-time projects: you build a brand, you build a website, etc. ' +
       'However, ongoing refreshes and refinements are common. Brands aren’t static. When ' +

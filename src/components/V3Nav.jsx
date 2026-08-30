@@ -344,7 +344,7 @@ export const FOOTER_COLS = [
   { tag: 'By company size', links: WORK_BY_SIZE.map(label => ({ label })) },
   ...COMPANY_COLS.map(({ tag, links }) => ({
     tag,
-    ...(tag === 'Socials' ? { row: 2 } : null),
+    ...(tag === 'Socials' ? { row: 3 } : null),
     links: links.map(({ label, href, external }) => ({ label, href, external })),
   })),
 ]
