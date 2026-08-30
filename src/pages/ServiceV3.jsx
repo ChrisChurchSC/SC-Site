@@ -6,6 +6,7 @@ import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
 import DashboardWindow from '../components/DashboardWindow'
+import InMarketPanel from '../components/InMarketPanel'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
@@ -92,7 +93,10 @@ export default function ServiceV3() {
             appear on the page. */}
         {service.heroVisual === 'dashboard' ? (
           <div className={styles.heroWindow}>
-            <DashboardWindow />
+            <div className={styles.heroSplit}>
+              <DashboardWindow />
+              <InMarketPanel />
+            </div>
           </div>
         ) : (
           <FlowDiagram
