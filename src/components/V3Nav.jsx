@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
+import ScMark from './ScMark'
 import { NavLink } from 'react-router-dom'
-import { Users, Briefcase, PenLine, Mail, ArrowUpRight } from 'lucide-react'
+import {
+  Users, Briefcase, PenLine, Mail, ArrowUpRight,
+  FolderGit2, Bot, BookMarked, CheckCheck, LayoutGrid, ChartNoAxesColumn,
+  Hammer, Sprout,
+} from 'lucide-react'
 
 import styles from '../pages/Home.module.css'
 import v3 from '../pages/HomeV3.module.css'
 import LogoWordmark from './LogoWordmark'
 import { useCalDrawer } from '../context/CalDrawerContext'
+import { featuredCaseStudies } from '../data/featuredCaseStudies'
 
 /**
  * The /v3 navigation bar, and the information architecture behind it.
@@ -128,12 +134,12 @@ export const WORK_BY_SIZE = [
  * two least differentiated of the six and the first to cut if this shortens.
  */
 export const PLATFORM_PAGES = [
-  { name: 'Repo', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
-  { name: 'Agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
-  { name: 'Memory', note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
-  { name: 'Reviews', note: 'Every change is proposed, and a person approves it.' },
-  { name: 'Library', note: 'Every asset we have made, in use and findable.' },
-  { name: 'Measurement', note: 'What shipped, and what it moved.' },
+  { name: 'Repo', Icon: FolderGit2, note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
+  { name: 'Agents', Icon: Bot, note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
+  { name: 'Memory', Icon: BookMarked, note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
+  { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },
+  { name: 'Library', Icon: LayoutGrid, note: 'Every asset we have made, in use and findable.' },
+  { name: 'Measurement', Icon: ChartNoAxesColumn, note: 'What shipped, and what it moved.' },
 ]
 
 /* Company's panel, in three columns.
@@ -249,6 +255,7 @@ export const HERO = "We build the brand and run it. So you can run the business.
 export const OFFER = [
   {
     id: 'build',
+    Icon: Hammer,
     name: 'Build',
     /* Names the brand platform, which is a real service — 'Brand platform'
        is one of the named services in serviceConstants, alongside brand
@@ -267,6 +274,7 @@ export const OFFER = [
   },
   {
     id: 'grow',
+    Icon: Sprout,
     name: 'Grow',
     body: 'We take that brand to market and run it.',
     price: null,
@@ -360,6 +368,50 @@ export default function V3Nav() {
     closeTimer.current = setTimeout(() => setOpenMenu(null), 260)
   }
   useEffect(() => cancelClose, [])
+
+  /* Condensed once the page has moved past the bar itself. */
+  const [condensed, setCondensed] = useState(false)
+  const [nearBar, setNearBar] = useState(false)
+  const condensedRef = useRef(false)
+  const barRef = useRef(null)
+  const [barHeight, setBarHeight] = useState(0)
+
+  useEffect(() => {
+    const el = barRef.current
+    if (!el) return
+    const measure = () => setBarHeight(el.offsetHeight)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  useEffect(() => {
+    let frame = 0
+    const read = () => {
+      frame = 0
+      const next = window.scrollY > 96
+      if (next !== condensedRef.current) {
+        condensedRef.current = next
+        setCondensed(next)
+      }
+    }
+    const onScroll = () => {
+      /* One read per frame, not one per scroll event. */
+      if (!frame) frame = requestAnimationFrame(read)
+    }
+    read()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  /* Hovering expands it, and so does having a panel open — a condensed bar
+     with a full menu hanging off it is the one state that would look
+     broken. */
+  const small = condensed && !nearBar && !openMenu
   /* Small screens only. The panels open on hover, which a touch screen does
      not have, so below the breakpoint the bar collapses to one button and a
      list — the whole navigation on a phone rather than a convenience. */
@@ -368,18 +420,28 @@ export default function V3Nav() {
   return (
         <section className={`${styles.row12} ${styles.introRow} ${v3.topBar}`}>
           <div
-            className={v3.navShell}
-            style={{ gridColumn: '1 / span 12' }}
-            onMouseLeave={closeSoon}
-            onMouseEnter={cancelClose}
+            ref={barRef}
+            className={`${v3.navShell}${condensed ? ' ' + v3.navFixed : ''}${small ? ' ' + v3.navSmall : ''}`}
+            style={{
+              gridColumn: '1 / span 12',
+              /* Holds the space the bar leaves when it goes fixed. */
+              ...(condensed && barHeight ? { minHeight: barHeight } : null),
+            }}
+            onMouseLeave={() => { setNearBar(false); closeSoon() }}
+            onMouseEnter={() => { setNearBar(true); cancelClose() }}
           >
             <div className={`${styles.cornerNote} ${v3.barCard}`}>
+              {/* Says the pill opens. Only while it is closed — once the bar
+                  is expanded the links themselves are the affordance. */}
+              {small && <span className={v3.navExpand} aria-hidden="true" />}
               {/* Back to the v3 homepage, not the live one — every page carrying this
                 bar belongs to that family, and a wordmark that jumps to a
                 different design of the same site is a dead end dressed as a
                 home button. */}
             <NavLink to="/v3" className={styles.cornerWordmark} aria-label="Super Conscious, home">
-                <LogoWordmark fill="rgba(255,255,255,0.7)" />
+                {small
+                  ? <ScMark className={v3.navMark} />
+                  : <LogoWordmark fill="rgba(255,255,255,0.7)" />}
               </NavLink>
 
               <nav className={v3.navLinks} aria-label="Main">
@@ -453,10 +515,12 @@ export default function V3Nav() {
                 </div>
 
                 <div className={v3.svcGrid}>
-                  {SERVICE_ROWS.map(({ name, note, href }, i) => {
+                  {SERVICE_ROWS.map(({ name, note, href, Icon }) => {
                     const inner = (
                       <>
-                        <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                        <span className={v3.svcIcon}>
+                          {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden="true" />}
+                        </span>
                         <span className={v3.svcBody}>
                           <span className={v3.svcName}>{name}</span>
                           {note
@@ -486,9 +550,11 @@ export default function V3Nav() {
                 </div>
 
                 <div className={v3.svcGrid}>
-                  {PLATFORM_PAGES.map(({ name, note }, i) => (
+                  {PLATFORM_PAGES.map(({ name, note, Icon }) => (
                     <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>
-                      <span className={v3.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                      <span className={v3.svcIcon}>
+                        {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden="true" />}
+                      </span>
                       <span className={v3.svcBody}>
                         <span className={v3.svcName}>{name}</span>
                         <span className={v3.svcNote}>{note}</span>

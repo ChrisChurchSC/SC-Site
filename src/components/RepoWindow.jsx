@@ -54,6 +54,14 @@ const ASSET_TILES = 9
    roster, so it should look like one roster. */
 const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
 
+/* What SC-Brand/Agents actually holds: one markdown file per agent. Ages are
+   sample, like every other timestamp in this window. */
+const AGENT_FILES = ROSTER.map(({ name }, i) => ({
+  folder: 'Agents',
+  name: `${name}.md`,
+  age: ['1d', '1d', '3d', '4d', '6d', '6d'][i],
+}))
+
 /* brand-strategist, because its refusal is the one with a marker to show. */
 const PICKED = 0
 
@@ -68,14 +76,16 @@ export default function RepoWindow({ label = 'Repo', big = false, assets = true,
       </div>
 
       <div className={styles.tabs}>
-        <span className={styles.tabOn}>Files</span>
-        <span className={styles.tab}>Pull requests</span>
+        <span className={agents ? styles.tab : styles.tabOn}>Files</span>
+        {agents
+          ? <span className={styles.tabOn}>Agents</span>
+          : <span className={styles.tab}>Pull requests</span>}
         <span className={styles.tab}>Activity</span>
       </div>
 
       <div className={styles.panes}>
         <ul className={styles.body}>
-          {repoFiles.map(({ folder, name, age }) => (
+          {(agents ? AGENT_FILES : repoFiles).map(({ folder, name, age }) => (
             <li key={folder + name} className={styles.row}>
               <Folder />
               <span className={styles.rowPath}>
