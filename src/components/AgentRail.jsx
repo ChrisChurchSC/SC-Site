@@ -39,7 +39,7 @@ const ICONS = [Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList]
 export default function AgentRail() {
   return (
     <section className={styles.section} aria-labelledby="roster">
-      <p className={styles.eyebrow}>[ The six ]</p>
+      <p className={styles.eyebrow}>[ Who they are ]</p>
       <h2 className={styles.headline} id="roster">One for each part of the job.</h2>
       <p className={styles.intro}>
         Every one of them is trained on your brand, not ours — same six roles, your
