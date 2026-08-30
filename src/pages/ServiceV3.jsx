@@ -7,6 +7,7 @@ import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FlowDiagram from '../components/FlowDiagram'
 import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
+import PlatformOutputs from '../components/PlatformOutputs'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { serviceBySlug } from '../data/services'
@@ -109,6 +110,8 @@ export default function ServiceV3() {
       </div>
 
       <PlatformIntro />
+
+      <PlatformOutputs />
 
       <FooterCard columns={FOOTER_COLS} />
 

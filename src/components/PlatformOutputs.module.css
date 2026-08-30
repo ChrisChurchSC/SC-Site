@@ -1,0 +1,87 @@
+/* What the platform makes — see PlatformOutputs.jsx. Left-aligned and inset
+   to the same measure as the platform section above it, so the two read as
+   one argument in two parts rather than two unrelated blocks. */
+
+.section {
+  padding: clamp(40px, 5vw, 76px) clamp(8px, 5vw, 96px) clamp(48px, 7vw, 104px);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(16px, 1.8vw, 24px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+/* A step down from the platform headline above: this is the second beat of
+   that section, not a new one competing with it. */
+.headline {
+  margin: 0 0 clamp(28px, 3.4vw, 48px);
+  max-width: 22ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 20px);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 2.2vw, 30px);
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-surface, 12px);
+}
+
+.name {
+  margin: 0 0 8px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.note {
+  margin: 0 0 auto;
+  padding-bottom: clamp(18px, 2vw, 26px);
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Mono, because a list of artifacts is an inventory rather than a sentence —
+   the same rule the chips in the hero diagram follow. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 6px 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.62);
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .headline { max-width: none; }
+}

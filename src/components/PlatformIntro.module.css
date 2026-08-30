@@ -41,30 +41,7 @@
   color: rgba(255, 255, 255, 0.62);
 }
 
-.actions {
-  margin-top: clamp(24px, 2.8vw, 34px);
-}
 
-/* Matches the hero's filled button exactly — same padding, same mono, same
-   pink. A second CTA style on one page reads as a second kind of action. */
-.cta {
-  display: inline-block;
-  padding: 12px 22px;
-  border: 1px solid var(--pink, #df4ed6);
-  border-radius: var(--r-control, 4px);
-  background: var(--pink, #df4ed6);
-  color: #0a0a0a;
-  font-family: "Roboto Mono", monospace;
-  font-size: 12px;
-  cursor: pointer;
-  transition: filter 0.15s;
-}
-
-.cta:hover { filter: brightness(1.08); }
-
-@media (prefers-reduced-motion: reduce) {
-  .cta { transition: none; }
-}
 
 /* THE PANEL. A framed well on a dot field, as the reference has — the field
    is this panel's own rather than the page's, so it starts and stops with
@@ -96,3 +73,34 @@
 @media (max-width: 620px) {
   .headline { max-width: none; }
 }
+
+/* THE PLAY MARK, over the window.
+
+   A light scrim rather than a heavy one: the file list and the asset grid
+   underneath are the reason the panel is here, and covering them to make the
+   mark pop would trade the substance for the affordance.
+
+   pointer-events: none throughout — it is not a control yet, and a cursor
+   that turns into a pointer over something that does nothing is a promise
+   the page cannot keep. */
+.play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.34);
+  border-radius: inherit;
+}
+
+.playMark {
+  display: block;
+  width: clamp(52px, 5vw, 68px);
+  height: clamp(52px, 5vw, 68px);
+}
+
+.playMark svg { width: 100%; height: 100%; display: block; }
+
