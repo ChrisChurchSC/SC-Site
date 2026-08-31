@@ -1,52 +1,59 @@
 import styles from './MemoryMap.module.css'
-import { decisions, markers } from '../data/decisions'
+import { corpus, corpusTotal, corpusMeasured } from '../data/brandCorpus'
 
 /**
- * THE RECORD, LAID OUT — a full-width map of what memory holds, grouped by
- * the folder each decision lives in.
+ * WHAT THE BRAND KNOWS, BY WEIGHT — a full-width treemap of the memory itself,
+ * on /platform/memory.
  *
- * THE DENSITY IS THE HONEST PART. The reference this is modelled on shows 33
- * workflows across seven departments, and its tiles are sized by hours per
- * month. This record holds three decisions and four marker types, and
- * src/data/decisions.js says in its first line that nothing in it is sample.
- * Filling the grid would mean inventing twenty-odd decisions the studio never
- * made, on the one page whose whole argument is that the record is real.
+ * EVERY BOX IS A REAL FILE AND EVERY AREA IS A REAL MEASUREMENT. The previous
+ * version of this section mapped decisions, and there are only three of those,
+ * so it was honest and nearly empty. This maps the thing the decisions are
+ * made about: the 33 files of the SC-Brand working copy, each sized by how
+ * much of the memory it actually occupies. Nothing here was invented to fill
+ * the grid — the numbers came off the disk. See src/data/brandCorpus.js.
  *
- * So the shape is the reference's and the contents are ours: grouped, tiled,
- * coloured by state, with the count on each group. It gets denser as the
- * studio decides more things, which is the correct way for it to get denser.
+ * AREA IS THE ARGUMENT. A treemap only tells the truth if size means
+ * something, so a box's area is its share of the token count and nothing else.
+ * That is what makes the shape readable at a glance: three vertical files are
+ * a quarter of everything the brand knows, and you can see that without
+ * reading a number.
  *
- * NO SIZE WEIGHTING. The reference sizes each box by hours saved. There is no
- * equivalent quantity on a decision — not one that is recorded anywhere — so
- * the tiles are even and the group is sized by how many it holds. A box
- * bigger than its neighbour would be saying something nobody measured.
+ * TOKENS RATHER THAN BYTES because tokens are what a model spends when it
+ * reads this. The count is an approximation at four characters to a token and
+ * the footnote says so; it is the right relative size, not a figure to quote.
+ *
+ * TWO PLACES IT BENDS, both stated under the map. The smallest column is
+ * floored so its name still fits, and binaries and the styleguide app's own
+ * source are left out — a font file carries no tokens to read.
  */
 
-/* The folder a decision lives in, which is also how the repo groups it. */
 const areaOf = (path) => path.split('/')[0]
+const nameOf = (path) => path.split('/').slice(1).join('/')
 
-const AREAS = [...new Set(decisions.map((d) => areaOf(d.path)))]
+const AREAS = [...new Set(corpus.map((f) => areaOf(f.path)))]
 
-/* The rule, short enough to sit in a tile. The full line is on the record
-   below; this is the label for it. */
-const short = (rule) => (rule.length > 62 ? rule.slice(0, 60).trimEnd() + '…' : rule)
+/* Five solid purples, darkest for the smallest file. No transparency: a tile
+   is one flat color so the areas read as blocks rather than as a stack of
+   washes over whatever is behind them. */
+const band = (tokens) =>
+  tokens >= 4000 ? 5 : tokens >= 2000 ? 4 : tokens >= 1200 ? 3 : tokens >= 600 ? 2 : 1
+
+const fmt = (n) => n.toLocaleString('en-US')
 
 export default function MemoryMap() {
-  const open = decisions.filter((d) => d.state === 'open').length
-
   return (
     <div className={styles.window}>
       <div className={styles.head}>
         <span className={styles.stat}>
-          <b className={styles.statNum}>{decisions.length}</b> decisions
+          <b className={styles.statNum}>{corpus.length}</b> files
         </span>
         <span className={styles.sep} />
         <span className={styles.stat}>
-          <b className={styles.statNum}>{open}</b> open
+          <b className={styles.statNum}>~{fmt(corpusTotal)}</b> tokens
         </span>
         <span className={styles.sep} />
         <span className={styles.stat}>
-          <b className={styles.statNum}>{markers.length}</b> kinds of gap
+          <b className={styles.statNum}>{AREAS.length}</b> folders
         </span>
         <span className={styles.dots} aria-hidden="true">
           <i /><i /><i />
@@ -55,52 +62,48 @@ export default function MemoryMap() {
 
       <div className={styles.body}>
         {AREAS.map((area) => {
-          const inArea = decisions.filter((d) => areaOf(d.path) === area)
+          const inArea = corpus.filter((f) => areaOf(f.path) === area)
+          const areaTokens = inArea.reduce((n, f) => n + f.tokens, 0)
+
           return (
-            <section key={area} className={styles.group} style={{ flexGrow: inArea.length }}>
+            <section
+              key={area}
+              className={styles.group}
+              /* Column width is the folder's share of the memory. */
+              style={{ flexGrow: areaTokens }}
+            >
               <p className={styles.groupHead}>
-                {area}/ <span className={styles.groupCount}>{inArea.length}</span>
+                <span className={styles.groupName}>{area}/</span>
+                <span className={styles.groupCount}>
+                  {Math.round((100 * areaTokens) / corpusTotal)}%
+                </span>
               </p>
 
               <div className={styles.tiles}>
-                {inArea.map((d) => (
+                {inArea.map((f) => (
                   <article
-                    key={d.id}
-                    className={`${styles.tile} ${d.state === 'open' ? styles.tileOpen : styles.tileSettled}`}
+                    key={f.path}
+                    /* And a tile's height is the file's share of its folder,
+                       so area across the whole map is share of everything. */
+                    style={{ flexGrow: f.tokens }}
+                    className={`${styles.tile} ${styles['b' + band(f.tokens)]}`}
+                    title={`${f.path} — ~${fmt(f.tokens)} tokens`}
                   >
-                    <p className={styles.tileRule}>{short(d.rule)}</p>
-                    <p className={styles.tileMeta}>
-                      {d.path}
-                      <span className={styles.tileDate}>{d.date}</span>
-                    </p>
+                    <p className={styles.tileName}>{nameOf(f.path)}</p>
+                    <p className={styles.tileNum}>{fmt(f.tokens)}</p>
                   </article>
                 ))}
               </div>
             </section>
           )
         })}
-
-        {/* The gaps get a group of their own: they are what the record holds
-            where a decision has not been made yet, which is the other half of
-            what this page claims. */}
-        <section className={styles.group} style={{ flexGrow: 2 }}>
-          <p className={styles.groupHead}>
-            Open markers <span className={styles.groupCount}>{markers.length}</span>
-          </p>
-          <div className={styles.tiles}>
-            {markers.map((m) => (
-              <article key={m.tag} className={`${styles.tile} ${styles.tileMarker}`}>
-                <p className={styles.tileTag}>[ {m.tag} ]</p>
-                <p className={styles.tileMeta}>{m.owner}</p>
-              </article>
-            ))}
-          </div>
-        </section>
       </div>
 
       <p className={styles.foot}>
-        Grouped by the folder the decision lives in. Every entry is one the studio actually
-        made — which is why there are this many and not more.
+        Every box is a file in the brand repo, sized by how much of the memory it takes up.
+        Measured {corpusMeasured}; token counts are approximate at four characters to a token.
+        Fonts and the styleguide&rsquo;s own source are left out &mdash; they carry nothing to
+        read. The narrowest column is floored so its name still fits.
       </p>
     </div>
   )

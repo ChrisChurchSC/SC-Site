@@ -12,9 +12,18 @@ import TestimonialCard from '../components/TestimonialCard'
 import DotNav from '../components/DotNav'
 import { useMeta } from '../hooks/useMeta'
 import { markers } from '../data/decisions'
+import { corpus, corpusTotal } from '../data/brandCorpus'
 
 /**
  * /platform/memory — the fourth of the six platform pages.
+ *
+ * WHAT THE PAGE IS ABOUT, which is not the same as what it used to be about.
+ * It is about what the brand KNOWS — positioning, voice, evidence, the design
+ * system, the agents and what shipped, all of it written down and carried as
+ * memory. Decisions are one thing that memory holds, and leading on them made
+ * the page read as a changelog. They are still the sharpest proof the record
+ * is real, so they keep the hero window and the markers section; they are no
+ * longer the headline.
  *
  * THE GROUND THIS PAGE HAS TO HOLD, or it should be cut. Repo already sells
  * structure and history; Reviews already sells approval. Memory is only worth
@@ -77,7 +86,7 @@ const FAQS = [
 export default function PlatformMemory() {
   useMeta({
     title: 'Memory | Super Conscious',
-    description: 'What was decided, what shipped, and why — so nothing is reinvented twice.',
+    description: 'Everything that defines the brand, held as memory a model can read.',
   })
 
   return (
@@ -87,12 +96,24 @@ export default function PlatformMemory() {
       <header className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>[ Memory ]</p>
+          {/* THE PAGE IS ABOUT WHAT THE BRAND KNOWS, and the hero has to say
+              that before anything else does. It used to open on decisions,
+              which is one thing the memory holds rather than the thing itself —
+              positioning, voice, the design system and the evidence are all in
+              there too, and leading on decisions made the page sound like a
+              changelog. The decisions are still the sharpest proof it is real,
+              so they stay in the window beside this and in the record below. */}
           <h1 className={styles.headline}>
-            Every decision, with the reason still attached.
+            Everything that defines the brand, held as memory.
           </h1>
+          {/* The two figures are read from src/data/brandCorpus.js, which was
+              measured off the working copy, so they cannot drift from the map
+              further down the page. */}
           <p className={styles.intro}>
-            What was decided, when, and what it ruled out &mdash; kept in the files it governs, so
-            the same question is not argued twice and the answer outlives whoever was in the room.
+            Positioning, voice, evidence, the design system and what shipped &mdash;{' '}
+            {corpus.length} files and around {Math.round(corpusTotal / 1000)}k tokens of it.
+            Anything working on this brand starts from what it already knows, rather than from
+            whatever fits in one prompt.
           </p>
           <div className={styles.formWrap}>
             <EmailCaptureForm
@@ -126,23 +147,25 @@ export default function PlatformMemory() {
 
       <hr className={styles.divider} />
 
-      {/* THE BOUNDARY, STATED. Two nav rows that both sound like "we keep track
-          of changes" would cannibalize each other, so the page draws the line
-          itself and reuses the review queue rather than redrawing it. */}
-      {/* THE RECORD, LAID OUT. Full width rather than a card beside a
+      {/* THE MEMORY, MEASURED. Full width rather than a card beside a
           paragraph: this is meant to be read across, and the reference Chris
-          gave for it is a canvas, not a panel. */}
-      <section className={`${styles.block} ${styles.dotted}`} aria-labelledby="boundary">
+          gave for it is a canvas, not a panel.
+
+          THE BOUNDARY WITH REVIEWS used to be argued here, and is not any more
+          — this section shows what the memory is made of. The line is still
+          drawn twice on the page, in the first How it works step and in the
+          "Who decides what gets recorded?" answer, so the two nav rows still
+          do not cannibalize each other. */}
+      <section className={`${styles.block} ${styles.dotted}`} aria-labelledby="corpus">
         <div className={styles.mapHead}>
           <p className={styles.sectionEyebrow}>[ Where it starts ]</p>
-          <h2 className={styles.blockHead} id="boundary">
-            Reviews is the gate. Memory is what it leaves behind.
+          <h2 className={styles.blockHead} id="corpus">
+            The brand, defined into something that can be remembered.
           </h2>
           <p className={styles.blockIntro}>
-            A push opens a numbered review and writes nothing live; a person merges it. That is
-            the gate, and it is the only way in. What the record holds is the far side of it
-            &mdash; the decision, the date, the name, and the alternative that did not get
-            merged.
+            Not a deck and not a folder of exports &mdash; {corpus.length} files, each one a piece
+            of what the brand knows. Every box below is one of them, sized by how much of the
+            memory it takes up.
           </p>
         </div>
 
