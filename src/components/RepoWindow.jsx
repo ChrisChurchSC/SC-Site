@@ -65,9 +65,12 @@ const AGENT_FILES = ROSTER.map(({ name }, i) => ({
 /* brand-strategist, because its refusal is the one with a marker to show. */
 const PICKED = 0
 
-export default function RepoWindow({ label = 'Repo', big = false, assets = true, agents = false }) {
+export default function RepoWindow({ label = 'Repo', big = false, assets = true, agents = false, ratio }) {
   return (
-    <div className={`${styles.window}${big ? ' ' + styles.big : ''}`}>
+    <div
+      className={`${styles.window}${big ? ' ' + styles.big : ''}`}
+      style={ratio ? { aspectRatio: ratio } : undefined}
+    >
       <div className={styles.head}>
         <span className={styles.crumbMuted}>Super Conscious</span>
         <span className={styles.slash}>/</span>

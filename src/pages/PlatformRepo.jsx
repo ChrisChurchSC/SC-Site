@@ -96,7 +96,7 @@ export default function PlatformRepo() {
         </div>
 
         <div className={styles.heroStage}>
-          <RepoWindow big />
+          <RepoWindow big ratio="1 / 1" />
         </div>
       </header>
 
