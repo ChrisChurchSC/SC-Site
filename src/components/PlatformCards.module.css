@@ -887,3 +887,58 @@
     --overhang: 0px;
   }
 }
+
+/* ── THE PLAY MARK ─────────────────────────────────────────────────────────
+   Over the wide card, which is the one showing the product. Above the
+   preview and its own scrim, so it reads against whatever is behind it.
+
+   Not a control: there is no tour file in this repo. It carries the same
+   "Coming soon" tip the arrow badges use, and the day a video exists this is
+   where it goes. */
+.playWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  /* A wash under the mark, or a play triangle over a file browser is just a
+     shape lost in a list. */
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.45), transparent 70%);
+}
+
+.play {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  width: clamp(56px, 5vw, 76px);
+  height: clamp(56px, 5vw, 76px);
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: default;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.play:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(10, 10, 10, 0.78);
+  transform: scale(1.04);
+}
+
+.playIcon {
+  width: 40%;
+  height: 40%;
+  /* Optical centring: a triangle's bounding box sits left of where the eye
+     puts its centre. */
+  margin-left: 8%;
+  fill: currentColor;
+  stroke: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play { transition: none; }
+  .play:hover { transform: none; }
+}

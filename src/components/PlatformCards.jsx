@@ -1,4 +1,4 @@
-import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList } from 'lucide-react'
+import { Compass, PenLine, TrendingUp, Ruler, ChartBar, ClipboardList, Play } from 'lucide-react'
 import { dashboard as DASH } from '../data/dashboard'
 import { agents as ROSTER } from '../data/agents'
 
@@ -456,6 +456,13 @@ export function Card({ id, lead, rest, size, preview }) {
       {/* The well. The repository card fills it with the product's own UI;
           the rest stay empty on purpose — see the note at the top. */}
       <div className={styles.well} aria-hidden="true">
+        {size === 'large' && (
+          <span className={styles.playWrap}>
+            <span className={styles.play} data-tip="Coming soon">
+              <Play className={styles.playIcon} aria-hidden="true" />
+            </span>
+          </span>
+        )}
         {preview ?? null}
         {!preview && id === 'brand-repository' ? <RepoPreview /> : null}
         {!preview && id === 'agents' ? <AgentsPreview /> : null}

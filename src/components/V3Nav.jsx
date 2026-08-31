@@ -457,9 +457,10 @@ export default function V3Nav() {
                     onMouseEnter: () => openPanel(panel),
                     onFocus: () => openPanel(panel),
                   }
-                  return href
-                    ? <NavLink key={label} to={href} {...shared} aria-expanded={panel ? open : undefined}>{inner}</NavLink>
-                    : <span key={label} {...shared}>{inner}</span>
+                  /* A panel makes it a heading; without one it is a link. */
+                  return href && !panel
+                    ? <NavLink key={label} to={href} {...shared}>{inner}</NavLink>
+                    : <span key={label} {...shared} aria-expanded={panel ? open : undefined}>{inner}</span>
                 })}
               </nav>
 
@@ -510,7 +511,7 @@ export default function V3Nav() {
                       nav card uses on / and /v2. Not a new claim written for a
                       menu. */}
                   <p className={v3.svcStatement}>Build the brand, then grow it.</p>
-                  <NavLink to="/contact" className={v3.svcIntroCta}>Talk to us →</NavLink>
+                  <NavLink to="/services" className={v3.svcIntroCta}>See all services →</NavLink>
                 </div>
 
                 <div className={v3.svcGrid}>
