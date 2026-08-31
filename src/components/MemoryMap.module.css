@@ -179,17 +179,6 @@
   .tileNum { display: block; }
 }
 
-.foot {
-  margin: 0;
-  padding: 13px 18px 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-  background: #120c1c;
-  max-width: 78ch;
-  font-size: 12px;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.42);
-}
-
 /* Stacked, the columns become rows and area stops meaning anything, so the map
    turns into an ordered list of the same files at the same relative weight. */
 @media (max-width: 900px) {

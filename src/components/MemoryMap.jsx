@@ -1,5 +1,5 @@
 import styles from './MemoryMap.module.css'
-import { corpus, corpusTotal, corpusMeasured } from '../data/brandCorpus'
+import { corpus, corpusTotal } from '../data/brandCorpus'
 
 /**
  * WHAT THE BRAND KNOWS, BY WEIGHT — a full-width treemap of the memory itself,
@@ -98,13 +98,6 @@ export default function MemoryMap() {
           )
         })}
       </div>
-
-      <p className={styles.foot}>
-        Every box is a file in the brand repo, sized by how much of the memory it takes up.
-        Measured {corpusMeasured}; token counts are approximate at four characters to a token.
-        Fonts and the styleguide&rsquo;s own source are left out &mdash; they carry nothing to
-        read. The narrowest column is floored so its name still fits.
-      </p>
     </div>
   )
 }

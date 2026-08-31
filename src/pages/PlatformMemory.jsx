@@ -4,7 +4,7 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import ServiceFaq from '../components/ServiceFaq'
 import MemoryCards from '../components/MemoryCards'
-import MemoryWindow from '../components/MemoryWindow'
+import BrandInputsWindow from '../components/BrandInputsWindow'
 import MemoryMap from '../components/MemoryMap'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import HowItWorks from '../components/HowItWorks'
@@ -131,11 +131,21 @@ export default function PlatformMemory() {
           </div>
         </div>
 
-        {/* THE RECORD ITSELF, and it is ours. The other platform heroes draw a
-            plausible screen; this one draws three decisions that actually got
-            made, which is why it is the hero rather than a section. */}
+        {/* WHAT THE BRAND KNOWS, INVENTORIED. The hero used to draw the three
+            real decisions, which made the page read as a changelog of them.
+            Decisions are one row of this taxonomy and they keep the record
+            further down, where the fact that they are real is the argument.
+
+            SAME SIZE AS ITS SIBLINGS: 1 / 1, the ratio the measurement and repo
+            heroes use, so the three platform pages open identically.
+
+            THE DECISION RECORD IS NO LONGER PERMANENTLY ON THIS PAGE. It was
+            the hero, and it was the one window here that needed no Sample data
+            tag. It now appears only in the rotating memory step of How it
+            works. The real entries still show in two of the three cards and in
+            the markers section, but see the note in BrandInputsWindow. */}
         <div className={styles.heroStage}>
-          <MemoryWindow bare />
+          <BrandInputsWindow bare ratio="1 / 1" />
         </div>
       </header>
 
