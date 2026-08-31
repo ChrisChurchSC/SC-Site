@@ -68,22 +68,22 @@ const POINTS = [
   {
     Icon: Sparkles,
     key: 'Brand',
-    line: 'Positioning, identity, voice — the source everything else has to be right against.',
+    line: 'One source to be right against, so the same decision is not argued twice.',
   },
   {
     Icon: Globe,
     key: 'Website & app',
-    line: 'Where people actually meet it, built to change without starting over.',
+    line: 'Changes ship without a rebuild, so the site keeps up with the business.',
   },
   {
     Icon: Megaphone,
     key: 'Campaign',
-    line: 'What takes it to market, drawn from the brand rather than invented beside it.',
+    line: 'Goes to market sooner, because the thinking behind it is already settled.',
   },
   {
     Icon: Share2,
     key: 'Channels',
-    line: 'Where it keeps showing up once the launch is over.',
+    line: 'Stays live after launch without a scramble for assets every week.',
   },
 ]
 
@@ -130,11 +130,12 @@ export default function BuiltInSection() {
         <div className={styles.copy}>
           <p className={styles.eyebrow}>[ What we build ]</p>
           <h2 className={styles.headline} id="built-in">
-            What we build, and why it all goes in one place.
+            We build it so you can go to market and grow faster.
           </h2>
           <p className={styles.body}>
-            Four things, built to work together — and put in the platform rather than handed
-            over, so whoever picks them up next can use them without asking us.
+            Four things, built to work together and put in the platform rather than handed
+            over — so your team can move on them without waiting on us. And we stay alongside
+            to help.
           </p>
 
           <dl className={styles.points}>

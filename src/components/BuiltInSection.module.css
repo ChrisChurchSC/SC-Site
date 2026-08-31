@@ -116,7 +116,7 @@
   font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
-  color: var(--pink, #df4ed6);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .pointIcon {
