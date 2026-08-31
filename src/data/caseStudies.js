@@ -6,6 +6,7 @@ const HY = (file) => `/cs/hylands/${file}`
 export const caseStudies = {
   'hylands': {
     n: '028',
+    cover: '/cs/hylands/SC_Hylands_10.webp',
     name: 'Hylands',
     type: 'Brand + Content',
     year: '2025',
@@ -67,6 +68,7 @@ export const caseStudies = {
 
   'entropy': {
     n: '031',
+    cover: '/cs/entropy/SC_Entropy_13.webp',
     name: 'Entropy',
     type: 'Brand',
     year: '2025',
@@ -128,6 +130,7 @@ export const caseStudies = {
 
   'nimruz': {
     n: '016',
+    cover: '/cs/nimruz/SC_Nimruz_11.webp',
     name: 'Nimruz',
     type: 'Brand + Content',
     year: '2025',
@@ -209,6 +212,7 @@ export const caseStudies = {
 
   'world-within': {
     n: '018',
+    cover: '/grid/ww-sizzle-compressed.mp4',
     name: 'World Within',
     type: 'Campaign',
     year: '2022',

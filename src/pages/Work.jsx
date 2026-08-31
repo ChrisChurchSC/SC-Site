@@ -1,5 +1,6 @@
+import { NavLink } from 'react-router-dom'
 import styles from './Work.module.css'
-import WorkGrid from '../components/WorkGrid'
+import WorkIndex from '../components/WorkIndex'
 import { useMeta } from '../hooks/useMeta'
 
 /**
@@ -42,8 +43,9 @@ export default function Work() {
         <h1 className={styles.headline}>Case studies</h1>
       </header>
 
-      <section className={styles.gridSection} aria-label="Selected work, visual index">
-        <WorkGrid />
+      <section className={styles.gridSection} aria-label="Selected work">
+        <WorkIndex />
+        <NavLink to="/work/all" className={styles.seeAll}>See all case studies</NavLink>
       </section>
 
     </main>
