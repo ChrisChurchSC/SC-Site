@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
-import { RefreshCw } from 'lucide-react'
+import { Check, LoaderCircle, RefreshCw } from 'lucide-react'
 
 import styles from './FlowDiagram.module.css'
 import RepoWindow from './RepoWindow'
@@ -62,7 +62,7 @@ const REPO_INPUTS = [
 function Column({ label, groups, sync = false }) {
   return (
     <div className={styles.column} aria-label={label}>
-      {groups.map(({ name, items, media }) => (
+      {groups.map(({ name, items, media, status }) => (
         <div key={name} className={`${styles.node}${media ? ' ' + styles.nodeMedia : ''}`}>
           {/* A thumbnail above the name. Grey while it is a placeholder, the
               image once there is one — the card's shape does not change when
@@ -82,6 +82,21 @@ function Column({ label, groups, sync = false }) {
           <span className={styles.nodeRow}>
             <span className={styles.nodeName}>{name}</span>
             {sync && <RefreshCw className={styles.sync} aria-hidden="true" />}
+            {/* The state of the thing being made. Two only: it is done, or it
+                is being worked on — a third would be a status board rather
+                than a picture of work happening. */}
+            {status === 'done' && (
+              <span className={`${styles.status} ${styles.statusDone}`}>
+                <Check className={styles.statusIcon} aria-hidden="true" />
+                Completed
+              </span>
+            )}
+            {status === 'running' && (
+              <span className={`${styles.status} ${styles.statusRunning}`}>
+                <LoaderCircle className={styles.statusSpin} aria-hidden="true" />
+                Running
+              </span>
+            )}
           </span>
           {items && (
             <span className={styles.chips}>

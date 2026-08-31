@@ -221,3 +221,51 @@
   object-fit: cover;
   border-radius: 4px;
 }
+
+/* ── THE STATE OF EACH OUTPUT ──────────────────────────────────────────────
+   Teal for done and pink for in progress, which is this site's own division:
+   pink is the thing being pointed at, and the thing being pointed at here is
+   the one still being made. */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.statusDone {
+  border: 1px solid rgba(78, 207, 179, 0.34);
+  background: rgba(78, 207, 179, 0.08);
+  color: var(--teal, #4ecfb3);
+}
+
+.statusRunning {
+  border: 1px solid rgba(223, 78, 214, 0.34);
+  background: rgba(223, 78, 214, 0.08);
+  color: var(--pink, #df4ed6);
+}
+
+.statusIcon { width: 11px; height: 11px; }
+
+.statusSpin {
+  width: 11px;
+  height: 11px;
+  animation: statusSpin 1.1s linear infinite;
+}
+
+@keyframes statusSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* A spinner that never stops is a distraction on a page somebody is reading;
+   for anyone who asked for less movement it simply holds still. */
+@media (prefers-reduced-motion: reduce) {
+  .statusSpin { animation: none; }
+}

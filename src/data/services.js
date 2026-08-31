@@ -47,12 +47,14 @@ export const services = [
         n: '01',
         name: 'Website & App',
         media: 'placeholder',
+        status: 'done',
         items: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
       },
       {
         n: '02',
         name: 'Campaign',
         media: 'placeholder',
+        status: 'done',
         items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
         /* The diagram's right column is what comes OUT of the repo, and the
            first three items above are the strategy that goes IN — audience
@@ -67,6 +69,7 @@ export const services = [
         n: '03',
         name: 'Channels',
         media: 'placeholder',
+        status: 'running',
         items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
       },
     ],

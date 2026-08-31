@@ -179,9 +179,10 @@ export default function ServiceV3() {
         ) : (
           <FlowDiagram
             centre="Repo"
-            outputs={service.pillars.map(({ name, items, outputs, media }) => ({
+            outputs={service.pillars.map(({ name, items, outputs, media, status }) => ({
               name,
               media,
+              status,
               /* A pillar that names its own outputs uses them; the rest fall
                  back to the first three deliverables, which read as outputs
                  already. */
