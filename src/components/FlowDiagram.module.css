@@ -78,14 +78,39 @@
   gap: 5px;
 }
 
+/* A TOKEN, not a pill: a hairline and a square-ish corner rather than a
+   filled lozenge, and a glyph in front of the word so it reads as a thing
+   the repo holds rather than as a tag applied to one. */
 .chip {
-  padding: 3px 8px;
-  border-radius: var(--r-control, 4px);
-  background: rgba(255, 255, 255, 0.06);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: 'Roboto Mono', monospace;
   font-size: 9.5px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.chipIcon {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  stroke-width: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* What a token without a better glyph gets — a dot is honest where a borrowed
+   icon would be wrong. */
+.chipDot {
+  width: 4px;
+  height: 4px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
 }
 
 /* THE WIRES. One SVG over the whole flow rather than a line per card, so
@@ -175,6 +200,18 @@
   min-width: 0;
   align-self: stretch;
   display: grid;
+}
+
+/* THE REPO SITS AT ITS OWN HEIGHT. Stretched, it took the row's height —
+   which the five input cards on the left decide — and spent the difference on
+   empty space under a five-row file list. Centred against the columns, capped
+   to what it actually holds. */
+.centreSlotRepo {
+  align-self: center;
+}
+
+.centreSlotRepo > * {
+  height: clamp(360px, 34vw, 470px);
 }
 
 /* Width only. Letting it take the row's height instead made the window's own

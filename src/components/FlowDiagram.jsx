@@ -1,5 +1,47 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
-import { Check, LoaderCircle, RefreshCw } from 'lucide-react'
+import {
+  AtSign, BadgeCheck, BarChart3, Bot, Brush, Camera, Check, CircleDollarSign,
+  Compass, Contact, Globe, Image, LoaderCircle, Mail, MessageSquare,
+  PenLine, RefreshCw, Ruler, Search, Share2, ShoppingBag, Sparkles, Target,
+  Type as TypeIcon, Users,
+} from 'lucide-react'
+
+/* The glyph a token carries, by what it names. */
+const TOKEN_ICONS = {
+  'Marketing mix': Target,
+  Audience: Users,
+  'Comms strategy': MessageSquare,
+  Logo: Sparkles,
+  Type: TypeIcon,
+  Color: Brush,
+  Photography: Camera,
+  Strategist: Compass,
+  Writer: PenLine,
+  Designer: Ruler,
+  Analyst: BarChart3,
+  Reviews: BadgeCheck,
+  Approvals: Check,
+  Social: Share2,
+  Search: Search,
+  Email: Mail,
+  Paid: CircleDollarSign,
+  Web: Globe,
+  CRM: Contact,
+  Sends: Mail,
+  Opens: Mail,
+  Clicks: Target,
+  Conversions: ShoppingBag,
+  Spend: CircleDollarSign,
+  Impressions: Globe,
+  CTR: BarChart3,
+  Sessions: Globe,
+  Referrers: Share2,
+  Signups: AtSign,
+  Pipeline: BarChart3,
+  'Closed won': BadgeCheck,
+  Agents: Bot,
+  Photos: Image,
+}
 
 import styles from './FlowDiagram.module.css'
 import RepoWindow from './RepoWindow'
@@ -100,7 +142,17 @@ function Column({ label, groups, sync = false }) {
           </span>
           {items && (
             <span className={styles.chips}>
-              {items.map((i) => <span key={i} className={styles.chip}>{i}</span>)}
+              {items.map((i) => {
+                const Glyph = TOKEN_ICONS[i]
+                return (
+                  <span key={i} className={styles.chip}>
+                    {Glyph
+                      ? <Glyph className={styles.chipIcon} aria-hidden="true" />
+                      : <span className={styles.chipDot} aria-hidden="true" />}
+                    {i}
+                  </span>
+                )
+              })}
             </span>
           )}
         </div>
@@ -222,11 +274,9 @@ export default function FlowDiagram({
 
         <Column label={inputsLabel} groups={inputs} sync />
 
-        {centreVisual ? (
-          <div className={styles.centreSlot}>{centreVisual}</div>
-        ) : (
-          <RepoWindow label={centre} />
-        )}
+        <div className={`${styles.centreSlot}${centreVisual ? '' : ' ' + styles.centreSlotRepo}`}>
+          {centreVisual ?? <RepoWindow label={centre} />}
+        </div>
 
         <Column label="What comes out" groups={outputs} />
       </div>
