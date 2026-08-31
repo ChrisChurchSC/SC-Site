@@ -130,12 +130,12 @@ export default function BuiltInSection() {
         <div className={styles.copy}>
           <p className={styles.eyebrow}>[ What we build ]</p>
           <h2 className={styles.headline} id="built-in">
-            We build it so you can go to market and grow faster.
+            Go to market and grow faster.
           </h2>
           <p className={styles.body}>
-            Four things, built to work together and put in the platform rather than handed
-            over — so your team can move on them without waiting on us. And we stay alongside
-            to help.
+            We build the four things that takes, and put them in the platform rather than
+            handing them over — so your team can move without waiting on us. And we stay
+            alongside to help.
           </p>
 
           <dl className={styles.points}>
