@@ -24,10 +24,18 @@ import { corpus, corpusTotal } from '../data/brandCorpus'
  *
  * WHERE THE REAL RECORD SURVIVES, which is now a short list and worth keeping
  * an eye on. The hero draws the input taxonomy; the markers section has been
- * cut. What is left that came off the working copy: the Governance card and
- * the open row of the Define table, the whole of the Usage card, the treemap,
- * and the rotating memory step of How it works. Everything else on the page is
- * a product surface carrying a Sample data tag.
+ * cut; and as of the Define/Use/Update/Govern visuals, MemoryWindow is
+ * selected by no step on any page, so the three real decisions are on this
+ * site nowhere at all. What is left that came off the working copy: the
+ * Governance card, the open row of the Define table, the whole of the Usage
+ * card, and the treemap. Everything else is a product surface with a Sample
+ * data tag on it.
+ *
+ * THAT IS A DECISION SOMEBODY SHOULD MAKE ON PURPOSE rather than let stand by
+ * accident. The record was this page's strongest asset — the only screen on
+ * the site that needed no tag — and it went one request at a time. Putting it
+ * back as its own section is a small change; the component is intact and the
+ * VISUALS entry for it is still there.
  *
  * THE GROUND THIS PAGE HAS TO HOLD, or it should be cut. Repo already sells
  * structure and history; Reviews already sells approval. Memory is only worth

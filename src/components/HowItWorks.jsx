@@ -145,14 +145,23 @@ const SETS = {
      Re-check is not padding. Strategy/verticals/ carries dated refresh notes
      because its compliance facts genuinely move, so a record that never
      expires anything would go quietly wrong. */
+  /* THE MEMORY SET. Visuals are Chris's: a folder structure for Define, the
+     inputs being read for Use, a diff for Update, and the review queue — the
+     pull requests — for Govern.
+
+     WHAT THAT COST: 'memory' is no longer selected by any step on any page, so
+     MemoryWindow — the one window on this site drawing three decisions that
+     actually got made, tagged "From SC-Brand" rather than "Sample data" — is
+     now rendered nowhere. The entry below stays in VISUALS so putting it back
+     is one word. Flagged on the page too; it is worth a decision. */
   memory: {
     headline: 'Defined once, used everywhere, updated as it learns — and never changed without a person.',
     steps: [
       {
         n: '01',
         name: 'Define',
-        visual: 'inputs',
-        note: 'Positioning, voice, evidence, the design system and the agents get written down as files — so the brand is something you open rather than something you explain.',
+        visual: 'folders',
+        note: 'Positioning, voice, evidence, the design system and the agents get written down as files, in folders, with names — so the brand is something you open rather than something you explain.',
       },
       {
         n: '02',
@@ -163,14 +172,14 @@ const SETS = {
       {
         n: '03',
         name: 'Update',
-        visual: 'memory',
-        note: 'What the work learns goes back in — the decision, the date, the name, and the option that lost. A call that gets reversed is struck through and dated rather than deleted.',
+        visual: 'diff',
+        note: 'Changes are versioned rather than overwritten. Every edit is a diff against what was there, with a date and a name on it, so what the brand used to say — and why it stopped saying it — is still readable.',
       },
       {
         n: '04',
         name: 'Govern',
         visual: 'review',
-        note: 'Nothing lands on its own. A push opens a numbered review holding what the files would become and writes nothing live; merging is a person\u2019s job.',
+        note: 'Nothing lands on its own. A push opens a numbered review holding what the files would become and writes nothing live, and the queue is the gate: merging is a person\u2019s job.',
       },
     ],
     loops: true,
@@ -277,6 +286,9 @@ const VISUALS = {
   /* Where it lands: the repo, set up and documented. */
   diff: DiffWindow,
   repo: () => <RepoWindow big assets={false} agents />,
+  /* The same window across all five folders rather than just Agents/ — the
+     structure itself, for the step about defining one. */
+  folders: () => <RepoWindow big assets={false} />,
   /* The creative that got made. */
   assets: AssetsGridWindow,
   /* The same assets, seen by where they went. */
