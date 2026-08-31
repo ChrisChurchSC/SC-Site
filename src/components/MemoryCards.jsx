@@ -41,12 +41,12 @@ const SPELLING = decisions.find((d) => d.id === 'us-spelling')
    rows. Pink on that row because pink is the thing being pointed at. */
 const DEFINE_ROWS = (() => {
   const groups = ['Strategy', 'Design', 'Evidence']
-    .map((name) => inputGroups.find((g) => g.group === name))
+    .map((name) => inputGroups.find((g) => g.name === name))
     .filter(Boolean)
   const max = Math.max(...groups.map((g) => g.items.length), markers.length)
   return [
     ...groups.map((g) => ({
-      name: g.group,
+      name: g.name,
       count: g.items.length,
       state: 'Defined',
       fill: g.items.length / max,

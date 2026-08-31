@@ -1,4 +1,5 @@
 import styles from './InputsWindow.module.css'
+import { inputGroups, inputCount } from '../data/brandInputs'
 
 /**
  * THE INPUTS, BEING DEFINED — the screen for Build's "Define" step.
@@ -11,33 +12,24 @@ import styles from './InputsWindow.module.css'
  * previously showed the four repo folders, which are directory names; these
  * are the things actually being defined, which is what the step is about.
  *
+ * THE LIST MOVED TO src/data/brandInputs.js and did not change. Three things
+ * draw it now — this window on Build's Define step, the same window as the
+ * memory hero, and the Define card — and a list copied into three files is a
+ * list that will disagree with itself. The memory page briefly had a second
+ * component drawing its own copy; this is that mistake being undone.
+ *
  * LEGAL IS THE ONE WORTH NOTICING. Approved claims, disclaimers and expiry
  * dates are the machinery behind an agent refusing to invent a claim — the
  * only group here that can make a draft wrong rather than merely weak.
  */
-const GROUPS = [
-  { name: 'Strategy', items: ['Positioning', 'Voice', 'Lexicon', 'Narrative', 'Naming rules'] },
-  { name: 'Goals', items: ['Business', 'Brand', 'Campaign', 'Asset-level'] },
-  { name: 'Evidence', items: ['Proof points', 'Objections', 'Audience'] },
-  { name: 'Legal', items: ['Approved claims', 'Disclaimers', 'Expiry dates'] },
-  {
-    name: 'Design',
-    items: ['Tokens', 'Components', 'Iconography', 'Layout', 'Motion', 'Sound', 'Imagery direction', 'Illustration style'],
-  },
-  { name: 'Language', items: ['Headline patterns', 'Body copy', 'Microcopy', 'Dataviz conventions'] },
-  { name: 'Learned', items: ['Decisions', 'Rejections with reasons', 'Exceptions', 'Candidate rules', 'Performance summary'] },
-  { name: 'Operating', items: ['Channel specs', 'Agent definitions', 'Prompt library', 'Access rules', 'Provenance'] },
-]
-
-const TOTAL = GROUPS.reduce((n, g) => n + g.items.length, 0)
 
 /* The one being read right now. Named rather than random so the highlighted
    group and the scan line always agree. */
 const READING = 'Strategy'
 
-export default function InputsWindow({ reading = false }) {
+export default function InputsWindow({ reading = false, ratio }) {
   return (
-    <div className={styles.window}>
+    <div className={styles.window} style={ratio ? { aspectRatio: ratio } : undefined}>
       <div className={styles.head}>
         <span className={styles.crumbMuted}>SC-Brand</span>
         <span className={styles.slash}>/</span>
@@ -49,7 +41,7 @@ export default function InputsWindow({ reading = false }) {
         <span className={styles.tabOn}>All</span>
         {reading && <span className={styles.ro}>read-only</span>}
         <span className={styles.tab}>Open questions</span>
-        <span className={styles.count}>{TOTAL} defined</span>
+        <span className={styles.count}>{inputCount} defined</span>
       </div>
 
       {reading && (
@@ -64,7 +56,7 @@ export default function InputsWindow({ reading = false }) {
       )}
 
       <div className={styles.list}>
-        {GROUPS.map(({ name, items }) => (
+        {inputGroups.map(({ name, items }) => (
           <div key={name} className={`${styles.group}${reading && name === READING ? ' ' + styles.groupOn : ''}`}>
             <span className={styles.folder}>
               {name}

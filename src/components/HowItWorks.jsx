@@ -146,31 +146,31 @@ const SETS = {
      because its compliance facts genuinely move, so a record that never
      expires anything would go quietly wrong. */
   memory: {
-    headline: 'Settled, recorded, recalled, re-checked — so the brand argues each question once.',
+    headline: 'Defined once, used everywhere, updated as it learns — and never changed without a person.',
     steps: [
       {
         n: '01',
-        name: 'Settle',
-        visual: 'diff',
-        note: 'A person merges the review. That is the only way in, and the moment a thing stops being a proposal and starts being true.',
+        name: 'Define',
+        visual: 'inputs',
+        note: 'Positioning, voice, evidence, the design system and the agents get written down as files — so the brand is something you open rather than something you explain.',
       },
       {
         n: '02',
-        name: 'Record',
-        visual: 'memory',
-        note: 'The rule, the date, the name and the reason land in the file the decision governs — alongside the option that lost, which is the part a version history cannot keep.',
+        name: 'Use',
+        visual: 'reading',
+        note: 'Every job reads it before it drafts. The same positioning, the same voice, the same claims, without anybody being briefed on them again.',
       },
       {
         n: '03',
-        name: 'Recall',
-        visual: 'agent',
-        note: 'Every agent reads it before it drafts, so nobody re-opens a settled question and nothing gets quietly decided a second way.',
+        name: 'Update',
+        visual: 'memory',
+        note: 'What the work learns goes back in — the decision, the date, the name, and the option that lost. A call that gets reversed is struck through and dated rather than deleted.',
       },
       {
         n: '04',
-        name: 'Re-check',
-        visual: 'draft',
-        note: 'Decisions that rest on facts carry a date to look again. When the fact moves, the entry is struck and dated rather than deleted.',
+        name: 'Govern',
+        visual: 'review',
+        note: 'Nothing lands on its own. A push opens a numbered review holding what the files would become and writes nothing live; merging is a person\u2019s job.',
       },
     ],
     loops: true,

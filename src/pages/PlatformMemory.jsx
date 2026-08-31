@@ -4,7 +4,7 @@ import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import ServiceFaq from '../components/ServiceFaq'
 import MemoryCards from '../components/MemoryCards'
-import BrandInputsWindow from '../components/BrandInputsWindow'
+import InputsWindow from '../components/InputsWindow'
 import MemoryMap from '../components/MemoryMap'
 import EmailCaptureForm from '../components/EmailCaptureForm'
 import HowItWorks from '../components/HowItWorks'
@@ -147,9 +147,9 @@ export default function PlatformMemory() {
             the hero, and it was the one window here that needed no Sample data
             tag. It now appears only in the rotating memory step of How it
             works. Real entries still show in the Governance card and in the
-            open row of Define; see the note in BrandInputsWindow. */}
+            open row of Define. */}
         <div className={styles.heroStage}>
-          <BrandInputsWindow bare ratio="1 / 1" />
+          <InputsWindow ratio="1 / 1" />
         </div>
       </header>
 
