@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './WorkAll.module.css'
-import { caseStudies } from '../data/caseStudies'
+import { caseStudies, SHOW_COVERS } from '../data/caseStudies'
+import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import FooterCard from '../components/FooterCard'
+import V3Signoff from '../components/V3Signoff'
 import { useMeta } from '../hooks/useMeta'
 
 /**
@@ -38,6 +41,7 @@ const YEARS = uniq(ALL.map((s) => s.year)).reverse()
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
 
 function Media({ src }) {
+  if (!SHOW_COVERS) return <span className={`${styles.img} ${styles.fill}`} aria-hidden="true" />
   if (isVideo(src)) {
     return (
       <video
@@ -81,6 +85,8 @@ export default function WorkAll() {
 
   return (
     <main className={styles.page}>
+      <V3Nav />
+
       <header className={styles.head}>
         <p className={styles.eyebrow}>[ Selected Work ]</p>
         <h1 className={styles.headline}>All case studies</h1>
@@ -150,6 +156,8 @@ export default function WorkAll() {
           ))}
         </div>
       )}
+      <FooterCard columns={FOOTER_COLS} />
+      <V3Signoff />
     </main>
   )
 }

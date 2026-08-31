@@ -3,6 +3,12 @@ const NZ = (file) => `/cs/nimruz/${file}`
 const EA = (file) => `/cs/entropy/${file}`
 const HY = (file) => `/cs/hylands/${file}`
 
+/* THE CARDS SHOW GREY FOR NOW. Every `cover` below is a real file that was
+   opened and looked at, so this is a presentation choice rather than missing
+   data: flip this to true and the index and /work/all draw the picture
+   instead. */
+export const SHOW_COVERS = false
+
 export const caseStudies = {
   'hylands': {
     n: '028',

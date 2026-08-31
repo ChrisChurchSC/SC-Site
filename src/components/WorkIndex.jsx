@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
 import styles from './WorkIndex.module.css'
-import { caseStudies } from '../data/caseStudies'
+import { caseStudies, SHOW_COVERS } from '../data/caseStudies'
 
 /**
  * THE CASE STUDIES INDEX — one study given the room, the rest beside it.
@@ -29,6 +29,7 @@ const ORDER = ['hylands', 'entropy', 'nimruz', 'world-within']
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
 
 function Media({ src, className }) {
+  if (!SHOW_COVERS) return <span className={`${className} ${styles.fill}`} aria-hidden="true" />
   if (isVideo(src)) {
     return (
       <video

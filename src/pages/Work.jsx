@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Work.module.css'
 import WorkIndex from '../components/WorkIndex'
+import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import FooterCard from '../components/FooterCard'
+import V3Signoff from '../components/V3Signoff'
 import { useMeta } from '../hooks/useMeta'
 
 /**
@@ -38,6 +41,8 @@ export default function Work() {
 
   return (
     <main className={styles.main}>
+      <V3Nav />
+
       <header className={styles.header}>
         <p className={styles.label}>[ Selected Work ]</p>
         <h1 className={styles.headline}>Case studies</h1>
@@ -48,6 +53,8 @@ export default function Work() {
         <NavLink to="/work/all" className={styles.seeAll}>See all case studies</NavLink>
       </section>
 
+      <FooterCard columns={FOOTER_COLS} />
+      <V3Signoff />
     </main>
   )
 }

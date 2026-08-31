@@ -5,14 +5,11 @@
    a permanent URL rather than a second design for the same list. */
 
 .main {
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: var(--bar-inset);
   min-height: 100vh;
-  padding: 120px 24px 96px;
-}
-
-@media (min-width: 769px) {
-  /* 300px rail + a 24px gutter. Below this the rail is display:none and the
-     hamburger takes over, so the reservation would be dead space. */
-  .main { padding-right: 324px; }
+  padding: clamp(128px, 12vw, 190px) var(--bar-inset) 0;
 }
 
 .header {
