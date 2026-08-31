@@ -49,119 +49,79 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* A FILE TREE, in the site's window chrome. The cards described directories;
-   this is the listing itself. */
-.window {
-  max-width: 820px;
-  background: #101010;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--r-surface, 12px);
-  overflow: hidden;
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.windowHead {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 15px 20px;
+/* A row per directory: the name, what it is for, and the files under it. The
+   grid is what keeps five rows reading as one table rather than five cards. */
+.row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 0.9fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(14px, 2vw, 32px);
+  padding: clamp(18px, 2.2vw, 28px) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  font-family: "Roboto Mono", monospace;
-  font-size: 12.5px;
 }
 
-.crumbMuted { color: rgba(255, 255, 255, 0.38); }
-.slash { color: rgba(255, 255, 255, 0.22); }
-.windowName { color: rgba(255, 255, 255, 0.88); }
+.icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
 
-.badge {
-  margin-left: auto;
-  padding: 3px 9px;
-  border: 1px solid rgba(223, 78, 214, 0.45);
-  border-radius: var(--r-control, 4px);
+.naming { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+.dir {
+  font-family: "Roboto Mono", monospace;
+  font-size: clamp(13px, 1.1vw, 16px);
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.what {
+  font-family: "Roboto Mono", monospace;
   font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
-  color: var(--pink, #df4ed6);
+  color: rgba(255, 255, 255, 0.38);
 }
-
-.tree {
-  padding: clamp(14px, 1.8vw, 22px) clamp(12px, 1.6vw, 20px);
-  font-family: "Roboto Mono", monospace;
-}
-
-.root {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Every folder is open: this section exists to show what is in there, so a
-   collapsed one would be a control rather than an answer. */
-.chev { width: 13px; height: 13px; flex: none; color: rgba(255, 255, 255, 0.32); }
-.folderIcon { width: 15px; height: 15px; flex: none; color: rgba(255, 255, 255, 0.5); }
-
-.branch {
-  /* The indent, with the guide line a tree draws down its open folders. */
-  margin-left: 10px;
-  padding-left: 16px;
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-.dirRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 8px;
-  border-radius: 5px;
-  font-size: 13px;
-}
-
-.dirRow:hover { background: rgba(255, 255, 255, 0.04); }
-
-.dir { color: rgba(255, 255, 255, 0.92); }
-
-/* What the folder is for, on the same line and quiet — a tree does not carry
-   descriptions, so this stays out of the way of the names. */
-.what {
-  font-size: 10px;
-  letter-spacing: var(--label-tracking, 0.18em);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.count { margin-left: auto; font-size: 11px; color: rgba(255, 255, 255, 0.3); }
 
 .note {
-  margin: 0 0 8px;
-  padding-left: 39px;
-  max-width: 62ch;
+  margin: 0;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* The files under a folder, one per line as a listing draws them. */
-.files {
-  display: flex;
-  flex-direction: column;
-  padding: 0 0 10px 39px;
-}
-
-.file {
-  padding: 4px 0;
-  font-size: 12px;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.62);
 }
 
-.file:hover { color: rgba(255, 255, 255, 0.9); }
+.files { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
 
-@media (max-width: 700px) {
-  .note, .files { padding-left: 24px; }
-  .what { display: none; }
+/* The same token as the hero diagram's chips, so a filename looks like a
+   filename wherever it appears. */
+.file {
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 34px minmax(0, 1fr);
+    row-gap: 10px;
+  }
+  .note, .files { grid-column: 2; }
 }
