@@ -61,6 +61,14 @@ const FALLBACKS = {
     attribution: '[Name], [Role], [Company]',
     placeholder: true,
   },
+  memory: {
+    quote:
+      'The useful part is not what we decided, it is why. New people stop ' +
+      'reopening things we settled a year ago, and the questions we never ' +
+      'answered are written down instead of quietly forgotten.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
   grow: {
     quote:
       'We used to go quiet between launches. Now there is always something in ' +

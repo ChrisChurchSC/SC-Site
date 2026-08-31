@@ -135,22 +135,22 @@
   font-family: var(--mono, 'Roboto Mono', monospace);
 }
 
-/* Top right, out of the way of the name and the count on the left. It is
-   hidden on any tile too short to hold it, by the same container query that
-   governs the labels — a thumbnail squeezed to a smear is worse than none. */
+/* Bottom right, and round. Hidden on any tile too short to hold it, by the
+   same container query that governs the labels — a thumbnail squeezed to a
+   smear is worse than none. */
 .thumb {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 22px;
-  height: 27px;
+  right: 7px;
+  bottom: 7px;
+  width: 26px;
+  height: 26px;
   display: none;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2px;
-  padding: 3px;
-  border-radius: 2px;
-  background: rgba(0, 0, 0, 0.28);
+  padding: 5px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.32);
   overflow: hidden;
 }
 
@@ -162,16 +162,18 @@
 }
 
 .thumbArt {
-  width: 34px;
-  padding: 3px;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.42);
 }
 
+/* COVER RATHER THAN CONTAIN. A wordmark is about seven to one; contained in
+   a 26px circle it comes out under three pixels tall, which is a dash rather
+   than a mark. Cropping a thumbnail to its frame is the ordinary convention
+   and it shows real letterforms at a readable size. */
 .thumbArt img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 @container (min-height: 34px) {
@@ -180,7 +182,6 @@
 
 .tileName {
   margin: 0;
-  padding-right: 26px;
   font-size: 11px;
   line-height: 1.25;
   letter-spacing: 0.01em;
@@ -192,6 +193,7 @@
 
 .tileNum {
   margin: 0;
+  padding-right: 30px;
   font-size: 10px;
   letter-spacing: 0.03em;
   color: rgba(255, 255, 255, 0.5);

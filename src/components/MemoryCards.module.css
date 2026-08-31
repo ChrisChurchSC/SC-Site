@@ -1,0 +1,396 @@
+/* MemoryCards — the three under the hero on /platform/memory.
+ *
+ * The rules below are lifted verbatim from MeasureCards.module.css rather
+ * than rewritten. The preview pane inside a platform card is one component
+ * wearing three hats across three pages, and three hand-tuned copies of it
+ * would drift within a release. If that pane is ever restyled, restyle it
+ * there and re-copy.
+ */
+
+/* The three under the measurement hero — see MeasureCards.jsx. The card
+   chrome comes from PlatformCards; everything here is what goes in the well. */
+
+/* The three-up. The vertical room lives here rather than on the page section
+   that wraps it, so it holds on every page that renders these cards —
+   /platform/repo referenced a .cardsBlock its own stylesheet never defined,
+   which left the row butted against the dividers above and below it. */
+.rowThree {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: clamp(34px, 4.2vw, 64px) 0;
+}
+
+/* THE WELL'S CONTENTS. A pane rather than a floating stack: the platform
+   cards put a surface inside the card and the previews read as product
+   because of it. */
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  padding: 14px 15px;
+  border-radius: 10px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.paneHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.path {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Teal, not pink: this is a state that is fine, and pink on this site means
+   the one thing being pointed at. */
+.ok,
+.sample {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+}
+
+.ok {
+  border: 1px solid rgba(78, 207, 179, 0.4);
+  color: var(--teal, #4ecfb3);
+}
+
+.sample {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── PROVE ─────────────────────────────────────────────────────────────── */
+
+.lines { display: flex; flex-direction: column; gap: 8px; }
+
+.add {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(78, 207, 179, 0.07);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.sign { flex: none; color: var(--teal, #4ecfb3); }
+
+.meta {
+  padding-left: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── COMPOUND ──────────────────────────────────────────────────────────── */
+
+.rows { display: flex; flex-direction: column; gap: 9px; margin: 0; }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rowKey {
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.rowValue {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: right;
+}
+
+/* ── ADDED DETAIL ──────────────────────────────────────────────────────────
+   The panes were a header, one fact and a lot of dark. These fill them with
+   the rest of what the artifact actually holds. */
+
+/* The claim as it stood before it had a source, struck. */
+.cut {
+  display: flex;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.34);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+}
+
+.cut .sign { color: rgba(255, 255, 255, 0.3); text-decoration: none; }
+
+/* ── MEMORY ONLY ────────────────────────────────────────────────────────── */
+
+/* A settled decision, drawn as it reads in the file: the rule, then the date
+   under it. The date is the whole card — a rule without one is an opinion. */
+.stamp {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  /* auto, not a fixed gap: the pane is a fixed-height well and the date
+     belongs at its foot, the way it sits at the foot of the file. */
+  margin-top: auto;
+  padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.stampState {
+  margin-left: auto;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-control, 4px);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Written out rather than composed from .stampState — composes couples the
+   two names in a way that is easy to break from the JSX side later. */
+.stampStateOpen {
+  margin-left: auto;
+  padding: 2px 7px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.quote {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The rejected option, kept behind a rule and dimmed but not struck out —
+   struck-through would say it was wrong, and the point of the card is that it
+   was not. It just lost. */
+.alt {
+  margin: 9px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.altKey {
+  display: block;
+  margin-bottom: 3px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.33);
+}
+
+/* ── DEFINE: the taxonomy as a table ─────────────────────────────────────────
+   Four columns in the reference collapse to three plus a bar on its own line,
+   because the card is a third of the width the reference had. */
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.thead,
+.trow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 11px;
+}
+
+.thead {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.trow + .trow { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+.tname {
+  color: rgba(255, 255, 255, 0.86);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tnum {
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.tstate { color: rgba(255, 255, 255, 0.4); }
+
+.pill,
+.pillOpen {
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pill {
+  border: 1px solid rgba(139, 82, 224, 0.5);
+  color: #b98cf0;
+}
+
+/* Pink, because this is the row being pointed at. */
+.pillOpen {
+  border: 1px solid rgba(223, 78, 214, 0.5);
+  color: var(--pink, #df4ed6);
+}
+
+/* The bar takes the full width under its row. */
+.bar {
+  grid-column: 1 / -1;
+  height: 3px;
+  margin-top: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.barFill,
+.barFillOpen {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.barFill { background: #8b52e0; }
+.barFillOpen { background: var(--pink, #df4ed6); }
+
+/* ── USAGE: the ring ────────────────────────────────────────────────────── */
+.tlabel {
+  margin: 0;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.donutRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  /* Centred in what is left of the pane rather than pinned under the label,
+     which left the bottom third of the card empty. */
+  margin: auto 0;
+}
+
+.donutWrap {
+  position: relative;
+  flex: none;
+  width: 132px;
+  height: 132px;
+}
+
+/* -90deg so the first segment starts at the top rather than at three o'clock. */
+.donut {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.donutTotal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif, 'Signifier', Georgia, serif);
+  font-size: 30px;
+  color: #fff;
+}
+
+.legend {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 11px;
+}
+
+.legendKey {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.swatch {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+
+.legendNum {
+  margin: 0 0 0 auto;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}

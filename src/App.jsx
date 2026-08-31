@@ -19,6 +19,7 @@ import PricingV3 from './pages/PricingV3'
 import ServiceV3 from './pages/ServiceV3'
 import PlatformAgents from './pages/PlatformAgents'
 import PlatformMeasurement from './pages/PlatformMeasurement'
+import PlatformMemory from './pages/PlatformMemory'
 import PlatformRepo from './pages/PlatformRepo'
 import Work from './pages/Work'
 import Services from './pages/Services'
@@ -131,6 +132,7 @@ export default function App() {
         <Route path="/services/:slug" element={<ServiceV3 />} />
         <Route path="/platform/agents" element={<PlatformAgents />} />
         <Route path="/platform/measurement" element={<PlatformMeasurement />} />
+        <Route path="/platform/memory" element={<PlatformMemory />} />
         <Route path="/platform/repo" element={<PlatformRepo />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />

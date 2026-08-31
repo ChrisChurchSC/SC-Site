@@ -7,6 +7,7 @@ import DeployWindow from './DeployWindow'
 import AgentWindow from './AgentWindow'
 import DraftWindow from './DraftWindow'
 import ReviewWindow from './ReviewWindow'
+import MemoryWindow from './MemoryWindow'
 import DiffWindow from './DiffWindow'
 import AdoptWindow from './AdoptWindow'
 import AssetsGridWindow from './AssetsGridWindow'
@@ -136,6 +137,45 @@ const SETS = {
     loops: true,
   },
 
+  /* MEMORY. The four verbs are mine, not Chris's — he named the boundary
+     (Reviews is the gate, Memory is after) and these are drawn to sit on the
+     far side of it, which is why step 01 is the merge rather than the
+     decision. Unapproved; replace them the moment he says four better ones.
+
+     Re-check is not padding. Strategy/verticals/ carries dated refresh notes
+     because its compliance facts genuinely move, so a record that never
+     expires anything would go quietly wrong. */
+  memory: {
+    headline: 'Settled, recorded, recalled, re-checked — so the brand argues each question once.',
+    steps: [
+      {
+        n: '01',
+        name: 'Settle',
+        visual: 'diff',
+        note: 'A person merges the review. That is the only way in, and the moment a thing stops being a proposal and starts being true.',
+      },
+      {
+        n: '02',
+        name: 'Record',
+        visual: 'memory',
+        note: 'The rule, the date, the name and the reason land in the file the decision governs — alongside the option that lost, which is the part a version history cannot keep.',
+      },
+      {
+        n: '03',
+        name: 'Recall',
+        visual: 'agent',
+        note: 'Every agent reads it before it drafts, so nobody re-opens a settled question and nothing gets quietly decided a second way.',
+      },
+      {
+        n: '04',
+        name: 'Re-check',
+        visual: 'draft',
+        note: 'Decisions that rest on facts carry a date to look again. When the fact moves, the entry is struck and dated rather than deleted.',
+      },
+    ],
+    loops: true,
+  },
+
   build: {
     headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
     steps: [
@@ -216,6 +256,8 @@ const SETS = {
 const STEP_MS = 6000
 
 const VISUALS = {
+  /* The decision record, for the step about writing one down. */
+  memory: () => <MemoryWindow />,
   /* The inputs, settled: what the work will be made from. */
   inputs: InputsWindow,
   /* The same window, showing itself being read. */

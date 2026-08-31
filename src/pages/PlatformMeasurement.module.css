@@ -441,8 +441,10 @@
 
 /* The three platform cards under the hero — see MeasureCards.jsx, which
    brings its own grid and previews. */
+/* Spacing moved onto .rowThree in the card components so it applies on every
+   page, symmetric top and bottom. Nothing to add here. */
 .cardsBlock {
-  padding: clamp(36px, 4.5vw, 68px) 0 clamp(4px, 0.6vw, 10px);
+  padding: 0;
 }
 
 /* ── WHAT IT READS FROM ────────────────────────────────────────────────────

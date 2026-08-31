@@ -1,10 +1,15 @@
 /* The three under the measurement hero — see MeasureCards.jsx. The card
    chrome comes from PlatformCards; everything here is what goes in the well. */
 
+/* The three-up. The vertical room lives here rather than on the page section
+   that wraps it, so it holds on every page that renders these cards —
+   /platform/repo referenced a .cardsBlock its own stylesheet never defined,
+   which left the row butted against the dividers above and below it. */
 .rowThree {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+  margin: clamp(34px, 4.2vw, 64px) 0;
 }
 
 /* THE WELL'S CONTENTS. A pane rather than a floating stack: the platform

@@ -125,8 +125,20 @@ export const WORK_BY_SIZE = [
  *                the gap instead.
  *   Reviews    — the sync CLI already works this way. A push opens a numbered
  *                review and writes nothing live; merging is a person's job.
- *   Guardrails — the same discipline as the '––' placeholders on this site:
- *                a claim without a source does not ship.
+ *   Memory     — REPLACED GUARDRAILS IN THIS LIST and went unargued for a
+ *                while, so: the repo already holds every decision with its
+ *                reasoning beside it, a date, and the option that was
+ *                rejected — Strategy/README.md keeps the v1 proposal it threw
+ *                out, and tone-of-voice.md strikes and dates a decision
+ *                rather than deleting it. Every file carries an Open
+ *                decisions section addressed to whoever can close it. That is
+ *                the row: not history, which Repo covers, and not approval,
+ *                which Reviews covers, but the REASON surviving the person
+ *                who had it.
+ *                Guardrails, which this replaced, was the same discipline as
+ *                the '––' placeholders on this site: a claim without a
+ *                source does not ship. It is not gone, it is the markers
+ *                inside Memory.
  *
  * Library and Measurement stay, because a brand system needs somewhere for
  * the output to live and some account of whether it worked — but they are the
@@ -135,7 +147,7 @@ export const WORK_BY_SIZE = [
 export const PLATFORM_PAGES = [
   { name: 'Repo', Icon: FolderGit2, href: '/platform/repo', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
   { name: 'Agents', Icon: Bot, href: '/platform/agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
-  { name: 'Memory', Icon: BookMarked, note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
+  { name: 'Memory', Icon: BookMarked, href: '/platform/memory', note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },
   { name: 'Library', Icon: LayoutGrid, note: 'Every asset we have made, in use and findable.' },
   { name: 'Measurement', Icon: ChartNoAxesColumn, href: '/platform/measurement', note: 'What shipped, and what it moved.' },
