@@ -191,37 +191,32 @@
    photograph happened to be doing there. */
 .nodeMedia { overflow: hidden; }
 
-/* THE PLACEHOLDER IS A BENTO OF REAL FORMATS: 16:9, 1:1 and 9:16 —
-   landscape, square and story, which is what a set of assets for one of these
-   actually comes in. They share a height and take their width from their
-   ratio, so the shapes carry the meaning rather than a caption.
+/* THE PLACEHOLDER IS FOUR 4:5 TILES ACROSS THE CARD. Equal shares of the
+   width, so their height falls out of the card's measure rather than being
+   picked — the row fills the card instead of sitting in the middle of it.
 
-   A picture in `media` replaces the cluster at the same height, so the card
-   does not change size when real work goes in. */
+   A picture in `media` takes the same height, so the card does not change
+   size when real work replaces the placeholder. */
 .bento {
   display: flex;
   align-items: stretch;
   gap: 6px;
-  height: 62px;
   margin-bottom: 14px;
 }
 
 .tile {
-  height: 100%;
-  flex: none;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 4 / 5;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.tileLandscape { aspect-ratio: 16 / 9; }
-.tileSquare { aspect-ratio: 1 / 1; }
-.tileStory { aspect-ratio: 9 / 16; }
-
 .media {
   display: block;
   width: 100%;
-  height: 62px;
+  aspect-ratio: 16 / 10;
   margin-bottom: 14px;
   object-fit: cover;
   border-radius: 4px;

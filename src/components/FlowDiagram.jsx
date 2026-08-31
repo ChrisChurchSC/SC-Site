@@ -70,9 +70,10 @@ function Column({ label, groups, sync = false }) {
               it is the label. */}
           {media === 'placeholder' && (
             <span className={styles.bento} aria-hidden="true">
-              <span className={`${styles.tile} ${styles.tileLandscape}`} />
-              <span className={`${styles.tile} ${styles.tileSquare}`} />
-              <span className={`${styles.tile} ${styles.tileStory}`} />
+              <span className={styles.tile} />
+              <span className={styles.tile} />
+              <span className={styles.tile} />
+              <span className={styles.tile} />
             </span>
           )}
           {media && media !== 'placeholder' && (
