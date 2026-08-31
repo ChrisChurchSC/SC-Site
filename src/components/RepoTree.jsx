@@ -1,4 +1,4 @@
-import { BarChart3, Bot, Palette, PenLine, Target } from 'lucide-react'
+import { ChevronDown, Folder, FolderOpen } from 'lucide-react'
 
 import styles from './RepoTree.module.css'
 
@@ -20,39 +20,50 @@ import styles from './RepoTree.module.css'
  */
 const DIRS = [
   {
-    Icon: Target,
-    name: 'Strategy/',
+    name: 'Strategy',
     what: 'What is true',
-    files: ['positioning.md', 'audience.md', 'proof-points.md'],
     note: 'What the brand stands for, who it is for, and which claims have something behind them.',
+    files: [
+      'positioning.md',
+      'audience.md',
+      'proof-points.md',
+      'messaging-house.md',
+      'competitive-landscape.md',
+      'verticals/',
+      'README.md',
+    ],
   },
   {
-    Icon: PenLine,
-    name: 'Verbal/',
+    name: 'Verbal',
     what: 'How it sounds',
-    files: ['tone-of-voice.md', 'lexicon.md'],
     note: 'The voice, and the copy standards that come out of it. Kept apart from Strategy on purpose.',
+    files: ['tone-of-voice.md', 'copy-standards.md', 'lexicon.md', 'naming.md'],
   },
   {
-    Icon: Palette,
-    name: 'Visual/',
+    name: 'Visual',
     what: 'How it looks',
-    files: ['logo.svg', 'type.md', 'color.md'],
-    note: 'The design system — marks, type, colour, components — as files rather than a PDF of them.',
+    note: 'The design system — marks, type, color, components — as files rather than a PDF of them.',
+    files: ['logo.svg', 'logotype.svg', 'type.md', 'color.md', 'components.md', 'motion.md', 'photography.md'],
   },
   {
-    Icon: Bot,
-    name: 'Agents/',
+    name: 'Agents',
     what: 'Who drafts',
-    files: ['brand-strategist.md', 'comms-writer.md'],
     note: 'One markdown file per role: what it owns, what it reads, and the thing it will not do.',
+    files: [
+      'brand-strategist.md',
+      'comms-writer.md',
+      'media-strategist.md',
+      'design-critic.md',
+      'sales-analyst.md',
+      'studio-ops.md',
+      'README.md',
+    ],
   },
   {
-    Icon: BarChart3,
-    name: 'Data/',
+    name: 'Data',
     what: 'What it moved',
-    files: ['metrics.csv'],
     note: 'What shipped and how it performed, written back so the next round starts from it.',
+    files: ['metrics.csv', 'channels.csv', 'reviews.log'],
   },
 ]
 
@@ -70,26 +81,44 @@ export default function RepoTree() {
         </p>
       </div>
 
-      <ol className={styles.list}>
-        {DIRS.map(({ Icon, name, what, files, note }) => (
-          <li key={name} className={styles.row}>
-            <span className={styles.icon}>
-              <Icon size={16} strokeWidth={1.4} aria-hidden="true" />
-            </span>
+      <div className={styles.window}>
+        <div className={styles.windowHead}>
+          <span className={styles.crumbMuted}>Super Conscious</span>
+          <span className={styles.slash}>/</span>
+          <span className={styles.windowName}>SC-Brand</span>
+          <span className={styles.badge}>Repo</span>
+        </div>
 
-            <span className={styles.naming}>
-              <span className={styles.dir}>{name}</span>
-              <span className={styles.what}>{what}</span>
-            </span>
+        <div className={styles.tree}>
+          {/* The root, open. */}
+          <span className={styles.root}>
+            <ChevronDown className={styles.chev} aria-hidden="true" />
+            <FolderOpen className={styles.folderIcon} aria-hidden="true" />
+            SC-Brand
+          </span>
 
-            <p className={styles.note}>{note}</p>
+          {DIRS.map(({ name, what, note, files }) => (
+            <div key={name} className={styles.branch}>
+              <span className={styles.dirRow}>
+                <ChevronDown className={styles.chev} aria-hidden="true" />
+                <Folder className={styles.folderIcon} aria-hidden="true" />
+                <span className={styles.dir}>{name}</span>
+                <span className={styles.what}>{what}</span>
+                <span className={styles.count}>{files.length}</span>
+              </span>
 
-            <span className={styles.files}>
-              {files.map((f) => <span key={f} className={styles.file}>{f}</span>)}
-            </span>
-          </li>
-        ))}
-      </ol>
+              <p className={styles.note}>{note}</p>
+
+              <span className={styles.files}>
+                {files.map((file) => (
+                  <span key={file} className={styles.file}>{file}</span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </section>
   )
 }

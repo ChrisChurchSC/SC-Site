@@ -118,52 +118,61 @@
   .rowThree { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* ── THE LOGO GRID ─────────────────────────────────────────────────────────
-   What reads the files. Marks on pale plaques for the same reason the
-   measurement page uses them: several of these are near-black, and a
-   treatment that only works when the brand picked a light color is not a
-   treatment. */
-.logoGrid {
+/* ── THE FIELD ─────────────────────────────────────────────────────────────
+   A dense staggered grid of marks that fills the card, crisp in the middle
+   and fading out at the edges. The fade is what makes it read as "and more of
+   them" rather than as a list that stops.
+
+   The pane loses its header for this one: a field that starts under a title
+   bar is a list with a picture on it. */
+.paneField {
+  padding: 0;
+  background: none;
+  border: 0;
+  overflow: hidden;
+}
+
+.field {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(12px, 1.6vw, 18px) 10px;
-  align-content: start;
-  padding-top: 4px;
-}
-
-.logoCell {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  gap: clamp(4px, 0.8vw, 10px);
+  width: 100%;
+  height: 100%;
+  /* Wider than the card so the outer columns are cut rather than ending on a
+     tidy margin, which is what makes the field feel like part of something
+     larger. */
+  margin: 0 -14%;
+  width: 128%;
   align-items: center;
-  gap: 8px;
-  text-align: center;
+  justify-items: center;
+  /* Nothing at the very edge: the mask does the last of the fade so a tile
+     never stops on a hard line. */
+  -webkit-mask-image: radial-gradient(115% 90% at 50% 50%, #000 42%, transparent 92%);
+  mask-image: radial-gradient(115% 90% at 50% 50%, #000 42%, transparent 92%);
 }
 
-.logoPlaque {
+.tile {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
+  width: clamp(30px, 3.4vw, 44px);
+  height: clamp(30px, 3.4vw, 44px);
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.92);
   overflow: hidden;
 }
 
-/* The tile that stands for everything not listed: dashed and empty, so it
-   reads as an opening rather than a product nobody named. */
-.logoPlaqueAny {
-  background: none;
-  border: 1px dashed rgba(255, 255, 255, 0.22);
-  font-family: "Roboto Mono", monospace;
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.4);
+.tileImg { width: 58%; height: 58%; object-fit: contain; }
+
+/* Three rings out from the middle. */
+.ring0 { opacity: 1; }
+
+.ring1 {
+  opacity: 0.55;
+  transform: scale(0.92);
 }
 
-.logoImg { width: 22px; height: 22px; object-fit: contain; }
-
-.logoName {
-  font-family: "Roboto Mono", monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.55);
+.ring2 {
+  opacity: 0.22;
+  transform: scale(0.84);
 }

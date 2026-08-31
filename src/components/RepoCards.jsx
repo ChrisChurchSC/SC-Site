@@ -69,47 +69,59 @@ function ReviewPreview() {
           <span className={styles.stateDone}>Merged</span>
         </span>
       </div>
-      <p className={styles.foot}>Writes nothing live. Merging is a person&rsquo;s job.</p>
     </div>
   )
 }
 
-/* AND WHAT READS IT — whatever the client already runs, which is the point of
-   keeping it in plain files.
+/* AND WHAT READS IT — a field of the things a folder of markdown opens in.
 
-   Every mark was opened and looked at. Gemini and Copilot are absent because
-   logo.dev hands back Google's G and GitHub's Octocat for them; the last tile
-   is honest rather than a sixth logo nobody checked. */
-const MODELS = [
-  { name: 'Claude', logo: '/marks/claude.png' },
-  { name: 'ChatGPT', logo: '/marks/chatgpt.png' },
-  { name: 'Grok', logo: '/marks/grok.png' },
-  { name: 'Perplexity', logo: '/marks/perplexity.png' },
-  { name: 'Mistral', logo: '/marks/mistral.png' },
+   Five models and six places files live. Every mark was opened and looked at;
+   Google Drive, VS Code, Gemini and Copilot are absent because logo.dev
+   returns the wrong company or a blank for each of them.
+
+   THE LAYOUT IS FIXED RATHER THAN RANDOM: this site prerenders, and a scatter
+   generated at render time would differ between the server pass and the
+   client one. Marks repeat in the outer rings, where they are texture rather
+   than a claim — which is also why those rings are faded. */
+const M = {
+  claude: '/marks/claude.png',
+  chatgpt: '/marks/chatgpt.png',
+  grok: '/marks/grok.png',
+  perplexity: '/marks/perplexity.png',
+  mistral: '/marks/mistral.png',
+  notion: '/marks/notion.png',
+  obsidian: '/marks/obsidian.png',
+  cursor: '/marks/cursor.png',
+  linear: '/marks/linear.png',
+  dropbox: '/marks/dropbox.png',
+  github: '/marks/github.png',
+}
+
+/* row, column, and which ring it is in. Ring 0 is the middle and reads at
+   full strength; 2 is the edge and is nearly gone. */
+const FIELD = [
+  [0, 1, 2, M.dropbox], [0, 3, 2, M.notion], [0, 5, 2, M.linear],
+  [1, 0, 2, M.github], [1, 2, 1, M.obsidian], [1, 4, 1, M.cursor], [1, 6, 2, M.mistral],
+  [2, 1, 1, M.perplexity], [2, 3, 0, M.chatgpt], [2, 5, 1, M.notion],
+  [3, 0, 2, M.linear], [3, 2, 0, M.claude], [3, 4, 0, M.cursor], [3, 6, 2, M.dropbox],
+  [4, 1, 1, M.grok], [4, 3, 0, M.obsidian], [4, 5, 1, M.github],
+  [5, 0, 2, M.mistral], [5, 2, 1, M.chatgpt], [5, 4, 1, M.claude], [5, 6, 2, M.perplexity],
+  [6, 1, 2, M.cursor], [6, 3, 2, M.grok], [6, 5, 2, M.notion],
 ]
 
 function MachinePreview() {
   return (
-    <div className={styles.pane}>
-      <div className={styles.paneHead}>
-        <span className={styles.path}>Plain files</span>
-        <span className={styles.ok}>Readable</span>
-      </div>
-
-      <div className={styles.logoGrid}>
-        {MODELS.map(({ name, logo }) => (
-          <span key={name} className={styles.logoCell}>
-            <span className={styles.logoPlaque}>
-              <img className={styles.logoImg} src={logo} alt="" width="22" height="22" loading="lazy" />
-            </span>
-            <span className={styles.logoName}>{name}</span>
+    <div className={`${styles.pane} ${styles.paneField}`}>
+      <div className={styles.field}>
+        {FIELD.map(([row, col, ring, src], i) => (
+          <span
+            key={i}
+            className={`${styles.tile} ${styles['ring' + ring]}`}
+            style={{ gridRow: row + 1, gridColumn: col + 1 }}
+          >
+            <img className={styles.tileImg} src={src} alt="" width="20" height="20" loading="lazy" />
           </span>
         ))}
-
-        <span className={styles.logoCell}>
-          <span className={`${styles.logoPlaque} ${styles.logoPlaqueAny}`}>+</span>
-          <span className={styles.logoName}>Any other</span>
-        </span>
       </div>
     </div>
   )

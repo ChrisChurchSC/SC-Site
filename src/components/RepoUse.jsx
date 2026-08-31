@@ -1,6 +1,7 @@
 import { FolderInput, Plug, ShieldCheck } from 'lucide-react'
 
 import styles from './RepoUse.module.css'
+import ClaudeCodeWindow from './ClaudeCodeWindow'
 
 /**
  * HOW YOU USE IT — the card on /platform/repo, in the panel shape the two
@@ -26,19 +27,17 @@ const WAYS = [
   {
     Icon: FolderInput,
     key: 'Drop it in',
-    line: 'Drag the folder into Claude, ChatGPT or Grok. It reads your positioning, voice and approved claims as source. No setup, any model.',
-    note: 'A copy, as it is right now.',
+    line: 'Drag the folder into any model. A copy of it, as it is right now.',
   },
   {
     Icon: Plug,
     key: 'Or connect it',
-    line: 'Over MCP the model reads the live repo instead of a copy — and can propose changes back as reviews rather than telling you what it would change.',
-    note: 'The current one, both ways.',
+    line: 'Over MCP it reads the live one, and can propose changes back.',
   },
   {
     Icon: ShieldCheck,
     key: 'Either way',
-    line: 'It is plain files that you own. Readable without us, and not tied to whichever model is current this year.',
+    line: 'Plain files that you own, readable without us.',
   },
 ]
 
@@ -57,7 +56,7 @@ export default function RepoUse() {
           </p>
 
           <dl className={styles.ways}>
-            {WAYS.map(({ Icon, key, line, note }) => (
+            {WAYS.map(({ Icon, key, line }) => (
               <div key={key} className={styles.way}>
                 <dt className={styles.wayKey}>
                   <Icon className={styles.wayIcon} aria-hidden="true" />
@@ -65,39 +64,19 @@ export default function RepoUse() {
                 </dt>
                 <dd className={styles.wayLine}>
                   {line}
-                  {note && <span className={styles.wayNote}>{note}</span>}
                 </dd>
               </div>
             ))}
           </dl>
         </div>
 
-        {/* The drop itself: a folder over a model's window, and what it knows
-            once it lands. Decorative — the list beside it is the content. */}
+        {/* HOW IT IS ACTUALLY USED: a terminal, pointed at the folder. The
+            previous version drew a drop zone over an invented model window,
+            which promised a product surface nobody has built. This is the
+            real client doing the real thing, and the row under it names the
+            other models honestly rather than implying three integrations. */}
         <div className={styles.visual} aria-hidden="true">
-          <div className={styles.drop}>
-            <span className={styles.dropHead}>
-              <span className={styles.dropCrumb}>Claude</span>
-              <span className={styles.dropBadge}>Connected</span>
-            </span>
-
-            <span className={styles.dropZone}>
-              <span className={styles.folder}>
-                <FolderInput size={20} strokeWidth={1.4} />
-                SC-Brand
-              </span>
-              <span className={styles.dropHint}>Drop to use as source</span>
-            </span>
-
-            <span className={styles.reads}>
-              {['Strategy/positioning.md', 'Verbal/tone-of-voice.md', 'Agents/comms-writer.md', 'Data/metrics.csv'].map((f) => (
-                <span key={f} className={styles.readRow}>
-                  <span className={styles.readTick} />
-                  {f}
-                </span>
-              ))}
-            </span>
-          </div>
+          <ClaudeCodeWindow />
         </div>
       </div>
     </section>
