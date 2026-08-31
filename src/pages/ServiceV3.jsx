@@ -142,8 +142,6 @@ export default function ServiceV3() {
           <p className={styles.eyebrow}>[ {service.name} ]</p>
           <h1 className={styles.headline}>{service.tagline}</h1>
 
-          {service.heroSub && <p className={styles.heroSub}>{service.heroSub}</p>}
-
           {service.draft && (
             /* On the page, not only in the source. Someone reading this should
                be able to tell that nobody has signed it off yet. */

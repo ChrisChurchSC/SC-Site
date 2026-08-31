@@ -38,25 +38,25 @@ export default function PlatformIntro({ visual = 'repo' }) {
         {visual === 'asset' ? <AssetWindow /> : <RepoWindow big />}
 
         {/* Over the window, not inside it — the hero uses the same component
-            and must not get this. Repo only: over the asset view the mark
-            lands on the chart and the detail rows, covering the thing it is
-            meant to advertise.
+            and must not get this.
 
-            STILL NOT A CONTROL. There is no tour file in the repo, so the
-            mark is decorative and the layer is pointer-events: none. It
-            carried a "coming soon" caption until that was cut, so nothing on
-            screen now says it does not play — worth a target before this
-            goes anywhere a customer sees. */}
-        {visual !== 'asset' && (
-          <div className={styles.play}>
-            <span className={styles.playMark} aria-hidden="true">
-              <svg viewBox="0 0 44 44" fill="none">
-                <circle cx="22" cy="22" r="21" fill="var(--pink, #df4ed6)" />
-                <path d="M18 14.5l12 7.5-12 7.5z" fill="#0a0a0a" />
-              </svg>
-            </span>
-          </div>
-        )}
+            On BOTH windows now. It used to be suppressed over the asset view,
+            where the triangle landed on the chart and covered the thing it
+            was advertising — but Grow shows that view, so that page had no
+            play button at all. The wash under the mark is the fix: with its
+            own ground it reads against whatever is behind it.
+
+            STILL NOT A CONTROL. There is no tour file in this repo, so it
+            carries the same "Coming soon" tip the platform cards use rather
+            than sitting there silently pretending to play something. */}
+        <div className={styles.play}>
+          <span className={styles.playMark} data-tip="Coming soon">
+            <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+              <circle cx="22" cy="22" r="21" fill="var(--pink, #df4ed6)" />
+              <path d="M18 14.5l12 7.5-12 7.5z" fill="#0a0a0a" />
+            </svg>
+          </span>
+        </div>
       </div>
     </section>
   )

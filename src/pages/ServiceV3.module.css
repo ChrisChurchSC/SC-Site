@@ -477,13 +477,3 @@
   .heroSplit { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* The line under the service headline, where a service has one. */
-.heroSub {
-  margin: clamp(16px, 1.8vw, 24px) auto 0;
-  max-width: 62ch;
-  font-family: 'Signifier', Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(15px, 1.15vw, 18px);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.6);
-}

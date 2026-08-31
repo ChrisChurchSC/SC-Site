@@ -82,11 +82,6 @@ export const services = [
        three keep the diagram. */
     heroVisual: 'dashboard',
     tagline: 'We work inside your platform, with your team, to grow the brand.',
-    heroSub:
-      'The platform produces the work — campaigns, channels and content, all of it drawn ' +
-      'from the same positioning, voice and approved claims. Our team is embedded in it ' +
-      'beside yours, and the job is to leave your people running it rather than to hold ' +
-      'the keys.',
     intro:
       'The platform is built, so the work runs through it. Our team embeds with yours and ' +
       'produces out of the repo — campaigns, channels, content, every piece drawn from the ' +
