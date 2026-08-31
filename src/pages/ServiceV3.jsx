@@ -12,6 +12,7 @@ import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
 import HowItWorks from '../components/HowItWorks'
 import EmbedSection from '../components/EmbedSection'
+import BuiltInSection from '../components/BuiltInSection'
 import FeaturedWall from '../components/FeaturedWall'
 import TestimonialCard from '../components/TestimonialCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -213,6 +214,13 @@ export default function ServiceV3() {
         <>
           <hr className={styles.divider} />
           <HowItWorks slug={service.slug} />
+        </>
+      )}
+
+      {service.slug === 'build' && (
+        <>
+          <hr className={styles.divider} />
+          <BuiltInSection />
         </>
       )}
 
