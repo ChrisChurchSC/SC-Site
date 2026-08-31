@@ -24,21 +24,9 @@ import AdoptWindow from './AdoptWindow'
  * THE WORDING IS MINE AND UNAPPROVED.
  */
 const POINTS = [
-  {
-    Icon: Users,
-    key: 'In your team',
-    line: 'Working the platform beside your people rather than reporting into them from outside.',
-  },
-  {
-    Icon: Wrench,
-    key: 'In your tools',
-    line: 'The repo, the reviews and the agents your team already uses — the same ones we work in.',
-  },
-  {
-    Icon: KeyRound,
-    key: 'Handing it over',
-    line: 'Standing things up, translating intent, and capturing decisions where they are made.',
-  },
+  { Icon: Users, key: 'In your team', line: 'Beside your people, not reporting in.' },
+  { Icon: Wrench, key: 'In your tools', line: 'Your repo, your reviews, your agents.' },
+  { Icon: KeyRound, key: 'Handing it over', line: 'Until you run it without us.' },
 ]
 
 export default function EmbedSection() {
@@ -51,10 +39,9 @@ export default function EmbedSection() {
             Our people inside your team, not alongside it.
           </h2>
           <p className={styles.body}>
-          The platform produces the work; somebody still has to run it. That is the
-          arrangement here — our team in your tools, on your problems, until running it is
-          something your people do without us in the room.
-        </p>
+            The platform produces the work. Somebody still has to run it, and for a while
+            that is us — beside your team rather than instead of it.
+          </p>
 
           <dl className={styles.points}>
           {POINTS.map(({ Icon, key, line }) => (
