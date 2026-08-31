@@ -45,18 +45,12 @@ export const services = [
     pillars: [
       {
         n: '01',
-        name: 'Brand',
-        media: 'placeholder',
-        items: ['New Brand', 'Rebrand', 'Brand Refresh', 'Sub-brand', 'Brand Guidelines', 'Product Positioning'],
-      },
-      {
-        n: '02',
         name: 'Website & App',
         media: 'placeholder',
         items: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
       },
       {
-        n: '03',
+        n: '02',
         name: 'Campaign',
         media: 'placeholder',
         items: ['Audience Architecture', 'Launch Campaign Strategy & Concept', 'Always-On Campaign Strategy & Concept', 'Conference & Event Strategy & Execution', 'Partnerships', 'Paid Media Strategy & Execution', 'Dashboards'],
@@ -70,7 +64,7 @@ export const services = [
         outputs: ['Key Visual', 'Campaign Film', 'Paid Ads'],
       },
       {
-        n: '04',
+        n: '03',
         name: 'Channels',
         media: 'placeholder',
         items: ['Meta', 'LinkedIn', 'TikTok', 'YouTube', 'X', 'Reddit', 'Email', 'SMS'],
