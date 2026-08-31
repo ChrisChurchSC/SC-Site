@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import styles from './WorkIndex.module.css'
@@ -26,6 +27,8 @@ import CaseFacts from './CaseFacts'
  * thirty-eight zero-byte files in its folder.
  */
 const ORDER = ['hylands', 'entropy', 'nimruz', 'world-within']
+
+const uniq = (xs) => [...new Set(xs.filter(Boolean))].sort()
 
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
 
@@ -58,16 +61,81 @@ function Meta({ study }) {
   )
 }
 
+const ENTRIES = ORDER.filter((slug) => caseStudies[slug]).map((slug) => ({
+  slug,
+  ...caseStudies[slug],
+}))
+
+/* Derived from the studies rather than listed, so a new one appears in the
+   dropdown by existing. */
+const TYPES = uniq(ENTRIES.map((s) => s.type))
+const INDUSTRIES = uniq(ENTRIES.map((s) => s.industry))
+const YEARS = uniq(ENTRIES.map((s) => s.year)).reverse()
+
 export default function WorkIndex() {
-  const entries = ORDER.filter((slug) => caseStudies[slug]).map((slug) => ({
-    slug,
-    ...caseStudies[slug],
-  }))
+  const [q, setQ] = useState('')
+  const [type, setType] = useState('')
+  const [industry, setIndustry] = useState('')
+  const [year, setYear] = useState('')
+
+  const entries = useMemo(() => {
+    const needle = q.trim().toLowerCase()
+    return ENTRIES.filter((s) => {
+      if (type && s.type !== type) return false
+      if (industry && s.industry !== industry) return false
+      if (year && s.year !== year) return false
+      if (!needle) return true
+      const hay = [s.name, s.tagline, s.summary, ...(s.services ?? [])].join(' ').toLowerCase()
+      return hay.includes(needle)
+    })
+  }, [q, type, industry, year])
+
+  const filtering = Boolean(q.trim() || type || industry || year)
+  const clear = () => { setQ(''); setType(''); setIndustry(''); setYear('') }
 
   const [lead, ...rest] = entries
-  if (!lead) return null
+
+  /* Six cells sit beside the featured card; whatever the studies do not fill
+     is shown as an empty slot rather than left as a hole in the grid. */
+  const slots = Math.max(0, 6 - rest.length)
 
   return (
+    <>
+      <div className={styles.controls}>
+        <input
+          className={styles.search}
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search"
+          aria-label="Search case studies"
+        />
+
+        <select className={styles.select} value={type} onChange={(e) => setType(e.target.value)} aria-label="Filter by discipline">
+          <option value="">Discipline</option>
+          {TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+
+        <select className={styles.select} value={industry} onChange={(e) => setIndustry(e.target.value)} aria-label="Filter by industry">
+          <option value="">Industry</option>
+          {INDUSTRIES.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+
+        <select className={styles.select} value={year} onChange={(e) => setYear(e.target.value)} aria-label="Filter by year">
+          <option value="">Year</option>
+          {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </div>
+
+      {filtering && (
+        <p className={styles.count} role="status">
+          <button type="button" className={styles.clear} onClick={clear}>Clear filters</button>
+        </p>
+      )}
+
+      {!lead ? (
+        <p className={styles.empty}>Nothing matches that. Try clearing a filter.</p>
+      ) : (
     <div className={styles.layout}>
       {/* THE FEATURED ONE. Its name sits top-left and its line bottom-left,
           both over the image, which is the only card here that does that —
@@ -92,6 +160,15 @@ export default function WorkIndex() {
           <CaseFacts study={study} />
         </NavLink>
       ))}
+
+      {Array.from({ length: slots }, (_, i) => (
+        <div key={`slot-${i}`} className={styles.slot} aria-hidden="true">
+          <span className={styles.slotMedia} />
+          <span className={styles.slotLabel}>Case study</span>
+        </div>
+      ))}
     </div>
+      )}
+    </>
   )
 }

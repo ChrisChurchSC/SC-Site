@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom'
 import styles from './Work.module.css'
 import WorkIndex from '../components/WorkIndex'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
@@ -50,7 +49,6 @@ export default function Work() {
 
       <section className={styles.gridSection} aria-label="Selected work">
         <WorkIndex />
-        <NavLink to="/work/all" className={styles.seeAll}>See all case studies</NavLink>
       </section>
 
       <FooterCard columns={FOOTER_COLS} />

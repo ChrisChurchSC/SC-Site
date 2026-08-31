@@ -1,42 +1,15 @@
-/* The four facts under a case study card — see CaseFacts.jsx. */
+/* Industry and size under a case study card — see CaseFacts.jsx. */
 
 .facts {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin: 6px 0 0;
-}
-
-.row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.key {
-  flex: none;
+  margin: 2px 0 0;
   font-family: "Roboto Mono", monospace;
-  font-size: 9px;
+  font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.value {
-  margin: 0;
-  min-width: 0;
-  font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: right;
-}
-
-/* Grew is the one worth reading across a row of cards, so it carries colour
-   and the others do not. */
-.yes { color: var(--teal, #4ecfb3); }
-.no { color: rgba(255, 255, 255, 0.35); }
+.sep { color: rgba(255, 255, 255, 0.24); }
 
 /* The site's placeholder, wherever a figure has no source. */
 .blank { color: rgba(255, 255, 255, 0.28); }

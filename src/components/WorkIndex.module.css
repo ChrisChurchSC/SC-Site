@@ -3,7 +3,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(16px, 2vw, 28px) clamp(12px, 1.4vw, 20px);
   align-items: start;
 }
@@ -147,7 +147,11 @@
 
 .metaSep { color: rgba(255, 255, 255, 0.24); }
 
-@media (max-width: 1180px) {
+@media (max-width: 1400px) {
+  .layout { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1080px) {
   .layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
@@ -179,6 +183,112 @@
 
 /* On the featured card the facts sit over a picture, so they take a stop more
    contrast than the same rows do on a flat card. */
-.leadFacts { max-width: 420px; }
-.leadFacts dt { color: rgba(255, 255, 255, 0.55); }
-.leadFacts dd { color: rgba(255, 255, 255, 0.92); }
+.leadFacts { color: rgba(255, 255, 255, 0.72); }
+
+/* AN EMPTY SLOT, said out loud. The grid has more cells than this repo has
+   case studies; a slot that looks like a card but goes nowhere is worse than
+   one that admits what it is. */
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0.5;
+}
+
+.slotMedia {
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-surface, 12px);
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+}
+
+.slotLabel {
+  margin-top: 4px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── THE CONTROLS ───────────────────────────────────────────────────────────
+   Only the fields this repo actually records: discipline, industry and year.
+   Size is not among them on purpose — it has no source here, which is why the
+   cards show a placeholder for it rather than a guess. */
+
+.controls {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search,
+.select {
+  height: 52px;
+  padding: 0 16px;
+  border-radius: var(--r-control, 4px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search::placeholder { color: rgba(255, 255, 255, 0.4); }
+.search:focus,
+.select:focus { border-color: rgba(255, 255, 255, 0.4); }
+
+/* The native control, restyled rather than replaced: a custom dropdown here
+   would be a keyboard trap for the sake of a chevron. */
+.select {
+  appearance: none;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.5) 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 23px, calc(100% - 14px) 23px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+.select option { background: #101010; color: #fff; }
+
+.count {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 20px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.clear {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--pink, #df4ed6);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.empty {
+  margin: clamp(40px, 6vw, 80px) 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 900px) {
+  .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search { grid-column: 1 / -1; }
+}
