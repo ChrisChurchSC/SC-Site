@@ -15,9 +15,9 @@
   isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  align-items: center;
+  align-items: stretch;
   gap: clamp(20px, 3vw, 48px);
-  padding: clamp(32px, 4vw, 64px) 0 clamp(32px, 4vw, 64px) clamp(24px, 3.4vw, 56px);
+  padding: clamp(28px, 3.4vw, 52px) 0 clamp(28px, 3.4vw, 52px) clamp(22px, 2.8vw, 44px);
   border-radius: var(--r-panel, 18px);
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -109,11 +109,21 @@
 }
 
 .pointKey {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: "Roboto Mono", monospace;
   font-size: var(--label-size, 10px);
   letter-spacing: var(--label-tracking, 0.18em);
   text-transform: uppercase;
   color: var(--pink, #df4ed6);
+}
+
+.pointIcon {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  stroke-width: 1.6;
 }
 
 .pointLine {
@@ -132,14 +142,14 @@
   align-self: stretch;
   display: flex;
   align-items: center;
-  margin: calc(-1 * clamp(32px, 4vw, 64px)) 0;
+  margin: calc(-1 * clamp(28px, 3.4vw, 52px)) 0;
   overflow: hidden;
 }
 
 .visual > * {
   width: 100%;
+  height: clamp(440px, 42vw, 580px);
   min-width: 0;
-  /* Fills the column rather than sitting at its own width inside it. */
   max-width: none;
 }
 

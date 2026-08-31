@@ -1,3 +1,5 @@
+import { KeyRound, Users, Wrench } from 'lucide-react'
+
 import styles from './EmbedSection.module.css'
 import AdoptWindow from './AdoptWindow'
 
@@ -23,14 +25,17 @@ import AdoptWindow from './AdoptWindow'
  */
 const POINTS = [
   {
+    Icon: Users,
     key: 'In your team',
     line: 'Working the platform beside your people rather than reporting into them from outside.',
   },
   {
+    Icon: Wrench,
     key: 'In your tools',
     line: 'The repo, the reviews and the agents your team already uses — the same ones we work in.',
   },
   {
+    Icon: KeyRound,
     key: 'Handing it over',
     line: 'Standing things up, translating intent, and capturing decisions where they are made.',
   },
@@ -52,9 +57,12 @@ export default function EmbedSection() {
         </p>
 
           <dl className={styles.points}>
-          {POINTS.map(({ key, line }) => (
+          {POINTS.map(({ Icon, key, line }) => (
             <div key={key} className={styles.point}>
-              <dt className={styles.pointKey}>{key}</dt>
+              <dt className={styles.pointKey}>
+                <Icon className={styles.pointIcon} aria-hidden="true" />
+                {key}
+              </dt>
               <dd className={styles.pointLine}>{line}</dd>
             </div>
           ))}
