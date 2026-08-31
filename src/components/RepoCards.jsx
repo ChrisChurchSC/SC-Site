@@ -1,6 +1,5 @@
 import styles from './RepoCards.module.css'
 import { Card } from './PlatformCards'
-import { agents } from '../data/agents'
 
 /**
  * THE THREE THINGS A REPO GIVES YOU — the cards under the hero on
@@ -75,21 +74,42 @@ function ReviewPreview() {
   )
 }
 
-/* And what reads it. The six are the real ones. */
+/* AND WHAT READS IT — whatever the client already runs, which is the point of
+   keeping it in plain files.
+
+   Every mark was opened and looked at. Gemini and Copilot are absent because
+   logo.dev hands back Google's G and GitHub's Octocat for them; the last tile
+   is honest rather than a sixth logo nobody checked. */
+const MODELS = [
+  { name: 'Claude', logo: '/marks/claude.png' },
+  { name: 'ChatGPT', logo: '/marks/chatgpt.png' },
+  { name: 'Grok', logo: '/marks/grok.png' },
+  { name: 'Perplexity', logo: '/marks/perplexity.png' },
+  { name: 'Mistral', logo: '/marks/mistral.png' },
+]
+
 function MachinePreview() {
   return (
     <div className={styles.pane}>
       <div className={styles.paneHead}>
-        <span className={styles.path}>Agents/</span>
+        <span className={styles.path}>Plain files</span>
         <span className={styles.ok}>Readable</span>
       </div>
-      <div className={styles.rows}>
-        {agents.map((a) => (
-          <span key={a.name} className={styles.agentRow}>
-            <span className={styles.file}>{a.name}.md</span>
-            <span className={styles.tick}>Reads it</span>
+
+      <div className={styles.logoGrid}>
+        {MODELS.map(({ name, logo }) => (
+          <span key={name} className={styles.logoCell}>
+            <span className={styles.logoPlaque}>
+              <img className={styles.logoImg} src={logo} alt="" width="22" height="22" loading="lazy" />
+            </span>
+            <span className={styles.logoName}>{name}</span>
           </span>
         ))}
+
+        <span className={styles.logoCell}>
+          <span className={`${styles.logoPlaque} ${styles.logoPlaqueAny}`}>+</span>
+          <span className={styles.logoName}>Any other</span>
+        </span>
       </div>
     </div>
   )

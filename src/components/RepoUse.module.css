@@ -143,12 +143,17 @@
   display: flex;
   align-items: center;
   margin: calc(-1 * clamp(28px, 3.4vw, 52px)) 0;
-  overflow: hidden;
+  /* The panel is the thing that clips. */
+  overflow: visible;
 }
 
 .visual > * {
-  width: 100%;
-  height: clamp(440px, 42vw, 580px);
+  /* Past the panel's right edge, so the panel crops it. flex: none because a
+     flex item shrinks by default and would give the extra width straight
+     back. */
+  flex: none;
+  width: 118%;
+  height: clamp(520px, 48vw, 660px);
   min-width: 0;
   max-width: none;
 }
@@ -158,104 +163,19 @@
     grid-template-columns: minmax(0, 1fr);
     padding: clamp(24px, 4vw, 40px);
   }
-  .visual { margin: 0; }
+  .visual { margin: 0; overflow: hidden; }
+  .visual > * { width: 100%; height: clamp(420px, 60vw, 520px); }
 }
 
-/* ── THE DROP TARGET ───────────────────────────────────────────────────────
-   A model's window with the folder over it, and what it can read once it
-   lands. Cropped by the panel like the other cards' visuals. */
-.drop {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: clamp(400px, 40vw, 520px);
-  background: #101010;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--r-surface, 12px);
-  overflow: hidden;
-}
 
-.dropHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: none;
-  padding: 15px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  font-family: "Roboto Mono", monospace;
-  font-size: 12.5px;
-}
 
-.dropCrumb { color: rgba(255, 255, 255, 0.88); }
 
-.dropBadge {
-  margin-left: auto;
-  padding: 3px 9px;
-  border: 1px solid rgba(78, 207, 179, 0.45);
-  border-radius: var(--r-control, 4px);
-  font-size: var(--label-size, 10px);
-  letter-spacing: var(--label-tracking, 0.18em);
-  text-transform: uppercase;
-  color: var(--teal, #4ecfb3);
-}
 
-/* Dashed, because that is what a drop target looks like everywhere else. */
-.dropZone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: clamp(16px, 2vw, 24px);
-  padding: clamp(20px, 3vw, 34px);
-  border: 1px dashed rgba(223, 78, 214, 0.4);
-  border-radius: 10px;
-  background: rgba(223, 78, 214, 0.05);
-}
 
-.folder {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 14px;
-  color: #fff;
-}
 
-.dropHint {
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: var(--label-tracking, 0.18em);
-  text-transform: uppercase;
-  color: var(--pink, #df4ed6);
-}
 
-/* What it can read once it has landed. */
-.reads {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  padding: 0 clamp(16px, 2vw, 24px) clamp(18px, 2.2vw, 26px);
-  overflow: hidden;
-}
 
-.readRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
-}
 
-.readTick {
-  width: 5px;
-  height: 5px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--teal, #4ecfb3);
-}
 
 /* The half-line under a way, where the two paths differ: a copy, or the live
    one. It is the distinction the whole card turns on. */
