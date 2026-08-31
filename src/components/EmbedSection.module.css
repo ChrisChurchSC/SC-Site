@@ -6,39 +6,46 @@
    than sitting inside it with equal margins. The crop is what makes it read
    as a view onto something larger instead of a picture pasted on. */
 .section {
-  position: relative;
-  isolation: isolate;
   padding: clamp(40px, 5vw, 80px) clamp(8px, 5vw, 96px);
 }
 
-/* The same dot field the platform cards sit on. z-index 0 rather than -1: at
-   -1 it paints behind the nearest ancestor background and the page's own
-   ground hides it. */
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 16px 16px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%);
-}
 
 .panel {
   position: relative;
-  z-index: 1;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
   align-items: center;
-  gap: clamp(24px, 4vw, 64px);
+  gap: clamp(20px, 3vw, 48px);
   padding: clamp(32px, 4vw, 64px) 0 clamp(32px, 4vw, 64px) clamp(24px, 3.4vw, 56px);
   border-radius: var(--r-panel, 18px);
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
   overflow: hidden;
 }
+
+/* THE FIELD IS INSIDE THE CARD, on the side the window sits on — the ground
+   under the picture rather than a texture the whole section is printed on.
+   The panel clips, so it ends where the panel does; it fades to nothing on
+   the left so it never reaches the copy.
+
+   z-index 0, not -1: at -1 it paints behind the panel's own background and
+   disappears entirely. */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 40%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-size: 16px 16px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32%);
+  mask-image: linear-gradient(to right, transparent 0, #000 32%);
+}
+
+/* Both columns sit above it. */
+.copy,
+.visual { position: relative; z-index: 1; }
 
 .copy {
   display: flex;
@@ -132,6 +139,8 @@
 .visual > * {
   width: 100%;
   min-width: 0;
+  /* Fills the column rather than sitting at its own width inside it. */
+  max-width: none;
 }
 
 @media (max-width: 900px) {
