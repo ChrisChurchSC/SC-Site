@@ -173,7 +173,7 @@ const SETS = {
         n: '05',
         name: 'Embed',
         visual: 'adopt',
-        note: 'Our people inside your team — standing things up, translating intent, and capturing decisions at the source.',
+        note: 'Our people inside your team, working the platform beside them — standing things up, translating intent, and handing over the running of it.',
       },
     ],
     loops: true,

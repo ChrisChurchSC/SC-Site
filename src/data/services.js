@@ -81,14 +81,22 @@ export const services = [
        and turns the hero ground purple. Omitted elsewhere, so the other
        three keep the diagram. */
     heroVisual: 'dashboard',
-    tagline: 'We take that brand to market and run it.',
+    tagline: 'We work inside your platform, with your team, to grow the brand.',
+    heroSub:
+      'The platform produces the work — campaigns, channels and content, all of it drawn ' +
+      'from the same positioning, voice and approved claims. Our team is embedded in it ' +
+      'beside yours, and the job is to leave your people running it rather than to hold ' +
+      'the keys.',
     intro:
-      'With the brand and marketing apparatus in good shape, we can pivot our focus towards ' +
-      'optimizations, extensions, additions, and anything else you might need as you engage ' +
-      'with your audience. This work is billed quarterly with a one quarter engagement ' +
+      'The platform is built, so the work runs through it. Our team embeds with yours and ' +
+      'produces out of the repo — campaigns, channels, content, every piece drawn from the ' +
+      'same positioning, voice and approved claims. What it earns goes back in, so each ' +
+      'round starts further along than the last. Your team is in it throughout, which is ' +
+      'the point: we are here to leave you able to run it, not holding the keys. ' +
+      'This work is billed quarterly with a one quarter engagement ' +
       'minimum. Media spend is separate, paid directly by you to the platforms. Our media ' +
       'management fee is flat, never a percentage of the buy.',
-    pillarsIntro: 'The same four pillars, kept moving rather than built.',
+    pillarsIntro: 'The same four pillars, kept moving — produced from the platform, by your team and ours.',
     priceLead: 'from $4,500 / month',
     priceNote: '25 to 150 hours a month, billed quarterly. Spend them on any of the four.',
     pillars: [
