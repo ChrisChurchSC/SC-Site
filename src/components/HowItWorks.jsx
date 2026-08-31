@@ -169,12 +169,6 @@ const SETS = {
         visual: 'repo',
         note: 'The brand stays current and consistent as teams, channels and products change.',
       },
-      {
-        n: '05',
-        name: 'Embed',
-        visual: 'adopt',
-        note: 'Our people inside your team, working the platform beside them — standing things up, translating intent, and handing over the running of it.',
-      },
     ],
     loops: true,
   },

@@ -11,6 +11,7 @@ import ClientStrip from '../components/ClientStrip'
 import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
 import HowItWorks from '../components/HowItWorks'
+import EmbedSection from '../components/EmbedSection'
 import FeaturedWall from '../components/FeaturedWall'
 import TestimonialCard from '../components/TestimonialCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -212,6 +213,16 @@ export default function ServiceV3() {
         <>
           <hr className={styles.divider} />
           <HowItWorks slug={service.slug} />
+        </>
+      )}
+
+      {/* THE EMBEDDED TEAM, on Grow only. It was the fifth step of that
+          page's how-it-works, which made the arrangement the whole engagement
+          runs under read as one beat in a sequence about producing work. */}
+      {service.slug === 'grow' && (
+        <>
+          <hr className={styles.divider} />
+          <EmbedSection />
         </>
       )}
 
