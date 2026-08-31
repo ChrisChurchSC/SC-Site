@@ -33,7 +33,8 @@ const uniq = (xs) => [...new Set(xs.filter(Boolean))].sort()
 /* The grid's shape, so the padding is arithmetic rather than a number that
    has to be remembered when either changes. */
 const COLUMNS = 5
-const ROWS = 4
+const ROWS_CLOSED = 2
+const ROWS_OPEN = 4
 const LEAD_SPAN = 2
 
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
@@ -79,6 +80,7 @@ const INDUSTRIES = uniq(ENTRIES.map((s) => s.industry))
 const YEARS = uniq(ENTRIES.map((s) => s.year)).reverse()
 
 export default function WorkIndex() {
+  const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
   const [type, setType] = useState('')
   const [industry, setIndustry] = useState('')
@@ -104,10 +106,15 @@ export default function WorkIndex() {
   /* The cells beside the featured card: four rows of five, less the two
      columns and two rows the featured one occupies. Whatever the studies do
      not fill shows as an empty slot rather than a hole in the grid. */
-  const slots = Math.max(0, COLUMNS * ROWS - LEAD_SPAN * LEAD_SPAN - rest.length)
+  const rows = open ? ROWS_OPEN : ROWS_CLOSED
+  const cells = COLUMNS * rows - LEAD_SPAN * LEAD_SPAN
+  const shown = rest.slice(0, cells)
+  const slots = Math.max(0, cells - shown.length)
+  /* Nothing left to open once every row is on screen. */
+  const more = !open && COLUMNS * ROWS_OPEN - LEAD_SPAN * LEAD_SPAN > cells
 
   return (
-    <>
+    <div className={styles.wrap}>
       <div className={styles.controls}>
         <input
           className={styles.search}
@@ -157,7 +164,7 @@ export default function WorkIndex() {
         </span>
       </NavLink>
 
-      {rest.map((study) => (
+      {shown.map((study) => (
         <NavLink key={study.slug} to={`/work/${study.slug}`} className={styles.card}>
           <span className={styles.cardMedia}>
             <Media src={study.cover} className={styles.cardImg} />
@@ -176,6 +183,12 @@ export default function WorkIndex() {
       ))}
     </div>
       )}
-    </>
+
+      {more && (
+        <button type="button" className={styles.seeAll} onClick={() => setOpen(true)}>
+          See all case studies
+        </button>
+      )}
+    </div>
   )
 }

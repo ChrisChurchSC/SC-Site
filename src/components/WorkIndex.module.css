@@ -1,10 +1,19 @@
 /* The case studies index — see WorkIndex.jsx. One study given the room, the
    rest beside it. */
 
+/* ONE COLUMN COUNT for the controls and the cards, so a filter sits exactly
+   over the card under it at every width. Two grids with their own counts and
+   their own gaps lined up by coincidence and stopped doing so at the first
+   breakpoint. */
+.wrap {
+  --cols: 5;
+  --col-gap: clamp(12px, 1.4vw, 20px);
+}
+
 .layout {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 28px) clamp(12px, 1.4vw, 20px);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px) var(--col-gap);
   align-items: start;
 }
 
@@ -150,23 +159,16 @@
 
 .metaSep { color: rgba(255, 255, 255, 0.24); }
 
-@media (max-width: 1400px) {
-  .layout { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-@media (max-width: 1080px) {
-  .layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
-@media (max-width: 900px) {
-  .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+@media (max-width: 1400px) { .wrap { --cols: 4; } }
+@media (max-width: 1080px) { .wrap { --cols: 3; } }
+@media (max-width: 900px) { .wrap { --cols: 2; } }
 
 /* One column: spanning two of one column is just a taller card, so the
    featured one goes back to a single cell. */
 @media (max-width: 560px) {
-  .layout { grid-template-columns: minmax(0, 1fr); }
+  .wrap { --cols: 1; }
   .lead { grid-column: auto; grid-row: auto; }
+  .controls { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* The placeholder, until the covers go back on — the same two-grey weave the
@@ -221,10 +223,13 @@
 
 .controls {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--col-gap);
   margin-bottom: 16px;
 }
+
+/* Over the featured card, which is two columns wide. */
+.search { grid-column: span 2; }
 
 .search,
 .select {
@@ -292,6 +297,27 @@
 }
 
 @media (max-width: 900px) {
-  .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .search { grid-column: 1 / -1; }
+}
+
+/* The way into the rest of the grid. Centred under it, because it belongs to
+   the whole grid rather than to its last column. */
+.seeAll {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: clamp(20px, 2.4vw, 36px);
+  padding: 18px 22px;
+  border-radius: var(--r-control, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.seeAll:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
 }
