@@ -4,7 +4,13 @@
   /* Bleeds past whatever padding its page carries, without needing to know
      what that padding is. */
   width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  margin: clamp(48px, 8vw, 120px) 0 0 calc(-1 * var(--page-pad-left, 0px));
+  /* NO TOP MARGIN. It carried up to 120px of its own, from when it sat at
+     the end of a page that spaced sections with margins. Both pages that
+     render it are flex stacks now with a gap of their own, so the two were
+     adding up — 184px of black between the footer and the wordmark. The gap
+     is the page's to set; this only needs the negative left margin that
+     bleeds it past the page padding. */
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
   padding: 0 clamp(8px, 2vw, 32px);
 }
 

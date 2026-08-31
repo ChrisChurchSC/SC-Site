@@ -4,19 +4,23 @@ import styles from './ServiceV3.module.css'
 import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
-import FlowDiagram from '../components/FlowDiagram'
-import DashboardWindow from '../components/DashboardWindow'
-import InMarketPanel from '../components/InMarketPanel'
-import ClientStrip from '../components/ClientStrip'
-import PlatformIntro from '../components/PlatformIntro'
 import PlatformOutputs from '../components/PlatformOutputs'
-import HowItWorks from '../components/HowItWorks'
 import EmbedSection from '../components/EmbedSection'
-import BuiltInSection from '../components/BuiltInSection'
+import AudienceCards from '../components/AudienceCards'
+import StatementCard from '../components/StatementCard'
+import DepartmentPanel from '../components/DepartmentPanel'
+import DisciplinesSection from '../components/DisciplinesSection'
+import BrandTokens from '../components/BrandTokens'
+import AssetsGridWindow from '../components/AssetsGridWindow'
+import DashboardWindow from '../components/DashboardWindow'
+import TrustMosaic from '../components/TrustMosaic'
+import ComparisonTable from '../components/ComparisonTable'
 import FeaturedWall from '../components/FeaturedWall'
 import TestimonialCard from '../components/TestimonialCard'
 import ServiceFaq from '../components/ServiceFaq'
 import DotNav from '../components/DotNav'
+import { KeyRound, SlidersHorizontal, Users } from 'lucide-react'
+
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 import { serviceBySlug } from '../data/services'
@@ -60,18 +64,6 @@ const GROW_CARDS = [
   },
   {
     kicker: '02',
-    name: 'App',
-    summary: 'What you shipped keeps shipping — new features, and the speed to hold them.',
-    lines: [
-      'New Features',
-      'Performance',
-      'Integrations',
-      'Deployment',
-      /* mine */ 'Release Notes',
-    ],
-  },
-  {
-    kicker: '03',
     name: 'Campaigns',
     summary: 'Budget moves toward what is working, on evidence rather than instinct.',
     lines: [
@@ -84,7 +76,7 @@ const GROW_CARDS = [
     ],
   },
   {
-    kicker: '04',
+    kicker: '03',
     name: 'Channels',
     summary: 'The feed keeps moving at the volume the platforms want, without the work getting worse.',
     lines: [
@@ -96,23 +88,137 @@ const GROW_CARDS = [
     ],
   },
 ]
-/* WHICH GROUND EACH HERO SITS ON. Keyed by hero visual, not by slug: the
-   window and the colour under it are one decision, and splitting them across
-   two lookups is how a page ends up teal with a purple panel in it.
+/* The per-service coloured grounds are gone with the dot field. Each hero
+   used to sit on a gradient picked off its visual — pink for Build, purple
+   for Grow — which was doing the work of telling four service pages apart.
+   There are two now, and they are flat. */
 
-   A service with no hero visual falls through to .top's pink default, which
-   is Build. */
-const GROUND = {
-  dashboard: 'topPurple',
+
+/* HOW WE WORK, on Build, in the shape EmbedSection already draws for Grow.
+
+   THE THREE PAY OFF "FRACTIONAL" rather than restating "one team". The
+   headline claims a fractional department, and a claim in a headline that
+   nothing underneath it collects is the kind of sentence this whole system
+   exists to refuse — so the first says what a department is (every
+   discipline you would otherwise hire), the second says what fractional
+   means (it flexes with the work, not with headcount), and the third is the
+   part that makes it a department rather than a supplier.
+
+   "FRACTIONAL" IS A WORDING CHANGE FROM THE POSITIONING DOC, made on
+   request. Strategy/positioning.md says "outsourced creative and marketing
+   department"; this section says fractional, which claims something slightly
+   different — outsourced is where the work happens, fractional is how much of
+   a department you are buying. The second is the better sentence and it is
+   the one Chris asked for, but the doc and the site now disagree on the word,
+   and the doc is the one brand-strategist owns. Worth reconciling there.
+
+   ONE SENTENCE OF HIS IS HELD OUT, deliberately and reversibly. He wrote
+   "No pooled or anonymous labor, no rotating bench — the same people, every
+   time." Strategy/proof-points.md carries that as claim #5, grades it C and
+   says in as many words: do not publish this one. Its warning is specific —
+   freelance capacity is load-bearing rather than overflow, and the primary
+   writer across four major accounts is engaged freelance. What survives is
+   the half that IS evidenced: claim #4, grade B, backed by weekly resourcing
+   that names individuals and a pod structure with named clients. A
+   governance hold, not an editorial opinion; one line to restore. */
+/* ONE SEQUENCE, TWO SERVICES. Grow was a different page — its own hero with
+   a dashboard beside it, a how-it-works, no client wall, no comparison. It
+   runs Build's order now, with its own words in it: hero, proof, who we work
+   with, how we work, the platform diagram, what it extends to, why us, work,
+   testimonial, questions.
+
+   WHAT THAT COST, and it is worth knowing rather than discovering: Grow's
+   how-it-works is no longer rendered. Its four steps — Grow, Measure,
+   Compound, Maintain — are Chris's own words and are still in
+   HowItWorks.jsx, unused. Mirroring the pages exactly is what removed them;
+   putting the section back is one line if the four are worth more than the
+   symmetry.
+
+   THE COPY BELOW IS MINE AND UNAPPROVED. */
+const PAGE = {
+  build: {
+    statement: 'We build brand platforms.',
+    embed: {
+      eyebrow: '[ How we work ]',
+      headline: <>Your fractional creative<br />and marketing<br />department.</>,
+    },
+    platform: {
+      eyebrow: '[ Brand platform ]',
+      headline: 'What a brand is made of.',
+      intro: 'Everything the brand is made of goes into one place, and everything it makes comes out of it — so the next piece of work starts from the thing itself rather than from a summary of it.',
+    },
+  },
+  grow: {
+    statement: 'We take brands to market.',
+    embed: {
+      eyebrow: '[ How we work ]',
+      headline: <>The same team that<br />built it, running it<br />every month.</>,
+    },
+    platform: {
+      eyebrow: '[ Growth platform ]',
+      headline: 'What the brand shows up as, every month.',
+      intro: 'The work is produced from the brand rather than from a brief about it — so what goes out in month six still sounds like what went out in month one, and what it earns comes back in.',
+    },
+  },
 }
 
-/* The services with a how-it-works set in HowItWorks.jsx. Represent has no
-   four steps anybody has written, so it gets no section rather than an
-   invented one.
+const BUILD_EMBED = [
+  {
+    Icon: Users,
+    key: 'A whole department',
+    line: 'Design, writing, film, motion, media and engineering in one team — not six hires.',
+  },
+  {
+    Icon: SlidersHorizontal,
+    key: 'At the fraction you need',
+    line: 'It flexes with the work rather than with your headcount.',
+  },
+  {
+    Icon: KeyRound,
+    key: 'People you know',
+    line: 'Embedded in your team, and you have access to them.',
+  },
+]
 
-   Grow's four and Support's four are Chris's words. Build's are mine and are
-   not signed off. */
-const HAS_STEPS = ['build', 'grow']
+/* GROW'S THREE, mirroring Build's: what the arrangement is, what it costs
+   you, and who you are dealing with. MINE AND UNAPPROVED. */
+const GROW_EMBED = [
+  { Icon: Users, key: 'One team, both halves', line: 'Whoever built the brand runs the campaigns against it.' },
+  { Icon: SlidersHorizontal, key: 'Scales with the work', line: 'Up for a launch, down between them, without a hiring round.' },
+  { Icon: KeyRound, key: 'People you know', line: 'Embedded in your team, and you have access to them.' },
+]
+
+/* GROW'S DIAGRAM IS A DIFFERENT SENTENCE. Build's reads inputs → system →
+   pillars: what a brand is made of. Grow's reads platform → content →
+   dashboard: what the brand already is, the work produced from it every
+   month, and the numbers that come back.
+
+   The left column is Grow's own pillars out of services.js — the platform is
+   what feeds the month, not an abstraction. The middle is the asset grid and
+   the right is the dashboard, both of them real windows this site already
+   draws, so the last two stages are screens rather than lists of nouns. */
+/* BRAND IS CUT FROM THIS COLUMN, and only from here. Grow's Brand pillar is
+   governance and upkeep — keeping the system coherent — which is the input to
+   a month rather than a thing the month produces. PlatformOutputs already
+   cuts it from Grow's cards for the same reason; this matches that. It is
+   still in services.js and still on /pricing.
+
+   Excluded by name rather than index, so reordering the pillars cannot
+   silently drop a different one. */
+const GROW_CUT = new Set(['Brand'])
+
+const GROW_INPUTS = (serviceBySlug('grow')?.pillars ?? [])
+  .filter(({ name }) => !GROW_CUT.has(name))
+  /* A MOSAIC AND A NAME, NO CHIPS. media: 'placeholder' is the four-tile grey
+     bento FlowDiagram's Column already draws — the same treatment Build's
+     output cards use — and dropping items takes the deliverable chips off
+     with it.
+
+     THE TILES ARE FLAT FILLS, as every asset tile on this site is: there is
+     no artwork in this repo, and a case study still standing in for "the
+     website we run" would be a picture of somebody else's month. The card's
+     shape does not change when real images arrive. */
+  .map(({ name }) => ({ name, media: 'placeholder' }))
 
 export default function ServiceV3() {
   const { slug } = useParams()
@@ -124,120 +230,73 @@ export default function ServiceV3() {
     description: service?.tagline,
   })
 
-  if (!service) return <Navigate to="/services" replace />
+  const page = PAGE[service.slug]
+
+  if (!service || !page) return <Navigate to="/services" replace />
 
   return (
     <main className={styles.page}>
       <V3Nav />
 
-      {/* The hero and its diagram share one ground, so the dot field runs
-          behind both rather than stopping where the copy ends. They were
-          siblings and the texture belonged to the diagram alone, which drew
-          a line across the page at exactly the point the eye is still
-          reading. */}
-      {/* A GROUND PER SERVICE. Three of the four pages used to share the pink
-          default, which is most of why they read as one page with the words
-          swapped. The hue is picked off the hero visual rather than the slug,
-          so a service that changes its window changes its ground with it. */}
-      <div className={`${styles.top}${GROUND[service.heroVisual] ? ' ' + styles[GROUND[service.heroVisual]] : ''}`}>
-        <header className={styles.hero}>
-          <p className={styles.eyebrow}>[ {service.name} ]</p>
-          <h1 className={styles.headline}>{service.tagline}</h1>
+      {/* BOTH SERVICES OPEN ON THE HOMEPAGE'S CARD. Grow had a hero of its
+          own with a dashboard beside it; mirroring the pages retired it, and
+          the service hero, the client strip and the coloured ground went with
+          it. */}
+      <StatementCard
+        eyebrow={`[ ${service.name} ]`}
+        statement={page.statement}
+        support={null}
+        as="h1"
+        tall
+        center
+        display
+      >
+        {/* ONE WAY OUT, and it is the quiet one. The nav's Start a project is
+            there for anyone ready to ask. */}
+        <div className={styles.heroActions}>
+          <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
+        </div>
+      </StatementCard>
 
-          {service.draft && (
-            /* On the page, not only in the source. Someone reading this should
-               be able to tell that nobody has signed it off yet. */
-            <p className={styles.draftFlag}>
-              Draft — this description has not been signed off yet.
-            </p>
-          )}
-
-          <div className={styles.heroActions}>
-            <button className={styles.ctaFilled} onClick={cal.open}>Book a demo</button>
-            <NavLink className={styles.ctaGhost} to="/pricing">See pricing</NavLink>
-          </div>
-        </header>
-
-        {/* THE REPO IS THE MIDDLE, not the service.
-
-            The first version put the service name in the centre, which drew
-            the wrong picture: it said the inputs become Build, and Build
-            becomes a brand. What actually happens is that everything goes into
-            the repo, and the outputs come out of it — the service is the work
-            around that, not a stage in the middle of it. Putting the platform
-            there is also the argument the rest of the site makes.
-
-            The right column is this service's four pillars, from services.js.
-            It used to be echoed by a "What it covers" section underneath;
-            that is cut, so this diagram is now the only place the pillars
-            appear on the page. */}
-        {service.heroVisual === 'dashboard' ? (
-          <div className={styles.heroWindow}>
-            <div className={styles.heroSplit}>
-              <DashboardWindow />
-              <InMarketPanel />
-            </div>
-          </div>
-        ) : (
-          <FlowDiagram
-            centre="Repo"
-            outputs={service.pillars.map(({ name, items, outputs, media, status }) => ({
-              name,
-              media,
-              status,
-              /* A pillar that names its own outputs uses them; the rest fall
-                 back to the first three deliverables, which read as outputs
-                 already. */
-              items: (outputs ?? items).slice(0, 3),
-            }))}
-          />
-        )}
-      </div>
-
-      {/* Under the hero, not inside it: the block above carries the gradient
-          and the dot field, and pulling the strip into that would put client
-          names on top of the texture. Out here it does the job a strip does,
-          which is to end the hero. Full bleed, so its rules run the width of
-          the page rather than stopping at the reading margin. */}
-      <div className={styles.clients}>
-        <ClientStrip banner />
-      </div>
-
+      {/* WHO WE HAVE DONE IT FOR. TrustMosaic is the homepage's
+          client wall — the same twenty names, read rather than scrolled past.
+          It replaces the strip that used to sit under the hero: proof belongs
+          in a section of its own, not as texture under a heading. */}
       <hr className={styles.divider} />
+      <TrustMosaic />
 
-      <PlatformIntro visual={service.heroVisual === 'dashboard' ? 'asset' : 'repo'} />
+      {/* WHO IT IS FOR. The three kinds of brand are Chris's,
+          straight out of positioning.md, and AudienceCards already drew them
+          for the homepage — so this is the same component rather than a
+          second copy that would drift from it.
 
-      {/* The section renders itself only for a service that has four steps,
-          so this is a slug test rather than a list to keep in sync — see
-          HowItWorks.jsx. Grow's four and Support's four are both Chris's. */}
-      {HAS_STEPS.includes(service.slug) && (
-        <>
-          <hr className={styles.divider} />
-          <HowItWorks slug={service.slug} />
-        </>
-      )}
-
-      {service.slug === 'build' && (
-        <>
-          <hr className={styles.divider} />
-          <BuiltInSection />
-        </>
-      )}
-
-      {/* THE EMBEDDED TEAM, on Grow only. It was the fifth step of that
-          page's how-it-works, which made the arrangement the whole engagement
-          runs under read as one beat in a sequence about producing work. */}
-      {service.slug === 'grow' && (
-        <>
-          <hr className={styles.divider} />
-          <EmbedSection />
-        </>
-      )}
-
+          ITS THREE LINKS ALL GO TO /work. There is no new / pivoting /
+          underdog taxonomy on a project and no filtered route to send them
+          to; that decision and its reasoning live in AudienceCards. Turning
+          them into three real destinations needs one tag per project, which
+          is a call about clients rather than code. */}
       <hr className={styles.divider} />
+      <AudienceCards />
+
+      {/* HOW WE WORK, both services, same shape and same resourcing sheet —
+          the words and the three points come from PAGE and from
+          BUILD_EMBED / GROW_EMBED. See BUILD_EMBED for the sentence of
+          Chris's held back and why. */}
+      <hr className={styles.divider} />
+        {/* body={null}: no paragraph. The headline makes the claim and the
+            three points collect it, so the sentence between them was
+            restating both. Grow passes nothing and keeps its own. */}
+      <EmbedSection
+        eyebrow={page.embed.eyebrow}
+        headline={page.embed.headline}
+        body={null}
+        points={service.slug === 'grow' ? GROW_EMBED : BUILD_EMBED}
+        visual={<DepartmentPanel />}
+      />
 
       {/* Grow is bought by the hour, so its cards are what the hours make.
-          Four, as Chris listed them: website, app, campaigns, channels.
+   Three: website, campaigns, channels. App was a fourth and is cut — see the
+   note on the pillar rename in services.js.
 
           BRAND IS NOT ONE OF THEM here. Grow's Brand pillar is governance
           and upkeep — keeping the system coherent — which is what Support
@@ -249,7 +308,51 @@ export default function ServiceV3() {
           signed off: optimization, landing pages, testing and SEO read as
           site work; features and performance read as app work. The App
           summary is mine too — the pillar's own line is about the site. */}
+      <hr className={styles.divider} />
+
+      {/* THE BENCH ITSELF, straight after the section that says you get a
+          department. That section shows the twelve as a resourcing grid —
+          names and hours — and never says what any of them is; this does.
+          The headline is Chris's own line from /services, where it sits
+          above 'the full list is below'.
+
+          ONE RULE ABOVE IT, not two. The rule that used to close the section
+          above is the one this section opens on — adding a second left an
+          empty band between two lines. A section takes a divider with it;
+          inserting one means using the seam that is already there. */}
+      <DisciplinesSection
+        eyebrow="[ Disciplines ]"
+        headline="Twelve disciplines, one bench."
+      />
+
+      <hr className={styles.divider} />
+
+      {/* THE PLATFORM DIAGRAM, both services. Before "what it extends to",
+          because what the brand is made of has to land before the list of
+          things it shows up as. The right column is the service's own
+          pillars; everything else is shared. */}
+      <BrandTokens
+        slug={service.slug}
+        eyebrow={page.platform.eyebrow}
+        headline={page.platform.headline}
+        intro={page.platform.intro}
+        inputs={service.slug === 'grow' ? GROW_INPUTS : undefined}
+        centreVisual={service.slug === 'grow' ? <AssetsGridWindow /> : undefined}
+        outputsVisual={service.slug === 'grow' ? <DashboardWindow /> : undefined}
+      />
+
+      <hr className={styles.divider} />
+
       <PlatformOutputs cards={service.slug === 'grow' ? GROW_CARDS : undefined} />
+
+      {/* WHY US. ComparisonTable is the homepage's.
+          ITS OWN HEADER SAYS NOTHING IN IT IS SIGNED OFF — every row name and
+          every mark is ours, and seven of the nine rows are claims about
+          third parties. It is here because Chris asked for a why-us beat and
+          this is the section the site already has for it; it is the first
+          thing to pull if the register is ever enforced on this page. */}
+      <hr className={styles.divider} />
+      <ComparisonTable />
 
       <hr className={styles.divider} />
 

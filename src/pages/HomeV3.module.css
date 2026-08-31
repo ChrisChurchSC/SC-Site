@@ -762,7 +762,12 @@
 }
 
 /* ── Company panel: three labelled columns of icon links ────────────────── */
-.panelCompany {
+/* The company links. They were the panel itself — three columns edge to
+   edge — and are now the right-hand side of a panelService grid, behind the
+   same statement column Services and Case Studies open with. Same three
+   columns they always had, one level in. */
+.coCols {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(20px, 3vw, 56px);
 }
@@ -1215,4 +1220,35 @@
 @media (prefers-reduced-motion: reduce) {
   .navFloat > * { transition: none; }
   .navHidden > * { transform: none; }
+}
+
+/* THE TWO VERBS IN THE HERO, linked to the two service pages.
+
+   Underlined by default rather than on hover: at display size an underline
+   that only appears on hover is a link nobody knows is there, and these two
+   are the only navigation above the fold now the capture field is gone. The
+   rule sits away from the baseline so it does not cut the descenders of the
+   serif. */
+.heroLink {
+  /* Grey rather than inherited white: the two verbs sit inside a display
+     sentence, and setting them back from it is what makes them read as
+     picked out rather than emphasised. The word still leads to a page, so
+     the underline carries the affordance and the colour stays quiet. */
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+a.heroLink:hover {
+  color: var(--pink, #df4ed6);
+  text-decoration-color: var(--pink, #df4ed6);
+}
+
+a.heroLink:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 4px;
+  border-radius: 2px;
 }

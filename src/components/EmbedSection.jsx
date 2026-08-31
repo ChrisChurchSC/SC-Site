@@ -29,22 +29,28 @@ const POINTS = [
   { Icon: KeyRound, key: 'Handing it over', line: 'Until you run it without us.' },
 ]
 
-export default function EmbedSection() {
+/* PARAMETERISED FOR BUILD, defaults unchanged for Grow. Build s "how we
+   work" makes the same argument this section already makes — one embedded
+   team, people you know, thinking that reaches the work — so it uses this
+   shape rather than a fourth hand-rolled section. Grow passes nothing and
+   renders exactly what it always did. */
+export default function EmbedSection({
+  eyebrow = '[ Embedded ]',
+  headline = 'Our people inside your team, not alongside it.',
+  body = 'The platform produces the work. Somebody still has to run it, and for a while that is us — beside your team rather than instead of it.',
+  points = POINTS,
+  visual = <AdoptWindow />,
+}) {
   return (
     <section className={styles.section} aria-labelledby="embed">
       <div className={styles.panel}>
         <div className={styles.copy}>
-          <p className={styles.eyebrow}>[ Embedded ]</p>
-          <h2 className={styles.headline} id="embed">
-            Our people inside your team, not alongside it.
-          </h2>
-          <p className={styles.body}>
-            The platform produces the work. Somebody still has to run it, and for a while
-            that is us — beside your team rather than instead of it.
-          </p>
+          <p className={styles.eyebrow}>{eyebrow}</p>
+          <h2 className={styles.headline} id="embed">{headline}</h2>
+          {body && <p className={styles.body}>{body}</p>}
 
           <dl className={styles.points}>
-          {POINTS.map(({ Icon, key, line }) => (
+          {points.map(({ Icon, key, line }) => (
             <div key={key} className={styles.point}>
               <dt className={styles.pointKey}>
                 <Icon className={styles.pointIcon} aria-hidden="true" />
@@ -58,7 +64,7 @@ export default function EmbedSection() {
 
         {/* Cropped by the panel's right edge rather than framed by it. */}
         <div className={styles.visual}>
-          <AdoptWindow />
+          {visual}
         </div>
       </div>
     </section>

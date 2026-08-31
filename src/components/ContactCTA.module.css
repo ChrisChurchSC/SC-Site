@@ -50,7 +50,10 @@
 .pricingLabel {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(22px, 2.5vw, 36px);
+  /* Up from clamp(22px, 2.5vw, 36px). This is the last thing the page asks
+     for and it was set smaller than the section headings above it. */
+  font-size: clamp(30px, 4vw, 56px);
+  line-height: 1.1;
   color: rgba(255, 255, 255, 0.7);
   position: relative;
   z-index: 1;

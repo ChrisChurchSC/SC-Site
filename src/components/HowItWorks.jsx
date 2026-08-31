@@ -1,20 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import styles from './HowItWorks.module.css'
-import InputsWindow from './InputsWindow'
-import DesignWindow from './DesignWindow'
-import DeployWindow from './DeployWindow'
-import AgentWindow from './AgentWindow'
-import DraftWindow from './DraftWindow'
-import ReviewWindow from './ReviewWindow'
-import MemoryWindow from './MemoryWindow'
-import DiffWindow from './DiffWindow'
-import AdoptWindow from './AdoptWindow'
-import AssetsGridWindow from './AssetsGridWindow'
-import RepoWindow from './RepoWindow'
-import AssetWindow from './AssetWindow'
-import InMarketPanel from './InMarketPanel'
-import DashboardWindow from './DashboardWindow'
 
 /**
  * HOW IT WORKS — the operating loop of a service.
@@ -43,184 +29,10 @@ import DashboardWindow from './DashboardWindow'
  * is promised, and Support's four describe what gets done, not how well.
  */
 const SETS = {
-  /* THE AGENTS PAGE. Three steps, because three is what the mechanism
-     actually has: it drafts out of the repo, it marks what it cannot source,
-     and a person approves before anything lands. A fourth would be padding.
-     
-     The middle one is the argument — an agent that stops is worth more than
-     one that fills the gap, and the marker is the thing it hands back. */
-  agents: {
-    headline: 'It reads your brand, drafts from it, and stops where it cannot source a claim.',
-    steps: [
-      {
-        n: '01',
-        name: 'It reads your brand',
-        visual: 'reading',
-        note: 'Positioning, voice, audience, the claims already cleared. It reads them; your team writes them.',
-      },
-      {
-        n: '02',
-        name: 'It drafts, and flags',
-        visual: 'draft',
-        note: 'In your voice, off your own positioning. Where there is no proof point it writes [CLAIM NEEDED] instead of something plausible.',
-      },
-      {
-        n: '03',
-        name: 'A person approves it',
-        visual: 'review',
-        note: 'Every change is proposed as a numbered review. Nothing an agent writes goes live until somebody merges it.',
-      },
-    ],
-    loops: false,
-  },
-
-
-  measurement: {
-    headline: 'Results come back, and the brand changes because of them.',
-    steps: [
-      {
-        n: '01',
-        name: 'What shipped',
-        visual: 'assets',
-        note: 'Every asset leaves the library tagged, so the quarter is a list rather than somebody\u2019s memory of it.',
-      },
-      {
-        n: '02',
-        name: 'What it moved',
-        visual: 'dashboard',
-        note: 'The numbers come back joined to the asset that earned them, the agent that drafted it and the brief behind it.',
-      },
-      {
-        n: '03',
-        name: 'What changes because of it',
-        visual: 'diff',
-        note: 'What worked is proposed as an edit to the brand files \u2014 a claim you may now make, a way of saying it \u2014 with the evidence attached.',
-      },
-      {
-        n: '04',
-        name: 'Every agent starts there',
-        visual: 'repo',
-        note: 'A person merges it and it is in the repo. The next draft opens with the lesson already in it, rather than with somebody remembering to mention it.',
-      },
-    ],
-    loops: true,
-  },
-
-  repo: {
-    headline: 'Nothing changes the brand until somebody says so.',
-    steps: [
-      {
-        n: '01',
-        name: 'Pull it',
-        visual: 'repo',
-        note: 'The whole brand as files — on your machine, in the app, or open in Claude.',
-      },
-      {
-        n: '02',
-        name: 'Change something',
-        visual: 'draft',
-        note: 'You edit it, or an agent drafts against it. Either way the change is to a file, not to a slide somebody has a copy of.',
-      },
-      {
-        n: '03',
-        name: 'Propose it',
-        visual: 'diff',
-        note: 'A push opens a numbered review holding what the files would become. It writes nothing live, and it refuses to run over a conflict rather than picking a winner.',
-      },
-      {
-        n: '04',
-        name: 'Merge it',
-        visual: 'review',
-        note: 'A person approves, and it is in — with a date, a name and a diff you can read later.',
-      },
-    ],
-    loops: true,
-  },
-
-  /* MEMORY. The four verbs are mine, not Chris's — he named the boundary
-     (Reviews is the gate, Memory is after) and these are drawn to sit on the
-     far side of it, which is why step 01 is the merge rather than the
-     decision. Unapproved; replace them the moment he says four better ones.
-
-     Re-check is not padding. Strategy/verticals/ carries dated refresh notes
-     because its compliance facts genuinely move, so a record that never
-     expires anything would go quietly wrong. */
-  /* THE MEMORY SET. Visuals are Chris's: a folder structure for Define, the
-     inputs being read for Use, a diff for Update, and the review queue — the
-     pull requests — for Govern.
-
-     WHAT THAT COST: 'memory' is no longer selected by any step on any page, so
-     MemoryWindow — the one window on this site drawing three decisions that
-     actually got made, tagged "From SC-Brand" rather than "Sample data" — is
-     now rendered nowhere. The entry below stays in VISUALS so putting it back
-     is one word. Flagged on the page too; it is worth a decision. */
-  memory: {
-    headline: 'Defined once, used everywhere, updated as it learns — and never changed without a person.',
-    steps: [
-      {
-        n: '01',
-        name: 'Define',
-        visual: 'folders',
-        note: 'Positioning, voice, evidence, the design system and the agents get written down as files, in folders, with names — so the brand is something you open rather than something you explain.',
-      },
-      {
-        n: '02',
-        name: 'Use',
-        visual: 'reading',
-        note: 'Every job reads it before it drafts. The same positioning, the same voice, the same claims, without anybody being briefed on them again.',
-      },
-      {
-        n: '03',
-        name: 'Update',
-        visual: 'diff',
-        note: 'Changes are versioned rather than overwritten. Every edit is a diff against what was there, with a date and a name on it, so what the brand used to say — and why it stopped saying it — is still readable.',
-      },
-      {
-        n: '04',
-        name: 'Govern',
-        visual: 'review',
-        note: 'Nothing lands on its own. A push opens a numbered review holding what the files would become and writes nothing live, and the queue is the gate: merging is a person\u2019s job.',
-      },
-    ],
-    loops: true,
-  },
-
-  build: {
-    headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
-    steps: [
-      {
-        n: '01',
-        name: 'Define',
-        visual: 'inputs',
-        note: 'Positioning, voice, story, audience, and what you are setting out to achieve.',
-      },
-      {
-        n: '02',
-        name: 'Design',
-        visual: 'design',
-        note: 'Identity, and the full system it runs on: type, color, components, imagery, motion, language.',
-      },
-      {
-        n: '03',
-        name: 'Encode',
-        visual: 'repo',
-        note: 'The brand becomes machine-readable, so your teams and AI can use it without getting it wrong.',
-      },
-      {
-        n: '04',
-        name: 'Deploy',
-        visual: 'deploy',
-        note: 'The foundational channels built from it: website, app, and the places you show up first.',
-      },
-      {
-        n: '05',
-        name: 'Adopt',
-        visual: 'adopt',
-        note: 'Teams, partners and agencies trained and working in it from day one.',
-      },
-    ],
-    loops: false,
-  },
+  /* Build had five steps here — Define, Design, Encode, Deploy, Adopt. They
+     were mine rather than Chris's and were never signed off, and the section
+     is cut from that page, so the set goes with it instead of sitting here
+     unused. Grow's four below are Chris's. */
 
   grow: {
     headline: 'Produced from the system, measured against what it moved, and starting each round further along.',
@@ -228,25 +40,21 @@ const SETS = {
       {
         n: '01',
         name: 'Grow',
-        visual: 'assets',
         note: 'Every asset, every channel, produced from the system — so the brand shows up more, and shows up right.',
       },
       {
         n: '02',
         name: 'Measure',
-        visual: 'dashboard',
         note: 'Output and performance tied back to what drove it.',
       },
       {
         n: '03',
         name: 'Compound',
-        visual: 'learning',
         note: 'Every decision and result makes the brand stronger, so each round starts ahead.',
       },
       {
         n: '04',
         name: 'Maintain',
-        visual: 'repo',
         note: 'The brand stays current and consistent as teams, channels and products change.',
       },
     ],
@@ -264,41 +72,11 @@ const SETS = {
    be the same number or the bar finishes somewhere other than the switch. */
 const STEP_MS = 6000
 
-const VISUALS = {
-  /* The decision record, for the step about writing one down. */
-  memory: () => <MemoryWindow />,
-  /* The inputs, settled: what the work will be made from. */
-  inputs: InputsWindow,
-  /* The same window, showing itself being read. */
-  reading: () => <InputsWindow reading />,
-  /* Those same inputs, designed — the system rather than a sheet of posts. */
-  design: DesignWindow,
-  /* What comes out of the repo once it is being used. */
-  deploy: DeployWindow,
-  /* The people working in it — their teams on Build, ours on Grow. */
-  adopt: AdoptWindow,
-  /* One agent's definition — the file, for the step about reading a brand. */
-  agent: AgentWindow,
-  /* A draft with the marker in it, for the step about flagging. */
-  draft: DraftWindow,
-  /* The review queue, for the step about a person approving. */
-  review: ReviewWindow,
-  /* Where it lands: the repo, set up and documented. */
-  diff: DiffWindow,
-  repo: () => <RepoWindow big assets={false} agents />,
-  /* The same window across all five folders rather than just Agents/ — the
-     structure itself, for the step about defining one. */
-  folders: () => <RepoWindow big assets={false} />,
-  /* The creative that got made. */
-  assets: AssetsGridWindow,
-  /* The same assets, seen by where they went. */
-  market: InMarketPanel,
-  /* The analytics. */
-  dashboard: DashboardWindow,
-  /* The learning: one asset against the account's own trailing average,
-     which is the reading a decision to repeat or drop it comes from. */
-  learning: AssetWindow,
-}
+/* The step visuals are gone with the platform. Each step used to show the
+   screen it was about — the repo, the review queue, the dashboard — which
+   was the platform argument told one frame at a time. The component already
+   renders text-only when no step carries a visual, so this needs no other
+   change; if these steps ever want pictures again they need new ones. */
 
 export default function HowItWorks({ slug = 'grow' }) {
   const set = SETS[slug]

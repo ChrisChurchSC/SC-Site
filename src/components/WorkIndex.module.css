@@ -19,18 +19,27 @@
 
 /* ── THE FEATURED ONE ───────────────────────────────────────────────────── */
 
+/* THE CELL, which is what the two rows belong to. Sticky is bounded by its
+   containing block, so putting the spans here and the pin on the card inside
+   is what makes the card release at the end of row two. It used to carry both
+   itself, and with align-items: start on the grid it overflowed its own area
+   and stayed pinned down the length of the page. */
+.leadCell {
+  grid-column: span 2;
+  grid-row: span 2;
+  position: relative;
+  height: 100%;
+}
+
 .lead {
   position: sticky;
   top: calc(var(--bar-inset, 22px) + 84px);
-  align-self: start;
   z-index: 2;
   display: block;
   overflow: hidden;
   border-radius: var(--r-surface, 12px);
   /* Two columns wide and two rows tall, at the same 4:5 as every other card
      — the featured one is bigger rather than a different shape. */
-  grid-column: span 2;
-  grid-row: span 2;
   aspect-ratio: 4 / 5;
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -106,6 +115,7 @@
 }
 
 .cardMedia {
+  position: relative;
   display: block;
   overflow: hidden;
   border-radius: var(--r-surface, 12px);
@@ -167,7 +177,8 @@
    featured one goes back to a single cell. */
 @media (max-width: 560px) {
   .wrap { --cols: 1; }
-  .lead { grid-column: auto; grid-row: auto; }
+  .leadCell { grid-column: auto; grid-row: auto; height: auto; }
+  .lead { position: static; }
   .controls { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -322,4 +333,55 @@
 .seeAll:hover {
   border-color: rgba(255, 255, 255, 0.4);
   color: #fff;
+}
+
+
+/* ── WHAT A THUMBNAIL SAYS WITH NO THUMBNAIL ────────────────────────────
+   Covers are off, so these boxes were empty stripes. The descriptor and the
+   disciplines sit inside them instead — the same two things the card would
+   otherwise say underneath, moved into the space that had nothing in it.
+
+   Set quietly: this is standing in for a picture, and it should read as a
+   caption on an absence rather than as a card in its own right. */
+.ph {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px;
+  pointer-events: none;
+}
+
+.phLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+  /* Three lines of descriptor is the most the box can hold before it starts
+     competing with the name under it. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.phTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.phTag {
+  padding: 3px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.35);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
 }

@@ -1,11 +1,17 @@
-/* The pricing page. Centred hero and a pill switcher, as in the reference,
-   in /v3's language — Signifier for sentences, mono for labels, pink for the
+/* The pricing page. Centred hero, then a section per service, in /v3's
+   language — Signifier for sentences, mono for labels, pink for the
    one thing being pointed at. */
 .page {
-  /* Room for the fixed bar, so it floats above the sign-off rather than
-     sitting on it. */
-  padding-bottom: 96px;
   --bar-inset: clamp(22px, 3.6vw, 58px);
+  /* HOW MUCH OF THE HERO BOX THE FLOATING BAR COVERS — not the bar's own
+     height. The bar's height is 64.5px, but the hero box starts above where
+     main's padding would put it, so the bar's bottom edge lands 92px into
+     it. Measured on /pricing at scroll 0: bar bottom 118.9, hero box top
+     26.7. This is the number the hero has to clear before its visible space
+     begins; using the 64.5 left the headline 28px high in the gap. */
+  --nav-cover: 92px;
+  /* The homepage's section gap, to the pixel — see .stack in HomeV3. */
+  --stack-gap: clamp(28px, 4vw, 64px);
   --nav-width: 0px;
   --page-pad-left: var(--bar-inset);
   --page-pad-right: var(--bar-inset);
@@ -21,7 +27,21 @@
   --label-radius: 4px;
   --label-width: fit-content;
 
-  padding: var(--bar-inset) var(--page-pad-right) clamp(50px, 7vw, 100px) var(--page-pad-left);
+  /* STACKED LIKE THE HOMEPAGE, not spaced by hand. HomeV3's main is a flex
+     column on clamp(28px, 4vw, 64px) with its rules as children; this page
+     was a block with a different margin on each thing — 72px above a rule,
+     110px above the FAQ, nothing above the footer — so the same page had
+     three rhythms and the footer had none. One gap now owns every seam, and
+     the rules and the FAQ carry no margins of their own. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap);
+
+  /* NO BOTTOM PADDING. It was clamp(50px, 7vw, 100px), plus a dead 96px
+     above it, to clear the fixed perk bar — and that bar is gone. Dropping it
+     to the homepage's 12px still left a sliver of page ground under the
+     sign-off's purple, so it goes to nothing and the sign-off ends the page. */
+  padding: var(--bar-inset) var(--page-pad-right) 0 var(--page-pad-left);
   color: rgba(255, 255, 255, 0.9);
   overflow-x: clip;
 }
@@ -31,7 +51,14 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: clamp(44px, 7vw, 96px) 0 clamp(30px, 4vw, 50px);
+  /* CENTRED IN THE SPACE, not padded into it. The label and the headline
+     sit between the floating nav and the first rule, and that space is not
+     the hero box: V3Nav's intro row sits above it with a -29.5px bottom
+     margin, so the bar's bottom edge lands --nav-cover into the hero rather
+     than at its top. Top padding is that cover plus one stack gap; the gap
+     below comes from the flex column itself, so both visible gaps are the
+     same number and neither is a guess. */
+  padding: calc(var(--nav-cover) + var(--stack-gap)) 0 0;
 }
 
 .eyebrow {
@@ -73,57 +100,35 @@
 
 
 
-/* The switcher. A pill of three, the active one lifted onto its own ground
-   rather than coloured — this page has one accent and it is spent on the
-   recommended card. */
-.switcher {
-  display: inline-flex;
-  margin-top: clamp(28px, 4vw, 48px);
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.tab,
-.tabOn {
-  padding: 10px 26px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.tab:hover { color: rgba(255, 255, 255, 0.85); }
-
-.tabOn {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
+/* The two sections. Build and Grow were tabs; they are stacked now, because
+   they are not alternatives — a client can have a project and a retainer at
+   once — and a tab hid half the prices on a page about prices. */
 .panel { padding-top: clamp(20px, 3vw, 36px); }
 
-.panelEyebrow {
+/* The section's name, in the page's label token rather than at heading size —
+   see the note in PricingV3.jsx. Its own rule instead of .eyebrow's because
+   that one lives inside the flex hero and would span the full width here. */
+.sectionLabel {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 6px;
+  padding: var(--label-pad);
+  background: var(--label-bg);
+  border-radius: var(--label-radius);
   font-family: 'Roboto Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  font-weight: 400;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
   text-transform: uppercase;
-  color: var(--pink, #df4ed6);
-  text-align: center;
-  margin: 0 0 10px;
+  color: var(--label-color);
 }
 
 .panelBlurb {
   margin: 0 auto clamp(26px, 3.4vw, 44px);
-  max-width: 56ch;
   text-align: center;
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: 15px;
+  font-size: 18px;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -287,7 +292,7 @@
 .tierFeatured .cta:hover { filter: brightness(1.08); }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab, .tabOn, .cta { transition: none; }
+  .cta { transition: none; }
 }
 
 /* ── The Project variant ───────────────────────────────────────────────────
@@ -425,8 +430,10 @@
    details/summary, so the browser owns the open/closed state and the
    keyboard and screen-reader behaviour comes free. */
 .faq {
+  width: 100%;
   max-width: 820px;
-  margin: clamp(56px, 8vw, 110px) auto 0;
+  /* No top margin: the stack gap owns the seam, like every other one. */
+  margin: 0 auto;
 }
 
 .faqHead {
@@ -638,8 +645,8 @@
   .featureCta { transition: none; }
 }
 
-/* Monthly / annual. The same pill as the tab switcher at a smaller size, so
-   it reads as a control of the same family rather than a second idea. */
+/* Monthly / annual. The one pill control left on the page, now that the
+   Build/Grow switcher is gone. */
 .periods {
   display: flex;
   width: fit-content;
@@ -695,7 +702,7 @@
    was not being constrained in the first place.
 
    As a block, the grid is width: auto against the column and auto-fit
-   collapses as it should. The switcher centres on its own margins.
+   collapses as it should. The grid centres on its own margins.
 
    Measured at a 500px viewport: grid 976px before, one row of four; the
    fix is verified below rather than assumed. */
@@ -768,4 +775,151 @@
 @media (max-width: 560px) {
   .perkText { font-size: 12.5px; }
   .perkBar { padding: 10px 16px 10px 12px; }
+}
+
+/* ── BRAND, ALONE, ABOVE THE THREE ──────────────────────────────────────
+   The same card the row below uses, given the full measure. It is not
+   wider-and-therefore-more-important by accident: on this page Brand is the
+   thing being bought and the other three extend it, which is the order the
+   service pages already argue in. */
+
+.lead {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* The card inside stretches, so its deliverable pills run the width rather
+   than stacking in a narrow column the way they do in the row. */
+.lead > * {
+  width: 100%;
+}
+
+/* THE HUB, AS A CARD. It used to be a line of text sitting to the left of
+   the wires; it is now the thing they meet on — same surface as a tier so it
+   reads as part of the same set, centred so the stem lands on its top edge
+   and the fan leaves its bottom. Sized by its own text rather than given a
+   width, and the space either side of it is where the wires run. */
+.extendsLabel {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: clamp(48px, 5vw, 84px) auto;
+  padding: 11px 18px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-surface);
+  text-align: center;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The extensions rendered as Build's cards. Only the gap is restated, to
+   match that grid; the cards bring their own stylesheet. */
+.tiersMirror {
+  gap: clamp(12px, 1.4vw, 20px);
+}
+
+/* The two things pricing has that the Build page does not, pinned to the
+   bottom of the card so the price lines up across a row of unequal lists. */
+.mirrorFoot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+/* WHAT THE PLATFORM HOLDS — the seven groups under the deliverables. Same
+   rule and same label treatment as .inventory, so the card reads as one
+   thing with two halves rather than two cards stacked. */
+.groups {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* The group name sits in the left column and the pills flow beside it, so
+   seven groups scan as a list rather than seven stacked blocks. Collapses to
+   a stack when the card is too narrow to hold both. */
+.group {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 8px 16px;
+  align-items: baseline;
+  padding: 8px 0;
+}
+
+.group + .group {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.groupName {
+  margin: 0;
+  font-family: 'Signifier', Georgia, serif;
+  font-size: 15px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 620px) {
+  .group {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* THE BOX THE WIRES ARE MEASURED INSIDE. It wraps the lead card, the label
+   and the grid, and does nothing else — each of those keeps its own width and
+   stays centred in it. Present on both tabs; Subscription has no lead card,
+   so ExtendsWires is never rendered into it. */
+.extends {
+  position: relative;
+}
+
+/* Above the cards rather than under them. The junction sits in the gap, but
+   the wires leave the lead card's edge and land on the cards' — underneath,
+   the panels clipped both ends. Matches FlowDiagram's overlay on
+   /services/build, which has the same problem the same way. */
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+.wire {
+  fill: none;
+  stroke: rgba(223, 78, 214, 0.45);
+  stroke-width: 1;
+}
+
+/* Filled, so it reads as a terminal rather than another bend in the line. */
+.junction {
+  fill: var(--pink, #df4ed6);
+}
+
+/* The rule between the two sections. Same divider as the homepage, pulled out
+   to the page's edges the same way. */
+/* No margins: the flex column's gap sits on both sides of every rule, which
+   is what makes the seams identical. Full bleed via the page's own pad vars,
+   the same way the homepage divider does it. */
+.divider {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* No jump links on the page any more, but /pricing#build and /pricing#grow
+   are still addresses somebody can be sent. The nav floats, so a landing has
+   to clear it or the heading it jumped to sits underneath it. */
+.panel {
+  scroll-margin-top: clamp(72px, 9vw, 132px);
 }

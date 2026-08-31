@@ -114,12 +114,14 @@
 .card {
   flex: none;
   width: clamp(240px, 26vw, 340px);
-  /* 4:5, matching the service cards — the page has two rails of cards and
-     they should be the same shape. The content sits at the foot of the card
-     and the space above it is the card, which is what the service cards do
-     too; a text card at this ratio with everything top-aligned is mostly
-     empty above nothing. */
-  aspect-ratio: 4 / 5;
+  /* 3:4 rather than 4:5. The content still sits at the foot and the space
+     above it is the card, but at 4:5 these read as the same object as the
+     service cards next to them; taller separates the two rails and gives the
+     three measures at the foot more room above them.
+
+     Still a ratio rather than a height, so the rail stays one shape at every
+     width. */
+  aspect-ratio: 3 / 4;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

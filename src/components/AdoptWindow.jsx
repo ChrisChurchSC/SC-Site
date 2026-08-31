@@ -23,7 +23,7 @@ import styles from './AdoptWindow.module.css'
  * one. The initials are nonsense pairs — recognisable ones would be naming
  * people.
  */
-const PALETTE = [
+export const PALETTE = [
   ['#df4ed6', '#7a3fd4'],
   ['#4ecfb3', '#2f8f9d'],
   ['#5a76e5', '#3d4fb8'],
@@ -32,10 +32,10 @@ const PALETTE = [
   ['#4ec4d4', '#3f7ad4'],
 ]
 
-const INITIALS = ['AK', 'RM', 'TS', 'JL', 'PN', 'CD', 'MO', 'EV', 'BH', 'SR', 'DW', 'FA', 'GN', 'LQ', 'YT']
+export const INITIALS = ['AK', 'RM', 'TS', 'JL', 'PN', 'CD', 'MO', 'EV', 'BH', 'SR', 'DW', 'FA', 'GN', 'LQ', 'YT']
 
 /* Deterministic, so a redeploy does not reshuffle the faces. */
-function seatSeeds(offset, count) {
+export function seatSeeds(offset, count) {
   return Array.from({ length: count }, (_, i) => {
     const k = offset + i
     return { colors: PALETTE[k % PALETTE.length], initials: INITIALS[k % INITIALS.length] }

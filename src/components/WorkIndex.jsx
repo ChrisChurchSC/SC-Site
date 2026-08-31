@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './WorkIndex.module.css'
 import { caseStudies, SHOW_COVERS } from '../data/caseStudies'
+import { projects } from '../data/projects'
+import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 import CaseFacts from './CaseFacts'
 
 /**
@@ -33,8 +35,12 @@ const uniq = (xs) => [...new Set(xs.filter(Boolean))].sort()
 /* The grid's shape, so the padding is arithmetic rather than a number that
    has to be remembered when either changes. */
 const COLUMNS = 5
-const ROWS_CLOSED = 2
-const ROWS_OPEN = 4
+/* Four rows: sixteen cells beside the featured card, all of them filled from
+   the thirty-seven entries. It was two rows when there were only the four
+   written studies to draw on, six once the roster came in, and four now —
+   enough to read as a body of work without the page becoming the index. */
+const ROWS_CLOSED = 4
+const ROWS_OPEN = 7
 const LEAD_SPAN = 2
 
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
@@ -62,22 +68,55 @@ function Meta({ study }) {
   return (
     <p className={styles.meta}>
       {study.type}
-      <span className={styles.metaSep}> / </span>
-      {study.year}
+      {study.year && <><span className={styles.metaSep}> / </span>{study.year}</>}
     </p>
   )
 }
 
-const ENTRIES = ORDER.filter((slug) => caseStudies[slug]).map((slug) => ({
+const STUDIES = ORDER.filter((slug) => caseStudies[slug]).map((slug) => ({
   slug,
   ...caseStudies[slug],
 }))
 
+/* THE REST OF THE ROSTER, so the grid is rows of work rather than rows of
+   empty slots.
+ *
+ * There are four written case studies and thirty-eight clients. The grid held
+ * six cells beside the featured card, so two thirds of it was placeholder —
+ * and the See all button opened it to sixteen, revealing ten more.
+ *
+ * These are the clients themselves out of projects.js: real names, the real
+ * type of engagement, and a slug that already resolves at /work/:slug. What
+ * they do NOT have is a cover image, a year, a tagline or an outcome, because
+ * nobody has written them up — so their cards carry a name and a type and say
+ * nothing else. That is the honest difference between a client and a case
+ * study, and it is visible on the page rather than papered over.
+ *
+ * WHAT IS EXCLUDED, and why it matters: HIDDEN_SLUGS are studies somebody
+ * deliberately took down, and a password on a project means it is not public.
+ * Both are filtered here. Putting either in front of a visitor would be the
+ * exact mistake hiddenProjects.js was written to stop. */
+const WRITTEN = new Set(STUDIES.map((s) => s.slug))
+
+const ROSTER = projects
+  .filter((p) => p.slug && !p.password && !HIDDEN_SLUGS.has(p.slug) && !WRITTEN.has(p.slug))
+  .map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    type: p.type,
+    tagline: p.descriptor ?? null,
+    summary: p.relationship ?? null,
+    services: p.work ?? [],
+    roster: true,
+  }))
+
+const ENTRIES = [...STUDIES, ...ROSTER]
+
 /* Derived from the studies rather than listed, so a new one appears in the
    dropdown by existing. */
-const TYPES = uniq(ENTRIES.map((s) => s.type))
-const INDUSTRIES = uniq(ENTRIES.map((s) => s.industry))
-const YEARS = uniq(ENTRIES.map((s) => s.year)).reverse()
+const TYPES = uniq(ENTRIES.map((s) => s.type)).filter(Boolean)
+const INDUSTRIES = uniq(ENTRIES.map((s) => s.industry)).filter(Boolean)
+const YEARS = uniq(ENTRIES.map((s) => s.year)).filter(Boolean).reverse()
 
 export default function WorkIndex() {
   const [open, setOpen] = useState(false)
@@ -154,6 +193,11 @@ export default function WorkIndex() {
       {/* THE FEATURED ONE. Its name sits top-left and its line bottom-left,
           both over the image, which is the only card here that does that —
           the smaller ones caption underneath so the picture stays whole. */}
+      {/* The cell owns the two rows; the card sticks INSIDE it. That is what
+          bounds the pin — sticky travels only as far as its containing block,
+          so the card releases at the end of row two instead of riding the
+          whole grid. */}
+      <div className={styles.leadCell}>
       <NavLink to={`/work/${lead.slug}`} className={styles.lead}>
         <Media src={lead.cover} className={styles.leadMedia} />
         <span className={styles.leadScrim} aria-hidden="true" />
@@ -163,14 +207,40 @@ export default function WorkIndex() {
           <CaseFacts study={lead} className={styles.leadFacts} />
         </span>
       </NavLink>
+      </div>
 
       {shown.map((study) => (
         <NavLink key={study.slug} to={`/work/${study.slug}`} className={styles.card}>
           <span className={styles.cardMedia}>
             <Media src={study.cover} className={styles.cardImg} />
+            {/* THE PLACEHOLDER SAYS WHAT THE WORK WAS. Covers are off
+                (SHOW_COVERS), so every one of these boxes is empty stripes —
+                a grid of them told a reader nothing about thirty-six clients.
+                The descriptor and the disciplines are what the repo holds for
+                each, so they fill the box until there is artwork.
+
+                EVERY CARD, not just the roster. Gating this on a missing
+                cover meant the four written studies kept empty boxes while
+                the clients nobody has written up carried content — the
+                inverse of the truth. With covers off, nothing has a picture,
+                so nothing goes without the caption.
+
+                When covers come on this layer goes: it is what a thumbnail
+                looks like when there is no thumbnail. */}
+            {(!SHOW_COVERS || !study.cover) && (
+              <span className={styles.ph}>
+                {study.tagline && <span className={styles.phLine}>{study.tagline}</span>}
+                {study.services?.length > 0 && (
+                  <span className={styles.phTags}>
+                    {study.services.slice(0, 3).map((w) => (
+                      <span key={w} className={styles.phTag}>{w}</span>
+                    ))}
+                  </span>
+                )}
+              </span>
+            )}
           </span>
           <span className={styles.cardClient}>{study.name}</span>
-          <span className={styles.cardTagline}>{study.tagline}</span>
           <CaseFacts study={study} />
         </NavLink>
       ))}
@@ -184,11 +254,10 @@ export default function WorkIndex() {
     </div>
       )}
 
-      {more && (
-        <button type="button" className={styles.seeAll} onClick={() => setOpen(true)}>
-          See all case studies
-        </button>
-      )}
+      {/* The See all case studies button is cut. It opened the grid from two
+          rows to four — and there are four studies in caseStudies.js, so
+          what it revealed was ten empty slots. The open state and ROWS_OPEN
+          are still here; it can come back when there is more to reveal. */}
     </div>
   )
 }

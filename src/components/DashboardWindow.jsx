@@ -129,7 +129,7 @@ function Donut({ slices, total }) {
   )
 }
 
-export default function DashboardWindow({ label = 'Measurement', ratio, bare = false, scroll = true }) {
+export default function DashboardWindow({ ratio, bare = false, scroll = true }) {
   const { source, columns, rows, channels } = metricsSample
 
   const tiles = [
@@ -142,19 +142,13 @@ export default function DashboardWindow({ label = 'Measurement', ratio, bare = f
 
   return (
     <div className={styles.window} style={ratio ? { aspectRatio: ratio } : undefined}>
-      {!bare && (
-        <div className={styles.head}>
-          <span className={styles.crumbMuted}>Super Conscious</span>
-          <span className={styles.slash}>/</span>
-          <span className={styles.name}>SC-Brand</span>
-          <span className={styles.private}>{label}</span>
-        </div>
-      )}
-
+      {/* NO CRUMB BAR. It read "Super Conscious / SC-Brand" — our own repo
+          named on a page selling the client theirs — and the window is inside
+          a diagram that already says where it sits. The tabs row below is
+          kept: it carries the Sample data tag, which is not optional. */}
       {!bare && (
         <div className={styles.tabs}>
           <span className={styles.tabOn}>Performance</span>
-          <span className={styles.tab}>Usage</span>
           <span className={styles.sample}>Sample data</span>
         </div>
       )}

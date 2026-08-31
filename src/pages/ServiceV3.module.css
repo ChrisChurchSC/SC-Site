@@ -21,11 +21,21 @@
   padding: var(--bar-inset) var(--page-pad-right) 0 var(--page-pad-left);
   color: rgba(255, 255, 255, 0.9);
   overflow-x: clip;
+
+  /* ONE RHYTHM FOR THE WHOLE PAGE, the same way the homepage does it: its
+     <main> carries .stack with this exact gap, applied once at the page
+     rather than as a margin on every section.
+
+     It matters more here than it used to. This page is now assembled from
+     sections built for the homepage — TrustMosaic, AudienceCards,
+     FeaturedWall — and those carry no vertical padding of their own,
+     because on the homepage the stack gap is what separates them. Dropped
+     onto a plain block they butted together. */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 64px);
 }
 
-/* Centred, as the reference is. The diagram below it is three columns with
-   the subject in the middle, and a left-aligned headline over a symmetrical
-   diagram reads as two designs stacked. */
 /* THE TOP OF THE PAGE, hero and diagram together, on one ground.
 
    Black at the top, pink at the foot, so the section starts on the page and
@@ -41,39 +51,16 @@
   width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
   margin-left: calc(-1 * var(--page-pad-left, 0px));
   padding: 0 var(--page-pad-right, 0px) 0 var(--page-pad-left, 0px);
-  background: linear-gradient(
-    to bottom,
-    #0a0a0a 0%,
-    rgba(223, 78, 214, 0.12) 55%,
-    rgba(223, 78, 214, 0.38) 100%
-  );
+  /* Flat. The gradient and the dot field are both cut — see below. */
+  background: #0a0a0a;
 }
 
 
-.top::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* 0, not -1: at -1 the field paints behind the page background and
-     disappears entirely — the platform section on /v3 has the same note for
-     the same reason. */
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 16px 16px;
-  /* Two masks, intersected: one fades the field out at the foot, the other
-     at both sides. Without the horizontal one the dots ran to the screen
-     edge and the texture read as a tiled background rather than as a pool of
-     light behind the diagram. */
-  -webkit-mask-image:
-    linear-gradient(to bottom, #000 0, #000 calc(100% - 160px), transparent 100%),
-    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
-  mask-image:
-    linear-gradient(to bottom, #000 0, #000 calc(100% - 160px), transparent 100%),
-    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
+/* THE DOT FIELD IS CUT. It was a masked radial-gradient layer painted over
+   the hero, and it went with the coloured grounds: the texture was there to
+   sit behind the platform diagram, and with that gone it was decoration on
+   an empty stage. The .top > * z-index rule below is kept — it costs
+   nothing and stops anything stacking oddly if a ground ever comes back. */
 
 /* Everything sits above the field. */
 .top > * {
@@ -417,17 +404,6 @@
   padding: clamp(48px, 6vw, 96px) 0;
 }
 
-/* PURPLE GROUND, for a service whose hero is the dashboard. Same shape as
-   the default: black at the top falling into colour at the foot, so the two
-   pages resolve the same way and only the hue differs. */
-.topPurple {
-  background: linear-gradient(
-    to bottom,
-    #0a0a0a 0%,
-    rgba(122, 90, 229, 0.14) 55%,
-    rgba(122, 90, 229, 0.4) 100%
-  );
-}
 
 /* TEAL FOR SUPPORT, BLUE FOR REPRESENT — same gradient, same stops, only the
    hue moves, so the four service pages resolve identically at the foot and
@@ -437,25 +413,7 @@
    take an alpha off a hex token without a colour function this file does not
    otherwise use.
 
-   Teal is the quieter of the two on purpose: Support is the service that runs
-   in the background, and a hero that shouted was drawing the wrong service. */
-.topTeal {
-  background: linear-gradient(
-    to bottom,
-    #0a0a0a 0%,
-    rgba(78, 207, 179, 0.1) 55%,
-    rgba(78, 207, 179, 0.3) 100%
-  );
-}
 
-.topBlue {
-  background: linear-gradient(
-    to bottom,
-    #0a0a0a 0%,
-    rgba(90, 118, 229, 0.14) 55%,
-    rgba(90, 118, 229, 0.4) 100%
-  );
-}
 
 /* The hero window sits in the same column the diagram does, with margins
    wide enough that it does not run to the page edge. */
@@ -476,4 +434,3 @@
 @media (max-width: 1000px) {
   .heroSplit { grid-template-columns: minmax(0, 1fr); }
 }
-

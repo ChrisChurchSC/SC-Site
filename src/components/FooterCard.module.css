@@ -11,7 +11,7 @@
   border-radius: var(--r-panel, 18px);
 }
 
-/* 132px and a tighter gap. Adding By company size took the nav to seven
+/* 132px and a tighter gap. Adding By company stage took the nav to seven
    columns; at 148px with a 44px gap they came to more than the card holds
    and Socials wrapped alone again. Sized so all seven sit on one row at
    desktop — the longest label wraps to two lines instead, which costs

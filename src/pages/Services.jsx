@@ -230,6 +230,12 @@ const COPY = {
  * still fill in that changes nothing is a trap. Their stored values are
  * untouched in Sanity if any of this needs reverting.
  */
+/* THE TWELVE, EXPORTED. Ten are the client's own wording from the aboutPage
+   document, verbatim; Media and Search were added here. /services/build draws
+   the same list in its resourcing panel, and two copies of a list this long
+   would disagree the first time either was edited. */
+export const DISCIPLINES = COPY.disciplines
+
 export default function Services() {
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
 

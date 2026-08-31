@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from './AudienceCards.module.css'
+import { WORK_BY_INDUSTRY } from './V3Nav'
 
 /**
  * "Who we work with" — the three kinds of brand, three-up under the offer.
@@ -48,6 +50,50 @@ const AUDIENCES = [
   },
 ]
 
+/* TWO WAYS TO ASK "IS THIS FOR ME". The brand's situation is the one this
+   section was built on; industry is the other way a visitor describes
+   themselves. WORK_BY_INDUSTRY drives the Case Studies menu too, so the tabs
+   and the nav cannot describe the studio's coverage differently.
+
+   BY STAGE WAS HERE AND IS CUT. Founder-led / seed / scale-up / enterprise
+   is a question about budget wearing a question about fit, and the four had
+   nothing written about them either. WORK_BY_STAGE still drives the nav.
+
+   BOTH VIEWS RENDER THE SAME 4:5 CARD. A dense variant existed for industry
+   for a version, on the reasoning that six name-only cards was a lot of page
+   for six names — but two card sizes in one section made switching tab
+   change the weight of everything under it, which is worse than the space.
+
+   THERE IS NO BODY COPY FOR INDUSTRIES anywhere in the repo, so those cards
+   carry a name and a link. Inventing a sentence per category to fill them
+   would be the other way to solve it, and it is not better.
+
+   EVERY LINK GOES TO /work, as the situation cards already do — there is no
+   filtered route for any of these. Turning them into real destinations needs
+   one tag per project. See the note on the situation cards. */
+/* SUB-INDUSTRIES, READ OFF THE CLIENT LIST rather than invented. Every one
+   of these is a category the studio has actually shipped into — Zbiotics and
+   Hylands under supplements and personal care, Photon and Heard under
+   digital health, Path Projects and Soft Science under apparel and footwear,
+   J.Jill under retail, Smashburger and Einstein Bagels under restaurants,
+   Smallhold and Big Buoy under packaged food, Arbitrum and Offchain under
+   crypto, Google under technology.
+
+   They also give the industry card something to hold. Without them it is a
+   name and a link in a 4:5 box, which is why a dense variant kept getting
+   proposed for this view. THE GROUPINGS ARE MINE AND UNAPPROVED. */
+const SUB_INDUSTRIES = {
+  'Consumer & Retail': ['CPG', 'Apparel', 'Footwear', 'Retail', 'DTC'],
+  'Food & Beverage': ['Restaurants', 'Packaged food', 'Beverage', 'Hospitality'],
+  'Health & Wellness': ['Supplements', 'Digital health', 'Personal care', 'Fitness'],
+  'Technology & Web3': ['SaaS', 'Crypto', 'Developer tools', 'Fintech'],
+}
+
+const VIEWS = [
+  { id: 'situation', label: 'By situation' },
+  { id: 'industry', label: 'By industry' },
+]
+
 /**
  * `rows` swaps the three cards for a list: name, line, and an arrow that
  * appears on the row you are on. Off by default — /v2 uses the cards.
@@ -63,6 +109,21 @@ export default function AudienceCards({
   rows = false,
   headline = 'Three kinds of brand, one way of working.',
 }) {
+  const [view, setView] = useState('situation')
+
+  /* Industry comes from V3Nav, mapped into the shape the card already takes
+     so there is one loop rather than two. */
+  const shown = view === 'situation'
+    ? cards
+    : WORK_BY_INDUSTRY.map((name) => ({
+      id: name,
+      name,
+      body: null,
+      pills: SUB_INDUSTRIES[name] ?? [],
+      cta: 'See work',
+      href: '/work',
+    }))
+
   if (rows) {
     return (
       <section className={styles.section}>
@@ -86,12 +147,33 @@ export default function AudienceCards({
 
   return (
     <section className={styles.section}>
-      <p className={styles.eyebrow}>{eyebrow}</p>
+      <div className={styles.head}>
+        <p className={styles.eyebrow}>{eyebrow}</p>
+        <div className={styles.views}>
+          {VIEWS.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              className={id === view ? styles.viewOn : styles.view}
+              aria-pressed={id === view}
+              onClick={() => setView(id)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className={styles.row}>
-        {cards.map(({ id, name, body, cta, href }) => (
+        {shown.map(({ id, name, body, pills, cta, href }) => (
           <NavLink key={id} to={href} className={styles.card}>
             <h2 className={styles.name}>{name}</h2>
-            <p className={styles.body}>{body}</p>
+            {body && <p className={styles.body}>{body}</p>}
+            {pills?.length > 0 && (
+              <span className={styles.chips}>
+                {pills.map((p) => <span key={p} className={styles.chip}>{p}</span>)}
+              </span>
+            )}
             <span className={styles.cta}>{cta} →</span>
           </NavLink>
         ))}

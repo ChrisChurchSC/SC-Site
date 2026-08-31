@@ -1,0 +1,80 @@
+/* The section shell only — the cards inside it are Services.module.css's.
+   Every value here is BrandTokens', which is the shell the rest of
+   /services/build and /services/grow use. */
+.section {
+  padding: clamp(48px, 6vw, 96px) clamp(8px, 5vw, 96px);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 clamp(16px, 1.8vw, 24px);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.62));
+  background: var(--label-bg, #161616);
+  padding: var(--label-pad, 6px 10px);
+  border-radius: var(--label-radius, 4px);
+}
+
+.headline {
+  margin: 0;
+  max-width: 30ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.intro {
+  margin: clamp(16px, 1.8vw, 22px) 0 clamp(30px, 4vw, 52px);
+  max-width: 58ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The space an .intro would have left below the headline, so a section with
+   no intro sits on the same rhythm as one with. */
+.grid {
+  margin-top: clamp(30px, 4vw, 52px);
+}
+
+/* BIGGER THAN /services, AND ONLY HERE. The card classes come from
+   Services.module.css and that page keeps its 18/13; these are scoped under
+   .section so two classes beat its one and the override cannot leak back. */
+.section .name {
+  font-size: 22px;
+}
+
+.section .desc {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* The icon sits with the name, so the row stops being space-between and the
+   toggle takes the far edge on its own. */
+.section .summary {
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.section .toggle {
+  margin-left: auto;
+}
+
+.section .icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.section .card {
+  padding: 18px 20px;
+}

@@ -69,6 +69,14 @@ const FALLBACKS = {
     attribution: '[Name], [Role], [Company]',
     placeholder: true,
   },
+  platform: {
+    quote:
+      'We are putting out far more than we used to and it all still sounds ' +
+      'like us. The difference is that nobody is waiting on me to check ' +
+      'every piece of it any more.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
   grow: {
     quote:
       'We used to go quiet between launches. Now there is always something in ' +

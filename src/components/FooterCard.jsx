@@ -7,7 +7,7 @@ import styles from './FooterCard.module.css'
  *
  * IT DOES NOT KNOW ITS OWN LINKS. The columns come in as a prop, built by
  * the page from the very same constants the nav bar renders from —
- * PLATFORM_PAGES, SERVICE_ROWS, WORK_BY_INDUSTRY, COMPANY_COLS. A footer
+ * SERVICE_ROWS, WORK_BY_INDUSTRY, COMPANY_COLS. A footer
  * that keeps its own copy of the site's structure is a footer that is wrong
  * within a month; rename a service once and it changes in the nav panel, on
  * the cards, and down here, together.

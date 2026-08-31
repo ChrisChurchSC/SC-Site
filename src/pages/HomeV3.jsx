@@ -18,20 +18,15 @@ import { SITE_CONFIG_QUERY } from '../lib/queries'
 import { buildDisciplines } from '../data/buildPackages'
 import { growDisciplines } from '../data/growPackages'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
-import TrustMosaic from '../components/TrustMosaic'
 import ContactCTA from '../components/ContactCTA'
-import EmailCaptureForm from '../components/EmailCaptureForm'
 import FooterCard from '../components/FooterCard'
-import V3Nav, { OFFER, FOOTER_COLS, HERO_EYEBROW, HERO } from '../components/V3Nav'
+import V3Nav, { FOOTER_COLS, HERO_EYEBROW, HERO } from '../components/V3Nav'
 import PromoCard from '../components/PromoCard'
 import DotNav from '../components/DotNav'
 import V3Signoff from '../components/V3Signoff'
 import TestimonialWall from '../components/TestimonialWall'
+import WorkIndex from '../components/WorkIndex'
 import StatementCard from '../components/StatementCard'
-import BuildGrowCards from '../components/BuildGrowCards'
-import ComparisonTable from '../components/ComparisonTable'
-import PlatformCards from '../components/PlatformCards'
-import FeaturedWall from '../components/FeaturedWall'
 
 /**
  * Homepage v3 — a third direction, alongside / and /v2.
@@ -60,21 +55,9 @@ let didLoad = false
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
-/**
- * A section and the label that names it. Every passage on this page carries
- * one, so the page can be read by its labels alone.
- *
- * StatementCard and AudienceCards render their own eyebrow — they already
- * had one — so they are NOT wrapped in this; wrapping them would print two.
- */
-function Labelled({ label, children, center = false }) {
-  return (
-    <div className={`${v3.labelled}${center ? ' ' + v3.labelledCenter : ''}`}>
-      <p className={v3.eyebrow}>{label}</p>
-      {children}
-    </div>
-  )
-}
+/* The Labelled wrapper is gone with the last section that used one. It put
+   an eyebrow above a passage; every section left on this page — the hero,
+   the work index, the comparison, the testimonials — renders its own. */
 
 export default function HomeV3() {
   const cal = useCalDrawer()
@@ -103,104 +86,56 @@ export default function HomeV3() {
           gone — so it carries the routes, the booking CTA, and the panel. */}
       <V3Nav />
 
-      {/* 1 — The canvas leads on the claim, not the reel */}
+      {/* THE PAGE IS THE CASE STUDIES NOW.
+
+          The hero stays and everything under it went: the email field it
+          carried, the client wall, and the featured-work rail. That was three
+          screens of claim before the page showed a single thing the studio
+          had made. The claim now sits directly on top of the evidence.
+
+          NO CAPTURE FIELD. The hero carried an email capture control; the
+          nav's Start a project is the ask now, and the page's job above the fold
+          is the sentence rather than a form. (Naming that component here in
+          prose would re-enrol this file as one of its consumers — the style
+          test discovers them by scanning for the name.) */}
+      {/* THE TWO VERBS ARE THE TWO SERVICES, so they are the links to them.
+          HERO in V3Nav stays the plain string — it is the source of the words
+          and anything needing the sentence as text still has it — but the
+          rendered version splits it so "build" and "grow" go where they say.
+          They are also the only navigation above the fold now the capture
+          field is gone. */}
       <StatementCard
         eyebrow={HERO_EYEBROW}
-        statement={HERO}
+        statement={
+          <>
+            We <NavLink className={v3.heroLink} to="/services/build">build</NavLink>
+            {' '}and{' '}
+            <NavLink className={v3.heroLink} to="/services/grow">grow</NavLink> brands.
+            <br />So you can focus on the business.
+          </>
+        }
         support={null}
         as="h1"
         tall
         center
         display
-      >
-        <div className={v3.heroActions}>
-          {/* AN EMAIL FIELD, NOT TWO BUTTONS. "Book a demo" and "See our
-              work" asked a first-time visitor to pick, and the second option
-              is the one that does not generate a lead. One field asks for
-              one thing.
+      />
 
-              It reuses EmailCaptureForm rather than posting on its own: there
-              is a single submission path through submitLead.js, and a test
-              holds every host to defining the six classes the compact variant
-              renders — a page that defines only some of them ships a bare
-              white box on a dark background, which is exactly what happened
-              on /about-us once.
+      {/* The whole roster, the same component /work renders — one source, so
+          the two pages cannot drift. */}
+      <WorkIndex />
 
-              NO INCENTIVE. The reference for this pattern offers $150 for
-              taking a demo; we are not paying that, so the button asks for
-              the demo on its own terms. */}
-          <EmailCaptureForm
-            styles={v3}
-            variant="compact"
-            placeholder="What's your work email?"
-            submitLabel="Book a demo"
-            subject="Homepage v3 — demo request"
-            requestType="v3-hero-demo"
-            confirmMessage="Thanks — we will send over a couple of times to talk."
-          />
-          {/* Operational promise, deliberately minimal: it says what the form
-              does and nothing about how fast anyone replies. Anything about
-              response time is comms-writer's to write and Chris's to keep. */}
-          <p className={v3.heroFormNote}>We'll follow up by email.</p>
-        </div>
-      </StatementCard>
 
-      {/* 2 — Who we have done it for */}
-      {/* Closes the hero. The page's other sections are divided by the rule
-          on the bare Who we are block; the hero had nothing under it, so it
-          ran straight into the wall. Same hairline, same full width. */}
-      <hr className={v3.divider} />
+      {/* WHAT USED TO SIT BETWEEN THE WORK AND THE TESTIMONIALS, all cut:
+          the Services cards (the hero's verbs and the nav both go to those
+          two pages), the platform section (its own product now, its own
+          repository), the Who we are long read, the reel, and the
+          competitive-alternatives table — that one still runs on both
+          service pages, where somebody is already weighing an option.
 
-      {/* The client wall, at the top where the proof belongs.
-
-          It replaces the card bar that used to sit here. That bar was the
-          same twenty names this wall shows, and printing the client list
-          twice on one page halves what either instance is worth — the bar
-          scrolled them past you, the wall lets you read them. */}
-      <TrustMosaic />
-
-      {/* 3 — The offer, in two halves, with the price lines */}
-      <hr className={v3.divider} />
-
-      <Labelled label="[ Services ]" center><BuildGrowCards cards={OFFER} compact /></Labelled>
-
-      {/* The platform, after the offer it supports and before the longer
-          read about who we are. Card layout only — the previews are empty
-          wells; see PlatformCards. */}
-      <hr className={v3.divider} />
-
-      <PlatformCards />
-
-      {/* Who we are is cut. It was the page's one long read — a headline and
-          three paragraphs — and everything around it had become short: four
-          service cards of a clause each, a wall of names, cards with no copy
-          in them yet. It had stopped matching the page it was on. The full
-          version still runs on / and /v2. */}
-
-      {/* 5 — Who it is for. The one section the live page has no version of */}
-      <hr className={v3.divider} />
-
-      {/* Replaces Who we work with. That section sorted the audience by what
-          kind of brand they are; this one answers the question they are
-          actually asking at this point on the page, which is why you rather
-          than the two alternatives. AudienceCards still runs on /v2. */}
-      {/* The work, directly under the platform that made it: the platform
-          section is the only part of this page selling something unbuilt, and
-          following it with six real clients is what keeps it from reading as
-          a pitch deck slide. */}
-      <hr className={v3.divider} />
-
-      <FeaturedWall />
-
-      <hr className={v3.divider} />
-
-      <ComparisonTable />
-
-      {/* 6 — The reel, demoted from hero: the page says it, then shows it */}
-      {/* The reel is cut. It was a full-width film in the middle of a page
-          that now opens on a client wall and carries film nowhere else — the
-          one moving thing on a still page, taking every eye on the way past.
-          It still plays on / and /v2. */}
+          The divider that opened the last of them went too. Two rules with a
+          page gap and nothing between them is a blank band, which is what
+          this was. */}
 
       {/* 9 — The ask */}
       <hr className={v3.divider} />
@@ -218,7 +153,10 @@ export default function HomeV3() {
           running a form and a button at the same visitor. The form and the
           card both still run on / and /v2. */}
       <ContactCTA sub={CLOSING} form={false} bare>
-        <button className={v3.contactCta} onClick={cal.open}>Book a demo</button>
+        {/* The nav carries this too. It asks for the thing the page is for
+            rather than a demo — there is no product to demo on a page that
+            is now the work. */}
+        <button className={v3.contactCta} onClick={cal.open}>Start a project</button>
       </ContactCTA>
 
       {/* The site's routes, grouped, between the ask and the sign-off. It

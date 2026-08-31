@@ -24,7 +24,7 @@
    that section, not a new one competing with it. */
 .headline {
   margin: 0 0 clamp(28px, 3.4vw, 48px);
-  max-width: 22ch;
+  max-width: 36ch;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
   font-size: clamp(26px, 3.2vw, 42px);

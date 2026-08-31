@@ -24,10 +24,13 @@
 .headline {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(24px, 3vw, 42px);
-  line-height: 1.12;
+  font-size: clamp(30px, 4vw, 56px);
+  line-height: 1.1;
   color: rgba(255, 255, 255, 0.92);
-  max-width: 22ch;
+  /* 22ch wrapped a 30-character sentence. Wide enough to hold one line at
+     desktop sizes; it still wraps on a narrow screen rather than overflowing,
+     which is the right failure. */
+  max-width: 34ch;
   margin: 4px 0 28px;
   text-align: center;
   text-wrap: balance;

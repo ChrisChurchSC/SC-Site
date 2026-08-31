@@ -45,7 +45,7 @@
      the CTA pushed to the bottom by margin-top:auto. Three of these are tall
      — at a third of the grid each, roughly 700px — which is the shape asked
      for, not an accident of the copy length. */
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 4 / 5;
   transition: background 0.2s;
 }
 
@@ -172,4 +172,75 @@
 
 @media (prefers-reduced-motion: reduce) {
   .listRow, .listArrow, .listAll { transition: none; }
+}
+
+/* ── THE THREE VIEWS ──────────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: space-between;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Segmented rather than underlined tabs: these switch what the section is
+   listing rather than navigating anywhere, and the section already has an
+   eyebrow doing the labelling. */
+.view,
+.viewOn {
+  padding: 5px 11px;
+  border: 1px solid transparent;
+  border-radius: var(--r-control, 4px);
+  background: none;
+  cursor: pointer;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.view:hover { color: rgba(255, 255, 255, 0.7); }
+
+.viewOn {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.view:focus-visible,
+.viewOn:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 3px;
+}
+
+
+/* ── SUB-INDUSTRY PILLS ──────────────────────────────────────────────────
+   The chip is PlatformOutputs', copied verbatim minus the interactive states
+   — these are labels, not buttons, so they take no cursor, hover or focus
+   ring. Same face, size and radius, so a chip means one thing on this site. */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.chip {
+  padding: 6px 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.62);
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
 }

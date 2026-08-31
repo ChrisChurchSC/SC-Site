@@ -306,3 +306,30 @@
 @media (prefers-reduced-motion: reduce) {
   .statusSpin { animation: none; }
 }
+
+
+/* A WINDOW IN THE OUTPUT COLUMN, CROPPED RATHER THAN SQUEEZED.
+
+   The dashboard's own layout wants about 560px — four stat tiles across a
+   row. Sized down to a narrow column it did not become a small dashboard, it
+   became a broken one: figures clipped mid-digit and every label wrapping to
+   three lines.
+
+   So it keeps its real width and the slot clips it. That is the idiom this
+   site already uses where a panel runs off the edge of the card holding it —
+   it reads as a window onto something larger rather than as a screenshot
+   that has been shrunk. */
+.outVisual {
+  align-self: center;
+  width: 100%;
+  max-width: 310px;
+  height: clamp(360px, 34vw, 470px);
+  overflow: hidden;
+  border-radius: var(--r-surface, 12px);
+}
+
+.outVisual > * {
+  width: 560px;
+  max-width: none;
+  height: 100%;
+}

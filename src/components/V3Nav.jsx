@@ -8,6 +8,10 @@ import {
 
 import styles from '../pages/Home.module.css'
 import v3 from '../pages/HomeV3.module.css'
+/* The twelve disciplines, from the Services page's own COPY — the same
+   export DepartmentPanel renders. Services does not import this file, so
+   there is no cycle. */
+import { DISCIPLINES } from '../pages/Services'
 import LogoWordmark from './LogoWordmark'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
@@ -35,11 +39,6 @@ import { featuredCaseStudies } from '../data/featuredCaseStudies'
    anchors or the pages exist, give each item an href and nothing else here
    changes. */
 export const NAV_LINKS = [
-  // Active now, and behaves like a menu heading: still no href, because there
-  // is no platform page to send anyone to, but it opens its panel on hover
-  // like Services and Company and is no longer dimmed. The chevron says it
-  // does something.
-  { label: 'Platform', href: null, panel: 'platform' },
   { label: 'Services', href: '/services', panel: 'services' },
   { label: 'Case Studies', href: '/work', panel: 'work' },
   { label: 'Company', href: '/about-us', panel: 'company' },
@@ -79,79 +78,42 @@ export const NAV_LINKS = [
  * Confirm or replace the two lists, and give each entry an href once /work
  * can filter. Nothing else here changes.
  * ───────────────────────────────────────────────────────────────────────── */
+/* FOUR, COMBINED DOWN FROM SIX. Consumer & CPG and Retail & Apparel were
+   one question a visitor was being asked twice, and Crypto & Web3 sat beside
+   Technology & SaaS as though a Web3 company were not a technology company.
+
+   THE ROSTER STILL FITS. Consumer & Retail covers Soft Science, Path
+   Projects, J.Jill and Zbiotics; Food & Beverage covers Smashburger,
+   Smallhold, Big Buoy and Einstein Bagels; Health & Wellness covers Hylands,
+   Heard and Photon; Technology & Web3 covers Google, Arbitrum and Offchain.
+   Combining further would put Google and Smashburger in one bucket, which is
+   where a category list stops telling anybody anything.
+
+   THIS DRIVES TWO SURFACES — the Case Studies menu in this nav and the "By
+   industry" view on /services/build — so it is edited here rather than in
+   either of them. */
 export const WORK_BY_INDUSTRY = [
-  'Consumer & CPG',
+  'Consumer & Retail',
   'Food & Beverage',
-  'Crypto & Web3',
   'Health & Wellness',
-  'Technology & SaaS',
-  'Retail & Apparel',
+  'Technology & Web3',
 ]
 
-export const WORK_BY_SIZE = [
+/* STAGE, NOT SIZE. Founder-led, Seed to Series A, Scale-up and Enterprise
+   describe where a company is in its life, which is what a visitor is
+   actually placing themselves against — headcount is a different question and
+   these were never answering it. */
+export const WORK_BY_STAGE = [
   'Founder-led',
   'Seed to Series A',
   'Scale-up',
   'Enterprise',
 ]
 
-/* PLATFORM. STILL A PROPOSAL — there is no platform in this repo, no route
- * for one, nothing in Sanity, and no part of the site a client logs into. A
- * nav item with six children is a claim to have built a thing; that claim is
- * currently untrue and every row below stays unlinked until it is not.
- *
- * REWRITTEN, though. The first six were Overview / Brand system / Asset
- * library / Requests / Reporting / Access — the shelves every SaaS nav has,
- * which described no studio in particular and gave a visitor no reason to
- * care. A platform is only worth a nav item if it does something this studio
- * does and others do not.
- *
- * So these are built on what the studio has actually already built, which is
- * a brand held as a system rather than as a deck:
- *
- *   Repo
- *              — THE STRUCTURE, NOT ITS CONTENTS. This is the correction
- *                worth keeping: the repository is not the strategy, the
- *                verbal, the visual and the agents. Those are what goes in
- *                it. The repository is what holds them so they can be found,
- *                versioned and actually used — which is the part nobody else
- *                sells, because everyone else hands over the contents and
- *                calls it done. Describing it by listing its folders sells a
- *                filing cabinet by naming the paper.
- *                SC-Brand is the working instance of it.
- *   Agents     — six brand-trained subagents exist today, and their defining
- *                property is the one worth selling: each refuses to invent
- *                the thing it would be most tempting to invent, and marks
- *                the gap instead.
- *   Reviews    — the sync CLI already works this way. A push opens a numbered
- *                review and writes nothing live; merging is a person's job.
- *   Memory     — REPLACED GUARDRAILS IN THIS LIST and went unargued for a
- *                while, so: the repo already holds every decision with its
- *                reasoning beside it, a date, and the option that was
- *                rejected — Strategy/README.md keeps the v1 proposal it threw
- *                out, and tone-of-voice.md strikes and dates a decision
- *                rather than deleting it. Every file carries an Open
- *                decisions section addressed to whoever can close it. That is
- *                the row: not history, which Repo covers, and not approval,
- *                which Reviews covers, but the REASON surviving the person
- *                who had it.
- *                Guardrails, which this replaced, was the same discipline as
- *                the '––' placeholders on this site: a claim without a
- *                source does not ship. It is not gone, it is the markers
- *                inside Memory.
- *
- * Library and Measurement stay, because a brand system needs somewhere for
- * the output to live and some account of whether it worked — but they are the
- * two least differentiated of the six and the first to cut if this shortens.
- */
-export const PLATFORM_PAGES = [
-  { name: 'Repo', Icon: FolderGit2, href: '/platform/repo', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
-  { name: 'Agents', Icon: Bot, href: '/platform/agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
-  { name: 'Memory', Icon: BookMarked, href: '/platform/memory', note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
-  { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },
-  { name: 'Library', Icon: LayoutGrid, note: 'Every asset we have made, in use and findable.' },
-  { name: 'Measurement', Icon: ChartNoAxesColumn, href: '/platform/measurement', note: 'What shipped, and what it moved.' },
-]
+/* The Platform menu, its six pages and the argument for them were removed
+   when the platform was cut from this site. It is its own product now and
+   lives in its own repository; a studio site carrying a nav for something it
+   does not sell was the thing to fix. See git history for what was here. */
 
 /* Company's panel, in three columns.
  *
@@ -202,38 +164,24 @@ export const COMPANY_COLS = [
    the live homepage has that the other way round because it has no headline
    above the statement. */
 export const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
-/* Warmer than "We're Super-Conscious. We build and grow brands.", which
-   introduced the studio and then described the transaction. This keeps the
-   build/grow structure — it is the whole offer, and the two cards below run
-   on it — but puts the reason first: belief, then reach. "Impossible to
-   ignore" is not a flourish either; it is the underdog case this page
-   already makes further down, in the brand "in a crowded category that needs
-   to stand out". */
-/* WRITTEN, NOT SOURCED — a proposal, like the Support and Represent lines.
+/* THE PLAINEST VERSION, and Chris's call.
  *
- * On the shape of Air's "Air keeps track. So you keep creating.", not its
- * words: an eyebrow that names the category, then two beats — what we do,
- * then what that frees the reader to do. The turn is the whole line; the
- * second beat has to be about them or the sentence is just a boast with a
- * conjunction in it.
+ * The history is worth keeping because this line has been round the houses.
+ * It has been the problem stated back ("Your brand is stitched together from
+ * vendors who never meet."), then a two-beat turn on the shape of Air's "Air
+ * keeps track. So you keep creating." — "We build the brand and run it. So
+ * you can run the business." Both are in git.
  *
- * Both halves are the site's own: Build says "we make your brand and its
- * assets", Grow says "we take that brand to market and run it". Run it is
- * their word, not a new claim.
+ * This keeps the two-beat turn but names the offer plainly in the first
+ * beat: what we do, then what it frees them to do. "Focus on" rather than
+ * "run" — they are running the business either way; what they get back is
+ * their attention.
  *
- * NO SUPPORTING LINE. The hero is the eyebrow, the headline and the actions.
- * The line that was here explained the offer before anyone had asked; the
- * headline says it in two beats and the Who we are block further down says
- * it in full. Saying it three times was the problem.
+ * Both halves are still the site's own: Build "makes your brand and its
+ * assets", Grow "takes that brand to market and runs it".
  *
- * NOTE — THIS IS A DIFFERENT MOVE FROM THE LAST ONE. The previous headline
- * stated the problem ("Your brand is stitched together from vendors who never
- * meet."), which made the reader recognise something before we claimed
- * anything. This one leads with what we do and pays it off with what they
- * get. Both are in the history; neither is more correct, and which one is
- * right depends on whether the page is for people who already know they have
- * the problem. */
-export const HERO = "We build the brand and run it. So you can run the business."
+ * NO SUPPORTING LINE. The hero is the eyebrow and the headline. */
+export const HERO = "We build and grow brands. So you can focus on the business."
 
 /* THE FOUR SERVICES, as cards.
  *
@@ -271,9 +219,9 @@ export const OFFER = [
     /* Names the brand platform, which is a real service — 'Brand platform'
        is one of the named services in serviceConstants, alongside brand
        strategy, brand sprint, brand refresh and brand system. It is the
-       strategy deliverable, not the software one in the Platform section
-       below; the two share a word and are not the same thing, which is worth
-       watching if this page ever says both out loud in the same breath.
+       strategy deliverable. It used to collide with the software product of
+       the same name in the Platform menu; that menu is gone, so the word is
+       unambiguous here again.
 
        40 characters, dropping the 'its'. Measured rather than guessed: the
        card body box is 294px and wraps past about 41 characters — Grow sits
@@ -321,7 +269,6 @@ const USE_CASES = [
 ]
 
 export const FOOTER_COLS = [
-  { tag: 'Platform', links: PLATFORM_PAGES.map(({ name, href }) => ({ label: name, href })) },
   {
     tag: 'Services',
     links: [
@@ -332,6 +279,17 @@ export const FOOTER_COLS = [
   },
   /* After Services, because a use case is a way into the same four. */
   { tag: 'Use cases', row: 2, links: USE_CASES.map(label => ({ label })) },
+  /* WHAT IS ACTUALLY IN THE DEPARTMENT. Services and Use cases both say what
+     you buy; this says what the studio can do, which is the one thing the
+     footer never listed. Read from Services' COPY rather than retyped, so
+     renaming a discipline changes it on /services, in DepartmentPanel and
+     here at once.
+
+     NO LINKS. There is no page per discipline, and the footer's own rule is
+     that an entry without a page is text rather than a thirty-first link to
+     /services — see the note at the top of FooterCard. Give them hrefs the
+     day the pages exist. */
+  { tag: 'Disciplines', row: 2, links: DISCIPLINES.map(({ name }) => ({ label: name })) },
   {
     tag: 'Case studies',
     links: [
@@ -339,7 +297,7 @@ export const FOOTER_COLS = [
       ...WORK_BY_INDUSTRY.map(label => ({ label })),
     ],
   },
-  { tag: 'By company size', links: WORK_BY_SIZE.map(label => ({ label })) },
+  { tag: 'By company stage', links: WORK_BY_STAGE.map(label => ({ label })) },
   ...COMPANY_COLS.map(({ tag, links }) => ({
     tag,
     ...(tag === 'Socials' ? { row: 3 } : null),
@@ -479,7 +437,7 @@ export default function V3Nav() {
               {/* THE SMALL-SCREEN MENU BUTTON. Below 860px the link row is
                   display: none, and until now nothing replaced it — Services,
                   Case Studies, Company and Pricing were simply unreachable from
-                  this page on a phone. A wordmark and a Book a demo button is
+                  this page on a phone. A wordmark and a Start a project button is
                   not navigation. */}
               <button
                 type="button"
@@ -508,7 +466,7 @@ export default function V3Nav() {
                     and Pricing get. Give it an href when there is a client area
                     to log in to. */}
                 <span className={`${v3.navLink} ${v3.navLinkFlat}`} onMouseEnter={() => openPanel(null)}>Log in</span>
-                <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => openPanel(null)}>Book a demo</button>
+                <button className={v3.navCta} onClick={cal.open} onMouseEnter={() => openPanel(null)}>Start a project</button>
               </div>
             </div>
 
@@ -519,10 +477,19 @@ export default function V3Nav() {
               <div className={`${v3.panel} ${v3.panelService}`}>
                 <div className={v3.svcIntro}>
                   <p className={v3.panelTag}>[ The Service ]</p>
-                  {/* The site's own descriptor for Services — the wording the
-                      nav card uses on / and /v2. Not a new claim written for a
-                      menu. */}
-                  <p className={v3.svcStatement}>Build the brand, then grow it.</p>
+                  {/* Chris's line, already the headline of the "How we work"
+                      section on both /services/build and /services/grow —
+                      not a new claim written for a menu. It replaced "Build
+                      the brand, then grow it.", which said what the two
+                      services are and is still what the numbered rows on the
+                      right of this panel say; this says what the studio is,
+                      which is the thing the rows cannot.
+
+                      THE OLD LINE IS STILL IN Nav.jsx, on the legacy nav's
+                      Services card. The two navs now disagree. That one is not
+                      on the v3 routes, so it is left alone rather than edited
+                      blind — but it is the other place this sentence lives. */}
+                  <p className={v3.svcStatement}>Your fractional creative and marketing department.</p>
                   <NavLink to="/services" className={v3.svcIntroCta}>See all services →</NavLink>
                 </div>
 
@@ -552,39 +519,26 @@ export default function V3Nav() {
               </div>
             )}
 
-            {openMenu === 'platform' && (
-              <div className={`${v3.panel} ${v3.panelService}`}>
-                <div className={v3.svcIntro}>
-                  <p className={v3.panelTag}>[ The Platform ]</p>
-                  <p className={v3.svcStatement}>One place to run the brand.</p>
-                  {/* Unlinked, like everything else in this panel. */}
-                  <span className={`${v3.svcIntroCta} ${v3.svcIntroCtaFlat}`}>Coming soon</span>
-                </div>
-
-                <div className={`${v3.svcGrid} ${v3.svcGridTwo}`}>
-                  {PLATFORM_PAGES.map(({ name, note, Icon, href }) => {
-                    const inner = (
-                      <>
-                        <span className={v3.svcIcon}>
-                          {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden="true" />}
-                        </span>
-                        <span className={v3.svcBody}>
-                          <span className={v3.svcName}>{name}</span>
-                          <span className={v3.svcNote}>{note}</span>
-                        </span>
-                      </>
-                    )
-                    return href
-                      ? <NavLink key={name} to={href} className={v3.svcRow}>{inner}</NavLink>
-                      /* No page yet, so no link and no hover. */
-                      : <span key={name} className={`${v3.svcRow} ${v3.svcRowFlat}`}>{inner}</span>
-                  })}
-                </div>
-              </div>
-            )}
 
             {openMenu === 'company' && (
-              <div className={`${v3.panel} ${v3.panelCompany}`}>
+              /* SAME SHAPE AS CASE STUDIES: a statement on the left, the
+                 links on the right. It was columns alone, which made it the
+                 one panel that opened without saying what it was — the other
+                 two both lead with a tag, a line and a way in.
+
+                 THE LINE IS WAYFINDING, NOT A CLAIM. There is no descriptor
+                 for Company anywhere in the repo the way there is for
+                 Services and Work, and inventing one would be inventing
+                 positioning in a menu. This says what is behind the menu and
+                 nothing more. */
+              <div className={`${v3.panel} ${v3.panelService}`}>
+                <div className={v3.svcIntro}>
+                  <p className={v3.panelTag}>[ The Studio ]</p>
+                  <p className={v3.svcStatement}>Who we are, and how to reach us.</p>
+                  <NavLink to="/about-us" className={v3.svcIntroCta}>About the studio →</NavLink>
+                </div>
+
+                <div className={v3.coCols}>
                 {COMPANY_COLS.map(({ tag, links }) => (
                   <div key={tag} className={v3.coCol}>
                     <p className={v3.panelTag}>{tag}</p>
@@ -601,6 +555,7 @@ export default function V3Nav() {
                     })}
                   </div>
                 ))}
+                </div>
               </div>
             )}
 
@@ -652,8 +607,8 @@ export default function V3Nav() {
                       ))}
                     </div>
                     <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
-                      <p className={v3.panelTag}>By company size</p>
-                      {WORK_BY_SIZE.map(s => (
+                      <p className={v3.panelTag}>By company stage</p>
+                      {WORK_BY_STAGE.map(s => (
                         <NavLink key={s} to="/work" className={v3.proofLink}>{s}</NavLink>
                       ))}
                     </div>

@@ -42,10 +42,16 @@ import { tabs } from '../data/pricingTabs'
 /* THE DEFAULT SET: the project tiers, for a service bought as projects.
    A caller can hand over its own cards instead — see the `cards` prop.
 
-   Brand is cut here and only here: still a tier, still on /pricing.
-   Excluded by name rather than index so reordering the tiers cannot
-   silently drop a different one. */
-const CUT = new Set(['Brand'])
+   Brand platform is cut here, and only here: still a tier, still on /pricing
+   where it now leads, and with a section of its own further up this page — so
+   listing it again in "what it extends to" was the page saying it twice.
+
+   MATCH THIS TO THE TIER NAME. The set excludes by name, so renaming the tier
+   in pricingTabs without renaming it here silently puts it back.
+
+   Excluded by name rather than index so reordering the tiers cannot silently
+   drop a different one. */
+const CUT = new Set(['Brand platform'])
 
 const projectCards = tabs
   .find((t) => t.id === 'project')
@@ -63,7 +69,7 @@ const projectCards = tabs
  * keyboard without anything extra. aria-pressed carries the state, and the
  * well is aria-live so a screen reader hears the change it just made.
  */
-function Card({ kicker, name, summary, items, note }) {
+export function Card({ kicker, name, summary, items, note, footer }) {
   const [active, setActive] = useState(0)
 
   return (
@@ -91,6 +97,7 @@ function Card({ kicker, name, summary, items, note }) {
       </div>
 
       {note && <p className={styles.footnote}>{note}</p>}
+      {footer}
     </article>
   )
 }
@@ -100,7 +107,12 @@ export default function PlatformOutputs({ cards }) {
 
   return (
     <section className={styles.section} aria-labelledby="what-it-makes">
-      <p className={styles.eyebrow}>[ What you get ]</p>
+      {/* Pairs with the section above it: that one is what a brand platform
+          is made of, this one is how far it reaches. Grow renders the same
+          component with its own cards, where the label reads as what the
+          hours produce rather than as an extension of the platform — worth
+          watching if this label is ever made per-service. */}
+      <p className={styles.eyebrow}>[ Everything a brand platform extends to ]</p>
       <h2 className={styles.headline} id="what-it-makes">
         Everything the brand shows up as.
       </h2>

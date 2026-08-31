@@ -45,6 +45,7 @@ const TOKEN_ICONS = {
 
 import styles from './FlowDiagram.module.css'
 import RepoWindow from './RepoWindow'
+import VisualSystemWindow from './VisualSystemWindow'
 
 /**
  * The hero diagram: what goes into the platform, and what comes out.
@@ -179,6 +180,13 @@ export default function FlowDiagram({
   inputs = REPO_INPUTS,
   inputsLabel = 'What goes in',
   centreVisual = null,
+  /* A WINDOW ON THE RIGHT INSTEAD OF CARDS. Grow's story is three stages —
+     the platform, then the content it produces, then the dashboard that
+     reads it — and the last of those is a screen, not a list of names.
+
+     The wire code maps over the column's children, so a single child draws a
+     single wire to it and nothing else has to change. */
+  outputsVisual = null,
 }) {
   const flowRef = useRef(null)
   const [wires, setWires] = useState(null)
@@ -275,10 +283,14 @@ export default function FlowDiagram({
         <Column label={inputsLabel} groups={inputs} sync />
 
         <div className={`${styles.centreSlot}${centreVisual ? '' : ' ' + styles.centreSlotRepo}`}>
-          {centreVisual ?? <RepoWindow label={centre} />}
+          {centreVisual ?? (centre === 'Visual'
+            ? <VisualSystemWindow />
+            : <RepoWindow label={centre} />)}
         </div>
 
-        <Column label="What comes out" groups={outputs} />
+        {outputsVisual
+          ? <div className={styles.outVisual}>{outputsVisual}</div>
+          : <Column label="What comes out" groups={outputs} />}
       </div>
     </div>
   )

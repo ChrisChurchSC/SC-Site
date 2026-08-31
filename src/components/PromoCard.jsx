@@ -73,7 +73,7 @@ export default function PromoCard({ onBook }) {
         Repo, agents and approvals. Not built yet — but the team
         behind it is.
       </p>
-      <button className={styles.cta} onClick={onBook}>Book a demo</button>
+      <button className={styles.cta} onClick={onBook}>Start a project</button>
     </aside>
   )
 }

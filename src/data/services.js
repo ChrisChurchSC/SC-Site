@@ -31,7 +31,11 @@ export const services = [
   {
     slug: 'build',
     name: 'Build',
-    tagline: 'Everything you need to go to market, and the system that keeps it working.',
+    tagline: 'We make your brand and its assets, from scratch or refreshed from what you have.',
+    /* The second half of Chris's sentence, after the colon. Rendered as a
+       list under the heading rather than run into it — six nouns in a row at
+       h1 size read as a headline that has lost control of itself. */
+    makes: ['Brand strategy', 'Identity', 'Voice', 'Messaging', 'Website', 'App'],
     intro:
       'These are typically one-time projects: you build a brand, you build a website, etc. ' +
       'However, ongoing refreshes and refinements are common. Brands aren’t static. When ' +
@@ -45,7 +49,13 @@ export const services = [
     pillars: [
       {
         n: '01',
-        name: 'Website & App',
+        /* "Website & App" until App was cut from both service pages. The
+           deliverable list below still holds Mobile App and Web App — they
+           are real things the studio builds, and they are what /pricing
+           sells under this tier. If App is meant to be gone as a capability
+           rather than as a card, those two lines go as well and that is a
+           decision about the offer rather than about a page. */
+        name: 'Website',
         media: 'placeholder',
         status: 'done',
         items: ['Brochure Website', 'Microsite', 'Landing Pages', 'Ecom Site', 'Mobile App', 'Web App', 'SEO/AEO', 'Development', 'Integrations', 'Analytics', 'Deployment'],
@@ -103,7 +113,7 @@ export const services = [
       },
       {
         n: '02',
-        name: 'Website & App',
+        name: 'Website',
         items: ['Conversion Optimization', 'Landing Pages', 'A/B Testing', 'New Features', 'Performance', 'Ongoing SEO/AEO'],
         why: 'The site stops being a launch and becomes something you tune every month.',
       },

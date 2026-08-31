@@ -146,11 +146,25 @@
   overflow: hidden;
 }
 
+/* WIDER THAN ITS COLUMN, so the panel's right edge cuts it rather than
+   framing it. The panel already has padding-right: 0 and overflow: hidden;
+   at exactly 100% the window merely stopped at the edge, which reads as a
+   picture that happens to be flush. Running it past reads as a window onto
+   something larger — the same trick the measurement page's sources card
+   uses. */
 .visual > * {
-  width: 100%;
+  /* Far enough past the edge to read as a crop. At +76px it sat flush and
+     looked like a window that happened to end there. */
+  width: calc(100% + clamp(70px, 9vw, 190px));
   height: clamp(440px, 42vw, 580px);
   min-width: 0;
   max-width: none;
+}
+
+/* Not on a stacked layout: cropping the right of a full-width window there
+   just loses the last column of the table. */
+@media (max-width: 900px) {
+  .visual > * { width: 100%; }
 }
 
 @media (max-width: 900px) {

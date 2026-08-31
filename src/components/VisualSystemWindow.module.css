@@ -1,0 +1,490 @@
+/* VisualSystemWindow — the foundations board at the centre of Build's
+   diagram. Chrome is the site's window chrome, unchanged: same head, same
+   crumb, same tab row as RepoWindow and the rest. Only the board is new. */
+
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-surface, 12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+}
+
+.crumbMuted { color: rgba(255, 255, 255, 0.38); }
+.slash { color: rgba(255, 255, 255, 0.22); }
+.name { color: rgba(255, 255, 255, 0.88); }
+
+.badge {
+  margin-left: auto;
+  padding: 3px 9px;
+  border: 1px solid rgba(223, 78, 214, 0.45);
+  border-radius: var(--r-control, 4px);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink, #df4ed6);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+}
+
+.tab { color: rgba(255, 255, 255, 0.3); }
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+  padding-bottom: 3px;
+}
+
+.version { margin-left: auto; font-size: 10px; color: rgba(255, 255, 255, 0.3); }
+
+/* A bento rather than an even grid: the cells hold different amounts and a
+   uniform grid would leave the palette cramped beside an empty photography
+   well. Hairlines between, no gaps — a design system board reads as one
+   sheet ruled into areas rather than as tiles. */
+.board {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  grid-auto-rows: minmax(0, auto);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px 15px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+  /* Both needed: the height is fixed by the diagram's centre column, and
+     without these a tall cell paints over the row beneath instead of being
+     contained by it. */
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cell:nth-child(2n) { border-right: 0; }
+
+/* The palette takes the full width: four swatches and four hex labels in a
+   half-width cell set the hexes at 8px and still clipped them. */
+.cellPalette {
+  grid-column: 1 / -1;
+  border-right: 0;
+}
+
+/* The last row closes on the window's own border. */
+.cellIcons,
+.cellGrid { border-bottom: 0; }
+
+.label {
+  font-family: "Roboto Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+/* ── Logomark and logotype ─────────────────────────────────────────────── */
+
+.markWrap,
+.wordWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  padding: 6px 0;
+}
+
+.mark {
+  width: clamp(34px, 4vw, 54px);
+  height: auto;
+  color: #fff;
+}
+
+.wordWrap > svg { max-width: min(100%, 220px); }
+
+/* ── Type ─────────────────────────────────────────────────────────────── */
+
+.serif {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 2.2vw, 28px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.mono {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Palette ──────────────────────────────────────────────────────────── */
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.swatchWrap { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+
+.swatch {
+  height: 26px;
+  border-radius: var(--r-control, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hex {
+  font-family: "Roboto Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── UI ───────────────────────────────────────────────────────────────── */
+
+.btnFilled,
+.btnGhost,
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: var(--r-control, 4px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.btnFilled { background: var(--pink, #df4ed6); color: #0a0a0a; }
+
+.btnGhost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.field {
+  justify-content: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.uiRow { display: flex; align-items: center; gap: 9px; }
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  width: 34px;
+  height: 18px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--pink, #df4ed6);
+}
+
+.knob {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.chip {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(78, 207, 179, 0.5);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: var(--teal, #4ecfb3);
+}
+
+/* ── Wells. Empty and flagged: there is no artwork in this repo. ───────── */
+
+.well {
+  flex: 1;
+  min-height: 72px;
+  border-radius: var(--r-control, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+
+.wellSmall {
+  display: flex;
+  align-items: flex-end;
+  min-height: 46px;
+  padding: 6px;
+  border-radius: var(--r-control, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wellName {
+  font-family: "Roboto Mono", monospace;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Icons and grid ───────────────────────────────────────────────────── */
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.icon { width: 17px; height: 17px; color: rgba(255, 255, 255, 0.7); flex: none; }
+
+.rule {
+  display: block;
+  height: 1px;
+  margin: 4px 0 2px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--pink, #df4ed6) 0 10px,
+    transparent 10px 18px
+  );
+}
+
+@media (max-width: 700px) {
+  .board { grid-template-columns: minmax(0, 1fr); }
+  .cell { border-right: 0; }
+}
+
+/* ── VERBAL AND AUDIO ─────────────────────────────────────────────────── */
+
+/* Verbal has no pairs to sit side by side — a principle list and a banned
+   word list are both full-width things — so its cells span the board. */
+.cellWide {
+  grid-column: 1 / -1;
+  border-right: 0;
+}
+
+.cellLast { border-bottom: 0; }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.word {
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+/* Struck through, because that is what the list means. */
+.struck {
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: line-through;
+  text-decoration-color: rgba(223, 78, 214, 0.7);
+}
+
+.quote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 17px);
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* THE EMPTY STATE IS THE POINT, so it is composed rather than a shrug. */
+.empty {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 18px 16px;
+  overflow: hidden;
+}
+
+.emptyLead {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2vw, 24px);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.emptyNote {
+  max-width: 46ch;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.emptyRows {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.emptyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.undef {
+  padding: 2px 7px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--r-control, 4px);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+/* The tabs are buttons now. */
+.tab,
+.tabOn {
+  padding: 0 0 3px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.tab:hover { color: rgba(255, 255, 255, 0.6); }
+
+.tab:focus-visible,
+.tabOn:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 3px;
+}
+
+/* ── VERBAL, laid out rather than listed ───────────────────────────────────
+   Four identical chip rows read as one undifferentiated block. The test
+   leads because tone-of-voice.md says it outranks everything else; the
+   principles are numbered because they are numbered in the file; and the two
+   word lists sit side by side because they are the same kind of thing —
+   words in, words out. */
+
+.verbal {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.verbalLead {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.quoteNote {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.verbalRow {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.principle {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pn {
+  flex: none;
+  font-size: 8.5px;
+  color: var(--pink, #df4ed6);
+}
+
+.verbalSplit {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.verbalSplit > div {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 16px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.verbalSplit > div:first-child { border-right: 1px solid rgba(255, 255, 255, 0.08); }
+
+/* ── AUDIO ────────────────────────────────────────────────────────────── */
+
+.empty { justify-content: center; }
+
+.emptyRows { margin-top: 10px; }
