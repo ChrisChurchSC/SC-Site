@@ -39,29 +39,32 @@ const POINTS = [
 export default function EmbedSection() {
   return (
     <section className={styles.section} aria-labelledby="embed">
-      <div className={styles.copy}>
-        <p className={styles.eyebrow}>[ Embedded ]</p>
-        <h2 className={styles.headline} id="embed">
-          Our people inside your team, not alongside it.
-        </h2>
-        <p className={styles.body}>
+      <div className={styles.panel}>
+        <div className={styles.copy}>
+          <p className={styles.eyebrow}>[ Embedded ]</p>
+          <h2 className={styles.headline} id="embed">
+            Our people inside your team, not alongside it.
+          </h2>
+          <p className={styles.body}>
           The platform produces the work; somebody still has to run it. That is the
           arrangement here — our team in your tools, on your problems, until running it is
           something your people do without us in the room.
         </p>
 
-        <dl className={styles.points}>
+          <dl className={styles.points}>
           {POINTS.map(({ key, line }) => (
             <div key={key} className={styles.point}>
               <dt className={styles.pointKey}>{key}</dt>
               <dd className={styles.pointLine}>{line}</dd>
             </div>
           ))}
-        </dl>
-      </div>
+          </dl>
+        </div>
 
-      <div className={styles.visual}>
-        <AdoptWindow />
+        {/* Cropped by the panel's right edge rather than framed by it. */}
+        <div className={styles.visual}>
+          <AdoptWindow />
+        </div>
       </div>
     </section>
   )
