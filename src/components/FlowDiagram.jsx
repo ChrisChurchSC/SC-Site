@@ -68,7 +68,13 @@ function Column({ label, groups, sync = false }) {
               image once there is one — the card's shape does not change when
               the real picture arrives. Decorative either way: the name beside
               it is the label. */}
-          {media === 'placeholder' && <span className={styles.mediaFill} aria-hidden="true" />}
+          {media === 'placeholder' && (
+            <span className={styles.bento} aria-hidden="true">
+              <span className={`${styles.tile} ${styles.tileLandscape}`} />
+              <span className={`${styles.tile} ${styles.tileSquare}`} />
+              <span className={`${styles.tile} ${styles.tileStory}`} />
+            </span>
+          )}
           {media && media !== 'placeholder' && (
             <img className={styles.media} src={media} alt="" loading="lazy" />
           )}
