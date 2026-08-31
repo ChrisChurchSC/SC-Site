@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Boxes, Layers, Repeat } from 'lucide-react'
+import { Globe, Megaphone, Share2, Sparkles } from 'lucide-react'
 
 import styles from './BuiltInSection.module.css'
 import DesignWindow from './DesignWindow'
@@ -65,12 +65,29 @@ function Chromed({ chrome, children }) {
 }
 
 const POINTS = [
-  { Icon: Boxes, key: 'Built', line: 'Brand, site, app, campaign, channels.' },
-  { Icon: Layers, key: 'Put in the platform', line: 'Not handed over as a folder of files.' },
-  { Icon: Repeat, key: 'So it keeps working', line: 'Usable by anyone, past the launch.' },
+  {
+    Icon: Sparkles,
+    key: 'Brand',
+    line: 'Positioning, identity, voice — the source everything else has to be right against.',
+  },
+  {
+    Icon: Globe,
+    key: 'Website & app',
+    line: 'Where people actually meet it, built to change without starting over.',
+  },
+  {
+    Icon: Megaphone,
+    key: 'Campaign',
+    line: 'What takes it to market, drawn from the brand rather than invented beside it.',
+  },
+  {
+    Icon: Share2,
+    key: 'Channels',
+    line: 'Where it keeps showing up once the launch is over.',
+  },
 ]
 
-const SHUFFLE_MS = 3200
+const SHUFFLE_MS = 6500
 
 export default function BuiltInSection() {
   const [front, setFront] = useState(0)
@@ -113,11 +130,11 @@ export default function BuiltInSection() {
         <div className={styles.copy}>
           <p className={styles.eyebrow}>[ What we build ]</p>
           <h2 className={styles.headline} id="built-in">
-            We build it, then we put it in the platform.
+            What we build, and why it all goes in one place.
           </h2>
           <p className={styles.body}>
-            The brand, the site and app, the campaign, the channels — and then all of it into
-            one place, where it can be used by people who were not in the room.
+            Four things, built to work together — and put in the platform rather than handed
+            over, so whoever picks them up next can use them without asking us.
           </p>
 
           <dl className={styles.points}>
