@@ -53,6 +53,14 @@ const FALLBACKS = {
     attribution: '[Name], [Role], [Company]',
     placeholder: true,
   },
+  repo: {
+    quote:
+      'Everything about the brand is in one place now, and I can see who changed ' +
+      'what and why. We stopped having the same argument every quarter because ' +
+      'the answer is written down.',
+    attribution: '[Name], [Role], [Company]',
+    placeholder: true,
+  },
   grow: {
     quote:
       'We used to go quiet between launches. Now there is always something in ' +

@@ -133,7 +133,7 @@ export const WORK_BY_SIZE = [
  * two least differentiated of the six and the first to cut if this shortens.
  */
 export const PLATFORM_PAGES = [
-  { name: 'Repo', Icon: FolderGit2, note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
+  { name: 'Repo', Icon: FolderGit2, href: '/platform/repo', note: 'The structure that holds everything the brand is made of, and keeps it usable.' },
   { name: 'Agents', Icon: Bot, href: '/platform/agents', note: 'Trained on your brand. They draft in your voice and refuse to invent claims.' },
   { name: 'Memory', Icon: BookMarked, note: 'What was decided, what shipped, and why — so nothing is reinvented twice.' },
   { name: 'Reviews', Icon: CheckCheck, note: 'Every change is proposed, and a person approves it.' },

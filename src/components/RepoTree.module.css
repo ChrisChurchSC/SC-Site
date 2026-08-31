@@ -1,0 +1,127 @@
+/* The five directories — see RepoTree.jsx. A list of rows on the page's own
+   measure rather than a window, because this is the structure itself and not
+   a screenshot of somewhere it is shown. */
+
+.section {
+  padding: clamp(48px, 6vw, 96px) clamp(8px, 5vw, 96px);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: clamp(28px, 3.4vw, 48px);
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.62));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+}
+
+.headline {
+  margin: 0;
+  max-width: 20ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3.6vw, 50px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.intro {
+  margin: clamp(14px, 1.6vw, 20px) 0 0;
+  max-width: 56ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* A row per directory: the name, what it is for, and the files under it. The
+   grid is what keeps five rows reading as one table rather than five cards. */
+.row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 0.9fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(14px, 2vw, 32px);
+  padding: clamp(18px, 2.2vw, 28px) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.naming { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+.dir {
+  font-family: "Roboto Mono", monospace;
+  font-size: clamp(13px, 1.1vw, 16px);
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.what {
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.note {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.files { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+
+/* The same token as the hero diagram's chips, so a filename looks like a
+   filename wherever it appears. */
+.file {
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 34px minmax(0, 1fr);
+    row-gap: 10px;
+  }
+  .note, .files { grid-column: 2; }
+}

@@ -1,0 +1,114 @@
+/* The three cards under the repo hero — see RepoCards.jsx. Card chrome comes
+   from PlatformCards; everything here is what goes in the well. */
+
+.rowThree {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  padding: 14px 15px;
+  border-radius: 10px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.paneHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.path {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Teal for a state that is fine. Pink on this site means the one thing being
+   pointed at, and none of these three is that. */
+.ok {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(78, 207, 179, 0.4);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: var(--teal, #4ecfb3);
+}
+
+/* ── ONE SOURCE ─────────────────────────────────────────────────────────── */
+
+.lines { display: flex; flex-direction: column; gap: 9px; }
+
+.fileRow {
+  display: flex;
+  gap: 2px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.dir { color: rgba(255, 255, 255, 0.38); }
+.file { color: rgba(255, 255, 255, 0.82); }
+
+/* ── REVIEWS AND AGENTS ─────────────────────────────────────────────────── */
+
+.rows { display: flex; flex-direction: column; gap: 10px; }
+
+.review {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 9px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.reviewNum { color: rgba(255, 255, 255, 0.32); }
+.reviewName { color: rgba(255, 255, 255, 0.8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.stateOpen { color: var(--pink, #df4ed6); text-align: right; }
+.stateDone { color: rgba(255, 255, 255, 0.35); text-align: right; }
+
+.agentRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+}
+
+.tick { color: var(--teal, #4ecfb3); flex: none; }
+
+.foot {
+  margin: auto 0 0;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 860px) {
+  .rowThree { grid-template-columns: minmax(0, 1fr); }
+}

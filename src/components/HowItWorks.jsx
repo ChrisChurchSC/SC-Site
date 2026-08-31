@@ -105,6 +105,37 @@ const SETS = {
     loops: true,
   },
 
+  repo: {
+    headline: 'Nothing changes the brand until somebody says so.',
+    steps: [
+      {
+        n: '01',
+        name: 'Pull it',
+        visual: 'repo',
+        note: 'The whole brand as files — on your machine, in the app, or open in Claude.',
+      },
+      {
+        n: '02',
+        name: 'Change something',
+        visual: 'draft',
+        note: 'You edit it, or an agent drafts against it. Either way the change is to a file, not to a slide somebody has a copy of.',
+      },
+      {
+        n: '03',
+        name: 'Propose it',
+        visual: 'diff',
+        note: 'A push opens a numbered review holding what the files would become. It writes nothing live, and it refuses to run over a conflict rather than picking a winner.',
+      },
+      {
+        n: '04',
+        name: 'Merge it',
+        visual: 'review',
+        note: 'A person approves, and it is in — with a date, a name and a diff you can read later.',
+      },
+    ],
+    loops: true,
+  },
+
   build: {
     headline: 'Defined, designed, encoded — and in the hands of the people who use it.',
     steps: [
