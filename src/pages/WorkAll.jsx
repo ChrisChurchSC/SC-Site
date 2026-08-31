@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './WorkAll.module.css'
 import { caseStudies, SHOW_COVERS } from '../data/caseStudies'
+import CaseFacts from '../components/CaseFacts'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import FooterCard from '../components/FooterCard'
 import V3Signoff from '../components/V3Signoff'
@@ -149,9 +150,7 @@ export default function WorkAll() {
               </span>
               <span className={styles.client}>{s.name}</span>
               <span className={styles.tagline}>{s.tagline}</span>
-              <span className={styles.meta}>
-                {s.type}<span className={styles.sep}> / </span>{s.year}
-              </span>
+              <CaseFacts study={s} />
             </NavLink>
           ))}
         </div>

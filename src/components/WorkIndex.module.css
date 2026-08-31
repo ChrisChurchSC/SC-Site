@@ -3,8 +3,8 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(12px, 1.4vw, 20px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px) clamp(12px, 1.4vw, 20px);
   align-items: start;
 }
 
@@ -15,8 +15,10 @@
   display: block;
   overflow: hidden;
   border-radius: var(--r-surface, 12px);
-  /* Tall, so it stands against two rows of the grid beside it rather than
-     floating in the middle of them. */
+  /* Two columns wide and two rows tall, at the same 4:5 as every other card
+     — the featured one is bigger rather than a different shape. */
+  grid-column: span 2;
+  grid-row: span 2;
   aspect-ratio: 4 / 5;
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -82,12 +84,6 @@
 
 /* ── THE REST ───────────────────────────────────────────────────────────── */
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(12px, 1.4vw, 20px);
-}
-
 /* Captioned under the picture rather than over it: at this size type on the
    image is unreadable, and the point of the small cards is the line. */
 .card {
@@ -151,13 +147,19 @@
 
 .metaSep { color: rgba(255, 255, 255, 0.24); }
 
-@media (max-width: 900px) {
-  .layout { grid-template-columns: minmax(0, 1fr); }
-  .lead { aspect-ratio: 16 / 11; }
+@media (max-width: 1180px) {
+  .layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+@media (max-width: 900px) {
+  .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* One column: spanning two of one column is just a taller card, so the
+   featured one goes back to a single cell. */
 @media (max-width: 560px) {
-  .grid { grid-template-columns: minmax(0, 1fr); }
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .lead { grid-column: auto; grid-row: auto; }
 }
 
 /* The placeholder, until the covers go back on — the same two-grey weave the
@@ -174,3 +176,9 @@
       rgba(255, 255, 255, 0.02) 10px 20px
     );
 }
+
+/* On the featured card the facts sit over a picture, so they take a stop more
+   contrast than the same rows do on a flat card. */
+.leadFacts { max-width: 420px; }
+.leadFacts dt { color: rgba(255, 255, 255, 0.55); }
+.leadFacts dd { color: rgba(255, 255, 255, 0.92); }

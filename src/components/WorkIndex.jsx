@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './WorkIndex.module.css'
 import { caseStudies, SHOW_COVERS } from '../data/caseStudies'
+import CaseFacts from './CaseFacts'
 
 /**
  * THE CASE STUDIES INDEX — one study given the room, the rest beside it.
@@ -77,22 +78,20 @@ export default function WorkIndex() {
         <span className={styles.leadClient}>{lead.name}</span>
         <span className={styles.leadFoot}>
           <span className={styles.leadTagline}>{lead.tagline}</span>
-          <Meta study={lead} />
+          <CaseFacts study={lead} className={styles.leadFacts} />
         </span>
       </NavLink>
 
-      <div className={styles.grid}>
-        {rest.map((study) => (
-          <NavLink key={study.slug} to={`/work/${study.slug}`} className={styles.card}>
-            <span className={styles.cardMedia}>
-              <Media src={study.cover} className={styles.cardImg} />
-            </span>
-            <span className={styles.cardClient}>{study.name}</span>
-            <span className={styles.cardTagline}>{study.tagline}</span>
-            <Meta study={study} />
-          </NavLink>
-        ))}
-      </div>
+      {rest.map((study) => (
+        <NavLink key={study.slug} to={`/work/${study.slug}`} className={styles.card}>
+          <span className={styles.cardMedia}>
+            <Media src={study.cover} className={styles.cardImg} />
+          </span>
+          <span className={styles.cardClient}>{study.name}</span>
+          <span className={styles.cardTagline}>{study.tagline}</span>
+          <CaseFacts study={study} />
+        </NavLink>
+      ))}
     </div>
   )
 }
