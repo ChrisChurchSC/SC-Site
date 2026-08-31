@@ -62,8 +62,16 @@ const REPO_INPUTS = [
 function Column({ label, groups, sync = false }) {
   return (
     <div className={styles.column} aria-label={label}>
-      {groups.map(({ name, items }) => (
-        <div key={name} className={styles.node}>
+      {groups.map(({ name, items, media }) => (
+        <div key={name} className={`${styles.node}${media ? ' ' + styles.nodeMedia : ''}`}>
+          {/* A thumbnail above the name. Grey while it is a placeholder, the
+              image once there is one — the card's shape does not change when
+              the real picture arrives. Decorative either way: the name beside
+              it is the label. */}
+          {media === 'placeholder' && <span className={styles.mediaFill} aria-hidden="true" />}
+          {media && media !== 'placeholder' && (
+            <img className={styles.media} src={media} alt="" loading="lazy" />
+          )}
           <span className={styles.nodeRow}>
             <span className={styles.nodeName}>{name}</span>
             {sync && <RefreshCw className={styles.sync} aria-hidden="true" />}

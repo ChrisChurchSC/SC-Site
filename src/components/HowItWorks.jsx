@@ -176,7 +176,6 @@ const SETS = {
         note: 'Our people inside your team — standing things up, translating intent, and capturing decisions at the source.',
       },
     ],
-    closing: 'And again the following month, from a better starting position.',
     loops: true,
   },
 

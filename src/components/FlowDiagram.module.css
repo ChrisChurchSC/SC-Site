@@ -185,3 +185,34 @@
   width: 100%;
   min-width: 0;
 }
+
+/* A CARD WITH A PICTURE IN IT. The image sits above the name rather than
+   behind it: behind, the chips stopped being readable over whatever the
+   photograph happened to be doing there. */
+.nodeMedia { padding-top: 0; overflow: hidden; }
+
+/* The placeholder: a flat fill at the thumbnail's own ratio, so the card is
+   the size it will be when a picture goes in. Two greys rather than one, or
+   at this size it reads as a hole in the card rather than as a slot. */
+.mediaFill {
+  display: block;
+  width: calc(100% + 2px);
+  margin: -1px -1px 14px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-surface, 12px) var(--r-surface, 12px) 0 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045) 0 10px,
+      rgba(255, 255, 255, 0.02) 10px 20px
+    );
+}
+
+.media {
+  display: block;
+  width: calc(100% + 2px);
+  margin: -1px -1px 14px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-surface, 12px) var(--r-surface, 12px) 0 0;
+}
