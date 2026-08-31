@@ -48,23 +48,28 @@ const band = (tokens) =>
 
 const fmt = (n) => n.toLocaleString('en-US')
 
-/* A page of the file, at the size of a stamp. Bars are real line lengths, so
-   the shape differs between a stylesheet and a paragraph because the text
-   does. Files that are pictures show the picture instead. */
+/* THE CORNER MARK: three small discs, overlapping, front one first.
+   
+   THE FRONT DISC IS THE FILE. A picture for the four marks that are pictures,
+   and otherwise four bars whose widths are real line lengths off the top of
+   it — which is why a stylesheet and a paragraph do not look alike.
+   
+   THE TWO BEHIND ARE A STACK, and they are exactly that: the shape a pile of
+   pages makes. They carry no number and are not pretending to — the count is
+   three on every tile whatever the file is. Saying so here because everything
+   else drawn on this page is a measurement, and this one is an affordance. */
 function Thumb({ file }) {
-  if (file.art) {
-    return (
-      <span className={`${styles.thumb} ${styles.thumbArt}`} aria-hidden="true">
-        <img src={file.art} alt="" loading="lazy" />
-      </span>
-    )
-  }
-
   return (
     <span className={styles.thumb} aria-hidden="true">
-      {file.shape.map((w, i) => (
-        <i key={i} style={{ width: `${Math.round(w * 100)}%` }} />
-      ))}
+      <span className={`${styles.disc} ${styles.discFront}`}>
+        {file.art
+          ? <img src={file.art} alt="" loading="lazy" />
+          : file.shape.slice(0, 4).map((w, i) => (
+              <i key={i} className={styles.discLine} style={{ width: `${Math.round(w * 100)}%` }} />
+            ))}
+      </span>
+      <span className={`${styles.disc} ${styles.discBack}`} />
+      <span className={`${styles.disc} ${styles.discBack}`} />
     </span>
   )
 }

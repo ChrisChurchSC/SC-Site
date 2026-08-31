@@ -324,20 +324,13 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-.donutRow {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  /* Centred in what is left of the pane rather than pinned under the label,
-     which left the bottom third of the card empty. */
-  margin: auto 0;
-}
+
 
 .donutWrap {
   position: relative;
   flex: none;
-  width: 132px;
-  height: 132px;
+  width: 76px;
+  height: 76px;
 }
 
 /* -90deg so the first segment starts at the top rather than at three o'clock. */
@@ -353,7 +346,7 @@
   display: grid;
   place-items: center;
   font-family: var(--serif, 'Signifier', Georgia, serif);
-  font-size: 30px;
+  font-size: 19px;
   color: #fff;
 }
 
@@ -362,7 +355,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 4px;
   margin: 0;
 }
 
@@ -371,7 +364,7 @@
   align-items: center;
   gap: 8px;
   font-family: var(--mono, 'Roboto Mono', monospace);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .legendKey {
@@ -394,3 +387,120 @@
   color: rgba(255, 255, 255, 0.55);
   font-variant-numeric: tabular-nums;
 }
+
+/* ── USAGE: a dashboard rather than one chart ────────────────────────────────
+   Five blocks in the space one ring used to have, so every size below is set
+   to fit the pane without a scrollbar. */
+.statStrip {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.statCell {
+  padding: 7px 8px;
+  background: #0a0a0a;
+}
+
+.statLabel {
+  margin: 0 0 3px;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.statNum {
+  margin: 0;
+  font-family: var(--serif, 'Signifier', Georgia, serif);
+  font-size: 19px;
+  line-height: 1;
+  color: #fff;
+}
+
+.chartRow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chartBlock {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* One row of a small horizontal bar chart: name, track, value. */
+.miniRow {
+  display: grid;
+  grid-template-columns: 74px 1fr 30px;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 9px;
+}
+
+.miniName {
+  color: rgba(255, 255, 255, 0.72);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniTrack {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.miniFill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: #8b52e0;
+}
+
+.miniNum {
+  text-align: right;
+  color: rgba(255, 255, 255, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Composition, as one bar rather than five — a different question from the
+   ring above it, so a different shape. */
+.stack {
+  display: flex;
+  height: 7px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stackSeg { display: block; height: 100%; }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono, 'Roboto Mono', monospace);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The usage pane carries five blocks where the others carry two, so it gets a
+   tighter rhythm rather than making every card denser. */
+.paneDense { gap: 7px; }

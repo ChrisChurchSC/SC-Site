@@ -135,45 +135,65 @@
   font-family: var(--mono, 'Roboto Mono', monospace);
 }
 
-/* Bottom right, and round. Hidden on any tile too short to hold it, by the
-   same container query that governs the labels — a thumbnail squeezed to a
-   smear is worse than none. */
+/* Bottom right: a stack of three overlapping discs, front one first in the
+   DOM and lifted above the rest. Hidden on any tile too short to hold it, by
+   the same container query that governs the labels. */
 .thumb {
   position: absolute;
   right: 7px;
   bottom: 7px;
-  width: 26px;
-  height: 26px;
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  padding: 5px;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+/* Every disc is opaque, so the overlap reads as one in front of another
+   rather than as two washes on top of each other. */
+.disc {
+  flex: none;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.32);
+  background: #150c22;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55);
   overflow: hidden;
 }
 
-.thumb i {
+/* row-reverse puts the first child on the right and on top, so the two behind
+   slide out to the left from under it. */
+.disc + .disc { margin-right: -6px; }
+
+.discFront {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5px;
+  padding: 3px;
+  background: #1d1130;
+}
+
+.discBack { background: #241640; }
+.discBack + .discBack { background: #2c1b4d; }
+
+.discLine {
   display: block;
   height: 1px;
   flex: none;
-  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.55);
 }
 
-.thumbArt {
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.42);
-}
-
-/* COVER RATHER THAN CONTAIN. A wordmark is about seven to one; contained in
-   a 26px circle it comes out under three pixels tall, which is a dash rather
-   than a mark. Cropping a thumbnail to its frame is the ordinary convention
-   and it shows real letterforms at a readable size. */
-.thumbArt img {
+/* COVER RATHER THAN CONTAIN. A wordmark is about seven to one; contained in a
+   disc this size it comes out a dash rather than a mark. Cropping a thumbnail
+   to its frame is the ordinary convention and it shows real letterforms. */
+.discFront img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 @container (min-height: 34px) {
@@ -193,7 +213,7 @@
 
 .tileNum {
   margin: 0;
-  padding-right: 30px;
+  padding-right: 40px;
   font-size: 10px;
   letter-spacing: 0.03em;
   color: rgba(255, 255, 255, 0.5);

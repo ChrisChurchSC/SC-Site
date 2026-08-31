@@ -11,7 +11,6 @@ import HowItWorks from '../components/HowItWorks'
 import TestimonialCard from '../components/TestimonialCard'
 import DotNav from '../components/DotNav'
 import { useMeta } from '../hooks/useMeta'
-import { markers } from '../data/decisions'
 import { corpus, corpusTotal } from '../data/brandCorpus'
 
 /**
@@ -21,9 +20,14 @@ import { corpus, corpusTotal } from '../data/brandCorpus'
  * It is about what the brand KNOWS — positioning, voice, evidence, the design
  * system, the agents and what shipped, all of it written down and carried as
  * memory. Decisions are one thing that memory holds, and leading on them made
- * the page read as a changelog. They are still the sharpest proof the record
- * is real, so they keep the hero window and the markers section; they are no
- * longer the headline.
+ * the page read as a changelog.
+ *
+ * WHERE THE REAL RECORD SURVIVES, which is now a short list and worth keeping
+ * an eye on. The hero draws the input taxonomy; the markers section has been
+ * cut. What is left that came off the working copy: the Governance card and
+ * the open row of the Define table, the whole of the Usage card, the treemap,
+ * and the rotating memory step of How it works. Everything else on the page is
+ * a product surface carrying a Sample data tag.
  *
  * THE GROUND THIS PAGE HAS TO HOLD, or it should be cut. Repo already sells
  * structure and history; Reviews already sells approval. Memory is only worth
@@ -142,8 +146,8 @@ export default function PlatformMemory() {
             THE DECISION RECORD IS NO LONGER PERMANENTLY ON THIS PAGE. It was
             the hero, and it was the one window here that needed no Sample data
             tag. It now appears only in the rotating memory step of How it
-            works. The real entries still show in two of the three cards and in
-            the markers section, but see the note in BrandInputsWindow. */}
+            works. Real entries still show in the Governance card and in the
+            open row of Define; see the note in BrandInputsWindow. */}
         <div className={styles.heroStage}>
           <BrandInputsWindow bare ratio="1 / 1" />
         </div>
@@ -180,30 +184,6 @@ export default function PlatformMemory() {
         </div>
 
         <MemoryMap />
-      </section>
-
-      <hr className={styles.divider} />
-
-      <section className={`${styles.block} ${styles.blockCentered} ${styles.blockTight}`} aria-labelledby="markers">
-        <p className={styles.sectionEyebrow}>[ When there is no answer yet ]</p>
-        <h2 className={styles.blockHead} id="markers">
-          A gap gets a name and an owner.
-        </h2>
-        <p className={styles.blockIntro}>
-          The expensive failure is not a wrong answer, it is a missing one that reads as settled.
-          So nothing unevidenced gets smoothed over &mdash; it gets marked, in the text, addressed
-          to whoever can close it. These four are the conventions the repo already runs on.
-        </p>
-
-        <div className={styles.markers}>
-          {markers.map(({ tag, owner, note }) => (
-            <div key={tag} className={styles.marker}>
-              <span className={styles.markerTag}>[{tag}]</span>
-              <span className={styles.markerNote}>{note}</span>
-              <span className={styles.markerOwner}>{owner}</span>
-            </div>
-          ))}
-        </div>
       </section>
 
       <hr className={styles.divider} />
