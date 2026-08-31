@@ -31,12 +31,38 @@ import RepoWindow from './RepoWindow'
  *
  * THE WORDING IS MINE AND UNAPPROVED.
  */
+/* `chrome` wraps a visual that has none of its own, so every card in the
+   stack is a window. Only the deploy sheet needs it. */
 const BUILT = [
   { key: 'Brand', Visual: DesignWindow },
-  { key: 'Website & app', Visual: DeployWindow },
+  {
+    key: 'Owned channels',
+    Visual: DeployWindow,
+    chrome: { name: 'Owned channels', badge: 'Live', tabs: ['Website', 'App', 'Email'] },
+  },
   { key: 'Campaign', Visual: AssetsGridWindow },
   { key: 'Channels', Visual: InMarketPanel },
 ]
+
+function Chromed({ chrome, children }) {
+  if (!chrome) return children
+  return (
+    <span className={styles.win}>
+      <span className={styles.winHead}>
+        <span className={styles.crumbMuted}>SC-Brand</span>
+        <span className={styles.slash}>/</span>
+        <span className={styles.winName}>{chrome.name}</span>
+        <span className={styles.winBadge}>{chrome.badge}</span>
+      </span>
+      <span className={styles.winTabs}>
+        {chrome.tabs.map((t, i) => (
+          <span key={t} className={i === 0 ? styles.tabOn : styles.tab}>{t}</span>
+        ))}
+      </span>
+      <span className={styles.winBody}>{children}</span>
+    </span>
+  )
+}
 
 const POINTS = [
   { Icon: Boxes, key: 'Built', line: 'Brand, site, app, campaign, channels.' },
@@ -115,7 +141,7 @@ export default function BuiltInSection() {
             <RepoWindow label="Repo" />
           </span>
 
-          {BUILT.map(({ key, Visual }, i) => {
+          {BUILT.map(({ key, Visual, chrome }, i) => {
             /* Depth from the front, wrapping — so the card that just left the
                front goes to the back rather than sliding through the others. */
             const depth = (i - front + BUILT.length) % BUILT.length
@@ -129,7 +155,9 @@ export default function BuiltInSection() {
                   opacity: depth > 2 ? 0 : 1 - depth * 0.18,
                 }}
               >
-                <Visual />
+                <Chromed chrome={chrome}>
+                  <Visual />
+                </Chromed>
               </span>
             )
           })}
