@@ -165,13 +165,14 @@
      clipped by the panel before it has faded out. */
   padding: 56px 0 0 0;
   min-height: 560px;
+  overflow: visible;
 }
 
 /* The repo behind everything: the place the rest of it lands. Held back so
    the stack in front reads first. */
 .base {
   position: absolute;
-  inset: 72px 15% 22% 7%;
+  inset: 40px -16% -14% 2%;
   z-index: 0;
   opacity: 0.4;
   transform: translate(96px, -74px) scale(0.9);
@@ -182,7 +183,7 @@
 
 .card {
   position: absolute;
-  inset: 72px 15% 22% 7%;
+  inset: 40px -16% -14% 2%;
   display: block;
   transform-origin: top left;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
@@ -207,7 +208,7 @@
 
 @media (max-width: 900px) {
   .visual { padding-top: 40px; min-height: 420px; }
-  .base, .card { inset: 48px 8% 14% 4%; }
+  .base, .card { inset: 32px -10% -10% 0; }
 }
 
 /* ── CHROME FOR A VISUAL THAT HAS NONE ─────────────────────────────────────
