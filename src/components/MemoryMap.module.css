@@ -131,11 +131,56 @@
   gap: 3px;
   padding: 6px 10px;
   overflow: hidden;
+  position: relative;
   font-family: var(--mono, 'Roboto Mono', monospace);
+}
+
+/* Top right, out of the way of the name and the count on the left. It is
+   hidden on any tile too short to hold it, by the same container query that
+   governs the labels — a thumbnail squeezed to a smear is worse than none. */
+.thumb {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 27px;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.thumb i {
+  display: block;
+  height: 1px;
+  flex: none;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.thumbArt {
+  width: 34px;
+  padding: 3px;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.thumbArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@container (min-height: 34px) {
+  .thumb { display: flex; }
 }
 
 .tileName {
   margin: 0;
+  padding-right: 26px;
   font-size: 11px;
   line-height: 1.25;
   letter-spacing: 0.01em;

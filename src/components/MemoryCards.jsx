@@ -1,47 +1,100 @@
 import styles from './MemoryCards.module.css'
 import { Card } from './PlatformCards'
-import { decisions, markers } from '../data/decisions'
-import { inputCount } from '../data/brandInputs'
+import { decisions } from '../data/decisions'
+import { inputGroups, inputCount } from '../data/brandInputs'
 
 /**
- * WHAT DEFINED TOKENS ACTUALLY SOLVE — the three under the hero on
- * /platform/memory.
+ * DEFINE, GOVERNANCE, USAGE — the three under the hero on /platform/memory,
+ * named by Chris.
  *
- * THESE USED TO DESCRIBE THE MECHANISM: a question is settled, the rejected
- * option is kept, the open one is visible. All true, and all answers to "what
- * does it do" rather than "what does it fix". A brand does not have a problem
- * called "our decisions are not written down" — it has three problems that
- * come FROM that, and those are the cards now:
- *
- *   Re-briefing. Every job starts by reconstructing what the brand is, from
- *   whoever happens to be in the room.
- *   Drift. Two people write the same thing two ways and neither is wrong,
- *   because nothing said which was right.
- *   Guessing. What nobody defined gets filled in silently, and reads as
- *   settled to the next person.
+ * THE THREE ARE A SEQUENCE, not a list, and the cards are ordered to say so:
+ * the brand gets written down, changes to it go past a person, and everything
+ * downstream reads from the result. Each one is still argued as the thing it
+ * fixes rather than the thing it is — re-briefing, silent edits, and work that
+ * drifts because nobody could see the source.
  *
  * THE CARD IS THE PLATFORM CARD, borrowed rather than rebuilt — a page in this
  * family that drew its own version would be two designs of one thing.
  *
- * WHAT IS REAL AND WHAT IS NOT. The second and third previews draw out of
- * src/data/decisions.js: the spelling decision and its replacements happened,
- * and the four markers are conventions the repo already runs on. The first
- * preview is a product surface nobody has built, so it carries the Sample data
- * tag the rest of the site uses. That line matters more on this page than
- * anywhere else, because the record below is the one thing here that needs no
- * tag at all.
+ * WHAT IS REAL AND WHAT IS NOT, which matters more on this page than any
+ * other. GOVERNANCE draws the spelling decision out of src/data/decisions.js:
+ * that decision was made, on that date, and those three replacements are three
+ * of the twelve it actually caused — so it needs no tag. DEFINE and USAGE draw
+ * product surfaces nobody has built yet and carry the Sample data tag the rest
+ * of the site uses. The counts in DEFINE come from src/data/brandInputs.js, so
+ * they agree with the hero window above.
  *
  * THE HEADLINES ARE MINE AND UNAPPROVED.
  */
 
-const byId = (id) => decisions.find((d) => d.id === id)
+const SPELLING = decisions.find((d) => d.id === 'us-spelling')
 
-const SPELLING = byId('us-spelling')
+/* DEFINE. What the brand knows, written down once — so no job starts by
+   reconstructing it from whoever is in the room. */
+function DefinePreview() {
+  return (
+    <div className={styles.pane}>
+      <div className={styles.paneHead}>
+        <span className={styles.path}>SC-Brand / Inputs</span>
+        <span className={styles.sample}>Sample data</span>
+      </div>
 
-/* NOTHING GETS RE-BRIEFED. The job arrives and the tokens it needs are already
-   there — which is the whole benefit of defining them once. INVENTED, and
-   tagged: no such request surface exists yet. */
-function ResolvedPreview() {
+      <p className={styles.quote}>
+        The brand written down once, instead of re-briefed every time.
+      </p>
+
+      <div className={styles.lines}>
+        {inputGroups.slice(0, 4).map(({ group, items }) => (
+          <span key={group} className={styles.add}>
+            <span className={styles.sign}>&rarr;</span>
+            <span>{group} &nbsp;{items.length}</span>
+          </span>
+        ))}
+      </div>
+
+      <div className={styles.stamp}>
+        <span>{inputGroups.length} groups</span>
+        <span>{inputCount} defined</span>
+      </div>
+    </div>
+  )
+}
+
+/* GOVERNANCE. Nothing lands without a person, and what did land says who and
+   when. The mechanism is the sync CLI's own: a push opens a numbered review
+   holding what the files would become and writes nothing live. */
+function GovernancePreview() {
+  return (
+    <div className={styles.pane}>
+      <div className={styles.paneHead}>
+        <span className={styles.path}>{SPELLING.path}</span>
+        <span className={styles.ok}>Merged</span>
+      </div>
+
+      <p className={styles.quote}>{SPELLING.rule} {SPELLING.why}</p>
+
+      {/* Three of the twelve, as they were actually made. A card that said
+          "twelve replacements" without showing one is a claim about a claim. */}
+      <div className={styles.lines}>
+        {[['colour', 'color'], ['behaviour', 'behavior'], ['judgement', 'judgment']].map(([from, to]) => (
+          <span key={from} className={styles.add}>
+            <span className={styles.sign}>&rarr;</span>
+            <span>{from} &nbsp;{to}</span>
+          </span>
+        ))}
+      </div>
+
+      <div className={styles.stamp}>
+        <span>{SPELLING.date}</span>
+        <span>{SPELLING.by}</span>
+      </div>
+    </div>
+  )
+}
+
+/* USAGE. The point of defining it: the work pulls from the same source every
+   time, without anyone policing it. */
+function UsagePreview() {
   return (
     <div className={styles.pane}>
       <div className={styles.paneHead}>
@@ -64,91 +117,30 @@ function ResolvedPreview() {
 
       <div className={styles.stamp}>
         <span>No brief written</span>
-        <span>{inputCount} defined</span>
+        <span>{inputCount} available</span>
       </div>
-    </div>
-  )
-}
-
-/* NOTHING DRIFTS. One definition, and everything downstream agrees with it.
-   REAL: this decision was made, and these are three of the twelve
-   replacements it actually caused. */
-function ConsistentPreview() {
-  return (
-    <div className={styles.pane}>
-      <div className={styles.paneHead}>
-        <span className={styles.path}>{SPELLING.path}</span>
-        <span className={styles.ok}>Defined</span>
-      </div>
-
-      <p className={styles.quote}>{SPELLING.rule} {SPELLING.why}</p>
-
-      {/* A card that said "twelve replacements" without showing one would be a
-          claim about a claim. */}
-      <div className={styles.lines}>
-        {[['colour', 'color'], ['behaviour', 'behavior'], ['judgement', 'judgment']].map(([from, to]) => (
-          <span key={from} className={styles.add}>
-            <span className={styles.sign}>&rarr;</span>
-            <span>{from} &nbsp;{to}</span>
-          </span>
-        ))}
-      </div>
-
-      <div className={styles.stamp}>
-        <span>{SPELLING.date}</span>
-        <span>{SPELLING.by}</span>
-      </div>
-    </div>
-  )
-}
-
-/* NOBODY GUESSES. The expensive failure is not a wrong answer, it is a missing
-   one that reads as settled — so what is undefined is named and addressed to
-   whoever can close it. REAL: these four are the repo's own conventions. */
-function GapsPreview() {
-  return (
-    <div className={styles.pane}>
-      <div className={styles.paneHead}>
-        <span className={styles.path}>Not defined yet</span>
-        <span className={styles.sample}>{markers.length} open</span>
-      </div>
-
-      <div className={styles.lines}>
-        {markers.map(({ tag, owner }) => (
-          <span key={tag} className={styles.add}>
-            <span className={styles.sign}>[ ]</span>
-            <span>{tag} &nbsp;{owner}</span>
-          </span>
-        ))}
-      </div>
-
-      <p className={styles.alt}>
-        <span className={styles.altKey}>Why it matters</span>
-        An unanswered question that looks answered is the one thing nobody
-        thinks to check.
-      </p>
     </div>
   )
 }
 
 const CARDS = [
   {
-    id: 'resolved',
-    lead: 'Stop',
-    rest: 'briefing the brand in from scratch',
-    preview: <ResolvedPreview />,
+    id: 'define',
+    lead: 'Define',
+    rest: 'the brand once, in one place',
+    preview: <DefinePreview />,
   },
   {
-    id: 'consistent',
-    lead: 'Say',
-    rest: 'it the same way without policing it',
-    preview: <ConsistentPreview />,
+    id: 'governance',
+    lead: 'Governance',
+    rest: 'so nothing changes without a person',
+    preview: <GovernancePreview />,
   },
   {
-    id: 'gaps',
-    lead: 'See',
-    rest: 'what nobody has defined yet',
-    preview: <GapsPreview />,
+    id: 'usage',
+    lead: 'Usage',
+    rest: 'every job reads from the same source',
+    preview: <UsagePreview />,
   },
 ]
 

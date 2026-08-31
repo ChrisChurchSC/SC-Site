@@ -22,6 +22,14 @@ import { corpus, corpusTotal } from '../data/brandCorpus'
  * reads this. The count is an approximation at four characters to a token and
  * the footnote says so; it is the right relative size, not a figure to quote.
  *
+ * THE CORNER THUMBNAIL IS READ OFF THE FILE TOO. Four of these files are
+ * pictures — the logo marks — and those show the actual artwork. The other
+ * twenty-nine are text, so they get a page drawn from ten real line lengths
+ * out of the top of the file. That is why the stylesheet and the prose look
+ * different from each other: it is measuring them, not decorating them.
+ * SC-Brand has no other imagery to use; Visual/public/imagery/ says in its own
+ * README that it is empty apart from that README.
+ *
  * TWO PLACES IT BENDS, both stated under the map. The smallest column is
  * floored so its name still fits, and binaries and the styleguide app's own
  * source are left out — a font file carries no tokens to read.
@@ -39,6 +47,27 @@ const band = (tokens) =>
   tokens >= 4000 ? 5 : tokens >= 2000 ? 4 : tokens >= 1200 ? 3 : tokens >= 600 ? 2 : 1
 
 const fmt = (n) => n.toLocaleString('en-US')
+
+/* A page of the file, at the size of a stamp. Bars are real line lengths, so
+   the shape differs between a stylesheet and a paragraph because the text
+   does. Files that are pictures show the picture instead. */
+function Thumb({ file }) {
+  if (file.art) {
+    return (
+      <span className={`${styles.thumb} ${styles.thumbArt}`} aria-hidden="true">
+        <img src={file.art} alt="" loading="lazy" />
+      </span>
+    )
+  }
+
+  return (
+    <span className={styles.thumb} aria-hidden="true">
+      {file.shape.map((w, i) => (
+        <i key={i} style={{ width: `${Math.round(w * 100)}%` }} />
+      ))}
+    </span>
+  )
+}
 
 export default function MemoryMap() {
   return (
@@ -89,6 +118,7 @@ export default function MemoryMap() {
                     className={`${styles.tile} ${styles['b' + band(f.tokens)]}`}
                     title={`${f.path} — ~${fmt(f.tokens)} tokens`}
                   >
+                    <Thumb file={f} />
                     <p className={styles.tileName}>{nameOf(f.path)}</p>
                     <p className={styles.tileNum}>{fmt(f.tokens)}</p>
                   </article>
