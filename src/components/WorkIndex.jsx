@@ -30,6 +30,12 @@ const ORDER = ['hylands', 'entropy', 'nimruz', 'world-within']
 
 const uniq = (xs) => [...new Set(xs.filter(Boolean))].sort()
 
+/* The grid's shape, so the padding is arithmetic rather than a number that
+   has to be remembered when either changes. */
+const COLUMNS = 5
+const ROWS = 4
+const LEAD_SPAN = 2
+
 const isVideo = (src) => /\.mp4($|\?)/.test(src)
 
 function Media({ src, className }) {
@@ -95,9 +101,10 @@ export default function WorkIndex() {
 
   const [lead, ...rest] = entries
 
-  /* Six cells sit beside the featured card; whatever the studies do not fill
-     is shown as an empty slot rather than left as a hole in the grid. */
-  const slots = Math.max(0, 6 - rest.length)
+  /* The cells beside the featured card: four rows of five, less the two
+     columns and two rows the featured one occupies. Whatever the studies do
+     not fill shows as an empty slot rather than a hole in the grid. */
+  const slots = Math.max(0, COLUMNS * ROWS - LEAD_SPAN * LEAD_SPAN - rest.length)
 
   return (
     <>

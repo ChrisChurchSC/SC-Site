@@ -11,7 +11,10 @@
 /* ── THE FEATURED ONE ───────────────────────────────────────────────────── */
 
 .lead {
-  position: relative;
+  position: sticky;
+  top: calc(var(--bar-inset, 22px) + 84px);
+  align-self: start;
+  z-index: 2;
   display: block;
   overflow: hidden;
   border-radius: var(--r-surface, 12px);
