@@ -20,22 +20,28 @@
    columns of empty beside it. auto-fit rather than a fixed six: the columns are short lists of very
    different lengths, and at a narrow window five fixed tracks would each be
    too thin to hold "Content programs" on one line. */
+/* THE TRACK COUNT IS THE TOP ROW'S, not whatever fits. auto-fit was making a
+   track per column, so moving the second row in here put all seven on one
+   line — 132px minimum and seven items still fit 1250px. Pinning it to the
+   number of top-row columns is what makes the extras wrap underneath, and the
+   component passes that number rather than the stylesheet guessing five.
+
+   The row gap is the one .secondRow used to carry as a margin-top, kept so
+   the two rows sit as far apart as they did. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
-  gap: clamp(24px, 2.2vw, 32px);
+  grid-template-columns: repeat(var(--footer-cols, 5), minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 44px) clamp(24px, 2.2vw, 32px);
   align-items: start;
 }
 
-/* A second row of navigation columns, under the first. No border above it:
-   the rule under the legal row exists to separate legal from navigation, and
-   this row is still navigation. */
-.secondRow {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
-  gap: clamp(24px, 2.2vw, 32px);
-  margin-top: clamp(28px, 3vw, 44px);
-  align-items: start;
+/* Five columns of a phone are five columns of wrapping. */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* The legal group drops to its own row under the rest, as in the reference.

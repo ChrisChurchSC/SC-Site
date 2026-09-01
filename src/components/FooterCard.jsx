@@ -73,15 +73,24 @@ export default function FooterCard({ columns = [] }) {
        and a document should not carry two competing footers. The label is
        what tells a screen reader which navigation this is. */
     <nav className={styles.card} aria-label="Footer">
-      <div className={styles.grid}>
+      {/* ONE GRID, TWO ROWS. The row-2 columns used to sit in a grid of their
+          own, which gave them their own tracks: with two items in an auto-fit
+          grid they spread across the width, so Disciplines landed at x=736
+          against Case studies at x=387. Same grid means the same tracks by
+          construction, and auto-placement drops them into columns one and two
+          under Services and Case studies — no explicit row or column, so
+          adding a sixth top-row column re-flows both rows together. */}
+      <div
+        className={styles.grid}
+        /* The number of top-row columns, so the grid has exactly that many
+           tracks and the row-2 columns wrap under the first two. In the
+           stylesheet it would be a hard-coded five that goes wrong the day a
+           column is added. */
+        style={{ '--footer-cols': columns.filter(col => !col.row).length }}
+      >
         {columns.filter(col => !col.row).map(col => <Column key={col.tag} {...col} />)}
+        {columns.filter(col => col.row === 2).map(col => <Column key={col.tag} {...col} />)}
       </div>
-
-      {columns.some(col => col.row === 2) && (
-        <div className={styles.secondRow}>
-          {columns.filter(col => col.row === 2).map(col => <Column key={col.tag} {...col} />)}
-        </div>
-      )}
 
       {/* Legal, and any column that asked to sit beside it. */}
       <div className={styles.legalRow}>

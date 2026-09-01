@@ -296,9 +296,14 @@ export const FOOTER_COLS = [
     ],
   },
   { tag: 'By company stage', links: WORK_BY_STAGE.map(label => ({ label })) },
+  /* ALL THREE COMPANY COLUMNS SIT ON THE BOTTOM ROW, beside Legal. It was
+     only Socials down there; Our company and Get in touch were in the top row
+     with the service and work links, which put four short columns of
+     wayfinding beside two long ones. Everything about the company is in one
+     band now, and the top row is what the site sells. */
   ...COMPANY_COLS.map(({ tag, links }) => ({
     tag,
-    ...(tag === 'Socials' ? { row: 3 } : null),
+    row: 3,
     links: links.map(({ label, href, external }) => ({ label, href, external })),
   })),
 ]
