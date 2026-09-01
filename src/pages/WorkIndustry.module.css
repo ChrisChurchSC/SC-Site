@@ -28,83 +28,6 @@
   color: rgba(255, 255, 255, 0.96);
 }
 
-.list {
-  display: flex;
-  flex-direction: column;
-}
-
-/* A rule between engagements rather than a card each: they are one list of
-   what happened in this category, not six things to choose between. */
-.entry {
-  display: grid;
-  grid-template-columns: minmax(0, 22ch) minmax(0, 1fr);
-  gap: clamp(16px, 3vw, 48px);
-  padding: clamp(22px, 2.6vw, 34px) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-  color: inherit;
-}
-
-.entry:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-a.entry:hover .name {
-  color: var(--pink, #df4ed6);
-}
-
-.name {
-  margin: 0;
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(20px, 2.1vw, 28px);
-  line-height: 1.15;
-  color: rgba(255, 255, 255, 0.96);
-  transition: color 0.2s ease;
-}
-
-.descriptor {
-  margin: 8px 0 0;
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.account {
-  margin: 0;
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(15px, 1.4vw, 17px);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.66);
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 14px;
-}
-
-.tag {
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--r-control, 4px);
-  background: rgba(255, 255, 255, 0.03);
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.62);
-}
-
-@media (max-width: 760px) {
-  .entry {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-}
-
 /* ── THE SPLIT HERO ──────────────────────────────────────────────────────
    Text left, the product visual right, as in the reference. Only industries
    that declare a `hero` in industries.js get it; the rest keep the centred
@@ -149,14 +72,6 @@ a.entry:hover .name {
   color: rgba(255, 255, 255, 0.62);
 }
 
-.heroNote {
-  margin: 12px 0 0;
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.35);
-}
-
 /* Square and flat, per the same rule the work cards follow: no artwork
    exists, so nothing pretends there is any. */
 .heroVisual {
@@ -166,98 +81,9 @@ a.entry:hover .name {
   border-radius: var(--r-panel, 18px);
 }
 
-/* ── The capture form ──
-   EmailCaptureForm renders classes from whatever module it is handed, and a
-   missing one is not an error, only an unstyled control — tests/lib holds
-   every caller to defining all six. Values are ContactCTA's, so the two
-   forms are the same control. */
-.emailForm {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  max-width: 440px;
-}
-
-.emailInput {
-  flex: 1;
-  min-width: 0;
-  background: #0a0a0a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--r-control, 4px);
-  color: rgba(255, 255, 255, 0.8);
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  padding: 14px 16px;
-  outline: none;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.emailInput::placeholder { color: rgba(255, 255, 255, 0.28); }
-
-.emailInput:focus {
-  background: #111;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Pink rather than the white ContactCTA uses: on that card the submit is the
-   only thing being asked for, and here it sits under a headline with the nav's
-   own CTA above it, so it takes the accent that already means "the ask". */
-.emailSubmit {
-  background: var(--pink, #df4ed6);
-  border: 1px solid var(--pink, #df4ed6);
-  border-radius: var(--r-control, 4px);
-  color: #0a0a0a;
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  padding: 14px 24px;
-  cursor: pointer;
-  transition: filter 0.18s;
-  flex-shrink: 0;
-}
-
-.emailSubmit:hover { filter: brightness(1.08); }
-
-.emailConfirm {
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.emailError {
-  margin: 10px 0 0;
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  line-height: 1.6;
-  color: #e8908f;
-}
-
-.emailSrOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(28px, 5vw, 44px);
   }
-}
-
-@media (max-width: 560px) {
-  .emailForm {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .emailSubmit { width: 100%; }
 }

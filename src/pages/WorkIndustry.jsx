@@ -1,4 +1,4 @@
-import { Navigate, NavLink, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 
 import home from './Home.module.css'
 import v3 from './HomeV3.module.css'
@@ -7,7 +7,6 @@ import v3 from './HomeV3.module.css'
    makes with the same file. */
 import styles from './WorkIndustry.module.css'
 import ContactCTA from '../components/ContactCTA'
-import EmailCaptureForm from '../components/EmailCaptureForm'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -16,55 +15,12 @@ import TestimonialCard from '../components/TestimonialCard'
 import TrustMosaic from '../components/TrustMosaic'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
-import { caseStudies } from '../data/caseStudies'
 import { industries, industryBySlug } from '../data/industries'
-import { projects } from '../data/projects'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
-import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
 const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
 
-/* THE SAME EXCLUSIONS THE WALL MAKES, for the same reason: HIDDEN_SLUGS are
-   studies somebody deliberately took down and a password means the project is
-   not public. An industry page is another way into the same roster, so it has
-   to honour both or it is a hole in the wall. */
-const bySlug = new Map(projects.filter((p) => p.slug).map((p) => [p.slug, p]))
-
-const entryFor = (slug) => {
-  if (HIDDEN_SLUGS.has(slug)) return null
-  const project = bySlug.get(slug)
-  if (project?.password) return null
-
-  /* THE ACCOUNT IS THE POINT. Every entry carries what actually happened in
-     that engagement, in the words the repo already holds — a client's
-     `relationship` in projects.js, or a case study's own `summary`. Nine of
-     the eleven have one and they run 200 to 460 characters, which is the
-     difference between a page that says "Food & Beverage" and one that says
-     what we did for a mushroom grower and a natural wine brand.
-
-     Nothing here is written for this page. If an entry has no account it
-     falls back to its one-line descriptor, and if it has neither it still
-     renders — the name and the disciplines are true on their own. */
-  const study = caseStudies[slug]
-  if (study) {
-    return {
-      slug,
-      name: study.name,
-      line: study.industry ?? null,
-      account: study.summary ?? study.tagline ?? null,
-      services: study.services ?? (study.type ? study.type.split(' + ') : []),
-    }
-  }
-  if (!project) return null
-  return {
-    slug,
-    name: project.name,
-    line: project.descriptor ?? null,
-    account: project.relationship ?? project.descriptor ?? null,
-    services: project.work ?? [],
-  }
-}
 
 /**
  * ONE INDUSTRY, ON THE BUILD PAGE'S SHAPE.
@@ -101,8 +57,6 @@ export default function WorkIndustry() {
 
   if (!industry) return <Navigate to="/work" replace />
 
-  const entries = industry.clients.map(entryFor).filter(Boolean)
-
   return (
     <main className={`${home.main} ${v3.stack}`}>
       <V3Nav />
@@ -114,24 +68,6 @@ export default function WorkIndustry() {
             <h1 className={styles.heroHeadline}>{industry.name}</h1>
             <p className={styles.heroBody}>{industry.hero.lede}</p>
 
-            {/* NO APOSTROPHE BEFORE THE DISTINGUISHING WORD in confirmMessage:
-                the copy test captures up to the first quote-ish character, so
-                "Thanks — we'll …" collapses to "Thanks — we" and collides with
-                the careers form. It caught exactly that.
-
-                Its own copy and its own request_type, so a walkthrough
-                request cannot land in the inbox looking like a pricing one —
-                the fault the form's own header describes. */}
-            <EmailCaptureForm
-              styles={styles}
-              submitLabel="Book a walkthrough"
-              confirmMessage="Sent. We will come back with a time to walk you through the work."
-              subject="Walkthrough request — technology & Web3"
-              requestType="industry-walkthrough"
-              placeholder="What's your work email?"
-            />
-
-            <p className={styles.heroNote}>We'll follow up by email.</p>
           </div>
 
           {/* FLAT GREY, 1:1, AND EMPTY. There is no artwork in this repo for
@@ -156,43 +92,6 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
-      {/* WHAT ACTUALLY HAPPENED IN THIS CATEGORY. The first version of this
-          page was a grid of thumbnails with the industry's name over it —
-          four pages that differed in five strings and were otherwise
-          identical, which is a filter rather than a page. This is the part
-          that is specific, and all of it is the repo's own record. */}
-      <section className={styles.section} aria-labelledby="industry-work">
-        <p className={styles.eyebrow}>[ The work ]</p>
-        <h2 className={styles.headline} id="industry-work">
-          {entries.length === 1
-            ? `One brand in ${industry.name.toLowerCase()}.`
-            : `${entries.length} brands in ${industry.name.toLowerCase()}.`}
-        </h2>
-
-        <div className={styles.list}>
-          {entries.map((e) => (
-            <NavLink key={e.slug} to={`/work/${e.slug}`} className={styles.entry}>
-              <div>
-                <h3 className={styles.name}>{e.name}</h3>
-                {e.line && <p className={styles.descriptor}>{e.line}</p>}
-              </div>
-
-              <div>
-                {e.account && <p className={styles.account}>{e.account}</p>}
-                {e.services.length > 0 && (
-                  <div className={styles.tags}>
-                    {e.services.map((w) => (
-                      <span key={w} className={styles.tag}>{w}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </NavLink>
-          ))}
-        </div>
-      </section>
-
-      <hr className={v3.divider} />
 
       <TrustMosaic />
 
