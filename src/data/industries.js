@@ -56,9 +56,17 @@ export const industries = [
 
        WHAT IS INDUSTRY-SPECIFIC IS THE SITUATION, NOT A CLAIM ABOUT US.
        Each body describes the state a technology company is in when it comes
-       to us. None of them says we are a technology specialist or that any of
-       this worked — proof-points.md grades that kind of statement, and four
+       to us — shipping before there is a brand, developer adoption meeting an
+       enterprise buyer, a category whose vendors all use the same sentence.
+       None of them says we are a technology specialist or that any of this
+       worked: proof-points.md grades that kind of statement, and four
        engagements is a capability rather than a record.
+
+       NO FIGURES. Strategy/verticals/ has real ones — vendor counts, how far
+       organic reach fell — but its README says re-check anything
+       compliance-adjacent the week you use it, and a number on a public page
+       is a maintenance commitment. The sentences describe the situation
+       without quantifying it, which needs no upkeep.
 
        NO href AND NO cta, per Chris: these describe who the work is for, and
        the nav and the closing ask carry the routes. AudienceCards renders a
@@ -68,25 +76,25 @@ export const industries = [
         id: 'new',
         name: 'New',
         body:
-          'A product exists and the brand does not. Usually pre-launch or ' +
-          'straight after a raise: it needs an identity, a voice, and a system ' +
-          'the product team can actually build against.',
+          'A protocol or a product that shipped before it had a brand. The ' +
+          'docs and the app exist; the name, the mark and the tokens the ' +
+          'front end can consume do not.',
       },
       {
         id: 'pivoting',
         name: 'Pivoting',
         body:
-          'A platform moving into a new category, a new buyer, or up-market — ' +
-          'where the name still fits and nothing else does, and the brand has ' +
-          'to carry the new story without discarding what it earned.',
+          'Developer-led adoption meeting an enterprise buyer, or a ' +
+          'crypto-native product going mainstream. The audience changes, so ' +
+          'the vocabulary, the proof and the surfaces all have to.',
       },
       {
         id: 'underdog',
         name: 'Underdog',
         body:
-          'A crowded category where every competitor is making the same claim ' +
-          'in the same words. Standing out means sounding different without ' +
-          'promising more than the product can hold up.',
+          'SaaS, security and L2s describing themselves in the same words, to ' +
+          'buyers who have read it before. Sounding specific without claiming ' +
+          'an outcome the product cannot yet show.',
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
