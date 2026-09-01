@@ -67,8 +67,6 @@ export const industries = [
           'Design and engineering are two of the twelve disciplines, not two ' +
           'suppliers. The identity, the design system and the interface are ' +
           'one engagement rather than a hand-off between a studio and a shop.',
-        cta: 'See how we build',
-        href: '/services/build',
       },
       {
         id: 'platform-not-pdf',
@@ -77,8 +75,6 @@ export const industries = [
           'The brand platform holds tokens, components, grid and radii, ' +
           'iconography and voice — a system your design system can meet, ' +
           'rather than a document somebody has to interpret.',
-        cta: 'See what it holds',
-        href: '/pricing',
       },
       {
         id: 'run-after-launch',
@@ -87,8 +83,6 @@ export const industries = [
           'Grow is hours on a retainer with the people who built the brand: ' +
           'campaigns, channels and content produced against the same ' +
           'positioning, with no re-briefing a second agency on your own work.',
-        cta: 'See how we grow',
-        href: '/services/grow',
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */

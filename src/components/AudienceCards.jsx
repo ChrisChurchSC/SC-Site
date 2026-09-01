@@ -178,19 +178,31 @@ export default function AudienceCards({
         </div>}
       </div>
 
+      {/* A CARD WITHOUT AN href IS NOT A LINK. Every card here used to be one,
+          which is right when each goes somewhere — the situations and the
+          industries both do. A card that describes what is in an engagement
+          has nowhere of its own to go, and a link that lands on a page the
+          reader is already being sold is a dead end dressed as a next step.
+          Omit href and the card renders as a div with no trailing arrow. */}
       <div className={styles.row}>
-        {shown.map(({ id, name, body, pills, cta, href }) => (
-          <NavLink key={id} to={href} className={styles.card}>
-            <h2 className={styles.name}>{name}</h2>
-            {body && <p className={styles.body}>{body}</p>}
-            {pills?.length > 0 && (
-              <span className={styles.chips}>
-                {pills.map((p) => <span key={p} className={styles.chip}>{p}</span>)}
-              </span>
-            )}
-            <span className={styles.cta}>{cta} →</span>
-          </NavLink>
-        ))}
+        {shown.map(({ id, name, body, pills, cta, href }) => {
+          const inner = (
+            <>
+              <h2 className={styles.name}>{name}</h2>
+              {body && <p className={styles.body}>{body}</p>}
+              {pills?.length > 0 && (
+                <span className={styles.chips}>
+                  {pills.map((p) => <span key={p} className={styles.chip}>{p}</span>)}
+                </span>
+              )}
+              {href && cta && <span className={styles.cta}>{cta} →</span>}
+            </>
+          )
+
+          return href
+            ? <NavLink key={id} to={href} className={styles.card}>{inner}</NavLink>
+            : <div key={id} className={styles.card}>{inner}</div>
+        })}
       </div>
     </section>
   )
