@@ -59,7 +59,8 @@ const isV3Page = (pathname) =>
   V3_PAGES.includes(pathname) ||
   pathname.startsWith('/services/') ||
   pathname.startsWith('/industries/') ||
-  pathname.startsWith('/stages/')
+  pathname.startsWith('/stages/') ||
+  pathname.startsWith('/outcomes/')
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -139,6 +140,7 @@ export default function App() {
                     read vercel.json. */}
                 <Route path="/industries/:slug" element={<AudiencePage kind="industry" />} />
                 <Route path="/stages/:slug" element={<AudiencePage kind="stage" />} />
+                <Route path="/outcomes/:slug" element={<AudiencePage kind="outcome" />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/services" element={<Services />} />

@@ -13,6 +13,7 @@ import v3 from '../pages/HomeV3.module.css'
    there is no cycle. */
 import { DISCIPLINES } from '../pages/Services'
 import { industries } from '../data/industries'
+import { outcomes as outcomeRecords } from '../data/outcomes'
 import { stages } from '../data/stages'
 import LogoWordmark from './LogoWordmark'
 import { useCalDrawer } from '../context/CalDrawerContext'
@@ -285,7 +286,10 @@ const OUTCOMES = [
   'Lower cost per acquisition',
   'Launch faster',
   'Enter a new market',
-]
+].map((label) => {
+  const written = outcomeRecords.find((o) => o.name === label)
+  return written ? { label, href: `/outcomes/${written.slug}` } : { label }
+})
 
 export const FOOTER_COLS = [
   {
@@ -297,7 +301,7 @@ export const FOOTER_COLS = [
     ],
   },
   /* After Services, because an outcome is a way into the same four. */
-  { tag: 'By outcome', row: 2, links: OUTCOMES.map(label => ({ label })) },
+  { tag: 'By outcome', row: 2, links: OUTCOMES },
   /* WHAT IS ACTUALLY IN THE DEPARTMENT. Services and By outcome both say what
      you buy; this says what the studio can do, which is the one thing the
      footer never listed. Read from Services' COPY rather than retyped, so
@@ -607,12 +611,19 @@ export default function V3Nav() {
                 </div>
 
                 <div className={v3.proofBody}>
-                  {/* THE NUMBERS ARE ABSENT ON PURPOSE. featuredCaseStudies
-                      carries '––' for every stat and says in its own header not
-                      to ship invented ones: there is no source for these
-                      anywhere in the repo or in Sanity. The layout is real and
-                      the figures are visibly missing, which is the same thing
-                      the featured section further down this page does. */}
+                  {/* THE NUMBERS ARE INVENTED AND THE TAG SAYS SO. This
+                      comment used to claim featuredCaseStudies carried '––'
+                      for every stat. It does not, and has not for a while: it
+                      carries +38%, +29% and 27% under OpenText, iScribe and
+                      Arbitrum, and its own header says in capitals that those
+                      values are invented, are not these clients' results, and
+                      must not ship without the tag FeaturedWall renders.
+
+                      This panel had no tag, so the menu was publishing
+                      invented percentages attributed to named companies.
+                      Replace the values with sourced figures and delete the
+                      tag in the same change — see featuredCaseStudies.js. */}
+                  <span className={`${v3.panelTag} ${v3.proofLinkFlat}`}>Placeholder figures</span>
                   <div className={v3.statCards}>
                     {featuredCaseStudies.slice(0, 3).map(({ slug, name, stats }, i) => {
                       /* A different measure per card. Taking stats[0] for all
@@ -657,8 +668,10 @@ export default function V3Nav() {
                         six more links to the wall is not depth. */}
                     <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
                       <p className={v3.panelTag}>By outcome</p>
-                      {OUTCOMES.map((label) => (
-                        <span key={label} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{label}</span>
+                      {OUTCOMES.map(({ label, href }) => (
+                        href
+                          ? <NavLink key={label} to={href} className={v3.proofLink}>{label}</NavLink>
+                          : <span key={label} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{label}</span>
                       ))}
                     </div>
                   </div>

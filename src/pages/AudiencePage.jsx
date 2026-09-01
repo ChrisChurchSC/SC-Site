@@ -21,6 +21,7 @@ import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
 import { BUILD_EMBED, embedCopyFor } from './ServiceV3'
 import { industryBySlug } from '../data/industries'
+import { outcomeBySlug } from '../data/outcomes'
 import { stageBySlug } from '../data/stages'
 import { faqs } from '../data/pricingTabs'
 import { useCalDrawer } from '../context/CalDrawerContext'
@@ -65,12 +66,24 @@ const KINDS = {
     base: '/industries',
     find: industryBySlug,
     noun: (name) => `${name.toLowerCase()} brand`,
+    cardsHeadline: (name) => `Three kinds of ${name.toLowerCase()} brand.`,
   },
   stage: {
     eyebrow: '[ Company stage ]',
     base: '/stages',
     find: stageBySlug,
     noun: (name) => `${name.toLowerCase()} company`,
+    cardsHeadline: (name) => `Three kinds of ${name.toLowerCase()} company.`,
+  },
+  /* An outcome has no "three kinds of" — the cards split on what is causing
+     the number to be short, not on what sort of company is reading. Each
+     record supplies its own heading; this is the fallback. */
+  outcome: {
+    eyebrow: '[ Outcome ]',
+    base: '/outcomes',
+    find: outcomeBySlug,
+    noun: (name) => name.toLowerCase(),
+    cardsHeadline: () => 'Three reasons it is not happening.',
   },
 }
 
@@ -151,7 +164,7 @@ export default function AudiencePage({ kind = 'industry' }) {
         <>
           <AudienceCards
             eyebrow="[ Who we work with ]"
-            headline={`Three kinds of ${config.noun(industry.name)}.`}
+            headline={industry.situationsHeadline ?? config.cardsHeadline(industry.name)}
             cards={industry.situations}
             {...(industry.stages
               ? {
