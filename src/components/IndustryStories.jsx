@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import styles from './IndustryStories.module.css'
 import { caseStudies } from '../data/caseStudies'
@@ -51,71 +51,86 @@ const entryFor = (slug) => {
 }
 
 /**
- * CASE STUDIES, ONE AT A TIME — the reference's shape: a strip of clients
- * across the top, one of them lit, and a large passage underneath it.
+* CASE STUDIES, AS A ROTATING RAIL.
  *
- * NO QUOTE. There is no attributed quote anywhere in this repo — every
- * testimonial is '[Name], [Role], [Company]' with a placeholder flag — and
- * Chris asked for the name and the measures instead. What each client got
- * still reads on its own page, which the link under the measures goes to.
+ * NO TABS. It was a strip of client names that switched the panel, which is
+ * the reference's shape and, on a page whose job is to be read down, four
+ * more things to click. The rail advances on its own and can be scrolled by
+ * hand; nothing has to be pressed to see all four.
  *
- * NO PHOTOGRAPH BEHIND IT. There is no artwork for any of this, which is why
- * the work cards are flat fills too. A stock image of a cargo ship would be a
- * picture of somebody else's client.
+ * ONE CARD PER CLIENT, each on the 16:9 frame, content bottom-left.
  *
- * NO FOOT ROW. It carried the "Figures not published" tag, the client's
- * descriptor and a link through to the work, and Chris cut all three. The tag
- * is safe to lose because it guarded invented NUMBERS — FeaturedWall's — and
- * there are none here: the values are the repo's missing-value mark, which
- * claims nothing on its own. Put real figures in and the tag has to come back
- * with them.
+ * NO QUOTE AND NO FIGURES. There is no attributed quote anywhere in this repo
+ * — every testimonial is '[Name], [Role], [Company]' with a placeholder flag
+ * — and featuredCaseStudies.js says in capitals that its stat values are
+ * invented and are not these clients' results. So a card carries the name and
+ * the three measures the studio reports against, with the repo's own
+ * missing-value mark where each figure goes. Put sourced numbers in METRICS
+ * and the card is finished.
  *
- * THE STRIP IS NAMES, NOT LOGOS. clientLogos.js exists but does not cover
- * this roster, and a strip where half the marks were wordmarks and half were
- * set in Signifier would read as broken rather than as mixed.
+ * IT ROTATES ONLY IF THE READER WANTS MOTION. prefers-reduced-motion stops
+ * the timer outright, and hover or focus inside the rail pauses it, so it
+ * cannot move under somebody reading or tabbing through it.
+ *
+ * NO PHOTOGRAPH. There is no artwork for any of this, which is why the work
+ * cards are flat fills too.
  */
 export default function IndustryStories({ clients = [], eyebrow = '[ Case studies ]' }) {
   const entries = clients.map(entryFor).filter(Boolean)
-  const [active, setActive] = useState(0)
+  const railRef = useRef(null)
+  const [paused, setPaused] = useState(false)
+
+  /* Advances by one card's width. scrollTo rather than an index into state:
+     the rail is scrollable by hand too, so the DOM is the source of truth for
+     where it is — reading it back means a manual scroll is not undone by the
+     next tick. */
+  const advance = useCallback(() => {
+    const rail = railRef.current
+    if (!rail) return
+    const card = rail.firstElementChild
+    if (!card) return
+    const step = card.getBoundingClientRect().width + 16
+    const atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8
+    rail.scrollTo({ left: atEnd ? 0 : rail.scrollLeft + step, behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    if (paused || entries.length < 2) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(advance, 5000)
+    return () => clearInterval(id)
+  }, [advance, paused, entries.length])
 
   if (entries.length === 0) return null
 
-  const current = entries[Math.min(active, entries.length - 1)]
-
   return (
     <section className={styles.section} aria-labelledby="industry-stories">
-      <div className={styles.strip}>
-        <p className={styles.eyebrow} id="industry-stories">{eyebrow}</p>
+      <p className={styles.eyebrow} id="industry-stories">{eyebrow}</p>
 
-        <div className={styles.tabs}>
-          {entries.map((e, i) => (
-            <button
-              key={e.slug}
-              type="button"
-              className={i === active ? styles.tabOn : styles.tab}
-              aria-pressed={i === active}
-              onClick={() => setActive(i)}
-            >
-              {e.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      <div
+        className={styles.rail}
+        ref={railRef}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
+        {entries.map((e) => (
+          <article className={styles.card} key={e.slug}>
+            <div className={styles.cardBody}>
+              <p className={styles.client}>{e.name}</p>
 
-      {/* aria-live so the change a click makes is announced, the way the
-          work cards' well is. */}
-      <div className={styles.panel} aria-live="polite">
-        <p className={styles.client}>{current.name}</p>
-
-        <dl className={styles.metrics}>
-          {MEASURES.map((label) => (
-            <div key={label} className={styles.metric}>
-              <dt className={styles.metricLabel}>{label}</dt>
-              <dd className={styles.metricValue}>{TBC}</dd>
+              <dl className={styles.metrics}>
+                {MEASURES.map((label) => (
+                  <div key={label} className={styles.metric}>
+                    <dt className={styles.metricLabel}>{label}</dt>
+                    <dd className={styles.metricValue}>{TBC}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-          ))}
-        </dl>
-
+          </article>
+        ))}
       </div>
     </section>
   )

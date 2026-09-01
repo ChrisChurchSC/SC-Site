@@ -1,33 +1,9 @@
-/* AN INSET PANEL, 16:9. It ran full bleed off the page's pad vars, matching
-   the reference's edge-to-edge photograph; Chris asked for margins and a
-   16:9 frame, so it is a panel in the column now — the same shape the Build
-   diagram's stage uses.
-
-   The ratio governs the box and the contents lay out inside it: the client
-   strip takes its own height at the top and the panel takes the rest, so a
-   longer client name cannot change the frame. Below the breakpoint the ratio
-   comes off — 16:9 at 390px wide is 219px tall, which is not enough for a
-   name and three measures. */
+/* THE RAIL. One 16:9 card per client, scrollable by hand and advanced on a
+   timer — see the component. Inset in the column rather than full bleed, and
+   the cards keep their own width so the rail can overflow past the right
+   edge the way the featured rail does. */
 .section {
-  margin: 0 clamp(8px, 5vw, 96px);
-  aspect-ratio: 16 / 9;
-  display: flex;
-  flex-direction: column;
-  background: #131313;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--r-panel, 18px);
-  overflow: hidden;
-}
-
-/* The client strip, on its own rule — the reference underlines the live one
-   against a hairline that runs the width. */
-.strip {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: clamp(16px, 3vw, 40px);
-  padding: clamp(20px, 2.4vw, 30px) clamp(16px, 5vw, 96px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: clamp(32px, 4vw, 72px) clamp(8px, 5vw, 96px);
 }
 
 .eyebrow {
@@ -39,41 +15,40 @@
   color: rgba(255, 255, 255, 0.38);
 }
 
-.tabs {
+.rail {
   display: flex;
-  flex-wrap: wrap;
-  gap: clamp(14px, 2.4vw, 34px);
-  margin-left: auto;
+  gap: 16px;
+  margin-top: clamp(18px, 2vw, 28px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
 
-.tab,
-.tabOn {
-  padding: 4px 0;
-  border: 0;
-  background: none;
-  font-family: "Signifier", Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(15px, 1.5vw, 19px);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+.rail::-webkit-scrollbar { display: none; }
+
+/* 16:9, and wide enough that one card is most of the row rather than a
+   thumbnail. */
+.card {
+  flex: none;
+  width: min(100%, 880px);
+  aspect-ratio: 16 / 9;
+  scroll-snap-align: start;
+  display: flex;
+  background: #131313;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-panel, 18px);
+  overflow: hidden;
 }
 
-.tab { color: rgba(255, 255, 255, 0.34); }
-.tab:hover { color: rgba(255, 255, 255, 0.7); }
-
-/* Lit and underlined, as in the reference. */
-.tabOn {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-.panel {
-  flex: 1;
+/* BOTTOM LEFT. The card is mostly empty — there is no artwork to fill it —
+   so the type sits on the floor of the frame rather than floating in it. */
+.cardBody {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: clamp(28px, 4vw, 64px) clamp(20px, 4vw, 72px);
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  padding: clamp(24px, 3.4vw, 56px);
 }
 
 /* The client, set as the thing the panel is about. */
@@ -120,9 +95,8 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
+
 @media (max-width: 760px) {
-  .section { aspect-ratio: auto; }
-  .strip { align-items: flex-start; flex-direction: column; }
-  .tabs { margin-left: 0; }
+  .card { aspect-ratio: auto; min-height: 320px; }
   .metrics { grid-template-columns: minmax(0, 1fr); }
 }
