@@ -10,6 +10,7 @@ import AudienceCards from '../components/AudienceCards'
 import ContactCTA from '../components/ContactCTA'
 import DepartmentPanel from '../components/DepartmentPanel'
 import EmbedSection from '../components/EmbedSection'
+import IndustryStories from '../components/IndustryStories'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -113,6 +114,11 @@ export default function WorkIndustry() {
           <hr className={v3.divider} />
         </>
       )}
+
+      {/* The clients in this category, one at a time. */}
+      <IndustryStories clients={industry.clients} />
+
+      <hr className={v3.divider} />
 
       {/* HOW WE WORK, the same section /services/build runs, from the same
           constants rather than a retyped copy of them. It is true on any page

@@ -1,0 +1,129 @@
+/* Full-bleed, like the reference: the panel runs to the page edges rather
+   than sitting in the column, so the passage reads as a spread rather than as
+   another card. The pads come off the page's own vars, the way the dividers
+   and the featured rail already do it. */
+.section {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin-left: calc(-1 * var(--page-pad-left, 0px));
+  background: #131313;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* The client strip, on its own rule — the reference underlines the live one
+   against a hairline that runs the width. */
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+  padding: clamp(20px, 2.4vw, 30px) clamp(16px, 5vw, 96px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 2.4vw, 34px);
+  margin-left: auto;
+}
+
+.tab,
+.tabOn {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.5vw, 19px);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab { color: rgba(255, 255, 255, 0.34); }
+.tab:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* Lit and underlined, as in the reference. */
+.tabOn {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.panel {
+  padding: clamp(40px, 6vw, 92px) clamp(16px, 5vw, 96px) clamp(32px, 4vw, 64px);
+}
+
+/* The size the reference gives a pull quote. It is not one — see the note in
+   the JSX — but it is the passage the section is built around, so it is set
+   like the thing that matters on the page rather than like body copy. */
+.account {
+  margin: 0;
+  max-width: 34ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.9vw, 40px);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  margin-top: clamp(24px, 3vw, 40px);
+}
+
+.client {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.client:hover {
+  color: var(--pink, #df4ed6);
+  border-bottom-color: var(--pink, #df4ed6);
+}
+
+.line {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tag {
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control, 4px);
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 760px) {
+  .strip { align-items: flex-start; flex-direction: column; }
+  .tabs { margin-left: 0; }
+  .account { max-width: none; }
+}
