@@ -8,6 +8,7 @@ import { ComingSoonProvider } from './context/ComingSoonContext'
 import { ProjectsProvider, useProjects } from './context/ProjectsContext'
 import { CalDrawerProvider } from './context/CalDrawerContext'
 import Nav from './components/Nav'
+import About from './pages/About'
 import AudiencePage from './pages/AudiencePage'
 import CalDrawer from './components/CalDrawer'
 import Cursor from './components/Cursor'
@@ -60,7 +61,8 @@ const isV3Page = (pathname) =>
   pathname.startsWith('/services/') ||
   pathname.startsWith('/industries/') ||
   pathname.startsWith('/stages/') ||
-  pathname.startsWith('/outcomes/')
+  pathname.startsWith('/outcomes/') ||
+  pathname === '/studio'
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -141,6 +143,12 @@ export default function App() {
                 <Route path="/industries/:slug" element={<AudiencePage kind="industry" />} />
                 <Route path="/stages/:slug" element={<AudiencePage kind="stage" />} />
                 <Route path="/outcomes/:slug" element={<AudiencePage kind="outcome" />} />
+                {/* NOT /about. That path is 301d to /services by vercel.json —
+                    capabilities lived there before the Services rename — so a
+                    page mounted on it would never reach React in production,
+                    the same way /work/industry/:slug never did. /about-us stays
+                    the careers page, which is what it actually is. */}
+                <Route path="/studio" element={<About />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/services" element={<Services />} />

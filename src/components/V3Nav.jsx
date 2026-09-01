@@ -147,7 +147,10 @@ export const COMPANY_COLS = [
   {
     tag: 'Our company',
     links: [
-      { label: 'About', href: '/about-us', Icon: Users },
+      /* About has its own page now. Careers keeps /about-us, which is what
+         that page actually is — what it is like to work here, the realities,
+         the open roles and the freelancer signup. */
+      { label: 'About', href: '/studio', Icon: Users },
       // Careers is not its own route on this branch — the About page carries
       // it, which is where Nav.jsx sends Careers too.
       { label: 'Careers', href: '/about-us', Icon: Briefcase },
