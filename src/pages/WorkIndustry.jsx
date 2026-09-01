@@ -21,6 +21,7 @@ import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
 import { BUILD_EMBED, embedCopyFor } from './ServiceV3'
 import { industries, industryBySlug } from '../data/industries'
+import { faqs } from '../data/pricingTabs'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 
@@ -51,6 +52,13 @@ export default function WorkIndustry() {
   const { slug } = useParams()
   const cal = useCalDrawer()
   const industry = industryBySlug(slug)
+
+  /* POINTS KEEP THEIR ICONS. An industry supplies the words; the icons stay
+     BUILD_EMBED's, by position, so the three keep the meanings the shared
+     section gave them and a data file does not have to import lucide. */
+  const embedPoints = industry?.embed?.points
+    ? industry.embed.points.map((pt, i) => ({ ...BUILD_EMBED[i], ...pt }))
+    : BUILD_EMBED
 
   useMeta({
     title: industry ? `${industry.name} Case Studies | Super Conscious` : 'Case Studies | Super Conscious',
@@ -129,9 +137,9 @@ export default function WorkIndustry() {
           actually happens. */}
       <EmbedSection
         eyebrow={embedCopyFor('build').eyebrow}
-        headline={embedCopyFor('build').headline}
+        headline={industry.embed?.headline ?? embedCopyFor('build').headline}
         body={null}
-        points={BUILD_EMBED}
+        points={embedPoints}
         visual={<DepartmentPanel />}
       />
 
@@ -143,7 +151,7 @@ export default function WorkIndustry() {
 
       <DisciplinesSection
         eyebrow="[ Disciplines ]"
-        headline="Twelve disciplines, one bench."
+        headline={industry.disciplinesHeadline ?? 'Twelve disciplines, one bench.'}
       />
 
       <hr className={v3.divider} />
@@ -152,7 +160,10 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
-      <ServiceFaq />
+      {/* The industry's own questions first, then the pricing list unchanged:
+          ServiceFaq's header is explicit that answering the commercial ones
+          differently from /pricing is worse than not answering them. */}
+      <ServiceFaq items={industry.faq ? [...industry.faq, ...faqs] : undefined} />
 
       <ContactCTA sub={CLOSING} form={false} bare>
         <button className={v3.contactCta} onClick={cal.open}>Start a project</button>

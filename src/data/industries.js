@@ -106,6 +106,60 @@ export const industries = [
           'claiming an outcome the product cannot yet show.',
       },
     ],
+    /* HOW WE WORK, SAID FOR THIS CATEGORY. The shared section is the studio's
+       shape and reads the same on every page; these are the same three facts
+       aimed at a technology reader. Points keep their icons from BUILD_EMBED
+       by position — see the note in WorkIndustry.jsx.
+
+       Every line is checkable. Design and engineering really are two of the
+       twelve disciplines. The tokens, components, grid and radii really are
+       what the brand platform holds, per /pricing. Neither line claims a
+       result. */
+    embed: {
+      headline: 'One bench for the brand and the product.',
+      points: [
+        {
+          key: 'Design and engineering together',
+          line: 'The identity, the design system and the interface come from one team rather than from a studio and a shop.',
+        },
+        {
+          key: 'Tokens, not a PDF',
+          line: 'What you get is a system the front end can consume: tokens, components, grid and radii, iconography and voice.',
+        },
+        {
+          key: 'People you know',
+          line: 'Embedded in your team, and you have access to them.',
+        },
+      ],
+    },
+
+    /* Engineering is genuinely one of the twelve, which is the part a
+       technology reader is checking for. */
+    disciplinesHeadline: 'Twelve disciplines, engineering among them.',
+
+    /* THE COMMERCIAL ANSWERS ARE NOT TOUCHED. ServiceFaq reads the pricing
+       FAQ and its own header says a page answering those differently from
+       /pricing is worse than not answering them at all — so these are three
+       questions ABOUT THE WORK that /pricing does not cover, and the page
+       appends the pricing list after them unchanged.
+
+       Each answer is a fact already on the site: the twelve disciplines, what
+       the brand platform holds, and the three situations above. */
+    faq: [
+      {
+        q: 'Do you work with our product team?',
+        a: 'Yes. Design and engineering are two of the twelve disciplines, so the identity, the design system and the interface are one engagement rather than a hand-off between a studio and a shop.',
+      },
+      {
+        q: 'Do we get design tokens, or a set of guidelines?',
+        a: 'Tokens. The brand platform holds tokens, components, grid and radii, iconography and voice — a system your design system can meet, rather than a document somebody has to interpret.',
+      },
+      {
+        q: 'Do we need to have a brand already?',
+        a: 'No. The work starts from wherever you are: a product that shipped before it had a brand, a platform moving to a new buyer, or an existing brand in a category where everyone sounds the same.',
+      },
+    ],
+
     /* THE SECOND VIEW. Same four stages the footer and the Case Studies menu
        already use — WORK_BY_STAGE — so a visitor meets one vocabulary for
        company size across the site rather than a fifth invented here.
