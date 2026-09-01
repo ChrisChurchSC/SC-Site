@@ -244,6 +244,74 @@ export const industries = [
   {
     slug: 'health-wellness',
     name: 'Health & Wellness',
+
+    hero: {
+      lede:
+        'Consumer remedies on a shelf and clinical software behind a login — ' +
+        'and what each of them needed the brand to do.',
+    },
+
+    situations: [
+      {
+        id: 'new',
+        name: 'New',
+        body:
+          'A product with a regulated label and nothing else decided. What it ' +
+          'can say is set before what it looks like, so the claims and the ' +
+          'identity have to be worked in that order.',
+        pills: ['Time to launch', 'Organic traffic'],
+      },
+      {
+        id: 'pivoting',
+        name: 'Pivoting',
+        body:
+          'Moving between audiences that are governed differently — consumer ' +
+          'to clinical, or a shelf product going direct. The proof that ' +
+          'carried one does not carry the other.',
+        pills: ['Share of voice', 'MQL-to-SQL rate'],
+      },
+      {
+        id: 'underdog',
+        name: 'Underdog',
+        body:
+          'A category where the incumbents have the datasets and the years. ' +
+          'Standing out means being specific about what is actually known ' +
+          'rather than louder about what is not.',
+        pills: ['Cost per lead', 'Brand search volume'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'for health and wellness.',
+      ],
+    },
+
+    /* Both engagements here ran through packaging, illustration and content —
+       Hyland's added character design and 3D. */
+    disciplinesHeadline: 'Twelve disciplines. Health and wellness leans on design, illustration, writing and packaging.',
+
+    trustHeadline: [
+      'Trusted by 100+ brands,',
+      'health and wellness among them.',
+    ],
+
+    faq: [
+      {
+        q: 'Do you work with regulated claims?',
+        a: 'We work around them rather than through them: what a product may say is your regulatory call, and the brand and the campaign are built to hold whatever survives it. Nothing goes out claiming something you cannot substantiate.',
+      },
+      {
+        q: 'Can you do packaging as well as the brand?',
+        a: 'Yes. Design, illustration and production are three of the twelve disciplines, and packaging has been part of the work here — identity, label design and the content around it in the same engagement.',
+      },
+      {
+        q: 'Do we need to have a brand already?',
+        a: 'No. The work starts from wherever you are: a product with a label and nothing else decided, a brand moving between audiences, or one in a category where the incumbents have the years.',
+      },
+    ],
     clients: [
       'hylands',       // case study industry: "Kids' wellness"
       'concis-labs',   // 'A Medicaid meeting intelligence platform.'
@@ -252,6 +320,71 @@ export const industries = [
   {
     slug: 'food-beverage',
     name: 'Food & Beverage',
+
+    hero: {
+      lede:
+        'Wine and mushrooms, sold through grocery, restaurants and direct — ' +
+        'and what each of them needed the brand to do.',
+    },
+
+    situations: [
+      {
+        id: 'new',
+        name: 'New',
+        body:
+          'A product going onto a shelf beside things people already buy. The ' +
+          'pack is the first and often the only thing that gets read, so it ' +
+          'has to carry the whole argument.',
+        pills: ['Time to launch', 'Organic traffic'],
+      },
+      {
+        id: 'pivoting',
+        name: 'Pivoting',
+        body:
+          'Adding a channel the brand was not built for — trade to direct, or ' +
+          'one region to national. The same identity has to work in a case ' +
+          'box, on a shelf and on a phone.',
+        pills: ['Share of voice', 'Cost per lead'],
+      },
+      {
+        id: 'underdog',
+        name: 'Underdog',
+        body:
+          'A crowded aisle where the shelf is the whole media buy. Standing ' +
+          'out is a design problem before it is a spending one.',
+        pills: ['Brand search volume', 'Engagement rate vs. benchmark'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'for food and drink.',
+      ],
+    },
+
+    disciplinesHeadline: 'Twelve disciplines. Food and drink leans on design, illustration, photography and writing.',
+
+    trustHeadline: [
+      'Trusted by 100+ brands,',
+      'food and drink among them.',
+    ],
+
+    faq: [
+      {
+        q: 'Do you do packaging and labels?',
+        a: 'Yes — identity, packaging, label design and illustration have been one engagement here, with the content and the site built off the same system rather than commissioned separately.',
+      },
+      {
+        q: 'Can the brand work for trade and for direct?',
+        a: 'That is what the system is for. The brand platform holds tokens, components, grid and radii, iconography and voice, so the same identity resolves on a case box, a shelf and a phone without being redrawn each time.',
+      },
+      {
+        q: 'Do we need to have a brand already?',
+        a: 'No. The work starts from wherever you are: a product about to hit a shelf, a brand adding a channel it was not built for, or one in an aisle where everything looks the same.',
+      },
+    ],
     clients: [
       'wonderwerk',    // "A natural wine brand from California's House of Fermentation."
       'smallhold',     // 'A specialty mushroom grower and national distributor.'
@@ -260,6 +393,72 @@ export const industries = [
   {
     slug: 'culture-nonprofit',
     name: 'Culture & Nonprofit',
+
+    hero: {
+      lede:
+        'A platform cultivating Iranian culture and a media platform for human ' +
+        'growth — and what each of them needed the brand to do.',
+    },
+
+    situations: [
+      {
+        id: 'new',
+        name: 'New',
+        body:
+          'A mission that has to be legible to people who have never heard of ' +
+          'it. What the organisation stands for gets decided in public, in the ' +
+          'same work that introduces it.',
+        pills: ['Time to launch', 'Organic traffic'],
+      },
+      {
+        id: 'pivoting',
+        name: 'Pivoting',
+        body:
+          'The cause has not changed and the way it is told has to. Usually ' +
+          'when the audience widens past the people who were already ' +
+          'convinced.',
+        pills: ['Share of voice', 'Engagement rate vs. benchmark'],
+      },
+      {
+        id: 'underdog',
+        name: 'Underdog',
+        body:
+          'Competing for attention against everything else, with no budget to ' +
+          'buy it. What carries is the work itself, made often enough to be ' +
+          'found.',
+        pills: ['Brand search volume', 'Content publishing velocity'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'for culture and nonprofit.',
+      ],
+    },
+
+    disciplinesHeadline: 'Twelve disciplines. Culture and nonprofit leans on design, writing, illustration and social.',
+
+    trustHeadline: [
+      'Trusted by 100+ brands,',
+      'culture and nonprofit among them.',
+    ],
+
+    faq: [
+      {
+        q: 'Can we run the work ourselves afterwards?',
+        a: 'That is the intent. The brand platform holds tokens, components, grid and radii, iconography and voice, and the work here has included a modular content framework a team runs independently.',
+      },
+      {
+        q: 'Do you work with limited budgets?',
+        a: 'The arrangement is built for it: one team at the fraction you need, flexing with the work rather than with your headcount. The pricing page lists what each deliverable starts at.',
+      },
+      {
+        q: 'Do we need to have a brand already?',
+        a: 'No. The work starts from wherever you are: a mission being introduced, a cause whose telling has to widen, or an organisation competing for attention it cannot buy.',
+      },
+    ],
     clients: [
       'nimruz',        // case study industry: 'Culture, nonprofit'
       'world-within',  // case study industry: 'Impact, culture'
