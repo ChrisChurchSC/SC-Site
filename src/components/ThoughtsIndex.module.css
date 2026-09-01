@@ -1,0 +1,31 @@
+/* Four across rather than the work grid's five. Its five is sized around a
+   featured card two columns wide; with no featured card the same five left
+   the cards narrower than they need to be for a title and a date. */
+.wrap {
+  --cols: 4;
+}
+
+/* FOUR CONTROLS ON ONE ROW. WorkIndex's controls grid is five equal tracks
+   with the search spanning two, which is right over a featured card two
+   columns wide. Here that left search + topic + year filling the row and the
+   sort dropping to a line of its own. Explicit tracks instead: the search
+   keeps its double width and the three selects take the rest.
+
+   Doubled class to outrank .controls rather than depend on which module the
+   bundler emits last — the same trick .navShell.navShell uses. */
+.controls.controls {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+/* WorkIndex spans the search across two columns to sit over the featured
+   card. There is no featured card here and the tracks above already give it
+   the double width, so the span would push the sort onto a second row. */
+.search.search {
+  grid-column: auto;
+}
+
+@media (max-width: 860px) {
+  .controls.controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

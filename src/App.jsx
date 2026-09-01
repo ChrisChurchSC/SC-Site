@@ -52,7 +52,7 @@ function ScrollToTop() {
    here rather than through ChromeGate, which would take the theme toggle
    down with it: the deck pages want all the chrome gone, these want only the
    nav gone. */
-const V3_PAGES = ['/v3', '/pricing', '/work']
+const V3_PAGES = ['/v3', '/pricing', '/work', '/thoughts']
 
 const isV3Page = (pathname) =>
   V3_PAGES.includes(pathname) ||
