@@ -95,6 +95,20 @@ function ExtendsWires({ count }) {
 
     const landings = cards.map((c) => ({ x: c.left - base.left + c.width / 2, y: landing }))
 
+    /* NOTHING TO DRAW IN ONE COLUMN. On a phone the grid collapses and every
+       card shares the same centre, so the fan becomes three straight lines
+       down the same axis — two of them behind the cards, and three nodes
+       stacked on one point, which reads as a rendering fault rather than as
+       a diagram. Detected from the measured positions rather than from a
+       breakpoint, because the grid is auto-fit and collapses at whatever
+       width the cards stop fitting. The stacked cards are already in reading
+       order, which is what the wires were saying. */
+    const oneColumn = landings.every((l) => Math.abs(l.x - landings[0].x) < 1)
+    if (oneColumn) {
+      setWires(null)
+      return
+    }
+
     setWires({
       width: base.width,
       height: base.height,

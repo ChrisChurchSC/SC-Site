@@ -78,3 +78,20 @@
 .section .card {
   padding: 18px 20px;
 }
+
+/* ONE COLUMN ON A PHONE. Services' grid goes four → three → two, and two is
+   right there for its 18px names. These are 22px, and in a 151px card the
+   name ran outside the card entirely — "Illustration +" and "Engineering +"
+   sat on the page beside their own borders, and "Film & photo" broke onto
+   three lines. Overriding here rather than in Services.module.css because
+   that page's own two columns are fine at its size. */
+@media (max-width: 700px) {
+  .section .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The name is what has to give when the row is tight, not the card. */
+.section .name {
+  min-width: 0;
+}

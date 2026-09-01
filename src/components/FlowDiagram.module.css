@@ -158,9 +158,15 @@
   .flow { grid-template-columns: minmax(0, 1fr); }
   .column { justify-content: flex-start; }
 
-  /* The wires are measured from live layout, so stacking needs no special
-     case — they redraw against the new positions. */
-
+  /* NO WIRES ONCE IT STACKS. This used to say stacking needed no special
+     case because the wires are measured from live layout and redraw against
+     the new positions — which is true, and is exactly the problem. Measured
+     against one column they become long diagonals running from each card's
+     right edge, across the cards below it, and off the side of the screen:
+     the line is still correct and reads as damage. The columns are stacked
+     in reading order at this width, which already says what the wires said
+     when there was a left, a middle and a right. */
+  .wires { display: none; }
 }
 
 /* Name on the left, sync mark on the right. */

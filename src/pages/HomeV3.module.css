@@ -1095,9 +1095,31 @@
   border: 0;
 }
 
+/* The menu's own CTA. Same pink as the bar's, full width because it is the
+   last thing in a stacked list rather than an item in a row. */
+.mobileCta {
+  margin-top: 6px;
+  padding: 14px;
+  border: 0;
+  border-radius: var(--r-control, 4px);
+  background: var(--pink, #df4ed6);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  cursor: pointer;
+}
+
 @media (max-width: 860px) {
   .navToggle { display: grid; }
   .mobileNav { display: flex; }
+
+  /* THE BAR BECOMES THE LOGO AND THE MENU BUTTON. Log in and Start a
+     project were 191px of content in a 390px bar and overflowed it; the CTA
+     is now the last item inside the menu and Log in is gone, since it has
+     nowhere to go on any width. */
+  .navActions { display: none; }
 }
 
 /* THE BAR IS A BAR, NOT A CARD.

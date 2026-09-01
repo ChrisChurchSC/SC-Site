@@ -637,6 +637,23 @@ export default function V3Nav() {
                        footer treats every entry without a destination. */
                     : <span key={label} className={v3.mobileText}>{label}</span>
                 ))}
+
+                {/* THE CTA MOVES IN HERE below the breakpoint. On the wide
+                    bar it sits beside "Log in"; on a phone that pair was
+                    191px of content in a 390px bar and ran off the right
+                    edge. The bar is now the logo and the menu button, and
+                    the one action worth keeping is the last thing in the
+                    menu rather than a second thing competing with it.
+
+                    LOG IN DOES NOT COME WITH IT. It is an unlinked span on
+                    the wide bar too — there is no client area to log into —
+                    so on a phone it is a word taking up room for nothing. */}
+                <button
+                  className={v3.mobileCta}
+                  onClick={() => { setMenuOpen(false); cal.open() }}
+                >
+                  Start a project
+                </button>
               </div>
             )}
           </div>
