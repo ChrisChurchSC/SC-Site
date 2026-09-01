@@ -22,9 +22,15 @@ import { useMeta } from '../hooks/useMeta'
  * study with a cover, and a thought is not more of a thought for being the
  * most recent. Every post gets the same cell — see ThoughtsIndex.
  *
- * NOT TALL. /work's hero holds the page open above a grid that is the whole
- * site's work; this one sits above four posts, and the same drop left most
- * of a screen of nothing between the headline and the first card.
+ * NOT TALL, AND BARE. /work's hero holds the page open above a grid that is
+ * the whole site's work; this one sits above four posts, and the same drop
+ * left most of a screen of nothing between the headline and the first card.
+ *
+ * Dropping tall cost the hero its transparency — that variant is what sets
+ * background: none, so without it the card's own #161616 came back as a grey
+ * panel behind the headline. bare is the variant that means no ground, and
+ * rule={false} suppresses the hairline it would otherwise draw above a hero
+ * that has only the nav above it.
  *
  * THE WORDS ARE THE PAGE'S OWN. "Thoughts" and "Ideas, notes, and process."
  * were the header of the version this replaced, and the second is also the
@@ -52,6 +58,8 @@ export default function Thoughts() {
         as="h1"
         center
         display
+        bare
+        rule={false}
       />
 
       <ThoughtsIndex />

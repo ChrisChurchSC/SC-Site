@@ -46,6 +46,11 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * the page and a hairline rule does the work the card's edge was doing. For a
  * page that does not want every passage in a container.
  *
+ * `rule` turns that hairline off, for a bare card that opens a page. The rule
+ * divides this passage from the one above it, and there is nothing above a
+ * hero but the nav — drawn there it reads as an underline on the bar. On by
+ * default, so every existing bare card keeps it.
+ *
  * `serif` sets the support paragraphs in Signifier at reading size instead of
  * the 11px mono, and lifts the statement to match. For a card carrying real
  * prose rather than one line of qualifier. Off by default.
@@ -62,13 +67,14 @@ export default function StatementCard({
   tall = false,
   serif = false,
   bare = false,
+  rule = true,
   center = false,
   display = false,
   children = null,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={styles.statement}>{statement}</Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}

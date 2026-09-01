@@ -166,6 +166,12 @@
    edge, in line with the section labels above and below it, rather than
    inset by the card's 56px. Vertical padding stays and grows: with no edge
    to separate it from what follows, the space has to. */
+/* See the note on the `rule` prop: a bare card at the top of a page has
+   nothing above it to be divided from. */
+.noRule::before {
+  display: none;
+}
+
 .bare {
   background: none;
   border-radius: 0;
