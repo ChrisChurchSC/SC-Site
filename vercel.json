@@ -76,7 +76,8 @@
       "statusCode": 301
     },
     {
-      "source": "/work/:client/:sub",
+      "_comment": "Legacy two-segment work URLs collapse to the hyphenated slug. :client excludes 'industry' because /work/industry/:slug is a real route: without the lookahead this rule 301s it to /work/industry-technology, which renders Case study not found. It only bites on Vercel — the dev server does not apply this file — so it passed every local check.",
+      "source": "/work/:client((?!industry$)[^/]+)/:sub",
       "destination": "/work/:client-:sub",
       "statusCode": 301
     }
