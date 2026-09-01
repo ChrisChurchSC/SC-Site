@@ -15,10 +15,23 @@
   color: rgba(255, 255, 255, 0.38);
 }
 
+/* IT BLEEDS OFF THE RIGHT. The rail was inset in the column, so the last
+   card stopped at the page margin and the row read as a finished set rather
+   than as one that continues. The bleed is the page pad plus this section own
+   pad — the two things between the rail and the screen edge — which is the
+   same calculation FeaturedWall own rail uses. */
 .rail {
+  /* Both sides: the page pad AND this section own pad sit between the rail
+     and each screen edge, and leaving the right one out stopped the rail 72px
+     short of it at 1440. */
+  --bleed: calc(var(--page-pad-left, 0px) + clamp(8px, 5vw, 96px));
+  --bleed-right: calc(var(--page-pad-right, 0px) + clamp(8px, 5vw, 96px));
   display: flex;
   gap: 16px;
-  margin-top: clamp(18px, 2vw, 28px);
+  margin: clamp(18px, 2vw, 28px) 0 0 calc(-1 * var(--bleed));
+  width: calc(100% + var(--bleed) + var(--bleed-right));
+  padding-left: var(--bleed);
+  scroll-padding-left: var(--bleed);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -31,7 +44,9 @@
 .card {
   flex: none;
   width: min(100%, 880px);
-  aspect-ratio: 16 / 9;
+  /* Taller than the 16:9 it started on: at 495px the card was a letterbox
+     with a name on the floor of it. 3:2 gives the type somewhere to sit. */
+  aspect-ratio: 3 / 2;
   scroll-snap-align: start;
   display: flex;
   background: #131313;
