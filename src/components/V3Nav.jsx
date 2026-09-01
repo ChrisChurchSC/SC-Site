@@ -13,6 +13,7 @@ import v3 from '../pages/HomeV3.module.css'
    there is no cycle. */
 import { DISCIPLINES } from '../pages/Services'
 import { industries } from '../data/industries'
+import { stages } from '../data/stages'
 import LogoWordmark from './LogoWordmark'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
@@ -101,12 +102,23 @@ export const WORK_BY_INDUSTRY = industries.map(({ name, slug }) => ({
    describe where a company is in its life, which is what a visitor is
    actually placing themselves against — headcount is a different question and
    these were never answering it. */
+/* THE FOUR STAGES, LINKED WHERE THERE IS A PAGE. Only the ones written up in
+   stages.js get an href; the rest render as text, the same way the footer and
+   the nav already treat any entry without a destination. Add a record there
+   and the link appears in both places without touching this list.
+
+   The labels stay here rather than moving into stages.js: they are the
+   site's vocabulary for company size, used by the nav and the footer whether
+   or not a page exists behind each one. */
 export const WORK_BY_STAGE = [
   'Founder-led',
   'Seed to Series A',
   'Scale-up',
   'Enterprise',
-]
+].map((label) => {
+  const written = stages.find((s) => s.name === label)
+  return written ? { label, href: `/stages/${written.slug}` } : { label }
+})
 
 /* The Platform menu, its six pages and the argument for them were removed
    when the platform was cut from this site. It is its own product now and
@@ -295,7 +307,7 @@ export const FOOTER_COLS = [
       ...WORK_BY_INDUSTRY,
     ],
   },
-  { tag: 'By company stage', links: WORK_BY_STAGE.map(label => ({ label })) },
+  { tag: 'By company stage', links: WORK_BY_STAGE },
   /* ALL THREE COMPANY COLUMNS SIT ON THE BOTTOM ROW, beside Legal. It was
      only Socials down there; Our company and Get in touch were in the top row
      with the service and work links, which put four short columns of
@@ -620,8 +632,12 @@ export default function V3Nav() {
                     </div>
                     <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
                       <p className={v3.panelTag}>By company stage</p>
-                      {WORK_BY_STAGE.map(s => (
-                        <NavLink key={s} to="/work" className={v3.proofLink}>{s}</NavLink>
+                      {WORK_BY_STAGE.map(({ label, href }) => (
+                        href
+                          ? <NavLink key={label} to={href} className={v3.proofLink}>{label}</NavLink>
+                          /* No page yet — text rather than a link to the wall,
+                             which is what every other undestined entry does. */
+                          : <span key={label} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{label}</span>
                       ))}
                     </div>
                   </div>

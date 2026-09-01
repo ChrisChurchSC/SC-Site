@@ -5,7 +5,7 @@ import v3 from './HomeV3.module.css'
 /* The work grid's own stylesheet, so an industry page's cards are the cards
    from /work rather than a second set that drifts — the move ThoughtsIndex
    makes with the same file. */
-import styles from './WorkIndustry.module.css'
+import styles from './AudiencePage.module.css'
 import AudienceCards from '../components/AudienceCards'
 import ContactCTA from '../components/ContactCTA'
 import DepartmentPanel from '../components/DepartmentPanel'
@@ -20,7 +20,8 @@ import TrustMosaic from '../components/TrustMosaic'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
 import { BUILD_EMBED, embedCopyFor } from './ServiceV3'
-import { industries, industryBySlug } from '../data/industries'
+import { industryBySlug } from '../data/industries'
+import { stageBySlug } from '../data/stages'
 import { faqs } from '../data/pricingTabs'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
@@ -48,10 +49,36 @@ const CLOSING = 'It might change your life. At minimum, we can answer your burni
  * AN UNKNOWN SLUG REDIRECTS to the wall rather than rendering an empty shell,
  * the same way /services/:slug does.
  */
-export default function WorkIndustry() {
+/* THE TWO KINDS OF PAGE, ONE COMPONENT. An industry and a company stage are
+   the same page with a different record behind them: a name, a lede, three
+   situations, and overrides for the shared sections. Two files would be two
+   copies of this markup drifting apart the first time either was touched —
+   the fault the disciplines list and the footer already avoid.
+
+   WHAT DIFFERS IS THE PAIR OF VIEWS. An industry page offers situation and
+   stage; a stage page passes none and takes AudienceCards' default, which is
+   situation and industry. An industry page offering to re-sort by industry
+   would be circular; a stage page offering it is not. */
+const KINDS = {
+  industry: {
+    eyebrow: '[ Industry ]',
+    base: '/industries',
+    find: industryBySlug,
+    noun: (name) => `${name.toLowerCase()} brand`,
+  },
+  stage: {
+    eyebrow: '[ Company stage ]',
+    base: '/stages',
+    find: stageBySlug,
+    noun: (name) => `${name.toLowerCase()} company`,
+  },
+}
+
+export default function AudiencePage({ kind = 'industry' }) {
   const { slug } = useParams()
   const cal = useCalDrawer()
-  const industry = industryBySlug(slug)
+  const config = KINDS[kind]
+  const industry = config.find(slug)
 
   /* An array of lines becomes breaks here rather than in the data file, which
      holds no JSX. A string or the shared JSX passes through untouched. */
@@ -75,9 +102,9 @@ export default function WorkIndustry() {
   useMeta({
     title: industry ? `${industry.name} Case Studies | Super Conscious` : 'Case Studies | Super Conscious',
     description: industry
-      ? `Brand and marketing work for ${industry.name.toLowerCase()} companies, from the Super Conscious studio.`
+      ? `Brand and marketing work for ${config.noun(industry.name)}s, from the Super Conscious studio.`
       : undefined,
-    path: `/industries/${slug}`,
+    path: `${config.base}/${slug}`,
   })
 
   if (!industry) return <Navigate to="/work" replace />
@@ -89,7 +116,7 @@ export default function WorkIndustry() {
       {industry.hero ? (
         <section className={styles.hero}>
           <div className={styles.heroText}>
-            <p className={styles.eyebrow}>[ Industry ]</p>
+            <p className={styles.eyebrow}>{config.eyebrow}</p>
             <h1 className={styles.heroHeadline}>{industry.name}</h1>
             <p className={styles.heroBody}>{industry.hero.lede}</p>
 
@@ -104,7 +131,7 @@ export default function WorkIndustry() {
         </section>
       ) : (
         <StatementCard
-          eyebrow="[ Industry ]"
+          eyebrow={config.eyebrow}
           statement={industry.name}
           support={null}
           as="h1"
@@ -124,11 +151,16 @@ export default function WorkIndustry() {
         <>
           <AudienceCards
             eyebrow="[ Who we work with ]"
-            headline={`Three kinds of ${industry.name.toLowerCase()} brand.`}
-            views={[
-              { id: 'situation', label: 'By situation', cards: industry.situations },
-              { id: 'stage', label: 'By company stage', cards: industry.stages },
-            ]}
+            headline={`Three kinds of ${config.noun(industry.name)}.`}
+            cards={industry.situations}
+            {...(industry.stages
+              ? {
+                views: [
+                  { id: 'situation', label: 'By situation', cards: industry.situations },
+                  { id: 'stage', label: 'By company stage', cards: industry.stages },
+                ],
+              }
+              : null)}
           />
 
           <hr className={v3.divider} />

@@ -8,7 +8,7 @@ import { ComingSoonProvider } from './context/ComingSoonContext'
 import { ProjectsProvider, useProjects } from './context/ProjectsContext'
 import { CalDrawerProvider } from './context/CalDrawerContext'
 import Nav from './components/Nav'
-import WorkIndustry from './pages/WorkIndustry'
+import AudiencePage from './pages/AudiencePage'
 import CalDrawer from './components/CalDrawer'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
@@ -58,7 +58,8 @@ const V3_PAGES = ['/v3', '/pricing', '/work', '/thoughts']
 const isV3Page = (pathname) =>
   V3_PAGES.includes(pathname) ||
   pathname.startsWith('/services/') ||
-  pathname.startsWith('/industries/')
+  pathname.startsWith('/industries/') ||
+  pathname.startsWith('/stages/')
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -136,7 +137,8 @@ export default function App() {
                     moved somewhere it cannot collide instead of fighting the
                     matcher. Only bites in production: the dev server does not
                     read vercel.json. */}
-                <Route path="/industries/:slug" element={<WorkIndustry />} />
+                <Route path="/industries/:slug" element={<AudiencePage kind="industry" />} />
+                <Route path="/stages/:slug" element={<AudiencePage kind="stage" />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/services" element={<Services />} />
