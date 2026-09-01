@@ -24,6 +24,14 @@ import styles from './HowItWorks.module.css'
  * and its closing line says that instead. Giving Support a loop it does not
  * have would have been the tidier row and the wrong picture.
  *
+ * ALSO USED FOR COPY THAT IS NOT A LOOP. The rail — numbered rows, one open
+ * at a time, the rule under the open row doubling as the dwell timer — is a
+ * shape for any short set of statements that should be read in order rather
+ * than scanned at once. About's point of view is six of those. A caller can
+ * hand over its own eyebrow, headline and steps instead of naming a slug, and
+ * `rail` asks for the rail layout when there are no visuals to put beside it.
+ * One implementation rather than a second component with the same markup.
+ *
  * Nothing here claims a result. Grow's "Compound" describes how the work is
  * organised — what was learned stays and gets reused — not an outcome anyone
  * is promised, and Support's four describe what gets done, not how well.
@@ -78,8 +86,17 @@ const STEP_MS = 6000
    renders text-only when no step carries a visual, so this needs no other
    change; if these steps ever want pictures again they need new ones. */
 
-export default function HowItWorks({ slug = 'grow' }) {
-  const set = SETS[slug]
+export default function HowItWorks({
+  slug = 'grow',
+  eyebrow = '[ How it works ]',
+  headline,
+  steps,
+  rail = false,
+}) {
+  /* Steps passed in win over the slug's set. A caller that hands over its own
+     is not a service and has no loop, so `loops` is false and no closing line
+     is drawn unless one is given. */
+  const set = steps ? { headline, steps, loops: false } : SETS[slug]
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const [seen, setSeen] = useState(false)
@@ -108,8 +125,13 @@ export default function HowItWorks({ slug = 'grow' }) {
   /* A service with no set has no section, rather than an empty one. */
   if (!set) return null
 
-  const { headline, steps, closing, loops } = set
+  const { headline: setHeadline, steps: setSteps, closing, loops } = set
   const id = `how-it-works-${slug}`
+  /* The stage only exists if a step has a visual. The rail can run without
+     one — see .railOnly, which drops the second column and holds the rows to
+     a readable measure rather than letting them span the page. */
+  const hasStage = setSteps.some((s) => s.visual)
+  const useRail = rail || hasStage
 
   return (
     <section
@@ -119,19 +141,19 @@ export default function HowItWorks({ slug = 'grow' }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <p className={styles.eyebrow}>[ How it works ]</p>
+      <p className={styles.eyebrow}>{eyebrow}</p>
       <h2 className={styles.headline} id={id}>
-        {headline}
+        {setHeadline}
       </h2>
 
-      {steps.some((s) => s.visual) ? (
-        <div className={styles.split}>
+      {useRail ? (
+        <div className={`${styles.split}${hasStage ? '' : ' ' + styles.railOnly}`}>
           {/* THE STEPS AS A LIST YOU READ DOWN, one open at a time. The
               closed ones stay legible rather than being hidden: the set is
               the argument, and a single open row with three hidden ones is
               an accordion, not a story. */}
           <ol className={styles.rail}>
-            {steps.map(({ n, name, note }, i) => (
+            {setSteps.map(({ n, name, note }, i) => (
               <li key={n} className={i === active ? styles.railOn : styles.railItem}>
                 <button
                   type="button"
@@ -160,17 +182,19 @@ export default function HowItWorks({ slug = 'grow' }) {
             ))}
           </ol>
 
-          <div className={styles.stage}>
-            {steps.map(({ n, visual }, i) => {
-              const Visual = VISUALS[visual]
-              if (!Visual || i !== active) return null
-              return <Visual key={n} />
-            })}
-          </div>
+          {hasStage && (
+            <div className={styles.stage}>
+              {setSteps.map(({ n, visual }, i) => {
+                const Visual = VISUALS[visual]
+                if (!Visual || i !== active) return null
+                return <Visual key={n} />
+              })}
+            </div>
+          )}
         </div>
       ) : (
         <ol className={styles.steps}>
-          {steps.map(({ n, name, note }) => (
+          {setSteps.map(({ n, name, note }) => (
             <li key={n} className={styles.step}>
               <span className={styles.num}>{n}</span>
               <h3 className={styles.name}>{name}</h3>

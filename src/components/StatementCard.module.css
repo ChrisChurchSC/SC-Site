@@ -111,6 +111,25 @@
   }
 }
 
+/* Bottom-aligned. .tall centres its contents; this drops them to the floor of
+   the card instead, so the height it adds opens above the type. Left alignment
+   needs no rule — it is the card's default, and comes back on its own once
+   .center is not applied. Declared after .tall so it wins on justify-content
+   without a specificity bump. */
+.bottom {
+  justify-content: flex-end;
+}
+
+/* Pre-broken. The measure and text-wrap: balance both exist to decide where
+   the lines fall; when the caller has already decided, they fight it — 26ch
+   would re-break a line that was written to be one. Declared after every
+   .statement rule that sets a measure (.tall, .display) so it wins on
+   max-width without a specificity bump. */
+.statementLines {
+  max-width: none;
+  text-wrap: initial;
+}
+
 /* Support copy as prose, not as a caption — and the whole block at ONE size.
 
    The default .support is 11px Roboto Mono at 62ch: a metadata treatment,
@@ -207,6 +226,18 @@
   }
 }
 
+/* See the note on the `inset` prop. The value is the section shell's own
+   horizontal padding, so the type lands on the same line as every ordinary
+   section on the page rather than 72px to the left of them — measured at
+   1440, where the shell puts its copy at 124 and a bare card put it at 52.
+
+   Compounded with .bare rather than alone, so it also beats the mobile
+   `padding: 40px 0` override without depending on where it sits in the file. */
+.bare.inset {
+  padding-left: clamp(8px, 5vw, 96px);
+  padding-right: clamp(8px, 5vw, 96px);
+}
+
 /* Centred. Both halves are needed: text-align centres the lines within each
    block, align-items centres the blocks themselves inside the card — without
    it the statement's max-width would hold it hard against the left edge with
@@ -250,6 +281,34 @@
     max-width: none;
   }
   .display .support { max-width: none; }
+}
+
+/* See the note on the `supportSerif` prop.
+
+   Declared after .display .support so it wins on font-family at equal
+   specificity — everything the mono treatment sets has to be reset here, not
+   just the face: 11px mono and 20px serif do not want the same line-height,
+   tracking or measure.
+
+   The measure comes in from 62ch to 46ch for the same reason .serif does. A
+   line of 20px Signifier is far wider than a line of 11px Roboto Mono at the
+   same character count, and 62ch of it overshoots where the eye reliably
+   finds the next line. */
+.supportSerif .support {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.35vw, 21px);
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 46ch;
+}
+
+@media (max-width: 768px) {
+  .supportSerif .support {
+    font-size: clamp(15px, 4.4vw, 19px);
+    max-width: none;
+  }
 }
 
 /* A shorter hero for the display variant.

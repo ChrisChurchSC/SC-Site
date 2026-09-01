@@ -55,6 +55,25 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * the 11px mono, and lifts the statement to match. For a card carrying real
  * prose rather than one line of qualifier. Off by default.
  *
+ * `supportSerif` sets the support line in Signifier at reading size, leaving
+ * the statement at whatever size it was given. Distinct from `serif`, which
+ * sets the statement AND the support at one shared size — right for a card
+ * that is all prose, wrong for a hero, where it would pull the display line
+ * down to the size of the line under it.
+ *
+ * `inset` puts the standard section side padding back on a bare card. `bare`
+ * zeroes it so the type starts on the page's own left edge, which is right for
+ * a card between sections that do the same; a hero whose siblings are ordinary
+ * sections needs to line up with those instead. Off by default.
+ *
+ * `statementLines` says the statement arrives pre-broken, as an array of
+ * lines. It turns off the measure and the balancing, both of which would
+ * otherwise re-break lines that were broken deliberately. Off by default.
+ *
+ * `bottom` sits the contents on the floor of that room instead of centred in
+ * it. Only meaningful with `tall`, which is what creates the room to sit at
+ * the bottom of. Off by default.
+ *
  * `tall` gives the card a viewport-relative minimum height with its contents
  * centred in it — for a card used as a hero, where the copy is short and the
  * room is the point. Off by default, so the live homepage is unaffected.
@@ -65,6 +84,10 @@ export default function StatementCard({
   support = SUPPORT,
   as: Heading = 'h1',
   tall = false,
+  bottom = false,
+  statementLines = false,
+  inset = false,
+  supportSerif = false,
   serif = false,
   bare = false,
   rule = true,
@@ -74,9 +97,18 @@ export default function StatementCard({
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${bottom ? ' ' + styles.bottom : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${bare && inset ? ' ' + styles.inset : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}${supportSerif ? ' ' + styles.supportSerif : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
-      <Heading className={styles.statement}>{statement}</Heading>
+      <Heading className={`${styles.statement}${statementLines ? ' ' + styles.statementLines : ''}`}>
+        {Array.isArray(statement)
+          ? statement.map((line, i) => (
+            <span key={line}>
+              {i > 0 && <br />}
+              {line}
+            </span>
+          ))
+          : statement}
+      </Heading>
       {paras.filter(Boolean).map(p => <p key={p.slice(0, 24)} className={styles.support}>{p}</p>)}
       {children}
     </section>
