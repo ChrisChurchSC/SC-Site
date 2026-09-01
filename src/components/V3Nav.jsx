@@ -269,7 +269,16 @@ export const SERVICE_ROWS = OFFER.map(({ name, body, href, Icon }) => ({ name, n
    from, so the two cannot disagree. Anything without an href renders as
    text rather than as a link to the nearest page that happens to exist —
    the nav panels already behave this way. */
-const USE_CASES = [
+/* OUTCOMES, WHICH IS WHAT THEY ALREADY WERE. The column was headed "Use
+   cases" and every entry under it is a result somebody wants — more leads, a
+   better win rate, a shorter cycle. A use case is a way of using the thing;
+   these are reasons for buying it, so the heading now says so.
+
+   The list itself does not change. Nor does what it claims: these are the
+   outcomes clients come for, not outcomes we have published evidence of
+   producing — proof-points.md grades that kind of statement, and nothing here
+   attaches a figure to any of them. */
+const OUTCOMES = [
   'Get more leads',
   'Improve your win rate',
   'Shorten the sales cycle',
@@ -287,9 +296,9 @@ export const FOOTER_COLS = [
       { label: 'Pricing', href: '/pricing' },
     ],
   },
-  /* After Services, because a use case is a way into the same four. */
-  { tag: 'Use cases', row: 2, links: USE_CASES.map(label => ({ label })) },
-  /* WHAT IS ACTUALLY IN THE DEPARTMENT. Services and Use cases both say what
+  /* After Services, because an outcome is a way into the same four. */
+  { tag: 'By outcome', row: 2, links: OUTCOMES.map(label => ({ label })) },
+  /* WHAT IS ACTUALLY IN THE DEPARTMENT. Services and By outcome both say what
      you buy; this says what the studio can do, which is the one thing the
      footer never listed. Read from Services' COPY rather than retyped, so
      renaming a discipline changes it on /services, in DepartmentPanel and
