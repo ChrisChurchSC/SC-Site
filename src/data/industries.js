@@ -49,6 +49,48 @@ export const industries = [
         'brand to do.',
       visual: 'dashboard',
     },
+    /* THREE OFFERINGS, NOT THREE CASE STUDIES. An earlier version made each
+       card a thing one client got — Gigs, OpenText, Entropy — which read as
+       three anecdotes rather than as what a technology company can buy. Each
+       one is now a service that exists, and links to the page that defines
+       and prices it.
+
+       WHAT THEY DO NOT SAY is that any of it produced a result, or that we
+       are a technology specialist. proof-points.md grades outcome claims we
+       cannot evidence. These describe what is in the engagement, which is
+       checkable against /services/build, /services/grow and /pricing. */
+    benefits: [
+      {
+        id: 'brand-and-product',
+        name: 'Brand and product, one bench',
+        body:
+          'Design and engineering are two of the twelve disciplines, not two ' +
+          'suppliers. The identity, the design system and the interface are ' +
+          'one engagement rather than a hand-off between a studio and a shop.',
+        cta: 'See how we build',
+        href: '/services/build',
+      },
+      {
+        id: 'platform-not-pdf',
+        name: 'A platform, not a guidelines PDF',
+        body:
+          'The brand platform holds tokens, components, grid and radii, ' +
+          'iconography and voice — a system your design system can meet, ' +
+          'rather than a document somebody has to interpret.',
+        cta: 'See what it holds',
+        href: '/pricing',
+      },
+      {
+        id: 'run-after-launch',
+        name: 'The same team runs it after launch',
+        body:
+          'Grow is hours on a retainer with the people who built the brand: ' +
+          'campaigns, channels and content produced against the same ' +
+          'positioning, with no re-briefing a second agency on your own work.',
+        cta: 'See how we grow',
+        href: '/services/grow',
+      },
+    ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
     clients: [
       'arbitrum',      // 'The leading Ethereum Layer 2 blockchain network.'

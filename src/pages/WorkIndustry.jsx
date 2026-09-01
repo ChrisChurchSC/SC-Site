@@ -6,6 +6,7 @@ import v3 from './HomeV3.module.css'
    from /work rather than a second set that drifts — the move ThoughtsIndex
    makes with the same file. */
 import styles from './WorkIndustry.module.css'
+import AudienceCards from '../components/AudienceCards'
 import ContactCTA from '../components/ContactCTA'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
@@ -92,6 +93,21 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
+      {/* Only where there are benefits to show, and only three: the component
+          lays out whatever it is given, and a fourth card would be a fourth
+          engagement we have not done. No view toggle — see the prop note. */}
+      {industry.benefits && (
+        <>
+          <AudienceCards
+            eyebrow="[ Why us here ]"
+            headline={`What a ${industry.name.toLowerCase()} company gets.`}
+            cards={industry.benefits}
+            toggle={false}
+          />
+
+          <hr className={v3.divider} />
+        </>
+      )}
 
       <TrustMosaic />
 

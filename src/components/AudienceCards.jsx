@@ -82,11 +82,14 @@ const AUDIENCES = [
    They also give the industry card something to hold. Without them it is a
    name and a link in a 4:5 box, which is why a dense variant kept getting
    proposed for this view. THE GROUPINGS ARE MINE AND UNAPPROVED. */
+/* Keyed to the industries that exist. Consumer & Retail went when the pages
+   were built — nothing in the roster evidenced it — and Culture & Nonprofit
+   arrived, so its key was missing and its card rendered without pills. */
 const SUB_INDUSTRIES = {
-  'Consumer & Retail': ['CPG', 'Apparel', 'Footwear', 'Retail', 'DTC'],
   'Food & Beverage': ['Restaurants', 'Packaged food', 'Beverage', 'Hospitality'],
   'Health & Wellness': ['Supplements', 'Digital health', 'Personal care', 'Fitness'],
   'Technology & Web3': ['SaaS', 'Crypto', 'Developer tools', 'Fintech'],
+  'Culture & Nonprofit': ['Nonprofit', 'Impact', 'Arts', 'Education'],
 }
 
 const VIEWS = [
@@ -108,20 +111,31 @@ export default function AudienceCards({
   cards = AUDIENCES,
   rows = false,
   headline = 'Three kinds of brand, one way of working.',
+  /* THE VIEW TOGGLE IS OPTIONAL. On a service page it is the point — the same
+     roster read two ways. On an industry page it would offer to re-sort the
+     page by industry, which is the page. */
+  toggle = true,
 }) {
   const [view, setView] = useState('situation')
 
   /* Industry comes from V3Nav, mapped into the shape the card already takes
-     so there is one loop rather than two. */
+     so there is one loop rather than two.
+
+     IT IS { label, href } NOW, not a string. When the industry pages were
+     built WORK_BY_INDUSTRY became a list of objects so the nav could link to
+     them, and this destructures accordingly — rendering the object threw
+     "Objects are not valid as a React child" and took the whole By industry
+     view down on both service pages. The href is the industry's own page
+     rather than the wall, which is the point of it having one. */
   const shown = view === 'situation'
     ? cards
-    : WORK_BY_INDUSTRY.map((name) => ({
-      id: name,
-      name,
+    : WORK_BY_INDUSTRY.map(({ label, href }) => ({
+      id: label,
+      name: label,
       body: null,
-      pills: SUB_INDUSTRIES[name] ?? [],
+      pills: SUB_INDUSTRIES[label] ?? [],
       cta: 'See work',
-      href: '/work',
+      href,
     }))
 
   if (rows) {
@@ -149,7 +163,7 @@ export default function AudienceCards({
     <section className={styles.section}>
       <div className={styles.head}>
         <p className={styles.eyebrow}>{eyebrow}</p>
-        <div className={styles.views}>
+        {toggle && <div className={styles.views}>
           {VIEWS.map(({ id, label }) => (
             <button
               key={id}
@@ -161,7 +175,7 @@ export default function AudienceCards({
               {label}
             </button>
           ))}
-        </div>
+        </div>}
       </div>
 
       <div className={styles.row}>
