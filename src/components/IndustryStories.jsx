@@ -10,6 +10,28 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
    down and a password means the project is not public. */
 const bySlug = new Map(projects.filter((p) => p.slug).map((p) => [p.slug, p]))
 
+/* THE THREE MEASURES, LABELS ONLY.
+ *
+ * featuredCaseStudies.js says it in capitals: its stat values are invented
+ * and are not these clients' results, and "an invented percentage sitting
+ * under the word OpenText is a claim about a named company's results,
+ * attributed to us, on a page meant to win work". The same is true here, so
+ * none of those numbers is reused.
+ *
+ * The LABELS are reusable — that file calls them final, and they are the
+ * three things the studio measures. So the section shows what we would report
+ * against, with the repo's own missing-value mark where the figure goes and
+ * the same tag FeaturedWall carries. Put real, sourced numbers in METRICS and
+ * delete the tag in the same change, not before.
+ *
+ * There is no per-client source for any of this: the Sanity project schema
+ * has no stats field, and caseStudies.js carries qualitative outcomes rather
+ * than metrics — which is why the values do not vary by client. */
+const TBC = '––'
+
+const MEASURES = ['Audience growth', 'SQL growth', 'Win rate']
+
+
 const entryFor = (slug) => {
   if (HIDDEN_SLUGS.has(slug)) return null
   const project = bySlug.get(slug)
@@ -21,8 +43,6 @@ const entryFor = (slug) => {
       slug,
       name: study.name,
       line: study.industry ?? null,
-      account: study.summary ?? study.tagline ?? null,
-      services: study.services ?? (study.type ? study.type.split(' + ') : []),
     }
   }
   if (!project) return null
@@ -30,8 +50,6 @@ const entryFor = (slug) => {
     slug,
     name: project.name,
     line: project.descriptor ?? null,
-    account: project.relationship ?? project.descriptor ?? null,
-    services: project.work ?? [],
   }
 }
 
@@ -39,19 +57,10 @@ const entryFor = (slug) => {
  * CASE STUDIES, ONE AT A TIME — the reference's shape: a strip of clients
  * across the top, one of them lit, and a large passage underneath it.
  *
- * IT IS NOT A PULL QUOTE, and that is the one deliberate departure. The
- * reference sets a customer's own words over their photography, attributed to
- * a named person and their title. There is no such quote anywhere in this
- * repo: every testimonial is '[Name], [Role], [Company]' with a placeholder
- * flag, and TestimonialCard's own header says it wants a real quote from a
- * named person before it goes in front of a customer. Writing one and putting
- * a real company's name under it is the one thing this section must not do.
- *
- * SO THE LARGE TEXT IS WHAT WE ACTUALLY HOLD: the client's own account of the
- * engagement, out of projects.js, or a written case study's summary. It reads
- * at the same size and does the same job, and every word of it is already the
- * repo's. Swap it for real quotes the day there are any — the layout does not
- * change, only the source.
+ * NO QUOTE. There is no attributed quote anywhere in this repo — every
+ * testimonial is '[Name], [Role], [Company]' with a placeholder flag — and
+ * Chris asked for the name and the measures instead. What each client got
+ * still reads on its own page, which the link under the measures goes to.
  *
  * NO PHOTOGRAPH BEHIND IT. There is no artwork for any of this, which is why
  * the work cards are flat fills too. A stock image of a cargo ship would be a
@@ -92,21 +101,25 @@ export default function IndustryStories({ clients = [], eyebrow = '[ Case studie
       {/* aria-live so the change a click makes is announced, the way the
           work cards' well is. */}
       <div className={styles.panel} aria-live="polite">
-        {current.account && <p className={styles.account}>{current.account}</p>}
+        <p className={styles.client}>{current.name}</p>
+
+        <dl className={styles.metrics}>
+          {MEASURES.map((label) => (
+            <div key={label} className={styles.metric}>
+              <dt className={styles.metricLabel}>{label}</dt>
+              <dd className={styles.metricValue}>{TBC}</dd>
+            </div>
+          ))}
+        </dl>
 
         <div className={styles.foot}>
-          <NavLink to={`/work/${current.slug}`} className={styles.client}>
-            {current.name}
-          </NavLink>
+          {/* THE TAG STAYS WHILE THE FIGURES ARE MISSING. It is what stops
+              four named clients appearing to have published results. */}
+          <span className={styles.provisional}>Figures not published</span>
           {current.line && <span className={styles.line}>{current.line}</span>}
-
-          {current.services.length > 0 && (
-            <span className={styles.tags}>
-              {current.services.slice(0, 4).map((w) => (
-                <span key={w} className={styles.tag}>{w}</span>
-              ))}
-            </span>
-          )}
+          <NavLink to={`/work/${current.slug}`} className={styles.more}>
+            See the work →
+          </NavLink>
         </div>
       </div>
     </section>

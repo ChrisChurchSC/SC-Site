@@ -63,67 +63,93 @@
   padding: clamp(40px, 6vw, 92px) clamp(16px, 5vw, 96px) clamp(32px, 4vw, 64px);
 }
 
-/* The size the reference gives a pull quote. It is not one — see the note in
-   the JSX — but it is the passage the section is built around, so it is set
-   like the thing that matters on the page rather than like body copy. */
-.account {
-  margin: 0;
-  max-width: 34ch;
+/* The client, set as the thing the panel is about. */
+.client {
+  margin: 0 0 clamp(24px, 3vw, 40px);
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;
-  font-size: clamp(22px, 2.9vw, 40px);
-  line-height: 1.22;
-  letter-spacing: -0.015em;
-  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
 
+/* Three measures across, on the label/figure split the dashboard uses: the
+   label small and mono above, the figure large below. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 48px);
+  max-width: 760px;
+  margin: 0;
+}
+
+.metric {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 14px;
+}
+
+.metricLabel {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* The repo's missing-value mark rather than a number nobody sourced. */
+.metricValue {
+  margin: 10px 0 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* The strip under the measures: the tag, what the client is, and the way
+   through to the work. Its rules went out with the passage this section used
+   to hold and had to come back — without them the three ran together as one
+   unstyled line. */
 .foot {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px 16px;
-  margin-top: clamp(24px, 3vw, 40px);
-}
-
-.client {
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.client:hover {
-  color: var(--pink, #df4ed6);
-  border-bottom-color: var(--pink, #df4ed6);
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: clamp(28px, 3.4vw, 48px);
 }
 
 .line {
   font-family: "Roboto Mono", monospace;
   font-size: 11px;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.38);
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.tag {
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+.provisional {
+  padding: 4px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--r-control, 4px);
   font-family: "Roboto Mono", monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
 }
+
+.more {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.more:hover { color: var(--pink, #df4ed6); }
 
 @media (max-width: 760px) {
   .strip { align-items: flex-start; flex-direction: column; }
   .tabs { margin-left: 0; }
-  .account { max-width: none; }
+  .metrics { grid-template-columns: minmax(0, 1fr); }
 }
