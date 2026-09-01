@@ -81,12 +81,25 @@ export const industries = [
        the nav and the closing ask carry the routes. AudienceCards renders a
        card without an href as a plain block.
 
-       THE PILLS ARE WHAT THAT SITUATION NEEDS, and every one is a deliverable
-       that already exists on /pricing — New Brand, Rebrand, Product
-       Positioning, Messaging, Design System, Website, Campaign, Channels and
-       the rest. They are not metrics and not outcomes: a card saying what a
-       reader in that position usually buys is checkable against the pricing
-       page, where a number would be a claim nothing here can support. */
+       THE PILLS ARE MEASURES, NOT DELIVERABLES. They were deliverables —
+       New Brand, Design System, Website — which answered "what do you sell"
+       rather than "what does this move". Every label below is lifted verbatim
+       from somewhere the site already publishes it: serviceConstants.js gives
+       each service a metrics array, and ContentPackages.jsx renders the demand
+       ones on a live page.
+
+       LABELS, NEVER VALUES. Naming what an engagement is aimed at moving is
+       not a claim that it moved. The moment a figure goes beside one of these
+       it becomes a result, and featuredCaseStudies.js is explicit that we have
+       none we can publish — so these stay unnumbered.
+
+       COUNTABLE ONES ONLY. The first pass took whatever the matching service
+       listed, which included "Design system coverage", "Message clarity
+       score", "Brand equity index" and "Campaign launch readiness" — none of
+       which anybody can put a number against, and Chris caught the first one.
+       Every label here is something with a unit: a cost, a rate, a volume, a
+       velocity, a time. If it cannot be counted it is not on a card that
+       claims to be measures. */
     situations: [
       {
         id: 'new',
@@ -95,7 +108,7 @@ export const industries = [
           'A product that shipped before it had a brand. The docs and the app ' +
           'exist; the name, the mark and the tokens the front end can consume ' +
           'do not.',
-        pills: ['Naming', 'New Brand', 'Design System', 'Website'],
+        pills: ['Time to launch', 'Organic traffic', 'Cost per lead'],
       },
       {
         id: 'pivoting',
@@ -104,7 +117,7 @@ export const industries = [
           'Developer-led adoption meeting an enterprise buyer, or a technical ' +
           'product going mainstream. The audience changes, so the vocabulary, ' +
           'the proof and the surfaces all have to.',
-        pills: ['Product Positioning', 'Rebrand', 'Messaging', 'Website'],
+        pills: ['Share of voice', 'Organic traffic growth', 'MQL-to-SQL rate'],
       },
       {
         id: 'underdog',
@@ -113,7 +126,7 @@ export const industries = [
           'A category where every competitor describes itself in the same ' +
           'words, to buyers who have read it before. Sounding specific without ' +
           'claiming an outcome the product cannot yet show.',
-        pills: ['Product Positioning', 'Campaign', 'Content', 'Channels'],
+        pills: ['Cost per MQL', 'Engagement rate vs. benchmark', 'Brand search volume'],
       },
     ],
     /* HOW WE WORK KEEPS THE DEPARTMENT FRAMING. It briefly became "One bench
@@ -180,7 +193,7 @@ export const industries = [
           'The founder is the brand, and the deck is the brand, and neither ' +
           'survives being handed to somebody else. The job is getting what is ' +
           'in their head into something a second person can use.',
-        pills: ['Naming', 'New Brand', 'Website'],
+        pills: ['Time to launch', 'Cost per lead'],
       },
       {
         id: 'seed-series-a',
@@ -189,7 +202,7 @@ export const industries = [
           'A first marketing hire arrives to find no system to hire against. ' +
           'The brand has to be decided quickly and written down, because the ' +
           'next twelve months are spent spending against it.',
-        pills: ['Brand platform', 'Brand Guidelines', 'Website', 'Content'],
+        pills: ['MQLs per month', 'Cost per MQL', 'Pipeline velocity'],
       },
       {
         id: 'scale-up',
@@ -198,7 +211,7 @@ export const industries = [
           'Enough people are making things that they have started to disagree. ' +
           'What is needed is not a rebrand but a system with rules in it — ' +
           'tokens, components and copy patterns other teams can build from.',
-        pills: ['Design System', 'Brand Guidelines', 'Tone of Voice', 'Content'],
+        pills: ['Component reuse rate', 'Asset reuse rate', 'Content publishing velocity'],
       },
       {
         id: 'enterprise',
@@ -207,7 +220,7 @@ export const industries = [
           'A global marketing org, several agencies and a brand that has to ' +
           'hold across all of them, in every market and format, without a ' +
           'review cycle for each one.',
-        pills: ['Brand Guidelines', 'Sub-brand', 'Campaign', 'Channels'],
+        pills: ['Brand compliance rate', 'Campaign reach', 'Pipeline influence'],
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
