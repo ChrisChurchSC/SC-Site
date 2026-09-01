@@ -168,9 +168,14 @@ export default function AudiencePage({ kind = 'industry' }) {
       )}
 
       {/* The clients in this category, one at a time. */}
+      {/* THE HEADING IS THE RECORD'S WHERE IT HAS ONE. An industry page can
+          say "Technology work." because its clients are assigned on the
+          evidence of their own descriptors. A stage page cannot: nothing in
+          the repo records what stage a client was at, so it shows real work
+          under a heading that does not claim one. */}
       <IndustryStories
         clients={industry.clients}
-        headline={`${industry.name} work.`}
+        headline={industry.storiesHeadline ?? `${industry.name} work.`}
       />
 
       <hr className={v3.divider} />

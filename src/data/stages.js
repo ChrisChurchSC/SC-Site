@@ -6,12 +6,18 @@
  * shared sections. Anything a record leaves out falls back to the studio-wide
  * copy, so a stage can be added with a name alone and filled in later.
  *
- * NO CLIENT LIST. industries.js assigns clients to a category on the evidence
- * of each one's own descriptor. Nothing in the repo records what stage a
- * client was at when we worked with them, and inferring it from a company
- * name would be a claim about somebody else's business — so `clients` is
- * empty and the case-studies rail does not render. Fill it the same way the
- * industries were filled: with the evidence quoted beside each slug.
+ * THE CLIENT LIST IS NOT STAGE-SPECIFIC, AND THE HEADING SAYS SO. industries.js
+ * assigns clients to a category on the evidence of each one's own descriptor.
+ * There is no equivalent for stage: searching every client record for founder,
+ * seed, series, raised, bootstrap or scale turns up two real matches in
+ * thirty-eight — OpenText is "a $4B enterprise software company" and Nimruz is
+ * "grounded in the founder vision" — and one false positive on "interview
+ * series". Two clients is not a mapping.
+ *
+ * So each stage shows the four written case studies under "Selected work"
+ * rather than "Founder-led work", which would assert something nothing here
+ * records. When somebody supplies the real mapping, put the slugs in `clients`
+ * and drop `storiesHeadline` — the page will name the stage on its own.
  *
  * THE SECOND VIEW IS INDUSTRY, and it comes for free. AudienceCards defaults
  * to situation/industry when a caller passes no `views`, which is the right
@@ -22,7 +28,8 @@ export const stages = [
   {
     slug: 'founder-led',
     name: 'Founder-led',
-    clients: [],
+    clients: ['hylands', 'entropy', 'nimruz', 'world-within'],
+    storiesHeadline: 'Selected work.',
 
     hero: {
       /* Describes the reader's position, not our record. */
@@ -112,7 +119,8 @@ export const stages = [
   {
     slug: 'seed-series-a',
     name: 'Seed to Series A',
-    clients: [],
+    clients: ['hylands', 'entropy', 'nimruz', 'world-within'],
+    storiesHeadline: 'Selected work.',
 
     hero: {
       lede:
