@@ -94,7 +94,7 @@ export const NAV_LINKS = [
    one linked at /work because there was nothing to link to. */
 export const WORK_BY_INDUSTRY = industries.map(({ name, slug }) => ({
   label: name,
-  href: `/work/industry/${slug}`,
+  href: `/industries/${slug}`,
 }))
 
 /* STAGE, NOT SIZE. Founder-led, Seed to Series A, Scale-up and Enterprise

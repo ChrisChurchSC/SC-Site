@@ -65,7 +65,7 @@ export default function WorkIndustry() {
     description: industry
       ? `Brand and marketing work for ${industry.name.toLowerCase()} companies, from the Super Conscious studio.`
       : undefined,
-    path: `/work/industry/${slug}`,
+    path: `/industries/${slug}`,
   })
 
   if (!industry) return <Navigate to="/work" replace />

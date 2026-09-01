@@ -76,7 +76,7 @@
       "statusCode": 301
     },
     {
-      "source": "/work/:client((?!industry$)[^/]+)/:sub",
+      "source": "/work/:client/:sub",
       "destination": "/work/:client-:sub",
       "statusCode": 301
     }
