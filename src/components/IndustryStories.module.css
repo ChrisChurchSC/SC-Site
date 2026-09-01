@@ -20,6 +20,18 @@
    than as one that continues. The bleed is the page pad plus this section own
    pad — the two things between the rail and the screen edge — which is the
    same calculation FeaturedWall own rail uses. */
+/* Names the category, because this section is the one part of the page that
+   is entirely this industry's. */
+.headline {
+  margin: 10px 0 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
 .rail {
   /* Both sides: the page pad AND this section own pad sit between the rail
      and each screen edge, and leaving the right one out stopped the rail 72px

@@ -75,7 +75,7 @@ const entryFor = (slug) => {
  * NO PHOTOGRAPH. There is no artwork for any of this, which is why the work
  * cards are flat fills too.
  */
-export default function IndustryStories({ clients = [], eyebrow = '[ Case studies ]' }) {
+export default function IndustryStories({ clients = [], eyebrow = '[ Case studies ]', headline }) {
   const entries = clients.map(entryFor).filter(Boolean)
   const railRef = useRef(null)
   const [paused, setPaused] = useState(false)
@@ -105,7 +105,8 @@ export default function IndustryStories({ clients = [], eyebrow = '[ Case studie
 
   return (
     <section className={styles.section} aria-labelledby="industry-stories">
-      <p className={styles.eyebrow} id="industry-stories">{eyebrow}</p>
+      <p className={styles.eyebrow}>{eyebrow}</p>
+      {headline && <h2 className={styles.headline} id="industry-stories">{headline}</h2>}
 
       <div
         className={styles.rail}

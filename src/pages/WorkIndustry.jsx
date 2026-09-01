@@ -116,7 +116,10 @@ export default function WorkIndustry() {
       )}
 
       {/* The clients in this category, one at a time. */}
-      <IndustryStories clients={industry.clients} />
+      <IndustryStories
+        clients={industry.clients}
+        headline={`${industry.name} work.`}
+      />
 
       <hr className={v3.divider} />
 
