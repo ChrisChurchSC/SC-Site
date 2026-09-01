@@ -194,6 +194,146 @@ export const stages = [
       },
     ],
   },
+  {
+    slug: 'scale-up',
+    name: 'Scale-up',
+    clients: ['hylands', 'entropy', 'nimruz', 'world-within'],
+    storiesHeadline: 'Selected work.',
+
+    hero: {
+      lede:
+        'Enough people are making things that they have started to disagree. ' +
+        'What is needed is not a rebrand but a system with rules other teams ' +
+        'can build from.',
+    },
+
+    /* WHAT VARIES AT THIS STAGE is not whether there is a brand — there is —
+       but where it is coming apart: across the people making things, across a
+       second product, or on the surface the company outgrew. */
+    situations: [
+      {
+        id: 'everyone-making',
+        name: 'Everyone is making things',
+        body:
+          'Several teams and a couple of agencies producing in parallel, each ' +
+          'reasonable on its own. The brand drifts in the gaps between them ' +
+          'rather than in any one piece.',
+        pills: ['Brand compliance rate', 'Asset reuse rate', 'Design request volume reduction'],
+      },
+      {
+        id: 'second-product',
+        name: 'A second product',
+        body:
+          'A new line or sub-brand that has to belong to the parent without ' +
+          'being a copy of it, and without quietly redefining what the parent ' +
+          'means.',
+        pills: ['Brand search volume', 'Share of voice'],
+      },
+      {
+        id: 'site-behind',
+        name: 'The site is behind',
+        body:
+          'The company outgrew its own site and it now argues against the ' +
+          'pitch — describing a smaller company than the one in the room.',
+        pills: ['Bounce rate', 'Organic traffic growth'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'beside the teams you have.',
+      ],
+    },
+
+    disciplinesHeadline: 'Twelve disciplines, and more than one team already making things.',
+
+    faq: [
+      {
+        q: 'We have an internal team. Where do you fit?',
+        a: 'Beside them. The department flexes with the work rather than with your headcount, so it covers what the team does not have rather than replacing what it does.',
+      },
+      {
+        q: 'Do we need a rebrand to fix the inconsistency?',
+        a: 'Usually not. What is missing is a system with rules in it — tokens, components, grid and radii, iconography and voice — which is what the brand platform holds. A refresh is its own deliverable if the identity is genuinely the problem.',
+      },
+      {
+        q: 'Can other teams work from it without us?',
+        a: 'That is the point of a platform rather than a set of files: it holds the rules, so a team that was not in the room can produce from it. Guidelines are a separate deliverable if you want the rules written out as well.',
+      },
+    ],
+  },
+  {
+    slug: 'enterprise',
+    name: 'Enterprise',
+
+    /* THE ONE STAGE WITH REAL EVIDENCE. OpenText's own descriptor calls it
+       "an enterprise information management and cloud software company" and
+       its record calls it a $4B one — so this page can name the category in
+       its heading, where founder-led and the rest cannot. */
+    clients: ['opentext'],
+
+    hero: {
+      lede:
+        'A global marketing org, several agencies, and a brand that has to ' +
+        'hold across all of them — in every market and format, without a ' +
+        'review cycle for each one.',
+    },
+
+    situations: [
+      {
+        id: 'many-markets',
+        name: 'Many markets',
+        body:
+          'The same brand running in several regions and languages, made by ' +
+          'people who never meet. What holds it together has to survive being ' +
+          'read rather than explained.',
+        pills: ['Brand compliance rate', 'Campaign reach'],
+      },
+      {
+        id: 'many-agencies',
+        name: 'Many partners',
+        body:
+          'Several agencies producing against one brand. The drift is between ' +
+          'them rather than inside any one, and nobody owns the seam.',
+        pills: ['Asset reuse rate', 'Design request volume reduction'],
+      },
+      {
+        id: 'sub-brand',
+        name: 'A sub-brand or acquisition',
+        body:
+          'Something new has to belong to the parent without being swallowed ' +
+          'by it, and the parent has to stay itself while it does.',
+        pills: ['Brand search volume', 'Pipeline influence'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'inside the one you have.',
+      ],
+    },
+
+    disciplinesHeadline: 'Twelve disciplines, for the ones your org does not keep in-house.',
+
+    faq: [
+      {
+        q: 'We already have agencies. Why add another?',
+        a: 'The work here has been the production layer rather than a competing partner: a refreshed direction taken into animated and live action campaigns across multiple markets, alongside an existing global marketing org.',
+      },
+      {
+        q: 'Can the brand hold across regions without a review for each piece?',
+        a: 'That is what the system is for. The brand platform holds tokens, components, grid and radii, iconography and voice, so a team in another market produces from the rules rather than from an approval.',
+      },
+      {
+        q: 'Can you work at our scale?',
+        a: 'OpenText is a multi-billion-dollar enterprise software company with a global marketing org, and the engagement ran from a refreshed direction through to production across multiple markets.',
+      },
+    ],
+  },
 ]
 
 export const stageBySlug = (slug) => stages.find((s) => s.slug === slug)
