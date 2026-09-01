@@ -7,6 +7,7 @@ import v3 from './HomeV3.module.css'
    makes with the same file. */
 import styles from './WorkIndustry.module.css'
 import ContactCTA from '../components/ContactCTA'
+import EmailCaptureForm from '../components/EmailCaptureForm'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -106,16 +107,52 @@ export default function WorkIndustry() {
     <main className={`${home.main} ${v3.stack}`}>
       <V3Nav />
 
-      <StatementCard
-        eyebrow="[ Industry ]"
-        statement={industry.name}
-        support={null}
-        as="h1"
-        center
-        display
-        bare
-        rule={false}
-      />
+      {industry.hero ? (
+        <section className={styles.hero}>
+          <div className={styles.heroText}>
+            <p className={styles.eyebrow}>[ Industry ]</p>
+            <h1 className={styles.heroHeadline}>{industry.name}</h1>
+            <p className={styles.heroBody}>{industry.hero.lede}</p>
+
+            {/* NO APOSTROPHE BEFORE THE DISTINGUISHING WORD in confirmMessage:
+                the copy test captures up to the first quote-ish character, so
+                "Thanks — we'll …" collapses to "Thanks — we" and collides with
+                the careers form. It caught exactly that.
+
+                Its own copy and its own request_type, so a walkthrough
+                request cannot land in the inbox looking like a pricing one —
+                the fault the form's own header describes. */}
+            <EmailCaptureForm
+              styles={styles}
+              submitLabel="Book a walkthrough"
+              confirmMessage="Sent. We will come back with a time to walk you through the work."
+              subject="Walkthrough request — technology & Web3"
+              requestType="industry-walkthrough"
+              placeholder="What's your work email?"
+            />
+
+            <p className={styles.heroNote}>We'll follow up by email.</p>
+          </div>
+
+          {/* FLAT GREY, 1:1, AND EMPTY. There is no artwork in this repo for
+              any of this — the work cards say the same thing with the same
+              treatment. A square fill is what a picture looks like when there
+              is not one, and it is honest about that rather than dressing a
+              screenshot of something else as this industry. */}
+          <div className={styles.heroVisual} aria-hidden="true" />
+        </section>
+      ) : (
+        <StatementCard
+          eyebrow="[ Industry ]"
+          statement={industry.name}
+          support={null}
+          as="h1"
+          center
+          display
+          bare
+          rule={false}
+        />
+      )}
 
       <hr className={v3.divider} />
 

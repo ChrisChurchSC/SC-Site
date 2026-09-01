@@ -29,6 +29,26 @@ export const industries = [
   {
     slug: 'technology-web3',
     name: 'Technology & Web3',
+    /* THE SPLIT HERO, and only here. An industry with a `hero` renders the
+       two-column treatment — copy left, a product window right — and one
+       without keeps the centred statement, so this is one page's layout
+       rather than a change to four.
+
+       THE LEDE IS A LIST, NOT A CLAIM. It names the four clients' own
+       categories, which is what the page can prove: a Layer 2, enterprise
+       software, telecom infrastructure and a consumer app. It deliberately
+       does not say we are a technology specialist — proof-points.md grades
+       that kind of statement C, and the page below it is four engagements.
+
+       The headline is still the category's name. A hero headline that made a
+       claim would be the one thing on this page nothing under it supports. */
+    hero: {
+      lede:
+        'A Layer 2 network, enterprise software, telecom infrastructure and a ' +
+        'consumer app — four engagements, and what each of them needed the ' +
+        'brand to do.',
+      visual: 'dashboard',
+    },
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
     clients: [
       'arbitrum',      // 'The leading Ethereum Layer 2 blockchain network.'
