@@ -1,13 +1,22 @@
-/* Full-bleed, like the reference: the panel runs to the page edges rather
-   than sitting in the column, so the passage reads as a spread rather than as
-   another card. The pads come off the page's own vars, the way the dividers
-   and the featured rail already do it. */
+/* AN INSET PANEL, 16:9. It ran full bleed off the page's pad vars, matching
+   the reference's edge-to-edge photograph; Chris asked for margins and a
+   16:9 frame, so it is a panel in the column now — the same shape the Build
+   diagram's stage uses.
+
+   The ratio governs the box and the contents lay out inside it: the client
+   strip takes its own height at the top and the panel takes the rest, so a
+   longer client name cannot change the frame. Below the breakpoint the ratio
+   comes off — 16:9 at 390px wide is 219px tall, which is not enough for a
+   name and three measures. */
 .section {
-  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  margin-left: calc(-1 * var(--page-pad-left, 0px));
+  margin: 0 clamp(8px, 5vw, 96px);
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
   background: #131313;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-panel, 18px);
+  overflow: hidden;
 }
 
 /* The client strip, on its own rule — the reference underlines the live one
@@ -60,7 +69,11 @@
 }
 
 .panel {
-  padding: clamp(40px, 6vw, 92px) clamp(16px, 5vw, 96px) clamp(32px, 4vw, 64px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 64px) clamp(20px, 4vw, 72px);
 }
 
 /* The client, set as the thing the panel is about. */
@@ -107,48 +120,8 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* The strip under the measures: the tag, what the client is, and the way
-   through to the work. Its rules went out with the passage this section used
-   to hold and had to come back — without them the three ran together as one
-   unstyled line. */
-.foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 18px;
-  margin-top: clamp(28px, 3.4vw, 48px);
-}
-
-.line {
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.38);
-}
-
-.provisional {
-  padding: 4px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--r-control, 4px);
-  font-family: "Roboto Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.more {
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.75);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.more:hover { color: var(--pink, #df4ed6); }
-
 @media (max-width: 760px) {
+  .section { aspect-ratio: auto; }
   .strip { align-items: flex-start; flex-direction: column; }
   .tabs { margin-left: 0; }
   .metrics { grid-template-columns: minmax(0, 1fr); }

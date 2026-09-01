@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 
 import styles from './IndustryStories.module.css'
 import { caseStudies } from '../data/caseStudies'
@@ -42,14 +41,12 @@ const entryFor = (slug) => {
     return {
       slug,
       name: study.name,
-      line: study.industry ?? null,
     }
   }
   if (!project) return null
   return {
     slug,
     name: project.name,
-    line: project.descriptor ?? null,
   }
 }
 
@@ -65,6 +62,13 @@ const entryFor = (slug) => {
  * NO PHOTOGRAPH BEHIND IT. There is no artwork for any of this, which is why
  * the work cards are flat fills too. A stock image of a cargo ship would be a
  * picture of somebody else's client.
+ *
+ * NO FOOT ROW. It carried the "Figures not published" tag, the client's
+ * descriptor and a link through to the work, and Chris cut all three. The tag
+ * is safe to lose because it guarded invented NUMBERS — FeaturedWall's — and
+ * there are none here: the values are the repo's missing-value mark, which
+ * claims nothing on its own. Put real figures in and the tag has to come back
+ * with them.
  *
  * THE STRIP IS NAMES, NOT LOGOS. clientLogos.js exists but does not cover
  * this roster, and a strip where half the marks were wordmarks and half were
@@ -112,15 +116,6 @@ export default function IndustryStories({ clients = [], eyebrow = '[ Case studie
           ))}
         </dl>
 
-        <div className={styles.foot}>
-          {/* THE TAG STAYS WHILE THE FIGURES ARE MISSING. It is what stops
-              four named clients appearing to have published results. */}
-          <span className={styles.provisional}>Figures not published</span>
-          {current.line && <span className={styles.line}>{current.line}</span>}
-          <NavLink to={`/work/${current.slug}`} className={styles.more}>
-            See the work →
-          </NavLink>
-        </div>
       </div>
     </section>
   )
