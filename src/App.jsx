@@ -1,7 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
-import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { NavProvider } from './context/NavContext'
 import { ComingSoonProvider } from './context/ComingSoonContext'
@@ -15,7 +15,7 @@ import TransitionBar from './components/TransitionBar'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import About from './pages/About'
-import AboutUs from './pages/AboutUs'
+import Careers from './pages/Careers'
 import AboutStudio from './pages/AboutStudio'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
@@ -99,7 +99,10 @@ export default function App() {
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/careers" element={<Careers />} />
+                {/* The page was renamed, not moved: anything already pointing
+                    at the old slug still lands on it rather than a 404. */}
+                <Route path="/about-us" element={<Navigate to="/careers" replace />} />
                 <Route path="/who-we-are" element={<AboutStudio />} />
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />

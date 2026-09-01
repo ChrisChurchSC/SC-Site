@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import styles from './AboutUs.module.css'
+import styles from './Careers.module.css'
 import own from './AboutStudio.module.css'
 import { useMeta } from '../hooks/useMeta'
 
 /**
  * The About page.
  *
- * Built on the Careers layout — it imports AboutUs.module.css directly rather
+ * Built on the Careers layout — it imports Careers.module.css directly rather
  * than restating two hundred lines of it, the same way ContentPrograms and
  * BrandSystems both render through Capabilities.module.css. Only the pieces
  * Careers has no equivalent for live in AboutStudio.module.css: the
@@ -14,7 +14,7 @@ import { useMeta } from '../hooks/useMeta'
  * an email capture form.
  *
  * On the URL: /about is the Capabilities page (which the nav now labels
- * "Services") and /about-us is Careers, so both of the obvious slugs were
+ * "Services") and /careers is Careers, so both of the obvious slugs were
  * taken. /who-we-are is a placeholder that avoids displacing an indexed page.
  * Moving it to /about means deciding where Capabilities goes.
  */

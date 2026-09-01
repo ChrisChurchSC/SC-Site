@@ -131,7 +131,7 @@ export default function Nav() {
           </NavLink>
 
           <div className="nav-card-pair">
-            <NavLink to="/about-us" className="nav-card">
+            <NavLink to="/careers" className="nav-card">
               <div className="nav-card-text">
                 <p className="nav-card-title">Careers</p>
                 <p className="nav-card-sub">Join the team.</p>
@@ -220,7 +220,7 @@ export default function Nav() {
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>
