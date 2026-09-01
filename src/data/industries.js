@@ -49,40 +49,44 @@ export const industries = [
         'brand to do.',
       visual: 'dashboard',
     },
-    /* THREE OFFERINGS, NOT THREE CASE STUDIES. An earlier version made each
-       card a thing one client got — Gigs, OpenText, Entropy — which read as
-       three anecdotes rather than as what a technology company can buy. Each
-       one is now a service that exists, and links to the page that defines
-       and prices it.
+    /* THE THREE SITUATIONS, WRITTEN FOR THIS CATEGORY. Same three the
+       service pages use — New, Pivoting, Underdog — because they are how the
+       studio already describes who it works with, and a fourth kind invented
+       for one industry would be a fourth kind everywhere else.
 
-       WHAT THEY DO NOT SAY is that any of it produced a result, or that we
-       are a technology specialist. proof-points.md grades outcome claims we
-       cannot evidence. These describe what is in the engagement, which is
-       checkable against /services/build, /services/grow and /pricing. */
-    benefits: [
+       WHAT IS INDUSTRY-SPECIFIC IS THE SITUATION, NOT A CLAIM ABOUT US.
+       Each body describes the state a technology company is in when it comes
+       to us. None of them says we are a technology specialist or that any of
+       this worked — proof-points.md grades that kind of statement, and four
+       engagements is a capability rather than a record.
+
+       NO href AND NO cta, per Chris: these describe who the work is for, and
+       the nav and the closing ask carry the routes. AudienceCards renders a
+       card without an href as a plain block. */
+    situations: [
       {
-        id: 'brand-and-product',
-        name: 'Brand and product, one bench',
+        id: 'new',
+        name: 'New',
         body:
-          'Design and engineering are two of the twelve disciplines, not two ' +
-          'suppliers. The identity, the design system and the interface are ' +
-          'one engagement rather than a hand-off between a studio and a shop.',
+          'A product exists and the brand does not. Usually pre-launch or ' +
+          'straight after a raise: it needs an identity, a voice, and a system ' +
+          'the product team can actually build against.',
       },
       {
-        id: 'platform-not-pdf',
-        name: 'A platform, not a guidelines PDF',
+        id: 'pivoting',
+        name: 'Pivoting',
         body:
-          'The brand platform holds tokens, components, grid and radii, ' +
-          'iconography and voice — a system your design system can meet, ' +
-          'rather than a document somebody has to interpret.',
+          'A platform moving into a new category, a new buyer, or up-market — ' +
+          'where the name still fits and nothing else does, and the brand has ' +
+          'to carry the new story without discarding what it earned.',
       },
       {
-        id: 'run-after-launch',
-        name: 'The same team runs it after launch',
+        id: 'underdog',
+        name: 'Underdog',
         body:
-          'Grow is hours on a retainer with the people who built the brand: ' +
-          'campaigns, channels and content produced against the same ' +
-          'positioning, with no re-briefing a second agency on your own work.',
+          'A crowded category where every competitor is making the same claim ' +
+          'in the same words. Standing out means sounding different without ' +
+          'promising more than the product can hold up.',
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */

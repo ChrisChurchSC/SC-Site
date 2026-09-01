@@ -8,6 +8,8 @@ import v3 from './HomeV3.module.css'
 import styles from './WorkIndustry.module.css'
 import AudienceCards from '../components/AudienceCards'
 import ContactCTA from '../components/ContactCTA'
+import DepartmentPanel from '../components/DepartmentPanel'
+import EmbedSection from '../components/EmbedSection'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
 import ServiceFaq from '../components/ServiceFaq'
@@ -16,6 +18,7 @@ import TestimonialCard from '../components/TestimonialCard'
 import TrustMosaic from '../components/TrustMosaic'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
+import { BUILD_EMBED, embedCopyFor } from './ServiceV3'
 import { industries, industryBySlug } from '../data/industries'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
@@ -93,21 +96,35 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
-      {/* Only where there are benefits to show, and only three: the component
-          lays out whatever it is given, and a fourth card would be a fourth
-          engagement we have not done. No view toggle — see the prop note. */}
-      {industry.benefits && (
+      {/* Only where an industry has written its three. No view toggle: a By
+          industry switch on an industry page offers to re-sort the page by
+          the thing the page is. */}
+      {industry.situations && (
         <>
           <AudienceCards
-            eyebrow="[ Why us here ]"
-            headline={`What a ${industry.name.toLowerCase()} company gets.`}
-            cards={industry.benefits}
+            eyebrow="[ Who we work with ]"
+            headline={`Three kinds of ${industry.name.toLowerCase()} brand.`}
+            cards={industry.situations}
             toggle={false}
           />
 
           <hr className={v3.divider} />
         </>
       )}
+
+      {/* HOW WE WORK, the same section /services/build runs, from the same
+          constants rather than a retyped copy of them. It is true on any page
+          that sells the studio, and this one had no account of how the work
+          actually happens. */}
+      <EmbedSection
+        eyebrow={embedCopyFor('build').eyebrow}
+        headline={embedCopyFor('build').headline}
+        body={null}
+        points={BUILD_EMBED}
+        visual={<DepartmentPanel />}
+      />
+
+      <hr className={v3.divider} />
 
       <TrustMosaic />
 

@@ -135,6 +135,10 @@ const GROW_CARDS = [
    symmetry.
 
    THE COPY BELOW IS MINE AND UNAPPROVED. */
+/* The build page's own embed copy, exported alongside BUILD_EMBED for the
+   same reason. */
+export const embedCopyFor = (slug) => PAGE[slug]?.embed ?? PAGE.build.embed
+
 const PAGE = {
   build: {
     statement: 'We build brand platforms.',
@@ -162,7 +166,12 @@ const PAGE = {
   },
 }
 
-const BUILD_EMBED = [
+/* EXPORTED so the industry pages can render the same section. It was kept
+   private and that is why they went without one: the alternative was a second
+   copy of this paragraph, and two copies of a paragraph drift the first time
+   either is edited. One source, two pages — the arrangement the footer and
+   the disciplines list already use. */
+export const BUILD_EMBED = [
   {
     Icon: Users,
     key: 'A whole department',
