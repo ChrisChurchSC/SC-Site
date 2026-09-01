@@ -46,7 +46,7 @@ export default function EmbedSection({
 }) {
   return (
     <section className={styles.section} aria-labelledby="embed">
-      <div className={styles.panel}>
+      <div className={`${styles.panel}${headlineLines ? ' ' + styles.panelLines : ''}`}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 className={`${styles.headline}${headlineLines ? ' ' + styles.headlineLines : ''}`} id="embed">{headline}</h2>

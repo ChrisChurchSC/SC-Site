@@ -91,8 +91,18 @@
 .headlineLines {
   max-width: none;
   text-wrap: initial;
-  font-size: clamp(22px, 2.1vw, 28px);
-  line-height: 1.14;
+  font-size: clamp(26px, 2.9vw, 40px);
+  line-height: 1.1;
+}
+
+/* THE COLUMN HAS TO GROW WITH THE TYPE. 0.72fr gives the copy 398px, which
+   is why the headline had to step down to 28px to hold three lines. Widening
+   the copy side to roughly half lets it come back up to 40px and still break
+   where it was told to. Only for the pre-broken variant: the shared panel
+   keeps the proportions it was tuned at, and the visual on the right is
+   cropped by design either way. */
+.panelLines {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
 }
 
 .body {
