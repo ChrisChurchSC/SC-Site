@@ -53,6 +53,18 @@ export default function WorkIndustry() {
   const cal = useCalDrawer()
   const industry = industryBySlug(slug)
 
+  /* An array of lines becomes breaks here rather than in the data file, which
+     holds no JSX. A string or the shared JSX passes through untouched. */
+  const raw = industry?.embed?.headline ?? null
+  const embedHeadline = Array.isArray(raw)
+    ? raw.map((line, i) => (
+      <span key={line}>
+        {i > 0 && <br />}
+        {line}
+      </span>
+    ))
+    : raw ?? embedCopyFor('build').headline
+
   /* POINTS KEEP THEIR ICONS. An industry supplies the words; the icons stay
      BUILD_EMBED's, by position, so the three keep the meanings the shared
      section gave them and a data file does not have to import lucide. */
@@ -137,7 +149,8 @@ export default function WorkIndustry() {
           actually happens. */}
       <EmbedSection
         eyebrow={embedCopyFor('build').eyebrow}
-        headline={industry.embed?.headline ?? embedCopyFor('build').headline}
+        headline={embedHeadline}
+        headlineLines={Array.isArray(raw)}
         body={null}
         points={embedPoints}
         visual={<DepartmentPanel />}

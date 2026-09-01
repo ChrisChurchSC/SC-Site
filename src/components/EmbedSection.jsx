@@ -34,19 +34,22 @@ const POINTS = [
    team, people you know, thinking that reaches the work — so it uses this
    shape rather than a fourth hand-rolled section. Grow passes nothing and
    renders exactly what it always did. */
+/* `headlineLines` says the headline arrives pre-broken — see .headlineLines
+   in the stylesheet for why that needs a different measure. */
 export default function EmbedSection({
   eyebrow = '[ Embedded ]',
   headline = 'Our people inside your team, not alongside it.',
   body = 'The platform produces the work. Somebody still has to run it, and for a while that is us — beside your team rather than instead of it.',
   points = POINTS,
   visual = <AdoptWindow />,
+  headlineLines = false,
 }) {
   return (
     <section className={styles.section} aria-labelledby="embed">
       <div className={styles.panel}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
-          <h2 className={styles.headline} id="embed">{headline}</h2>
+          <h2 className={`${styles.headline}${headlineLines ? ' ' + styles.headlineLines : ''}`} id="embed">{headline}</h2>
           {body && <p className={styles.body}>{body}</p>}
 
           <dl className={styles.points}>

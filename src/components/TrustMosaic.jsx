@@ -87,7 +87,19 @@ export default function TrustMosaic({
   return (
     <section className={styles.section}>
       <p className={styles.eyebrow}>{eyebrow}</p>
-      <h2 className={styles.headline}>{headline}</h2>
+      {/* An array is the break. A caller that wants a specific two-line
+          headline hands over the two lines rather than a string with markup
+          in it — industries.js is data and has no business holding JSX. */}
+      <h2 className={`${styles.headline}${Array.isArray(headline) ? ' ' + styles.headlineSplit : ''}`}>
+        {Array.isArray(headline)
+          ? headline.map((line, i) => (
+            <span key={line}>
+              {i > 0 && <br />}
+              {line}
+            </span>
+          ))
+          : headline}
+      </h2>
 
       {/* No feature card. It carried a client name and a missing number —
           every case-study stat in this repo is a placeholder — and once its

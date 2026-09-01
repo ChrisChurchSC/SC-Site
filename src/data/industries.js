@@ -140,7 +140,13 @@ export const industries = [
        on their own terms: the first names engineering among the disciplines,
        and the other two are about how the team is bought and who you get. */
     embed: {
-      headline: 'Your fractional creative and marketing department, for technology companies.',
+      /* Given as lines, not a sentence: the page turns them into breaks. Data
+         files hold no JSX — see the same arrangement on trustHeadline. */
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'for technology companies.',
+      ],
     },
 
     /* WHAT THE CATEGORY ACTUALLY BUYS. Read off these four clients' own work
@@ -153,7 +159,10 @@ export const industries = [
 
     /* TRUE OF THE WALL UNDERNEATH IT. The grid is the whole roster, so this
        cannot say "100+ technology brands" — see the note on the prop. */
-    trustHeadline: 'Trusted by 100+ brands, technology companies among them.',
+    trustHeadline: [
+      'Trusted by 100+ brands,',
+      'technology companies among them.',
+    ],
 
     /* THE COMMERCIAL ANSWERS ARE NOT TOUCHED. ServiceFaq reads the pricing
        FAQ and its own header says a page answering those differently from
@@ -211,7 +220,7 @@ export const industries = [
           'Enough people are making things that they have started to disagree. ' +
           'What is needed is not a rebrand but a system with rules in it — ' +
           'tokens, components and copy patterns other teams can build from.',
-        pills: ['Component reuse rate', 'Asset reuse rate', 'Content publishing velocity'],
+        pills: ['Design request volume reduction', 'Asset reuse rate', 'Campaign asset velocity'],
       },
       {
         id: 'enterprise',
