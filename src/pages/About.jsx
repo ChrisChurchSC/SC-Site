@@ -100,12 +100,22 @@ export default function About() {
 
       <hr className={v3.divider} />
 
-      {/* Who we are for, in the words positioning.md uses. AudienceCards'
-          default cards are those three, so this is the shared set rather than
-          a retyped one. */}
+      {/* Who we are, in the words positioning.md uses.
+          
+          The cards are passed rather than defaulted. AudienceCards' own three
+          are New / Pivoting / Underdog, which is who the studio is *for* —
+          right under the old label and wrong under this one. HomeV2 and
+          ServiceV3 still render the defaults, so the component keeps them.
+
+          The copy is positioning.md's "Build vs. Grow" and the embedded-team
+          claim, which proof-points.md grades B and evidences end to end. What
+          is deliberately not here: "no pooled or anonymous labor", which that
+          file grades C and says plainly not to publish, and the tiered hourly
+          retainers, which it records as a model the studio does not sell. */}
       <AudienceCards
-        eyebrow="[ Who we are for ]"
-        headline="Challenger brands — new, pivoting, or fighting to stand out."
+        eyebrow="[ Who we are ]"
+        headline="An embedded creative and marketing team — we build the brand, then grow it."
+        cards={WHO_WE_ARE}
       />
 
       <hr className={v3.divider} />
@@ -166,6 +176,40 @@ export default function About() {
 /* Each claim is positioning.md's, and each "behind" line is what
    proof-points.md holds as the evidence for it — stated as what we would show
    rather than as a result. Claim numbers 3, 4, 8, 10, 11 and 12, all graded B. */
+/* Straight out of positioning.md: the two actions everything falls into,
+   and the team arrangement that is the studio's actual category claim.
+
+   Every card is a link — that is the component's shape, not a choice made
+   here — and they all point at /work for the reason AudienceCards already
+   gives about its own: the filtered routes these imply do not exist, and a
+   link to a page that is not there is worse than a broader one. */
+const WHO_WE_ARE = [
+  {
+    id: 'build',
+    name: 'Build',
+    body: 'We make your brand and its assets, from scratch or refreshed from what you have: strategy, identity, voice, messaging, website, app.',
+    line: 'Make the brand.',
+    cta: 'See what we have built',
+    href: '/work',
+  },
+  {
+    id: 'grow',
+    name: 'Grow',
+    body: 'We take that brand to market and run it: campaigns, paid media, organic content, measured and optimized every month.',
+    line: 'Take it to market.',
+    cta: 'See how we grow them',
+    href: '/work',
+  },
+  {
+    id: 'one-team',
+    name: 'One team',
+    body: 'Most of the field does one half — identity and web, or campaigns and content. We do both, with the same named people on both phases.',
+    line: 'The same people do both.',
+    cta: 'See the work end to end',
+    href: '/work',
+  },
+]
+
 const POV = [
   {
     n: '01',
