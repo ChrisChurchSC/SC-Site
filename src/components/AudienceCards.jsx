@@ -88,7 +88,7 @@ const AUDIENCES = [
 const SUB_INDUSTRIES = {
   'Food & Beverage': ['Restaurants', 'Packaged food', 'Beverage', 'Hospitality'],
   'Health & Wellness': ['Supplements', 'Digital health', 'Personal care', 'Fitness'],
-  'Technology & Web3': ['SaaS', 'Crypto', 'Developer tools', 'Fintech'],
+  Technology: ['SaaS', 'Developer tools', 'Infrastructure', 'Consumer apps'],
   'Culture & Nonprofit': ['Nonprofit', 'Impact', 'Arts', 'Education'],
 }
 

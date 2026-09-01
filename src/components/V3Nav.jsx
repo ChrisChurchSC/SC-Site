@@ -79,20 +79,15 @@ export const NAV_LINKS = [
  * Confirm or replace the two lists, and give each entry an href once /work
  * can filter. Nothing else here changes.
  * ───────────────────────────────────────────────────────────────────────── */
-/* FOUR, COMBINED DOWN FROM SIX. Consumer & CPG and Retail & Apparel were
-   one question a visitor was being asked twice, and Crypto & Web3 sat beside
-   Technology & SaaS as though a Web3 company were not a technology company.
-
-   THE ROSTER STILL FITS. Consumer & Retail covers Soft Science, Path
-   Projects, J.Jill and Zbiotics; Food & Beverage covers Smashburger,
-   Smallhold, Big Buoy and Einstein Bagels; Health & Wellness covers Hylands,
-   Heard and Photon; Technology & Web3 covers Google, Arbitrum and Offchain.
-   Combining further would put Google and Smashburger in one bucket, which is
-   where a category list stops telling anybody anything.
+/* SUPERSEDED. This described four labels combined down from six, and
+   assigned clients to them in prose — Google and Offchain to technology, Big
+   Buoy to food and beverage. None of that was ever in data, and some of it
+   disagrees with the mapping that now is: Big Buoy is tagged technology on
+   the evidence of its own descriptor. The list and the assignments both live
+   in src/data/industries.js, which quotes the evidence for each.
 
    THIS DRIVES TWO SURFACES — the Case Studies menu in this nav and the "By
-   industry" view on /services/build — so it is edited here rather than in
-   either of them. */
+   industry" view on /services/build — so both follow that file. */
 /* THE FOUR LABELS ARE GONE, replaced by the industries that have work behind
    them — see src/data/industries.js, which is also where the client mapping
    lives. These used to be four strings with no data under them, and every

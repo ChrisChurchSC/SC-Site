@@ -27,8 +27,8 @@
  */
 export const industries = [
   {
-    slug: 'technology-web3',
-    name: 'Technology & Web3',
+    slug: 'technology',
+    name: 'Technology',
     /* THE SPLIT HERO, and only here. An industry with a `hero` renders the
        two-column treatment — copy left, a product window right — and one
        without keeps the centred statement, so this is one page's layout
@@ -43,10 +43,13 @@ export const industries = [
        The headline is still the category's name. A hero headline that made a
        claim would be the one thing on this page nothing under it supports. */
     hero: {
+      /* Categories rather than a count: the roster is enterprise software, a
+         telecom platform, a consumer app and an on-chain analytics brand, and
+         naming three shapes covers them without a number that goes wrong the
+         moment a fifth is tagged. */
       lede:
-        'A Layer 2 network, enterprise software, telecom infrastructure and a ' +
-        'consumer app — four engagements, and what each of them needed the ' +
-        'brand to do.',
+        'Enterprise software, infrastructure and consumer products — and what ' +
+        'each of them needed the brand to do.',
       visual: 'dashboard',
     },
     /* THE THREE SITUATIONS, WRITTEN FOR THIS CATEGORY. Same three the
@@ -58,6 +61,12 @@ export const industries = [
        Each body describes the state a technology company is in when it comes
        to us — shipping before there is a brand, developer adoption meeting an
        enterprise buyer, a category whose vendors all use the same sentence.
+
+       IT IS TECHNOLOGY, NOT WEB3. The category was "Technology & Web3" and
+       the copy leaned on protocols, L2s and crypto-native products. Two of
+       the clients are on-chain and stay tagged here — they are technology
+       companies — but the page speaks to the wider category rather than to
+       the narrower one inside it.
        None of them says we are a technology specialist or that any of this
        worked: proof-points.md grades that kind of statement, and four
        engagements is a capability rather than a record.
@@ -76,25 +85,25 @@ export const industries = [
         id: 'new',
         name: 'New',
         body:
-          'A protocol or a product that shipped before it had a brand. The ' +
-          'docs and the app exist; the name, the mark and the tokens the ' +
-          'front end can consume do not.',
+          'A product that shipped before it had a brand. The docs and the app ' +
+          'exist; the name, the mark and the tokens the front end can consume ' +
+          'do not.',
       },
       {
         id: 'pivoting',
         name: 'Pivoting',
         body:
-          'Developer-led adoption meeting an enterprise buyer, or a ' +
-          'crypto-native product going mainstream. The audience changes, so ' +
-          'the vocabulary, the proof and the surfaces all have to.',
+          'Developer-led adoption meeting an enterprise buyer, or a technical ' +
+          'product going mainstream. The audience changes, so the vocabulary, ' +
+          'the proof and the surfaces all have to.',
       },
       {
         id: 'underdog',
         name: 'Underdog',
         body:
-          'SaaS, security and L2s describing themselves in the same words, to ' +
-          'buyers who have read it before. Sounding specific without claiming ' +
-          'an outcome the product cannot yet show.',
+          'A category where every competitor describes itself in the same ' +
+          'words, to buyers who have read it before. Sounding specific without ' +
+          'claiming an outcome the product cannot yet show.',
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
