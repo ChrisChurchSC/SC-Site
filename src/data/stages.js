@@ -215,18 +215,24 @@ export const stages = [
         'can build from.',
     },
 
-    /* WHAT VARIES AT THIS STAGE is not whether there is a brand — there is —
-       but where it is coming apart: across the people making things, across a
-       second product, or on the surface the company outgrew. */
+    /* SITUATIONS, NOT SYMPTOMS. These were "Everyone is making things", "A
+       second product" and "The site is behind" — the first and third describe
+       a symptom the company has, not the circumstance it is in, which is what
+       the toggle above them says. A scale-up arrives because something
+       happened: it outgrew the brand, it added a line, or it started selling
+       upmarket. The symptoms belong inside those, and they are.
+
+       Measures sized to a company this big — see the note on the founder-led
+       record for why that matters. */
     situations: [
       {
-        id: 'everyone-making',
-        name: 'Everyone is making things',
+        id: 'outgrown',
+        name: 'Outgrown it',
         body:
-          'Several teams and a couple of agencies producing in parallel, each ' +
-          'reasonable on its own. The brand drifts in the gaps between them ' +
-          'rather than in any one piece.',
-        pills: ['Brand compliance rate', 'Asset reuse rate', 'Design request volume reduction'],
+          'The brand was made for a smaller company and now describes one. ' +
+          'Nothing is broken; none of it matches the rooms the company is ' +
+          'now in.',
+        pills: ['Bounce rate', 'Brand search volume'],
       },
       {
         id: 'second-product',
@@ -235,15 +241,16 @@ export const stages = [
           'A new line or sub-brand that has to belong to the parent without ' +
           'being a copy of it, and without quietly redefining what the parent ' +
           'means.',
-        pills: ['Brand search volume', 'Share of voice'],
+        pills: ['Asset reuse rate', 'Campaign launch speed'],
       },
       {
-        id: 'site-behind',
-        name: 'The site is behind',
+        id: 'upmarket',
+        name: 'Going upmarket',
         body:
-          'The company outgrew its own site and it now argues against the ' +
-          'pitch — describing a smaller company than the one in the room.',
-        pills: ['Bounce rate', 'Organic traffic growth'],
+          'Selling to buyers who compare you with companies several times ' +
+          'your size, and who read the brand as evidence of whether you can ' +
+          'carry the work.',
+        pills: ['Win rate lift', 'Pipeline influence'],
       },
     ],
 
@@ -289,31 +296,37 @@ export const stages = [
         'review cycle for each one.',
     },
 
+    /* Same correction as scale-up: Many markets and Many partners described
+       the shape of the org rather than the circumstance that starts a
+       conversation. An enterprise arrives with an event — a rebrand, an
+       acquisition, a market it has not sold into. The scale is in the bodies,
+       which is where it belongs. */
     situations: [
       {
-        id: 'many-markets',
-        name: 'Many markets',
+        id: 'rebrand',
+        name: 'A rebrand',
         body:
-          'The same brand running in several regions and languages, made by ' +
-          'people who never meet. What holds it together has to survive being ' +
-          'read rather than explained.',
-        pills: ['Brand compliance rate', 'Campaign reach'],
+          'A full identity change across an organisation where nothing can go ' +
+          'dark, every market has to move together, and several partners are ' +
+          'producing against it at once.',
+        pills: ['Brand compliance rate', 'Asset reuse rate'],
       },
       {
-        id: 'many-agencies',
-        name: 'Many partners',
+        id: 'acquisition',
+        name: 'An acquisition',
         body:
-          'Several agencies producing against one brand. The drift is between ' +
-          'them rather than inside any one, and nobody owns the seam.',
-        pills: ['Asset reuse rate', 'Design request volume reduction'],
-      },
-      {
-        id: 'sub-brand',
-        name: 'A sub-brand or acquisition',
-        body:
-          'Something new has to belong to the parent without being swallowed ' +
-          'by it, and the parent has to stay itself while it does.',
+          'Something bought that has to be folded in — or deliberately held ' +
+          'apart — without either brand losing what it had before the deal.',
         pills: ['Brand search volume', 'Pipeline influence'],
+      },
+      {
+        id: 'new-market',
+        name: 'A new market',
+        body:
+          'Entering a region or a category the brand was not built for, where ' +
+          'the name means nothing yet and the proof that worked at home does ' +
+          'not travel.',
+        pills: ['Campaign reach', 'Brand awareness lift in target markets'],
       },
     ],
 

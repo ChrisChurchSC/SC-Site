@@ -649,6 +649,18 @@ export default function V3Nav() {
                           : <span key={label} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{label}</span>
                       ))}
                     </div>
+                    {/* THE THIRD WAY IN. The footer has had these under "By
+                        outcome" all along; the menu offered only industry and
+                        stage, so somebody who knows what they want out of it
+                        had nowhere to start. Unlinked, like the footer's copy
+                        of the same list: there is no page per outcome, and
+                        six more links to the wall is not depth. */}
+                    <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
+                      <p className={v3.panelTag}>By outcome</p>
+                      {OUTCOMES.map((label) => (
+                        <span key={label} className={`${v3.proofLink} ${v3.proofLinkFlat}`}>{label}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

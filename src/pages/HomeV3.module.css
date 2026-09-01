@@ -708,7 +708,8 @@
 
 .proofCols {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Three since By outcome joined industry and stage. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(18px, 2.4vw, 40px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: clamp(14px, 1.6vw, 22px);
