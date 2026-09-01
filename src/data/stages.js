@@ -109,6 +109,83 @@ export const stages = [
       },
     ],
   },
+  {
+    slug: 'seed-series-a',
+    name: 'Seed to Series A',
+    clients: [],
+
+    hero: {
+      lede:
+        'The round is in and somebody now owns marketing. What they inherit ' +
+        'has to be decided and written down, because the next twelve months ' +
+        'are spent against it.',
+    },
+
+    /* THE THREE MOMENTS THAT DIFFER HERE. Founder-led splits on whether the
+       thing is public and whether a round landed; by seed those are settled,
+       and what varies is who owns the work, whether spend repeats yet, and
+       whether the next raise is in view. Each describes the reader's
+       position rather than our record.
+
+       Measures follow the situation, labels only and every one countable —
+       see the note in industries.js about why there are no values. */
+    situations: [
+      {
+        id: 'first-hire',
+        name: 'The first hire',
+        body:
+          'Someone owns marketing now and there is nothing to own: no system ' +
+          'to brief from, no library to pull from, and every asset made from ' +
+          'scratch by whoever is free.',
+        pills: ['Asset reuse rate', 'Content publishing velocity'],
+      },
+      {
+        id: 'proving-the-channel',
+        name: 'Proving the channel',
+        body:
+          'Spend has started and nothing repeats yet. Each piece has to be ' +
+          'measurable enough to keep or kill, rather than added to a pile ' +
+          'nobody reads back.',
+        pills: ['Cost per lead', 'MQL-to-SQL rate', 'Pipeline velocity'],
+      },
+      {
+        id: 'next-round',
+        name: 'The next round',
+        body:
+          'The site, the deck and the product get read by people who compare ' +
+          'them. They have to tell one story, and it has to be the one the ' +
+          'company is actually running.',
+        pills: ['Brand search volume', 'Share of voice'],
+      },
+    ],
+
+    embed: {
+      headline: [
+        'Your fractional creative',
+        'and marketing department,',
+        'around your first hire.',
+      ],
+    },
+
+    /* True of this stage: there is a marketing function now, and it is one
+       person. */
+    disciplinesHeadline: 'Twelve disciplines, and one person to point them at.',
+
+    faq: [
+      {
+        q: 'We just made our first marketing hire. Where do you fit?',
+        a: 'Alongside them. Design, writing, film, motion, media and engineering come as one team at the fraction you need, so the person who owns marketing has a bench to brief rather than six roles to hire.',
+      },
+      {
+        q: 'Do we have to redo the brand before we can market?',
+        a: 'No. Campaigns, channels and content are their own deliverables, and so are a refresh, guidelines and product positioning if the brand is what is in the way. The pricing page lists each one separately.',
+      },
+      {
+        q: 'What do we get that we can hand to the next person?',
+        a: 'The brand platform: tokens, components, grid and radii, iconography and voice — a system a new hire can work from rather than a folder of finished files.',
+      },
+    ],
+  },
 ]
 
 export const stageBySlug = (slug) => stages.find((s) => s.slug === slug)
