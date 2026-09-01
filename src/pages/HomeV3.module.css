@@ -1057,6 +1057,26 @@
     0 5px 0 rgba(255, 255, 255, 0.8);
 }
 
+/* An X while the menu is open. The bar itself goes transparent and the two
+   strokes are drawn as pseudo-elements, because the closed state's lines are
+   box-shadows and those cannot be rotated apart. */
+.burgerOpen {
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+}
+
+.burgerOpen::before,
+.burgerOpen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.burgerOpen::before { transform: rotate(45deg); }
+.burgerOpen::after { transform: rotate(-45deg); }
+
 .mobileNav {
   display: none;
   flex-direction: column;
@@ -1227,6 +1247,18 @@
    bridge spans so the cursor never crosses dead space on the way down. */
 .navFloat > .panel {
   top: calc(var(--bar-inset, 22px) + var(--bar-h, 64px) + 8px);
+}
+
+/* THE MENU GOES UNDER THE BAR, for the same reason the panel does — and it
+   is a worse bug here. As a direct child of .navFloat it took the rule
+   above and was pinned at the bar's own top, covering the logo and the
+   toggle: the button that opens the menu was underneath it, so there was no
+   way to close the thing except by following a link out of the page.
+
+   margin-top goes to 0 because the 8px it carried is in this calc now. */
+.navFloat > .mobileNav {
+  top: calc(var(--bar-inset, 22px) + var(--bar-h, 64px) + 8px);
+  margin-top: 0;
 }
 
 /* Out of the way once the page has moved past it. Translated rather than

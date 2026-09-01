@@ -389,6 +389,16 @@ export default function V3Nav() {
      list — the whole navigation on a phone rather than a convenience. */
   const [menuOpen, setMenuOpen] = useState(false)
 
+  /* ESCAPE CLOSES IT. The toggle is reachable again, but a menu that covers
+     most of a phone screen should not need the right pixel to get out of —
+     and this is the one thing a keyboard user has. */
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
   return (
         <section className={`${styles.row12} ${styles.introRow} ${v3.topBar}`}>
           <div
@@ -447,7 +457,10 @@ export default function V3Nav() {
                 onClick={() => setMenuOpen(o => !o)}
               >
                 <span className={v3.srOnly}>{menuOpen ? 'Close menu' : 'Open menu'}</span>
-                <span className={v3.burger} aria-hidden="true" />
+                <span
+                  className={`${v3.burger}${menuOpen ? ' ' + v3.burgerOpen : ''}`}
+                  aria-hidden="true"
+                />
               </button>
 
               <div className={v3.navActions}>
