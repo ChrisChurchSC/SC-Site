@@ -39,7 +39,16 @@ import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
    and the problem disappears. */
 const CLIENT_CLAIM = '100+'
 
-export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
+/* THE HEADLINE IS A PROP so an industry page can name its category — but the
+   wall still renders the whole roster, so the sentence has to stay true of
+   what is under it. "Trusted by 100+ technology brands" would be false: three
+   of the five technology clients are in this grid and the other eighteen
+   tiles are not technology. "…technology companies among them" is true and
+   says the same thing to the reader who came for it. */
+export default function TrustMosaic({
+  eyebrow = '[ Proof ]',
+  headline = `Trusted by ${CLIENT_CLAIM} brands, and the people who run them.`,
+}) {
   const comingSoon = useComingSoon()
 
   const clients = clientLogos.filter(c => !c.slug || !HIDDEN_SLUGS.has(c.slug))
@@ -78,9 +87,7 @@ export default function TrustMosaic({ eyebrow = '[ Proof ]' }) {
   return (
     <section className={styles.section}>
       <p className={styles.eyebrow}>{eyebrow}</p>
-      <h2 className={styles.headline}>
-        Trusted by {CLIENT_CLAIM} brands, and the people who run them.
-      </h2>
+      <h2 className={styles.headline}>{headline}</h2>
 
       {/* No feature card. It carried a client name and a missing number —
           every case-study stat in this repo is a placeholder — and once its

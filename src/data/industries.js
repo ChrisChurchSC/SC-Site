@@ -79,7 +79,14 @@ export const industries = [
 
        NO href AND NO cta, per Chris: these describe who the work is for, and
        the nav and the closing ask carry the routes. AudienceCards renders a
-       card without an href as a plain block. */
+       card without an href as a plain block.
+
+       THE PILLS ARE WHAT THAT SITUATION NEEDS, and every one is a deliverable
+       that already exists on /pricing — New Brand, Rebrand, Product
+       Positioning, Messaging, Design System, Website, Campaign, Channels and
+       the rest. They are not metrics and not outcomes: a card saying what a
+       reader in that position usually buys is checkable against the pricing
+       page, where a number would be a claim nothing here can support. */
     situations: [
       {
         id: 'new',
@@ -88,6 +95,7 @@ export const industries = [
           'A product that shipped before it had a brand. The docs and the app ' +
           'exist; the name, the mark and the tokens the front end can consume ' +
           'do not.',
+        pills: ['Naming', 'New Brand', 'Design System', 'Website'],
       },
       {
         id: 'pivoting',
@@ -96,6 +104,7 @@ export const industries = [
           'Developer-led adoption meeting an enterprise buyer, or a technical ' +
           'product going mainstream. The audience changes, so the vocabulary, ' +
           'the proof and the surfaces all have to.',
+        pills: ['Product Positioning', 'Rebrand', 'Messaging', 'Website'],
       },
       {
         id: 'underdog',
@@ -104,38 +113,34 @@ export const industries = [
           'A category where every competitor describes itself in the same ' +
           'words, to buyers who have read it before. Sounding specific without ' +
           'claiming an outcome the product cannot yet show.',
+        pills: ['Product Positioning', 'Campaign', 'Content', 'Channels'],
       },
     ],
-    /* HOW WE WORK, SAID FOR THIS CATEGORY. The shared section is the studio's
-       shape and reads the same on every page; these are the same three facts
-       aimed at a technology reader. Points keep their icons from BUILD_EMBED
-       by position — see the note in WorkIndustry.jsx.
+    /* HOW WE WORK KEEPS THE DEPARTMENT FRAMING. It briefly became "One bench
+       for the brand and the product" with points about tokens and hand-offs,
+       which described the deliverable rather than the arrangement — and the
+       arrangement is the offer. Back to the fractional department, with the
+       category named in the headline.
 
-       Every line is checkable. Design and engineering really are two of the
-       twelve disciplines. The tokens, components, grid and radii really are
-       what the brand platform holds, per /pricing. Neither line claims a
-       result. */
+       ONLY THE HEADLINE IS OVERRIDDEN. The three points come from BUILD_EMBED
+       so there is one copy of them, and they already suit a technology reader
+       on their own terms: the first names engineering among the disciplines,
+       and the other two are about how the team is bought and who you get. */
     embed: {
-      headline: 'One bench for the brand and the product.',
-      points: [
-        {
-          key: 'Design and engineering together',
-          line: 'The identity, the design system and the interface come from one team rather than from a studio and a shop.',
-        },
-        {
-          key: 'Tokens, not a PDF',
-          line: 'What you get is a system the front end can consume: tokens, components, grid and radii, iconography and voice.',
-        },
-        {
-          key: 'People you know',
-          line: 'Embedded in your team, and you have access to them.',
-        },
-      ],
+      headline: 'Your fractional creative and marketing department, for technology companies.',
     },
 
-    /* Engineering is genuinely one of the twelve, which is the part a
-       technology reader is checking for. */
-    disciplinesHeadline: 'Twelve disciplines, engineering among them.',
+    /* WHAT THE CATEGORY ACTUALLY BUYS. Read off these four clients' own work
+       lists in projects.js and caseStudies.js: brand and rebrand (design),
+       product (design and engineering), animated ads, live action and product
+       videos (film and animation), and content (writing). Named rather than
+       asserted as an industry-wide fact — it is what our technology
+       engagements have used. */
+    disciplinesHeadline: 'Twelve disciplines. Technology brands lean on design, engineering, writing and film.',
+
+    /* TRUE OF THE WALL UNDERNEATH IT. The grid is the whole roster, so this
+       cannot say "100+ technology brands" — see the note on the prop. */
+    trustHeadline: 'Trusted by 100+ brands, technology companies among them.',
 
     /* THE COMMERCIAL ANSWERS ARE NOT TOUCHED. ServiceFaq reads the pricing
        FAQ and its own header says a page answering those differently from
@@ -175,6 +180,7 @@ export const industries = [
           'The founder is the brand, and the deck is the brand, and neither ' +
           'survives being handed to somebody else. The job is getting what is ' +
           'in their head into something a second person can use.',
+        pills: ['Naming', 'New Brand', 'Website'],
       },
       {
         id: 'seed-series-a',
@@ -183,6 +189,7 @@ export const industries = [
           'A first marketing hire arrives to find no system to hire against. ' +
           'The brand has to be decided quickly and written down, because the ' +
           'next twelve months are spent spending against it.',
+        pills: ['Brand platform', 'Brand Guidelines', 'Website', 'Content'],
       },
       {
         id: 'scale-up',
@@ -191,6 +198,7 @@ export const industries = [
           'Enough people are making things that they have started to disagree. ' +
           'What is needed is not a rebrand but a system with rules in it — ' +
           'tokens, components and copy patterns other teams can build from.',
+        pills: ['Design System', 'Brand Guidelines', 'Tone of Voice', 'Content'],
       },
       {
         id: 'enterprise',
@@ -199,6 +207,7 @@ export const industries = [
           'A global marketing org, several agencies and a brand that has to ' +
           'hold across all of them, in every market and format, without a ' +
           'review cycle for each one.',
+        pills: ['Brand Guidelines', 'Sub-brand', 'Campaign', 'Channels'],
       },
     ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */

@@ -145,7 +145,7 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
-      <TrustMosaic />
+      <TrustMosaic headline={industry.trustHeadline ?? undefined} />
 
       <hr className={v3.divider} />
 
