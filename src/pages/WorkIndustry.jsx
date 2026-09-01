@@ -104,8 +104,10 @@ export default function WorkIndustry() {
           <AudienceCards
             eyebrow="[ Who we work with ]"
             headline={`Three kinds of ${industry.name.toLowerCase()} brand.`}
-            cards={industry.situations}
-            toggle={false}
+            views={[
+              { id: 'situation', label: 'By situation', cards: industry.situations },
+              { id: 'stage', label: 'By company stage', cards: industry.stages },
+            ]}
           />
 
           <hr className={v3.divider} />

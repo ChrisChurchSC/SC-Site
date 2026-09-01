@@ -106,6 +106,47 @@ export const industries = [
           'claiming an outcome the product cannot yet show.',
       },
     ],
+    /* THE SECOND VIEW. Same four stages the footer and the Case Studies menu
+       already use — WORK_BY_STAGE — so a visitor meets one vocabulary for
+       company size across the site rather than a fifth invented here.
+
+       These describe what changes about the brand problem at each stage, not
+       what we did about it. A stage is a fact about the reader's company; the
+       claim would be the sentence after it, and that sentence is not here. */
+    stages: [
+      {
+        id: 'founder-led',
+        name: 'Founder-led',
+        body:
+          'The founder is the brand, and the deck is the brand, and neither ' +
+          'survives being handed to somebody else. The job is getting what is ' +
+          'in their head into something a second person can use.',
+      },
+      {
+        id: 'seed-series-a',
+        name: 'Seed to Series A',
+        body:
+          'A first marketing hire arrives to find no system to hire against. ' +
+          'The brand has to be decided quickly and written down, because the ' +
+          'next twelve months are spent spending against it.',
+      },
+      {
+        id: 'scale-up',
+        name: 'Scale-up',
+        body:
+          'Enough people are making things that they have started to disagree. ' +
+          'What is needed is not a rebrand but a system with rules in it — ' +
+          'tokens, components and copy patterns other teams can build from.',
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        body:
+          'A global marketing org, several agencies and a brand that has to ' +
+          'hold across all of them, in every market and format, without a ' +
+          'review cycle for each one.',
+      },
+    ],
     /* Descriptors from projects.js, and Entropy's own case-study industry. */
     clients: [
       'arbitrum',      // 'The leading Ethereum Layer 2 blockchain network.'

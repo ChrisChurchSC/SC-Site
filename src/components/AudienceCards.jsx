@@ -92,11 +92,6 @@ const SUB_INDUSTRIES = {
   'Culture & Nonprofit': ['Nonprofit', 'Impact', 'Arts', 'Education'],
 }
 
-const VIEWS = [
-  { id: 'situation', label: 'By situation' },
-  { id: 'industry', label: 'By industry' },
-]
-
 /**
  * `rows` swaps the three cards for a list: name, line, and an arrow that
  * appears on the row you are on. Off by default — /v2 uses the cards.
@@ -112,9 +107,17 @@ export default function AudienceCards({
   rows = false,
   headline = 'Three kinds of brand, one way of working.',
   /* THE VIEW TOGGLE IS OPTIONAL. On a service page it is the point — the same
-     roster read two ways. On an industry page it would offer to re-sort the
-     page by industry, which is the page. */
+     roster read two ways. Set false for a single set with no switch. */
   toggle = true,
+  /* THE TWO VIEWS ARE A PROP, so a page can offer its own pair. The default
+     is the service pages' situation/industry; the industry pages hand over
+     situation/stage, because offering to re-sort an industry page by industry
+     is offering to re-sort it by itself.
+
+     Each view carries its own cards, so the component stops knowing where any
+     set comes from — it was reaching into WORK_BY_INDUSTRY itself, which is
+     what made the second view impossible to change without editing it. */
+  views = null,
 }) {
   const [view, setView] = useState('situation')
 
@@ -127,16 +130,23 @@ export default function AudienceCards({
      "Objects are not valid as a React child" and took the whole By industry
      view down on both service pages. The href is the industry's own page
      rather than the wall, which is the point of it having one. */
-  const shown = view === 'situation'
-    ? cards
-    : WORK_BY_INDUSTRY.map(({ label, href }) => ({
-      id: label,
-      name: label,
-      body: null,
-      pills: SUB_INDUSTRIES[label] ?? [],
-      cta: 'See work',
-      href,
-    }))
+  const resolved = views ?? [
+    { id: 'situation', label: 'By situation', cards },
+    {
+      id: 'industry',
+      label: 'By industry',
+      cards: WORK_BY_INDUSTRY.map(({ label, href }) => ({
+        id: label,
+        name: label,
+        body: null,
+        pills: SUB_INDUSTRIES[label] ?? [],
+        cta: 'See work',
+        href,
+      })),
+    },
+  ]
+
+  const shown = (resolved.find((v) => v.id === view) ?? resolved[0]).cards
 
   if (rows) {
     return (
@@ -164,7 +174,7 @@ export default function AudienceCards({
       <div className={styles.head}>
         <p className={styles.eyebrow}>{eyebrow}</p>
         {toggle && <div className={styles.views}>
-          {VIEWS.map(({ id, label }) => (
+          {resolved.map(({ id, label }) => (
             <button
               key={id}
               type="button"
