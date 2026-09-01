@@ -5,7 +5,7 @@ import v3 from './HomeV3.module.css'
 /* The work grid's own stylesheet, so an industry page's cards are the cards
    from /work rather than a second set that drifts — the move ThoughtsIndex
    makes with the same file. */
-import grid from '../components/WorkIndex.module.css'
+import styles from './WorkIndustry.module.css'
 import ContactCTA from '../components/ContactCTA'
 import DisciplinesSection from '../components/DisciplinesSection'
 import FooterCard from '../components/FooterCard'
@@ -35,14 +35,24 @@ const entryFor = (slug) => {
   const project = bySlug.get(slug)
   if (project?.password) return null
 
+  /* THE ACCOUNT IS THE POINT. Every entry carries what actually happened in
+     that engagement, in the words the repo already holds — a client's
+     `relationship` in projects.js, or a case study's own `summary`. Nine of
+     the eleven have one and they run 200 to 460 characters, which is the
+     difference between a page that says "Food & Beverage" and one that says
+     what we did for a mushroom grower and a natural wine brand.
+
+     Nothing here is written for this page. If an entry has no account it
+     falls back to its one-line descriptor, and if it has neither it still
+     renders — the name and the disciplines are true on their own. */
   const study = caseStudies[slug]
   if (study) {
     return {
       slug,
       name: study.name,
-      line: study.tagline ?? null,
-      services: study.type ? study.type.split(' + ') : [],
-      written: true,
+      line: study.industry ?? null,
+      account: study.summary ?? study.tagline ?? null,
+      services: study.services ?? (study.type ? study.type.split(' + ') : []),
     }
   }
   if (!project) return null
@@ -50,8 +60,8 @@ const entryFor = (slug) => {
     slug,
     name: project.name,
     line: project.descriptor ?? null,
+    account: project.relationship ?? project.descriptor ?? null,
     services: project.work ?? [],
-    written: false,
   }
 }
 
@@ -109,26 +119,37 @@ export default function WorkIndustry() {
 
       <hr className={v3.divider} />
 
-      <section className={grid.wrap} aria-labelledby="industry-work">
-        <h2 className={v3.srOnly} id="industry-work">{industry.name} work</h2>
-        <div className={grid.layout}>
+      {/* WHAT ACTUALLY HAPPENED IN THIS CATEGORY. The first version of this
+          page was a grid of thumbnails with the industry's name over it —
+          four pages that differed in five strings and were otherwise
+          identical, which is a filter rather than a page. This is the part
+          that is specific, and all of it is the repo's own record. */}
+      <section className={styles.section} aria-labelledby="industry-work">
+        <p className={styles.eyebrow}>[ The work ]</p>
+        <h2 className={styles.headline} id="industry-work">
+          {entries.length === 1
+            ? `One brand in ${industry.name.toLowerCase()}.`
+            : `${entries.length} brands in ${industry.name.toLowerCase()}.`}
+        </h2>
+
+        <div className={styles.list}>
           {entries.map((e) => (
-            <NavLink key={e.slug} to={`/work/${e.slug}`} className={grid.card}>
-              <span className={grid.cardMedia}>
-                {/* No artwork in the repo for any of these, so the box carries
-                    what is known instead — the same placeholder the wall uses. */}
-                <span className={grid.ph}>
-                  {e.line && <span className={grid.phLine}>{e.line}</span>}
-                  {e.services.length > 0 && (
-                    <span className={grid.phTags}>
-                      {e.services.slice(0, 3).map((w) => (
-                        <span key={w} className={grid.phTag}>{w}</span>
-                      ))}
-                    </span>
-                  )}
-                </span>
-              </span>
-              <span className={grid.cardClient}>{e.name}</span>
+            <NavLink key={e.slug} to={`/work/${e.slug}`} className={styles.entry}>
+              <div>
+                <h3 className={styles.name}>{e.name}</h3>
+                {e.line && <p className={styles.descriptor}>{e.line}</p>}
+              </div>
+
+              <div>
+                {e.account && <p className={styles.account}>{e.account}</p>}
+                {e.services.length > 0 && (
+                  <div className={styles.tags}>
+                    {e.services.map((w) => (
+                      <span key={w} className={styles.tag}>{w}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </NavLink>
           ))}
         </div>
