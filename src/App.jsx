@@ -8,6 +8,7 @@ import { ComingSoonProvider } from './context/ComingSoonContext'
 import { ProjectsProvider, useProjects } from './context/ProjectsContext'
 import { CalDrawerProvider } from './context/CalDrawerContext'
 import Nav from './components/Nav'
+import WorkIndustry from './pages/WorkIndustry'
 import CalDrawer from './components/CalDrawer'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
@@ -56,7 +57,8 @@ const V3_PAGES = ['/v3', '/pricing', '/work', '/thoughts']
 
 const isV3Page = (pathname) =>
   V3_PAGES.includes(pathname) ||
-  pathname.startsWith('/services/')
+  pathname.startsWith('/services/') ||
+  pathname.startsWith('/work/industry/')
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -126,6 +128,9 @@ export default function App() {
         <Route path="/pricing" element={<PricingV3 />} />
         <Route path="/services/:slug" element={<ServiceV3 />} />
                 <Route path="/work" element={<Work />} />
+                {/* Before the dynamic ones: a static segment outranks a param in
+                    React Router, but keeping them in this order says so. */}
+                <Route path="/work/industry/:slug" element={<WorkIndustry />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
                 <Route path="/services" element={<Services />} />

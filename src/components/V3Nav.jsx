@@ -12,6 +12,7 @@ import v3 from '../pages/HomeV3.module.css'
    export DepartmentPanel renders. Services does not import this file, so
    there is no cycle. */
 import { DISCIPLINES } from '../pages/Services'
+import { industries } from '../data/industries'
 import LogoWordmark from './LogoWordmark'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { featuredCaseStudies } from '../data/featuredCaseStudies'
@@ -92,12 +93,14 @@ export const NAV_LINKS = [
    THIS DRIVES TWO SURFACES — the Case Studies menu in this nav and the "By
    industry" view on /services/build — so it is edited here rather than in
    either of them. */
-export const WORK_BY_INDUSTRY = [
-  'Consumer & Retail',
-  'Food & Beverage',
-  'Health & Wellness',
-  'Technology & Web3',
-]
+/* THE FOUR LABELS ARE GONE, replaced by the industries that have work behind
+   them — see src/data/industries.js, which is also where the client mapping
+   lives. These used to be four strings with no data under them, and every
+   one linked at /work because there was nothing to link to. */
+export const WORK_BY_INDUSTRY = industries.map(({ name, slug }) => ({
+  label: name,
+  href: `/work/industry/${slug}`,
+}))
 
 /* STAGE, NOT SIZE. Founder-led, Seed to Series A, Scale-up and Enterprise
    describe where a company is in its life, which is what a visitor is
@@ -294,7 +297,7 @@ export const FOOTER_COLS = [
     tag: 'Case studies',
     links: [
       { label: 'All case studies', href: '/work' },
-      ...WORK_BY_INDUSTRY.map(label => ({ label })),
+      ...WORK_BY_INDUSTRY,
     ],
   },
   { tag: 'By company stage', links: WORK_BY_STAGE.map(label => ({ label })) },
@@ -610,13 +613,9 @@ export default function V3Nav() {
                   <div className={v3.proofCols}>
                     <div className={v3.proofCol}>
                       <p className={v3.panelTag}>By industry</p>
-                      {WORK_BY_INDUSTRY.map(i => (
-                        /* /work cannot filter yet, so every one of these lands
-                           on the wall. Unlinked would be worse here than
-                           repetitive: these are categories a visitor is meant
-                           to browse, and the wall is the honest answer to all
-                           of them until the filters exist. */
-                        <NavLink key={i} to="/work" className={v3.proofLink}>{i}</NavLink>
+                      {/* Each goes to its own page now. */}
+                      {WORK_BY_INDUSTRY.map(({ label, href }) => (
+                        <NavLink key={label} to={href} className={v3.proofLink}>{label}</NavLink>
                       ))}
                     </div>
                     <div className={`${v3.proofCol} ${v3.proofColRuled}`}>
