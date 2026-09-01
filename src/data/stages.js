@@ -32,34 +32,45 @@ export const stages = [
         'by somebody else.',
     },
 
-    /* The same three situations the rest of the site uses, written for a
-       company at this stage. The pills are countable measures, drawn from the
-       same vocabulary as everywhere else — labels only, never values. */
+    /* NOT NEW / PIVOTING / UNDERDOG. Those are the site's three situations
+       and they are right on a service or an industry page, where the reader
+       could be any of them. On a founder-led page they barely segment
+       anything: a founder-led company is almost by definition new, so two of
+       the three describe somebody who is not reading this.
+
+       These three are the moments that actually differ before there is a
+       marketing function — whether the thing is public yet, whether a round
+       just landed, and whether there is a round at all. Each describes the
+       reader's position rather than our record, and the pills are countable
+       measures from the same vocabulary as everywhere else: labels only,
+       never values. */
     situations: [
       {
-        id: 'new',
-        name: 'New',
+        id: 'pre-launch',
+        name: 'Pre-launch',
         body:
-          'Nothing exists yet but the product and the pitch. The name, the ' +
-          'mark and the words all get decided at once, usually while raising.',
+          'The product works and nobody has seen it. Everything public gets ' +
+          'made at once — the name, the site, and the first thing anyone ' +
+          'reads about the company.',
         pills: ['Time to launch', 'Organic traffic'],
       },
       {
-        id: 'pivoting',
-        name: 'Pivoting',
+        id: 'just-raised',
+        name: 'Just raised',
         body:
-          'The story that raised the round is not the story that sells. What ' +
-          'the company says has to change before the next hire repeats the ' +
-          'old version of it.',
-        pills: ['Share of voice', 'MQL-to-SQL rate'],
+          'The round is announced and the company has to look like it. Often ' +
+          'the first time the brand is a liability rather than a detail to ' +
+          'get to later.',
+        pills: ['Brand search volume', 'Share of voice'],
       },
       {
-        id: 'underdog',
-        name: 'Underdog',
+        id: 'bootstrapped',
+        name: 'Bootstrapped',
         body:
-          'No category presence and no budget to buy one. Standing out has to ' +
-          'come from being specific rather than from outspending anybody.',
-        pills: ['Cost per lead', 'Brand search volume'],
+          'No round to spend against, so every piece has to earn back. The ' +
+          'work gets picked for what it returns rather than for what it ' +
+          'covers.',
+        pills: ['Cost per lead', 'MQL-to-SQL rate'],
       },
     ],
 
