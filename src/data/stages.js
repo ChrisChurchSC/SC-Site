@@ -59,7 +59,7 @@ export const stages = [
           'The product works and nobody has seen it. Everything public gets ' +
           'made at once — the name, the site, and the first thing anyone ' +
           'reads about the company.',
-        pills: ['Time to launch', 'Organic traffic'],
+        pills: ['Time to launch', 'Launch day traffic'],
       },
       {
         id: 'just-raised',
@@ -68,7 +68,7 @@ export const stages = [
           'The round is announced and the company has to look like it. Often ' +
           'the first time the brand is a liability rather than a detail to ' +
           'get to later.',
-        pills: ['Brand search volume', 'Share of voice'],
+        pills: ['Brand search volume', 'Inbound traffic'],
       },
       {
         id: 'bootstrapped',
@@ -77,7 +77,7 @@ export const stages = [
           'No round to spend against, so every piece has to earn back. The ' +
           'work gets picked for what it returns rather than for what it ' +
           'covers.',
-        pills: ['Cost per lead', 'MQL-to-SQL rate'],
+        pills: ['Cost per lead', 'Email list growth'],
       },
     ],
 
@@ -135,8 +135,16 @@ export const stages = [
        whether the next raise is in view. Each describes the reader's
        position rather than our record.
 
-       Measures follow the situation, labels only and every one countable —
-       see the note in industries.js about why there are no values. */
+       MEASURES HAVE TO FIT THE SIZE, not just the situation. The first pass
+       put Organic traffic on a pre-launch company that has no traffic yet,
+       Share of voice on a founder-led one that cannot move a category
+       measure, and MQL-to-SQL on a company with no funnel to run it through.
+       Those are scale-up and enterprise measures wearing a startup's clothes.
+       What a company this size actually watches is launch day, inbound, a
+       list, a cost per lead and whether investors take the meeting.
+
+       Labels only and every one countable — see the note in industries.js
+       about why there are no values. */
     situations: [
       {
         id: 'first-hire',
@@ -145,7 +153,7 @@ export const stages = [
           'Someone owns marketing now and there is nothing to own: no system ' +
           'to brief from, no library to pull from, and every asset made from ' +
           'scratch by whoever is free.',
-        pills: ['Asset reuse rate', 'Content publishing velocity'],
+        pills: ['Content publishing velocity', 'Campaign launch speed'],
       },
       {
         id: 'proving-the-channel',
@@ -154,7 +162,7 @@ export const stages = [
           'Spend has started and nothing repeats yet. Each piece has to be ' +
           'measurable enough to keep or kill, rather than added to a pile ' +
           'nobody reads back.',
-        pills: ['Cost per lead', 'MQL-to-SQL rate', 'Pipeline velocity'],
+        pills: ['Cost per lead', 'MQL-to-SQL rate'],
       },
       {
         id: 'next-round',
@@ -163,7 +171,7 @@ export const stages = [
           'The site, the deck and the product get read by people who compare ' +
           'them. They have to tell one story, and it has to be the one the ' +
           'company is actually running.',
-        pills: ['Brand search volume', 'Share of voice'],
+        pills: ['Investor meeting rate', 'Brand search volume'],
       },
     ],
 
