@@ -1,10 +1,6 @@
-import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useMeta } from '../hooks/useMeta'
 import styles from './LandingHub.module.css'
-
-const HUB_PASSWORD = 'sc-preview'
-const SESSION_KEY = 'landing_hub_unlocked'
 
 const TEMPLATES = [
   {
@@ -28,53 +24,11 @@ const TEMPLATES = [
 ]
 
 export default function LandingHub() {
-  const [pw, setPw] = useState('')
-  const [error, setError] = useState(false)
-  const [manualUnlock, setManualUnlock] = useState(false)
-
-  const sessionUnlocked = typeof localStorage !== 'undefined'
-    && localStorage.getItem(SESSION_KEY) === '1'
-  const unlocked = manualUnlock || sessionUnlocked
-
   useMeta({
     title: 'Sales Decks | Super Conscious',
     path: '/landing-pages',
     noindex: true,
   })
-
-  const handleUnlock = (e) => {
-    e.preventDefault()
-    if (pw === HUB_PASSWORD) {
-      localStorage.setItem(SESSION_KEY, '1')
-      setManualUnlock(true)
-    } else {
-      setError(true)
-      setPw('')
-      setTimeout(() => setError(false), 600)
-    }
-  }
-
-  if (!unlocked) return (
-    <main className={styles.main}>
-      <div className={styles.gate}>
-        <div className={styles.gateInner}>
-          <p className={styles.gateLabel}>Sales Decks</p>
-          <form className={styles.gateForm} onSubmit={handleUnlock}>
-            <input
-              className={`${styles.gateInput}${error ? ` ${styles.gateInputError}` : ''}`}
-              type="password"
-              placeholder="Password"
-              value={pw}
-              onChange={e => setPw(e.target.value)}
-              autoFocus
-            />
-            <span className={styles.gateError}>{error ? 'Incorrect password.' : ''}</span>
-            <button type="submit" className={styles.gateSubmit}>Enter →</button>
-          </form>
-        </div>
-      </div>
-    </main>
-  )
 
   return (
     <main className={styles.main}>
