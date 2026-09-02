@@ -38,4 +38,10 @@ export const clientLogos = [
   { name: 'Wonderwerk',    slug: 'wonderwerk' },
   { name: 'J.Jill' },
   { name: 'Talos' },
+  // No slug: there is no case study for this one, so the strip and the wall
+  // show the name without linking it, same as J.Jill and Talos.
+  //
+  // The brand trades as "Einstein Bros. Bagels". Added here as given; change
+  // the string if the full name is what should appear beside the others.
+  { name: 'Einstein Bagels' },
 ]

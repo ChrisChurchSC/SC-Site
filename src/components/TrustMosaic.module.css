@@ -1,0 +1,151 @@
+/* The client wall — see TrustMosaic.jsx for what each part may show.
+
+   The reference is a flat grid of equal tiles with one large card beside it.
+   The tiles are almost seamless: a small gap and a generous radius, so the
+   wall reads as one surface divided rather than as a scatter of cards. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.6vw, 38px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+  /* 24ch fits the default sentence on two lines. A caller that supplies its
+     own break needs the room for it — see .headlineSplit. */
+  max-width: 24ch;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+/* When the lines are given, the measure must not re-wrap them: 24ch put
+   "them." on a line of its own under a two-line headline. Wide enough for the
+   longest line supplied, and it still centres. */
+.headlineSplit {
+  max-width: 34ch;
+  text-wrap: balance;
+}
+
+/* The wall's own container: narrower than the page and drawn with a stroke,
+   the same hairline the nav bar and the panels use, so it belongs to the same
+   drawn system rather than introducing a second.
+
+   Not full width. At the page's width the twenty names spread into a band ten
+   columns wide and two rows deep, which reads as a strip running past you.
+   Held in, it reads as a block you look at — and the headline above it, which
+   is centred on a 24ch measure, finally has something the same size under it.
+
+   width:100% is load-bearing here: the section centres its children, so
+   without it the panel is shrink-to-fit and collapses to the width of one
+   tile. */
+.panel {
+  /* Deliberately inset well past the page margin — the one block on the page
+     that is. Everything else runs to the page's own edge; this steps in, and
+     the step is what makes a wall of twenty-one names read as a held object
+     rather than as a band spanning the screen.
+
+     Big enough to be read as intent. A small inset looks like a mistake in
+     the margin; this one cannot be mistaken for one. */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(100% - clamp(24px, 11vw, 220px));
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-panel, 18px);
+}
+
+/* SEVEN COLUMNS — three rows of twenty, with the last tile widened to fill
+   the leftover slot. See the component: the span is computed from the client
+   count rather than set by hand, so adding or removing a client cannot leave
+   a hole inside the stroke. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 116px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--r-surface, 14px);
+  transition: background 0.18s;
+}
+
+.tileLink:hover { background: rgba(255, 255, 255, 0.07); }
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.25vw, 19px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  transition: color 0.18s;
+}
+
+.tileLink:hover .name { color: rgba(255, 255, 255, 0.95); }
+
+.logo {
+  max-width: 100%;
+  max-height: 26px;
+  object-fit: contain;
+}
+
+/* Only on tiles that go somewhere — see the linkable test in the component. */
+.arrow {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1;
+  transition: background 0.18s, color 0.18s;
+}
+
+.tileLink:hover .arrow {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tile { min-height: 92px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile, .name, .arrow { transition: none; }
+}

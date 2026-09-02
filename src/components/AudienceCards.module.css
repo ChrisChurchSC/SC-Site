@@ -1,0 +1,246 @@
+/* Deliberately the same card as BuildGrowCards — border, radius, hover, and
+   the mono CTA — so the two sections read as one system rather than two.
+   Three-up instead of two, and no artwork layer. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  /* Stands in from the page margin, like the platform section and the case
+     study rail. The three sections that are lists rather than full-bleed
+     grids are the ones that read better held in — the wall and the service
+     cards still run to the page edge. */
+  padding: clamp(24px, 4vw, 80px) clamp(16px, 5vw, 110px) 0;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #161616;
+  border-radius: var(--r-surface, 4px);
+  padding: 40px 34px;
+  /* Portrait 9:16. The cards were sized by their contents with a 230px floor;
+     they are now sized by the ratio, and the copy sits at the top of it with
+     the CTA pushed to the bottom by margin-top:auto. Three of these are tall
+     — at a third of the grid each, roughly 700px — which is the shape asked
+     for, not an accident of the copy length. */
+  aspect-ratio: 4 / 5;
+  transition: background 0.2s;
+}
+
+.card:hover { background: #1b1b1b; }
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+.body {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.cta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: auto;
+  transition: color 0.2s;
+}
+
+.card:hover .cta { color: #fff; }
+
+@media (max-width: 768px) {
+  /* One per row at this width, so the ratio would make each card most of a
+     screen on its own. Height goes back to the content. */
+  .card {
+    padding: 30px 22px;
+    aspect-ratio: auto;
+  }
+}
+
+/* ── Row list variant ─────────────────────────────────────────────────────
+   One list with a focus, not three cards with hover states. The whole effect
+   is that the row you are on lifts and the others recede — which is why the
+   dimming lives on the list, not on each row. */
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 22ch;
+  margin: 4px 0 28px;
+  text-wrap: balance;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.listRow {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) 30px;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 20px;
+  margin: 0 -20px;
+  border-radius: var(--r-surface, 10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.18s, opacity 0.18s;
+}
+
+/* Everything fades while the pointer is in the list; the row under it does
+   not. Two rules rather than one so the list at rest is fully lit. */
+.list:hover .listRow { opacity: 0.45; }
+.list .listRow:hover { opacity: 1; background: #161616; border-bottom-color: transparent; }
+
+.listName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 36px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.listLine {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Only on the row you are on, as in the reference. */
+.listArrow {
+  justify-self: end;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.listRow:hover .listArrow { opacity: 1; }
+
+.listAll {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 22px;
+  transition: color 0.15s;
+}
+
+.listAll:hover { color: #fff; }
+
+@media (max-width: 760px) {
+  .listRow {
+    grid-template-columns: minmax(0, 1fr) 24px;
+    gap: 6px 16px;
+  }
+  .listLine { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listRow, .listArrow, .listAll { transition: none; }
+}
+
+/* ── THE THREE VIEWS ──────────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: space-between;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Segmented rather than underlined tabs: these switch what the section is
+   listing rather than navigating anywhere, and the section already has an
+   eyebrow doing the labelling. */
+.view,
+.viewOn {
+  padding: 5px 11px;
+  border: 1px solid transparent;
+  border-radius: var(--r-control, 4px);
+  background: none;
+  cursor: pointer;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.view:hover { color: rgba(255, 255, 255, 0.7); }
+
+.viewOn {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.view:focus-visible,
+.viewOn:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 3px;
+}
+
+
+/* ── SUB-INDUSTRY PILLS ──────────────────────────────────────────────────
+   The chip is PlatformOutputs', copied verbatim minus the interactive states
+   — these are labels, not buttons, so they take no cursor, hover or focus
+   ring. Same face, size and radius, so a chip means one thing on this site. */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.chip {
+  padding: 6px 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.62);
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+}

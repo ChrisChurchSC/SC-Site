@@ -1,0 +1,1400 @@
+/* The only thing /v3 styles for itself. Everything else it renders comes
+   from Home.module.css and the components' own modules — see HomeV3.jsx. */
+
+/* The homepage stacks its sections on a 5px gap: cards butted together into
+   one grid, which is the site's rhythm and is deliberate. This opens that up
+   so the sections read as separate passages rather than one continuous wall.
+   Scoped here rather than changed in Home.module.css, which / also uses.
+
+   The class is doubled to raise specificity above .main's own gap. Both are
+   single classes otherwise, and which of two equal-specificity rules wins
+   would then depend on the order the modules happen to be injected in —
+   which is not something to leave to chance. */
+.stack.stack {
+  gap: clamp(28px, 4vw, 64px);
+  /* The homepage runs its cards to a 12px edge, because a grid of butted
+     cards wants the page's full width. This page has passages of type on the
+     open ground between them, and 12px is not a margin — it is the absence
+     of one.
+
+     Applied at the page rather than per section, so the cards, the section
+     labels and the bare copy all share one left edge rather than each
+     arriving at its own. The right side keeps the 312px the fixed nav column
+     occupies, plus the same increase, so the inset reads as even. */
+  /* Published as custom properties so anything that needs to break OUT of
+     this padding can subtract exactly it, rather than guessing with 100vw.
+     Custom property names are not hashed by CSS modules, so other modules
+     can read these — see ClientStrip's .bleed and StatementCard's rule. */
+  /* ONE MARGIN FOR THE WHOLE PAGE.
+
+     The bars and the content used to stand in by different amounts — the
+     bars at the inset below, the copy and cards at a wider reading margin —
+     and the two left edges did not line up down the page. They are the same
+     value now, so everything shares one edge: the wordmark bar, the client
+     strip, the section labels, the copy and the cards.
+
+     --bar-inset keeps its name because it is still what positions the bars;
+     it is simply the page's margin as well now. With the two equal, the
+     bars' own margins compute to zero and the .barInset rule becomes inert —
+     kept rather than deleted because it is what holds them together if the
+     two ever diverge again.
+
+     The right is the nav column plus the same inset, so the content stops
+     short of the fixed nav by exactly what it stands in from the left. */
+  /* Section labels. They were 9px at 0.3 white, which put them below the
+     threshold where a label reads as a label rather than as a smudge — and
+     they are the page's whole navigation for a reader skimming it. Brighter,
+     a point larger, and tracked wider so the extra weight does not close the
+     letters up.
+
+     Set here and read by every eyebrow rule with the old values as their
+     fallback, so / and /v2 — which never set these — are untouched. */
+  /* ONE RADIUS SCALE. The page had ten different values on it — 4, 6, 8, 10,
+     12, 14, 16, 18, 999 and 50% — most of them arrived one section at a time
+     and none of them agreed. Three steps now:
+
+       control  4px, matching the site's own language on / and /v2, for
+                buttons, inputs, chips, icon tiles and rows inside a menu.
+       surface  12px for the cards and tiles the page is built from.
+       panel    18px for the one container holding a grid of surfaces.
+
+     Every rule reads these with its old value as the fallback, so nothing
+     outside /v3 moves. A circle is left as a circle — 50% on the mosaic's
+     arrow is not a rounded rectangle. */
+  --r-control: 4px;
+  --r-surface: 12px;
+  --r-panel: 18px;
+
+  --label-color: rgba(255, 255, 255, 0.62);
+  --label-size: 10px;
+  --label-tracking: 0.18em;
+  /* The fill. A chip rather than a bare line: at 10px the label was competing
+     with the body copy near it for the eye's attention and losing. The fill
+     gives it an edge, which is what makes it read as a marker on the page
+     rather than as the first line of the section under it. */
+  --label-display: inline-block;
+  /* Grey, and the site's own: #161616 is the card ground used by every panel
+     on / and /v2, so the chip belongs to the existing system rather than
+     introducing a fourth surface value.
+
+     It went light wash to black to here. The wash made the label glow off the
+     page; black closed it up so far the chip stopped reading as a chip at
+     all — at #0a0a0a page ground there was almost nothing between them. This
+     sits clearly above the page and clearly below the type. */
+  --label-bg: #161616;
+  --label-pad: 6px 10px;
+  --label-radius: 4px;
+  /* fit-content, or the chip stretches. Every section is a flex column with
+     align-items:stretch, so a blockified child takes the full width — the
+     chip ran the whole page and read as a bar, not a label. Tokenised like
+     the rest: auto by default, so / and /v2 are unchanged. */
+  --label-width: fit-content;
+
+  /* The page margin, and the nav bar reads it too, so widening this widens
+     everything together — which is the point: the sections were asked to
+     match the nav, so there is one number for all of them.
+
+     Was calc(clamp(20px, 3.4vw, 60px) * 0.25 + 9px), about 22px, which came
+     from splitting the difference on the bar alone back when the bar was the
+     only thing using it. */
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  /* No side nav on this page — see NavGate in App.jsx. The right side is a
+     plain margin again, the same as the left, rather than a column reserved
+     for something that is not there. */
+  --nav-width: 0px;
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: calc(var(--nav-width) + var(--bar-inset));
+  padding-top: var(--bar-inset);
+  padding-left: var(--page-pad-left);
+  padding-right: var(--page-pad-right);
+  /* Full-bleed children subtract the padding above exactly, so nothing should
+     overhang. Kept as a backstop for sub-pixel rounding on the clamps, and
+     because a future full-bleed element that gets the maths wrong should look
+     wrong rather than put a horizontal scrollbar on the page.
+
+     clip rather than hidden: hidden would make this a scroll container and
+     break position:sticky for anything inside it later. */
+  overflow-x: clip;
+}
+
+@media (max-width: 900px) {
+  /* The nav column is not beside the content at this width, so the right
+     padding is a margin like any other. */
+  .stack.stack {
+    --page-pad-right: var(--bar-inset);
+  }
+}
+
+/* A section label and the section it names, held together.
+
+   Both would otherwise be children of the page's flex column and the stack's
+   gap — up to 64px — would open between the label and the thing it labels,
+   which is the same fault the Build/Grow footnote had. This keeps them at
+   their own spacing.
+
+   The label matches StatementCard's eyebrow exactly rather than approximately:
+   the two sit in the same left column down the page, and a label that is a
+   pixel or a shade off reads as a mistake precisely because the rest line up. */
+.labelled {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* The label over a centred row centres with it. Only the chip moves:
+   text-align here would inherit into the cards and centre every line in
+   them. The eyebrow is an inline-block by token, so it is made a block of
+   its own width first — margin auto does nothing to an inline-block. */
+.labelledCenter .eyebrow {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+/* The top bar is chrome, not a passage of the page.
+
+   It was inheriting the reading margin — the same clamp(20px, 3.4vw, 60px)
+   that insets the copy — and then the stack's section gap beneath it, so the
+   wordmark floated in the middle of a lot of nothing before the page began.
+   Chrome wants to sit near the edge it belongs to.
+
+   The left margin comes back to the 12px the homepage grid uses. The right
+   is left alone: beyond it is the fixed nav column, and pulling the bar into
+   that would run it under the nav cards. The gap below is clawed back to the
+   grid's own 5px rhythm, so the bar reads as attached to the top of the page
+   rather than as the first of the sections. */
+/* The two card bars — the wordmark at the top and the client strip below the
+   hero — stand in from the page by one inset, on one rule, so they cannot
+   drift apart. They are the same object twice, and the eye reads any
+   difference between them as a mistake rather than as intent.
+
+   Each edge is measured from a different reference, which is why this is one
+   number and several expressions rather than several numbers:
+
+     left  — from the page edge, so it subtracts the page's reading margin.
+     right — from the NAV COLUMN, not the page edge: a card must not run under
+             the fixed nav, so it stops short of it by the same inset. What
+             padding-right already leaves is --page-pad-right minus the nav's
+             300px (measured), and the margin makes up the difference.
+     top   — the page's own padding-top, set on the stack: the space above the
+             first card is padding, and a margin there would collapse against
+             it rather than add to it.
+
+   Expressed over the padding rather than as fixed pixels so each holds its
+   proportion as the margin scales with the viewport. */
+.barInset,
+.topBar {
+  margin-left: calc(var(--bar-inset) - var(--page-pad-left));
+  margin-right: calc(var(--bar-inset) - (var(--page-pad-right) - var(--nav-width)));
+}
+
+/* The bar began with the page's full reading margin and the full section gap,
+   which left the wordmark floating; then with the grid's 12px and 5px, which
+   put it tight into the corner. This is between the two. */
+.topBar {
+  margin-bottom: calc((5px - clamp(28px, 4vw, 64px)) / 2);
+}
+
+/* Outlined, not filled.
+
+   The bars were #161616 panels — objects sitting ON the page. These are black
+   with a hairline around them: the same ground as the page, defined by an
+   edge rather than by a fill. The stroke does all the work, which is why it
+   is the only thing that changes.
+
+   Black rather than transparent, deliberately. The page ground is #0a0a0a,
+   so #000 reads a touch deeper than what surrounds it — barely, but enough
+   that the bar has a body inside its outline instead of being a rectangle
+   drawn on nothing. The stroke is what makes it legible; the fill is what
+   keeps it from feeling hollow.
+
+   Same value as every other rule on the page, so the bars belong to the same
+   drawn system as the section dividers rather than introducing a second. */
+.barCard {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* ── The nav bar's contents ──────────────────────────────────────────────
+   Links sit against the wordmark and push the actions to the far end:
+   margin-right:auto on the group rather than a third flex child, so the
+   actions stay hard right however many links there are. */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 34px);
+  margin-left: clamp(16px, 3vw, 44px);
+  margin-right: auto;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 22px);
+}
+
+.navLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.navLink:hover { color: #fff; }
+
+/* Light on a black bar, the inverse of the reference's dark button on white:
+   the primary action should be the one thing in the bar that is filled. */
+/* Pink, and the only colour in the bar — which is the point of a primary
+   action. --pink is the token from index.css (#df4ed6), not a new value: the
+   page had no colour in it at all until now, and inventing a second one to
+   sit beside the existing three would start a palette rather than use one.
+
+   Near-black type on it rather than white: white on #df4ed6 lands around
+   2.9:1, under the 4.5:1 body threshold, while #0a0a0a on it clears 7:1. */
+.navCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #0a0a0a;
+  background: var(--pink);
+  border-radius: var(--r-control, 4px);
+  padding: 10px 16px;
+  white-space: nowrap;
+  transition: filter 0.15s;
+}
+
+.navCta:hover { filter: brightness(1.12); }
+
+@media (max-width: 860px) {
+  /* The links go before the CTA does: losing the way to book is worse than
+     losing the way to browse. */
+  .navLinks { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink, .navCta { transition: none; }
+}
+
+/* ── The hover panel ─────────────────────────────────────────────────────
+   The shell is the positioning context AND the hover region. It has to be
+   both: the panel sits below the bar, outside the bar's own box, so a
+   mouseleave bound to the bar would close it the moment the cursor set off
+   toward it. Bound to the shell, the trip from link to panel stays inside. */
+.navShell {
+  position: relative;
+  /* Above the section that follows it. The service hero is itself positioned
+     and full bleed, so with the bar at z-index auto the later element simply
+     painted over it — the nav read fine on /v3, where nothing positioned
+     follows it, and was buried on a service page. Higher than the .panel
+     inside it, which is 40 and stacks within this context. */
+  z-index: 50;
+}
+
+/* Bridges the 6px gap between the bar and this panel. Without it the cursor
+   passes over neither element on the way down, so the shell sees a mouseleave
+   before the panel sees a mouseenter. Invisible, and only present while the
+   panel is. */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 20%, 280px);
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(24px, 2.6vw, 40px);
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-panel, 4px);
+  animation: panelIn 0.16s ease both;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; translate: 0 -6px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.panelCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 40px) clamp(16px, 2vw, 36px);
+}
+
+.panelCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.panelTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+}
+
+.panelHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.92);
+  transition: color 0.15s;
+}
+
+.panelHeading:hover { color: #fff; }
+
+.panelList {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Text, not links. Every one of these would point at /services — see the
+   note on NAV_LINKS. */
+.panelItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Case Studies and Company: a list of real destinations, two lines each. */
+.panelWork {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 2px 18px;
+  align-content: start;
+}
+
+.workItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 10px;
+  margin: 0 -10px;
+  border-radius: var(--r-control, 4px);
+  transition: background 0.15s;
+}
+
+.workItem:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* No page to go to, so no hover affordance either — it would promise one. */
+.workItemFlat { cursor: default; }
+.workItemFlat:hover { background: none; }
+
+.workName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.workItemFlat .workName { color: rgba(255, 255, 255, 0.5); }
+
+.workType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* The promo, as in the reference: one thing worth looking at, given a face. */
+.panelPromo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  min-height: 190px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-surface, 4px);
+  transition: border-color 0.2s;
+}
+
+.panelPromo:hover { border-color: rgba(255, 255, 255, 0.34); }
+
+.panelPromoMedia {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.panelPromoMedia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.4) 55%, transparent 100%);
+}
+
+.panelPromoVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panelPromoTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.panelPromoName {
+  font-family: 'Signifier', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 24px;
+  color: #fff;
+}
+
+.panelPromoCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 6px;
+}
+
+/* ── The chevron ──
+   Drawn rather than a glyph, so it matches the hairline weight the rest of
+   the bar is drawn with and rotates cleanly. */
+.chev {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 7px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.18s;
+}
+
+.chevOpen { transform: translateY(0) rotate(225deg); }
+
+.navLinkOpen { color: #fff; }
+
+/* Shown, not linked — it has no page. Legible, but it does not pretend to
+   be a destination: no hover lift, and the cursor stays an arrow. */
+.navLinkFlat {
+  color: rgba(255, 255, 255, 0.32);
+  cursor: default;
+}
+
+.navLinkFlat:hover { color: rgba(255, 255, 255, 0.32); }
+
+@media (max-width: 1100px) {
+  .panel { grid-template-columns: minmax(0, 1fr); }
+  .panelCols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panelPromo { min-height: 130px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+  .chev, .panelPromo, .workItem, .panelHeading { transition: none; }
+}
+
+/* ── Services panel: statement, then numbered rows ───────────────────────
+   A different shape from the other panels, so it overrides the shared grid
+   rather than adding a second .panel. */
+.panelService {
+  grid-template-columns: clamp(220px, 32%, 380px) minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 56px);
+}
+
+.svcIntro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  /* The rule between the statement and the list, as in the reference —
+     on the intro rather than between grid cells, so it stops at the
+     content instead of running the full height of whichever side is taller. */
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding-right: clamp(20px, 2.4vw, 40px);
+}
+
+.svcStatement {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 1.9vw, 30px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.svcIntroCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  /* The Services panel's line is a <button> now (it opens the booking
+     drawer); these strip the button chrome so it sets like the links. */
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  margin-top: auto;
+  transition: color 0.15s;
+}
+
+.svcIntroCta:hover { color: #fff; }
+
+.svcGrid {
+  display: flex;
+  flex-direction: column;
+  align-content: start;
+}
+
+/* The hairline belongs to the row, so it lands under every row in both
+   columns rather than only where a grid gap happens to fall. */
+.svcRow {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: clamp(16px, 1.8vw, 22px) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: opacity 0.15s;
+}
+
+.svcRow:hover { opacity: 1; }
+.svcGrid:hover .svcRow { opacity: 0.5; }
+.svcGrid .svcRow:hover { opacity: 1; }
+
+.svcNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  flex: none;
+}
+
+.svcBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.svcName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(17px, 1.5vw, 22px);
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.svcNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+@media (max-width: 1100px) {
+  .panelService { grid-template-columns: minmax(0, 1fr); }
+  .svcIntro {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding-right: 0;
+    padding-bottom: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svcRow, .svcIntroCta { transition: none; }
+}
+
+/* A service with no page yet: legible, but it does not offer a destination. */
+.svcRowFlat { cursor: default; }
+.svcGrid:hover .svcRowFlat { opacity: 0.5; }
+.svcGrid .svcRowFlat:hover { opacity: 0.5; }
+.svcRowFlat .svcName { color: rgba(255, 255, 255, 0.55); }
+
+/* Dev-only marker for a description that has not been written. Deliberately
+   ugly enough that it cannot be mistaken for copy. */
+.svcNoteMissing {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Case Studies panel: stat cards, then two taxonomy columns ─────────── */
+.proofBody {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 26px);
+  min-width: 0;
+}
+
+.statCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* Filled, unlike everything else in the panel. The reference's cards are the
+   one raised surface in an otherwise flat menu, and that is what makes the
+   numbers read as the point rather than as another list. */
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--r-control, 4px);
+  padding: 16px 16px 14px;
+  min-width: 0;
+}
+
+/* '––' at display size. It is deliberately the same weight a real figure
+   would be: the gap should look like a missing number, not like a design
+   that never had one. */
+.statValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.statNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 2px 0 0;
+}
+
+.statClient {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: auto 0 0;
+  padding-top: 10px;
+}
+
+.proofCols {
+  display: grid;
+  /* Three since By outcome joined industry and stage. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 40px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: clamp(14px, 1.6vw, 22px);
+}
+
+.proofCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+}
+
+/* The rule between the two columns, as in the reference. */
+.proofColRuled {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: clamp(18px, 2.4vw, 40px);
+}
+
+.proofLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.15s;
+}
+
+.proofLink:hover { color: #fff; }
+
+/* No page to reach — legible, but not offered as a destination. */
+.proofLinkFlat {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+}
+
+.proofLinkFlat:hover { color: rgba(255, 255, 255, 0.4); }
+
+@media (max-width: 1100px) {
+  .statCards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proofCols { grid-template-columns: minmax(0, 1fr); }
+  .proofColRuled {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proofLink { transition: none; }
+}
+
+/* ── Company panel: three labelled columns of icon links ────────────────── */
+/* The company links. They were the panel itself — three columns edge to
+   edge — and are now the right-hand side of a panelService grid, behind the
+   same statement column Services and Case Studies open with. Same three
+   columns they always had, one level in. */
+.coCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 56px);
+}
+
+.coCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.coLink {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 10px;
+  margin: 0 -10px;
+  border-radius: var(--r-control, 4px);
+  transition: background 0.15s;
+}
+
+.coLink:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* The tile the reference gives each icon, in this page's terms: outlined
+   rather than a filled pastel square, because every other box on this page is
+   drawn with a stroke. */
+.coIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control, 4px);
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.coLink:hover .coIcon {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.coLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+@media (max-width: 1100px) {
+  .panelCompany { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coLink, .coIcon { transition: none; }
+}
+
+/* ── Hero actions ────────────────────────────────────────────────────────
+   A filled primary and an outlined secondary, as in the reference. Pill
+   radius there; 4px here, because every other button and card on this site
+   is 4px and a pair of pills would be the only round things on the page. */
+.heroActions {
+  /* Stretch, and take the full width. The hero card centres its children, so
+     without this the actions row is shrink-to-fit — and the form inside it
+     asking for width: 100% then resolved against a box the width of its own
+     button, collapsing a 520px field to about 205. */
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  /* A column now: it holds one form and the line under it, not two buttons
+     side by side. */
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.heroCta,
+.heroGhost {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-radius: var(--r-control, 4px);
+  padding: 14px 22px;
+  white-space: nowrap;
+}
+
+/* Same pink as the nav's primary — one primary action, one colour for it. */
+.heroCta {
+  color: #0a0a0a;
+  background: var(--pink);
+  transition: filter 0.15s;
+}
+
+.heroCta:hover { filter: brightness(1.12); }
+
+.heroGhost {
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.heroGhost:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroCta, .heroGhost { transition: none; }
+}
+
+/* The panel's CTA when there is nowhere for it to go. Same size and place as
+   the real one so the panel keeps its shape, but visibly not a link. */
+.svcIntroCtaFlat {
+  color: rgba(255, 255, 255, 0.32);
+  cursor: default;
+}
+
+.svcIntroCtaFlat:hover { color: rgba(255, 255, 255, 0.32); }
+
+/* A full-width rule between sections.
+
+   Subtracts the page's side padding exactly rather than centring 100vw on the
+   content column — the column is not centred in the viewport (the nav takes
+   312px on the right on pages that have one), so a centred rule lands off
+   both edges. Same reasoning as StatementCard's .bare rule. */
+.divider {
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* The contact action, in place of the capture form. */
+.contactCta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: #0a0a0a;
+  background: var(--pink);
+  border-radius: var(--r-control, 4px);
+  padding: 15px 26px;
+  margin-top: 6px;
+  transition: filter 0.15s;
+}
+
+.contactCta:hover { filter: brightness(1.12); }
+
+/* The sign-off wordmark.
+
+   Runs the full width of the page including the margins — it is the one
+   thing on the page that should touch both edges, because it is not content
+   any more, it is the page ending. Faint enough to read as a watermark
+   rather than as another headline competing with the one above it. */
+
+
+/* ── THE HERO EMAIL CAPTURE ────────────────────────────────────────────────
+   One field and one button in a single pill, as in the reference. These six
+   class names are EmailCaptureForm's contract, not this page's invention: it
+   takes a host's CSS module as a prop, so a name this file does not define
+   renders as class="undefined" and the control comes out with browser
+   defaults — a white box on a black page. A test holds every host to all
+   six for that reason. */
+.emailForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* Explicit width and max-width rather than min(520px, 100%): the hero
+     actions are a centred flex column, so the form is shrink-to-fit and the
+     percentage resolved against a box narrower than the field needed. The
+     placeholder came out clipped mid-word. */
+  /* width:100% with a cap, not width:520px with max-width:100%. The second
+     form measured 520px inside a 500px viewport, because the max-width
+     resolved against a parent wider than the screen. This one can only ever
+     be as wide as what contains it. */
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-control, 4px);
+}
+
+.emailInput {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+}
+
+.emailInput::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+/* Focus lands on the pill, not the bare input: the input has no border of
+   its own, so a ring on it would draw a rectangle inside a rectangle. */
+.emailForm:focus-within { border-color: rgba(255, 255, 255, 0.4); }
+
+.emailSubmit {
+  flex: none;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--r-control, 4px);
+  background: var(--pink, #df4ed6);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.emailSubmit:hover { filter: brightness(1.08); }
+.emailSubmit:disabled { opacity: 0.6; cursor: default; }
+
+/* Replaces the form on success, so it needs the form's height rather than a
+   line of text's — otherwise the hero jumps when it submits. */
+.emailConfirm {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  margin: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: var(--teal, #4ecfb3);
+}
+
+.emailError {
+  margin: 8px 0 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Visually hidden, still read aloud — the field's label. */
+.emailSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.heroFormNote {
+  margin: 12px 0 0;
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── THE SMALL-SCREEN MENU ─────────────────────────────────────────────────
+   Above the breakpoint the link row does the work and this does not exist;
+   below it, the row is display:none and this is the only way to the rest of
+   the site. */
+.navToggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: 10px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-control, 4px);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Three bars from one element: the middle is the box, the outer two are its
+   shadows. Fewer nodes than three spans, and they cannot get out of step. */
+.burger {
+  width: 16px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 -5px 0 rgba(255, 255, 255, 0.8),
+    0 5px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* An X while the menu is open. The bar itself goes transparent and the two
+   strokes are drawn as pseudo-elements, because the closed state's lines are
+   box-shadows and those cannot be rotated apart. */
+.burgerOpen {
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+}
+
+.burgerOpen::before,
+.burgerOpen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.burgerOpen::before { transform: rotate(45deg); }
+.burgerOpen::after { transform: rotate(-45deg); }
+
+.mobileNav {
+  display: none;
+  flex-direction: column;
+  margin-top: 8px;
+  padding: 6px;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-surface, 12px);
+}
+
+.mobileLink,
+.mobileText {
+  padding: 13px 14px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--r-control, 4px);
+}
+
+.mobileLink { color: rgba(255, 255, 255, 0.82); }
+.mobileLink:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* No destination, so no hover and no pointer — see the note in the JSX. */
+.mobileText { color: rgba(255, 255, 255, 0.34); }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The menu's own CTA. Same pink as the bar's, full width because it is the
+   last thing in a stacked list rather than an item in a row. */
+.mobileCta {
+  margin-top: 6px;
+  padding: 14px;
+  border: 0;
+  border-radius: var(--r-control, 4px);
+  background: var(--pink, #df4ed6);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .navToggle { display: grid; }
+  .mobileNav { display: flex; }
+
+  /* THE BAR BECOMES THE LOGO AND THE MENU BUTTON. Log in and Start a
+     project were 191px of content in a 390px bar and overflowed it; the CTA
+     is now the last item inside the menu and Log in is gone, since it has
+     nowhere to go on any width. */
+  .navActions { display: none; }
+}
+
+/* THE BAR IS A BAR, NOT A CARD.
+
+   The nav shell reuses the homepage's grid-cell classes, and below the
+   breakpoint one of those gives every cell aspect-ratio: 4 / 5 so the
+   homepage's tiles stay square-ish on a phone. Applied to a full-width nav
+   bar that is 456px across, that reserved 570px of height for 70px of
+   content — half a screen of nothing between the logo and the headline, on
+   the one viewport where vertical space is scarcest.
+
+   Doubled selector to outrank the media-query rule it is undoing without
+   reaching for !important. */
+.navShell.navShell {
+  /* !important, reluctantly and specifically. The rule being undone is
+     ".row12 > * { aspect-ratio: 4 / 5 !important }" in the shared homepage
+     stylesheet — it turns every cell of that grid into a portrait tile on a
+     phone, which is right for the homepage's tiles and wrong for a nav bar.
+     An important declaration can only be beaten by another one, and editing
+     the shared file would change / and /v2.
+
+     The doubled class outranks ".row12 > *" on specificity, so this wins
+     rather than merely ties. */
+  aspect-ratio: auto !important;
+  height: auto !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* One line stops being one line. At this width the button takes 130px of a
+   343px pill and the field is left with less room than its own placeholder
+   needs — "What's your work emai" was being cut mid-word. Stacked, both get
+   the full width, and the pill becomes a block without changing anything
+   about how it works. */
+@media (max-width: 560px) {
+  .emailForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .emailSubmit { width: 100%; }
+
+  /* The input has no border of its own, so on its own line it needs a
+     ground to sit on or it reads as loose text above a button. */
+  .emailInput {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--r-control, 4px);
+  }
+}
+
+
+/* The icon sits where the number was. A well rather than a bare glyph: six
+   loose icons down a panel read as decoration, and six in boxes read as an
+   index. */
+.svcIcon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+/* The hovered row's icon takes the colour, the same way its text does. */
+.svcRow:hover .svcIcon {
+  color: var(--pink, #df4ed6);
+  border-color: rgba(223, 78, 214, 0.4);
+}
+
+/* TWO COLUMNS OF THREE, for the panel that still has six rows. The hairline
+   belongs to the row rather than the grid, so it lands under every row in
+   both columns rather than only where a gap happens to fall. */
+.svcGridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 3vw, 48px);
+  align-content: start;
+}
+
+/* One column on a narrow panel — two columns of a name and a sentence at
+   half a phone's width is two columns of wrapping. */
+@media (max-width: 900px) {
+  .svcGridTwo { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* THE BAR FLOATS, and the shell holds its place. Always fixed rather than
+   switching on scroll: changing position mid-scroll collapses the space the
+   bar held and jumps the page by its height. */
+.navFloat > * {
+  position: fixed;
+  top: var(--bar-inset, 22px);
+  left: var(--page-pad-left, 16px);
+  right: var(--page-pad-right, 16px);
+  z-index: 60;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The panel is a direct child too, so the rule above put it at the bar's own
+   top and it covered the bar. It belongs underneath: --bar-h is the measured
+   height of the bar, published by V3Nav, and the 8px is the gap the ::before
+   bridge spans so the cursor never crosses dead space on the way down. */
+.navFloat > .panel {
+  top: calc(var(--bar-inset, 22px) + var(--bar-h, 64px) + 8px);
+}
+
+/* THE MENU GOES UNDER THE BAR, for the same reason the panel does — and it
+   is a worse bug here. As a direct child of .navFloat it took the rule
+   above and was pinned at the bar's own top, covering the logo and the
+   toggle: the button that opens the menu was underneath it, so there was no
+   way to close the thing except by following a link out of the page.
+
+   margin-top goes to 0 because the 8px it carried is in this calc now. */
+.navFloat > .mobileNav {
+  top: calc(var(--bar-inset, 22px) + var(--bar-h, 64px) + 8px);
+  margin-top: 0;
+}
+
+/* Out of the way once the page has moved past it. Translated rather than
+   hidden, so it can come back without a reflow — and far enough that the
+   shadow under it clears the top edge too. */
+.navHidden > * {
+  transform: translateY(calc(-100% - var(--bar-inset, 22px) - 12px));
+  pointer-events: none;
+}
+
+/* Someone who asked for less movement gets the bar appearing and
+   disappearing rather than sliding. */
+@media (prefers-reduced-motion: reduce) {
+  .navFloat > * { transition: none; }
+  .navHidden > * { transform: none; }
+}
+
+/* THE TWO VERBS IN THE HERO, linked to the two service pages.
+
+   Underlined by default rather than on hover: at display size an underline
+   that only appears on hover is a link nobody knows is there, and these two
+   are the only navigation above the fold now the capture field is gone. The
+   rule sits away from the baseline so it does not cut the descenders of the
+   serif. */
+/* THE HERO IS SHORTER HERE THAN .tall.display MAKES IT, so the case studies
+   peek in under the fold. At the shared 78vh floor the grid began below the
+   bottom of a desktop window and the first screen was the headline alone;
+   at 66vh the top of the featured card shows through, which is what tells a
+   visitor there is a page under the sentence. Tripled selector: .tall.display
+   is two classes and StatementCard's stylesheet loads after this one, so two
+   classes here only ties and loses. */
+.heroHome.heroHome.heroHome {
+  min-height: min(66vh, 560px);
+  /* The mat below sits in a layer of its own under the type; isolation keeps
+     its negative z-index inside this box rather than under the page. */
+  position: relative;
+  isolation: isolate;
+}
+
+/* A CUTTING MAT BEHIND THE HERO. Black, with the lines in gray: the self-heal
+   mat every studio has under its knife, drawn in CSS so it tiles to any size
+   and costs no image. The layers, top to bottom:
+
+     the two diagonals, corner to corner at a true 45 degrees (angle
+       gradients keep their angle whatever the box's proportions);
+     ruler ticks, 8px long at every minor step, along all four edges;
+     the major grid, one line in five, a step brighter;
+     the minor grid, the pale one everything else sits on;
+     the mat itself, a shade off the page's black so it reads as an object
+       with an edge and not as the page with lines on it.
+
+   The grid starts on the edge itself — no inset — so there is no unlined
+   band at the top of the screen; the ticks sit on the first lines rather
+   than hanging in a margin above them. Both grids share the origin, so
+   every fifth minor line is under a major one. Everything is faint on purpose: the headline is the point of the
+   section and the mat is what it is set on.
+
+   FULL SCREEN, NOT A PANEL. The layer reaches past the hero's box to the top
+   of the page and both edges of the screen, under the bar: up by the
+   distance the page puts above its first section, and out by the page
+   padding on each side.
+
+   THE PULL INCLUDES THE BAR'S HEIGHT, AND OVERSHOOTS ON PURPOSE. The bar is
+   in the page flow on a fresh load, 58px tall, and floats free once the page
+   scrolls, at which point its row collapses to nothing and everything under
+   it sits 58px higher. A pull measured in the floating state left a 58px
+   band of bare page above the mat on every first load. So the pull is the
+   page's top padding, the bar's height and the stack gap less the half-gap
+   the bar row hands back; in the floating state the top of the layer lands
+   above the top of the page, where there is nothing to see. The bar height
+   is rounded up to 80px for the same reason — too much is invisible, too
+   little is a gap. No
+   radius and no edge line, because a mat the size of the screen has no
+   edge to draw. Down, it runs on through the gap to the top of the case
+   studies and is masked to nothing over its last third, so the grid
+   dissolves into the work rather than stopping at a line. */
+.heroHome.heroHome.heroHome::before {
+  --mat-minor: rgba(255, 255, 255, 0.06);
+  --mat-major: rgba(255, 255, 255, 0.13);
+  --mat-diag: rgba(255, 255, 255, 0.11);
+  --mat-tick: rgba(255, 255, 255, 0.3);
+  --mat-step: 24px;
+  --mat-major-step: 120px;
+  --mat-inset: 0px;
+  content: '';
+  position: absolute;
+  top: calc(-1 * (var(--bar-inset, 0px) + 80px + (clamp(28px, 4vw, 64px) + 5px) / 2));
+  right: calc(-1 * var(--page-pad-right, 0px));
+  bottom: calc(-1 * clamp(28px, 4vw, 64px));
+  left: calc(-1 * var(--page-pad-left, 0px));
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 0.5px), var(--mat-diag) calc(50% - 0.5px), var(--mat-diag) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(-45deg, transparent calc(50% - 0.5px), var(--mat-diag) calc(50% - 0.5px), var(--mat-diag) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    repeating-linear-gradient(to right, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) var(--mat-inset) 0 / calc(100% - 2 * var(--mat-inset)) 8px no-repeat,
+    repeating-linear-gradient(to right, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) var(--mat-inset) 100% / calc(100% - 2 * var(--mat-inset)) 8px no-repeat,
+    repeating-linear-gradient(to bottom, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) 0 var(--mat-inset) / 8px calc(100% - 2 * var(--mat-inset)) no-repeat,
+    repeating-linear-gradient(to bottom, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) 100% var(--mat-inset) / 8px calc(100% - 2 * var(--mat-inset)) no-repeat,
+    linear-gradient(to right, var(--mat-major) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-major-step) var(--mat-major-step),
+    linear-gradient(to bottom, var(--mat-major) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-major-step) var(--mat-major-step),
+    linear-gradient(to right, var(--mat-minor) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-step) var(--mat-step),
+    linear-gradient(to bottom, var(--mat-minor) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-step) var(--mat-step),
+    #0e0e0e;
+}
+
+.heroLink {
+  /* Grey rather than inherited white: the two verbs sit inside a display
+     sentence, and setting them back from it is what makes them read as
+     picked out rather than emphasised. The word still leads to a page, so
+     the underline carries the affordance and the colour stays quiet. */
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+a.heroLink:hover {
+  color: var(--pink, #df4ed6);
+  text-decoration-color: var(--pink, #df4ed6);
+}
+
+a.heroLink:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 4px;
+  border-radius: 2px;
+}

@@ -147,6 +147,14 @@ export const clientLanding = defineType({
       description: 'Optional. e.g. "Stuart Friedman, Founder, Big Buoy".',
     }),
     defineField({
+      name: 'testimonialAvatar',
+      title: 'Testimonial avatar',
+      type: 'image',
+      options: { hotspot: true },
+      description:
+        'Optional. A headshot or company logo, shown beside the quote in the homepage testimonial strip. Square crops best. Without one the card shows the quote and attribution alone.',
+    }),
+    defineField({
       name: 'trustLogos',
       title: 'Trust strip',
       type: 'array',

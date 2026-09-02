@@ -10,6 +10,8 @@ import ClientStrip from '../components/ClientStrip'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
+import TestimonialStrip from '../components/TestimonialStrip'
+import ContactCTA from '../components/ContactCTA'
 
 let didLoad = false
 
@@ -135,8 +137,14 @@ export default function Home() {
       {/* Build / Grow two-up — the offer, before the work that proves it */}
       <BuildGrowCards />
 
+      {/* Client quotes, ahead of the work they are about */}
+      <TestimonialStrip />
+
       {/* Featured case studies — four, with their numbers */}
       <FeaturedCaseStudies />
+
+      {/* Closes the page on the ask */}
+      <ContactCTA />
 
 
       {reelOpen && (

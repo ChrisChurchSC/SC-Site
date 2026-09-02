@@ -1,0 +1,223 @@
+/* Featured work — see FeaturedWall.jsx. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  /* Stands in from the page margin on the left. The rail still bleeds off the
+     right, so the section reads as starting further in and running out —
+     which is the shape of a rail rather than a row that happens to be cut. */
+  padding-left: clamp(16px, 5vw, 110px);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  font-family: 'Roboto Mono', monospace;
+  font-size: var(--label-size, 9px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, rgba(255, 255, 255, 0.3));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+  margin: 0;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.12;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 4px 0 0;
+  /* One line. The 20ch measure was breaking it after "had", and text-wrap:
+     balance only chooses where to break — it cannot decide not to. Both go.
+
+     Safe to nowrap all the way down: the font size is 3vw between 800px and
+     1400px, so the phrase and the space it has shrink together, and below
+     800px it holds at 24px, where thirty-one characters of Signifier is
+     around 340px against a viewport of at least 800. */
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* The pill, as in the reference: light on dark rather than dark on light. */
+.explore {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: #0a0a0a;
+  background: #f2f0ea;
+  border-radius: var(--r-control, 999px);
+  padding: 12px 24px;
+  margin: 18px 0 30px;
+  transition: background 0.15s;
+}
+
+.explore:hover { background: #fff; }
+
+/* Runs past the page's right edge on purpose. The negative margin lets it
+   bleed while the section's copy stays on the page grid, and the row scrolls
+   rather than wrapping — a wrapped row would end the drift at the first
+   break. */
+.rail {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  /* THE SCROLLPORT SPANS THE SCREEN; THE CONTENT STAYS INDENTED.
+
+     The rail used to begin at the section's own margin, so a card leaving to
+     the left was sliced by a vertical edge sitting in open space — which
+     reads as broken rather than as "there is more this way". Now the
+     scrollport is pulled out to both screen edges, and cards leave the way
+     they arrive: off the screen.
+
+     But the content keeps the indent, via padding rather than margin, so at
+     rest a card still lines up under the headline instead of hugging the
+     bezel. scroll-padding-left is what makes the snap agree with that: it
+     rests a snapped card at the indent, which leaves the previous card
+     half-visible in the bleed, running off the edge. Scrollable, off the
+     left, and nothing lands on a broken-looking crop.
+
+     The bleed is the page's own left padding plus this section's, because
+     those are the two things between the rail and the screen edge. */
+  --bleed-left: calc(var(--page-pad-left, 0px) + clamp(16px, 5vw, 110px));
+  margin-left: calc(-1 * var(--bleed-left));
+  width: calc(100% + var(--bleed-left) + var(--page-pad-right, 0px));
+  padding-left: var(--bleed-left);
+  scroll-padding-left: var(--bleed-left);
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+  /* NO SNAP. It went in for the card-by-card stepper, where it stopped a
+     hand-scroll resting between two cards. With a continuous drift it is
+     actively wrong: mandatory snapping fights a scrollLeft written every
+     frame, and the browser spends the whole animation trying to pull the
+     rail back onto the nearest card edge. */
+}
+
+.rail::-webkit-scrollbar { display: none; }
+
+/* The card is the media plus a caption under it now, rather than the media
+   with a name laid over it. The name and the measures both needed room the
+   image was not going to give them, and type over a photograph has to be
+   defended with a scrim at every size. */
+/* A text card. No media block at all — see the component: an empty frame
+   waiting for a picture reads as a failure to load, not as a promise. The
+   card carries the type, the name and the three measures, and its height
+   comes from those rather than from a ratio. */
+.card {
+  flex: none;
+  width: clamp(240px, 26vw, 340px);
+  /* 3:4 rather than 4:5. The content still sits at the foot and the space
+     above it is the card, but at 4:5 these read as the same object as the
+     service cards next to them; taller separates the two rails and gives the
+     three measures at the foot more room above them.
+
+     Still a ratio rather than a height, so the rail stays one shape at every
+     width. */
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 28px 26px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-surface, 14px);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* No page yet, so no hover — it would promise one. */
+.cardFlat { cursor: default; }
+.cardFlat:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.type {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.2vw, 34px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.measures {
+  display: flex;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.measure {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+/* At the size a real figure would be. */
+.measureValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.measureLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+@media (max-width: 760px) {
+  .card { width: 230px; }
+  .rail { padding-bottom: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .explore { transition: none; }
+}
+
+/* Two identical passes inside the scroller. The pass carries the same gap as
+   the rail, so the seam between them is indistinguishable from any other gap
+   between two cards. */
+.pass {
+  display: flex;
+  align-items: flex-start;
+  flex: none;
+  gap: 14px;
+}
+
+/* Says the figures on these cards are not real. It sits beside the section
+   label rather than on each card, because it is true of all six, and it is
+   legible rather than decorative — its whole job is to reach someone who is
+   about to believe a number attached to a named client. */
+.provisional {
+  margin-left: 10px;
+  padding: 1px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--r-control, 4px);
+  color: rgba(255, 255, 255, 0.45);
+}

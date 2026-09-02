@@ -51,24 +51,6 @@ export const THOUGHT_QUERY = `*[_type == "thought" && slug.current == $slug][0] 
   }
 }`
 
-export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "about-page"][0] {
-  headerLabel,
-  headline,
-  intro,
-  embeddedPoints[] { heading, body },
-  servicesIntro,
-  services[] { tag, name, deliverables },
-  rolesLabel,
-  rolesIntro,
-  roles,
-  faqLabel,
-  faqs[] { question, answer },
-  pricingLabel,
-  pricingSub,
-  clientsLabel,
-  clients
-}`
-
 export const CAREERS_PHOTOS_QUERY = `*[_type == "careersPage" && _id == "careers-page"][0].photos[] {
   "src": coalesce(videoFile.asset->url, image.asset->url),
   "isVideo": defined(videoFile.asset)
@@ -279,4 +261,16 @@ export const HOMEPAGE_GRID_QUERY = `*[_type == "homepageGrid" && _id == "homepag
     "projectName": project->name,
     externalUrl
   }
+}`
+
+// Client quotes for the homepage marquee.
+//
+// They live on clientLanding documents because that is where they were
+// already written, one per landing page. Ordered by _createdAt so the strip
+// has a stable sequence rather than whatever order the dataset returns.
+export const TESTIMONIALS_QUERY = `*[_type == "clientLanding" && defined(testimonialQuote)] | order(_createdAt asc) {
+  "quote": testimonialQuote,
+  "attribution": testimonialAttribution,
+  "avatar": testimonialAvatar.asset->url,
+  "client": clientName
 }`

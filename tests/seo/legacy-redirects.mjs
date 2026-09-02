@@ -37,6 +37,12 @@ export const LEGACY_REDIRECTS = {
   '/marketing-dept': '/work/arbitrum-marketing-dept-videos',
   '/gigs-characters': '/work/gigs',
 
+  // Renamed in August 2026: the Capabilities page became Services and moved
+  // off /about. Not a pre-rebuild legacy URL like the rest of this map, but it
+  // is the same problem — a live, indexed URL that must not start 404ing — and
+  // this map is what vercel.json is checked against, so it belongs here.
+  '/about': '/services',
+
   // Thought post, moved under /thoughts/.
   '/rethinking-the-workweek': '/thoughts/rethinking-the-workweek',
 

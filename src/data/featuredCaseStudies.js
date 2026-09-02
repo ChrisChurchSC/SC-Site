@@ -1,19 +1,22 @@
 // The featured case study section on the homepage.
 //
 // ─────────────────────────────────────────────────────────────────────────
-// THE STAT VALUES BELOW ARE PLACEHOLDERS. DO NOT SHIP THEM.
+// THE STAT VALUES BELOW ARE INVENTED. THEY ARE NOT THESE CLIENTS' RESULTS.
 //
-// The labels are the client's and are final. Every `value` is "––" on
-// purpose: there is no source for these numbers
-// anywhere in the repo or in Sanity — the `project` schema has no stats
-// field, and caseStudies.js carries qualitative `outcomes`, not metrics.
-// Inventing plausible-looking figures and attributing them to four named
-// companies is the one thing this file must not do, so it doesn't: the
-// layout is real and the numbers are visibly absent.
+// They were asked for so the section could be seen with numbers in it, and
+// they are why the section renders a "Placeholder figures" tag beside its
+// label. DO NOT REMOVE THAT TAG WHILE THESE NUMBERS ARE MADE UP.
 //
-// Replace `value` and `label` per entry and the section is finished. The
-// component renders whatever is in `stats`, so a client with three stats
-// instead of four just renders three.
+// This matters more here than anywhere else on the page. A dashboard mock
+// with an invented percentage is a product illustration; an invented
+// percentage sitting under the word OpenText is a claim about a named
+// company's results, attributed to us, on a page meant to win work. There is
+// no source for any of it — the Sanity project schema has no stats field,
+// and caseStudies.js carries qualitative outcomes, not metrics.
+//
+// The labels are the client's and are final. Replace each value with a real,
+// sourced figure, delete the tag in FeaturedWall, and the section is
+// finished. Until then it is a layout with numbers in it, not proof.
 // ─────────────────────────────────────────────────────────────────────────
 //
 // On media: none of these four has an image or video anywhere. The project
@@ -28,13 +31,14 @@
 // component renders those as unlinked cards. Matching how the wall, the nav
 // and the client strip already treat unwritten or hidden work.
 
-// The measures, same set across all four case studies so the section
-// reads as one comparable table rather than four unrelated brag sheets.
-// Labels are final. Values are not — see the warning above.
-const PLACEHOLDER = [
-  { value: '––', label: 'Win rate' },
-  { value: '––', label: 'Follower growth' },
-  { value: '––', label: 'SQL growth' },
+// The three measures, same labels across every card so the section reads as
+// one comparable table rather than six unrelated brag sheets. Labels final,
+// values invented — see the warning above. A helper rather than one shared
+// array, because six identical cards read as a rendering fault.
+const stats = (audience, sql, win) => [
+  { value: audience, label: 'Audience growth' },
+  { value: sql, label: 'SQL growth' },
+  { value: win, label: 'Win rate' },
 ]
 
 export const featuredCaseStudies = [
@@ -48,7 +52,7 @@ export const featuredCaseStudies = [
     // oversight to fix in code.
     href: null,
     media: null,
-    stats: PLACEHOLDER,
+    stats: stats('+38%', '+21%', '34%'),
   },
   {
     slug: 'iscribe',
@@ -58,7 +62,7 @@ export const featuredCaseStudies = [
     // because it was asked for; there is nothing behind it yet.
     href: null,
     media: null,
-    stats: PLACEHOLDER,
+    stats: stats('+52%', '+29%', '41%'),
   },
   {
     slug: 'arbitrum',
@@ -68,7 +72,31 @@ export const featuredCaseStudies = [
     // the site. Left unlinked here for the same reason.
     href: null,
     media: null,
-    stats: PLACEHOLDER,
+    stats: stats('+61%', '+18%', '27%'),
+  },
+  {
+    slug: 'smashburger',
+    name: 'Smashburger',
+    type: 'Brand + Content',
+    // comingSoon:true in Sanity — its page builds but is noindexed and absent
+    // from the sitemap, so it is shown and not linked, the same treatment
+    // Arbitrum gets here and the wall, the nav and the client strip already
+    // give it. It was already on the homepage in the client strip; this puts
+    // it in the featured set too.
+    href: null,
+    media: null,
+    stats: stats('+44%', '+33%', '38%'),
+  },
+  {
+    slug: 'world-within',
+    name: 'World Within',
+    type: 'Brand + Content',
+    // Checked rather than assumed: published:true and comingSoon:false in
+    // Sanity, the page builds, it is indexable and it is in the sitemap. So
+    // it links, which makes it the second of these cards with anywhere to go.
+    href: '/work/world-within',
+    media: null,
+    stats: stats('+27%', '+24%', '31%'),
   },
   {
     slug: 'wonderwerk',
@@ -76,7 +104,13 @@ export const featuredCaseStudies = [
     type: 'Brand + Content',
     // The only one of the four with a real, reachable case study page.
     href: '/work/wonderwerk',
-    media: null,
-    stats: PLACEHOLDER,
+    // A 9s cut of the case study's own delivered assets — wordmark, posters,
+    // packaging, social, identity, web, 3D, and the tagline to land on. Built
+    // at 16:9 from the seven assets that were already 16:9 plus five moments
+    // pulled from the films, so nothing in it is a portrait frame squeezed
+    // into a landscape one. LazyVideo means it costs nothing until the card
+    // is near the viewport.
+    media: '/wonderwerk-montage-compressed.mp4',
+    stats: stats('+49%', '+26%', '36%'),
   },
 ]

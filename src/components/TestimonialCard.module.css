@@ -1,0 +1,101 @@
+/* One testimonial on a wide pale card — see TestimonialCard.jsx.
+
+   THE ONE LIGHT THING ON A DARK PAGE, as the reference is. It works because
+   it is alone: a second pale panel anywhere near it would read as a theme
+   change rather than as emphasis. */
+
+.section {
+  padding: clamp(40px, 5vw, 76px) clamp(8px, 5vw, 96px);
+}
+
+/* Pink at the top falling to near-white at the foot, the way round the
+   reference runs its own gradient — the quote sits in the tinted half and
+   the card lifts off the page underneath it. */
+.card {
+  margin: 0;
+  padding: clamp(48px, 8vw, 120px) clamp(24px, 6vw, 96px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 2.4vw, 32px);
+  text-align: center;
+  border-radius: clamp(16px, 1.8vw, 26px);
+  background: linear-gradient(
+    to bottom,
+    #f2c9ee 0%,
+    #f9e2f6 45%,
+    #fdf6fc 100%
+  );
+}
+
+/* Signifier, and dark on light — the one place on this page where the type
+   inverts. Sized to hold two lines at the top of the range, which is the
+   shape of the reference. */
+/* Says the quote is not real. Deliberately legible rather than tucked in a
+   corner — it is doing a job, not apologising. */
+.tag {
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(15, 17, 22, 0.2);
+  border-radius: 999px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(15, 17, 22, 0.5);
+}
+
+.quote {
+  margin: 0;
+  max-width: 26ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3.4vw, 46px);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: #0f1116;
+}
+
+/* Avatar and name on one line, centred under the quote. */
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(15, 17, 22, 0.07);
+  border: 1px solid rgba(15, 17, 22, 0.12);
+  color: rgba(15, 17, 22, 0.45);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.who {
+  font-family: "Roboto Mono", monospace;
+  font-size: clamp(11px, 0.9vw, 13px);
+  letter-spacing: 0.04em;
+  color: rgba(15, 17, 22, 0.55);
+}
+
+/* Bracketed placeholders only render in dev — see the component. Marked so
+   nobody mistakes one for a real name while working. */
+.whoPlaceholder {
+  color: #b0246a;
+}
+
+@media (max-width: 620px) {
+  .quote { max-width: none; }
+}

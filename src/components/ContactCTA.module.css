@@ -1,0 +1,362 @@
+/* Talk to a Super-Conscious human.
+
+   Lifted out of Services.module.css unchanged when the block became a shared
+   component. Both the homepage and /services render it now, so the styles had
+   to leave the page module with it — a CSS module is scoped to its importer,
+   and a component reaching for a page's classes gets undefined.
+
+   The six email* classes are the contract EmailCaptureForm expects. It takes
+   its host's module as a prop, so a class defined nowhere is not an error:
+   `styles.emailInput` is undefined, React renders class="undefined", and the
+   control appears with browser defaults. That shipped once already, which is
+   why tests/lib/emailCaptureStyles.test.mjs asserts every consumer defines
+   all six. */
+
+/* ── Pricing ── */
+.pricingSection {
+  padding: 48px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pricingCard {
+  position: relative;
+  background-color: #1a1a1a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: var(--r-surface, 6px);
+  padding: 64px 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.pricingCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.035;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.pricingLabel {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  /* Up from clamp(22px, 2.5vw, 36px). This is the last thing the page asks
+     for and it was set smaller than the section headings above it. */
+  font-size: clamp(30px, 4vw, 56px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.pricingSub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.emailForm {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
+
+.emailInput {
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.emailInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── The contact variant ──
+   .emailForm is a row for the one-line capture; this turns it into a column
+   and lets the fields set their own widths. Wider than the 440px the single
+   input sits in, because a message box at that measure is a slot, not a box
+   you would write a paragraph in.
+
+   Keyed off the attribute rather than a second class so the compact callers
+   are not made to define a class they never apply — the style test holds
+   every caller to the classes the component references. */
+.emailForm[data-variant='contact'] {
+  flex-direction: column;
+  gap: 14px;
+  max-width: 620px;
+}
+
+/* Name and email share a line, the message gets its own. minmax(0, 1fr) and
+   not 1fr: an input's default size attribute gives it an intrinsic minimum
+   wider than half the row, and bare 1fr honours that and overflows. */
+.emailRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* The card centres its heading and sub, and a control inherits that — which
+   would centre the placeholder text inside its own box. The form block stays
+   centred in the card; its contents read from the left.
+
+   min-width: 0 because this is a grid item wrapping an input, and an input's
+   intrinsic width would otherwise push the column past its track. */
+.emailField {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+/* Matches .emailInput, plus the things only a textarea needs: a readable
+   line-height, a resize handle that cannot break the card's width, and the
+   inherited font a textarea otherwise refuses. */
+.emailTextarea {
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  width: 100%;
+  resize: vertical;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+/* A textarea does not pick up .emailInput::placeholder, and an unstyled
+   placeholder here is near-white on near-black. */
+.emailTextarea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.emailTextarea:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Centred under the stack, matching the heading and the line above it. Left
+   to itself it would stretch the full column width, which reads as a bar
+   rather than a button. */
+.emailForm[data-variant='contact'] .emailSubmit {
+  align-self: center;
+}
+
+.emailInput:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Solid white, the same primary submit /contact already uses — this is the
+   one thing on the card being asked for, and the ghost treatment it had made
+   it read as secondary to nothing. Values match Contact.module.css .submit so
+   the two forms are the same button. */
+.emailSubmit {
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: var(--r-control, 5px);
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 13px 26px;
+  cursor: pointer;
+  transition: opacity 0.18s;
+  flex-shrink: 0;
+}
+
+.emailSubmit:hover {
+  opacity: 0.82;
+}
+
+.emailSubmit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.emailConfirm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  padding: 12px 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 300;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastIn 0.3s cubic-bezier(0.25, 1, 0.4, 1) both;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Clients ── */
+.clientsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.clientName {
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.15s;
+}
+
+.clientName:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .main {
+    padding: 0 0 80px 0;
+  }
+
+  .backBtn {
+    top: 12px;
+    left: 12px;
+  }
+
+  .header {
+    padding: 72px 24px 40px;
+  }
+
+  .textSection {
+    padding: 36px 24px;
+  }
+
+  .embeddedGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .principlesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricingSection {
+    padding: 36px 24px;
+  }
+
+  .pricingCard {
+    padding: 40px 24px;
+  }
+
+  .emailForm {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .emailSubmit {
+    width: 100%;
+  }
+
+  .pricingCard :global(.formkit-fields[data-stacked="false"]) {
+    flex-direction: column !important;
+    gap: 8px;
+  }
+
+  .pricingCard :global(.formkit-field),
+  .pricingCard :global(.formkit-submit) {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .pricingCard :global(.formkit-input) {
+    width: 100% !important;
+  }
+
+  .clientsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.emailSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.emailError {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #e8908f;
+  margin: 10px 0 0;
+}
+
+/* No card. The ground, the grid and the grain all come off — the grid is
+   drawn with background-image, so it goes with the background rather than
+   needing its own override, and the grain is a pseudo-element that has to be
+   turned off on its own. Padding stays: the block still needs its own space
+   even without an edge to hold it. */
+.pricingCardBare {
+  background-color: transparent;
+  background-image: none;
+  border-radius: 0;
+}
+
+.pricingCardBare::after { content: none; }

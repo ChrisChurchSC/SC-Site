@@ -1,0 +1,15 @@
+/* Industry and size under a case study card — see CaseFacts.jsx. */
+
+.facts {
+  margin: 2px 0 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sep { color: rgba(255, 255, 255, 0.24); }
+
+/* The site's placeholder, wherever a figure has no source. */
+.blank { color: rgba(255, 255, 255, 0.28); }

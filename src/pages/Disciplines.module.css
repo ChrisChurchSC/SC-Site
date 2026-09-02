@@ -1,0 +1,114 @@
+/* All disciplines — see Disciplines.jsx. */
+
+/* The v3 section inset, so the cards' left edge is the hero headline's.
+
+   NO TOP PADDING. The hero above carries 104px of its own under the support
+   line and the page stack adds its gap on top of that; with a section
+   padding as well the cards started 230px under the headline. The bottom
+   keeps the careers page's 64px. */
+.section {
+  padding: 0 clamp(8px, 5vw, 96px) clamp(32px, 4vw, 64px);
+}
+
+/* Four across at desktop, the same 5px gutter as every card grid on the site.
+   Twelve cards is three even rows of four; at two across it is six rows, at
+   one it is a stack. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* 9:16 — A PORTRAIT FRAME, TALLER THAN THE 4:5 THE STUDIO AND CAREERS CARDS
+   USE. Same inset, the number at the top and the copy on the floor, so it is
+   still recognisably the same object; the ratio is a phone screen's, which
+   is the shape most of this work ships in. The height is the ratio's, so
+   twelve cards are twelve identical frames whatever their sentences do — the
+   longest body (Production, Media) uses about half the frame at the
+   four-column width, which is the width that matters. */
+.card {
+  background: #161616;
+  border-radius: var(--r-surface, 12px);
+  aspect-ratio: 9 / 16;
+  padding: clamp(20px, 2.2vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* The card that goes somewhere. The lift is the site's hover for a card that
+   is a link — a shade lighter, nothing that moves the grid. */
+.cardLink {
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.cardLink:hover,
+.cardLink:focus-visible {
+  background: #1c1c1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardLink { transition: none; }
+}
+
+.n {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.18);
+  /* Top of the frame; the copy below sits on the floor. */
+  margin-bottom: auto;
+}
+
+/* Reset from the h2 default: the heading level is for the outline, the size
+   is the v3 sub-head step and the ink the studio card's headline. */
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.8vw, 26px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.96);
+  margin: 0;
+}
+
+/* The v3 body step at the studio card's support ink.
+
+   EVERY BODY IS THE SAME HEIGHT. The copy runs four lines on most cards and
+   five on Creative direction, Production, Media and Search; with the copy on
+   the floor of the frame, a four-line body lifted its heading a line above
+   its neighbours', and the row read as ragged. The block is reserved at the
+   longest body's count, so every heading sits on the same line across the
+   row. A min-height, not a fixed one: nothing is ever clipped, and a copy
+   edit that runs to six lines grows the block rather than losing a line. */
+.body {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  --body-lines: 5;
+  min-height: calc(var(--body-lines) * 1.5em);
+}
+
+/* One column: the ratio would make each card a screen of black under a
+   paragraph. Text-height, like any card in a stack. */
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .card {
+    aspect-ratio: auto;
+    gap: 20px;
+  }
+}

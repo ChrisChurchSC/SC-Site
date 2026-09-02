@@ -1,0 +1,271 @@
+/* The operating loop — see HowItWorks.jsx. */
+
+.section {
+  padding: clamp(48px, 6vw, 96px) clamp(8px, 5vw, 96px);
+}
+
+.eyebrow {
+  margin: 0 0 clamp(16px, 1.8vw, 24px);
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 11px);
+  letter-spacing: var(--label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--label-color, var(--pink, #df4ed6));
+  display: var(--label-display, block);
+  background: var(--label-bg, none);
+  padding: var(--label-pad, 0);
+  border-radius: var(--label-radius, 0);
+  width: var(--label-width, auto);
+}
+
+.headline {
+  margin: 0 0 clamp(36px, 4.5vw, 64px);
+  max-width: 30ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+/* FOUR COLUMNS DIVIDED BY HAIRLINES. Not a track with markers on it: that
+   drew left-to-right travel and read as a schedule you pass through once.
+   These four happen every month, so they are set as a group of equals. */
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.step {
+  position: relative;
+  padding-left: clamp(16px, 2vw, 30px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 0;
+}
+
+/* The first column carries no rule — a hairline at the left edge of the page
+   would read as a border on the section rather than as a division inside
+   it. */
+.step:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+
+.num {
+  display: block;
+  margin-bottom: 14px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 2.8vw, 40px);
+  line-height: 1;
+  color: rgba(223, 78, 214, 0.5);
+}
+
+.name {
+  margin: 0 0 8px;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.8vw, 26px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.note {
+  margin: 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The return leg, said rather than drawn — an arc looping from the fourth
+   step back to the first is a lot of ink for one sentence. */
+.loop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(28px, 3.4vw, 44px) 0 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.loopMark {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--pink, #df4ed6);
+}
+
+/* Two up, then one. Four columns of a sentence each is four columns too
+   narrow to read. */
+@media (max-width: 900px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 34px; }
+  /* The third column starts a new row, so its rule would divide nothing. */
+  .step:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .headline { max-width: none; }
+}
+
+@media (max-width: 560px) {
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .step { padding-left: 0; border-left: 0; }
+}
+
+/* THE REFERENCE FORMAT: the steps down the left, the screen they are about
+   on the right. Left is narrower — it is a list of four short lines, and the
+   thing being shown is the point. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+
+.rail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.railItem, .railOn { position: relative; }
+
+/* A button, so it is focusable and operable from the keyboard with nothing
+   extra, and reset out of its browser styling. */
+.railButton {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(14px, 1.6vw, 20px) 0 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.9vw, 27px);
+  line-height: 1.15;
+  /* Closed rows are dimmed rather than hidden — the four together are the
+     argument, and one open row above three empty ones is an accordion. */
+  color: rgba(255, 255, 255, 0.34);
+  transition: color 0.16s;
+}
+
+.railButton:hover { color: rgba(255, 255, 255, 0.6); }
+
+.railOn .railButton { color: rgba(255, 255, 255, 0.96); }
+
+.railButton:focus-visible {
+  outline: 2px solid var(--pink, #df4ed6);
+  outline-offset: 3px;
+}
+
+.railNum {
+  flex: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(223, 78, 214, 0.55);
+}
+
+.railOn .railNum { color: var(--pink, #df4ed6); }
+
+.railName { min-width: 0; }
+
+.railNote {
+  margin: 10px 0 0 34px;
+  max-width: 44ch;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The rule under each row. On the open one it is pink and full width, which
+   marks position without adding a progress bar of its own. */
+.railRule {
+  display: block;
+  height: 1px;
+  margin-top: clamp(14px, 1.6vw, 20px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* The open row keeps the grey rule; the fill runs across it, so the bar
+   reads as progress rather than as the row changing colour. */
+.railRule { position: relative; overflow: hidden; }
+
+.railFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  width: 0;
+  background: var(--pink, #df4ed6);
+  animation-name: railProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes railProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* No auto-advance under reduced motion, so the open row simply reads as
+   open rather than as a bar that never finishes. */
+@media (prefers-reduced-motion: reduce) {
+  .railFill { animation: none; width: 100%; }
+}
+
+/* The screen. min-width: 0 so a wide window scrolls inside its own frame
+   rather than widening the grid column. */
+.stage { min-width: 0; }
+
+@media (max-width: 1000px) {
+  .split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+
+/* ONE FRAME, FOUR SCREENS. The windows size themselves differently on their
+   own pages — the dashboard is 16:9, the repo and the asset view are as tall
+   as their content — and switching between them here made the section jump
+   by hundreds of pixels each time. The stage sets the shape and every screen
+   fills it.
+
+   .split .stage > * rather than .stage > *: the child carries its own
+   .window class from its own stylesheet, and at equal specificity which rule
+   wins depends on bundle order. Two classes beats one, whatever the order. */
+.stage {
+  /* A GROUND BEHIND THE SCREEN, so the pair reads as one framed image rather
+     than a floating panel — the same move the platform section makes with
+     its dot field. The window sits inset on it, which is what gives it a
+     mount instead of an edge. */
+  aspect-ratio: 1 / 1;
+  padding: clamp(14px, 1.8vw, 26px);
+  border-radius: clamp(14px, 1.6vw, 22px);
+  background: radial-gradient(
+    120% 100% at 50% 0%,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.02) 55%,
+    rgba(255, 255, 255, 0.012) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.split .stage > * {
+  height: 100%;
+  width: 100%;
+  /* Undoes the dashboard's own 16:9. */
+  aspect-ratio: auto;
+  /* A screen taller than the frame scrolls inside it rather than being cut:
+     a clipped table looks like a bug, a scrolling one looks like a window. */
+  overflow: auto;
+}

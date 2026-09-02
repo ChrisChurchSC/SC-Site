@@ -1,17 +1,15 @@
 /* Case study index.
-   Cards only — the page is the header and the Build / Grow grids beneath it.
-   The typographic list that used to sit under them is gone; see the note in
-   Work.jsx for why that was safe. */
+   Type and spacing follow the nav drawer's list, which is where this content
+   lived before it had a page — same Signifier display face, same mono
+   metadata, same hairline row rule — so the page reads as the same object at
+   a permanent URL rather than a second design for the same list. */
 
 .main {
+  --bar-inset: clamp(22px, 3.6vw, 58px);
+  --page-pad-left: var(--bar-inset);
+  --page-pad-right: var(--bar-inset);
   min-height: 100vh;
-  padding: 120px 24px 96px;
-}
-
-@media (min-width: 769px) {
-  /* 300px rail + a 24px gutter. Below this the rail is display:none and the
-     hamburger takes over, so the reservation would be dead space. */
-  .main { padding-right: 324px; }
+  padding: clamp(128px, 12vw, 190px) var(--bar-inset) 0;
 }
 
 .header {
@@ -40,7 +38,131 @@
   text-wrap: balance;
 }
 
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.row { margin: 0; }
+
+.item {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.item:hover { opacity: 1; }
+.item:hover .name { color: rgba(255, 255, 255, 0.95); }
+.item:hover .num { color: rgba(255, 255, 255, 0.5); }
+
+.item:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 4px;
+}
+
+/* Not a link: no pointer, and it does not brighten on hover, so the
+   difference between a written case study and one that is not is legible
+   before you click rather than after. */
+.itemSoon { cursor: default; opacity: 0.45; }
+
+.num {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.2s;
+}
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 3.4vw, 44px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s;
+}
+
+.type {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.soon {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
 @media (max-width: 720px) {
   .main { padding: 96px 18px 72px; }
-  .header { padding-bottom: 32px; }
+  .item { grid-template-columns: 36px 1fr; gap: 10px; padding: 16px 0; }
+  .type { grid-column: 2; }
 }
+
+/* ── Visual index (the wall) ──
+   The grid arrived from the homepage, where it ran nearly full-bleed against
+   the fixed nav rail. This page shipped with a 1100px centred measure, whose
+   right edge lands at roughly x=1306 on a 1512px viewport — under the rail,
+   which is 300px wide and always there. The text list mostly got away with
+   that; a case study card half-hidden behind the nav is not a card. So the
+   page now reserves the rail the way /services and /about-us already do: full
+   width minus the rail, left-aligned, no centring. */
+
+.gridSection {
+  margin-bottom: 72px;
+}
+
+/* ── Divider between the curated grid and the complete list ── */
+.listHead {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.listLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.listRule {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.listCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.32);
+  flex-shrink: 0;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .gridSection { margin-bottom: 52px; }
+  .listHead { gap: 12px; margin-bottom: 20px; }
+}
+

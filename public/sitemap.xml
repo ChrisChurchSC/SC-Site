@@ -2,9 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url><loc>https://super-conscious.studio/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://super-conscious.studio/about</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://super-conscious.studio/careers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://super-conscious.studio/who-we-are</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://super-conscious.studio/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/creative-direction</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/writing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/design</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/illustration</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/film-photo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/3d-motion</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/animation</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/editing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/production</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/media</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/search</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/disciplines/engineering</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://super-conscious.studio/studio</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://super-conscious.studio/about-us</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://super-conscious.studio/work</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://super-conscious.studio/thoughts</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://super-conscious.studio/thoughts/build-slow-grow-fast</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>

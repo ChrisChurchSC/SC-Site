@@ -3,10 +3,20 @@ const NZ = (file) => `/cs/nimruz/${file}`
 const EA = (file) => `/cs/entropy/${file}`
 const HY = (file) => `/cs/hylands/${file}`
 
+/* THE CARDS SHOW GREY FOR NOW. Every `cover` below is a real file that was
+   opened and looked at, so this is a presentation choice rather than missing
+   data: flip this to true and the index and /work/all draw the picture
+   instead. */
+export const SHOW_COVERS = false
+
 export const caseStudies = {
   'hylands': {
     n: '028',
+    cover: '/cs/hylands/SC_Hylands_10.webp',
     name: 'Hylands',
+    industry: 'Kids\' wellness',
+    /* Unknown, and not ours to guess — see the note above. */
+    size: null,
     type: 'Brand + Content',
     year: '2025',
     tagline: 'A handmade clay world for a kids’ wellness brand.',
@@ -67,7 +77,11 @@ export const caseStudies = {
 
   'entropy': {
     n: '031',
+    cover: '/cs/entropy/SC_Entropy_13.webp',
     name: 'Entropy',
+    industry: 'Decentralized governance',
+    /* Unknown, and not ours to guess — see the note above. */
+    size: null,
     type: 'Brand',
     year: '2025',
     tagline: 'A brand and design system for a firm empowering decentralized governance.',
@@ -128,7 +142,11 @@ export const caseStudies = {
 
   'nimruz': {
     n: '016',
+    cover: '/cs/nimruz/SC_Nimruz_11.webp',
     name: 'Nimruz',
+    industry: 'Culture, nonprofit',
+    /* Unknown, and not ours to guess — see the note above. */
+    size: null,
     type: 'Brand + Content',
     year: '2025',
     tagline: 'A rebrand and content system for a platform cultivating Iranian culture.',
@@ -209,7 +227,11 @@ export const caseStudies = {
 
   'world-within': {
     n: '018',
+    cover: '/grid/ww-sizzle-compressed.mp4',
     name: 'World Within',
+    industry: 'Impact, culture',
+    /* Unknown, and not ours to guess — see the note above. */
+    size: null,
     type: 'Campaign',
     year: '2022',
     tagline: 'A full brand and campaign system for a mission-driven organization raising capital through culture.',

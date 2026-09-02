@@ -105,10 +105,22 @@ export default function Nav() {
 
         {/* Action cards */}
         <div className="nav-action-cards">
-          <NavLink to="/about" className="nav-card">
+          <NavLink to="/services" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Services</p>
-              <p className="nav-card-sub">Design, motion, engineering.</p>
+              <p className="nav-card-sub">Build the brand, then grow it.</p>
+            </div>
+          </NavLink>
+
+          {/* Sits under Services, above Thoughts. This is now the only
+              crawlable route to /work from the desktop nav — the "see all"
+              link that used to close the case study list is gone, and the
+              drawer opens from a <button>, which is not an edge a crawler
+              can follow. */}
+          <NavLink to="/work" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Work</p>
+              <p className="nav-card-sub">Selected case studies.</p>
             </div>
           </NavLink>
 
@@ -179,19 +191,6 @@ export default function Nav() {
               </li>
             )
           })}
-          <li className="nav-cs-item nav-cs-all">
-            {/* A real link, not a button. This was the only path to the case
-                study list on desktop, and a <button> is not a crawlable edge:
-                /work had zero inbound links while sitting in the sitemap at
-                priority 0.9. The click still opens the drawer, so the
-                behaviour visitors know is unchanged — but the href is real,
-                so a crawler can follow it and cmd-click opens the page. */}
-            <NavLink
-              to="/work"
-              className="nav-cs-see-all"
-              onClick={(e) => { e.preventDefault(); setWorkOpen(true) }}
-            >See all case studies →</NavLink>
-          </li>
         </ul>
 
         {/* Socials */}
@@ -213,14 +212,14 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
+          <NavLink to="/services" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
           <NavLink
             to="/work"
             className="nav-mobile-link"
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+          <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>

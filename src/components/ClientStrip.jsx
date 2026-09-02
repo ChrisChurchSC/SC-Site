@@ -31,7 +31,18 @@ function Entry({ name, logo, slug, comingSoon }) {
   return <NavLink to={`/work/${slug}`} className={`${styles.item} ${styles.itemLink}`}>{inner}</NavLink>
 }
 
-export default function ClientStrip() {
+/**
+ * `outlined` swaps the filled card for black with a hairline around it, for a
+ * page that draws its bars with a stroke instead of a fill. Off by default,
+ * so the live homepage and /v2 keep the panel.
+ *
+ * `banner` drops the card altogether: no fill, no radius, a hairline above
+ * and below and more air around each name. It is the treatment for a strip
+ * that runs the full width of the page under a hero, where a floating card
+ * would read as a second object competing with the one above it. Also off by
+ * default. The two are exclusive; banner wins if both are passed.
+ */
+export default function ClientStrip({ outlined = false, banner = false }) {
   const comingSoon = useComingSoon()
   const pass = (hidden) => (
     <div className={styles.pass} aria-hidden={hidden || undefined}>
@@ -42,7 +53,7 @@ export default function ClientStrip() {
   )
 
   return (
-    <div className={styles.strip}>
+    <div className={`${styles.strip}${banner ? ' ' + styles.banner : outlined ? ' ' + styles.outlined : ''}`}>
       <div className={styles.window}>
         <div className={styles.track}>
           {pass(false)}

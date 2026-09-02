@@ -1,9 +1,9 @@
 /* Featured case studies.
-   Four full-width 16:9 cards, stacked one per row, in the homepage grid's
+   Full-width 16:9 cards, stacked one per row, in the homepage grid's
    rhythm — 5px gutter, 4px radius, #161616 ground.
 
-   Name and stats both sit inside the card: name bottom-left, the four
-   measures along the bottom-right. One box per case study rather than a
+   Name and stats both sit inside the card: name bottom-left, the measures
+   along the bottom-right. One box per case study rather than a
    card plus a stat block underneath it. */
 
 .section {
@@ -23,12 +23,29 @@
   border-radius: 4px;
 }
 
-/* Matches the wall's hover, so a linked card behaves like a case study block. */
+/* Matches the wall's hover, so a linked card behaves like a case study block.
+   The lift and ring were already here; what follows brings the card's own
+   contents with it, so the whole thing responds rather than just its frame.
+
+   Only .entryLink gets any of this. A card without a written case study
+   renders as an <article> and stays inert on purpose — the same rule the
+   work list, the nav and the client strip already follow, so whether there
+   is something to click is legible before you click rather than after. */
 .entryLink:hover {
   transform: translateY(-6px);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
               0 16px 36px rgba(0, 0, 0, 0.6);
 }
+
+.entryLink .name,
+.entryLink .statValue,
+.entryLink .statLabel {
+  transition: color 0.25s ease;
+}
+
+.entryLink:hover .name { color: #fff; }
+.entryLink:hover .statValue { color: #fff; }
+.entryLink:hover .statLabel { color: rgba(255, 255, 255, 0.75); }
 
 .frame {
   position: relative;
@@ -104,17 +121,22 @@
   flex-shrink: 0;
 }
 
-/* Columns come from however many stats an entry has, rather than a hardcoded
-   four — dropping one from the data should not need a CSS edit too. */
+/* Sized to their contents and pushed to the bottom right, rather than
+   stretched across the foot.
+
+   Auto columns rather than repeat(4): the set was four measures and is three
+   since Time to market came out, and a fixed count left an empty column
+   holding the group off the right edge. Now the track count follows whatever
+   PLACEHOLDER holds. */
 .stats {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-columns: minmax(0, auto);
+  justify-content: end;
   gap: 26px;
   margin: 0;
   padding: 0;
-  flex: 1;
-  max-width: 620px;
+  text-align: right;
 }
 
 .stat {
@@ -127,7 +149,7 @@
 }
 
 /* Label above value: the label is what has to be readable at this size, and
-   the numbers then align on one baseline across all four. */
+   the numbers then align on one baseline across the set. */
 .statLabel {
   font-family: 'Roboto Mono', monospace;
   font-size: 8px;
@@ -155,20 +177,24 @@
     gap: 20px;
   }
 
-  .stats { max-width: none; width: 100%; gap: 16px; }
+  .stats { width: 100%; justify-content: start; gap: 16px; }
 }
 
 @media (max-width: 768px) {
-  /* 16:9 leaves no room for a name and four stats on a phone. */
+  /* 16:9 leaves no room for a name and a row of stats on a phone. */
   .frame { aspect-ratio: 4 / 5; }
 
   .frameFoot { left: 18px; right: 18px; bottom: 18px; gap: 16px; }
   .frameType { top: 14px; left: 18px; }
 
-  /* Side by side on a phone is a row of crushed columns. Two by two. */
+  /* A single row on a phone is a row of crushed columns. Two by two —
+     which needs auto-flow back to row, or the template below is ignored and
+     they stay on one line. */
   .stats {
     grid-auto-flow: row;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    text-align: left;
     gap: 14px 12px;
   }
 }

@@ -1,0 +1,72 @@
+/* The page-end sign-off — see V3Signoff.jsx. */
+.signoff {
+  position: relative;
+  /* Bleeds past whatever padding its page carries, without needing to know
+     what that padding is. */
+  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  /* NO TOP MARGIN. It carried up to 120px of its own, from when it sat at
+     the end of a page that spaced sections with margins. Both pages that
+     render it are flex stacks now with a gap of their own, so the two were
+     adding up — 184px of black between the footer and the wordmark. The gap
+     is the page's to set; this only needs the negative left margin that
+     bleeds it past the page padding. */
+  margin: 0 0 0 calc(-1 * var(--page-pad-left, 0px));
+  /* Room under the letters. Without it the descender-less lettering sits on
+     the very last pixel of the page, and the glow below the baseline is
+     clipped by the document edge. */
+  padding: 0 clamp(8px, 2vw, 32px) clamp(28px, 4vw, 64px);
+}
+
+/* THE PAGE ENDS IN PINK. A wash rising from the bottom edge, behind the
+   wordmark, so the last screen resolves into the brand colour instead of
+   stopping on the same black it started on.
+
+   It reaches well above the sign-off — 55vh — because a gradient confined to
+   the wordmark's own box reads as a panel behind the logo rather than as the
+   page changing. The top stop is fully transparent, so there is no seam
+   where it begins.
+
+   Behind the letters, not over them: the wordmark is z-index 1 and this is
+   0. Painting it on top would wash out the glow it is supposed to sit
+   under. */
+.signoff::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: -55vh;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(223, 78, 214, 0) 0%,
+    rgba(223, 78, 214, 0.06) 55%,
+    rgba(223, 78, 214, 0.16) 82%,
+    rgba(223, 78, 214, 0.26) 100%
+  );
+}
+
+/* Lit. The lettering is pink in the PNG itself; this is only the glow, in the
+   same --pink the art was exported in. */
+.signoff .mark {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  display: block;
+
+  /* Three drop-shadows, not one. They follow the letters because the PNG has
+     a real alpha channel — on a flattened export they would draw a box. A single large blur reads as a smudge
+     behind the letters; a tight one, a mid one and a wide one stack into
+     something that falls off the way light does. They follow the glyph
+     because drop-shadow works on the alpha channel — box-shadow would draw
+     a rectangle around the whole image.
+
+     No blur radius above ~60px: this element is the full width of the page,
+     and the filter is rasterised at that size on every paint. */
+  filter:
+    drop-shadow(0 0 6px rgba(223, 78, 214, 0.55))
+    drop-shadow(0 0 22px rgba(223, 78, 214, 0.35))
+    drop-shadow(0 0 56px rgba(223, 78, 214, 0.22));
+}

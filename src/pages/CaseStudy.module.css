@@ -178,11 +178,13 @@
 
 .outcomeCard {
   flex: 1;
+  aspect-ratio: 4 / 5;
   background: #161616;
   border-radius: 4px;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 8px;
 }
 

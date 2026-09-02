@@ -1,43 +1,34 @@
 import styles from './Work.module.css'
-import WorkGrid from '../components/WorkGrid'
+import WorkIndex from '../components/WorkIndex'
+import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
+import FooterCard from '../components/FooterCard'
+import V3Signoff from '../components/V3Signoff'
 import { useMeta } from '../hooks/useMeta'
 
 /**
- * The case study index — cards only.
+ * The case study index.
  *
- * This route used to be `<Navigate to="/" replace />`, then became a
- * typographic list of every case study (PR #122), because the only two paths
- * to the list were <button> elements that open a drawer. A button is not a
- * crawlable edge and carries no link equity, so fifty-eight case studies had
- * no hub at all.
+ * This route used to be `<Navigate to="/" replace />` — five lines that sent
+ * every visitor to the homepage. It was still submitted to Google at priority
+ * 0.9, still returned 200 with a self-canonical, and had zero inbound links,
+ * because the only two paths to the case study list were <button> elements
+ * that open a drawer. A button is not a crawlable edge and carries no link
+ * equity, so fifty-eight case studies had no hub at all.
  *
- * The list is gone again. Measured before and after, that costs exactly two
- * inbound links, and they are worth knowing about:
+ * A text list of every case study sat under the grid for exactly that reason:
+ * the grid was a curated subset, so the list was the crawlable route to the
+ * remainder. It has been removed, and the note it carried set the condition
+ * for removing it — that the grid covers them all.
  *
- *   with the list     23 slugs linked, 6 indexable pages unlinked
- *   without it        21 slugs linked, 8 indexable pages unlinked
+ * Checked rather than assumed, against live Sanity: the list linked 36 case
+ * studies and the grid links 44, but count is not coverage. Three were in the
+ * list and not the grid — aris, yellow-dog, concis-labs — and all three are
+ * noindexed coming-soon placeholders. They are already absent from the
+ * sitemap and cannot rank, so the route the list gave them was not worth
+ * anything to lose.
  *
- * Six of those eight were already unreachable from here either way — the
- * Google sub-pages, which are sub-projects reached through /work/google
- * rather than listed at top level.
- *
- * The two this actually orphaned are /work/big-buoy and /work/girlfight.
- * Both are written, published and indexable, and both have a card in the
- * grid — but the Sanity homepageGrid documents set `externalUrl` on blocks
- * 002 and 007, which overrides their slug, so those cards point at
- * big-buoy.com and girlfightapparel.com instead of at the case studies.
- * That is an editorial choice made in the Studio, not a bug here, which is
- * why it is not overridden in code. Clearing those two externalUrl fields
- * would restore the internal links.
- *
- * The other case studies that left the list — Arbitrum, Offchain, OpenText,
- * Ari's, Concis Labs, Yellow Dog — are all `noindex, follow` placeholders,
- * or in OpenText's case have no page built at all. Losing a link to a page
- * Google is told to skip costs nothing.
- *
- * If a placeholder is ever written up and made indexable, it needs a card in
- * the grid or a link from somewhere. The check is: does every non-noindex
- * /work/<slug> page have an inbound link.
+ * If any of those three ships as a real case study, it needs a grid block or
+ * another crawlable link before it goes indexable.
  */
 export default function Work() {
   useMeta({
@@ -49,12 +40,19 @@ export default function Work() {
 
   return (
     <main className={styles.main}>
+      <V3Nav />
+
       <header className={styles.header}>
         <p className={styles.label}>[ Selected Work ]</p>
         <h1 className={styles.headline}>Case studies</h1>
       </header>
 
-      <WorkGrid />
+      <section className={styles.gridSection} aria-label="Selected work">
+        <WorkIndex />
+      </section>
+
+      <FooterCard columns={FOOTER_COLS} />
+      <V3Signoff />
     </main>
   )
 }

@@ -1,0 +1,387 @@
+/* The case studies index — see WorkIndex.jsx. One study given the room, the
+   rest beside it. */
+
+/* ONE COLUMN COUNT for the controls and the cards, so a filter sits exactly
+   over the card under it at every width. Two grids with their own counts and
+   their own gaps lined up by coincidence and stopped doing so at the first
+   breakpoint. */
+.wrap {
+  --cols: 5;
+  --col-gap: clamp(12px, 1.4vw, 20px);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px) var(--col-gap);
+  align-items: start;
+}
+
+/* ── THE FEATURED ONE ───────────────────────────────────────────────────── */
+
+/* THE CELL, which is what the two rows belong to. Sticky is bounded by its
+   containing block, so putting the spans here and the pin on the card inside
+   is what makes the card release at the end of row two. It used to carry both
+   itself, and with align-items: start on the grid it overflowed its own area
+   and stayed pinned down the length of the page. */
+.leadCell {
+  grid-column: span 2;
+  grid-row: span 2;
+  position: relative;
+  height: 100%;
+}
+
+.lead {
+  position: sticky;
+  top: calc(var(--bar-inset, 22px) + 84px);
+  z-index: 2;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-surface, 12px);
+  /* Two columns wide and two rows tall, at the same 4:5 as every other card
+     — the featured one is bigger rather than a different shape. */
+  aspect-ratio: 4 / 5;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+
+.lead:hover { border-color: rgba(255, 255, 255, 0.24); }
+
+.leadMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.lead:hover .leadMedia { transform: scale(1.03); }
+
+/* Type over a photograph needs its own ground, and the reference's is a wash
+   rather than a panel — dark at the foot where the line sits, and enough at
+   the head to hold the client's name. */
+.leadScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0, transparent 28%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.82) 0, transparent 52%);
+}
+
+.leadClient,
+.leadFoot {
+  position: absolute;
+  left: clamp(20px, 2.4vw, 36px);
+  right: clamp(20px, 2.4vw, 36px);
+}
+
+.leadClient {
+  top: clamp(18px, 2.2vw, 30px);
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(19px, 1.7vw, 26px);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.leadFoot {
+  bottom: clamp(18px, 2.2vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leadTagline {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.4vw, 38px);
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+/* ── THE REST ───────────────────────────────────────────────────────────── */
+
+/* Captioned under the picture rather than over it: at this size type on the
+   image is unreadable, and the point of the small cards is the line. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.cardMedia {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-surface, 12px);
+  aspect-ratio: 4 / 5;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.2s;
+}
+
+.card:hover .cardMedia { border-color: rgba(255, 255, 255, 0.24); }
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.card:hover .cardImg { transform: scale(1.03); }
+
+.cardClient {
+  margin-top: 4px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cardTagline {
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.2vw, 19px);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ── THE LINE UNDER BOTH ────────────────────────────────────────────────── */
+
+/* What the repo actually records about a study: what kind of work it was and
+   when. The reference runs industry and company size here; this site holds
+   neither, and a filled slot is not worth an invented fact. */
+.meta {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.metaSep { color: rgba(255, 255, 255, 0.24); }
+
+@media (max-width: 1400px) { .wrap { --cols: 4; } }
+@media (max-width: 1080px) { .wrap { --cols: 3; } }
+@media (max-width: 900px) { .wrap { --cols: 2; } }
+
+/* One column: spanning two of one column is just a taller card, so the
+   featured one goes back to a single cell. */
+@media (max-width: 560px) {
+  .wrap { --cols: 1; }
+  .leadCell { grid-column: auto; grid-row: auto; height: auto; }
+  .lead { position: static; }
+  .controls { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The placeholder, until the covers go back on — the same two-grey weave the
+   Build thumbnails use, so a slot waiting for a picture reads the same
+   wherever it appears. */
+.fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045) 0 10px,
+      rgba(255, 255, 255, 0.02) 10px 20px
+    );
+}
+
+/* On the featured card the facts sit over a picture, so they take a stop more
+   contrast than the same rows do on a flat card. */
+.leadFacts { color: rgba(255, 255, 255, 0.72); }
+
+/* AN EMPTY SLOT, said out loud. The grid has more cells than this repo has
+   case studies; a slot that looks like a card but goes nowhere is worse than
+   one that admits what it is. */
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0.5;
+}
+
+.slotMedia {
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-surface, 12px);
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+}
+
+.slotLabel {
+  margin-top: 4px;
+  font-family: "Roboto Mono", monospace;
+  font-size: var(--label-size, 10px);
+  letter-spacing: var(--label-tracking, 0.18em);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── THE CONTROLS ───────────────────────────────────────────────────────────
+   Only the fields this repo actually records: discipline, industry and year.
+   Size is not among them on purpose — it has no source here, which is why the
+   cards show a placeholder for it rather than a guess. */
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin-bottom: 16px;
+}
+
+/* Over the featured card, which is two columns wide. */
+.search { grid-column: span 2; }
+
+.search,
+.select {
+  height: 52px;
+  padding: 0 16px;
+  border-radius: var(--r-control, 4px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search::placeholder { color: rgba(255, 255, 255, 0.4); }
+.search:focus,
+.select:focus { border-color: rgba(255, 255, 255, 0.4); }
+
+/* The native control, restyled rather than replaced: a custom dropdown here
+   would be a keyboard trap for the sake of a chevron. */
+.select {
+  appearance: none;
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.5) 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 23px, calc(100% - 14px) 23px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+.select option { background: #101010; color: #fff; }
+
+.count {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 20px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.clear {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--pink, #df4ed6);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.empty {
+  margin: clamp(40px, 6vw, 80px) 0;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 900px) {
+  .search { grid-column: 1 / -1; }
+}
+
+/* The way into the rest of the grid. Centred under it, because it belongs to
+   the whole grid rather than to its last column. */
+.seeAll {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: clamp(20px, 2.4vw, 36px);
+  padding: 18px 22px;
+  border-radius: var(--r-control, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: none;
+  font-family: "Signifier", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(17px, 1.5vw, 22px);
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.seeAll:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+
+/* ── WHAT A THUMBNAIL SAYS WITH NO THUMBNAIL ────────────────────────────
+   Covers are off, so these boxes were empty stripes. The descriptor and the
+   disciplines sit inside them instead — the same two things the card would
+   otherwise say underneath, moved into the space that had nothing in it.
+
+   Set quietly: this is standing in for a picture, and it should read as a
+   caption on an absence rather than as a card in its own right. */
+.ph {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px;
+  pointer-events: none;
+}
+
+.phLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+  /* Three lines of descriptor is the most the box can hold before it starts
+     competing with the name under it. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.phTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.phTag {
+  padding: 3px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.35);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
