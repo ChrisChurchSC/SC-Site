@@ -61,6 +61,15 @@
   outline-offset: 2px;
 }
 
+/* The starting price on a chip: quieter than the name, and on the chosen
+   chip it goes dark with the rest. */
+.chipHint {
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.chipOn .chipHint { color: rgba(10, 10, 10, 0.7); }
+
 .chipOn,
 .chipOn:hover {
   background: var(--pink, #df4ed6);

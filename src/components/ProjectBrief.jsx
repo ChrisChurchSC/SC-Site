@@ -4,6 +4,7 @@ import styles from './ProjectBrief.module.css'
 import v3 from '../pages/HomeV3.module.css'
 import { industries } from '../data/industries'
 import { tabs as pricingTabs } from '../data/pricingTabs'
+import { money } from './PricingTier'
 import { outcomes } from '../data/outcomes'
 import { services } from '../data/services'
 import { WORK_BY_STAGE } from './V3Nav'
@@ -43,14 +44,26 @@ import { submitLead } from '../lib/submitLead'
  * discarded ten weeks of enquiries behind a green tick.
  */
 const SERVICE_OPTIONS = services.map(({ name }) => name).concat('Not sure yet')
-/* The pricing page's own tiers. Build's carry a name; Grow's are named by
-   their hours, which is the kicker on each card. */
-const BUILD_TYPES = (pricingTabs.find((t) => t.id === 'project')?.tiers ?? []).map(({ name }) => name)
-const GROW_BUCKETS = (pricingTabs.find((t) => t.id === 'subscription')?.tiers ?? []).map(({ kicker }) => kicker)
+/* The pricing page's own tiers, each with its starting price as a hint on
+   the chip (Chris, 2026-09-02) — the same figure the pricing card shows, so
+   the brief cannot quote a different number. Build's carry a name; Grow's
+   are named by their hours, which is the kicker on each card, and priced
+   per month. */
+const BUILD_TYPES = (pricingTabs.find((t) => t.id === 'project')?.tiers ?? []).map(({ name, price }) => ({
+  value: name,
+  hint: typeof price === 'number' ? `from ${money(price)}` : null,
+}))
+const GROW_BUCKETS = (pricingTabs.find((t) => t.id === 'subscription')?.tiers ?? []).map(({ kicker, price }) => ({
+  value: kicker,
+  hint: typeof price === 'number' ? `${money(price)} / month` : null,
+}))
 const INDUSTRY_OPTIONS = industries.map(({ name }) => name).concat('Something else')
 const STAGE_OPTIONS = WORK_BY_STAGE.map(({ label }) => label)
 const OUTCOME_OPTIONS = outcomes.map(({ name }) => name).concat('Not sure yet')
 const DISCIPLINE_OPTIONS = DISCIPLINES.map(({ name }) => name)
+
+/* An option is a string, or { value, hint } when it carries a price. */
+const norm = (o) => (typeof o === 'string' ? { value: o, hint: null } : o)
 
 function Chips({ legend, name, options, value, onChange, multiple = false, required = false }) {
   const selected = (opt) => (multiple ? value.includes(opt) : value === opt)
@@ -67,7 +80,7 @@ function Chips({ legend, name, options, value, onChange, multiple = false, requi
         {required ? <span className={styles.req}> · required</span> : <span className={styles.opt}> · optional{multiple ? ', pick any' : ''}</span>}
       </legend>
       <div className={styles.chips} role={multiple ? 'group' : 'radiogroup'} aria-label={legend}>
-        {options.map((opt) => (
+        {options.map(norm).map(({ value: opt, hint }) => (
           <button
             key={opt}
             type="button"
@@ -77,6 +90,7 @@ function Chips({ legend, name, options, value, onChange, multiple = false, requi
             onClick={() => toggle(opt)}
           >
             {opt}
+            {hint && <span className={styles.chipHint}>{hint}</span>}
           </button>
         ))}
       </div>
