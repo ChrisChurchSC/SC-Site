@@ -108,7 +108,6 @@ export default function Nav() {
           <NavLink to="/services" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Services</p>
-<<<<<<< HEAD
               <p className="nav-card-sub">Build the brand, then grow it.</p>
             </div>
           </NavLink>
@@ -122,9 +121,6 @@ export default function Nav() {
             <div className="nav-card-text">
               <p className="nav-card-title">Work</p>
               <p className="nav-card-sub">Selected case studies.</p>
-=======
-              <p className="nav-card-sub">Design, motion, engineering.</p>
->>>>>>> origin/main
             </div>
           </NavLink>
 
@@ -216,22 +212,14 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-<<<<<<< HEAD
           <NavLink to="/services" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
-=======
-          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
->>>>>>> origin/main
           <NavLink
             to="/work"
             className="nav-mobile-link"
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-<<<<<<< HEAD
           <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
-=======
-          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
->>>>>>> origin/main
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>

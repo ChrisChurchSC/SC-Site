@@ -19,16 +19,10 @@ import HomeV3 from './pages/HomeV3'
 import PricingV3 from './pages/PricingV3'
 import ServiceV3 from './pages/ServiceV3'
 import Work from './pages/Work'
-<<<<<<< HEAD
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
 import Disciplines from './pages/Disciplines'
 import Discipline from './pages/Discipline'
-=======
-import About from './pages/About'
-import Careers from './pages/Careers'
-import AboutStudio from './pages/AboutStudio'
->>>>>>> origin/main
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
@@ -166,7 +160,6 @@ export default function App() {
                 <Route path="/studio" element={<About />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
-<<<<<<< HEAD
                 <Route path="/services" element={<Services />} />
                 {/* Capabilities lived at /about until the Services rename.
                     vercel.json 301s it, but that only fires on a request to
@@ -175,17 +168,20 @@ export default function App() {
                     to NotFound for anyone still linking it internally. */}
                 <Route path="/about" element={<Navigate to="/services" replace />} />
                 <Route path="/about-us" element={<AboutUs />} />
+                {/* MAIN'S ADDRESSES FOR THE SAME PAGES. main (PR #137) put the
+                    careers page at /careers and the studio page at
+                    /who-we-are; this branch keeps them at /about-us and
+                    /studio, and the merge was resolved that way on
+                    2026-09-02. Anything holding main's addresses lands on
+                    the page it meant. */}
+                <Route path="/careers" element={<Navigate to="/about-us" replace />} />
+                <Route path="/who-we-are" element={<Navigate to="/studio" replace />} />
                 {/* Where the nav's "View all disciplines" lands: the twelve
                     from /services, on their own page. */}
                 <Route path="/disciplines" element={<Disciplines />} />
                 {/* One discipline. Only the slugs in Discipline.jsx's LIVE set
                     render; the rest redirect back to the grid. */}
                 <Route path="/disciplines/:slug" element={<Discipline />} />
-=======
-                <Route path="/about" element={<About />} />
-                <Route path="/careers" element={<Careers />} />
-                <Route path="/who-we-are" element={<AboutStudio />} />
->>>>>>> origin/main
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
                 <Route path="/contact" element={<Contact />} />

@@ -167,8 +167,13 @@ if (!fs.existsSync(sitemapPath)) {
 
 const REQUIRED_SCHEMA = [
   ['index.html', ['Organization', 'WebSite']],
-  ['about/index.html', ['Organization', 'BreadcrumbList', 'FAQPage']],
-  ['careers/index.html', ['Organization', 'BreadcrumbList']],
+  /* main (PR #137) asserted /about with a FAQPage and /careers; this branch
+     keeps the what-we-do page at /services, which carries no FAQ, and the
+     careers page at /about-us, with the studio page at /studio — merge of
+     2026-09-02. */
+  ['services/index.html', ['Organization']],
+  ['about-us/index.html', ['Organization', 'BreadcrumbList']],
+  ['studio/index.html', ['Organization', 'BreadcrumbList']],
   ['work/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
   ['thoughts/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
   ['contact/index.html', ['Organization', 'BreadcrumbList', 'ContactPage']],

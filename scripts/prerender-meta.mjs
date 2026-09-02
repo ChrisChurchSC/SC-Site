@@ -6,13 +6,8 @@
  *  - /lp/[slug]  — AEO landing pages (canonical, FAQ+HowTo+Breadcrumb JSON-LD)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
-<<<<<<< HEAD
  *  - static pages: /services, /disciplines, /about-us, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
-=======
- *  - static pages: /about, /careers, /work, /thoughts, /contact
- *  - / — homepage
->>>>>>> origin/main
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
@@ -202,7 +197,6 @@ let count = 0
 // exactly what it rendered, with no second round trip.
 const STATIC_PAGES = [
   {
-<<<<<<< HEAD
     segments: ['services'],
     title: 'Services | Super Conscious',
     // Must match the useMeta() call in src/pages/Services.jsx. This one is what
@@ -278,44 +272,26 @@ const STATIC_PAGES = [
     segments: ['disciplines', 'engineering'],
     title: 'Engineering | Super Conscious',
     description: "Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.",
-=======
-    segments: ['about'],
-    title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
-    description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
-    schemas: (data, url) => {
-      // Guarded on the FAQ array itself, never on `data ?? FALLBACK`. About.jsx's
-      // FALLBACK has no faqs key and only substitutes when Sanity returns nothing
-      // at all — the same field-level trap that once shipped /about with no <h1>.
-      const faqs = data[sanityKey(ABOUT_PAGE_QUERY, {})]?.faqs
-      return [
-        crumbs({ name: 'What we do', item: url }),
-        faqs?.length && {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faqs.map(({ question, answer }) => ({
-            '@type': 'Question',
-            name: question,
-            acceptedAnswer: { '@type': 'Answer', text: answer },
-          })),
-        },
-      ]
-    },
->>>>>>> origin/main
   },
+  /* THE CAREERS AND STUDIO PAGES, AT THIS BRANCH'S ADDRESSES. main (PR #137)
+     listed them as /careers and /who-we-are; the merge on 2026-09-02 kept
+     this branch's /about-us and /studio and made main's addresses redirects,
+     so the prerendered pages are these. The breadcrumb schemas are main's —
+  // Optional: a page with no richer type to claim lists none, rather than
+  // every entry carrying a breadcrumb it does not need.
+     the loop calls page.schemas() when there is one, and a static page with no
+     richer type to claim gets a breadcrumb. */
   {
-    segments: ['careers'],
+    segments: ['about-us'],
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
     schemas: (_data, url) => [crumbs({ name: 'Careers', item: url })],
   },
   {
-    segments: ['who-we-are'],
+    segments: ['studio'],
+    // Must match useMeta() in src/pages/About.jsx.
     title: 'About | Super Conscious',
-    description: 'A fractional creative and marketing department — brand, copy, design, development, media — that plugs into your company at a fraction of the cost of building it in-house.',
-    /* /who-we-are is this branch's own page, so main's commit moving page
-       schemas into the prerender could not have given it one — and the loop
-       calls page.schemas() unconditionally. A breadcrumb, the same as Careers
-       has: it is a static page with no richer type to claim. */
+    description: 'The embedded creative and marketing team that builds your brand and then grows it.',
     schemas: (_data, url) => [crumbs({ name: 'About', item: url })],
   },
   {
@@ -448,7 +424,7 @@ for (const page of STATIC_PAGES) {
   let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
   // injectRoot first: the schema builders read the data it returns.
   const rendered = await injectRoot(html, routePath)
-  html = injectSchemas(rendered.html, page.schemas(rendered.data, url))
+  html = injectSchemas(rendered.html, (page.schemas ?? (() => []))(rendered.data, url))
   writeHtml(page.segments, html)
   count++
 }
@@ -669,11 +645,7 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-<<<<<<< HEAD
 // The floor for pages with no better date: /, /services, /about-us and /lp/*.
-=======
-// The floor for pages with no better date: /, /about, /careers and /lp/*.
->>>>>>> origin/main
 //
 // This was a hand-bumped constant, and the instruction to bump it was missed.
 // On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
@@ -708,10 +680,10 @@ function gitDay(relPath) {
 const STATIC_CONTENT_SOURCES = [
   'src/lib/mockLandingPages.js',
   'src/lib/lpCategories.js',
-  'src/pages/Home.jsx',
+  'src/pages/HomeV3.jsx',
+  'src/pages/Services.jsx',
   'src/pages/About.jsx',
-  'src/pages/Careers.jsx',
-  'src/pages/AboutStudio.jsx',
+  'src/pages/AboutUs.jsx',
   'src/pages/LandingPage.jsx',
   'src/pages/Work.jsx',
 ]
@@ -746,11 +718,7 @@ function lastmodFor(loc) {
   if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-<<<<<<< HEAD
   return staticContentDay // /, /services, /about-us, /lp/*
-=======
-  return staticContentDay // /, /about, /careers, /lp/*
->>>>>>> origin/main
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')
