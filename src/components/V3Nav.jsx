@@ -182,7 +182,10 @@ export const COMPANY_COLS = [
 /* The hero. Carries the h1, which is why the statement below it is an h2 —
    the live homepage has that the other way round because it has no headline
    above the statement. */
-export const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
+/* The positioning line as the label (Chris, 2026-09-02), over the headline
+   with the two verbs — the label says what we are, the headline what we do.
+   Was "[ Creative + Marketing, One Embedded Team ]". */
+export const HERO_EYEBROW = '[ Your fractional creative and marketing department ]'
 /* THE PLAINEST VERSION, and Chris's call.
  *
  * The history is worth keeping because this line has been round the houses.
@@ -200,11 +203,7 @@ export const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
  * assets", Grow "takes that brand to market and runs it".
  *
  * NO SUPPORTING LINE. The hero is the eyebrow and the headline. */
-/* Chris's line, 2026-09-02, replacing "We build and grow brands. So you
-   can focus on the business." It is the positioning statement itself — the
-   same sentence the Services panel opens with — so the first thing on the
-   site and the first thing in the menu agree. */
-export const HERO = 'Your fractional creative and marketing department.'
+export const HERO = "We build and grow brands. So you can focus on the business."
 
 /* THE FOUR SERVICES, as cards.
  *
