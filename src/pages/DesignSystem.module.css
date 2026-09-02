@@ -1,0 +1,6755 @@
+/* Styleguide page.
+   Written in the system it documents — #161616 on #0a0a0a, 4px radius, mono
+   labels at 8/9/10/11px, Signifier for anything that reads as prose. If this
+   file ever needs a value that isn't in designTokens.js, that's a finding
+   about the system, not a licence to invent one. */
+
+/* The fixed nav rail is 312px wide and shows above 768px, so the page reserves
+   it the same way the homepage grid does. Without this the right-hand column —
+   which is where every copyable value sits — slides underneath the nav. */
+.main {
+  padding: 96px 312px 160px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Masthead ── */
+
+.masthead {
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0 0 18px;
+}
+
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 20px;
+}
+
+.lede {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 62ch;
+  margin: 0 0 32px;
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tocLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.tocLink:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+}
+
+/* ── Section scaffolding ── */
+
+.section {
+  padding: 64px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  scroll-margin-top: 24px;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.sectionHead {
+  margin-bottom: 36px;
+}
+
+.sectionNum {
+  display: block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 10px;
+}
+
+.sectionTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 12px;
+}
+
+.sectionBlurb {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.subhead {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 40px 0 14px;
+}
+
+.subhead:first-of-type {
+  margin-top: 0;
+}
+
+.subnote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 62ch;
+  margin: 0 0 18px;
+}
+
+.prose {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 68ch;
+  margin: 0 0 20px;
+}
+
+.strong {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.82em;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 2px 5px;
+}
+
+.inlineLink {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: 4px;
+  transition: color 0.15s;
+}
+
+.inlineLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ── Generic token row ── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 12px 14px;
+  transition: background 0.15s;
+}
+
+.row:hover {
+  background: #1c1c1c;
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rowNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* The value is a button because it copies; it must not look like one. */
+.value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 5px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+
+.value:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.swatchText {
+  width: 40px;
+  font-family: 'Signifier', Georgia, serif;
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.swatchLine {
+  width: 40px;
+  height: 0;
+  border-top: 1px solid;
+  flex-shrink: 0;
+}
+
+.alpha {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.count {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+/* ── Accents ── */
+
+.accentRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+/* A retiring accent is shown struck through rather than removed — the value
+   is still in :root, and the page has to stay true about that. */
+.accentRetire {
+  color: rgba(255, 80, 80, 0.8);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.accentChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.accentChip:hover {
+  background: #1c1c1c;
+}
+
+.accentSwatch {
+  width: 100%;
+  height: 44px;
+  border-radius: 4px;
+}
+
+.accentName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.accentValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.accentVar {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.accentUnused {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+/* ── Gradients ── */
+
+.gradRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.gradChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.gradChip:hover {
+  background: #1c1c1c;
+}
+
+/* Half the set is transparency. On a flat ground a scrim looks like nothing,
+   so the plate underneath makes the alpha visible. */
+.gradPlate {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #6a6a6a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' shape-rendering='crispEdges'%3E%3Crect width='6' height='6' fill='%23555'/%3E%3Crect x='6' y='6' width='6' height='6' fill='%23555'/%3E%3C/svg%3E");
+}
+
+.gradSwatch {
+  display: block;
+  width: 100%;
+  height: 56px;
+}
+
+.em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Families ── */
+
+.families {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.family {
+  display: flex;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.familySpecimen {
+  font-size: 72px;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+.familyMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.familyName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.familyRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.familySource {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Specimens ── */
+
+.specRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 8px 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 14px;
+  transition: background 0.15s;
+}
+
+.specRow:hover {
+  background: #1c1c1c;
+}
+
+.specMono {
+  font-family: 'Roboto Mono', monospace;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 0;
+}
+
+.specDisplay {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 0;
+}
+
+.specMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.specSize {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.specRole {
+  grid-column: 1 / -1;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Radii ── */
+
+.radii {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.radiusChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.radiusChip:hover {
+  background: #1c1c1c;
+}
+
+.radiusBox {
+  width: 100%;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.radiusValue {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.radiusRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Component demos ── */
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+.demoLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Demos sit on the ground colour so a #161616 component reads as a component
+   rather than melting into the card holding it. */
+.demoStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 28px 20px;
+  min-height: 132px;
+}
+
+.demoNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.cardDemo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 150px;
+  height: 76px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px 16px;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+.cardDemo:hover {
+  background: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+.cardDemoLink {
+  cursor: pointer;
+}
+
+.cardDemoLink:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cardEyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.cardTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.btnDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDemo:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.backDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.backDemo:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1e1e1e;
+}
+
+.inputDemo {
+  width: 100%;
+  max-width: 220px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.inputDemo::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.inputDemo:focus {
+  background: #111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pairDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.pairHeadline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Stagger demo ── */
+
+.staggerDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+  margin-top: 8px;
+}
+
+.staggerRow {
+  display: flex;
+  gap: 5px;
+}
+
+@keyframes blockIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.staggerBlock {
+  flex: 1;
+  height: 64px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  animation: blockIn 0.5s ease both;
+}
+
+.staggerBlock:nth-child(1) { animation-delay: 0.05s; }
+.staggerBlock:nth-child(2) { animation-delay: 0.12s; }
+.staggerBlock:nth-child(3) { animation-delay: 0.19s; }
+.staggerBlock:nth-child(4) { animation-delay: 0.26s; }
+
+/* ── Light mode pair ── */
+
+.lightPair {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.lightSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+/* Inverted by the same filter the site uses, so this pair stays honest even
+   if the ground colours change. */
+.lightSwatchInv {
+  filter: invert(1);
+}
+
+.lightLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.lightValues {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Select ── */
+
+.select {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  text-align: left;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.selectTrigger:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.selectCaret {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s;
+}
+
+.selectCaretOpen {
+  transform: rotate(180deg);
+}
+
+.selectMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.selectOption {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 13px;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+}
+
+.selectOption:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.selectOptionOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Checkbox / radio ── */
+
+.choiceGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.choiceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 4px;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+
+.choiceRow:hover {
+  opacity: 0.75;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.checkOn {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* The tick is two borders on a rotated box — no glyph, no icon font, and it
+   scales with the control instead of with the font. */
+.checkOn i {
+  width: 3px;
+  height: 7px;
+  border: solid #0a0a0a;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+
+.radioOn {
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.radioOn i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.choiceLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Validation ── */
+
+.fieldInvalid {
+  border-color: rgba(255, 80, 80, 0.6);
+}
+
+.hintText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Multi-step ── */
+
+.multiStep {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.stepRail {
+  display: flex;
+  gap: 28px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.2s;
+}
+
+.stepDotOn {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.stepLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.2s;
+}
+
+.stepLabelOn {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stepBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 32px;
+}
+
+.stepBodyText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.stepNav {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Upload ── */
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 108px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.uploadOver {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.uploadLine,
+.uploadName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.uploadHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.uploadClear {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.15s;
+}
+
+.uploadClear:hover {
+  color: rgba(255, 80, 80, 0.9);
+}
+
+/* ── Search ── */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 220px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 0 12px;
+  transition: border-color 0.18s;
+}
+
+.search:focus-within {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.searchIcon {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 12px 0;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.searchClear {
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.15s;
+}
+
+.searchClear:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Tabs ── */
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.tabRow {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Underline rather than a filled pill — the site has no filled nav state
+   anywhere, and inventing one here would make tabs louder than the nav. */
+.tab {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 0 10px;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tabOn {
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.9);
+}
+
+.tabPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 28px;
+}
+
+.tabPanelText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Filter / sort ── */
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.filterChip {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.filterChip:hover {
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.filterChipOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.filterChipOn:hover {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+.filterClear {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 8px 4px;
+  transition: color 0.15s;
+}
+
+.filterClear:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sortRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.15s;
+}
+
+.sortBtn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sortBtnOn {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sortArrow {
+  font-size: 10px;
+}
+
+.toTop {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.toTop:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+}
+
+/* ── Accordion ── */
+
+.accordion {
+  width: 100%;
+}
+
+.accItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.accHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 0;
+  text-align: left;
+}
+
+.accQ {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Rotates to an × rather than swapping to a minus — one glyph, one transform,
+   and the motion says "closing" more clearly than a character change. */
+.accMark {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.4, 1), color 0.15s;
+}
+
+.accHead:hover .accMark {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.accMarkOpen {
+  transform: rotate(45deg);
+}
+
+.accA {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 62ch;
+  margin: 0 0 18px;
+}
+
+/* ── Table ── */
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* No vertical rules and no zebra: hairline rows and mono figures already
+   separate the columns, and anything more would out-shout the type. */
+.table th {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: left;
+  padding: 0 16px 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+.table td {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 14px 16px 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.tName {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Figures in mono so the columns align on the digit rather than the glyph. */
+.tNum {
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 11px !important;
+  text-align: right;
+  padding-right: 0 !important;
+  white-space: nowrap;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────────
+   One base. Every variant is this plus content — which is precisely what the
+   58 blocks across the site each re-declare from scratch. */
+
+.cardBase {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px 24px;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+/* The only card that moves. If it doesn't navigate, it doesn't lift. */
+.cardLink {
+  cursor: pointer;
+}
+
+.cardLink:hover {
+  background: #1c1c1c;
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cardMuted {
+  opacity: 0.5;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.cardHeading {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cardBodyText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cardIndex {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.cardFigure {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.cardMediaVariant {
+  padding: 12px 12px 16px;
+}
+
+.cardThumbDemo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+/* ── Card anatomy ── */
+
+.anatomy {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.anatomyCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+}
+
+/* Dashed so a slot reads as a place a thing goes, not a thing. */
+.anaSlot {
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+  padding: 7px 9px;
+}
+
+.anaMedia {
+  justify-content: center;
+  height: 56px;
+}
+
+.anaTitle {
+  color: rgba(255, 255, 255, 0.8);
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.anaList {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 18px;
+  margin: 0;
+}
+
+.anaTerm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  padding-top: 2px;
+}
+
+.anaDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+}
+
+.anaSpec {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.anaNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* ── Drawer, popover, sheet, consent ── */
+
+.drawerBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(10, 10, 10, 0.82);
+  border-radius: 4px;
+}
+
+/* Casts upward, because it rises from the bottom edge. */
+.drawer,
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  background: #161616;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px 4px 0 0;
+  padding: 16px;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+}
+
+.sheet {
+  align-items: stretch;
+  gap: 2px;
+  padding: 10px 8px 8px;
+}
+
+.sheetGrab {
+  align-self: center;
+  width: 34px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-bottom: 8px;
+}
+
+.sheetItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 11px 10px;
+  border-radius: 3px;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.sheetItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Non-modal: no backdrop, no trap. The page behind stays usable, which is the
+   entire distinction from a modal. */
+.popover {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 168px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.popTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.consentStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 96px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.consent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 16px 18px;
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+}
+
+.consentText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* Equal weight, deliberately. A banner where refusing is harder than
+   accepting is not consent. */
+.consentActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.consentEcho {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Segmented, copy, kbd ── */
+
+.segmented {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.segItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  padding: 8px 12px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.segItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.segItemOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.copyBtn:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* The tick is the confirmation, so it needs no toast. */
+.copyBtnOn {
+  color: rgba(190, 220, 150, 0.95);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.kbdRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Raised, not inset — a key sticks up. */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+  border-radius: 3px;
+  padding: 4px 6px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+              0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Error boundary & toast stack ── */
+
+.errBoundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  color: rgba(255, 80, 80, 0.85);
+  background: rgba(255, 80, 80, 0.05);
+  border: 1px dashed rgba(255, 80, 80, 0.3);
+  border-radius: 4px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.errTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.errText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 4px;
+}
+
+.toastStageBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Newest first, and they push rather than cover — the whole reason a stack
+   exists instead of a single slot. */
+.toastStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+}
+
+/* ── Overlays ── */
+
+.formStage,
+.overlayStageBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 18px;
+  min-height: 132px;
+  width: 100%;
+}
+
+/* Contained rather than fixed, so the demo can't take over the page. In use
+   this is position: fixed with a layer from Depth. */
+.modalBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 10, 10, 0.82);
+  border-radius: 4px;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modalTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.modalBody {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 4px;
+}
+
+/* ── Dropdown menu ── */
+
+.menuWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 9px;
+  border-radius: 2px;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+}
+
+.menuItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Destructive last, behind a rule — it should never be the neighbour of a
+   routine action. */
+.menuRule {
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
+}
+
+.menuItemBad {
+  color: rgba(255, 80, 80, 0.85);
+}
+
+.menuItemBad:hover {
+  background: rgba(255, 80, 80, 0.12);
+  color: rgba(255, 120, 120, 1);
+}
+
+.menuEcho {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Date picker ── */
+
+.dateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.dateField {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 10px 13px;
+}
+
+.calendar {
+  width: 100%;
+  max-width: 260px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.calMonth {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calDay {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding-bottom: 4px;
+}
+
+.calCell {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  padding: 5px 0;
+  transition: background 0.12s, color 0.12s;
+}
+
+.calCell:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.calWeekend {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Today is marked whether or not it is selected — the two are different
+   facts and a picker that conflates them loses one. */
+.calToday {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.calCellOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.calCellOn:hover {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+/* ── Combobox ── */
+
+.comboWrap {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+}
+
+.comboWrap .fieldContact {
+  max-width: none;
+}
+
+.comboList {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  padding: 3px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.comboItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 7px 8px;
+  border-radius: 2px;
+  text-align: left;
+}
+
+.comboItemOn {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* The matched run, not a highlight colour — this is the reason the row is in
+   the list, so it wears ink rather than a fill. */
+.comboMark {
+  background: none;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.comboEmpty {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 8px;
+}
+
+/* ── Switch, stepper, tags, slider ── */
+
+.switchRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switchTrack {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.switchOn {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.switchThumb {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  transform: translateY(-50%);
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.4, 1), background 0.2s;
+}
+
+.switchOn .switchThumb {
+  background: #0a0a0a;
+  transform: translate(14px, -50%);
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.15s, color 0.15s;
+}
+
+.stepBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.stepInput {
+  width: 42px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  text-align: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 6px 0;
+  outline: none;
+}
+
+.stepUnit {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.tagField {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  max-width: 240px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 7px 8px;
+}
+
+.tagField:focus-within {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+  padding: 4px 5px 4px 7px;
+}
+
+.tag button {
+  display: inline-flex;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.15s;
+}
+
+.tag button:hover {
+  color: rgba(255, 80, 80, 0.9);
+}
+
+.tagInput {
+  flex: 1;
+  min-width: 70px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: #fff;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 3px 0;
+}
+
+.tagInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.sliderWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 240px;
+}
+
+.sliderHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.sliderVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sliderEnds {
+  display: flex;
+  justify-content: space-between;
+}
+
+.axisMutedText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Banners & spinner ── */
+
+.banners {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+/* Rule on the left rather than a full border — a bordered box in a column of
+   prose reads as a different page. */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  border-radius: 3px;
+  border-left: 2px solid;
+  padding: 11px 12px;
+}
+
+.bannerText { flex: 1; }
+
+.bannerClose {
+  display: inline-flex;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.bannerClose:hover { opacity: 1; }
+
+.bannerInfo {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(255, 255, 255, 0.4);
+}
+
+.bannerGood {
+  color: rgba(205, 230, 175, 0.95);
+  background: rgba(190, 220, 150, 0.08);
+  border-left-color: rgba(190, 220, 150, 0.7);
+}
+
+.bannerWarn {
+  color: #d9a04a;
+  background: rgba(189, 132, 44, 0.1);
+  border-left-color: rgba(189, 132, 44, 0.8);
+}
+
+.bannerBad {
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.08);
+  border-left-color: rgba(255, 80, 80, 0.7);
+}
+
+/* A ring, not dots — dots already mean "thinking" in the chat, and a wait of
+   unknown length is a different statement from a model composing a reply. */
+.spinner {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── People ── */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.people {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+}
+
+.personText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.personName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.personRole {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Prev / next & scrollspy ── */
+
+.prevNext {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  width: 100%;
+}
+
+.pnItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 18px 16px;
+  transition: background 0.15s;
+}
+
+.pnItem:hover {
+  background: #131313;
+}
+
+.pnNext {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pnDir {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.pnName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pnMeta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.spyRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.spyLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  border-left: 1px solid transparent;
+  padding: 6px 10px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.spyLinkOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Callout, definitions, timeline ── */
+
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 2px 0 2px 16px;
+}
+
+.calloutLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.calloutText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 62ch;
+  margin: 0;
+}
+
+.defList {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 18px;
+  margin: 0;
+}
+
+.defTerm {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  padding-top: 3px;
+}
+
+.defDesc {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.timeline {
+  list-style: none;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* The rule runs behind the markers so the steps read as one thread rather
+   than three separate rows. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tlItem {
+  display: flex;
+  gap: 14px;
+  position: relative;
+}
+
+.tlMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.75);
+  background: #161616;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.tlBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.tlTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tlText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 56ch;
+}
+
+/* ── Data grid ───────────────────────────────────────────────────────────────
+   Rules on both axes, unlike the reading table above: a cell here is addressed
+   by column as much as by row, so the column edge has to be visible. */
+
+.gridWrap {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gridBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.gridBarRight {
+  display: flex;
+  gap: 5px;
+}
+
+/* Formula bar. A grid without one leaves "which cell am I in?" unanswered the
+   moment the row count passes a screen. */
+.formulaBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0e0e0e;
+}
+
+.formulaAddr {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 30px;
+}
+
+.formulaDivider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.formulaVal {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.formulaType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.colToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.colToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: color 0.12s, background 0.12s, opacity 0.12s;
+}
+
+/* Hidden is dimmed and struck, not removed — you have to be able to find a
+   column you turned off. */
+.colToggleOff {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.gridScroll {
+  overflow: auto;
+  max-height: 420px;
+}
+
+.grid {
+  display: grid;
+  min-width: 700px;
+  position: relative;
+}
+
+/* Frozen panes. The header and the first column carry the labels that say
+   what a cell is; losing either to a scroll makes the rest unreadable. */
+.gFrozen {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
+.gFrozenCol {
+  position: sticky;
+  z-index: 2;
+  background: #0a0a0a;
+}
+
+.gHead {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.gHead.gFrozen {
+  z-index: 5;
+}
+
+.gCell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 9px 10px;
+  min-height: 34px;
+  text-align: left;
+  /* Rules drawn as insets so neighbouring cells share one hairline rather
+     than doubling it. */
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: background 0.1s;
+}
+
+.gridDense .gCell {
+  font-size: 10px;
+  padding: 5px 8px;
+  min-height: 24px;
+}
+
+.gHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: #131313;
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.gridDense .gHead {
+  font-size: 7px;
+}
+
+.gHead:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.gSort {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* The gutter addresses rows; it holds no data, so it is dimmer than any
+   cell and never picks up the numeric treatment. */
+.gGutter {
+  justify-content: center;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+  background: #131313;
+  cursor: pointer;
+}
+
+.gGutter:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gGutterOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Tabular figures so digits stack in a column and magnitude reads as
+   length — the reason a spreadsheet is monospaced at all. */
+.gNum {
+  justify-content: flex-end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gRowOn {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* The cell you're looking at and the cell you would edit have to be the same
+   cell. A ring rather than a fill, so the value stays readable. */
+.gSel {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85),
+              inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.98);
+  outline: none;
+}
+
+.gFoot {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  background: #131313;
+  box-shadow: inset -1px 0 0 0 rgba(255, 255, 255, 0.06),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.gPill {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.gPillOn {
+  color: rgba(190, 220, 150, 0.9);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.gPillDraft {
+  color: #bd842c;
+  background: rgba(189, 132, 44, 0.12);
+}
+
+/* ── Grid cell types ── */
+
+.gPerson {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.gSpark {
+  width: 100%;
+  height: 16px;
+}
+
+/* Data bar behind the figure: magnitude without a separate chart, and the
+   number stays exact rather than becoming a bar you have to estimate. */
+.gBar {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  background: rgba(217, 78, 182, 0.22);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.gBarVal {
+  position: relative;
+  z-index: 1;
+}
+
+.gScale {
+  display: inline-block;
+  border-radius: 2px;
+  padding: 3px 6px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.gEdit {
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: #fff;
+  background: #0a0a0a;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+/* Filter row sits under the header and above the data, so it reads as a
+   property of the column rather than a row of values. */
+.gFilterCell {
+  min-height: 26px;
+  padding: 3px 6px;
+  background: #0e0e0e;
+  box-shadow: inset -1px -1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.gFilterInput {
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: none;
+  border: none;
+  outline: none;
+  padding: 2px 0;
+}
+
+.gFilterInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.gFilterInput:focus {
+  color: #fff;
+}
+
+/* A range is a fill; the active cell inside it keeps the ring. Two different
+   states, so they get two different treatments. */
+.gInRange {
+  background: rgba(217, 78, 182, 0.1);
+}
+
+.gFindInput {
+  width: 86px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  border-radius: 2px;
+  padding: 5px 7px;
+  outline: none;
+}
+
+.gFindInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* A find hit tints the whole row rather than the matched cell — you are
+   looking for the record, not the string. */
+.gFound {
+  background: rgba(125, 90, 224, 0.16);
+}
+
+.gSortRank {
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 2px;
+}
+
+.gridStat {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gridFoot {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.tableToggle:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.gAggMode {
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-right: auto;
+}
+
+.gFoot {
+  cursor: pointer;
+  gap: 8px;
+}
+
+.gFootMuted {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Address bar. A grid without one leaves "which cell am I in?" unanswered
+   the moment the row count passes a screen. */
+.gridFoot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gridCell {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Quotes ── */
+
+.pullQuote {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.pullQuoteText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2.4vw, 32px);
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 26ch;
+  margin: 0 0 16px;
+  text-wrap: balance;
+}
+
+.pullQuoteBy {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.blockquote {
+  margin: 0;
+  padding-left: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 62ch;
+}
+
+.cite {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.codeBlock {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 0;
+  overflow-x: auto;
+}
+
+/* ── Tooltip ── */
+
+.tipDemoLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.tipWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tipTrigger {
+  font-family: inherit;
+  font-size: inherit;
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+  padding: 0;
+}
+
+.tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Stats ── */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 20px;
+}
+
+.statNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.statLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Progress / badge / confirm ── */
+
+.progressWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.progressTrack {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.progressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progressPct {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.badge {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 4px 8px;
+}
+
+.badgeGood {
+  color: rgba(190, 220, 150, 0.9);
+  background: rgba(190, 220, 150, 0.1);
+}
+
+.badgeBad {
+  color: rgba(255, 80, 80, 0.85);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.confirmStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.confirmTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.confirmBody {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 6px;
+}
+
+/* Destructive on the right, and never the pre-focused control. */
+.confirmActions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ── Lightbox / gallery ── */
+
+.lightStage {
+  position: relative;
+  width: 100%;
+  min-height: 108px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightThumb {
+  width: 132px;
+  height: 76px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+  transition: opacity 0.15s;
+}
+
+.lightThumb:hover {
+  opacity: 0.8;
+}
+
+.lightThumbHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  padding: 4px 7px;
+}
+
+.lightOverlay {
+  position: absolute;
+  inset: -18px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(10, 10, 10, 0.97);
+  border-radius: 4px;
+}
+
+.lightFrame {
+  width: 76%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+.lightClose {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 18px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s;
+}
+
+.lightClose:hover {
+  color: #fff;
+}
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.galleryMain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px);
+}
+
+.galleryNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.galleryThumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.galleryThumb {
+  aspect-ratio: 16 / 9;
+  border-radius: 2px;
+  background: #262626;
+  opacity: 0.45;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.galleryThumb:hover {
+  opacity: 0.75;
+}
+
+.galleryThumbOn {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* ── Before / after ── */
+
+.baWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.ba {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.baAfter,
+.baBefore {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+
+.baAfter {
+  background: repeating-linear-gradient(45deg, #2a2a2a 0 12px, #343434 12px 24px);
+}
+
+/* Clipped by width rather than a mask so the divider position and the fill
+   can never disagree. */
+.baBefore {
+  overflow: hidden;
+  background: repeating-linear-gradient(45deg, #4e4e4e 0 12px, #5a5a5a 12px 24px);
+}
+
+.baTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  padding: 4px 7px;
+  white-space: nowrap;
+}
+
+.baLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+.baRange,
+.videoScrub {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.baRange::-webkit-slider-thumb,
+.videoScrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.baRange::-moz-range-thumb,
+.videoScrub::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Video controls ── */
+
+.videoWrap {
+  width: 100%;
+}
+
+.videoBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 10, 10, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.videoBtn {
+  font-size: 11px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.videoBtn:hover {
+  color: #fff;
+}
+
+.videoTime {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* ── AI extras ── */
+
+.stream {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+}
+
+/* The ghost copy holds the finished paragraph's height while the live copy
+   is drawn over it, so nothing below reflows as tokens arrive. */
+.streamText {
+  position: relative;
+  margin: 0;
+  max-width: 62ch;
+}
+
+.streamGhost,
+.streamLive {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.streamGhost {
+  visibility: hidden;
+}
+
+.streamLive {
+  position: absolute;
+  inset: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.caret {
+  display: inline-block;
+  width: 6px;
+  height: 1em;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  background: rgba(255, 255, 255, 0.75);
+  animation: caretBlink 0.9s steps(2) infinite;
+}
+
+@keyframes caretBlink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.promptRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.prompt {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 12px;
+  text-align: left;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.prompt:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Superscript-sized chip riding in the line, so the citation is clickable
+   exactly where the claim is read. */
+.citation {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  padding: 2px 5px;
+  margin: 0 2px;
+  vertical-align: super;
+  transition: color 0.15s, background 0.15s;
+}
+
+.citation:hover {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.voteRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voteBtn {
+  font-size: 9px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 8px 10px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.voteBtn:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.voteBtnOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.voteNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Conversion ── */
+
+.pricing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+
+.priceCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 20px;
+}
+
+/* A hairline ring rather than a fill — the recommended column should lift,
+   not shout over the other two. */
+.priceCardRec {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.priceFlag {
+  position: absolute;
+  top: -1px;
+  right: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0 0 2px 2px;
+  padding: 3px 7px;
+}
+
+.priceName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.priceFig {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.priceList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 0;
+  flex: 1;
+}
+
+.priceItem {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 14px;
+  position: relative;
+}
+
+.priceItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 4px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 20px;
+  margin: 0;
+}
+
+.testimonialText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  flex: 1;
+}
+
+.testimonialBy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.testimonialName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.testimonialRole {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.ctaBand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 32px 28px;
+  width: 100%;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ctaLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Charts ───────────────────────────────────────────────────────────────────
+   Series colours live as custom properties on .viz so a slot changes in one
+   place and every chart follows. The values are the validated dark column from
+   designTokens.js — do not edit one here without re-running the validator. */
+
+/* Three categorical slots, and that is the measured ceiling for two adjacent
+   hues — see designTokens.js. s4–s6 are deliberately aliases rather than new
+   hues: a chart that reaches for a fourth gets a repeat it can see, not a
+   colour that quietly fails separation. */
+.viz {
+  --s1: #d94eb6;
+  --s2: #7d5ae0;
+  --s3: #a82a7e;
+  --s4: #d94eb6;
+  --s5: #7d5ae0;
+  --s6: #a82a7e;
+
+  /* Sequential ramp, addressed by quantile. q0 is "no data" and is
+     deliberately not a step on the ramp — an empty cell must not read as a
+     low value. */
+  --q0: rgba(255, 255, 255, 0.03);
+  --q1: #231a49;
+  --q2: #342767;
+  --q3: #4a3891;
+  --q4: #6a51c4;
+  --q5: #9b86e6;
+
+  /* Neutral marks. Colour is not the default here — it is reserved for
+     charts that actually have something to tell apart. A single-series chart
+     spending a hue on its only series is decoration. */
+  --neutral: rgba(255, 255, 255, 0.62);
+  --neutral-dim: rgba(255, 255, 255, 0.28);
+
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 16px;
+  width: 100%;
+}
+
+/* A validated palette cannot survive being inverted — the teal would come out
+   pink and every contrast check with it. Charts therefore take the second
+   invert that images and video already get, and keep their true hues in both
+   themes. */
+:global([data-theme="light"]) .viz {
+  filter: invert(1);
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.fig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Capped so a chart never scales far past its coordinate system — SVG text
+   scales with the viewBox, so an uncapped chart renders 8px labels at 20px. */
+.svg {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  overflow: visible;
+}
+
+.svgWide {
+  width: 100%;
+  max-width: 860px;
+  height: auto;
+  overflow: visible;
+}
+
+/* Grid and axes stay recessive — they orient, they don't compete. */
+.grid {
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 1;
+}
+
+/* Drawn spines. A plot with no baseline is a picture of data; a plot with one
+   is a measurement. */
+.spine {
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 1;
+}
+
+.tickMinor {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1;
+}
+
+.crosshair {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.tick {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+}
+
+/* Reference lines are dashed and neutral: they are context, never a series.
+   A solid coloured line here would read as another measure. */
+.refLine {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.fitLine {
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.refText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.unitText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.28);
+}
+
+.axisMuted {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.3);
+}
+
+.connector {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.targetTick {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+}
+
+.whisker {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 1;
+}
+
+.stem {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+}
+
+/* The connector is the measure on a dumbbell, so it gets real weight rather
+   than the hairline a stem gets. */
+.dumbbellBar {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 3;
+}
+
+.todayLine {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.sigmaLine {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.treeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(10, 10, 10, 0.8);
+}
+
+.treeVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  fill: rgba(10, 10, 10, 0.65);
+}
+
+.treeLabelLight {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.treeValLight {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.medianLine {
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.5;
+}
+
+.cellText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.funnelLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: rgba(10, 10, 10, 0.85);
+}
+
+/* Text wears text tokens, never the series colour. */
+.axisText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  fill: rgba(255, 255, 255, 0.42);
+}
+
+.valueText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  fill: rgba(255, 255, 255, 0.72);
+}
+
+.donutFig {
+  font-family: 'Signifier', Georgia, serif;
+  font-size: 22px;
+  fill: rgba(255, 255, 255, 0.92);
+}
+
+.mark {
+  transition: opacity 0.15s;
+}
+
+.mark:hover {
+  opacity: 0.75;
+}
+
+/* A 2px surface ring keeps overlapping dots readable where series cross. */
+.dot {
+  stroke: #0a0a0a;
+  stroke-width: 2;
+  transition: r 0.15s;
+}
+
+.figCap {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.legend2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.legendKey,
+.statusKey {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.legendSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.plotWrap {
+  position: relative;
+}
+
+.tipBox {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 9px 11px;
+  pointer-events: none;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+
+.tipMonth {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tipRow i {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.tipRow b {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  margin-left: 4px;
+}
+
+/* ── Stat tiles ── */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  padding: 18px 16px;
+}
+
+.tileLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.tileFig {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.tileMain {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tileSpark {
+  width: 96px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.tileDelta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* A delta with no stated comparison is a number pretending to be a fact. */
+.tileVs {
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.08em;
+}
+
+.figFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tableToggle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 6px 10px;
+  align-self: flex-start;
+  transition: color 0.15s, background 0.15s;
+}
+
+.tableToggle:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Table view of a chart's own numbers — mono throughout and right-aligned,
+   because these are read as figures, not prose. */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dataTable th {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: left;
+  padding: 0 14px 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dataTable td {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 7px 14px 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.legendDash {
+  width: 12px;
+  height: 0;
+  border-top: 1px dashed;
+  flex-shrink: 0;
+}
+
+.tipDelta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.multipleHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Direction is carried by the sign as well as the colour, so the delta is not
+   colour-alone. */
+.tileDeltaGood {
+  color: rgba(190, 220, 150, 0.9);
+}
+
+/* ── Sparklines & multiples ── */
+
+.sparks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spark {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.sparkLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sparkSvg {
+  width: 100%;
+  height: 34px;
+}
+
+.sparkVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.multiples {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.multiple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.multipleSvg {
+  width: 100%;
+  height: auto;
+}
+
+/* ── Texture ── */
+
+/* Defs carrier: present in the DOM, absent from the layout. */
+.defsOnly {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.texRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.texChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.texChip:hover {
+  background: #1c1c1c;
+}
+
+/* crispEdges on the swatch too — a scaled-down preview that antialiases
+   misrepresents the fill it is advertising. The swatch sits on the ground
+   colour rather than the card so the fill is shown at the contrast it will
+   actually have in use. */
+.texSwatch {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  background: #0a0a0a;
+  shape-rendering: crispEdges;
+}
+
+/* ── Texture in use ── */
+
+.texDemoMedia {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background-color: #131313;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' shape-rendering='crispEdges'%3E%3Crect x='1' y='2' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='5' y='0' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='3' y='5' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='7' y='6' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='0' y='6' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='6' y='3' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
+}
+
+.texDemoEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 108px;
+  border-radius: 4px;
+  text-align: center;
+  background-color: #111;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='2' y='2' width='2' height='2' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
+}
+
+.texDemoBand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 108px;
+  border-radius: 4px;
+  background-color: #111;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect x='0' y='3' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='1' y='2' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='2' y='1' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3Crect x='3' y='0' width='1' height='1' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
+}
+
+.texName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.texId {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.texNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.legendTex {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  shape-rendering: crispEdges;
+}
+
+/* ── Palette display ── */
+
+.paletteRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.paletteChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.paletteChip:hover {
+  background: #1c1c1c;
+}
+
+.paletteSwatch {
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.paletteName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.paletteVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.paletteBrand {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.rampRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.ramp {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.rampBar {
+  display: flex;
+  height: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rampBar span {
+  flex: 1;
+}
+
+.statusRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 32px;
+  justify-content: center;
+}
+
+/* ── Backlog ── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.backlog {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.backlogGroup {
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px;
+}
+
+.backlogHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.backlogTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.backlogCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.backlogNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 68ch;
+  margin: 8px 0 18px;
+}
+
+.backlogList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Name and badge on a fixed measure so the badges form a column and the
+   reasons all start at the same place — the list is meant to be scanned down
+   the state, not read across. */
+.backlogItem {
+  display: grid;
+  grid-template-columns: 148px 56px 1fr;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.backlogItem:last-child {
+  border-bottom: none;
+}
+
+.backlogName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.backlogWhy {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Footer ── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 40px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.footerDim {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Status badge ── */
+
+.demoHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 6px;
+  flex-shrink: 0;
+}
+
+/* NEW earns a brighter chip: it is the one thing on this page that is a
+   proposal rather than a description, and it must not be mistaken for the
+   site's current state. */
+.statusNew {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Neither built nor drawn — an outline with nothing in it. */
+.statusGap {
+  color: rgba(255, 255, 255, 0.4);
+  background: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.demoWide {
+  grid-column: 1 / -1;
+}
+
+.demoStack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Button variants ── */
+
+.btnSolid {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 13px 26px;
+  transition: opacity 0.18s;
+}
+
+.btnSolid:hover:not(:disabled) {
+  opacity: 0.82;
+}
+
+.btnSolid:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btnOutline {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  padding: 11px 20px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btnOutline:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Sits on a mid-grey plate so the "survives any image" claim is visible. */
+.overlayStage,
+.mediaDemo {
+  position: relative;
+  display: block;
+  width: 168px;
+  height: 96px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px
+  );
+}
+
+.btnOverlay,
+.btnOverlayInner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 8px 12px;
+  transition: background 0.15s;
+}
+
+.btnOverlay:hover,
+.btnOverlayInner:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.btnGate {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0a0a0a;
+  border: none;
+  padding: 12px 18px;
+  transition: background 0.15s;
+}
+
+.btnGate:hover {
+  background: #fff;
+}
+
+/* Reuses the error red already in DeckGate rather than inventing a fourth. */
+.btnDanger {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 80, 80, 0.9);
+  background: rgba(255, 80, 80, 0.08);
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  border-radius: 5px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDanger:hover {
+  background: rgba(255, 80, 80, 0.16);
+  color: rgba(255, 120, 120, 1);
+}
+
+/* Shared three-dot pulse — the loading button and the chat use the same one
+   so the two patterns agree about what "working" looks like. */
+.btnDots,
+.thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btnDots i,
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+.btnDots i:nth-child(2),
+.thinking i:nth-child(2) { animation-delay: 0.15s; }
+.btnDots i:nth-child(3),
+.thinking i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50%      { opacity: 1;    transform: translateY(-2px); }
+}
+
+.thinking {
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 0;
+}
+
+/* ── Field variants ── */
+
+.fieldContact {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldContact:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldContact::placeholder,
+.fieldTextarea::placeholder,
+.fieldGate::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldGate {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fieldGate:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.fieldTextarea {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 12px 13px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.fieldTextarea:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.fieldErrorWrap,
+.labelledField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.labelledField {
+  gap: 6px;
+}
+
+.fieldError {
+  width: 100%;
+  max-width: 220px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  background: #161616;
+  border: 1px solid rgba(255, 80, 80, 0.6);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 14px;
+  outline: none;
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.errorText {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 80, 80, 0.8);
+}
+
+/* ── Icons ───────────────────────────────────────────────────────────────────
+   Stroke-based and inheriting currentColor, so an icon takes the colour of the
+   text beside it. 1.25px matches the hairline the rest of the system uses;
+   butt caps and miter joins keep every terminal square. */
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 16px 8px 12px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconCell:hover {
+  background: #1c1c1c;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.iconName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  word-break: break-all;
+}
+
+.iconUses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* A 16px mark still needs a 32px target — the icon is what you see, not what
+   you have to hit. */
+.iconOnly {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s, color 0.15s;
+}
+
+.iconOnly:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.iconStatuses {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.iconStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.isGood { color: rgba(190, 220, 150, 0.9); }
+.isWarn { color: #bd842c; }
+.isBad  { color: rgba(255, 80, 80, 0.85); }
+
+.iconSizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.iconSizeCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.iconSizeLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Composed form ── */
+
+.formDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.formLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 0;
+}
+
+/* Optional is marked; required is the default. Fewer marks, less noise. */
+.formOptional {
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Help and error share this slot, so the row cannot change height when
+   validation fires and push everything below it down. */
+.formHelp {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.3);
+  min-height: 13px;
+}
+
+.formDemo .fieldContact,
+.formDemo .fieldTextarea {
+  max-width: none;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.errSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 80, 80, 0.07);
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  border-radius: 3px;
+  padding: 14px 16px;
+}
+
+.errSummaryTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 80, 80, 0.9);
+}
+
+.errList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.errLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.errLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.formNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Navigation ── */
+
+.navCardDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  background: #161616;
+  border-radius: 4px;
+  padding: 12px;
+  transition: background 0.15s;
+}
+
+.navCardDemo:hover {
+  background: #1c1c1c;
+}
+
+.navCardTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navCardSub {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.navListDemo {
+  width: 100%;
+}
+
+.navRow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: opacity 0.15s;
+}
+
+.navRow:hover {
+  opacity: 0.6;
+}
+
+.navRowNum {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.navRowName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navRowType {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chipNavDemo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mobileNavDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.mobileLink {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.15s;
+}
+
+.mobileLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.crumb,
+.crumbOn,
+.crumbSep {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.crumb {
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.15s;
+}
+
+.crumb:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.crumbSep {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.crumbOn {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pager {
+  display: flex;
+  gap: 4px;
+}
+
+.pageBtn {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  background: #161616;
+  border-radius: 4px;
+  min-width: 28px;
+  padding: 8px 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.pageBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: #1c1c1c;
+}
+
+.pageBtnOn {
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.pageBtnOn:hover {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+/* ── Composed navigation ── */
+
+.navStage {
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 14px;
+  width: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sidebarGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebarHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 5px;
+}
+
+.sidebarTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.sidebarCount {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebarItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: left;
+  padding: 7px 6px;
+  border-radius: 2px;
+  border-left: 1px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.sidebarItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Active carries a rule as well as brightness — aria-current announces it,
+   and the rule means it isn't colour alone. */
+.sidebarItemOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(255, 255, 255, 0.85);
+}
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.paletteBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.paletteHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+
+.paletteInput {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.paletteInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.paletteList {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  min-height: 108px;
+}
+
+.paletteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 9px;
+  border-radius: 2px;
+}
+
+.paletteRowOn {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.paletteEnter {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.paletteEmpty {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 12px 9px;
+}
+
+/* Off-screen until focused — the standard skip-link treatment. Not
+   display:none, which would take it out of the tab order entirely and defeat
+   the purpose. */
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.skipLink:focus {
+  position: static;
+  left: auto;
+}
+
+.footerNav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.footerHead {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footerLink {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s;
+}
+
+.footerLink:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Grids ── */
+
+.gridDemos {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gridDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+}
+
+.gridCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.span3 { grid-column: span 3; }
+.span4 { grid-column: span 4; }
+.span6 { grid-column: span 6; }
+
+.gridEditorial {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 28px;
+  row-gap: 56px;
+  background: #1c1c1c;
+  border-radius: 4px;
+  padding: 40px;
+}
+
+.editorialCell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editorialThumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #262626;
+  border-radius: 4px;
+}
+
+/* ── Ratios ── */
+
+.ratioRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.ratioChip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 18px 16px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.ratioChip:hover {
+  background: #1c1c1c;
+}
+
+/* Fixed-height well so the four ratios are compared at equal height rather
+   than equal width — otherwise 9:16 dwarfs the row. */
+.ratioBoxWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 128px;
+}
+
+.ratioBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #262626;
+  border-radius: 4px;
+}
+
+.ratioName {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ratioMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Media ── */
+
+.mediaTag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.captionDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.mediaDemoSmall {
+  display: block;
+  width: 168px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    45deg, #3a3a3a 0 10px, #4a4a4a 10px 20px
+  );
+}
+
+.caption {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Marquee ── */
+
+.marquee {
+  display: flex;
+  align-items: center;
+  background: #0a0a0a;
+  border-radius: 4px;
+  height: 52px;
+  overflow: hidden;
+}
+
+.marqueeWindow {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 48s linear infinite;
+}
+
+.marqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marqueePass {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 22px;
+  white-space: nowrap;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.18s;
+}
+
+.marqueeItem:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Paged carousel ── */
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.carouselWindow {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.slide {
+  flex: 0 0 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 132px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+
+.slideNum {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.carouselControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.dotOn {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.15);
+}
+
+.arrows {
+  display: flex;
+  gap: 4px;
+}
+
+.arrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: color 0.15s, background 0.15s, opacity 0.15s;
+}
+
+.arrow:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* ── Chat ── */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Fixed height with its own scroll, so the composer below it never moves as
+   the conversation grows. */
+.chatLog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #0a0a0a;
+  border-radius: 4px;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.turnUser {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.turnBot {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* The reader's turn is UI, so it is mono in a chip. */
+.userBubble {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 10px 12px;
+  max-width: 68%;
+}
+
+/* The reply is prose, so it is Signifier at reading size and takes no chip —
+   the same rule the rest of the site follows. */
+.botText {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 62ch;
+  margin: 0;
+}
+
+/* ── Chat chrome ── */
+
+.chatHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chatModel {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.chatHeadRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatCtx {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chatEmpty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.chatEmptyLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.botTurn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* A tool call is shown, never hidden — an answer that quietly searched
+   something is an answer nobody can check. */
+.toolCall {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  padding: 8px 10px;
+}
+
+.chatCode {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.citeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Revealed on hover but never removed from the tab order — a keyboard user
+   cannot hover, and hiding actions from them is the commonest chat failure. */
+.msgActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.botTurn:hover .msgActions,
+.msgActions:focus-within {
+  opacity: 1;
+}
+
+.msgAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  padding: 5px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.msgAction:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stoppedTag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  padding: 3px 5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.chatError {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.08);
+  border-left: 2px solid rgba(255, 80, 80, 0.7);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+
+.attachChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+  padding: 4px 6px;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+
+.chatFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chatHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.chatFail {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  padding: 4px 7px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.chatFail:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chatFailOn {
+  color: rgba(255, 130, 130, 0.95);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.composerField {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: border-color 0.15s;
+}
+
+.composerField:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* The composer never moves. A control that jumps as the log grows is
+   unusable while something is streaming into it. */
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.composerInput {
+  width: 100%;
+  min-width: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  background: none;
+  border: none;
+  padding: 6px 0;
+  outline: none;
+}
+
+.composerInput::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.composerInput:focus {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: #111;
+}
+
+.composerSend {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 11px 20px;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.composerSend:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.composerSend:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Feedback ── */
+
+.toastDemo {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 12px 18px;
+}
+
+.loaderDemo {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.loaderDemo i {
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, #1a1a1a, #ffffff, #1a1a1a);
+  animation: loaderSweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes loaderSweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(350%); }
+}
+
+.toggleDemo {
+  display: block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.toggleDemo i {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  animation: thumbSlide 2.4s ease-in-out infinite;
+}
+
+@keyframes thumbSlide {
+  0%, 40%   { transform: translate(0, -50%); }
+  50%, 90%  { transform: translate(16px, -50%); }
+  100%      { transform: translate(0, -50%); }
+}
+
+.cursorDemo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.cursorDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.cursorRing {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+}
+
+.emptyDemo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.emptyLine {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.skeleton i {
+  display: block;
+  height: 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+.skeleton i:nth-child(2) { animation-delay: 0.15s; }
+.skeleton i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes skeletonPulse {
+  0%, 100% { background: rgba(255, 255, 255, 0.06); }
+  50%      { background: rgba(255, 255, 255, 0.12); }
+}
+
+/* ── Finding rows ─────────────────────────────────────────────────────────────
+   A large figure against its explanation. Used where a measured count is the
+   argument and the prose is only the footnote. */
+
+.driftList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.drift {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 22px 20px;
+}
+
+.driftStat {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.85);
+  width: 76px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.driftBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.driftTitle {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.driftNote {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 68ch;
+  margin: 0;
+}
+
+/* ── Spacing ── */
+
+.spaceList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spaceRow {
+  display: grid;
+  grid-template-columns: 132px 54px 46px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  background: #161616;
+  border-radius: 4px;
+  padding: 10px 14px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.spaceRow:hover {
+  background: #1c1c1c;
+}
+
+/* A drift step is dimmed rather than hidden — it is still in the codebase,
+   and the page has to stay true about that. */
+.spaceDrift {
+  opacity: 0.55;
+}
+
+.spaceBar {
+  display: block;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1px;
+}
+
+.spaceVal {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.spaceRole {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Elevation ── */
+
+.elevRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.elevChip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #0e0e0e;
+  border-radius: 4px;
+  padding: 20px 14px 14px;
+  text-align: left;
+}
+
+.elevBox {
+  display: block;
+  width: 100%;
+  height: 44px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+
+/* ── Focus ── */
+
+.focusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* One ring for every control on the page, not just the demos — this page has
+   to obey the rule it documents, and the default blue UA ring is exactly what
+   the rule exists to replace.
+ *
+ * focus-visible rather than focus, so a mouse click leaves nothing behind but
+   a Tab key does. The 2px offset matters: flush to the edge it reads as a
+   border and vanishes on anything that already has one. */
+.main :focus-visible,
+.focusable:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.focusLight {
+  background: #e9e9e9;
+  border-radius: 4px;
+  padding: 18px;
+}
+
+/* On a light ground the ring flips, or it disappears into the surface. */
+.focusLight .focusable:focus-visible {
+  outline-color: rgba(10, 10, 10, 0.9);
+}
+
+.focusHint {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────
+   Not "no motion" — motion that doesn't move anything through space. Fades are
+   kept, because opacity carries no vestibular cost; travel, scale, parallax
+   and anything looping stops. */
+@media (prefers-reduced-motion: reduce) {
+  .staggerBlock,
+  .skeleton i,
+  .btnDots i,
+  .thinking i,
+  .loaderDemo i,
+  .toggleDemo i,
+  .caret {
+    animation: none !important;
+  }
+
+  .marqueeTrack {
+    animation: none !important;
+  }
+
+  .cardDemo:hover,
+  .cardDemoLink:hover {
+    transform: none !important;
+  }
+
+  .carouselTrack,
+  .progressFill,
+  .accMark,
+  .selectCaret {
+    transition: none !important;
+  }
+
+  .fieldError {
+    animation: none !important;
+  }
+
+  /* Opacity-only transitions survive deliberately — they orient without
+     moving anything. */
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1024px) {
+  .demoGrid,
+  .radii,
+  .ratioRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .families,
+  .accentRow {
+    grid-template-columns: 1fr;
+  }
+
+  .chartGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .paletteRow,
+  .texRow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Nav rail is hidden here, so give the reserved space back. */
+  .main {
+    padding: 64px 0 96px;
+  }
+
+  .inner {
+    padding: 0 24px;
+  }
+
+  .section {
+    padding: 44px 0;
+  }
+
+  .demoGrid,
+  .radii,
+  .ratioRow,
+  .lightPair {
+    grid-template-columns: 1fr;
+  }
+
+  /* The 12-column proof shrinks to 6 so the cells stay wider than they are
+     tall — at 12 across on a phone they become unreadable slivers. */
+  .grid12 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .gridEditorial {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+    padding: 20px;
+  }
+
+  .ratioBoxWrap {
+    height: 96px;
+  }
+
+  .userBubble {
+    max-width: 85%;
+  }
+
+  .row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .family {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .familySpecimen {
+    font-size: 56px;
+  }
+
+  .specRow {
+    grid-template-columns: 1fr;
+  }
+
+  /* Name and badge share a row, the reason drops below — three columns at this
+     width leaves the reason too narrow to read. */
+  .backlogItem {
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+  }
+
+  .backlogWhy {
+    grid-column: 1 / -1;
+  }
+
+  .pricing,
+  .testimonials,
+  .stats,
+  .chartGrid,
+  .rampRow,
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .paletteRow,
+  .texRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .elevRow {
+    grid-template-columns: 1fr;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* The bar and the role drop away; the value and its verdict are what
+     matter at this width. */
+  .spaceRow {
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+  }
+
+  .spaceBar,
+  .spaceRole {
+    display: none;
+  }
+
+  .drift {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .driftStat {
+    width: auto;
+    text-align: left;
+    font-size: 34px;
+  }
+
+  .stepRail {
+    gap: 16px;
+  }
+
+  .formRow,
+  .footerNav,
+  .cardGrid,
+  .anatomy {
+    grid-template-columns: 1fr;
+  }
+
+  .consent {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ctaBand {
+    padding: 24px 20px;
+  }
+}
