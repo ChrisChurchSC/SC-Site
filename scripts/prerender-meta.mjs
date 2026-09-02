@@ -229,6 +229,11 @@ const STATIC_PAGES = [
     segments: ['who-we-are'],
     title: 'About | Super Conscious',
     description: 'A fractional creative and marketing department — brand, copy, design, development, media — that plugs into your company at a fraction of the cost of building it in-house.',
+    /* /who-we-are is this branch's own page, so main's commit moving page
+       schemas into the prerender could not have given it one — and the loop
+       calls page.schemas() unconditionally. A breadcrumb, the same as Careers
+       has: it is a static page with no richer type to claim. */
+    schemas: (_data, url) => [crumbs({ name: 'About', item: url })],
   },
   {
     segments: ['work'],
