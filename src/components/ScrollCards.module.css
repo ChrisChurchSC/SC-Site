@@ -694,7 +694,11 @@
   flex: 1;
   min-width: 0;
   border-radius: 4px 4px 0 0;
-  background: #7a7a7a;
+  /* Pink, the same as the trend line above (2026-09-02). They were #7a7a7a
+     so the two plots read as two series; Chris asked for the brand pink on
+     the bars, so the whole dashboard now speaks one color. Decorative,
+     aria-hidden artwork, so no contrast claim rides on it. */
+  background: var(--pink, #df4ed6);
 }
 
 /* THE RING OF FACES. The panel is 4:5, so a percentage across it is not the
