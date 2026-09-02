@@ -14,6 +14,7 @@ import CalDrawer from './components/CalDrawer'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
+import SiteLoader from './components/SiteLoader'
 import HomeV2 from './pages/HomeV2'
 import HomeV3 from './pages/HomeV3'
 import PricingV3 from './pages/PricingV3'
@@ -118,6 +119,9 @@ export default function App() {
         <ProjectsProvider>
         <CalDrawerProvider>
           <ScrollToTop />
+          {/* The head, filling up, over the first paint of every full load —
+              see SiteLoader.jsx. Mounted once here, not per route. */}
+          <SiteLoader />
           <TransitionBar />
           <Cursor />
           <ChromeGate>

@@ -6,7 +6,10 @@
    than sitting inside it with equal margins. The crop is what makes it read
    as a view onto something larger instead of a picture pasted on. */
 .section {
-  padding: clamp(40px, 5vw, 80px) clamp(8px, 5vw, 96px);
+  /* Vertical was 80px at desktop; 48 now (2026-09-02). The page stack
+     already gaps the sections, and at 80 the copy and the panel sat in more
+     black than they needed above and below. */
+  padding: clamp(24px, 3vw, 48px) clamp(8px, 5vw, 96px);
 }
 
 
@@ -17,7 +20,13 @@
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
   align-items: stretch;
   gap: clamp(20px, 3vw, 48px);
-  padding: clamp(28px, 3.4vw, 52px) 0 clamp(28px, 3.4vw, 52px) clamp(22px, 2.8vw, 44px);
+  /* RIGHT INSET, WHERE THERE WAS NONE. The card used to run the window off
+     its right edge as a crop; since the window took its own height
+     (2026-09-02) it sits 26px inside the frame above and below, and an edge
+     cropped on one side against a 26px gap on the other three read as a
+     mistake. 26px matches that gap at the desktop width the card was tuned
+     at. */
+  padding: clamp(28px, 3.4vw, 52px) 26px clamp(28px, 3.4vw, 52px) clamp(22px, 2.8vw, 44px);
   border-radius: var(--r-panel, 18px);
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -171,8 +180,9 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Runs to the panel's right edge and past its vertical padding, so the window
-   is cropped by the panel rather than framed by it. */
+/* Past the card's vertical padding, so the window is centred in the card's
+   full height rather than in the padded box. It no longer runs off the
+   right edge — see the card's padding. */
 .visual {
   min-width: 0;
   align-self: stretch;
@@ -182,17 +192,17 @@
   overflow: hidden;
 }
 
-/* WIDER THAN ITS COLUMN, so the panel's right edge cuts it rather than
-   framing it. The panel already has padding-right: 0 and overflow: hidden;
-   at exactly 100% the window merely stopped at the edge, which reads as a
-   picture that happens to be flush. Running it past reads as a window onto
-   something larger — the same trick the measurement page's sources card
-   uses. */
+/* THE FULL COLUMN, NO WIDER. It ran past the column by up to 190px so the
+   card's edge cropped it, which read as a window onto something larger;
+   with an inset on every side now, a cropped edge on one of them read as
+   the layout failing. The whole table shows. */
 .visual > * {
-  /* Far enough past the edge to read as a crop. At +76px it sat flush and
-     looked like a window that happened to end there. */
-  width: calc(100% + clamp(70px, 9vw, 190px));
-  height: clamp(440px, 42vw, 580px);
+  width: 100%;
+  /* AS TALL AS ITS CONTENT. It was clamp(440px, 42vw, 580px), a fixed height
+     the panel then filled, which stretched the table's sheet and left a
+     band of empty panel under the last row. The rows decide the height
+     now; the column centres the panel beside the copy. */
+  height: auto;
   min-width: 0;
   max-width: none;
 }

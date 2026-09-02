@@ -6,7 +6,11 @@
 .panel {
   /* The section gives this a fixed height. Filling it puts the slack inside
      the sheet rather than leaving a band under the last row. */
-  height: 100%;
+  /* As tall as its rows, not as tall as the column (2026-09-02). At 100%
+     it filled whatever height the copy beside it set, and the sheet
+     stretched to match, which left a band of empty panel under the last
+     row that read as a gap. Now the panel ends where the table does and
+     the column centres it. */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -21,7 +25,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 4px 12px;
-  padding: 18px 18px 14px;
+  padding: 14px 18px 12px;
 }
 
 .eyebrow {
@@ -60,7 +64,7 @@
 .sheet {
   flex: 1;
   min-height: 0;
-  margin: 0 18px 18px;
+  margin: 0 18px 14px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--r-control, 4px);
   overflow: hidden;
@@ -149,7 +153,10 @@
 /* Square by default so consecutive weeks read as one bar, rounded only where
    a run starts or ends. */
 .block {
-  background: var(--teal, #4ecfb3);
+  /* The brand pink, not the teal it launched with (2026-09-02): the panel
+     is the one place on the service pages that showed a second accent, and
+     the site has one. */
+  background: var(--pink, #df4ed6);
   margin: 0 -3px;
 }
 
