@@ -1,0 +1,240 @@
+/* Work wall — the 12-column case study grid.
+   Lifted from Home.module.css when the wall moved off the homepage. The
+   block, label and badge rules are unchanged so the cards render exactly as
+   they did; only the container is new, since the wall is no longer the page
+   itself and has to sit inside one. */
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Build / Grow groups ──
+   The wall used to be twenty-one hand-composed rows carrying eighteen
+   different column spans. Splitting the blocks into Build and Grow made
+   those compositions impossible to keep — a row designed around a 5-wide
+   beside two 3-wides cannot survive half its cards moving to another
+   section — so the grid flows now: uniform 4-up 4:5 cards, which was
+   already the wall's most common shape. */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Built to match the intro card at the top of the homepage: a full-width
+   #1a1a1a bar with the same 4px radius and the same 14px/16px padding. The
+   word alone — no rule, no count — so the strip reads as a title bar rather
+   than as a table header. */
+.groupHead {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 14px 16px;
+  animation: blockIn 0.5s ease both;
+}
+
+.groupTitle {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+@keyframes blockIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.row12 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  align-items: start;
+}
+
+.block {
+  background: #161616;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-radius: 4px;
+  animation: blockIn 0.5s ease both;
+  transition: background 0.2s ease, transform 0.3s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.block:hover {
+  background: #1c1c1c;
+  transform: translateY(-2px);
+}
+
+.blockLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+.blockLink:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.blockLink img,
+.blockLink video {
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.blockLink:hover img,
+.blockLink:hover video {
+  transform: scale(1.06);
+}
+
+.wwCard {
+  view-transition-name: cs-world-within;
+}
+
+.block::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 0 0 4px 4px;
+}
+
+.r169 { aspect-ratio: 16 / 9; }
+.r916 { aspect-ratio: 9 / 16; }
+.r45  { aspect-ratio: 4 / 5; }
+.r11  { aspect-ratio: 1 / 1; }
+
+.label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.blockTitle {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(12px, 1vw, 16px);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.1;
+}
+
+.blockExternal .csTag { display: none; }
+
+.csTag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.workBadge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  padding: 3px 6px;
+  pointer-events: none;
+}
+
+.comingSoonBadge {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 3;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+  padding: 4px 7px;
+  pointer-events: none;
+}
+
+.blockComingSoon { cursor: pointer; }
+
+.blockComingSoon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.extIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  padding: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.block:hover .extIcon {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 1100px) {
+  .row12 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .grid { gap: 32px; }
+  .row12 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .groupHead { padding: 12px 14px; }
+  .blockTitle { font-size: 13px; }
+}

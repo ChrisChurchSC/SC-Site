@@ -226,6 +226,16 @@ const STATIC_PAGES = [
     schemas: (_data, url) => [crumbs({ name: 'Careers', item: url })],
   },
   {
+    segments: ['who-we-are'],
+    title: 'About | Super Conscious',
+    description: 'A fractional creative and marketing department — brand, copy, design, development, media — that plugs into your company at a fraction of the cost of building it in-house.',
+    /* /who-we-are is this branch's own page, so main's commit moving page
+       schemas into the prerender could not have given it one — and the loop
+       calls page.schemas() unconditionally. A breadcrumb, the same as Careers
+       has: it is a static page with no richer type to claim. */
+    schemas: (_data, url) => [crumbs({ name: 'About', item: url })],
+  },
+  {
     segments: ['work'],
     title: 'Selected Work | Super Conscious',
     description: 'Case studies from Super Conscious. Brand systems, content programs, and digital products for founders and marketing teams.',
@@ -614,6 +624,7 @@ const STATIC_CONTENT_SOURCES = [
   'src/pages/Home.jsx',
   'src/pages/About.jsx',
   'src/pages/Careers.jsx',
+  'src/pages/AboutStudio.jsx',
   'src/pages/LandingPage.jsx',
   'src/pages/Work.jsx',
 ]

@@ -107,8 +107,19 @@ export default function Nav() {
         <div className="nav-action-cards">
           <NavLink to="/about" className="nav-card">
             <div className="nav-card-text">
-              <p className="nav-card-title">Capabilities</p>
+              <p className="nav-card-title">Services</p>
               <p className="nav-card-sub">Design, motion, engineering.</p>
+            </div>
+          </NavLink>
+
+          {/* Sits under Services, above Thoughts. /work already existed
+              as the case study index — this is the first card-level route
+              into it; until now the only ways in were the "see all" link at
+              the bottom of this list and the drawer's button. */}
+          <NavLink to="/work" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Work</p>
+              <p className="nav-card-sub">Selected case studies.</p>
             </div>
           </NavLink>
 
@@ -202,14 +213,14 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
-          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Capabilities</NavLink>
-          <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
-          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
           <NavLink
             to="/work"
             className="nav-mobile-link"
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
+          <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
+          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>

@@ -1,0 +1,102 @@
+/* Client strip — the slim row under the showreel.
+   Built as one more block in the homepage grid: #161616, 4px radius, the same
+   5px gutter above it as between any two cards. It is deliberately short —
+   the reel is the hero, and this is a caption to it. */
+
+.strip {
+  display: flex;
+  align-items: center;
+  background: #161616;
+  border-radius: 4px;
+  height: 52px;
+  overflow: hidden;
+  animation: stripIn 0.5s ease both;
+}
+
+@keyframes stripIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* The window fades both edges so names enter and leave the marquee instead
+   of being chopped off at a hard border. */
+.window {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: stripScroll 48s linear infinite;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes stripScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.pass {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 22px;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.18s;
+}
+
+.itemLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1;
+  color: inherit;
+}
+
+/* Real logo files are tinted rather than shown raw, so a strip of mixed
+   sources still reads as one row. */
+.logo {
+  height: 18px;
+  width: auto;
+  opacity: 0.75;
+  filter: grayscale(1) brightness(0) invert(1);
+  transition: opacity 0.18s;
+}
+
+.itemLink:hover .logo {
+  opacity: 1;
+}
+
+/* Someone who has asked the OS to stop things moving gets a static row.
+   The list is longer than the row, so it is clipped — but a clipped legible
+   row beats a marquee they explicitly turned off. */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+}
+
+@media (max-width: 768px) {
+  .strip {
+    height: 46px;
+  }
+
+  .item { padding: 0 16px; }
+  .name { font-size: 15px; }
+}

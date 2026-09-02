@@ -584,10 +584,11 @@
     max-width: 160px;
   }
 
-  /* Tagline hidden on mobile — no room in compact card.
+  /* No room for the strapline beside a wordmark and a hamburger on a phone.
+
      Visually hidden rather than display:none, because this element is the
-     page <h1>. Google indexes mobile-first, so display:none here would mean
-     the homepage headline is absent from the rendering Google actually reads,
+     page <h1>. Google indexes mobile-first, so display:none would mean the
+     homepage headline is absent from the rendering Google actually reads,
      and screen readers would lose it too. Clipping takes it out of flow and
      off screen with the same visual result, while keeping it in the
      accessibility tree. */

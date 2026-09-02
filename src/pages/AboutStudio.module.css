@@ -1,0 +1,94 @@
+/* About — additions to the Careers layout.
+   The page renders through Careers.module.css; only what Careers has no
+   equivalent for lives here. Everything below follows the same type system:
+   Signifier for display, Roboto Mono for labels and body chrome. */
+
+/* The line that lands after the intro. Serif, dimmer than the sub above it,
+   so it reads as an aside rather than a third paragraph of the same weight. */
+.kicker {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(17px, 1.8vw, 24px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 46ch;
+  margin: 4px 0 0;
+}
+
+/* ── The bench ──
+   A wrapping row of disciplines rather than a column: twelve of them stacked
+   would run longer than every other section on the page combined, and the
+   point is the breadth, which reads better as a mass. */
+.bench {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.benchItem {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  padding: 8px 12px;
+}
+
+.benchNote {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.38);
+  max-width: 62ch;
+  margin: 18px 0 0;
+}
+
+/* ── Rosters ──
+   Where we've worked, and select clients. Both are middot-joined runs rather
+   than lists, because they are read as a block of names, not scanned item by
+   item. */
+.roster {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.5vw, 20px);
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 4px 0 0;
+}
+
+/* The second label in a section that carries two. */
+.rosterLabel {
+  margin-top: 40px;
+}
+
+/* ── CTA ──
+   Careers ends in an email capture form; this ends in a link, so it needs a
+   control of its own rather than that form's submit button. */
+.ctaLink {
+  height: 38px;
+  padding: 0 22px;
+  margin-top: 8px;
+  border-radius: 5px;
+  background: #fff;
+  color: #0a0a0a;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.15s;
+}
+
+.ctaLink:hover { opacity: 0.84; }
+
+@media (max-width: 768px) {
+  .benchItem { font-size: 9px; padding: 7px 10px; }
+  .rosterLabel { margin-top: 32px; }
+}

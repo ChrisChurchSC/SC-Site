@@ -1,0 +1,174 @@
+/* Featured case studies.
+   Four full-width 16:9 cards, stacked one per row, in the homepage grid's
+   rhythm — 5px gutter, 4px radius, #161616 ground.
+
+   Name and stats both sit inside the card: name bottom-left, the four
+   measures along the bottom-right. One box per case study rather than a
+   card plus a stat block underneath it. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.entry,
+.entryLink {
+  display: block;
+  min-width: 0;
+}
+
+.entryLink {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.4, 1), box-shadow 0.25s ease;
+  border-radius: 4px;
+}
+
+/* Matches the wall's hover, so a linked card behaves like a case study block. */
+.entryLink:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #161616;
+  animation: frameIn 0.5s ease both;
+}
+
+@keyframes frameIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+.entryLink:hover .media { transform: scale(1.04); }
+
+/* Only drawn when there is media to darken. An empty card is already dark,
+   and a gradient over nothing just makes it muddy at the bottom. Heavier
+   than the wall's, because this one carries a row of numbers rather than a
+   single title. */
+.frame:has(.media)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  pointer-events: none;
+}
+
+.frameType {
+  position: absolute;
+  top: 20px;
+  left: 26px;
+  z-index: 2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Name and stats share the bottom edge, name left, numbers right. */
+.frameFoot {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 24px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.frameName {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(34px, 4.4vw, 68px);
+  line-height: 0.95;
+  color: rgba(255, 255, 255, 0.95);
+  flex-shrink: 0;
+}
+
+/* Columns come from however many stats an entry has, rather than a hardcoded
+   four — dropping one from the data should not need a CSS edit too. */
+.stats {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  max-width: 620px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  min-width: 0;
+}
+
+/* Label above value: the label is what has to be readable at this size, and
+   the numbers then align on one baseline across all four. */
+.statLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+.statValue {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  /* Name over stats rather than beside them — at this width they were
+     fighting for the same line. */
+  .frameFoot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .stats { max-width: none; width: 100%; gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  /* 16:9 leaves no room for a name and four stats on a phone. */
+  .frame { aspect-ratio: 4 / 5; }
+
+  .frameFoot { left: 18px; right: 18px; bottom: 18px; gap: 16px; }
+  .frameType { top: 14px; left: 18px; }
+
+  /* Side by side on a phone is a row of crushed columns. Two by two. */
+  .stats {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+  }
+}

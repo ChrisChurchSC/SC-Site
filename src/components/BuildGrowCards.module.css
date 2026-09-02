@@ -1,0 +1,91 @@
+/* Build / Grow two-up.
+   Two cards in the homepage grid's rhythm — 5px gutter, 4px radius, #161616
+   ground — so they read as part of the wall's system rather than a band
+   bolted on above it.
+
+   No media in these. The reel is above and the wall is below; this is the
+   still point between them, and the only place on the page that says the
+   offer in words.
+
+   4:5, the same ratio the wall's case study blocks use, so the two-up and
+   the grid under it are cut from one set of proportions. Content is
+   bottom-aligned for the same reason — that is where a .block puts its
+   title. */
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  align-items: stretch;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: 4 / 5;
+  background: #161616;
+  border-radius: 4px;
+  padding: 40px 36px 34px;
+  animation: cardIn 0.5s ease both;
+  transition: background 0.2s ease,
+              transform 0.3s cubic-bezier(0.25, 1, 0.4, 1),
+              box-shadow 0.25s ease;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* Matches the wall's hover exactly, so the two-up and the blocks below it
+   behave the same way under the cursor. */
+.card:hover {
+  background: #1c1c1c;
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+              0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.name {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(38px, 4vw, 62px);
+  line-height: 0.98;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+.body {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.48);
+  max-width: 46ch;
+  margin: 16px 0 0;
+}
+
+/* Both stacks end at the same bottom padding, so the links already sit on
+   one line — no margin-top: auto needed once the card is bottom-aligned. */
+.cta {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  padding-top: 26px;
+  transition: color 0.15s;
+}
+
+.card:hover .cta { color: #fff; }
+
+@media (max-width: 768px) {
+  .row { grid-template-columns: 1fr; }
+
+  .card {
+    padding: 28px 22px 24px;
+  }
+
+  .cta { padding-top: 22px; }
+}
