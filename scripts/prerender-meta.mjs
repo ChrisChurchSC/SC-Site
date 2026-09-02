@@ -33,6 +33,9 @@ const { injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs
 const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
+const { industries } = await import(path.join(ROOT, 'src/data/industries.js'))
+const { stages } = await import(path.join(ROOT, 'src/data/stages.js'))
+const { outcomes } = await import(path.join(ROOT, 'src/data/outcomes.js'))
 const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY, CASE_STUDY_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
 const { sanityImg } = await import(path.join(ROOT, 'src/lib/sanityImg.js'))
 const { sanityKey } = await import(path.join(ROOT, 'src/lib/sanityCache.js'))
@@ -355,7 +358,44 @@ const STATIC_PAGES = [
       },
     ],
   },
+  {
+    segments: ['pricing'],
+    title: 'Pricing | Super Conscious',
+    // Must match useMeta() in src/pages/PricingV3.jsx.
+    description: 'Have us build a project, or keep us on by the hour. What each one costs.',
+    schemas: (_data, url) => [crumbs({ name: 'Pricing', item: url })],
+  },
 ]
+
+/* ── Audience pages, from the same data the page reads ────────────────────────
+ *
+ * /industries/:slug, /stages/:slug and /outcomes/:slug are one component,
+ * AudiencePage, over three record types. Fourteen URLs, and every one of them
+ * answered 404 in production between the v3 merge and this commit: the routes
+ * existed in App.jsx, nothing prerendered them, and the shell.html rewrite did
+ * not name them either, so the static host had nothing to serve.
+ *
+ * Generated from the data files rather than listed by hand, so adding a record
+ * to industries.js ships a page instead of another silent 404. Titles and
+ * descriptions must match the useMeta() call in src/pages/AudiencePage.jsx —
+ * that one retitles the tab after hydration, these are what crawlers read.
+ */
+const AUDIENCE_KINDS = [
+  { base: 'industries', records: industries, describe: (n) => `Brand and marketing work for ${n.toLowerCase()} brands, from the Super Conscious studio.` },
+  { base: 'stages',     records: stages,     describe: (n) => `Brand and marketing work for ${n.toLowerCase()} companies, from the Super Conscious studio.` },
+  { base: 'outcomes',   records: outcomes,   describe: (n) => `Brand and marketing work to ${n.toLowerCase()}, from the Super Conscious studio.` },
+]
+
+for (const { base, records, describe } of AUDIENCE_KINDS) {
+  for (const { slug, name } of records) {
+    STATIC_PAGES.push({
+      segments: [base, slug],
+      title: `${name} Case Studies | Super Conscious`,
+      description: describe(name),
+      schemas: (_data, url) => [crumbs({ name: `${name} Case Studies`, item: url })],
+    })
+  }
+}
 
 
 // ── Work / case study pages ───────────────────────────────────────────────────
