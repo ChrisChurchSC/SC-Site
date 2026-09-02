@@ -935,6 +935,30 @@
 @media (max-width: 760px) {
   .track { height: auto; }
 
+  /* NO PULL ON A PHONE. The bleed's negative top margin lifts the stage
+     under the bar so the desktop hero fills the screen; unpinned and
+     stacked, it only put the first passage's label under the fixed bar.
+     The left ground is already hidden at this width (below), so the
+     horizontal bleed has nothing to bleed and the section can sit on the
+     page's own padding like every other. */
+  .sectionBleed {
+    margin: 0;
+    width: auto;
+    padding: 0;
+  }
+
+  .sectionBleed::before,
+  .sectionBleed::after {
+    left: calc(-1 * var(--page-pad-left, 0px));
+    width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
+  }
+
+  /* The bare hero's card spans its column at this width anyway; the top
+     room is the fixed bar's height plus a little, so the first label sits
+     under the bar rather than behind it. Measured: the bar's bottom edge is
+     about 100px down the page on a phone and the column started at 63. */
+  .columnRight.columnRightBleed { padding: 72px 0 clamp(32px, 8vw, 56px); }
+
   .stage {
     position: static;
     height: auto;

@@ -43,6 +43,13 @@
 .scroller {
   overflow-x: auto;
   scrollbar-width: none;
+  /* THE CONTAINING BLOCK FOR THE TABLE'S ABSOLUTE CHILDREN. The .sr spans
+     are position: absolute, and with no positioned ancestor they were placed
+     against the document — a 1px span 933px in on a phone, outside the
+     scroller's clip, which gave the whole page a sideways scroll of 548px
+     (found 2026-09-02). Positioned, the scroller owns them and clips them
+     with the rest of the table. */
+  position: relative;
 }
 
 .scroller::-webkit-scrollbar { display: none; }

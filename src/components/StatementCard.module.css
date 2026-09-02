@@ -99,6 +99,14 @@
 }
 
 @media (max-width: 768px) {
+  /* A display hero that is not tall starts where the page's padding puts
+     it, which on a phone is the bottom edge of the fixed bar — the careers
+     and disciplines labels sat half under it. Room to clear the bar. The
+     tall hero has its own floor and centres, so it is not touched. */
+  .display:not(.tall) {
+    padding-top: 96px;
+  }
+
   .tall {
     min-height: 56vh;
     padding-top: 56px;
