@@ -66,6 +66,7 @@ const KINDS = {
     base: '/industries',
     find: industryBySlug,
     noun: (name) => `${name.toLowerCase()} brand`,
+    metaDescription: (name) => `Brand and marketing work for ${name.toLowerCase()} brands, from the Super Conscious studio.`,
     cardsHeadline: (name) => `Three kinds of ${name.toLowerCase()} brand.`,
   },
   stage: {
@@ -73,6 +74,7 @@ const KINDS = {
     base: '/stages',
     find: stageBySlug,
     noun: (name) => `${name.toLowerCase()} company`,
+    metaDescription: (name) => `Brand and marketing work for ${name.toLowerCase()} companies, from the Super Conscious studio.`,
     cardsHeadline: (name) => `Three kinds of ${name.toLowerCase()} company.`,
   },
   /* An outcome has no "three kinds of" — the cards split on what is causing
@@ -83,6 +85,7 @@ const KINDS = {
     base: '/outcomes',
     find: outcomeBySlug,
     noun: (name) => name.toLowerCase(),
+    metaDescription: (name) => `Brand and marketing work to ${name.toLowerCase()}, from the Super Conscious studio.`,
     cardsHeadline: () => 'Three reasons it is not happening.',
   },
 }
@@ -115,7 +118,7 @@ export default function AudiencePage({ kind = 'industry' }) {
   useMeta({
     title: industry ? `${industry.name} Case Studies | Super Conscious` : 'Case Studies | Super Conscious',
     description: industry
-      ? `Brand and marketing work for ${config.noun(industry.name)}s, from the Super Conscious studio.`
+      ? config.metaDescription(industry.name)
       : undefined,
     path: `${config.base}/${slug}`,
   })

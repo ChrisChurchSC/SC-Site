@@ -71,13 +71,18 @@
       "statusCode": 301
     },
     {
-      "source": "/rethinking-the-workweek",
-      "destination": "/thoughts/rethinking-the-workweek",
+      "source": "/careers",
+      "destination": "/about-us",
       "statusCode": 301
     },
     {
-      "source": "/about-us",
-      "destination": "/careers",
+      "source": "/who-we-are",
+      "destination": "/studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/rethinking-the-workweek",
+      "destination": "/thoughts/rethinking-the-workweek",
       "statusCode": 301
     },
     {
