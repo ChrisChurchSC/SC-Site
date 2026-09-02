@@ -107,6 +107,16 @@
 
 .body {
   margin: clamp(16px, 1.8vw, 22px) 0 0;
+}
+
+/* A second and third paragraph sit closer to each other than the first sits
+   to the headline — the gap under the headline is a section break, the gaps
+   between paragraphs are not. */
+.body + .body {
+  margin-top: clamp(12px, 1.2vw, 16px);
+}
+
+.body {
   max-width: 46ch;
   font-family: "Signifier", Georgia, serif;
   font-weight: 300;

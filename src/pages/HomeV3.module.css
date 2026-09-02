@@ -564,6 +564,13 @@
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
+  /* The Services panel's line is a <button> now (it opens the booking
+     drawer); these strip the button chrome so it sets like the links. */
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
   margin-top: auto;
   transition: color 0.15s;
 }
@@ -1284,6 +1291,90 @@
    are the only navigation above the fold now the capture field is gone. The
    rule sits away from the baseline so it does not cut the descenders of the
    serif. */
+/* THE HERO IS SHORTER HERE THAN .tall.display MAKES IT, so the case studies
+   peek in under the fold. At the shared 78vh floor the grid began below the
+   bottom of a desktop window and the first screen was the headline alone;
+   at 66vh the top of the featured card shows through, which is what tells a
+   visitor there is a page under the sentence. Tripled selector: .tall.display
+   is two classes and StatementCard's stylesheet loads after this one, so two
+   classes here only ties and loses. */
+.heroHome.heroHome.heroHome {
+  min-height: min(66vh, 560px);
+  /* The mat below sits in a layer of its own under the type; isolation keeps
+     its negative z-index inside this box rather than under the page. */
+  position: relative;
+  isolation: isolate;
+}
+
+/* A CUTTING MAT BEHIND THE HERO. Black, with the lines in gray: the self-heal
+   mat every studio has under its knife, drawn in CSS so it tiles to any size
+   and costs no image. The layers, top to bottom:
+
+     the two diagonals, corner to corner at a true 45 degrees (angle
+       gradients keep their angle whatever the box's proportions);
+     ruler ticks, 8px long at every minor step, along all four edges;
+     the major grid, one line in five, a step brighter;
+     the minor grid, the pale one everything else sits on;
+     the mat itself, a shade off the page's black so it reads as an object
+       with an edge and not as the page with lines on it.
+
+   The grid starts on the edge itself — no inset — so there is no unlined
+   band at the top of the screen; the ticks sit on the first lines rather
+   than hanging in a margin above them. Both grids share the origin, so
+   every fifth minor line is under a major one. Everything is faint on purpose: the headline is the point of the
+   section and the mat is what it is set on.
+
+   FULL SCREEN, NOT A PANEL. The layer reaches past the hero's box to the top
+   of the page and both edges of the screen, under the bar: up by the
+   distance the page puts above its first section, and out by the page
+   padding on each side.
+
+   THE PULL INCLUDES THE BAR'S HEIGHT, AND OVERSHOOTS ON PURPOSE. The bar is
+   in the page flow on a fresh load, 58px tall, and floats free once the page
+   scrolls, at which point its row collapses to nothing and everything under
+   it sits 58px higher. A pull measured in the floating state left a 58px
+   band of bare page above the mat on every first load. So the pull is the
+   page's top padding, the bar's height and the stack gap less the half-gap
+   the bar row hands back; in the floating state the top of the layer lands
+   above the top of the page, where there is nothing to see. The bar height
+   is rounded up to 80px for the same reason — too much is invisible, too
+   little is a gap. No
+   radius and no edge line, because a mat the size of the screen has no
+   edge to draw. Down, it runs on through the gap to the top of the case
+   studies and is masked to nothing over its last third, so the grid
+   dissolves into the work rather than stopping at a line. */
+.heroHome.heroHome.heroHome::before {
+  --mat-minor: rgba(255, 255, 255, 0.06);
+  --mat-major: rgba(255, 255, 255, 0.13);
+  --mat-diag: rgba(255, 255, 255, 0.11);
+  --mat-tick: rgba(255, 255, 255, 0.3);
+  --mat-step: 24px;
+  --mat-major-step: 120px;
+  --mat-inset: 0px;
+  content: '';
+  position: absolute;
+  top: calc(-1 * (var(--bar-inset, 0px) + 80px + (clamp(28px, 4vw, 64px) + 5px) / 2));
+  right: calc(-1 * var(--page-pad-right, 0px));
+  bottom: calc(-1 * clamp(28px, 4vw, 64px));
+  left: calc(-1 * var(--page-pad-left, 0px));
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 0.5px), var(--mat-diag) calc(50% - 0.5px), var(--mat-diag) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(-45deg, transparent calc(50% - 0.5px), var(--mat-diag) calc(50% - 0.5px), var(--mat-diag) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    repeating-linear-gradient(to right, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) var(--mat-inset) 0 / calc(100% - 2 * var(--mat-inset)) 8px no-repeat,
+    repeating-linear-gradient(to right, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) var(--mat-inset) 100% / calc(100% - 2 * var(--mat-inset)) 8px no-repeat,
+    repeating-linear-gradient(to bottom, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) 0 var(--mat-inset) / 8px calc(100% - 2 * var(--mat-inset)) no-repeat,
+    repeating-linear-gradient(to bottom, var(--mat-tick) 0 1px, transparent 1px var(--mat-step)) 100% var(--mat-inset) / 8px calc(100% - 2 * var(--mat-inset)) no-repeat,
+    linear-gradient(to right, var(--mat-major) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-major-step) var(--mat-major-step),
+    linear-gradient(to bottom, var(--mat-major) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-major-step) var(--mat-major-step),
+    linear-gradient(to right, var(--mat-minor) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-step) var(--mat-step),
+    linear-gradient(to bottom, var(--mat-minor) 1px, transparent 1px) var(--mat-inset) var(--mat-inset) / var(--mat-step) var(--mat-step),
+    #0e0e0e;
+}
+
 .heroLink {
   /* Grey rather than inherited white: the two verbs sit inside a display
      sentence, and setting them back from it is what makes them read as

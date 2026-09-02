@@ -6,7 +6,7 @@
  *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
- *  - static pages: /services, /about-us, /work, /thoughts, /contact
+ *  - static pages: /services, /disciplines, /about-us, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
@@ -157,6 +157,75 @@ const STATIC_PAGES = [
     // crawlers read; that one retitles the tab after hydration, and the two
     // said different things until the positioning rewrite aligned them.
     description: 'Brand, website, marketing mix and channels for challenger brands, from $10,000 — plus ongoing support billed hourly. We build the brand, then grow it.',
+  },
+  {
+    segments: ['disciplines'],
+    title: 'Disciplines | Super Conscious',
+    // Must match useMeta() in src/pages/Disciplines.jsx.
+    description: 'Twelve disciplines, one bench: creative direction, writing, design, illustration, film, 3D and motion, animation, editing, production, media, search and engineering.',
+  },
+  {
+    segments: ['disciplines', 'creative-direction'],
+    title: 'Creative direction | Super Conscious',
+    // The /services discipline paragraph, which is what the page's useMeta
+    // also reads. Only the live discipline pages are listed here — see LIVE
+    // in src/pages/Discipline.jsx.
+    description: 'Brand strategy, concept development, and the creative through-line that holds a project together from first idea to final asset.',
+  },
+  {
+    segments: ['disciplines', 'writing'],
+    title: 'Writing | Super Conscious',
+    description: "Naming, taglines, scripts, voice, and body copy. The verbal half of a brand, shaped to earn its space across every surface.",
+  },
+  {
+    segments: ['disciplines', 'design'],
+    title: 'Design | Super Conscious',
+    description: "Identity systems, visual languages, layout, and typography. The framework that lets every piece of output feel like the same brand.",
+  },
+  {
+    segments: ['disciplines', 'illustration'],
+    title: 'Illustration | Super Conscious',
+    description: "Custom marks, characters, editorial pieces, and full toolkit systems built to extend the brand into any context.",
+  },
+  {
+    segments: ['disciplines', 'film-photo'],
+    title: 'Film & photo | Super Conscious',
+    description: "Direction, shoots, casting, lighting, and styling for stills and moving image, from product capture to campaign storytelling.",
+  },
+  {
+    segments: ['disciplines', '3d-motion'],
+    title: '3D & motion | Super Conscious',
+    description: "Modeling, rendering, and motion design across formats: brand films, product explainers, social spots, and platform-native work.",
+  },
+  {
+    segments: ['disciplines', 'animation'],
+    title: 'Animation | Super Conscious',
+    description: "Cel, rigged, and procedural animation built for any platform, from social loops to broadcast spots to interactive experiences.",
+  },
+  {
+    segments: ['disciplines', 'editing'],
+    title: 'Editing | Super Conscious',
+    description: "Story structure, pacing, and color. The post-production craft that turns footage into a finished piece with rhythm and intent.",
+  },
+  {
+    segments: ['disciplines', 'production'],
+    title: 'Production | Super Conscious',
+    description: "Planning, scheduling, budgeting, casting, and the on-the-ground logistics that turn a creative brief into a finished, shipped piece of work.",
+  },
+  {
+    segments: ['disciplines', 'media'],
+    title: 'Media | Super Conscious',
+    description: "Paid strategy, buying, and creative testing across social, search, and programmatic. Planned, flighted, and optimized against the numbers rather than the impressions.",
+  },
+  {
+    segments: ['disciplines', 'search'],
+    title: 'Search | Super Conscious',
+    description: "SEO and AEO: the technical foundations, the content that earns the position, and the structured data that makes a brand legible to engines and to models.",
+  },
+  {
+    segments: ['disciplines', 'engineering'],
+    title: 'Engineering | Super Conscious',
+    description: "Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.",
   },
   {
     segments: ['about-us'],

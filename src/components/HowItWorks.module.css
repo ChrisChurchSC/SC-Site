@@ -230,14 +230,6 @@
    rather than widening the grid column. */
 .stage { min-width: 0; }
 
-/* The rail with nothing beside it. One column, and held to a measure rather
-   than spanning the page: the rule under each row is the row's own extent, and
-   at full width a one-line claim sits under a rule three times its length. */
-.railOnly {
-  grid-template-columns: minmax(0, 1fr);
-  max-width: 760px;
-}
-
 @media (max-width: 1000px) {
   .split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }

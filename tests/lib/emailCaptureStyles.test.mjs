@@ -57,8 +57,11 @@ const consumers = ['src/pages', 'src/components'].flatMap((dir) =>
 
 test('every file rendering the form was discovered', () => {
   // Guards against the regex silently matching nothing and the suite passing
-  // by testing an empty list.
-  assert.ok(consumers.length >= 2, `expected at least 2 consumers, found ${consumers.length}`)
+  // by testing an empty list. One, not two: it was two while the careers page
+  // carried its own roster form, and that was cut on 2026-09-01. ContactCTA
+  // is the only consumer left, and one found consumer is still proof the
+  // discovery is not matching nothing.
+  assert.ok(consumers.length >= 1, `expected at least 1 consumer, found ${consumers.length}`)
 })
 
 for (const { dir, file, id } of consumers) {

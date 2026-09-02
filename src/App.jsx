@@ -22,6 +22,8 @@ import ServiceV3 from './pages/ServiceV3'
 import Work from './pages/Work'
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
+import Disciplines from './pages/Disciplines'
+import Discipline from './pages/Discipline'
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
@@ -62,7 +64,12 @@ const isV3Page = (pathname) =>
   pathname.startsWith('/industries/') ||
   pathname.startsWith('/stages/') ||
   pathname.startsWith('/outcomes/') ||
-  pathname === '/studio'
+  pathname === '/studio' ||
+  /* The careers page. It carries V3Nav now like the rest of the family, and
+     this gate is what takes the side nav and the floating back button off it —
+     two navigations on one page is worse than either. */
+  pathname === '/about-us' ||
+  pathname.startsWith('/disciplines')
 
 function NavGate() {
   const { pathname } = useLocation()
@@ -159,6 +166,12 @@ export default function App() {
                     to NotFound for anyone still linking it internally. */}
                 <Route path="/about" element={<Navigate to="/services" replace />} />
                 <Route path="/about-us" element={<AboutUs />} />
+                {/* Where the nav's "View all disciplines" lands: the twelve
+                    from /services, on their own page. */}
+                <Route path="/disciplines" element={<Disciplines />} />
+                {/* One discipline. Only the slugs in Discipline.jsx's LIVE set
+                    render; the rest redirect back to the grid. */}
+                <Route path="/disciplines/:slug" element={<Discipline />} />
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
                 <Route path="/contact" element={<Contact />} />

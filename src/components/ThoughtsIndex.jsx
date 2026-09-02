@@ -15,7 +15,10 @@ import { sanityImg } from '../lib/sanityImg'
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => (url?.startsWith('/') ? `${base}${url}` : url)
 
-const fmtDate = (iso) => {
+/* Exported for FeaturedThoughts, which shows the newest three of the same
+   list on the homepage and must not have a formatter or a fallback of its
+   own to drift. */
+export const fmtDate = (iso) => {
   if (!iso) return ''
   return new Date(iso).toLocaleString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
@@ -24,7 +27,7 @@ const yearOf = (iso) => (iso ? String(new Date(iso).getUTCFullYear()) : '')
 
 /* The static set, in the same shape the Sanity query returns, so one map
    below renders either. Unchanged from the page that used to hold it. */
-const fromStatic = staticThoughts
+export const fromStatic = staticThoughts
   .map((t) => ({
     _id: `static-${t.slug}`,
     title: t.title,

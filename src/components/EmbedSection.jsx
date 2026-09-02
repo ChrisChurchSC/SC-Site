@@ -34,6 +34,9 @@ const POINTS = [
    team, people you know, thinking that reaches the work — so it uses this
    shape rather than a fourth hand-rolled section. Grow passes nothing and
    renders exactly what it always did. */
+/* `body` takes a string or an array of paragraphs, and `points` may be empty
+   — a caller whose argument is prose rather than three labelled lines gets
+   paragraphs and no list, instead of an empty <dl> in the markup. */
 /* `headlineLines` says the headline arrives pre-broken — see .headlineLines
    in the stylesheet for why that needs a different measure. */
 export default function EmbedSection({
@@ -50,19 +53,23 @@ export default function EmbedSection({
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 className={`${styles.headline}${headlineLines ? ' ' + styles.headlineLines : ''}`} id="embed">{headline}</h2>
-          {body && <p className={styles.body}>{body}</p>}
-
-          <dl className={styles.points}>
-          {points.map(({ Icon, key, line }) => (
-            <div key={key} className={styles.point}>
-              <dt className={styles.pointKey}>
-                <Icon className={styles.pointIcon} aria-hidden="true" />
-                {key}
-              </dt>
-              <dd className={styles.pointLine}>{line}</dd>
-            </div>
+          {(Array.isArray(body) ? body : [body]).filter(Boolean).map((para) => (
+            <p key={para.slice(0, 24)} className={styles.body}>{para}</p>
           ))}
-          </dl>
+
+          {points.length > 0 && (
+            <dl className={styles.points}>
+            {points.map(({ Icon, key, line }) => (
+              <div key={key} className={styles.point}>
+                <dt className={styles.pointKey}>
+                  <Icon className={styles.pointIcon} aria-hidden="true" />
+                  {key}
+                </dt>
+                <dd className={styles.pointLine}>{line}</dd>
+              </div>
+            ))}
+            </dl>
+          )}
         </div>
 
         {/* Cropped by the panel's right edge rather than framed by it. */}

@@ -26,3 +26,4 @@ public/grid/*.jpg
 # Allow named compressed grid images
 !public/grid/*-compressed.jpg
 .vercel
+.env*

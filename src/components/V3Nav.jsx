@@ -151,6 +151,10 @@ export const COMPANY_COLS = [
          that page actually is — what it is like to work here, the realities,
          the open roles and the freelancer signup. */
       { label: 'About', href: '/studio', Icon: Users },
+      /* The twelve disciplines, on their own page. It sat under Services as
+         the panel's "View all" line; it is a page about the studio rather
+         than a service, so it lives with About. */
+      { label: 'Disciplines', href: '/disciplines', Icon: LayoutGrid },
       // Careers is not its own route on this branch — the About page carries
       // it, which is where Nav.jsx sends Careers too.
       { label: 'Careers', href: '/about-us', Icon: Briefcase },
@@ -534,7 +538,10 @@ export default function V3Nav() {
                       on the v3 routes, so it is left alone rather than edited
                       blind — but it is the other place this sentence lives. */}
                   <p className={v3.svcStatement}>Your fractional creative and marketing department.</p>
-                  <NavLink to="/services" className={v3.svcIntroCta}>See all services →</NavLink>
+                  {/* A button, not a link: the ask is the booking, the same
+                      drawer the bar's own button opens. The disciplines page
+                      this line used to point at is under Company now. */}
+                  <button type="button" className={v3.svcIntroCta} onClick={() => { openPanel(null); cal.open() }}>Start a project →</button>
                 </div>
 
                 <div className={v3.svcGrid}>

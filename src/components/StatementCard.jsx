@@ -93,11 +93,15 @@ export default function StatementCard({
   rule = true,
   center = false,
   display = false,
+  /* An extra class from the page, for the one thing a page needs that no
+     flag covers — the homepage's shorter hero. Appended last, so it wins on
+     any property it sets at higher specificity. */
+  className = '',
   children = null,
 }) {
   const paras = Array.isArray(support) ? support : [support]
   return (
-    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${bottom ? ' ' + styles.bottom : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${bare && inset ? ' ' + styles.inset : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}${supportSerif ? ' ' + styles.supportSerif : ''}`}>
+    <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${bottom ? ' ' + styles.bottom : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${bare && inset ? ' ' + styles.inset : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}${supportSerif ? ' ' + styles.supportSerif : ''}${className ? ' ' + className : ''}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
       <Heading className={`${styles.statement}${statementLines ? ' ' + styles.statementLines : ''}`}>
         {Array.isArray(statement)

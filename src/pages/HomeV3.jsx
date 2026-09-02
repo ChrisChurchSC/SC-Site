@@ -21,10 +21,10 @@ import { featuredCaseStudies } from '../data/featuredCaseStudies'
 import ContactCTA from '../components/ContactCTA'
 import FooterCard from '../components/FooterCard'
 import V3Nav, { FOOTER_COLS, HERO_EYEBROW, HERO } from '../components/V3Nav'
-import PromoCard from '../components/PromoCard'
 import DotNav from '../components/DotNav'
 import V3Signoff from '../components/V3Signoff'
 import TestimonialWall from '../components/TestimonialWall'
+import FeaturedThoughts from '../components/FeaturedThoughts'
 import WorkIndex from '../components/WorkIndex'
 import StatementCard from '../components/StatementCard'
 
@@ -119,11 +119,12 @@ export default function HomeV3() {
         tall
         center
         display
+        className={v3.heroHome}
       />
 
       {/* The whole roster, the same component /work renders — one source, so
           the two pages cannot drift. */}
-      <WorkIndex />
+      <WorkIndex controls={false} />
 
 
       {/* WHAT USED TO SIT BETWEEN THE WORK AND THE TESTIMONIALS, all cut:
@@ -142,6 +143,13 @@ export default function HomeV3() {
 
       {/* Carries its own label, so it is not wrapped. */}
       <TestimonialWall />
+
+      <hr className={v3.divider} />
+
+      {/* The newest three thoughts, after the people who worked with us and
+          before the ask: the work, the word on it, the thinking, then the
+          door. Carries its own label and heading, so it is not wrapped. */}
+      <FeaturedThoughts />
 
       <hr className={v3.divider} />
 
@@ -167,11 +175,16 @@ export default function HomeV3() {
 
       <V3Signoff />
 
-      {/* Both are fixed overlays, so they sit at the end of the document
-          rather than in the flow — and after the sign-off, so the last thing
-          in the source order is the last thing on the page. */}
+      {/* A fixed overlay, so it sits at the end of the document rather than
+          in the flow — and after the sign-off, so the last thing in the
+          source order is the last thing on the page.
+
+          THE PLATFORM PROMO CARD THAT SAT BESIDE IT IS GONE (2026-09-02). It
+          was a fixed card in the bottom-right corner pitching the platform,
+          which is its own product in its own repository now; the homepage
+          already ends on the one ask it wants. The component still exists
+          for any page that has a reason to use it. */}
       <DotNav />
-      <PromoCard onBook={cal.open} />
 
     </main>
   )

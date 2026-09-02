@@ -64,10 +64,29 @@ function Media({ src, className }) {
   return <img className={className} src={src} alt="" loading="lazy" />
 }
 
+/* THE TAG ON EVERY CARD IS BUILD OR GROW — the two services — and nothing
+   else. The data carries an engagement type (Brand, Content, Campaign,
+   Product, Brand + Content), which is what the cards used to show and what
+   the Discipline filter still reads; this folds each type into the service
+   it belongs to. Brand and Product are the building half; Content and
+   Campaign are the growing half; Brand + Content began as a build and is
+   filed as one. A type this table has never seen falls to Grow if it
+   mentions content, campaign or marketing and to Build otherwise, so a new
+   Sanity type cannot put a third word on the cards. */
+const SERVICE_OF = {
+  Brand: 'Build',
+  Product: 'Build',
+  'Brand + Content': 'Build',
+  Content: 'Grow',
+  Campaign: 'Grow',
+}
+export const serviceOf = (type) =>
+  SERVICE_OF[type] ?? (/content|campaign|marketing|media|growth/i.test(type ?? '') ? 'Grow' : 'Build')
+
 function Meta({ study }) {
   return (
     <p className={styles.meta}>
-      {study.type}
+      {serviceOf(study.type)}
       {study.year && <><span className={styles.metaSep}> / </span>{study.year}</>}
     </p>
   )
@@ -118,7 +137,13 @@ const TYPES = uniq(ENTRIES.map((s) => s.type)).filter(Boolean)
 const INDUSTRIES = uniq(ENTRIES.map((s) => s.industry)).filter(Boolean)
 const YEARS = uniq(ENTRIES.map((s) => s.year)).filter(Boolean).reverse()
 
-export default function WorkIndex() {
+/* `controls`: the search field and the three filters above the grid. On by
+   default, which is what /work wants; the homepage turns them off — the grid
+   there is a shop window rather than a catalog, and a search box between
+   the hero and the first card is a form on a page that has been stripped
+   of forms. The state hooks still run with controls off; they just never
+   change. */
+export default function WorkIndex({ controls = true }) {
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
   const [type, setType] = useState('')
@@ -154,6 +179,7 @@ export default function WorkIndex() {
 
   return (
     <div className={styles.wrap}>
+      {controls && (
       <div className={styles.controls}>
         <input
           className={styles.search}
@@ -179,6 +205,7 @@ export default function WorkIndex() {
           {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
         </select>
       </div>
+      )}
 
       {filtering && (
         <p className={styles.count} role="status">
@@ -230,13 +257,14 @@ export default function WorkIndex() {
             {(!SHOW_COVERS || !study.cover) && (
               <span className={styles.ph}>
                 {study.tagline && <span className={styles.phLine}>{study.tagline}</span>}
-                {study.services?.length > 0 && (
-                  <span className={styles.phTags}>
-                    {study.services.slice(0, 3).map((w) => (
-                      <span key={w} className={styles.phTag}>{w}</span>
-                    ))}
-                  </span>
-                )}
+                {/* ONE TAG: THE SERVICE. It was the first three of the study's
+                    services ("Brand Identity", "Design System", ...), which
+                    read as a list of deliverables under a card. The site
+                    sells two things, so the card says which one this was —
+                    see serviceOf above. */}
+                <span className={styles.phTags}>
+                  <span className={styles.phTag}>{serviceOf(study.type)}</span>
+                </span>
               </span>
             )}
           </span>

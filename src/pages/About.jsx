@@ -1,24 +1,26 @@
 import home from './Home.module.css'
 import v3 from './HomeV3.module.css'
-import AudienceCards from '../components/AudienceCards'
-import ContactCTA from '../components/ContactCTA'
-import DepartmentPanel from '../components/DepartmentPanel'
-import DisciplinesSection from '../components/DisciplinesSection'
-import EmbedSection from '../components/EmbedSection'
 import FooterCard from '../components/FooterCard'
-import HowItWorks from '../components/HowItWorks'
+import ScrollCards from '../components/ScrollCards'
 import StatementCard from '../components/StatementCard'
-import TestimonialWall from '../components/TestimonialWall'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
-import { BUILD_EMBED, embedCopyFor } from './ServiceV3'
-import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
 
-const CLOSING = 'It might change your life. At minimum, we can answer your burning marketing questions.'
-
 /**
- * ABOUT, ON THE HOMEPAGE'S PATTERN.
+ * ABOUT — A HERO AND THE FOOTER, AND NOTHING ELSE.
+ *
+ * IT WAS SIX SECTIONS. Built on the homepage's pattern, it ran who we are,
+ * how we work, disciplines, testimonials and a contact card under the hero.
+ * All of it is cut, on 2026-09-01, and the page is deliberately one screen.
+ *
+ * WHAT THAT MEANS FOR THE CLAIM NOTES BELOW. They were written because the
+ * cut sections made claims that SC-Brand/Strategy/proof-points.md grades, and
+ * the page had to be checked against those grades. One line of copy is left —
+ * the hero's support, which is positioning.md's own statement — so nothing on
+ * this page currently needs a grade. The notes stay because the sections are
+ * likely to come back, and they record what was checked and what may not be
+ * said, which is the expensive part to work out twice.
  *
  * IT LIVES AT /studio. /about is 301d to /services by vercel.json — the
  * capabilities page lived there before the Services rename — so a page
@@ -34,25 +36,104 @@ const CLOSING = 'It might change your life. At minimum, we can answer your burni
  *
  * EVERY CLAIM IS GRADED. SC-Brand/Strategy/proof-points.md v2 grades twelve
  * studio claims A, B or C and says which may be said publicly: A as stated, B
- * "if we would actually show it", C "only as opinion, never as fact". This
- * page uses the B-graded ones and the positioning statement, and none of the
- * C ones.
+ * "if we would actually show it", C "only as opinion, never as fact".
  *
- * SPECIFICALLY NOT HERE:
- *   - "No pooled or anonymous labor" — graded C and marked do not publish.
+ * WHAT MAY NOT BE SAID HERE, whatever comes back onto the page:
+ *   - "No pooled or anonymous labor" — graded C and marked do not publish
+ *     until three contradictions in that file are resolved.
+ *   - "Our creative output is always 100% our own" — C: no written AI-use
+ *     policy exists to stand behind it.
  *   - "Measured and optimized every month" — C: we instrument well, but there
  *     is no record of a client being shown a readout against goals.
- *   - "Our creative output is always 100% our own" — C: no written AI-use
- *     policy exists.
  *   - The A-graded analytics figures. They are the strongest thing the studio
  *     owns — 1.3M impressions and $0.48 per subscriber on $8,599 of spend —
  *     and proof-points.md says they need client permission to name. Nothing
  *     in the repo records that permission, so the claim appears without the
  *     client and without the numbers.
  */
-export default function About() {
-  const cal = useCalDrawer()
+/* CHRIS'S THREE, VERBATIM. He wrote them for this page on 2026-09-01, for a
+   three-up card section that was cut, and they then ran as the three passages
+   of the scrolling section below.
 
+   NOTHING READS THIS TODAY. The section below is two mirrored panels with no
+   copy in it — "for now", per the instruction that produced it. The words are
+   kept here rather than deleted because they are Chris's, they were written
+   for this page, and the layout they belong to is one file's history away.
+
+   Two comparative claims in here have nothing behind them in
+   SC-Brand/Strategy/proof-points.md — "a fraction of your typical overhead
+   costs" and "our fees are competitive". They are Chris's own and are set as
+   given; noted so nobody later mistakes them for evidenced ones. */
+const WHAT_WE_ARE = [
+  {
+    n: '01',
+    name: 'We are creatives who are also marketers.',
+    body: "While we all started out as writers, designers, illustrators, and developers, we've built our marketing and media chops through years of work in-house and in agencies. We make beautiful brands, and we also know how to take them to market.",
+  },
+  {
+    n: '02',
+    name: "We're not an extension of your team. We are your team.",
+    body: "We embed ourselves into your workflow, giving you on-demand access to world-class design, copy, and marketing talent for a fraction of your typical overhead costs. Whether you need to supplement staff or you're looking to add capabilities, we're ready to get into your weeds.",
+  },
+  {
+    n: '03',
+    name: 'We scale to your needs.',
+    body: 'Our infrastructure is flexible and our fees are competitive for one simple reason: every client has unique needs. We partner with you on the best mix of services and team support based on your goals, budgets, and timelines. Nothing at Super-Conscious is off the shelf.',
+  },
+]
+
+/* FOUR PANELS, AND THREE OF THEM ARE STILL THE FIRST ONE'S WORDS.
+
+   Spelled out rather than generated, because the point of duplicating them is
+   that each one gets its own copy next — and a .map over one object, or four
+   references to a single const, would make editing one edit all four.
+
+   WHAT_WE_ARE 02 and 03 above are the obvious tenants for two of these. They
+   are not dropped in here because nobody has said they belong on these panels
+   in this order, and guessing would bury that decision in a diff. */
+/* THE PANEL ART IS A FLAT GREY FOR NOW. Each passage gets its own step so the
+   left panel visibly changes with the copy; `shade`, `call`, `stack`, `board` and `logos` are the stand-ins
+   for the
+   `image` the component also takes, and swapping one field for the other is the
+   whole of the job when the real artwork exists. */
+const PANELS = [
+  {
+    /* The captions name what comes OUT of the studio rather than the crafts
+       that go into it — the disciplines were already said by the ring on the
+       next passage, and a channel is the thing a client recognises. */
+    board: ['Website', 'YouTube', 'Email', 'Instagram', 'Landing Page', 'Paid Social'],
+    label: "[ What We Are ]",
+    line: "We are creatives who are also marketers.",
+    sub: "While we all started out as writers, designers, illustrators, and developers, we've built our marketing and media chops through years of work in-house and in agencies. We make beautiful brands, and we also know how to take them to market.",
+  },
+  {
+    call: [
+      'Creative Director',
+      'Designer',
+      'Copywriter',
+      'Strategist',
+      'Producer',
+      'Developer',
+    ],
+    label: "[ Who We Are ]",
+    line: "We're not an extension of your team. We are your team.",
+    sub: "We embed ourselves into your workflow, giving you on-demand access to world-class design, copy, and marketing talent for a fraction of your typical overhead costs. Whether you need to supplement staff or you're looking to add capabilities, we're ready to get into your weeds.",
+  },
+  {
+    stack: 9,
+    label: "[ How We Work ]",
+    line: "We scale to your needs.",
+    sub: "Our infrastructure is flexible and our fees are competitive for one simple reason: every client has unique needs. We partner with you on the best mix of services and team support based on your goals, budgets, and timelines. Nothing at Super-Conscious is off the shelf.",
+  },
+  {
+    logos: 20,
+    label: "[ Who We've Worked With ]",
+    line: "You've seen our work before.",
+    sub: "We've worked with tons of brands through our different roles and careers — Digitas, Huge, Buck, Conde Nast, Amazon and Victoria's Secret among them.",
+  },
+]
+
+export default function About() {
   useMeta({
     title: 'About | Super Conscious',
     description: 'The embedded creative and marketing team that builds your brand and then grows it.',
@@ -77,8 +158,10 @@ export default function About() {
           11px mono the display variant defaults to — it is a sentence to read,
           not a caption.
 
-          `inset` lines the type up with the sections under it — bare cards
-          start on the page edge, and every other page's hero does not.
+          `inset` lines the type up with the page's other sections — bare
+          cards start on the page edge, and every other page's hero does not.
+          There is nothing under it here any more, but the inset is what keeps
+          this hero on the same line as every other hero on the site.
 
           The break is written here rather than left to the measure: it falls
           after "embedded" so "creative department" — the thing being claimed —
@@ -98,73 +181,23 @@ export default function About() {
         rule={false}
       />
 
-      <hr className={v3.divider} />
+      {/* THE RULE UNDER THE HERO IS DRAWN BY ScrollCards, not by an <hr> here.
+          It has to meet the vertical rule down the middle of that section, and
+          two elements with the page stack's gap between them cannot touch.
+          See the note on .section in ScrollCards.module.css.
 
-      {/* Who we are, in the words positioning.md uses.
-          
-          The cards are passed rather than defaulted. AudienceCards' own three
-          are New / Pivoting / Underdog, which is who the studio is *for* —
-          right under the old label and wrong under this one. HomeV2 and
-          ServiceV3 still render the defaults, so the component keeps them.
+          `rule={false}` on the hero above is unrelated: that turns off
+          StatementCard's own hairline, which sits at the top of the card and
+          would read as an underline on the nav bar. */}
+      {/* ONE SECTION NOW, NOT FOUR. The wrapper that used to sit here existed
+          to stop the stack's gap opening a space at every join; there are no
+          joins left. ScrollCards takes the whole set and pins one stage over a
+          track four screens tall, swapping the copy in the right-hand panel as
+          the scroll crosses from one band to the next.
 
-          The copy is positioning.md's "Build vs. Grow" and the embedded-team
-          claim, which proof-points.md grades B and evidences end to end. What
-          is deliberately not here: "no pooled or anonymous labor", which that
-          file grades C and says plainly not to publish, and the tiered hourly
-          retainers, which it records as a model the studio does not sell. */}
-      <AudienceCards
-        eyebrow="[ Who we are ]"
-        headline="An embedded creative and marketing team — we build the brand, then grow it."
-        cards={WHO_WE_ARE}
-      />
-
-      <hr className={v3.divider} />
-
-      <EmbedSection
-        eyebrow={embedCopyFor('build').eyebrow}
-        headline={embedCopyFor('build').headline}
-        body={null}
-        points={BUILD_EMBED}
-        visual={<DepartmentPanel />}
-      />
-
-      <hr className={v3.divider} />
-
-      {/* THE POINT OF VIEW, from positioning.md, trimmed to the claims
-          proof-points.md grades B — evidenced, and we would show the record
-          if challenged. The C-graded ones are named in this file's header and
-          are deliberately absent.
-
-          ON THE RAIL, not on cards. Six claims side by side are six things to
-          scan; on the rail they are read one at a time in order, and each one
-          holds the page for its dwell — which is the right reading for a claim
-          that is only worth anything with its evidence attached. It is the same
-          component the services pages use, given its own steps rather than a
-          slug, so there is one rail on the site and not two. */}
-      <HowItWorks
-        slug="point-of-view"
-        eyebrow="[ What is behind it ]"
-        headline="Our point of view."
-        steps={POV}
-        rail
-      />
-
-      <hr className={v3.divider} />
-
-      <DisciplinesSection
-        eyebrow="[ Disciplines ]"
-        headline="Twelve disciplines, one bench."
-      />
-
-      <hr className={v3.divider} />
-
-      <TestimonialWall />
-
-      <hr className={v3.divider} />
-
-      <ContactCTA sub={CLOSING} form={false} bare>
-        <button className={v3.contactCta} onClick={cal.open}>Start a project</button>
-      </ContactCTA>
+          The copy lives in PANELS above for the same reason WHAT_WE_ARE does:
+          the component owns the shape, this page owns the words. */}
+      <ScrollCards panels={PANELS} />
 
       <FooterCard columns={FOOTER_COLS} />
 
@@ -173,72 +206,4 @@ export default function About() {
   )
 }
 
-/* Each claim is positioning.md's, and each "behind" line is what
-   proof-points.md holds as the evidence for it — stated as what we would show
-   rather than as a result. Claim numbers 3, 4, 8, 10, 11 and 12, all graded B. */
-/* Straight out of positioning.md: the two actions everything falls into,
-   and the team arrangement that is the studio's actual category claim.
 
-   Every card is a link — that is the component's shape, not a choice made
-   here — and they all point at /work for the reason AudienceCards already
-   gives about its own: the filtered routes these imply do not exist, and a
-   link to a page that is not there is worse than a broader one. */
-const WHO_WE_ARE = [
-  {
-    id: 'build',
-    name: 'Build',
-    body: 'We make your brand and its assets, from scratch or refreshed from what you have: strategy, identity, voice, messaging, website, app.',
-    line: 'Make the brand.',
-    cta: 'See what we have built',
-    href: '/work',
-  },
-  {
-    id: 'grow',
-    name: 'Grow',
-    body: 'We take that brand to market and run it: campaigns, paid media, organic content, measured and optimized every month.',
-    line: 'Take it to market.',
-    cta: 'See how we grow them',
-    href: '/work',
-  },
-  {
-    id: 'one-team',
-    name: 'One team',
-    body: 'Most of the field does one half — identity and web, or campaigns and content. We do both, with the same named people on both phases.',
-    line: 'The same people do both.',
-    cta: 'See the work end to end',
-    href: '/work',
-  },
-]
-
-const POV = [
-  {
-    n: '01',
-    name: 'Build and grow, one embedded team.',
-    note: 'Most of the field does one half — identity and web, or campaigns and content. We hold the record of a single engagement running from positioning through the site to paid media with the same named people on both phases.',
-  },
-  {
-    n: '02',
-    name: 'The same people who already know the brand.',
-    note: 'Resourcing names individuals against accounts week by week, with job codes per project and utilization tracked per person. It is a model we operate rather than a promise we make.',
-  },
-  {
-    n: '03',
-    name: 'Strategy that gets executed.',
-    note: 'The thinking does not sit in a deck. In the engagement above it ran positioning to audience definition to site to paid media in one continuous line, and the strategy demonstrably reached the ad.',
-  },
-  {
-    n: '04',
-    name: 'We revisit that thinking through analytics.',
-    note: 'On one program an assumption was tested and changed — growth spiked only with media spend while organic plateaued flat — and that finding redirected the work rather than being noted and ignored.',
-  },
-  {
-    n: '05',
-    name: 'We start where you are.',
-    note: 'A pair of proposals was re-cut inside a single call once the prospect named a budget. Scope moves to the money rather than the other way round.',
-  },
-  {
-    n: '06',
-    name: 'AI enhances the work, it does not do the work.',
-    note: 'The argument is public: the agent definitions in our own brand repository are built around judgment rather than generation, and each one names the thing it refuses to invent.',
-  },
-]
