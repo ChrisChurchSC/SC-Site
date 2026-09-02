@@ -1,7 +1,9 @@
 .main {
-  padding: 0 305px 120px 0;
+  /* Inside V3Frame now (2026-09-02): the frame carries the page padding, so
+     the 305px reserved on the right for the old side nav is gone, and the
+     frame's own top padding replaces this rule's. */
+  padding: 0;
   background: #0a0a0a;
-  min-height: 100vh;
   animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 

@@ -57,6 +57,14 @@ export const NAV_LINKS = [
   { label: 'Pricing', href: '/pricing' },
 ]
 
+/* THE PHONE MENU'S GROUPS: what the three panels open, flattened, plus
+   Pricing. Built from the same constants as the panels and the footer, so
+   nothing here can drift from them. */
+const MOBILE_GROUPS_SERVICES = [
+  { label: 'Build', href: '/services/build' },
+  { label: 'Grow', href: '/services/grow' },
+]
+
 /* The two columns of the Case Studies panel: by industry, and by company
  * size.
  *
@@ -175,6 +183,14 @@ export const COMPANY_COLS = [
       { label: 'LinkedIn', href: 'https://www.linkedin.com/company/super-conscious/', Icon: ArrowUpRight, external: true },
     ],
   },
+]
+
+export const MOBILE_GROUPS = [
+  { heading: 'Services', links: MOBILE_GROUPS_SERVICES },
+  { heading: 'Case Studies', links: [{ label: 'All case studies', href: '/work' }, ...WORK_BY_INDUSTRY, ...WORK_BY_STAGE.filter((l) => l.href)] },
+  { heading: 'Company', links: COMPANY_COLS[0].links.map(({ label, href }) => ({ label, href })) },
+  /* No heading: a group of one is a link. */
+  { heading: null, links: [{ label: 'Pricing', href: '/pricing' }] },
 ]
 
 /* ── The canvas's copy ─────────────────────────────────────────────────── */
@@ -698,9 +714,16 @@ export default function V3Nav() {
 
             {menuOpen && (
               <div className={v3.mobileNav} id="v3-mobile-nav">
-                {NAV_LINKS.map(({ label, href }) => (
-                  href
-                    ? (
+                {/* THE PANELS' OWN DESTINATIONS, NOT THE TOP-LEVEL LABELS'.
+                    The wide bar opens a panel for Services, Case Studies and
+                    Company; the phone menu used to link their labels instead,
+                    and "Services" went to /services, the older page. Here
+                    each group is its heading as text and the panel's pages
+                    under it (2026-09-02). */}
+                {MOBILE_GROUPS.map(({ heading, links }) => (
+                  <div key={heading ?? links[0].label} className={v3.mobileGroup}>
+                    {heading && <span className={v3.mobileText}>{heading}</span>}
+                    {links.map(({ label, href }) => (
                       <NavLink
                         key={label}
                         to={href}
@@ -709,12 +732,8 @@ export default function V3Nav() {
                       >
                         {label}
                       </NavLink>
-                    )
-                    /* Platform has no route on the wide bar either — it opens a
-                       panel there, and there is no page behind it. Rendered as
-                       text rather than as a link to nowhere, the same way the
-                       footer treats every entry without a destination. */
-                    : <span key={label} className={v3.mobileText}>{label}</span>
+                    ))}
+                  </div>
                 ))}
 
                 {/* THE CTA MOVES IN HERE below the breakpoint. On the wide

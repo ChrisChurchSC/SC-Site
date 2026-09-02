@@ -1,4 +1,5 @@
 import { useMeta } from '../hooks/useMeta'
+import V3Frame from '../components/V3Frame'
 import styles from './Privacy.module.css'
 
 export default function Terms() {
@@ -10,7 +11,7 @@ export default function Terms() {
   })
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
       <div className={styles.inner}>
         <h1 className={styles.headline}>Terms of Service</h1>
         <p className={styles.updated}>Last updated: June 1, 2026</p>
@@ -68,6 +69,6 @@ export default function Terms() {
           <a href="mailto:chris@super-conscious.studio" className={styles.link}>chris@super-conscious.studio</a>
         </p>
       </div>
-    </main>
+    </div></V3Frame>
   )
 }

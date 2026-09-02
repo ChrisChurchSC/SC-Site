@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import V3Frame from '../components/V3Frame'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { thoughts as staticThoughts } from '../data/thoughts'
 import styles from './ThoughtPost.module.css'
@@ -112,9 +113,9 @@ export default function ThoughtPost() {
   } : {})
 
   if (!post) return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
       <p className={styles.notFound}>Post not found.</p>
-    </main>
+    </div></V3Frame>
   )
 
   const n = String(post.order ?? 0).padStart(3, '0')
@@ -137,7 +138,7 @@ export default function ThoughtPost() {
   }
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
       <header className={styles.header}>
         <div className={styles.meta}>
           <span className={styles.num}>{n}</span>
@@ -191,6 +192,6 @@ export default function ThoughtPost() {
           </button>
         </div>
       </article>
-    </main>
+    </div></V3Frame>
   )
 }

@@ -1,4 +1,5 @@
 import { useMeta } from '../hooks/useMeta'
+import V3Frame from '../components/V3Frame'
 import styles from './Privacy.module.css'
 
 export default function Privacy() {
@@ -10,7 +11,7 @@ export default function Privacy() {
   })
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
       <div className={styles.inner}>
         <h1 className={styles.headline}>Privacy Policy</h1>
         <p className={styles.updated}>Last updated: June 1, 2026</p>
@@ -62,6 +63,6 @@ export default function Privacy() {
           chris@super-conscious.studio
         </p>
       </div>
-    </main>
+    </div></V3Frame>
   )
 }

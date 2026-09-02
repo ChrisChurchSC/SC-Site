@@ -1,4 +1,5 @@
 import { NavLink, useParams } from 'react-router-dom'
+import V3Frame from '../components/V3Frame'
 import { useProjects } from '../context/ProjectsContext'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
@@ -22,7 +23,7 @@ export default function ClientOverview() {
   })
 
   if (!project) return (
-    <main className={styles.main}><p className={styles.notFound}>Client not found.</p></main>
+    <V3Frame><div className={styles.main}><p className={styles.notFound}>Client not found.</p></div></V3Frame>
   )
 
   // Sanity sub-projects (with thumbnail and comingSoon) keyed by full slug
@@ -49,7 +50,7 @@ export default function ClientOverview() {
   const tagline = sanity?.tagline ?? null
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
 
       <header className={styles.header}>
         <div className={styles.headerMeta}>
@@ -101,6 +102,6 @@ export default function ClientOverview() {
 
       <Toast toast={toast} />
 
-    </main>
+    </div></V3Frame>
   )
 }

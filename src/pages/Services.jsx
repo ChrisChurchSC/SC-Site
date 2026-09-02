@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import V3Frame from '../components/V3Frame'
 import styles from './Services.module.css'
 import { useMeta } from '../hooks/useMeta'
 import ContactCTA from '../components/ContactCTA'
@@ -259,7 +260,7 @@ export default function Services() {
   })
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
 
       <section className={styles.header}>
         <p className={styles.headerLabel}>{COPY.eyebrow}</p>
@@ -463,6 +464,6 @@ export default function Services() {
         requestType="pricing"
       />
 
-    </main>
+    </div></V3Frame>
   )
 }

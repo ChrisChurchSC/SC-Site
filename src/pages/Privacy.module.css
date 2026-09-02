@@ -1,7 +1,9 @@
 .main {
-  padding: 120px 0 160px;
+  /* Inside V3Frame now (2026-09-02): the frame carries the page padding, so
+     the 305px reserved on the right for the old side nav is gone, and the
+     frame's own top padding replaces this rule's. */
+  padding: 0;
   background: #0a0a0a;
-  min-height: 100vh;
 }
 
 .inner {

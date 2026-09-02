@@ -69,7 +69,16 @@ const isV3Page = (pathname) =>
      this gate is what takes the side nav and the floating back button off it —
      two navigations on one page is worse than either. */
   pathname === '/about-us' ||
-  pathname.startsWith('/disciplines')
+  pathname.startsWith('/disciplines') ||
+  /* The pages that wear V3Frame (2026-09-02): case studies and client
+     overviews, thought posts, contact, privacy, terms and the old services
+     page. Without this the old side nav rendered over the new bar. */
+  pathname === '/services' ||
+  pathname === '/contact' ||
+  pathname === '/privacy' ||
+  pathname === '/terms' ||
+  pathname.startsWith('/work/') ||
+  pathname.startsWith('/thoughts/')
 
 function NavGate() {
   const { pathname } = useLocation()

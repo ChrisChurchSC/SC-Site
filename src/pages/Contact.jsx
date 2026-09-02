@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import V3Frame from '../components/V3Frame'
 import styles from './Contact.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { FORMSPREE_ENDPOINT, submitLead } from '../lib/submitLead'
@@ -37,7 +38,7 @@ export default function Contact() {
   }
 
   return (
-    <main className={styles.main}>
+    <V3Frame><div className={styles.main}>
       <section className={styles.header}>
         <p className={styles.headerLabel}>Contact</p>
         <h1 className={styles.headline}>Let's build together.</h1>
@@ -104,6 +105,6 @@ export default function Contact() {
           Message sent. We'll be in touch shortly.
         </div>
       )}
-    </main>
+    </div></V3Frame>
   )
 }
