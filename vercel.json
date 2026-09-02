@@ -76,8 +76,13 @@
       "statusCode": 301
     },
     {
-      "source": "/about-us",
-      "destination": "/careers",
+      "source": "/careers",
+      "destination": "/about-us",
+      "statusCode": 301
+    },
+    {
+      "source": "/who-we-are",
+      "destination": "/studio",
       "statusCode": 301
     },
     {
