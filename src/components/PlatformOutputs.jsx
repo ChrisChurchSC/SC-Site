@@ -1,6 +1,10 @@
 import { useState } from 'react'
 
 import styles from './PlatformOutputs.module.css'
+import pricing from '../pages/PricingV3.module.css'
+import Tier, { money } from './PricingTier'
+import ExtendsWires from './ExtendsWires'
+import { useCalDrawer } from '../context/CalDrawerContext'
 import { tabs } from '../data/pricingTabs'
 
 /**
@@ -102,7 +106,30 @@ export function Card({ kicker, name, summary, items, note, footer }) {
   )
 }
 
-export default function PlatformOutputs({ cards }) {
+export default function PlatformOutputs({ cards, service = 'build' }) {
+  const cal = useCalDrawer()
+  /* GROW IS THE PRICING PAGE'S GROW SECTION (2026-09-02), the same swap
+     Build got: the billing toggle and the four hour buckets as the pricing
+     page's own price-led cards. The period is this section's own state, as
+     it is the pricing page's. */
+  const isGrow = !cards && service === 'grow'
+  const growTab = isGrow ? tabs.find((t) => t.id === 'subscription') : null
+  const [period, setPeriod] = useState(growTab?.periods?.[0]?.id ?? 'monthly')
+  const p = growTab?.periods?.find((x) => x.id === period)
+  /* THE BUILD SET IS THE PRICING PAGE'S BUILD SECTION, LAID OUT AS IT IS
+     THERE (2026-09-02): Brand platform as the wide lead card, the "and
+     everything it extends to" hub, the wires, and the three under it as
+     this section's own card with the price and button hung underneath —
+     the same composition BuySection draws on /pricing, with the same
+     data attributes the wires find their ends by. Chris's call: the
+     section should be the Build part of /pricing, exactly. Grow still
+     hands in its own cards and gets the plain grid below. */
+  const projectTiers = cards || isGrow ? null : tabs.find((t) => t.id === 'project').tiers
+  const pricingMode = Boolean(projectTiers || isGrow)
+  const lead = projectTiers?.find((t) => t.name === 'Brand platform') ?? null
+  const rest = projectTiers ? projectTiers.filter((t) => t !== lead) : null
+  /* The plain grid, for a caller that hands in its own cards. Neither
+     service does now; both render their pricing section above. */
   const TIERS = cards ?? projectCards
 
   return (
@@ -112,11 +139,88 @@ export default function PlatformOutputs({ cards }) {
           component with its own cards, where the label reads as what the
           hours produce rather than as an extension of the platform — worth
           watching if this label is ever made per-service. */}
-      <p className={styles.eyebrow}>[ Everything a brand platform extends to ]</p>
+      {/* TWO HEADINGS FOR TWO JOBS. On Build the section is the pricing
+          page's Build section — the lead card, the hub, the three under it,
+          each with a price and its deliverables — so it says so. On Grow,
+          which hands in its own output cards, the older line stands: what
+          the platform extends to. Chris's call, 2026-09-02: a section about
+          pricing and deliverables should be labelled as one. */}
+      <p className={styles.eyebrow}>
+        {pricingMode ? '[ Pricing & deliverables ]' : '[ Everything a brand platform extends to ]'}
+      </p>
       <h2 className={styles.headline} id="what-it-makes">
-        Everything the brand shows up as.
+        {pricingMode ? 'What it costs, and what you get.' : 'Everything the brand shows up as.'}
       </h2>
 
+      {isGrow && growTab.periods && (
+        <div className={pricing.periods} role="group" aria-label="Billing period">
+          {growTab.periods.map((x) => (
+            <button
+              key={x.id}
+              type="button"
+              className={x.id === period ? pricing.periodOn : pricing.period}
+              aria-pressed={x.id === period}
+              onClick={() => setPeriod(x.id)}
+            >
+              {x.label}
+              {x.badge && <span className={pricing.saveBadge}>{x.badge}</span>}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {isGrow && (
+        <div className={pricing.tiers}>
+          {growTab.tiers.map((tier) => (
+            <Tier
+              key={tier.kicker}
+              tier={tier}
+              variant="subscription"
+              months={p?.months ?? 1}
+              discount={p?.discount ?? 0}
+              unitOverride={p?.unit}
+              onCta={cal.open}
+            />
+          ))}
+        </div>
+      )}
+
+      {projectTiers ? (
+        <div className={pricing.extends}>
+          {lead && <ExtendsWires count={rest.length} />}
+          {lead && (
+            <div className={pricing.lead} data-lead-card>
+              <Tier tier={lead} variant="project" onCta={cal.open} />
+            </div>
+          )}
+          {lead && (
+            <p className={pricing.extendsLabel} data-extends-label>
+              And everything it extends to
+            </p>
+          )}
+          <div className={`${pricing.tiers}${lead ? ' ' + pricing.tiersMirror : ''}`} data-extends-grid>
+            {rest.map((t) => (
+              <Card
+                key={t.name}
+                kicker={t.kicker}
+                name={t.name}
+                summary={t.summary}
+                items={t.outputs ?? t.lines}
+                note={t.outputsNote ?? t.note}
+                footer={
+                  <div className={pricing.mirrorFoot}>
+                    <p className={pricing.priceRow}>
+                      {t.unit && <span className={pricing.unitAbove}>{t.unit}</span>}
+                      <span className={`${pricing.price} ${pricing.priceQuiet}`}>{money(t.price)}</span>
+                    </p>
+                    <button className={pricing.cta} onClick={cal.open}>{t.cta}</button>
+                  </div>
+                }
+              />
+            ))}
+          </div>
+        </div>
+      ) : isGrow ? null : (
       <div className={styles.grid}>
         {TIERS.map(({ kicker, name, summary, lines, outputs, note, outputsNote }, i) => (
           <Card
@@ -131,6 +235,7 @@ export default function PlatformOutputs({ cards }) {
           />
         ))}
       </div>
+      )}
     </section>
   )
 }

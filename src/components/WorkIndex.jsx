@@ -256,7 +256,11 @@ export default function WorkIndex({ controls = true }) {
                 looks like when there is no thumbnail. */}
             {(!SHOW_COVERS || !study.cover) && (
               <span className={styles.ph}>
-                {study.tagline && <span className={styles.phLine}>{study.tagline}</span>}
+                {/* No tagline on the small cards (cut 2026-09-02): the placeholder
+                    carried the study's one-line description under the tag,
+                    and twelve of them read as a wall of captions. The name
+                    under the card and the Build/Grow tag are what a grid cell
+                    needs; the description is on the study's own page. */}
                 {/* ONE TAG: THE SERVICE. It was the first three of the study's
                     services ("Brand Identity", "Design System", ...), which
                     read as a list of deliverables under a card. The site

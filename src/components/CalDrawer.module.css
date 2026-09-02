@@ -4,8 +4,10 @@
   inset: 0;
   background: rgba(0, 0, 0, 0);
   z-index: 500;
+  /* A side panel now (2026-09-02), not a bottom sheet: the panel sits at
+     the right edge and slides in from it. */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-end;
   transition: background 0.35s ease;
   pointer-events: none;
@@ -19,41 +21,46 @@
 /* ── Drawer panel ── */
 .drawer {
   background: #161616;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px 12px 0 0;
-  /* Tall enough to fit the calendar without scrolling, but capped so the
-     sheet doesn't slide up to near-full-screen on large displays. */
-  height: min(92vh, 700px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  /* Full height, and wide enough for the brief's chip rows and the calendar
+     without either scrolling sideways; capped so it is a panel beside the
+     page on a wide screen rather than most of it. */
+  height: 100%;
+  width: min(92vw, 720px);
   display: flex;
   flex-direction: column;
-  transform: translateY(100%);
+  transform: translateX(100%);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: all;
   overflow: hidden;
 }
 
 .drawerVisible {
-  transform: translateY(0);
+  transform: translateX(0);
 }
 
 /* ── Handle + header ── */
+/* The pull handle was a bottom sheet's affordance; a side panel has none. */
 .handle {
-  width: 36px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
-  margin: 12px auto 0;
-  flex-shrink: 0;
+  display: none;
 }
 
+/* Left-aligned, on the form's own edge (2026-09-02). The title was centred
+   when the drawer was a bottom sheet the width of the screen; in a side
+   panel a centred title floats between a left-aligned form and a close
+   button. */
 .header {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 14px 32px 14px;
+  justify-content: flex-start;
+  padding: 22px 32px 16px;
   flex-shrink: 0;
+  /* A rule under the title, the site's hairline, the full width of the
+     panel — edge to edge, not inset to the form (Chris, 2026-09-02). */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 
 .title {
   font-family: 'Signifier', Georgia, serif;
@@ -114,11 +121,11 @@
 
 @media (max-width: 768px) {
   .drawer {
-    height: 92vh;
+    width: 100%;
   }
 
   .header {
-    padding: 16px 20px 12px;
+    padding: 16px 18px 12px;
   }
 
   .closeBtn {
@@ -130,4 +137,53 @@
   .calContainer {
     padding: 18px 0 0;
   }
+}
+
+/* ── The brief step ─────────────────────────────────────────────────────── */
+
+/* The form is longer than the sheet; this is what scrolls. Same side
+   padding as the header. */
+.briefScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 32px 28px;
+}
+
+.skip {
+  max-width: 1040px;
+  margin: 22px auto 0;
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.skipLink {
+  font: inherit;
+  color: rgba(255, 255, 255, 0.75);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.skipLink:hover { color: #fff; }
+
+/* Over the calendar once the brief has gone: one line, centred like the
+   title above it. */
+.sentNote {
+  margin: 0 32px 6px;
+  text-align: left;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--pink, #df4ed6);
+}
+
+@media (max-width: 760px) {
+  .briefScroll { padding: 8px 18px 24px; }
 }

@@ -1,10 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useCalDrawer } from '../context/CalDrawerContext'
+import ProjectBrief from './ProjectBrief'
 import styles from './CalDrawer.module.css'
 
+/**
+ * TWO STEPS NOW (2026-09-02): the brief, then the booking. "Start a project"
+ * used to open straight onto the calendar; it opens onto ProjectBrief —
+ * service, industry, stage, outcome, disciplines — and the calendar is the
+ * step after the brief is sent, so the call is booked by someone who has
+ * already said what it is about. Anyone who only wants the call has a
+ * line to skip to it. The calendar's container stays in the DOM through
+ * both steps (hidden, not unmounted) so the Cal embed initialises once,
+ * as before. The step is remembered: a sent brief is not asked for twice.
+ */
 export default function CalDrawer() {
   const { isOpen, close } = useCalDrawer()
   const [visible, setVisible] = useState(false)
+  const [step, setStep] = useState('brief') // brief | book
+  const [sent, setSent] = useState(false)
 
   // Initialize Cal inline embed once — the element is always in the DOM so
   // the iframe persists across open/close cycles without re-initializing.
@@ -67,14 +80,26 @@ export default function CalDrawer() {
       >
         <div className={styles.handle} />
         <div className={styles.header}>
-          <h2 className={styles.title}>Book a discovery call</h2>
+          <h2 className={styles.title}>{step === 'brief' ? 'Start a project' : 'Book a discovery call'}</h2>
           <button className={styles.closeBtn} onClick={close} aria-label="Close">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </button>
         </div>
-        <div id="cal-drawer-container" className={styles.calContainer} />
+        {step === 'brief' && (
+          <div className={styles.briefScroll}>
+            <ProjectBrief onSent={() => { setSent(true); setStep('book') }} />
+            <p className={styles.skip}>
+              Just want to talk?{' '}
+              <button type="button" className={styles.skipLink} onClick={() => setStep('book')}>Skip to booking →</button>
+            </p>
+          </div>
+        )}
+        {step === 'book' && sent && (
+          <p className={styles.sentNote} role="status">Brief sent. Pick a time and we will come prepared.</p>
+        )}
+        <div id="cal-drawer-container" className={styles.calContainer} hidden={step !== 'book'} />
       </div>
     </div>
   )

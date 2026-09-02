@@ -100,22 +100,13 @@ export default function HomeV3() {
           is the sentence rather than a form. (Naming that component here in
           prose would re-enrol this file as one of its consumers — the style
           test discovers them by scanning for the name.) */}
-      {/* THE TWO VERBS ARE THE TWO SERVICES, so they are the links to them.
-          HERO in V3Nav stays the plain string — it is the source of the words
-          and anything needing the sentence as text still has it — but the
-          rendered version splits it so "build" and "grow" go where they say.
-          They are also the only navigation above the fold now the capture
-          field is gone. */}
+      {/* THE HERO IS HERO, THE STRING. It used to be split into JSX so
+          "build" and "grow" could link to the two service pages; the line
+          is the positioning statement now (2026-09-02) and has no verbs to
+          link. The nav above carries both services. */}
       <StatementCard
         eyebrow={HERO_EYEBROW}
-        statement={
-          <>
-            We <NavLink className={v3.heroLink} to="/services/build">build</NavLink>
-            {' '}and{' '}
-            <NavLink className={v3.heroLink} to="/services/grow">grow</NavLink> brands.
-            <br />So you can focus on the business.
-          </>
-        }
+        statement={HERO}
         support={null}
         as="h1"
         tall

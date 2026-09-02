@@ -12,6 +12,7 @@ import v3 from '../pages/HomeV3.module.css'
    export DepartmentPanel renders. Services does not import this file, so
    there is no cycle. */
 import { DISCIPLINES } from '../pages/Services'
+import { disciplineSlug } from '../lib/disciplineSlug'
 import { industries } from '../data/industries'
 import { outcomes as outcomeRecords } from '../data/outcomes'
 import { stages } from '../data/stages'
@@ -199,7 +200,11 @@ export const HERO_EYEBROW = '[ Creative + Marketing, One Embedded Team ]'
  * assets", Grow "takes that brand to market and runs it".
  *
  * NO SUPPORTING LINE. The hero is the eyebrow and the headline. */
-export const HERO = "We build and grow brands. So you can focus on the business."
+/* Chris's line, 2026-09-02, replacing "We build and grow brands. So you
+   can focus on the business." It is the positioning statement itself — the
+   same sentence the Services panel opens with — so the first thing on the
+   site and the first thing in the menu agree. */
+export const HERO = 'Your fractional creative and marketing department.'
 
 /* THE FOUR SERVICES, as cards.
  *
@@ -315,11 +320,14 @@ export const FOOTER_COLS = [
      renaming a discipline changes it on /services, in DepartmentPanel and
      here at once.
 
-     NO LINKS. There is no page per discipline, and the footer's own rule is
-     that an entry without a page is text rather than a thirty-first link to
-     /services — see the note at the top of FooterCard. Give them hrefs the
-     day the pages exist. */
-  { tag: 'Disciplines', row: 2, links: DISCIPLINES.map(({ name }) => ({ label: name })) },
+     LINKED, since 2026-09-02: every discipline has a page at
+     /disciplines/<slug>, so the footer's rule — an entry with nowhere to go
+     is text — now puts a link on each. Before that they were text. */
+  /* LINKED NOW (2026-09-02): every discipline has a page at
+     /disciplines/<slug>, and the slug is derived from the name the same way
+     the pages are, so a rename on /services moves the link with it. The
+     "no links" rule above held while there were no pages. */
+  { tag: 'Disciplines', row: 2, links: DISCIPLINES.map(({ name }) => ({ label: name, href: `/disciplines/${disciplineSlug(name)}` })) },
   {
     tag: 'Case studies',
     links: [

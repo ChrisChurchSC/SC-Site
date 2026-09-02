@@ -352,7 +352,11 @@ export default function ServiceV3() {
 
       <hr className={styles.divider} />
 
-      <PlatformOutputs cards={service.slug === 'grow' ? GROW_CARDS : undefined} />
+      {/* Both services show their pricing-page section here now
+          (2026-09-02): Build the lead card and its three, Grow the toggle
+          and the four hour buckets. GROW_CARDS above is no longer rendered
+          — kept as the record of what the section said before. */}
+      <PlatformOutputs service={service.slug} />
 
       {/* WHY US. ComparisonTable is the homepage's.
           ITS OWN HEADER SAYS NOTHING IN IT IS SIGNED OFF — every row name and
