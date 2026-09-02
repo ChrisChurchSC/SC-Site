@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 const DEFAULT_TITLE = 'Super Conscious | Creative Studio'
 const DEFAULT_DESC = 'Super Conscious is a creative strategy and production studio building brands, content, and digital products for founders and marketing teams. Philadelphia, PA.'
 const DEFAULT_OG_DESC = 'Your fractional marketing and creative department'
-const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.gif'
+const DEFAULT_IMAGE = 'https://super-conscious.studio/reel-preview.jpg'
 const SITE_BASE = 'https://super-conscious.studio'
 
 function setMeta(selector, attr, value) {
@@ -24,18 +24,25 @@ export function useMeta({ title, description, image, path, schema, noindex } = {
       document.head.appendChild(robotsEl)
     }
 
-    const ogImage = image || DEFAULT_IMAGE
     const ogTitle = title || DEFAULT_TITLE
     const ogDesc  = description || DEFAULT_OG_DESC
     const ogUrl   = path ? `${SITE_BASE}${path}` : SITE_BASE
 
     setMeta('meta[property="og:title"]',        'content', ogTitle)
     setMeta('meta[property="og:description"]',  'content', ogDesc)
-    setMeta('meta[property="og:image"]',        'content', ogImage)
     setMeta('meta[property="og:url"]',          'content', ogUrl)
     setMeta('meta[name="twitter:title"]',       'content', ogTitle)
     setMeta('meta[name="twitter:description"]', 'content', ogDesc)
-    setMeta('meta[name="twitter:image"]',       'content', ogImage)
+
+    // Only when the caller actually has an image. This used to fall back to
+    // DEFAULT_IMAGE and write it unconditionally, so any page whose useMeta
+    // call omits `image` — every thought post — overwrote the per-page og:image
+    // the prerender had just put in the document, back to the default still.
+    // setMeta already no-ops on a null value; the fallback was the whole bug.
+    if (image) {
+      setMeta('meta[property="og:image"]',  'content', image)
+      setMeta('meta[name="twitter:image"]', 'content', image)
+    }
 
     let canonical = document.querySelector('link[rel="canonical"]')
     if (canonical) canonical.setAttribute('href', ogUrl)

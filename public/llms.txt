@@ -6,8 +6,13 @@ Super Conscious is a small studio of designers, animators, and engineers. We emb
 
 ## About
 
+<<<<<<< HEAD
 - [Services](https://super-conscious.studio/services): The embedded creative and marketing team for challenger brands — who we build for, what we do, and where we stand.
 - [Careers](https://super-conscious.studio/about-us): How we work, who fits here, and how to join the freelance roster.
+=======
+- [Brand Systems, Content Programs & Digital Products](https://super-conscious.studio/about): What we do, how we work, and the disciplines we cover.
+- [Careers](https://super-conscious.studio/careers): How we work, who fits here, and how to join the freelance roster.
+>>>>>>> origin/main
 - [Thoughts](https://super-conscious.studio/thoughts): Ideas, notes, and process from the studio.
 
 ## Disciplines

@@ -454,7 +454,7 @@ export default function V3Nav() {
                 bar belongs to that family, and a wordmark that jumps to a
                 different design of the same site is a dead end dressed as a
                 home button. */}
-            <NavLink to="/v3" className={styles.cornerWordmark} aria-label="Super Conscious, home">
+            <NavLink to="/" className={styles.cornerWordmark} aria-label="Super Conscious, home">
                 <LogoWordmark fill="rgba(255,255,255,0.7)" />
               </NavLink>
 

@@ -11,8 +11,11 @@ const HEAD = `<!doctype html><html><head>
 <meta property="og:title" content="placeholder" />
 <meta property="og:description" content="placeholder" />
 <meta property="og:image" content="placeholder" />
+<meta property="og:type" content="website" />
+<meta property="og:image:alt" content="placeholder" />
 <meta name="twitter:title" content="placeholder" />
 <meta name="twitter:description" content="placeholder" />
+<meta name="twitter:image" content="placeholder" />
 </head><body></body></html>`
 
 const render = (over = {}) =>
@@ -20,7 +23,7 @@ const render = (over = {}) =>
     title: 'T',
     description: 'D',
     url: 'https://super-conscious.studio/x',
-    image: 'https://super-conscious.studio/reel-preview.gif',
+    image: 'https://super-conscious.studio/reel-preview.jpg',
     ...over,
   })
 
@@ -84,4 +87,60 @@ test('HTML-significant characters are still escaped', () => {
 test('esc leaves $ alone — the fix is the replacer, not the escaper', () => {
   // Escaping $ would corrupt copy that legitimately quotes prices.
   assert.equal(esc('$150,000'), '$150,000')
+})
+
+// ── og:type, article times, and the tags that had no replacer ──────────────
+
+const OG = (html, prop) => html.match(new RegExp(`<meta property="${prop}" content="([^"]*)"`))?.[1]
+const TW = (html, name) => html.match(new RegExp(`<meta name="${name}" content="([^"]*)"`))?.[1]
+
+test('twitter:image tracks og:image', () => {
+  // It had no replacer, so it stayed on the default while og:image moved.
+  const html = render({ image: 'https://super-conscious.studio/hero.jpg' })
+  assert.equal(OG(html, 'og:image'), 'https://super-conscious.studio/hero.jpg')
+  assert.equal(TW(html, 'twitter:image'), 'https://super-conscious.studio/hero.jpg')
+})
+
+test('og:image:alt defaults to the title and can be overridden', () => {
+  assert.equal(OG(render(), 'og:image:alt'), 'T')
+  assert.equal(OG(render({ imageAlt: 'A photo of the studio' }), 'og:image:alt'), 'A photo of the studio')
+})
+
+test('og:type is left alone when no type is passed', () => {
+  assert.equal(OG(render(), 'og:type'), 'website')
+})
+
+test('og:type becomes article and emits the publish time', () => {
+  const html = render({ type: 'article', publishedTime: '2025-10-15' })
+  assert.equal(OG(html, 'og:type'), 'article')
+  assert.equal(OG(html, 'article:published_time'), '2025-10-15')
+})
+
+test('article tags are emitted as SIBLING tags, not nested inside og:type', () => {
+  // The failure mode: content="article" <meta property="article:…"/> />
+  // which the tokenizer reads as attributes and which pops </head>.
+  const html = render({ type: 'article', publishedTime: '2025-10-15', modifiedTime: '2026-07-01' })
+  assert.ok(!/content="article"\s*<meta/.test(html), 'article tag nested inside og:type')
+  assert.ok(!/\/>\s*\/>/.test(html), 'doubled tag terminator')
+  assert.equal((html.match(/<meta property="og:type"/g) || []).length, 1)
+  assert.equal((html.match(/<\/head>/g) || []).length, 1)
+  // <head> must still contain all of them, and <body> none.
+  const head = html.slice(0, html.indexOf('</head>'))
+  for (const p of ['og:type', 'article:published_time', 'article:modified_time']) {
+    assert.ok(head.includes(p), `${p} escaped <head>`)
+  }
+})
+
+test('modifiedTime is optional', () => {
+  const html = render({ type: 'article', publishedTime: '2025-10-15' })
+  assert.equal(OG(html, 'article:modified_time'), undefined)
+})
+
+test('a $ in an injected value is still not substituted', () => {
+  // Same class as the bug this file was written for, now via the new fields.
+  // esc() escapes & " < >, but not ' — a bare apostrophe is valid inside a
+  // double-quoted attribute. What matters is that none of $1, $' or $& was
+  // read as a backreference.
+  const html = render({ type: 'article', publishedTime: '2025-10-15', imageAlt: "Costs $1 and $' and $&" })
+  assert.equal(OG(html, 'og:image:alt'), "Costs $1 and $' and $&amp;")
 })

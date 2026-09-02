@@ -7,50 +7,21 @@ import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { SITE_CONFIG_QUERY } from '../lib/queries'
 import ClientStrip from '../components/ClientStrip'
-import TestimonialStrip from '../components/TestimonialStrip'
-import ContactCTA from '../components/ContactCTA'
 import StatementCard from '../components/StatementCard'
 import BuildGrowCards from '../components/BuildGrowCards'
 import FeaturedCaseStudies from '../components/FeaturedCaseStudies'
+import TestimonialStrip from '../components/TestimonialStrip'
+import ContactCTA from '../components/ContactCTA'
 
 let didLoad = false
 
 const REEL_VIDEO_URL = 'https://cdn.sanity.io/files/ppq16wpu/production/586f7407cc2a4d7d2a1d9c8b753695e28aec8247.mp4'
 
-const HOME_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': 'https://super-conscious.studio/#organization',
-      name: 'Super Conscious',
-      url: 'https://super-conscious.studio',
-      logo: 'https://super-conscious.studio/favicon-dark.png',
-      sameAs: [
-        'https://www.instagram.com/_super_conscious/',
-        'https://www.linkedin.com/company/super-conscious/',
-      ],
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Philadelphia',
-        addressRegion: 'PA',
-        addressCountry: 'US',
-      },
-    },
-    {
-      '@type': 'WebSite',
-      '@id': 'https://super-conscious.studio/#website',
-      url: 'https://super-conscious.studio',
-      name: 'Super Conscious',
-      publisher: { '@id': 'https://super-conscious.studio/#organization' },
-    },
-  ],
-}
 
 export default function Home() {
   const { menuOpen, setMenuOpen } = useNav()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
-  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/', schema: HOME_SCHEMA })
+  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/' })
 
   // Prefix local paths with Vite base URL (needed for GitHub Pages /SC-Site/ subpath)
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
@@ -117,6 +88,11 @@ export default function Home() {
             <LogoWordmark fill="rgba(255,255,255,0.55)" />
           </div>
           <div className={styles.cornerTextStack}>
+            {/* The page headline, and now marked up as one. This text was
+                already here as a <p>, so the homepage shipped with no <h1> at
+                all. The tag change is style-neutral — .cornerText is selected
+                by class, never by element. */}
+            <h1 className={styles.cornerText}>{siteConfig?.homeHeroTitle ?? 'For challenger brands:\nnew, pivoting, or fighting to stand out.'}</h1>
             {siteConfig?.homeHeroTagline && <p className={styles.cornerSub}>{siteConfig.homeHeroTagline}</p>}
           </div>
         </div>
@@ -136,7 +112,7 @@ export default function Home() {
           <video
             className={styles.heroReel}
             src={siteConfig?.reelVideoUrl ?? REEL_VIDEO_URL}
-            poster={assetUrl('/reel-preview.gif')}
+            poster={assetUrl('/reel-preview.jpg')}
             autoPlay
             muted
             loop

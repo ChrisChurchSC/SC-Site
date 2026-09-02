@@ -27,3 +27,6 @@ public/grid/*.jpg
 !public/grid/*-compressed.jpg
 .vercel
 .env*
+
+# Claude Code worktrees — local scratch checkouts, never part of the repo
+.claude/worktrees/

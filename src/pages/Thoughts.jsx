@@ -8,6 +8,12 @@ import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { useMeta } from '../hooks/useMeta'
+<<<<<<< HEAD
+=======
+import { useSanity } from '../hooks/useSanity'
+import { THOUGHTS_INDEX_QUERY } from '../lib/queries'
+import { sanityImgProps } from '../lib/sanityImg'
+>>>>>>> origin/main
 
 /**
  * THOUGHTS, ON THE CASE-STUDIES PAGE'S SHAPE.
@@ -47,6 +53,7 @@ export default function Thoughts() {
     path: '/thoughts',
   })
 
+<<<<<<< HEAD
   return (
     <main className={`${styles.main} ${v3.stack}`}>
       <V3Nav />
@@ -75,6 +82,26 @@ export default function Thoughts() {
       <FooterCard columns={FOOTER_COLS} />
 
       <V3Signoff />
+=======
+      <section className={styles.grid}>
+        {items.map(({ _id, title, slug, excerpt, publishedAt, order, heroUrl }) => {
+          const n = String(order ?? 0).padStart(3, '0')
+          return (
+            <NavLink key={_id} to={`/thoughts/${slug}`} className={styles.card}>
+              <div className={styles.cardThumb}>
+                {heroUrl && <img {...sanityImgProps(heroUrl, { w: 900 })} alt="" />}
+              </div>
+              <div className={styles.cardMeta}>
+                <span className={styles.cardNum}>{n}</span>
+                <span className={styles.cardDate}>{fmtDate(publishedAt)}</span>
+              </div>
+              <h2 className={styles.cardTitle}>{title}</h2>
+              {excerpt && <p className={styles.cardExcerpt}>{excerpt}</p>}
+            </NavLink>
+          )
+        })}
+      </section>
+>>>>>>> origin/main
     </main>
   )
 }

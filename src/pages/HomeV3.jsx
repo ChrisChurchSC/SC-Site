@@ -63,7 +63,9 @@ export default function HomeV3() {
   const cal = useCalDrawer()
   const { data: siteConfig } = useSanity(SITE_CONFIG_QUERY)
   // noindex: a messaging variant to look at, not a page to be found.
-  useMeta({ title: 'Super Conscious — homepage v3', path: '/v3', noindex: true })
+  /* The site's own title and path, now this is the homepage rather than a
+     canvas beside it — and indexed, which the canvas was not. */
+  useMeta({ title: 'Creative Studio for Brand, Content & Digital Products | Super Conscious', path: '/' })
 
   const [openMenu, setOpenMenu] = useState(null)
   /* Small screens only. The wide bar's panels open on hover, and a touch

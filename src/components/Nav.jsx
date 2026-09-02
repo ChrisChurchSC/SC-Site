@@ -108,6 +108,7 @@ export default function Nav() {
           <NavLink to="/services" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Services</p>
+<<<<<<< HEAD
               <p className="nav-card-sub">Build the brand, then grow it.</p>
             </div>
           </NavLink>
@@ -117,6 +118,20 @@ export default function Nav() {
               link that used to close the case study list is gone, and the
               drawer opens from a <button>, which is not an edge a crawler
               can follow. */}
+          <NavLink to="/work" className="nav-card">
+            <div className="nav-card-text">
+              <p className="nav-card-title">Work</p>
+              <p className="nav-card-sub">Selected case studies.</p>
+=======
+              <p className="nav-card-sub">Design, motion, engineering.</p>
+>>>>>>> origin/main
+            </div>
+          </NavLink>
+
+          {/* Sits under Services, above Thoughts. /work already existed
+              as the case study index — this is the first card-level route
+              into it; until now the only ways in were the "see all" link at
+              the bottom of this list and the drawer's button. */}
           <NavLink to="/work" className="nav-card">
             <div className="nav-card-text">
               <p className="nav-card-title">Work</p>
@@ -132,7 +147,7 @@ export default function Nav() {
           </NavLink>
 
           <div className="nav-card-pair">
-            <NavLink to="/about-us" className="nav-card">
+            <NavLink to="/careers" className="nav-card">
               <div className="nav-card-text">
                 <p className="nav-card-title">Careers</p>
                 <p className="nav-card-sub">Join the team.</p>
@@ -201,14 +216,22 @@ export default function Nav() {
 
       {menuOpen && (
         <div className="nav-mobile-menu" onClick={() => setMenuOpen(false)}>
+<<<<<<< HEAD
           <NavLink to="/services" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
+=======
+          <NavLink to="/about" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Services</NavLink>
+>>>>>>> origin/main
           <NavLink
             to="/work"
             className="nav-mobile-link"
             onClick={(e) => { e.preventDefault(); setMenuOpen(false); setWorkOpen(true) }}
           >Work</NavLink>
           <NavLink to="/thoughts" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Thoughts</NavLink>
+<<<<<<< HEAD
           <NavLink to="/about-us" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+=======
+          <NavLink to="/careers" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Careers</NavLink>
+>>>>>>> origin/main
           <NavLink to="/contact" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Contact</NavLink>
           <div className="nav-mobile-socials">
             <a href="https://www.instagram.com/_super_conscious/" target="_blank" rel="noreferrer" className="nav-mobile-social-link">Instagram</a>

@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useCalDrawer } from '../context/CalDrawerContext'
 import { thoughts as staticThoughts } from '../data/thoughts'
 import styles from './ThoughtPost.module.css'
 import { useMeta } from '../hooks/useMeta'
 import { useSanity } from '../hooks/useSanity'
 import { THOUGHT_QUERY } from '../lib/queries'
-import { sanityImg } from '../lib/sanityImg'
+import { sanityImgProps } from '../lib/sanityImg'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const assetUrl = (url) => url?.startsWith('/') ? `${base}${url}` : url
@@ -54,35 +54,61 @@ function fromStaticThought(t) {
   }
 }
 
+/**
+ * Restore image alt text from src/data/thoughts.js onto the Sanity body.
+ *
+ * Every imageBlock in Sanity has alt: "" — an empty string, not null, so no
+ * `??` fallback anywhere reaches it — while the static file carries a written
+ * description for each. The two cannot be matched by src (local path vs CDN
+ * URL), so this pairs them by position.
+ *
+ * Guarded on the counts being equal, because they are not always: three posts
+ * line up, and rethinking-the-workweek has two static images against four in
+ * Sanity. Pairing those by index would attach the wrong description to the
+ * wrong picture, which is worse than none, so that post keeps its empty alts.
+ */
+function mergeBodyAlts(sanityBody, staticBody) {
+  if (!Array.isArray(sanityBody) || !Array.isArray(staticBody)) return sanityBody
+  const fromStatic = staticBody.filter((b) => b._type === 'imageBlock')
+  const inSanity = sanityBody.filter((b) => b._type === 'imageBlock')
+  if (!fromStatic.length || fromStatic.length !== inSanity.length) return sanityBody
+
+  let i = -1
+  return sanityBody.map((b) => {
+    if (b._type !== 'imageBlock') return b
+    i += 1
+    return b.alt ? b : { ...b, alt: fromStatic[i]?.alt || '' }
+  })
+}
+
 export default function ThoughtPost() {
   const { slug } = useParams()
   const { open: openCalDrawer } = useCalDrawer()
   const { data: sanityPost } = useSanity(THOUGHT_QUERY, { slug })
   const staticPost = staticThoughts.find(t => t.slug === slug)
-  const post = sanityPost ?? (staticPost ? fromStaticThought(staticPost) : null)
+  // Field-level fallback, not object-level. `sanityPost ?? static` let the
+  // Sanity document win wholesale, and THOUGHT_QUERY does not project
+  // relatedLinks — the field is not in the thought schema at all. So the
+  // eight /lp links authored in src/data/thoughts.js were dead on every post:
+  // the guard below them was always false. Same shape as the headline defect
+  // on /about, and the same fix.
+  const fallback = staticPost ? fromStaticThought(staticPost) : null
+  const post = sanityPost
+    ? {
+        ...sanityPost,
+        relatedLinks: sanityPost.relatedLinks?.length ? sanityPost.relatedLinks : (fallback?.relatedLinks ?? []),
+        // heroAlt is null on all four Sanity documents while src/data/thoughts.js
+        // carries a properly written description for each, so the hero shipped
+        // alt="" on every post. Same defect as relatedLinks above.
+        heroAlt: sanityPost.heroAlt || fallback?.heroAlt || '',
+        body: mergeBodyAlts(sanityPost.body, fallback?.body),
+      }
+    : fallback
 
   useMeta(post ? {
     title: `${post.title} | Super Conscious`,
     description: (post.excerpt || firstParagraph(post)).slice(0, 155),
     path: `/thoughts/${slug}`,
-    schema: {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: post.title,
-      datePublished: post.publishedAt,
-      author: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        url: 'https://super-conscious.studio',
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        logo: { '@type': 'ImageObject', url: 'https://super-conscious.studio/logo.svg' },
-      },
-      url: `https://super-conscious.studio/thoughts/${slug}`,
-      mainEntityOfPage: `https://super-conscious.studio/thoughts/${slug}`,
-    },
   } : {})
 
   if (!post) return (
@@ -123,7 +149,7 @@ export default function ThoughtPost() {
 
       {post.heroUrl && (
         <figure className={styles.hero}>
-          <img src={sanityImg(post.heroUrl, { w: 1800 })} alt={post.heroAlt || ''} />
+          <img {...sanityImgProps(post.heroUrl, { w: 1800, priority: true })} alt={post.heroAlt || ''} />
         </figure>
       )}
 
@@ -133,7 +159,7 @@ export default function ThoughtPost() {
           if (item._type === 'headingBlock') return <h2 key={i} className={styles.h2}>{item.text}</h2>
           if (item._type === 'imageBlock') return (
             <figure key={i} className={imgClass ? `${styles.figure} ${imgClass}` : styles.figure}>
-              <img src={sanityImg(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} loading="lazy" />
+              <img {...sanityImgProps(item.imageUrl, { w: 1400 })} alt={item.alt ?? ''} />
             </figure>
           )
           return null
@@ -145,7 +171,7 @@ export default function ThoughtPost() {
             <ul className={styles.relatedList}>
               {post.relatedLinks.map(link => (
                 <li key={link.href}>
-                  <a href={link.href} className={styles.relatedLink}>{link.text} →</a>
+                  <Link to={link.href} className={styles.relatedLink}>{link.text} →</Link>
                 </li>
               ))}
             </ul>

@@ -50,6 +50,13 @@ button {
 img, video {
   display: block;
   max-width: 100%;
+  /* Load-bearing, and it must land with the width/height attributes rather
+     than after them. `max-width: 100%` scales the WIDTH down, but an intrinsic
+     height attribute stays definite without this — and a definite height also
+     wins over `aspect-ratio`. Careers ships a 6048x4010 photo into a
+     `width: 100%` slot; height="4010" would have made that block 4000px tall,
+     and every gate would still have passed. */
+  height: auto;
 }
 
 * {

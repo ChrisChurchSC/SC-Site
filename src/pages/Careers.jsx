@@ -1,8 +1,12 @@
+<<<<<<< HEAD:src/pages/AboutUs.jsx
 import home from './Home.module.css'
 import v3 from './HomeV3.module.css'
 import styles from './AboutUs.module.css'
 import { User } from 'lucide-react'
 import tc from '../components/TestimonialCard.module.css'
+=======
+import styles from './Careers.module.css'
+>>>>>>> origin/main:src/pages/Careers.jsx
 import { useMeta } from '../hooks/useMeta'
 import ContactCTA from '../components/ContactCTA'
 import FooterCard from '../components/FooterCard'
@@ -10,9 +14,14 @@ import StatementCard from '../components/StatementCard'
 import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
 import V3Signoff from '../components/V3Signoff'
 import { useSanity } from '../hooks/useSanity'
+<<<<<<< HEAD:src/pages/AboutUs.jsx
 import { CAREERS_PAGE_QUERY } from '../lib/queries'
 import { sanityImg } from '../lib/sanityImg'
 import { useCalDrawer } from '../context/CalDrawerContext'
+=======
+import { OPEN_ROLES_QUERY, CAREERS_PAGE_QUERY } from '../lib/queries'
+import { sanityImgProps } from '../lib/sanityImg'
+>>>>>>> origin/main:src/pages/Careers.jsx
 
 /* Section labels on this site are written "[ Like This ]". The hero's already
    is; the section ones were not, and half a convention reads as a mistake.
@@ -69,15 +78,20 @@ const railFrames = (photos = []) =>
     ? photos
     : [...photos, ...Array.from({ length: RAIL_MIN - photos.length }, () => ({ caption: '' }))]
 
+<<<<<<< HEAD:src/pages/AboutUs.jsx
 export default function AboutUs() {
   const cal = useCalDrawer()
+=======
+export default function Careers() {
+  const { data: sanityRoles } = useSanity(OPEN_ROLES_QUERY)
+>>>>>>> origin/main:src/pages/Careers.jsx
   const { data: pageData } = useSanity(CAREERS_PAGE_QUERY)
   const cfg = pageData ?? FALLBACK
 
   useMeta({
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
-    path: '/about-us',
+    path: '/careers',
   })
   return (
     /* THE SAME SHELL /studio USES. This page was on the old layout — its own
@@ -93,6 +107,7 @@ export default function AboutUs() {
           at the same size. The words still come from Sanity — this is the
           layout changing, not the copy.
 
+<<<<<<< HEAD:src/pages/AboutUs.jsx
           NOT tall. tall gives the hero a 78vh floor, which on this page put
           a full screen of black between the bar and the photo rail. display
           on its own keeps the headline at the same step and lets the card be
@@ -143,6 +158,22 @@ export default function AboutUs() {
               </div>
             ))}
           </div>
+=======
+      <section className={styles.photoSection}>
+        <div className={styles.photoGrid}>
+          {cfg.photos?.map(({ caption, imageUrl, videoUrl }) => (
+            <div key={caption} className={styles.photoBlock}>
+              {videoUrl ? (
+                <video src={videoUrl} autoPlay muted loop playsInline className={styles.photoMedia} />
+              ) : imageUrl ? (
+                <img {...sanityImgProps(imageUrl, { w: 1200 })} alt={caption} className={styles.photoMedia} />
+              ) : (
+                <div className={styles.photoPlaceholder} />
+              )}
+              <p className={styles.photoCaption}>{caption}</p>
+            </div>
+          ))}
+>>>>>>> origin/main:src/pages/Careers.jsx
         </div>
       </section>
 

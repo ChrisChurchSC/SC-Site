@@ -3,11 +3,16 @@
  * see the correct title, description, and canonical for every sitemap page.
  *
  * Covers:
- *  - /lp/[slug]  — AEO landing pages (canonical, H1, FAQ+HowTo JSON-LD, outgoing links)
+ *  - /lp/[slug]  — AEO landing pages (canonical, FAQ+HowTo+Breadcrumb JSON-LD)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
+<<<<<<< HEAD
  *  - static pages: /services, /disciplines, /about-us, /work, /thoughts, /contact
  *  - / — homepage (LP links injected for crawler discoverability)
+=======
+ *  - static pages: /about, /careers, /work, /thoughts, /contact
+ *  - / — homepage
+>>>>>>> origin/main
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
@@ -29,29 +34,53 @@ if (!fs.existsSync(indexPath)) {
 
 const { MOCK_PAGES } = await import(path.join(ROOT, 'src/lib/mockLandingPages.js'))
 const { thoughts } = await import(path.join(ROOT, 'src/data/thoughts.js'))
-const { esc, injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs'))
+const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
+const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
+const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY, CASE_STUDY_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
+const { sanityImg } = await import(path.join(ROOT, 'src/lib/sanityImg.js'))
+const { sanityKey } = await import(path.join(ROOT, 'src/lib/sanityCache.js'))
+const { workTitle, workDescription } = await import(path.join(ROOT, 'src/lib/workMeta.js'))
+
+// The og:image for a case study, matching what CaseStudy.jsx picks so the two
+// cannot disagree.
+//
+// It reads TOP-LEVEL `src` only. The component looks like it also descends into
+// imageGridSection.images, but normalizeSections rewrites that type and drops
+// `_type`, so that branch never runs and only top-level src has ever shipped.
+// Reading the grid here would change og:image on the affected pages, which is a
+// content decision, not this change.
+function caseStudyHero(data, slug) {
+  const cs = data[sanityKey(CASE_STUDY_QUERY, { slug })]
+  const src = (cs?.sections ?? []).map((sec) => sec?.src).find((u) => u && u.includes('/images/'))
+  return src ? sanityImg(src, { w: 1200 }) : null
+}
 
 const BASE_URL = 'https://super-conscious.studio'
-const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.gif`
+const DEFAULT_IMAGE = `${BASE_URL}/reel-preview.jpg`
+
+// The Organization node lives in index.html so every page carries it. Everything
+// else refers to it by @id rather than restating it.
+//
+// Note for anyone tempted to wrap these in an @graph: tests/baseline/capture.mjs
+// reads only the TOP-LEVEL @type of each block, so an @graph wrapper reads as no
+// types at all and would strip "Organization" from all 95 baseline routes at
+// once. Separate top-level nodes, joined by @id, say the same thing and stay
+// visible to the gate.
+const ORG_ID = `${BASE_URL}/#organization`
+const ORG_REF = { '@id': ORG_ID }
+
+const crumbs = (...trail) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+    ...trail.map((t, i) => ({ '@type': 'ListItem', position: i + 2, name: t.name, item: t.item })),
+  ],
+})
 const indexHtml = fs.readFileSync(indexPath, 'utf8')
 
-// Inject JSON-LD schema scripts before </head>
-function injectSchemas(html, schemas) {
-  if (!schemas.length) return html
-  const scripts = schemas
-    .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
-    .join('\n    ')
-  return html.replace('</head>', `    ${scripts}\n  </head>`)
-}
-
-// Inject crawler-only content as a hidden div after #root (React never touches it)
-function injectSeoContent(html, content) {
-  return html.replace(
-    '<div id="root"></div>',
-    `<div id="root"></div>\n<div id="seo-static" style="display:none" aria-hidden="true">${content}</div>`,
-  )
-}
 
 function writeHtml(segments, html) {
   const dir = path.join(distDir, ...segments)
@@ -77,7 +106,7 @@ try {
 //
 // Keys are sorted so the same content always serializes to the same bytes.
 // They are GROQ query strings, inserted in whatever order the queries resolved
-// during the two-pass render, which is a race — so /about and /about-us came
+// during the two-pass render, which is a race — so /about and /careers came
 // out byte-different on every build despite identical data. Two consecutive
 // builds of the same commit differed by 31,698 characters at an identical
 // length of 70,800.
@@ -96,17 +125,31 @@ const sortTopLevel = (o) =>
 
 const serializeData = (data) => JSON.stringify(sortTopLevel(data || {})).replace(/</g, '\\u003c')
 
+// Returns the data alongside the html: the two-pass render has already fetched
+// everything the route needs, so page schema can be built from it rather than
+// re-querying Sanity. `data` is keyed by sanityKey(query, params).
+//
+// A render failure degrades to the untouched html and an EMPTY data map, so a
+// caller building schema from it emits nothing rather than emitting a shape
+// full of undefined. assert-build.mjs asserts the schema is present, which is
+// what turns that silent degradation into a failed build.
 async function injectRoot(html, routePath) {
-  if (!renderRoute) return html
+  if (!renderRoute) return { html, data: {} }
   try {
     const { html: body, data } = await renderRoute(routePath)
     const dataScript = `<script>window.__SANITY_DATA__=${serializeData(data)}</script>`
-    return html
-      .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
-      .replace('</body>', `${dataScript}\n</body>`)
+    // Function replacers: the SSR body and the serialized Sanity data are
+    // arbitrary content, and a `$&` or `$'` in either would be substituted.
+    // See scripts/lib/inject-schemas.mjs.
+    return {
+      html: html
+        .replace('<div id="root"></div>', () => `<div id="root">${body}</div>`)
+        .replace('</body>', () => `${dataScript}\n</body>`),
+      data: data || {},
+    }
   } catch (e) {
     console.warn(`  SSR render failed for ${routePath}: ${e.message}`)
-    return html
+    return { html, data: {} }
   }
 }
 
@@ -114,7 +157,7 @@ async function injectRoot(html, routePath) {
 
 let projectMeta = {}
 try {
-  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, comingSoon, _updatedAt}`)
+  const q = encodeURIComponent(`*[_type == "project" && published == true]{"slug": slug.current, name, tagline, descriptor, type, category, services, summary, comingSoon, _updatedAt}`)
   const res = await fetch(`https://ppq16wpu.apicdn.sanity.io/v2024-01-01/data/query/production?query=${q}`)
   if (res.ok) {
     const data = await res.json()
@@ -122,6 +165,11 @@ try {
       if (p.slug) projectMeta[p.slug] = {
         name: p.name,
         tagline: p.tagline,
+        descriptor: p.descriptor,
+        type: p.type,
+        category: p.category,
+        services: p.services,
+        summary: p.summary,
         updatedAt: p._updatedAt,
         comingSoon: p.comingSoon === true,
       }
@@ -149,8 +197,12 @@ let count = 0
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 
+// `schemas(data, url)` receives the Sanity store the SSR render already fetched,
+// keyed by sanityKey(query, params) — so a page's structured data is built from
+// exactly what it rendered, with no second round trip.
 const STATIC_PAGES = [
   {
+<<<<<<< HEAD
     segments: ['services'],
     title: 'Services | Super Conscious',
     // Must match the useMeta() call in src/pages/Services.jsx. This one is what
@@ -226,36 +278,109 @@ const STATIC_PAGES = [
     segments: ['disciplines', 'engineering'],
     title: 'Engineering | Super Conscious',
     description: "Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.",
+=======
+    segments: ['about'],
+    title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
+    description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
+    schemas: (data, url) => {
+      // Guarded on the FAQ array itself, never on `data ?? FALLBACK`. About.jsx's
+      // FALLBACK has no faqs key and only substitutes when Sanity returns nothing
+      // at all — the same field-level trap that once shipped /about with no <h1>.
+      const faqs = data[sanityKey(ABOUT_PAGE_QUERY, {})]?.faqs
+      return [
+        crumbs({ name: 'What we do', item: url }),
+        faqs?.length && {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map(({ question, answer }) => ({
+            '@type': 'Question',
+            name: question,
+            acceptedAnswer: { '@type': 'Answer', text: answer },
+          })),
+        },
+      ]
+    },
+>>>>>>> origin/main
   },
   {
-    segments: ['about-us'],
+    segments: ['careers'],
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
+    schemas: (_data, url) => [crumbs({ name: 'Careers', item: url })],
+  },
+  {
+    segments: ['who-we-are'],
+    title: 'About | Super Conscious',
+    description: 'A fractional creative and marketing department — brand, copy, design, development, media — that plugs into your company at a fraction of the cost of building it in-house.',
+    /* /who-we-are is this branch's own page, so main's commit moving page
+       schemas into the prerender could not have given it one — and the loop
+       calls page.schemas() unconditionally. A breadcrumb, the same as Careers
+       has: it is a static page with no richer type to claim. */
+    schemas: (_data, url) => [crumbs({ name: 'About', item: url })],
   },
   {
     segments: ['work'],
     title: 'Selected Work | Super Conscious',
     description: 'Case studies from Super Conscious. Brand systems, content programs, and digital products for founders and marketing teams.',
+    schemas: (_data, url) => [
+      crumbs({ name: 'Work', item: url }),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Selected Work',
+        // The sitemap'd case studies, in the order the page lists them. Built
+        // from indexableWorkSlugs so a coming-soon or hidden project can never
+        // be advertised here as a case study that exists.
+        itemListElement: indexableWorkSlugs.map((slug, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `${BASE_URL}/work/${slug}`,
+          name: projectMeta[slug]?.name || slugToName(slug),
+        })),
+      },
+    ],
   },
   {
     segments: ['thoughts'],
     title: 'Thoughts | Super Conscious',
     description: 'Perspectives on brand, content, and building creative companies from the Super Conscious team.',
+    schemas: (_data, url) => [
+      crumbs({ name: 'Thoughts', item: url }),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Thoughts',
+        // From src/data/thoughts.js, which is also what prerenders the posts
+        // themselves. The /thoughts index renders Sanity's list when it is
+        // non-empty; the two hold the same four posts today, and building this
+        // from the prerendered set means the ItemList can only ever point at a
+        // URL that exists.
+        itemListElement: thoughts.map((t, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `${BASE_URL}/thoughts/${t.slug}`,
+          name: t.title,
+        })),
+      },
+    ],
   },
   {
     segments: ['contact'],
     title: 'Start a Project | Super Conscious',
     description: "Tell us where you are and what you're trying to accomplish. We'll respond within one business day.",
+    schemas: (_data, url) => [
+      crumbs({ name: 'Contact', item: url }),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ContactPage',
+        url,
+        name: 'Start a Project',
+        about: ORG_REF,
+      },
+    ],
   },
 ]
 
-for (const page of STATIC_PAGES) {
-  const url = `${BASE_URL}/${page.segments.join('/')}`
-  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
-  html = await injectRoot(html, `/${page.segments.join('/')}`)
-  writeHtml(page.segments, html)
-  count++
-}
 
 // ── Work / case study pages ───────────────────────────────────────────────────
 
@@ -311,30 +436,76 @@ const isPlaceholder = (slug) =>
 
 const placeholderSlugs = workSlugs.filter(isPlaceholder)
 
+// The case studies that are actually submitted to Google — what /work's ItemList
+// is allowed to advertise. Sorted the way the work loop iterates.
+const indexableWorkSlugs = workSlugs.filter(slug => !isPlaceholder(slug))
+
+// Static pages render here rather than earlier so their schema builders can see
+// the resolved work-slug lists above.
+for (const page of STATIC_PAGES) {
+  const routePath = `/${page.segments.join('/')}`
+  const url = `${BASE_URL}${routePath}`
+  let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
+  // injectRoot first: the schema builders read the data it returns.
+  const rendered = await injectRoot(html, routePath)
+  html = injectSchemas(rendered.html, page.schemas(rendered.data, url))
+  writeHtml(page.segments, html)
+  count++
+}
+
+
 for (const slug of workSlugs) {
   const meta = projectMeta[slug]
   const name = meta?.name || slugToName(slug)
   const tagline = meta?.tagline || ''
-  const title = `${name} | Super Conscious`
-  const description = (tagline || `Work by Super Conscious for ${name}.`).slice(0, 155)
+  const title = workTitle(meta, name)
+  const description = workDescription(meta, name)
   const url = `${BASE_URL}/work/${slug}`
-  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
-  html = injectSchemas(html, [{
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Work', item: `${BASE_URL}/work` },
-      { '@type': 'ListItem', position: 3, name, item: url },
-    ],
-  }])
+
+  // Render first: the og:image comes from the sections this route resolved.
+  // injectRoot touches #root and </body>, injectMeta touches <head>, so the
+  // order between them is free.
+  const rendered = await injectRoot(indexHtml, `/work/${slug}`)
+  let html = injectMeta(rendered.html, {
+    title,
+    description,
+    url,
+    image: caseStudyHero(rendered.data, slug) || DEFAULT_IMAGE,
+    imageAlt: `${name} — case study by Super Conscious`,
+  })
   if (isPlaceholder(slug)) {
     // follow, not none: the links out of the page still carry equity, and the
     // page becomes indexable again as soon as someone writes the case study.
-    html = html.replace('<meta name="viewport"', '<meta name="robots" content="noindex, follow" />\n    <meta name="viewport"')
+    html = html.replace('<meta name="viewport"', () => '<meta name="robots" content="noindex, follow" />\n    <meta name="viewport"')
   }
 
-  html = await injectRoot(html, `/work/${slug}`)
+  html = injectSchemas(html, [
+    crumbs({ name: 'Work', item: `${BASE_URL}/work` }, { name, item: url }),
+    // CreativeWork describes ONE piece of work, so it is wrong on the client
+    // hubs — /work/google is an index of six projects, not a project.
+    //
+    // The test is which query this render actually resolved, not a rule
+    // re-derived from Sanity. WorkRouter picks ClientOverview on
+    // projects.isMulti(slug), and ProjectsContext falls back to
+    // src/data/projects.js whenever the Sanity list is empty — which is the
+    // state during SSR pass 1, when the route's queries are collected. So the
+    // static file, not Sanity, decides what gets fetched and therefore what
+    // pass 2 renders. Sanity's own subCount disagrees for five of the fourteen
+    // (big-buoy, gigs, girlfight, nimruz and world-within all report 0), so
+    // recomputing the rule here would mislabel them. Asking the render what it
+    // fetched cannot drift from what it rendered.
+    !Object.hasOwn(rendered.data, sanityKey(CLIENT_OVERVIEW_QUERY, { slug })) && {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name,
+      url,
+      // Spread rather than `?? null`: JSON.stringify drops an undefined value
+      // but happily emits `"description": null`, which is invalid.
+      ...(tagline ? { description: tagline } : {}),
+      creator: ORG_REF,
+      author: ORG_REF,
+    },
+  ])
   writeHtml(['work', slug], html)
   count++
 }
@@ -348,7 +519,16 @@ for (const t of thoughts) {
   const description = (t.excerpt || '').slice(0, 155)
   const url = `${BASE_URL}/thoughts/${t.slug}`
 
-  let html = injectMeta(indexHtml, { title, description, url, image: DEFAULT_IMAGE })
+  const image = t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE
+  let html = injectMeta(indexHtml, {
+    title,
+    description,
+    url,
+    image,
+    imageAlt: t.heroAlt || t.title,
+    type: 'article',
+    publishedTime: t.isoDate || undefined,
+  })
 
   html = injectSchemas(html, [
     {
@@ -357,19 +537,12 @@ for (const t of thoughts) {
       headline: t.title,
       description: t.excerpt || '',
       datePublished: t.isoDate || '',
-      author: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        url: BASE_URL,
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: 'Super Conscious',
-        url: BASE_URL,
-        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.svg` },
-      },
+      // Refs, not restatements: index.html ships the Organization node on every
+      // page, so these resolve to it instead of describing a third copy.
+      author: ORG_REF,
+      publisher: ORG_REF,
       url,
-      image: t.hero ? `${BASE_URL}${t.hero}` : DEFAULT_IMAGE,
+      image,
     },
     {
       '@context': 'https://schema.org',
@@ -382,41 +555,14 @@ for (const t of thoughts) {
     },
   ])
 
-  html = await injectRoot(html, `/thoughts/${t.slug}`)
+  html = (await injectRoot(html, `/thoughts/${t.slug}`)).html
   writeHtml(['thoughts', t.slug], html)
   count++
 }
 
 // ── AEO landing pages (canonical, H1, FAQ + HowTo + Breadcrumb JSON-LD, outgoing links) ──
 
-const LP_CATEGORY = {
-  'what-does-a-brand-system-include': 'Brand Systems',
-  'how-long-does-a-brand-system-take': 'Brand Systems',
-  'brand-system-cost': 'Brand Systems',
-  'brand-guidelines-vs-brand-system': 'Brand Systems',
-  'when-to-invest-in-a-brand-system': 'Brand Systems',
-  'what-is-a-verbal-identity': 'Brand Systems',
-  'brand-consistency-across-a-team': 'Brand Systems',
-  'what-is-a-content-program': 'Content Programs',
-  'how-to-build-a-b2b-content-program': 'Content Programs',
-  'content-program-cost': 'Content Programs',
-  'how-long-until-content-marketing-works': 'Content Programs',
-  'what-is-a-thought-leadership-program': 'Content Programs',
-  'how-to-measure-a-content-program': 'Content Programs',
-  'what-does-a-digital-product-design-engagement-include': 'Digital Products',
-  'how-much-does-product-design-cost': 'Digital Products',
-  'how-long-to-design-a-web-app': 'Digital Products',
-  'design-system-vs-brand-system': 'Digital Products',
-  'what-to-look-for-in-a-product-design-studio': 'Digital Products',
-  'brand-or-content-first': 'Hiring a Studio',
-  'do-i-need-a-brand-system-before-content': 'Hiring a Studio',
-  'creative-studio-vs-freelancer': 'Hiring a Studio',
-  'what-to-ask-a-creative-agency': 'Hiring a Studio',
-}
 
-const lpLinks = Object.entries(MOCK_PAGES)
-  .map(([slug, p]) => `<a href="/lp/${slug}">${esc(p.heroHeadline)}</a>`)
-  .join('\n')
 
 for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   const title = page.seoTitle || `${page.heroHeadline} | Super Conscious`
@@ -462,27 +608,25 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
   })
   html = injectSchemas(html, schemas)
 
-  // H1 + description + nav links in hidden div for non-JS crawlers
-  html = injectSeoContent(html, [
-    `<h1>${esc(page.heroHeadline)}</h1>`,
-    `<p>${esc(description)}</p>`,
-    `<nav><a href="/">Super Conscious</a> · <a href="/contact">Start a project</a></nav>`,
-  ].join(''))
 
-  html = await injectRoot(html, `/lp/${slug}`)
+  html = (await injectRoot(html, `/lp/${slug}`)).html
   writeHtml(['lp', slug], html)
   count++
 }
 
-// ── Homepage: inject LP links so crawlers can discover /lp/* pages ───────────
+// ── Homepage ─────────────────────────────────────────────────────────────────
+// The /lp links used to be injected here, into a display:none div. They live
+// on /about now, visible. See src/pages/About.jsx.
 
-const homepageHtml = fs.readFileSync(indexPath, 'utf8')
-let homepageWithLinks = injectSeoContent(
-  homepageHtml,
-  `<nav aria-label="Resources">\n${lpLinks}\n</nav>`,
-)
-homepageWithLinks = await injectRoot(homepageWithLinks, '/')
-fs.writeFileSync(indexPath, homepageWithLinks)
+const homeRendered = await injectRoot(fs.readFileSync(indexPath, 'utf8'), '/')
+fs.writeFileSync(indexPath, injectSchemas(homeRendered.html, [{
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${BASE_URL}/#website`,
+  url: BASE_URL,
+  name: 'Super Conscious',
+  publisher: ORG_REF,
+}]))
 
 // ── Routing shells ───────────────────────────────────────────────────────────
 // Prerendered routes serve their own (SSR'd) file. Client-only routes (gated
@@ -525,7 +669,11 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
+<<<<<<< HEAD
 // The floor for pages with no better date: /, /services, /about-us and /lp/*.
+=======
+// The floor for pages with no better date: /, /about, /careers and /lp/*.
+>>>>>>> origin/main
 //
 // This was a hand-bumped constant, and the instruction to bump it was missed.
 // On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
@@ -559,9 +707,11 @@ function gitDay(relPath) {
 // The sources that actually produce those pages.
 const STATIC_CONTENT_SOURCES = [
   'src/lib/mockLandingPages.js',
+  'src/lib/lpCategories.js',
   'src/pages/Home.jsx',
   'src/pages/About.jsx',
-  'src/pages/AboutUs.jsx',
+  'src/pages/Careers.jsx',
+  'src/pages/AboutStudio.jsx',
   'src/pages/LandingPage.jsx',
   'src/pages/Work.jsx',
 ]
@@ -596,7 +746,11 @@ function lastmodFor(loc) {
   if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
+<<<<<<< HEAD
   return staticContentDay // /, /services, /about-us, /lp/*
+=======
+  return staticContentDay // /, /about, /careers, /lp/*
+>>>>>>> origin/main
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')
@@ -620,42 +774,10 @@ if (fs.existsSync(distSitemapPath)) {
 
 const baseLlms = fs.readFileSync(path.join(ROOT, 'public/llms.txt'), 'utf8').trimEnd()
 
-const lpByCategory = {
-  'Brand Systems': [
-    'what-does-a-brand-system-include',
-    'how-long-does-a-brand-system-take',
-    'brand-system-cost',
-    'brand-guidelines-vs-brand-system',
-    'when-to-invest-in-a-brand-system',
-    'what-is-a-verbal-identity',
-    'brand-consistency-across-a-team',
-  ],
-  'Content Programs': [
-    'what-is-a-content-program',
-    'how-to-build-a-b2b-content-program',
-    'content-program-cost',
-    'how-long-until-content-marketing-works',
-    'what-is-a-thought-leadership-program',
-    'how-to-measure-a-content-program',
-  ],
-  'Digital Products': [
-    'what-does-a-digital-product-design-engagement-include',
-    'how-much-does-product-design-cost',
-    'how-long-to-design-a-web-app',
-    'design-system-vs-brand-system',
-    'what-to-look-for-in-a-product-design-studio',
-  ],
-  'Hiring a Studio': [
-    'brand-or-content-first',
-    'do-i-need-a-brand-system-before-content',
-    'creative-studio-vs-freelancer',
-    'what-to-ask-a-creative-agency',
-  ],
-}
 
 let aeoSection = '\n\n## Common Questions\n\nDetailed answers to questions about brand systems, content programs, and digital products:\n'
 
-for (const [category, slugs] of Object.entries(lpByCategory)) {
+for (const { label: category, slugs } of LP_CATEGORIES) {
   aeoSection += `\n### ${category}\n\n`
   for (const slug of slugs) {
     const p = MOCK_PAGES[slug]

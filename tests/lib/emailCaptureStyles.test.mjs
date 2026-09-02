@@ -9,7 +9,7 @@ import test from 'node:test'
  * `undefined`, React renders `class="undefined"`, and the control appears
  * with browser defaults.
  *
- * That shipped. /about-us defined two of the six, so the email field rendered
+ * That shipped. /careers defined two of the six, so the email field rendered
  * as a bare white box overlapping the button, on a dark page, in production.
  * Nothing failed; it just looked broken.
  */

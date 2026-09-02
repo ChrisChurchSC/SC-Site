@@ -19,7 +19,7 @@ import { FORMSPREE_ENDPOINT, submitLead } from '../lib/submitLead'
  * @param {Record<string,string>} props.styles  host page's CSS module — must
  *   define emailForm, emailInput, emailSubmit, emailConfirm, emailError and
  *   emailSrOnly. tests/lib/emailCaptureStyles.test.mjs enforces that, because
- *   a missing class is not an error, just an unstyled control: on /about-us
+ *   a missing class is not an error, just an unstyled control: on /careers
  *   four of the six were absent and the input rendered as a bare white box
  *   overlapping the button.
  * @param {string}  props.submitLabel     button text

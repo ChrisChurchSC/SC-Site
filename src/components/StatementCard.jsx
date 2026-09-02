@@ -11,14 +11,15 @@ import styles from './StatementCard.module.css'
  * boundary rather than rewritten: the first sentence is the claim and carries
  * the display size, the rest is the reasoning and sits in mono beneath it.
  *
- * THE STATEMENT IS THE PAGE'S <h1>. It was an h2 while the intro card above
- * carried the heading; that text has since been removed, which would have
- * left the homepage with no h1 at all — the fault that markup existed to fix,
- * and one assert-build.mjs fails the build on. This component is rendered
- * only by Home.jsx, so the tag cannot collide anywhere else. The change is
- * style-neutral: .statement is selected by class, never by element.
+ * THE STATEMENT IS AN <h2> ON THE LIVE HOMEPAGE. It was this component's h1
+ * for a while, because the intro card above it had lost its heading and the
+ * page had no h1 left. Home.jsx has since been rebuilt with its own h1 on the
+ * corner text, so the h1 is accounted for above and this card is a section
+ * heading again. Two h1s is a fault assert-build.mjs fails the build on, in
+ * the other direction — see `as`. Style-neutral either way: .statement is
+ * selected by class, never by element.
  */
-const STATEMENT = 'Super-Conscious exists to level up challenger brands by combining world-class creative with analytics-driven marketing at an accessible price.'
+const STATEMENT = 'For challenger brands, Super-Conscious is your fractional marketing and creative department.'
 const SUPPORT = "One embedded team handles both brand creation/evolution and growth media and content tactics, so you're not stitching together a branding studio, a media shop, and whoever built your last campaign."
 
 /**
@@ -79,10 +80,10 @@ const SUPPORT = "One embedded team handles both brand creation/evolution and gro
  * room is the point. Off by default, so the live homepage is unaffected.
  */
 export default function StatementCard({
-  eyebrow = '[ Who We Are ]',
+  eyebrow = null,
   statement = STATEMENT,
   support = SUPPORT,
-  as: Heading = 'h1',
+  as: Heading = 'h2',
   tall = false,
   bottom = false,
   statementLines = false,
@@ -102,7 +103,7 @@ export default function StatementCard({
   const paras = Array.isArray(support) ? support : [support]
   return (
     <section className={`${styles.card}${tall ? ' ' + styles.tall : ''}${bottom ? ' ' + styles.bottom : ''}${serif ? ' ' + styles.serif : ''}${bare ? ' ' + styles.bare : ''}${bare && !rule ? ' ' + styles.noRule : ''}${bare && inset ? ' ' + styles.inset : ''}${center ? ' ' + styles.center : ''}${display ? ' ' + styles.display : ''}${supportSerif ? ' ' + styles.supportSerif : ''}${className ? ' ' + className : ''}`}>
-      <p className={styles.eyebrow}>{eyebrow}</p>
+      {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
       <Heading className={`${styles.statement}${statementLines ? ' ' + styles.statementLines : ''}`}>
         {Array.isArray(statement)
           ? statement.map((line, i) => (

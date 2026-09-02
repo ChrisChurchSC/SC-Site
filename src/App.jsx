@@ -14,16 +14,21 @@ import CalDrawer from './components/CalDrawer'
 import Cursor from './components/Cursor'
 import ThemeToggle from './components/ThemeToggle'
 import TransitionBar from './components/TransitionBar'
-import Home from './pages/Home'
 import HomeV2 from './pages/HomeV2'
 import HomeV3 from './pages/HomeV3'
 import PricingV3 from './pages/PricingV3'
 import ServiceV3 from './pages/ServiceV3'
 import Work from './pages/Work'
+<<<<<<< HEAD
 import Services from './pages/Services'
 import AboutUs from './pages/AboutUs'
 import Disciplines from './pages/Disciplines'
 import Discipline from './pages/Discipline'
+=======
+import About from './pages/About'
+import Careers from './pages/Careers'
+import AboutStudio from './pages/AboutStudio'
+>>>>>>> origin/main
 import CaseStudy from './pages/CaseStudy'
 import ClientOverview from './pages/ClientOverview'
 import Thoughts from './pages/Thoughts'
@@ -56,7 +61,7 @@ function ScrollToTop() {
    here rather than through ChromeGate, which would take the theme toggle
    down with it: the deck pages want all the chrome gone, these want only the
    nav gone. */
-const V3_PAGES = ['/v3', '/pricing', '/work', '/thoughts']
+const V3_PAGES = ['/', '/pricing', '/work', '/thoughts']
 
 const isV3Page = (pathname) =>
   V3_PAGES.includes(pathname) ||
@@ -130,12 +135,15 @@ export default function App() {
           <div className="theme-layer">
             <Suspense fallback={null}>
               <Routes>
-                <Route path="/" element={<Home />} />
-                {/* The design-canvas homepage, alongside the live one so the
-                    two can be compared. Promoting it is a one-line change:
-                    point path="/" at HomeV2 and drop this route. */}
+                {/* THE V3 HOMEPAGE IS THE HOMEPAGE (2026-09-02). It ran at /v3
+                    beside the old one while it was built; the old Home is
+                    no longer routed. /v3 redirects here so anything holding
+                    the old address — a shared preview link, a bookmark —
+                    still lands on the page. */}
+                <Route path="/" element={<HomeV3 />} />
+                <Route path="/v3" element={<Navigate to="/" replace />} />
+                {/* The design-canvas homepage, kept for comparison. */}
                 <Route path="/v2" element={<HomeV2 />} />
-                <Route path="/v3" element={<HomeV3 />} />
         <Route path="/pricing" element={<PricingV3 />} />
         <Route path="/services/:slug" element={<ServiceV3 />} />
                 <Route path="/work" element={<Work />} />
@@ -158,6 +166,7 @@ export default function App() {
                 <Route path="/studio" element={<About />} />
                 <Route path="/work/:slug" element={<WorkRouter />} />
                 <Route path="/work/:clientSlug/:workSlug" element={<CaseStudy />} />
+<<<<<<< HEAD
                 <Route path="/services" element={<Services />} />
                 {/* Capabilities lived at /about until the Services rename.
                     vercel.json 301s it, but that only fires on a request to
@@ -172,6 +181,11 @@ export default function App() {
                 {/* One discipline. Only the slugs in Discipline.jsx's LIVE set
                     render; the rest redirect back to the grid. */}
                 <Route path="/disciplines/:slug" element={<Discipline />} />
+=======
+                <Route path="/about" element={<About />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/who-we-are" element={<AboutStudio />} />
+>>>>>>> origin/main
                 <Route path="/thoughts" element={<Thoughts />} />
                 <Route path="/thoughts/:slug" element={<ThoughtPost />} />
                 <Route path="/contact" element={<Contact />} />
