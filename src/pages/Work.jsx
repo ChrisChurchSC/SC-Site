@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom'
+
 import styles from './Work.module.css'
-import WorkIndex from '../components/WorkIndex'
-import V3Nav, { FOOTER_COLS } from '../components/V3Nav'
-import FooterCard from '../components/FooterCard'
-import V3Signoff from '../components/V3Signoff'
 import { useMeta } from '../hooks/useMeta'
+import { useProjects } from '../context/ProjectsContext'
+import { useComingSoon } from '../context/ComingSoonContext'
+import { HIDDEN_SLUGS } from '../lib/hiddenProjects'
 
 /**
  * The case study index.
@@ -15,22 +16,15 @@ import { useMeta } from '../hooks/useMeta'
  * that open a drawer. A button is not a crawlable edge and carries no link
  * equity, so fifty-eight case studies had no hub at all.
  *
- * A text list of every case study sat under the grid for exactly that reason:
- * the grid was a curated subset, so the list was the crawlable route to the
- * remainder. It has been removed, and the note it carried set the condition
- * for removing it — that the grid covers them all.
- *
- * Checked rather than assumed, against live Sanity: the list linked 36 case
- * studies and the grid links 44, but count is not coverage. Three were in the
- * list and not the grid — aris, yellow-dog, concis-labs — and all three are
- * noindexed coming-soon placeholders. They are already absent from the
- * sitemap and cannot rank, so the route the list gave them was not worth
- * anything to lose.
- *
- * If any of those three ships as a real case study, it needs a grid block or
- * another crawlable link before it goes indexable.
+ * The list here is the same one the nav drawer renders, from the same context,
+ * with the same filters — top-level projects only, minus the deliberately
+ * hidden ones. What differs is that these are real anchors at a real URL, so
+ * a crawler can follow them and a visitor can link to the page.
  */
 export default function Work() {
+  const projects = useProjects()
+  const comingSoon = useComingSoon()
+
   useMeta({
     title: 'Selected Work | Super Conscious',
     description:
@@ -38,21 +32,53 @@ export default function Work() {
     path: '/work',
   })
 
+  // Sub-projects carry n >= 100 and belong to their client's overview page.
+  const caseStudies = projects.all
+    .filter((p) => parseInt(p.n, 10) < 100 && !HIDDEN_SLUGS.has(p.slug))
+    .sort((a, b) => a.name.localeCompare(b.name))
+
   return (
     <main className={styles.main}>
-      <V3Nav />
-
       <header className={styles.header}>
         <p className={styles.label}>[ Selected Work ]</p>
         <h1 className={styles.headline}>Case studies</h1>
+        <p className={styles.intro}>
+          Brand systems, content programs, and digital products, built with founders and
+          marketing teams.
+        </p>
       </header>
 
-      <section className={styles.gridSection} aria-label="Selected work">
-        <WorkIndex />
-      </section>
+      <ol className={styles.list}>
+        {caseStudies.map((p) => {
+          const isSoon = comingSoon.has(p.slug)
+          const inner = (
+            <>
+              <span className={styles.num}>{p.n}</span>
+              <span className={styles.name}>{p.name}</span>
+              <span className={styles.type}>
+                {p.type}
+                {isSoon && <span className={styles.soon}>Soon</span>}
+              </span>
+            </>
+          )
 
-      <FooterCard columns={FOOTER_COLS} />
-      <V3Signoff />
+          return (
+            <li key={p.slug} className={styles.row}>
+              {isSoon ? (
+                // Matches the nav and the homepage grid: shown, not linked.
+                // These pages are noindex, so linking them would spend equity
+                // on a page that cannot rank and promise a visitor a case
+                // study that is not written yet.
+                <span className={`${styles.item} ${styles.itemSoon}`}>{inner}</span>
+              ) : (
+                <Link className={styles.item} to={`/work/${p.slug}`}>
+                  {inner}
+                </Link>
+              )}
+            </li>
+          )
+        })}
+      </ol>
     </main>
   )
 }

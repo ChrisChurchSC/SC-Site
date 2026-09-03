@@ -1,16 +1,4 @@
 // Body items: { type: 'p', text } | { type: 'h2', text } | { type: 'img', src, alt }
-//
-// TOPICS ARE MINE AND ARE NOT SIGNED OFF. Nothing in this file or in the
-// Sanity schema carried a category, and the thoughts index needed an axis to
-// filter on that was not the date. These are read off each post's own title
-// and excerpt rather than invented from nothing, but they are still a call
-// somebody else should make — they are the words a reader uses to decide
-// what to open. Change them here and the filter changes with them.
-//
-// SANITY POSTS HAVE NONE. THOUGHTS_INDEX_QUERY does not return a topic and
-// the schema has no field for one, so when Sanity is serving this list the
-// topic filter has nothing to offer and hides itself. Add the field there
-// and to the query to turn it back on.
 export const thoughts = [
   {
     n: '001',
@@ -18,7 +6,6 @@ export const thoughts = [
     excerpt: 'Our take on building toolkits that keep brands cohesive, flexible, and alive.',
     date: 'Sep 2025',
     slug: 'the-case-for-toolkits',
-    topics: ['Brand systems', 'Design'],
     isoDate: '2025-09-15',
     hero: '/thoughts/DulgOYVZriRYqYUQZZzq0Tlow18.png',
     heroAlt: 'Illustration of a brand as a model kit box filled with colorful icons representing visual assets, UI elements, and brand components',
@@ -50,7 +37,6 @@ export const thoughts = [
     excerpt: 'The balance between building brand and driving performance.',
     date: 'Oct 2025',
     slug: 'build-slow-grow-fast',
-    topics: ['Growth', 'Strategy'],
     isoDate: '2025-10-15',
     hero: '/thoughts/3maXhJv29xblOOUBvFHF3PATo9k.png',
     heroAlt: 'Pink illustration of two mirrored figures emerging from ornate botanical decoration, representing the balance between brand building and performance',
@@ -81,7 +67,6 @@ export const thoughts = [
     excerpt: 'Why we dropped the five-day norm for more meaningful work.',
     date: 'Nov 2025',
     slug: 'rethinking-the-workweek',
-    topics: ['Studio', 'Ways of working'],
     isoDate: '2025-11-15',
     hero: '/thoughts/u3V0gMhHHOFycvueaitpfXFTiA.png',
     heroAlt: 'Illustration of a human head silhouette containing a factory, clock, cursor, and emotion icons, representing the mental burden of traditional work culture',
@@ -107,7 +92,6 @@ export const thoughts = [
     excerpt: 'Why the future of creative work belongs to small teams — clarity, agility, and craft over headcount.',
     date: 'Jul 2026',
     slug: 'agility-over-headcount',
-    topics: ['Studio', 'Strategy'],
     isoDate: '2026-07-15',
     hero: '/thoughts/agility-over-headcount.webp',
     heroAlt: 'Illustration of a balance scale: three blue toy figures crowded together on one pan, a single red toy figure vaulting a hurdle on the other, representing agility outweighing headcount',

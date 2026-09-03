@@ -104,9 +104,9 @@ for (const file of htmlFiles) {
   // — so scripts are stripped rather than the document being sliced at a
   // marker that may not exist.
   //
-  // The homepage, /services and /work all shipped with zero. The services
-  // page's was worse than absent — the markup was there, guarded on a Sanity
-  // field that is null, so it silently rendered nothing.
+  // The homepage, /about and /work all shipped with zero. /about's was worse
+  // than absent — the markup was there, guarded on a Sanity field that is
+  // null, so it silently rendered nothing.
   const rootStart = html.indexOf('<div id="root">')
   if (rootStart !== -1) {
     const body = html.slice(rootStart).replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '')
@@ -167,13 +167,8 @@ if (!fs.existsSync(sitemapPath)) {
 
 const REQUIRED_SCHEMA = [
   ['index.html', ['Organization', 'WebSite']],
-  /* main (PR #137) asserted /about with a FAQPage and /careers; this branch
-     keeps the what-we-do page at /services, which carries no FAQ, and the
-     careers page at /about-us, with the studio page at /studio — merge of
-     2026-09-02. */
-  ['services/index.html', ['Organization']],
-  ['about-us/index.html', ['Organization', 'BreadcrumbList']],
-  ['studio/index.html', ['Organization', 'BreadcrumbList']],
+  ['about/index.html', ['Organization', 'BreadcrumbList', 'FAQPage']],
+  ['careers/index.html', ['Organization', 'BreadcrumbList']],
   ['work/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
   ['thoughts/index.html', ['Organization', 'BreadcrumbList', 'ItemList']],
   ['contact/index.html', ['Organization', 'BreadcrumbList', 'ContactPage']],
@@ -211,64 +206,6 @@ for (const file of htmlFiles) {
   const types = schemaTypes(fs.readFileSync(file, 'utf8'))
   if (!types.includes('BreadcrumbList')) {
     problems.push(`${rel}: missing BreadcrumbList JSON-LD`)
-  }
-}
-
-// ── every route the app declares is actually served ──────────────────────────
-//
-// The check above pairs the sitemap with the built output, which is worth
-// having but cannot see a route missing from both. That is precisely what
-// shipped: the v3 merge added /pricing and fourteen audience pages to App.jsx,
-// nothing prerendered them, no rewrite named them, and they were not in the
-// sitemap either — so there was nothing to compare, the build passed, and
-// seventeen URLs answered 404 in production.
-//
-// A route is served if one of four things is true: it was prerendered, a
-// rewrite hands it to the client shell, a redirect sends it elsewhere, or it is
-// named below as deliberately unreachable. Anything else fails the build.
-//
-// Dynamic segments are skipped — one :slug stands for a set this script cannot
-// enumerate, and the sitemap check already covers the ones that get built.
-
-// Routes that exist in the app and are deliberately NOT served in production.
-// Being here is a decision; being absent from the site without being here is
-// the bug this check exists to catch.
-const UNSERVED_ROUTES = new Set([
-  // The homepage design variants, kept in the tree for comparison. Two
-  // alternate homepages on a public marketing site would be duplicate content
-  // competing with the real one, so they are reachable in dev and nowhere else.
-  '/v2',
-  '/v3',
-])
-
-{
-  const appSrc = fs.readFileSync('src/App.jsx', 'utf8')
-  const declared = [...appSrc.matchAll(/path="([^"]+)"/g)]
-    .map((m) => m[1])
-    .filter((r) => r !== '*' && !r.includes(':'))
-
-  const vercel = JSON.parse(fs.readFileSync('vercel.json', 'utf8'))
-  // Vercel sources are path patterns with regex alternation; a literal source is
-  // its own pattern. Anchored, so /about does not match /about-us — the exact
-  // confusion that produced the careers-page redirect loop.
-  const asRegExp = (source) => {
-    try { return new RegExp('^' + source.replace(/:[A-Za-z0-9_]+\*?/g, '[^/]+') + '$') }
-    catch { return null }
-  }
-  const handledBy = (list) => (route) =>
-    (list || []).some((r) => r.source === route || asRegExp(r.source)?.test(route))
-
-  const rewritten = handledBy(vercel.rewrites)
-  const redirected = handledBy(vercel.redirects)
-
-  for (const route of declared) {
-    if (routes.has(route)) continue
-    if (rewritten(route)) continue
-    if (redirected(route)) continue
-    if (UNSERVED_ROUTES.has(route)) continue
-    problems.push(
-      `${route}: declared in App.jsx but not prerendered, rewritten or redirected — it will 404`,
-    )
   }
 }
 

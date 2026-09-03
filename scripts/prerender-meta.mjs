@@ -6,8 +6,8 @@
  *  - /lp/[slug]  — AEO landing pages (canonical, FAQ+HowTo+Breadcrumb JSON-LD)
  *  - /work/[slug] — case studies (canonical, title, description)
  *  - /thoughts/[slug] — thought posts (canonical, Article JSON-LD)
- *  - static pages: /services, /disciplines, /about-us, /work, /thoughts, /contact
- *  - / — homepage (LP links injected for crawler discoverability)
+ *  - static pages: /about, /careers, /work, /thoughts, /contact
+ *  - / — homepage
  *  - dist/llms.txt — regenerated with AEO question/answer section appended
  */
 
@@ -33,9 +33,6 @@ const { injectMeta } = await import(path.join(ROOT, 'scripts/lib/inject-meta.mjs
 const { injectSchemas } = await import(path.join(ROOT, 'scripts/lib/inject-schemas.mjs'))
 const { HIDDEN_SLUGS } = await import(path.join(ROOT, 'src/lib/hiddenProjects.js'))
 const { LP_CATEGORIES, LP_CATEGORY } = await import(path.join(ROOT, 'src/lib/lpCategories.js'))
-const { industries } = await import(path.join(ROOT, 'src/data/industries.js'))
-const { stages } = await import(path.join(ROOT, 'src/data/stages.js'))
-const { outcomes } = await import(path.join(ROOT, 'src/data/outcomes.js'))
 const { ABOUT_PAGE_QUERY, CLIENT_OVERVIEW_QUERY, CASE_STUDY_QUERY } = await import(path.join(ROOT, 'src/lib/queries.js'))
 const { sanityImg } = await import(path.join(ROOT, 'src/lib/sanityImg.js'))
 const { sanityKey } = await import(path.join(ROOT, 'src/lib/sanityCache.js'))
@@ -200,102 +197,33 @@ let count = 0
 // exactly what it rendered, with no second round trip.
 const STATIC_PAGES = [
   {
-    segments: ['services'],
-    title: 'Services | Super Conscious',
-    // Must match the useMeta() call in src/pages/Services.jsx. This one is what
-    // crawlers read; that one retitles the tab after hydration, and the two
-    // said different things until the positioning rewrite aligned them.
-    description: 'Brand, website, marketing mix and channels for challenger brands, from $10,000 — plus ongoing support billed hourly. We build the brand, then grow it.',
+    segments: ['about'],
+    title: 'Brand Systems, Content Programs & Digital Products | Super Conscious',
+    description: 'Brand systems, content programs, and digital products. A creative studio embedded with founders and marketing teams, month to month.',
+    schemas: (data, url) => {
+      // Guarded on the FAQ array itself, never on `data ?? FALLBACK`. About.jsx's
+      // FALLBACK has no faqs key and only substitutes when Sanity returns nothing
+      // at all — the same field-level trap that once shipped /about with no <h1>.
+      const faqs = data[sanityKey(ABOUT_PAGE_QUERY, {})]?.faqs
+      return [
+        crumbs({ name: 'What we do', item: url }),
+        faqs?.length && {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map(({ question, answer }) => ({
+            '@type': 'Question',
+            name: question,
+            acceptedAnswer: { '@type': 'Answer', text: answer },
+          })),
+        },
+      ]
+    },
   },
   {
-    segments: ['disciplines'],
-    title: 'Disciplines | Super Conscious',
-    // Must match useMeta() in src/pages/Disciplines.jsx.
-    description: 'Twelve disciplines, one bench: creative direction, writing, design, illustration, film, 3D and motion, animation, editing, production, media, search and engineering.',
-  },
-  {
-    segments: ['disciplines', 'creative-direction'],
-    title: 'Creative direction | Super Conscious',
-    // The /services discipline paragraph, which is what the page's useMeta
-    // also reads. Only the live discipline pages are listed here — see LIVE
-    // in src/pages/Discipline.jsx.
-    description: 'Brand strategy, concept development, and the creative through-line that holds a project together from first idea to final asset.',
-  },
-  {
-    segments: ['disciplines', 'writing'],
-    title: 'Writing | Super Conscious',
-    description: "Naming, taglines, scripts, voice, and body copy. The verbal half of a brand, shaped to earn its space across every surface.",
-  },
-  {
-    segments: ['disciplines', 'design'],
-    title: 'Design | Super Conscious',
-    description: "Identity systems, visual languages, layout, and typography. The framework that lets every piece of output feel like the same brand.",
-  },
-  {
-    segments: ['disciplines', 'illustration'],
-    title: 'Illustration | Super Conscious',
-    description: "Custom marks, characters, editorial pieces, and full toolkit systems built to extend the brand into any context.",
-  },
-  {
-    segments: ['disciplines', 'film-photo'],
-    title: 'Film & photo | Super Conscious',
-    description: "Direction, shoots, casting, lighting, and styling for stills and moving image, from product capture to campaign storytelling.",
-  },
-  {
-    segments: ['disciplines', '3d-motion'],
-    title: '3D & motion | Super Conscious',
-    description: "Modeling, rendering, and motion design across formats: brand films, product explainers, social spots, and platform-native work.",
-  },
-  {
-    segments: ['disciplines', 'animation'],
-    title: 'Animation | Super Conscious',
-    description: "Cel, rigged, and procedural animation built for any platform, from social loops to broadcast spots to interactive experiences.",
-  },
-  {
-    segments: ['disciplines', 'editing'],
-    title: 'Editing | Super Conscious',
-    description: "Story structure, pacing, and color. The post-production craft that turns footage into a finished piece with rhythm and intent.",
-  },
-  {
-    segments: ['disciplines', 'production'],
-    title: 'Production | Super Conscious',
-    description: "Planning, scheduling, budgeting, casting, and the on-the-ground logistics that turn a creative brief into a finished, shipped piece of work.",
-  },
-  {
-    segments: ['disciplines', 'media'],
-    title: 'Media | Super Conscious',
-    description: "Paid strategy, buying, and creative testing across social, search, and programmatic. Planned, flighted, and optimized against the numbers rather than the impressions.",
-  },
-  {
-    segments: ['disciplines', 'search'],
-    title: 'Search | Super Conscious',
-    description: "SEO and AEO: the technical foundations, the content that earns the position, and the structured data that makes a brand legible to engines and to models.",
-  },
-  {
-    segments: ['disciplines', 'engineering'],
-    title: 'Engineering | Super Conscious',
-    description: "Marketing sites, web apps, internal tools, and bespoke builds. Production code that ships fast, scales cleanly, and is built to last.",
-  },
-  /* THE CAREERS AND STUDIO PAGES, AT THIS BRANCH'S ADDRESSES. main (PR #137)
-     listed them as /careers and /who-we-are; the merge on 2026-09-02 kept
-     this branch's /about-us and /studio and made main's addresses redirects,
-     so the prerendered pages are these. The breadcrumb schemas are main's —
-  // Optional: a page with no richer type to claim lists none, rather than
-  // every entry carrying a breadcrumb it does not need.
-     the loop calls page.schemas() when there is one, and a static page with no
-     richer type to claim gets a breadcrumb. */
-  {
-    segments: ['about-us'],
+    segments: ['careers'],
     title: 'Join the Team | Super Conscious',
     description: 'Join a small team of strategists, creatives, and builders. Everyone is close to the work. Philadelphia, PA.',
     schemas: (_data, url) => [crumbs({ name: 'Careers', item: url })],
-  },
-  {
-    segments: ['studio'],
-    // Must match useMeta() in src/pages/About.jsx.
-    title: 'About | Super Conscious',
-    description: 'The embedded creative and marketing team that builds your brand and then grows it.',
-    schemas: (_data, url) => [crumbs({ name: 'About', item: url })],
   },
   {
     segments: ['work'],
@@ -358,44 +286,7 @@ const STATIC_PAGES = [
       },
     ],
   },
-  {
-    segments: ['pricing'],
-    title: 'Pricing | Super Conscious',
-    // Must match useMeta() in src/pages/PricingV3.jsx.
-    description: 'Have us build a project, or keep us on by the hour. What each one costs.',
-    schemas: (_data, url) => [crumbs({ name: 'Pricing', item: url })],
-  },
 ]
-
-/* ── Audience pages, from the same data the page reads ────────────────────────
- *
- * /industries/:slug, /stages/:slug and /outcomes/:slug are one component,
- * AudiencePage, over three record types. Fourteen URLs, and every one of them
- * answered 404 in production between the v3 merge and this commit: the routes
- * existed in App.jsx, nothing prerendered them, and the shell.html rewrite did
- * not name them either, so the static host had nothing to serve.
- *
- * Generated from the data files rather than listed by hand, so adding a record
- * to industries.js ships a page instead of another silent 404. Titles and
- * descriptions must match the useMeta() call in src/pages/AudiencePage.jsx —
- * that one retitles the tab after hydration, these are what crawlers read.
- */
-const AUDIENCE_KINDS = [
-  { base: 'industries', records: industries, describe: (n) => `Brand and marketing work for ${n.toLowerCase()} brands, from the Super Conscious studio.` },
-  { base: 'stages',     records: stages,     describe: (n) => `Brand and marketing work for ${n.toLowerCase()} companies, from the Super Conscious studio.` },
-  { base: 'outcomes',   records: outcomes,   describe: (n) => `Brand and marketing work to ${n.toLowerCase()}, from the Super Conscious studio.` },
-]
-
-for (const { base, records, describe } of AUDIENCE_KINDS) {
-  for (const { slug, name } of records) {
-    STATIC_PAGES.push({
-      segments: [base, slug],
-      title: `${name} Case Studies | Super Conscious`,
-      description: describe(name),
-      schemas: (_data, url) => [crumbs({ name: `${name} Case Studies`, item: url })],
-    })
-  }
-}
 
 
 // ── Work / case study pages ───────────────────────────────────────────────────
@@ -464,7 +355,7 @@ for (const page of STATIC_PAGES) {
   let html = injectMeta(indexHtml, { title: page.title, description: page.description, url, image: DEFAULT_IMAGE })
   // injectRoot first: the schema builders read the data it returns.
   const rendered = await injectRoot(html, routePath)
-  html = injectSchemas(rendered.html, (page.schemas ?? (() => []))(rendered.data, url))
+  html = injectSchemas(rendered.html, page.schemas(rendered.data, url))
   writeHtml(page.segments, html)
   count++
 }
@@ -618,7 +509,7 @@ for (const [slug, page] of Object.entries(MOCK_PAGES)) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: LP_CATEGORY[slug] || 'Resources', item: `${BASE_URL}/services` },
+      { '@type': 'ListItem', position: 2, name: LP_CATEGORY[slug] || 'Resources', item: `${BASE_URL}/about` },
       { '@type': 'ListItem', position: 3, name: page.heroHeadline, item: url },
     ],
   })
@@ -685,7 +576,7 @@ console.log(`Prerendered ${count} pages → dist/*/index.html`)
 // only moves on real content changes, not every build (Google distrusts lastmods
 // that churn). Phase 3 automates this fully per-URL from git/Sanity.
 
-// The floor for pages with no better date: /, /services, /about-us and /lp/*.
+// The floor for pages with no better date: /, /about, /careers and /lp/*.
 //
 // This was a hand-bumped constant, and the instruction to bump it was missed.
 // On 2026-08-19 all 22 /lp descriptions were rewritten, and /'s and /about's
@@ -720,10 +611,9 @@ function gitDay(relPath) {
 const STATIC_CONTENT_SOURCES = [
   'src/lib/mockLandingPages.js',
   'src/lib/lpCategories.js',
-  'src/pages/HomeV3.jsx',
-  'src/pages/Services.jsx',
+  'src/pages/Home.jsx',
   'src/pages/About.jsx',
-  'src/pages/AboutUs.jsx',
+  'src/pages/Careers.jsx',
   'src/pages/LandingPage.jsx',
   'src/pages/Work.jsx',
 ]
@@ -758,7 +648,7 @@ function lastmodFor(loc) {
   if (t) return thoughtDateBySlug[t[1]] || staticContentDay
   const w = route.match(/^\/work\/(.+)$/)
   if (w) return toDay(projectMeta[w[1]]?.updatedAt)
-  return staticContentDay // /, /services, /about-us, /lp/*
+  return staticContentDay // /, /about, /careers, /lp/*
 }
 
 const distSitemapPath = path.join(distDir, 'sitemap.xml')

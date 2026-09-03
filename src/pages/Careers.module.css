@@ -1,7 +1,22 @@
-/* The hero is StatementCard and the shell is the v3 stack — see AboutUs.jsx.
-   The old .main (305px reserved for the side nav, plus a slide-up animation)
-   and the hand-built .header went with them. */
+.main {
+  padding: 0 305px 80px 0;
+  background: #0a0a0a;
+  min-height: 100vh;
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
 
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.7);
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
 
 @keyframes cascadeIn {
   from { opacity: 0; transform: translateY(12px); }
@@ -41,123 +56,106 @@
 }
 
 /* ── Header ── */
+.header {
+  padding: 72px 40px 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
+.headerLabel {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin: 0;
+}
 
+.headline {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  max-width: 800px;
+  white-space: pre-line;
+}
 
+.sub {
+  font-family: 'Signifier', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(16px, 1.7vw, 22px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  max-width: 720px;
+}
 
 /* ── Shared section row ── */
 .textSection {
-  /* The page's own left edge. clamp(8px, 5vw, 96px) is what every v3 section
-     runs, and what StatementCard's `inset` matches — so the hero headline and
-     everything under it start on the same line. Vertical was HowItWorks'
-     96px; 64 now, because the page stack already puts its own gap between
-     sections and each section's padding is added to that — at 96 the run
-     from one section's last line to the next label was over 250px, more
-     black than content. */
-  padding: clamp(32px, 4vw, 64px) clamp(8px, 5vw, 96px);
+  padding: 48px 40px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* THE SAME EYEBROW AS EVERY OTHER V3 SECTION. Each property reads a --label-*
-   token with its pre-v3 value as the fallback, so on this page it renders as
-   the grey chip the hero's "[ Working Here ]" is, and off it nothing moves. */
 .sectionLabel {
   font-family: 'Roboto Mono', monospace;
-  font-size: var(--label-size, 11px);
-  letter-spacing: var(--label-tracking, 0.1em);
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--label-color, rgba(255, 255, 255, 0.6));
-  display: var(--label-display, block);
-  background: var(--label-bg, none);
-  padding: var(--label-pad, 0);
-  border-radius: var(--label-radius, 0);
-  width: var(--label-width, auto);
+  color: rgba(255, 255, 255, 0.6);
 }
 
-/* ── Photo rail ── */
-/* FULL BLEED. The rail runs to the viewport edges, not the page margin: a
-   marquee that stops at a margin shows its own ends, and the masked fades
-   below need real edge to fade into. The negative margin undoes the page
-   padding the same way the sign-off does. */
+/* ── Photo grid ── */
 .photoSection {
-  width: calc(100% + var(--page-pad-left, 0px) + var(--page-pad-right, 0px));
-  margin-left: calc(-1 * var(--page-pad-left, 0px));
-  padding: 0 0 clamp(32px, 4vw, 64px);
+  padding: 24px 40px 48px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.railWindow {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 60px, #000 calc(100% - 60px), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, #000 60px, #000 calc(100% - 60px), transparent 100%);
-}
-
-/* Two passes on one track; slide to -50% and the second pass is exactly where
-   the first began. The gap between passes is the same 5px as between frames,
-   carried by the pass's margin so the seam is invisible. */
-.railTrack {
-  display: flex;
-  width: max-content;
-  animation: railScroll var(--rail-duration, 70s) linear infinite;
-}
-
-.railTrack:hover {
-  animation-play-state: paused;
-}
-
-@keyframes railScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.railPass {
-  display: flex;
+.photoGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 5px;
-  flex-shrink: 0;
-  padding-right: 5px;
+  align-items: start;
 }
 
-/* THE FRAME WIDTH IS THE /STUDIO CARD'S — 4:5 of the height that leaves room
-   for the bar above and a caption below — so the rail's pictures are the same
-   object as the pinned cards on the studio page. Clamped so a short window
-   does not shrink them into thumbnails and a tall one does not grow them past
-   a sensible width. */
 .photoBlock {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex: none;
-  width: clamp(220px, calc((100dvh - 190px) * 4 / 5), 480px);
 }
 
-/* 4:5, THE SAME FRAME AS THE /STUDIO CARDS, and the same corner. */
-.photoPlaceholder,
+.photoBlock:nth-child(1) .photoPlaceholder,
+.photoBlock:nth-child(1) .photoMedia {
+  aspect-ratio: 4 / 5;
+}
+
+.photoBlock:nth-child(2) .photoPlaceholder,
+.photoBlock:nth-child(2) .photoMedia {
+  aspect-ratio: 1 / 1;
+}
+
+.photoBlock:nth-child(3) {
+  display: none;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  background: #161616;
+  border-radius: 4px;
+}
+
 .photoMedia {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  background: #161616;
-  border-radius: var(--r-surface, 12px);
-}
-
-.photoMedia {
   object-fit: cover;
+  background: #161616;
+  border-radius: 4px;
   display: block;
-}
-
-/* Still, and scrollable by hand, for anyone who asked for less motion. The
-   mask goes too — with nothing moving, a faded edge is just a picture cut
-   off. */
-@media (prefers-reduced-motion: reduce) {
-  .railTrack { animation: none; }
-  .railWindow {
-    overflow-x: auto;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .railPass[aria-hidden] { display: none; }
 }
 
 .photoCaption {
@@ -168,25 +166,13 @@
   margin: 0;
 }
 
-/* The testimonial card's quote holds two lines at 26ch; this passage is
-   three sentences and wants a wider measure to stay a paragraph rather than
-   a column. The card itself is TestimonialCard's stylesheet. */
-.quoteCard blockquote {
-  max-width: 34ch;
-}
-
 /* ── Statement text ── */
 .statement {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  /* The v3 section-headline step, with its measure — a statement set to the
-     full column width stops being a statement. */
-  font-weight: 300;
-  font-size: clamp(26px, 3.2vw, 42px);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
-  max-width: 30ch;
-  color: rgba(255, 255, 255, 0.96);
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
   max-width: 720px;
 }
@@ -208,7 +194,7 @@
 
 .realityLabel {
   font-family: 'Roboto Mono', monospace;
-  font-size: 11px;
+  font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
@@ -216,80 +202,55 @@
   flex-shrink: 0;
 }
 
-/* The v3 section-headline step, not the sub-head one: six short serif
-   facts against a mono label is the loudest thing in this section, and at
-   26px they read as body copy with a bigger font. */
 .realityValue {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(26px, 3.2vw, 42px);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  font-size: clamp(15px, 1.4vw, 20px);
   color: rgba(255, 255, 255, 0.65);
 }
 
-/* ── Traits grid (4 up) ── */
+/* ── Traits grid (2x2) ── */
 .traitsGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 5px;
 }
 
-/* Four cards of a 16px body get too thin below about 1000px to hold a
-   sentence at a readable measure; two across, then one on a phone. */
-@media (max-width: 1000px) {
-  .traitsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-/* THE SAME OBJECT AS THE /STUDIO CARDS: 4:5, the same inset, the number at
-   the top and the copy on the floor the way the studio passages sit
-   bottom-left in their frame. The height is the ratio's, not the text's, so
-   four cards are four identical frames whatever their sentences do. */
 .traitCard {
   background: #161616;
-  border-radius: var(--r-surface, 12px);
-  aspect-ratio: 4 / 5;
-  padding: clamp(20px, 2.2vw, 36px);
+  border-radius: 4px;
+  padding: 24px 20px 28px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   gap: 12px;
 }
 
 .traitN {
   font-family: 'Roboto Mono', monospace;
-  /* Top of the frame; the copy below it sits on the floor. */
-  margin-bottom: auto;
   font-size: 8px;
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.18);
 }
 
-/* The studio card's headline ink and the studio card's support ink below —
-   the heading nearly white, the body dimmed, so the two read as a headline
-   and its note rather than as two paragraphs of the same grey. */
 .traitHeading {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(19px, 1.8vw, 26px);
-  color: rgba(255, 255, 255, 0.96);
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
   line-height: 1.2;
 }
 
-/* The v3 body step. It was 9px mono at 1.9 line-height, which is a caption
-   pretending to be a paragraph. */
 .traitBody {
-  font-family: 'Signifier', Georgia, serif;
-  font-size: clamp(14px, 1.05vw, 16px);
-  letter-spacing: 0;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
-/* ── Open roles ── UNUSED since the section was cut (2026-09-01), with the
-   CTA rules below. Kept in case hiring brings it back. */
+/* ── Open roles ── */
 .rolesGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -299,7 +260,7 @@
 .rolesEmpty {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(14px, 1.05vw, 16px);
+  font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.6);
   margin: 0;
@@ -324,7 +285,7 @@
 .roleTitle {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(19px, 1.8vw, 26px);
+  font-size: clamp(18px, 1.8vw, 24px);
   color: rgba(255, 255, 255, 0.75);
   margin: 0;
 }
@@ -354,10 +315,10 @@
 }
 
 .roleDescription {
-  font-family: 'Signifier', Georgia, serif;
-  font-size: clamp(14px, 1.05vw, 16px);
-  letter-spacing: 0;
-  line-height: 1.5;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
   flex: 1;
@@ -378,11 +339,9 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ── CTA section ── UNUSED since the roster form was cut (2026-09-01). The
-   page now closes on ContactCTA instead. Kept in case the capture comes
-   back; delete with the .email* rules below if it does not. */
+/* ── CTA section ── */
 .ctaSection {
-  padding: clamp(48px, 6vw, 96px) clamp(8px, 5vw, 96px);
+  padding: 48px 40px;
 }
 
 .ctaCard {
@@ -416,7 +375,7 @@
 .ctaHeading {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(19px, 1.9vw, 27px);
+  font-size: clamp(22px, 2.5vw, 36px);
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
   position: relative;
@@ -426,8 +385,8 @@
 .ctaSub {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(14px, 1.05vw, 16px);
-  line-height: 1.5;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.35);
   margin: 0;
   max-width: 480px;
@@ -528,6 +487,22 @@
     padding: 72px 24px 40px;
   }
 
+  .textSection {
+    padding: 36px 24px;
+  }
+
+  .photoSection {
+    padding: 16px 24px 36px;
+  }
+
+  .photoBlock:nth-child(1) .photoPlaceholder {
+    aspect-ratio: 1 / 1;
+  }
+
+  .photoBlock:nth-child(2) .photoPlaceholder {
+    aspect-ratio: 1 / 1;
+  }
+
   .realityLabel {
     width: 100px;
   }
@@ -536,15 +511,12 @@
     grid-template-columns: 1fr;
   }
 
-  /* One column: the ratio would make each card a screen of black under a
-     sentence. Text-height, like any card in a stack. */
-  .traitCard {
-    aspect-ratio: auto;
-    gap: 20px;
-  }
-
   .rolesGrid {
     grid-template-columns: 1fr;
+  }
+
+  .ctaSection {
+    padding: 36px 24px;
   }
 
   .ctaCard {
