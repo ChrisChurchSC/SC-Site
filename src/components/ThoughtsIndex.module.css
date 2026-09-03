@@ -5,6 +5,14 @@
   --cols: 4;
 }
 
+/* THE SAME COLLAPSE AS THE WORK GRID (2026-09-02). This rule's --cols wins
+   over WorkIndex's by load order, so without steps of its own the index
+   stayed four across on a phone — four 78px cards with thumbnails the size
+   of a stamp. The steps are WorkIndex's, minus its five-wide top. */
+@media (max-width: 1080px) { .wrap { --cols: 3; } }
+@media (max-width: 900px) { .wrap { --cols: 2; } }
+@media (max-width: 560px) { .wrap { --cols: 1; } }
+
 /* FOUR CONTROLS ON ONE ROW. WorkIndex's controls grid is five equal tracks
    with the search spanning two, which is right over a featured card two
    columns wide. Here that left search + topic + year filling the row and the
