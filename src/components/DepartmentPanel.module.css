@@ -178,3 +178,12 @@
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.04);
 }
+
+/* NARROW: the header's "Discipline" ran into W1 once the name column was
+   down to 70px, and the names themselves are already hidden at this width
+   (only the initials show). The word goes with them; the week labels keep
+   the columns legible. */
+@media (max-width: 480px) {
+  .headRow > :first-child { visibility: hidden; }
+  .head { padding: 12px 14px 10px; }
+}

@@ -339,3 +339,36 @@
   max-width: none;
   height: 100%;
 }
+
+/* STACKED, THE CENTRE SLOT IS AS TALL AS ITS WINDOW (2026-09-02). The
+   360px row is the diagram's own proportion at desktop, where the window
+   fits it; stacked on a phone the window's board is one column and taller,
+   and a fixed row clipped every cell to 39px — the type sample over the
+   palette, labels cut mid-word. Auto here, and the window decides. */
+@media (max-width: 860px) {
+  .flow { grid-template-rows: auto; }
+  .centreSlot {
+    grid-template-rows: auto;
+    height: auto;
+    min-height: 0;
+  }
+  .centreSlotRepo { align-self: stretch; }
+  .centreSlotRepo > * { height: auto; }
+}
+
+/* THE DASHBOARD ON A PHONE. Clipping it at 310px was the desktop idiom, a
+   panel running off the edge of its card; on a 390px screen with the column
+   stacked it left half a dashboard in a fixed 360px box, tiles and charts
+   cut mid-row. The window has its own narrow layout under 860px (tiles
+   two-up, charts stacked, the grid scrolling sideways), so here it gets the
+   column's width and its content's height and uses it. */
+@media (max-width: 860px) {
+  .outVisual {
+    max-width: none;
+    height: auto;
+  }
+  .outVisual > * {
+    width: 100%;
+    height: auto;
+  }
+}

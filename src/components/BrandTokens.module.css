@@ -124,3 +124,10 @@
     place-items: stretch;
   }
 }
+
+/* Same as EmbedSection: on a phone the stage frame is the inset, so the
+   section's side padding goes and the window gets the width. */
+@media (max-width: 560px) {
+  .section { padding-left: 0; padding-right: 0; }
+  .stage { padding: 12px; }
+}
