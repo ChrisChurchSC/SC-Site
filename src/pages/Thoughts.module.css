@@ -55,8 +55,8 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 5px;
-  row-gap: 28px;
+  column-gap: 28px;
+  row-gap: 56px;
   padding: 40px;
 }
 
@@ -75,7 +75,7 @@
 
 .cardThumb {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 16 / 9;
   background: #161616;
   border-radius: 4px;
   overflow: hidden;
@@ -126,6 +126,7 @@
 .cardExcerpt {
   font-family: 'Signifier', Georgia, serif;
   font-weight: 300;
+  font-style: italic;
   font-size: 14px;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.45);

@@ -66,23 +66,13 @@
       "statusCode": 301
     },
     {
-      "source": "/about",
-      "destination": "/services",
-      "statusCode": 301
-    },
-    {
-      "source": "/careers",
-      "destination": "/about-us",
-      "statusCode": 301
-    },
-    {
-      "source": "/who-we-are",
-      "destination": "/studio",
-      "statusCode": 301
-    },
-    {
       "source": "/rethinking-the-workweek",
       "destination": "/thoughts/rethinking-the-workweek",
+      "statusCode": 301
+    },
+    {
+      "source": "/about-us",
+      "destination": "/careers",
       "statusCode": 301
     },
     {

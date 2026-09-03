@@ -305,10 +305,8 @@ export default function CaseStudy() {
             return (
               <div key={i} className={styles.mediaGrid}>
                 {section.images.map((item, j) => {
-                  // Fixed, not derived: these cards are 4:5 whatever the item
-                  // asks for. MediaItem still takes mobileSrc directly, so the
-                  // mobile art direction is unaffected — only the frame is.
-                  const ar = '4/5'
+                  const useMobile = isMobile && item.mobileSrc
+                  const ar = useMobile ? (item.mobileRatio ?? '4/5') : (item.ratio ?? '16/9')
                   return (
                     <div
                       key={j}
